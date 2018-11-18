@@ -2,16 +2,11 @@ var express = require('express');
 var app = express();
 var port     =  3010;
 var cors = require('cors');
-var passport = require('passport');
 var flash    = require('connect-flash');
-var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
-var session      = require('express-session');
 var expressLayouts = require('express-ejs-layouts');
-var multer = require('multer');
 var compression = require('compression');
-var minify = require('express-minify');
 
 
 app.get('/*', function(req, res, next) {
@@ -63,12 +58,6 @@ app.use("/templates", express.static(__dirname + "/public/templates"));
 app.use("/lib", express.static(__dirname + "/public/lib"));
 app.use('/libs/', express.static(__dirname + '/node_modules'));
 
-/**
-require('./app/policy.js')(app, passport);
-require('./app/api.js')(app, passport); 
-require('./app/routes.js')(app, passport);
- */
-
 app.use('/libs', express.static(__dirname + '/node_modules'));
 
 app.get("/*", function(req, res, next) {
@@ -81,5 +70,5 @@ server.listen(port, function() {
 	var host = server.address().address;
 	var port = server.address().port;
 
-	console.log('VICIGO app listening at http://%s:%s', host, port);
+	console.log('Honest.Cash app listening at http://%s:%s', host, port);
 });
