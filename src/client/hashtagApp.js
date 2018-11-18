@@ -22,17 +22,6 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 
 .constant("API_URL", "https://vqsocialmedia.alphateamhackers.com/api")
 .run(function(ngDialog) {
-	(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) {
-			return;
-		}
-		js = d.createElement(s);
-		js.id = id;
-		js.src = "//connect.facebook.net/en_US/sdk.js";
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
-
 	(function(i, s, o, g, r, a, m) {
 		i['GoogleAnalyticsObject'] = r;
 		i[r] = i[r] || function() {
@@ -44,19 +33,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 		a.src = g;
 		m.parentNode.insertBefore(a, m)
 	})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-	ga('create', 'UA-61717055-1', 'auto');
-
-})
-.run(function($rootScope, $window, $location) {
-	$window.fbAsyncInit = function() {
-		FB.init({
-			appId: '1577245229193798',
-			status: true,
-			cookie: true,
-			xfbml: true,
-			version: 'v2.4'
-		});
-	};
+	ga('create', 'UA-128589022-2', 'auto');
 })
 .run(function($rootScope, $window, $location) {
 	$rootScope.$on('$stateChangeSuccess', function(event) {
@@ -64,7 +41,6 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 			page: $location.url()
 		});
 	});
-
 })
 .run(function(ViciAuth, Uploader) {
 
@@ -91,6 +67,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 	});
 })
 .run(function($rootScope, $state, $timeout, $http) {
+	/**
 	var fetchNotifs = function() {
 		$http.get("/api/notifications/status").then(function(response) {
 			$rootScope.userStatus = response.data;
@@ -104,6 +81,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 			$state.go("starter.welcome");
 		}
 	});
+	*/
 })
 
 	.run(function(editableOptions) {
@@ -116,26 +94,9 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 
 	.service('MetaService', function() {
 		var metaDefault = {
-			title: "#vicigo",
-			author: 'Vicigo',
-			description: 'explore the world of hashtags - #vicigo makes it easy to browse the most interesting information, get your questions answered and share your own knowledge.',
-			robots: 'index, follow',
-			keywords: 'vicigo,viciqloud,hashtag,information,question,answer,social media,share,blog,post,technology',
-			ogTitle: "#vicigo",
-			ogSite_name: "Vicigo",
-			ogUrl: "https://vicigo.com/",
-			ogDescription: "explore the world of hashtags - #vicigo makes it easy to browse the most interesting information, get your questions answered and share your own knowledge.",
-			fbAppId: 1577245229193798,
-			ogType: "website",
-			ogLocale: "locale",
-			articlePublisher: "https://www.facebook.com/vvicigo",
-			ogImage: "https://www.vicigo.com/img/fb_post.png",
-			twitterTitle: "#vicigo",
-			twitterUrl: "https://www.vicigo.com/",
-			twitterDescription: "explore the world of hashtags",
+			title: "Honest.Cash",
 		};
 		var meta = metaDefault;
-
 
 		var set = function(key, value) {
 			meta[key] = value;
@@ -519,39 +480,10 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 	$scope.AUTH_TOKEN = ViciAuth.getAuthToken();
 })
 
-.controller("chatController", function($rootScope, $stateParams, $scope, $state, $http, $sce) {
-	$scope.message = "";
-	$scope.messages = [];
-	var socket = io();
-	alert($rootScope.user.id);
-	socket.emit('chatJoined', {
-		senderId: $rootScope.user.id,
-		receiverId: $stateParams.userId
-	});
-
-	socket.on('chatMessage', function(msg) {
-		$scope.messages.push(msg);
-	});
-
-
-
-	$scope.submitMessage = function(message) {
-		socket.emit('chatMessage', message);
-		$scope.messages.push(message);
-		$scope.message = "";
-
-		return false;
-	};
-
-})
-
 .controller("blogController", function($rootScope, $stateParams, $scope, $state, $http, CommentService, PostService) {
 
 		$scope.blogSlug = $stateParams.blogSlug;
 		$scope.blog = {};
-
-
-
 
 		$scope.followHashbook = function(hashbook) {
 			if (!$rootScope.user.id) {
@@ -566,14 +498,11 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 					$scope.blog.blogFollowed = true;
 					
 				});
-
 			}
-
 		};
 
 
 		$http.get("/api/hashbook/" + $scope.blogSlug).then(function(response) {
-			
 			$scope.blog = response.data;
 		});
 
@@ -627,7 +556,6 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 		$scope.displayPostBody = PostService.displayHTML;
 	
 		})
-
 	.controller("blogEditController", function($rootScope, $stateParams, $scope, $state, $http, $sce) {
 		$(".tags-area").tagit();
 
@@ -742,9 +670,6 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 		};
 
 
-
-
-
 		$scope.showItems = function(type) {
 			$scope.statType = type;
 			if (type == "upvotes") {
@@ -770,12 +695,15 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 			$scope.cancel();
 		});
 	})
+
 	.controller("mainController", function($rootScope, $scope, $state, $sce, $window, $location, $http, ViciAuth, MetaService, PostService, $uibModal) {
-		$http.get("/api/hashtags/trending").then(function(response) {
-			$scope.hashtags = response.data.map(function(item) {
-				return item.hashtag
+		const init = () => {
+			$http.get("/api/hashtags/trending").then(function(response) {
+				$scope.hashtags = response.data.map(function(item) {
+					return item.hashtag
+				});
 			});
-		});
+		};
 
 		$scope.showUpvotes = function(feed, statType) {
 			PostService.getUpvotes(feed.id, function(rPostUpvotes) {
@@ -1129,7 +1057,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 			} else {
 				$rootScope.welcome = false;
 			}
-			if (next.name == "starter.login" || next.name == "starter.signup" || next.name == "blog") {
+			if (next.name == "starter.login" || next.name == "starter.signup" || next.name == "blog" || next.name == "starter.welcome" || next.name == "starter.thankyou") {
 				$rootScope.noHeader = true;
 			} else {
 				$rootScope.noHeader = false;

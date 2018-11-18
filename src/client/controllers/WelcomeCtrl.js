@@ -110,7 +110,6 @@ export default class WelcomeCtrl {
 
 		$state.go("starter.thankyou");
 	};
-
 	/**
 	$http.get("/api/hashtags/trending").then(function(response) {
 		$scope.hashtags = response.data.map(function(item) {

@@ -178,6 +178,5 @@ export default () => {
 	})
 	.run(function(ViciAuth, $rootScope) {
 		ViciAuth.loadUserCredentials();
-		
 	});
 };

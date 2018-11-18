@@ -7,7 +7,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			controller: "mainController"
 		})
 		.state('starter.welcome', {
-			url: "/welcome",
+			url: "/",
 			templateUrl: "/templates/welcome.html",
 			controller: "welcomeController",
 		})
@@ -32,7 +32,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/layout.html"
 		})
         .state('vicigo.feeds', {
-            url: "/",
+            url: "/feeds",
             templateUrl: "/templates/feeds.html",
             controller: "feedsController",
             resolve: {

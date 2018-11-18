@@ -4932,7 +4932,7 @@ function state($stateProvider, $urlRouterProvider) {
 		templateUrl: "/templates/layout.html",
 		controller: "mainController"
 	}).state('starter.welcome', {
-		url: "/welcome",
+		url: "/",
 		templateUrl: "/templates/welcome.html",
 		controller: "welcomeController"
 	}).state('starter.thankyou', {
@@ -4952,7 +4952,7 @@ function state($stateProvider, $urlRouterProvider) {
 		controller: "mainController",
 		templateUrl: "/templates/layout.html"
 	}).state('vicigo.feeds', {
-		url: "/",
+		url: "/feeds",
 		templateUrl: "/templates/feeds.html",
 		controller: "feedsController",
 		resolve: {
@@ -5866,7 +5866,6 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 
 		$state.go("starter.thankyou");
 	};
-
 	/**
  $http.get("/api/hashtags/trending").then(function(response) {
  	$scope.hashtags = response.data.map(function(item) {
@@ -16538,18 +16537,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
 var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "https://vqsocialmedia.alphateamhackers.com/api").run(function (ngDialog) {
-	(function (d, s, id) {
-		var js,
-		    fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) {
-			return;
-		}
-		js = d.createElement(s);
-		js.id = id;
-		js.src = "//connect.facebook.net/en_US/sdk.js";
-		fjs.parentNode.insertBefore(js, fjs);
-	})(document, 'script', 'facebook-jssdk');
-
 	(function (i, s, o, g, r, a, m) {
 		i['GoogleAnalyticsObject'] = r;
 		i[r] = i[r] || function () {
@@ -16560,17 +16547,7 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 		a.src = g;
 		m.parentNode.insertBefore(a, m);
 	})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-	ga('create', 'UA-61717055-1', 'auto');
-}).run(function ($rootScope, $window, $location) {
-	$window.fbAsyncInit = function () {
-		FB.init({
-			appId: '1577245229193798',
-			status: true,
-			cookie: true,
-			xfbml: true,
-			version: 'v2.4'
-		});
-	};
+	ga('create', 'UA-128589022-2', 'auto');
 }).run(function ($rootScope, $window, $location) {
 	$rootScope.$on('$stateChangeSuccess', function (event) {
 		$window.ga('send', 'pageview', {
@@ -16601,40 +16578,25 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 		placeholderText: "tag it!"
 	});
 }).run(function ($rootScope, $state, $timeout, $http) {
-	var fetchNotifs = function fetchNotifs() {
-		$http.get("/api/notifications/status").then(function (response) {
-			$rootScope.userStatus = response.data;
-			return;
-		});
-	};
-
-	$rootScope.$on("notAuthenticated", function () {
-		var WhiteListed = ["starter.welcome", "vicigo.post", "vicigo.postByAlias", "vicigo.hashbook", "vicigo.hashtag"];
-		if (WhiteListed.indexOf($state.current.name) == -1) {
-			$state.go("starter.welcome");
-		}
-	});
+	/**
+ var fetchNotifs = function() {
+ 	$http.get("/api/notifications/status").then(function(response) {
+ 		$rootScope.userStatus = response.data;
+ 		return;
+ 	});
+ };
+ 	$rootScope.$on("notAuthenticated", function() {
+ 	var WhiteListed = [ "starter.welcome", "vicigo.post", "vicigo.postByAlias", "vicigo.hashbook", "vicigo.hashtag" ];
+ 	if (WhiteListed.indexOf($state.current.name) == -1) {
+ 		$state.go("starter.welcome");
+ 	}
+ });
+ */
 }).run(function (editableOptions) {
 	editableOptions.theme = 'bs3';
 }).config(_routing2.default).config(_http2.default).config(_state2.default).service('MetaService', function () {
 	var metaDefault = {
-		title: "#vicigo",
-		author: 'Vicigo',
-		description: 'explore the world of hashtags - #vicigo makes it easy to browse the most interesting information, get your questions answered and share your own knowledge.',
-		robots: 'index, follow',
-		keywords: 'vicigo,viciqloud,hashtag,information,question,answer,social media,share,blog,post,technology',
-		ogTitle: "#vicigo",
-		ogSite_name: "Vicigo",
-		ogUrl: "https://vicigo.com/",
-		ogDescription: "explore the world of hashtags - #vicigo makes it easy to browse the most interesting information, get your questions answered and share your own knowledge.",
-		fbAppId: 1577245229193798,
-		ogType: "website",
-		ogLocale: "locale",
-		articlePublisher: "https://www.facebook.com/vvicigo",
-		ogImage: "https://www.vicigo.com/img/fb_post.png",
-		twitterTitle: "#vicigo",
-		twitterUrl: "https://www.vicigo.com/",
-		twitterDescription: "explore the world of hashtags"
+		title: "Honest.Cash"
 	};
 	var meta = metaDefault;
 
@@ -16977,27 +16939,6 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 	};
 }).controller("appController", function ($scope, ViciAuth, PostService) {
 	$scope.AUTH_TOKEN = ViciAuth.getAuthToken();
-}).controller("chatController", function ($rootScope, $stateParams, $scope, $state, $http, $sce) {
-	$scope.message = "";
-	$scope.messages = [];
-	var socket = io();
-	alert($rootScope.user.id);
-	socket.emit('chatJoined', {
-		senderId: $rootScope.user.id,
-		receiverId: $stateParams.userId
-	});
-
-	socket.on('chatMessage', function (msg) {
-		$scope.messages.push(msg);
-	});
-
-	$scope.submitMessage = function (message) {
-		socket.emit('chatMessage', message);
-		$scope.messages.push(message);
-		$scope.message = "";
-
-		return false;
-	};
 }).controller("blogController", function ($rootScope, $stateParams, $scope, $state, $http, CommentService, PostService) {
 
 	$scope.blogSlug = $stateParams.blogSlug;
@@ -17019,7 +16960,6 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 	};
 
 	$http.get("/api/hashbook/" + $scope.blogSlug).then(function (response) {
-
 		$scope.blog = response.data;
 	});
 
@@ -17193,11 +17133,13 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 		$scope.cancel();
 	});
 }).controller("mainController", function ($rootScope, $scope, $state, $sce, $window, $location, $http, ViciAuth, MetaService, PostService, $uibModal) {
-	$http.get("/api/hashtags/trending").then(function (response) {
-		$scope.hashtags = response.data.map(function (item) {
-			return item.hashtag;
+	var init = function init() {
+		$http.get("/api/hashtags/trending").then(function (response) {
+			$scope.hashtags = response.data.map(function (item) {
+				return item.hashtag;
+			});
 		});
-	});
+	};
 
 	$scope.showUpvotes = function (feed, statType) {
 		PostService.getUpvotes(feed.id, function (rPostUpvotes) {
@@ -17521,7 +17463,7 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 		} else {
 			$rootScope.welcome = false;
 		}
-		if (next.name == "starter.login" || next.name == "starter.signup" || next.name == "blog") {
+		if (next.name == "starter.login" || next.name == "starter.signup" || next.name == "blog" || next.name == "starter.welcome" || next.name == "starter.thankyou") {
 			$rootScope.noHeader = true;
 		} else {
 			$rootScope.noHeader = false;
