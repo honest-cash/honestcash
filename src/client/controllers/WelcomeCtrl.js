@@ -57,11 +57,9 @@ export default class WelcomeCtrl {
 	};
 
 	const checkUserName = (username) => {
-		var pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
+		var pattern = new RegExp(/[~`!#@$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
 		
 		if (pattern.test(username)) {
-			$scope.message = "Username: please only use standard alphanumerics";
-
 			return false;
 		}
 
@@ -69,46 +67,57 @@ export default class WelcomeCtrl {
 	}
 
 	$rootScope.signup = async (data) => {
-		if (!data.username) {
-			return alert("Username is required!");
+		if (!data) {
+			return alert("Username is required.");
 		}
 
-		if (!data.password) {
-			return alert("Password is required!");
-		}
-		
-		if (!data.email) {
-			return alert("Email is required!");
+		if (!data.username) {
+			return alert("Username is required.");
 		}
 
 		if (!checkUserName(data.username)) {
+			$scope.message = "Username: please only use standard alphanumerics";
+
 			return;	
+		}
+
+		if (data.username.length > 16) {
+			$scope.message = "Username cannot have more than 16 characters";
+
+			return;
+		}
+
+		if (!data.password) {
+			return alert("Password is required.");
+		}
+		
+		if (!data.email) {
+			return alert("Email is required.");
 		}
 
 		$scope.isLoading = true;
 
-		let User;
+		ViciAuth.signup({
+			username: data.username,
+			password: data.password,
+			email: data.email,
+			userType: 0
+		})
+		.then((user) => {
+			const User = user;
 
-		try {
-			User = await ViciAuth.signup({
-				username: data.username,
-				password: data.password,
-				email: data.email,
-				userType: 0
-			});
-		} catch (response) {
 			$scope.isLoading = false;
 
-			return displayErrorMessage(response.data.code)
-		}
+			$rootScope.user = {
+				id: User.userId
+			};
 
-		$scope.isLoading = false;
+			$state.go("starter.thankyou");
+		}, response => {
+			$scope.isLoading = false;
 
-		$rootScope.user = {
-			id: User.userId
-		};
-
-		$state.go("starter.thankyou");
+			return displayErrorMessage(response.data.code);
+		});
 	};
 	/**
 	$http.get("/api/hashtags/trending").then(function(response) {

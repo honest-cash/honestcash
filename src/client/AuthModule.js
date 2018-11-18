@@ -128,20 +128,23 @@ export default () => {
 			});
 		}
 
-		async function signup(data) {
-            console.info("[ViciAuth] Signing Up..");
+		function signup(data) {
+			return $q(async (resolve, reject) => {
+				console.info("[ViciAuth] Signing Up..");
 
-            const body = {
-                username: data.username,
-                password: data.password,
-                email: data.email
-            };
+				const body = {
+					username: data.username,
+					password: data.password,
+					email: data.email
+				};
 
-            const response = await $http.post(apiFactory("SIGNUP"), body)
-            
-            storeUserCredentials(response.data.token, response.data.userId);
-            
-            return response.data;
+				$http.post(apiFactory("SIGNUP"), body)
+				.then(response => {
+					storeUserCredentials(response.data.token, response.data.userId);
+
+					resolve(response.data);
+				}, reject);
+			});
 		}
 
 		function validate(callback) {

@@ -31,7 +31,7 @@
 
 						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
 
-						<button style="background-color:#4B9E70; color: white;" ng-disabled="{{isLoading}}" type="submit" class="btn btn-lg" ng-click="signup(data)">signup</button>
+						<button style="background-color:#4B9E70; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-lg" ng-click="signup(data)">{{isLoading ? "Loading.." : "Register"}}</button>
 			
 						<!-- <button ng-click="fbLogin()" class="btn btn-primary push btn btn-lg"><span class="fa fa-facebook"></span> facebook</button> -->
 				</form>

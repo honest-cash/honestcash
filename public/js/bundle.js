@@ -4806,20 +4806,22 @@ exports.default = function () {
 			});
 		}
 
-		async function signup(data) {
-			console.info("[ViciAuth] Signing Up..");
+		function signup(data) {
+			return $q(async function (resolve, reject) {
+				console.info("[ViciAuth] Signing Up..");
 
-			var body = {
-				username: data.username,
-				password: data.password,
-				email: data.email
-			};
+				var body = {
+					username: data.username,
+					password: data.password,
+					email: data.email
+				};
 
-			var response = await $http.post(apiFactory("SIGNUP"), body);
+				$http.post(apiFactory("SIGNUP"), body).then(function (response) {
+					storeUserCredentials(response.data.token, response.data.userId);
 
-			storeUserCredentials(response.data.token, response.data.userId);
-
-			return response.data;
+					resolve(response.data);
+				}, reject);
+			});
 		}
 
 		function validate(callback) {
@@ -5813,11 +5815,9 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 	};
 
 	var checkUserName = function checkUserName(username) {
-		var pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
+		var pattern = new RegExp(/[~`!#@$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
 
 		if (pattern.test(username)) {
-			$scope.message = "Username: please only use standard alphanumerics";
-
 			return false;
 		}
 
@@ -5825,46 +5825,56 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 	};
 
 	$rootScope.signup = async function (data) {
+		if (!data) {
+			return alert("Username is required.");
+		}
+
 		if (!data.username) {
-			return alert("Username is required!");
-		}
-
-		if (!data.password) {
-			return alert("Password is required!");
-		}
-
-		if (!data.email) {
-			return alert("Email is required!");
+			return alert("Username is required.");
 		}
 
 		if (!checkUserName(data.username)) {
+			$scope.message = "Username: please only use standard alphanumerics";
+
 			return;
+		}
+
+		if (data.username.length > 16) {
+			$scope.message = "Username cannot have more than 16 characters";
+
+			return;
+		}
+
+		if (!data.password) {
+			return alert("Password is required.");
+		}
+
+		if (!data.email) {
+			return alert("Email is required.");
 		}
 
 		$scope.isLoading = true;
 
-		var User = void 0;
+		ViciAuth.signup({
+			username: data.username,
+			password: data.password,
+			email: data.email,
+			userType: 0
+		}).then(function (user) {
+			var User = user;
 
-		try {
-			User = await ViciAuth.signup({
-				username: data.username,
-				password: data.password,
-				email: data.email,
-				userType: 0
-			});
-		} catch (response) {
+			$scope.isLoading = false;
+
+			$rootScope.user = {
+				id: User.userId
+			};
+
+			$state.go("starter.thankyou");
+		}, function (response) {
 			$scope.isLoading = false;
 
 			return displayErrorMessage(response.data.code);
-		}
-
-		$scope.isLoading = false;
-
-		$rootScope.user = {
-			id: User.userId
-		};
-
-		$state.go("starter.thankyou");
+		});
 	};
 	/**
  $http.get("/api/hashtags/trending").then(function(response) {
@@ -16536,7 +16546,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
-var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "https://vqsocialmedia.alphateamhackers.com/api").run(function (ngDialog) {
+var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "http://localhost:8080/api").run(function (ngDialog) {
 	(function (i, s, o, g, r, a, m) {
 		i['GoogleAnalyticsObject'] = r;
 		i[r] = i[r] || function () {
