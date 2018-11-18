@@ -1,8 +1,9 @@
 export default class WelcomeCtrl {
   constructor($rootScope, $scope, $location, $state, $http, ViciAuth) {
 	$scope.message = "";
-
+	$rootScope.noHeader = true;
 	$scope.hashtags = [ "general", "crypto", "fiction", "art", "music", "science", "funny", "photos", "meta" ];
+	$scope.isLoading = false;
 
 	const displayErrorMessage = (code) => {
 		if (code || $location.search().code) {
@@ -55,11 +56,23 @@ export default class WelcomeCtrl {
 		});
 	};
 
+	const checkUserName = (username) => {
+		var pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
+		
+		if (pattern.test(username)) {
+			$scope.message = "Username: please only use standard alphanumerics";
+
+			return false;
+		}
+
+		return true; //good user input
+	}
+
 	$rootScope.signup = async (data) => {
 		if (!data.username) {
 			return alert("Username is required!");
 		}
-		
+
 		if (!data.password) {
 			return alert("Password is required!");
 		}
@@ -67,6 +80,12 @@ export default class WelcomeCtrl {
 		if (!data.email) {
 			return alert("Email is required!");
 		}
+
+		if (!checkUserName(data.username)) {
+			return;	
+		}
+
+		$scope.isLoading = true;
 
 		let User;
 
@@ -78,9 +97,13 @@ export default class WelcomeCtrl {
 				userType: 0
 			});
 		} catch (response) {
+			$scope.isLoading = false;
+
 			return displayErrorMessage(response.data.code)
 		}
-	
+
+		$scope.isLoading = false;
+
 		$rootScope.user = {
 			id: User.userId
 		};

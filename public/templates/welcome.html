@@ -16,20 +16,22 @@
           Request an early invitation
         </h2>
 				<form>
-				<div class="form-group">
+						<div class="form-group">
 								<label>username</label>
 								<input type="text" class="form-control" ng-model="data.username">
 						</div>
 						<div class="form-group">
 								<label>email</label>
-								<input type="text" class="form-control" ng-model="data.email">
+								<input type="email" class="form-control" ng-model="data.email">
 						</div>
 						<div class="form-group">
 								<label>password</label>
 								<input type="password" class="form-control" ng-model="data.password">
 						</div>
 
-						<button type="submit" class="btn btn-warning btn-lg" ng-click="signup(data)">signup</button>
+						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+
+						<button style="background-color:#4B9E70; color: white;" ng-disabled="{{isLoading}}" type="submit" class="btn btn-lg" ng-click="signup(data)">signup</button>
 			
 						<!-- <button ng-click="fbLogin()" class="btn btn-primary push btn btn-lg"><span class="fa fa-facebook"></span> facebook</button> -->
 				</form>
@@ -44,7 +46,8 @@
         </h4>
         <ul>
           <li ng-repeat = "hashtag in hashtags">
-						<a ui-sref="vicigo.hashtag({hashtag : hashtag})">#{{hashtag}}</a>
+							<b>#{{hashtag}}</b>
+						<a ng-if="false" ui-sref="vicigo.hashtag({hashtag : hashtag})">#{{hashtag}}</a>
 					</li>
         </ul>
       </div>
@@ -57,7 +60,7 @@
 							Earn for creating content
 						</h2>
 							<p>
-								You can create content with a free preview and put the rest of your content behind a pay wall. You can set any price you want. You don't have to charge anything if you don't want to; just put the entire content before the pay wall and other users will tip you if they like your work. Yours Inc. takes 5% of purchases.
+								You can create content with a free preview and put the rest of your content behind a pay wall. You can set any price you want. You don't have to charge anything if you don't want to; just put the entire content before the pay wall and other users will tip you if they like your work.
 							</p>
 					</div>	
 					<div class="col-sm-4">	

@@ -64,7 +64,9 @@ h4 {
 	width: 321px !important;
 }
 
-
+btn {
+	background-color: #4B9E70;
+}
 
 .padding-5 {
 	padding: 5px;
