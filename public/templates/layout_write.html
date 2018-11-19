@@ -1,33 +1,33 @@
 <div ng-controller="editorController">
-
 	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
-	<div class="container">
-			<a ui-sref="vicigo.feeds">
-				<img style="margin:13px;" src="/img/vicigo_logo_short_dark_size_1.png"  alt="Vicigo Logo">
-			</a>
-		
-			<ul class="nav navbar-nav navbar-right" >
-				<li ng-if="draft.post_status==0" ng-click="publishPost(draft.post_id)">
-					<button class="btn-default btn" style="margin:10px;" >
-					<strong>Publish</strong>
-					</button>
-				</li>
-				<li ng-if="draft.post_status>0">
-					<span class="badge" style="margin:15px;" >Published</span>
-				</li>
-				<li ng-if="draft.post_status!==0" ui-sref="vicigo.post({postId : draft.post_id})">
-					<button class="btn-default btn" style="margin:10px;">
-						<strong>Go to post</strong>
-					</button>
-				</li>
-		
-				<li ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
-					<img ng-if="user.profile_image_url" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.profile_image_url}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
-					<img ng-if="!user.profile_image_url" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
-				</li>
-			</ul>
+		<div class="container">
+				<a ui-sref="vicigo.feeds">
+					<img style="margin:13px;" src="/img/vicigo_logo_short_dark_size_1.png"  alt="Vicigo Logo">
+				</a>
 
-	</div>
+				<ul class="nav navbar-nav navbar-right" >
+					<li ng-if="draft.status === 'draft'" ng-click="publishPost(draft.id)">
+						<button class="btn-default btn" style="margin:10px;" >
+							<strong>Publish</strong>
+						</button>
+					</li>
+
+					<li ng-if="draft.status === 'published'">
+						<span class="badge" style="margin:15px;" >Published</span>
+					</li>
+
+					<li ng-if="draft.status === 'draft'" ui-sref="vicigo.post({postId : draft.id})">
+						<button class="btn-default btn" style="margin:10px;">
+							<strong>Go to post</strong>
+						</button>
+					</li>
+
+					<li ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
+						<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+						<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+					</li>
+				</ul>
+		</div>
 	</div>
 
 	<div style="min-height:440px;">
@@ -36,31 +36,26 @@
 		<div ui-view autoscroll="true"></div>
 	</div>
 
-
 	<script type="text/ng-template" id="searchResults.html">
+		<div class="padding">
+			<span ng-if="match.model.type=='profile'"><i class="fa fa-user fa-2x"></i></span>
+			<span ng-if="match.model.type=='hashtag'"><i class="fa fa-hashtag fa-2x"></i></span>
+			<span ng-if="match.model.type=='post'"><i class="fa fa-file-text-o fa-2x"></i></span>
 
-				<div class="padding">
-				<span ng-if="match.model.type=='profile'"><i class="fa fa-user fa-2x"></i></span>
-				<span ng-if="match.model.type=='hashtag'"><i class="fa fa-hashtag fa-2x"></i></span>
-				<span ng-if="match.model.type=='post'"><i class="fa fa-file-text-o fa-2x"></i></span>
-				
+			<span ng-bind-html="match.model.header | uibTypeaheadHighlight:query"></span>
 
-				<span ng-bind-html="match.model.header | uibTypeaheadHighlight:query"></span>
-				
-				<div ng-show="noResults">
-		<i class="fa fa-times"></i> No Results Found
+			<div ng-show="noResults">
+				<i class="fa fa-times"></i> No Results Found
 			</div>
-				<div>
+		<div>
+	</script>
 
-	</script>	
-			
 	<script type="text/ng-template" id="searchResultsPopup.html">
 	<div class="search-results-wrapper"
 		ng-style="{top: position().top+'px', left: position().left+'px'}"
 		style="display: block;"
 		ng-show="isOpen() && !moveInProgress"
 		aria-hidden="{{!isOpen()}}">
-	
 
 		<ul class="dropdown-menu" role="listbox">
 				

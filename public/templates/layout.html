@@ -41,14 +41,12 @@
         <button type="submit" class="btn btn-warning " ng-click="login(data)">login</button>
         </div>
       </li>
-		 	<li>
+	<li>
         <div class="form-group " style="padding:7px; padding-top:30px;">
         <a></a>
         </div>
       </li>
-				
-				
-			</ul>
+	</ul>
   </form>
 
 		</div>
@@ -67,12 +65,6 @@
 		<a class="navbar-brand" ui-sref="vicigo.feeds">
 				<img class="header-logo" src="/img/vicigo_logo_short_dark_size_1.png"  alt="Vicigo Logo">
 		</a>
-		<form class="navbar-form pull-left" role="search">
-			<div class="input-group">
-				<input type="text" class="form-control"  placeholder="vicigo search" typeahead-on-select="searchResultSelected($item); asyncSelected = '';" typeahead-min-length="3" typeahead-wait-ms="500" typeahead-template-url="searchResults.html" ng-model="asyncSelected" uib-typeahead="result.header for result in searchVicigo($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-				<i ng-show="loadingLocations" class="fa fa-circle-o-notch fa-spin"></i>
-			</div>
-		</form>
       </div>
       <div class="navbar-collapse collapse">
          <ul class="nav navbar-nav navbar-right" >
@@ -91,58 +83,46 @@
 			<li ng-if="user.id">
 				<a ui-sref="editor.write"><i class="fa fa-pencil"></i></a>
 			</li>
+
+			<!--
 			<li ng-if="user.id">
 				<a ng-click="newPhoto()"><i class="fa fa-camera"></i></a>
 			</li>
-			
 
+			<li ng-if="user.id">
+				<a ui-sref="vicigo.notifs">
+						<i class="fa fa-bell-o"><span class="badge" ng-if="userStatus.notifications_count">{{userStatus.notifications_count}}</span></i>
+				</a>
+			</li>
+			-->
 
-					 
-					  <li ng-if="user.id">
-							<a ui-sref="vicigo.notifs">
-								
-								 <i class="fa fa-bell-o"><span class="badge" ng-if="userStatus.notifications_count">{{userStatus.notifications_count}}</span></i>
-							</a>
-					 </li>
-					 
             <li ng-if="user.id" class="menu-item-profile">
-							
-							
-							<div class="btn-group" uib-dropdown on-toggle="toggled(open)">
-      <a href="#" uib-dropdown-toggle ng-disabled="disabled">
-
-								<img ng-if="user.profileImageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.profileImageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
-								<img ng-if="!user.profileImageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
-						    
-      </a>
-      <ul uib-dropdown-menu class="uib-dropdown-menu header_menu" role="menu" aria-labelledby="single-button">
-        <li role="menuitem">
-						<a ui-sref="vicigo.profile({ profileId: user.id })">Profile</a>
-				</li>
-      	<li role="menuitem">
-						<a ui-sref="vicigo.hashbookNew">Create Hashbook</a>
-				</li>
-				<li role="menuitem">
-						<a ui-sref="vicigo.hashbooks({profileIdentifier:user.id})">Hashbooks</a>
-				</li>
-
-				 <li role="menuitem">
-						<a href="/settings" target="_self">Settings</a>
-			   </li>
-				 <li role="menuitem">
-							<a href="#" ng-click="logoutMe()">Logout </a>
-			   </li>
-			
-      </ul>
-    </div>
-							
-					
-					 </li>
-        
-
-
-
-					
+				<div class="btn-group" uib-dropdown on-toggle="toggled(open)">
+					<a href="#" uib-dropdown-toggle ng-disabled="disabled">
+						<img ng-if="user.profileImageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.profileImageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+						<img ng-if="!user.profileImageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+					</a>
+					<ul uib-dropdown-menu class="uib-dropdown-menu header_menu" role="menu" aria-labelledby="single-button">
+						<li role="menuitem">
+								<a ui-sref="vicigo.profile({ profileId: user.id })">Profile</a>
+						</li>
+						<!--
+						<li role="menuitem">
+								<a ui-sref="vicigo.hashbookNew">Create Hashbook</a>
+						</li>
+						<li role="menuitem">
+								<a ui-sref="vicigo.hashbooks({profileIdentifier:user.id})">Hashbooks</a>
+						</li>
+						<li role="menuitem">
+								<a href="/settings" target="_self">Settings</a>
+						</li>
+						-->
+						<li role="menuitem">
+								<a href="#" ng-click="logoutMe()">Logout </a>
+						</li>
+					</ul>
+				</div>
+			</li>
          </ul>
       </div>
       <!--/.navbar-collapse -->
@@ -206,10 +186,6 @@
   </div>
 </script>
 
-	
-
-
-
 <footer class="site-section site-content themed-background-muted">
 		<div class="container">
 			<hr>
@@ -218,26 +194,32 @@
       <div class="col-xs-12">
 			
 	<div class="text-center">
-					<big>
-					<ul class=" ul-breath list-unstyled list-inline">
-						<li><a href="/" target="_self">home</a></li>
-           				<li><a href="https://alphateamhackers.com/imprint" target="_self">impressum</a>
-						</li>
-						<li><a href="https://www.alphateamhackers.com/about" target="_self">company</a>
-						</li>
-						<li><a href="https://www.alphateamhackers.com/datenschutzerklaerung" target="_self">privacy</a>
-						</li>
-					</ul>
-					  </big>	
-		</div>
+		<big>
+			<ul class=" ul-breath list-unstyled list-inline">
+				<li><a href="/" target="_self">home</a></li>
+				<li><a href="https://alphateamhackers.com/imprint" target="_self">impressum</a>
+				</li>
+				<li><a href="https://www.alphateamhackers.com/about" target="_self">company</a>
+				</li>
+				<li><a href="https://www.alphateamhackers.com/datenschutzerklaerung" target="_self">privacy</a>
+				</li>
+			</ul>
+		</big>	
+	</div>
 
-		<div class="text-center push">
-			<small ui-sref="vicigo.write">Crafted with <i class="fa fa-heart text-danger"></i> in Heidelberg, Germany</small>
-			<br>
-			<a href="http://viciqloud.com" target="_blank"><small>&copy;<span>2018</span> Alphateam Hackers GmbH</small></a>
+	<div class="text-center push">
+		<small>
+			Donate: bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h
+		</small>
+		<br />
+		<div class="donate-bch"></div>
+		
+		<small ui-sref="vicigo.write">Crafted with <i class="fa fa-heart text-danger"></i> in Heidelberg, Germany</small>
+		<br />
+		<a href="http://viciqloud.com" target="_blank"><small>&copy;<span>2018</span> honest.cash</small></a>
+	</div>
 		</div>
-		</div>
-    </div>
+    	</div>
 		</div>
 	</footer>  
     

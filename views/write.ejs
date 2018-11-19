@@ -92,7 +92,7 @@
 			});
 	<% } %> 
 
-			var imageUploadUrl = "/api/post/<%- post.id %>/upload/image";
+			var imageUploadUrl = "/post/<%- post.id %>/upload/image";
 			$('#body').froalaEditor({
 				toolbarSticky: false,
 				key: 'krlenofG5hcj1==',
@@ -199,7 +199,7 @@ editor.unpublish = function(){
 
 	
 	$.ajax({
-   url: "/api/post/"+postId+"/unpublish/",
+   url: "/post/"+postId+"/unpublish/",
    type: 'PUT',
    success: function(response) {
      	console.log(response.data);
@@ -283,7 +283,7 @@ editor.unpublish = function(){
 	
 	
 <script>
-var url = "/api/post/";
+var url = "/post/";
 url +=  "<%- post.post_id %>";
 url +=  "/upload/background_image";
 	

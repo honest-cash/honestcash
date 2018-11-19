@@ -1,4 +1,3 @@
-
 export default () => {
     angular.module("ViciAuth", [])
 	.run(function() {
@@ -6,10 +5,12 @@ export default () => {
 	})
 	.constant("API_URL", "localhost:3010")
 	.constant("API", {
+		LOGIN: "/login",
 		SIGNUP: "/signup/email",
+		VALIDATE: "/me"
 	})
 	.factory("apiFactory", function(API_URL, API) {
-		return function(method) {
+		return (method) => {
 			return API_URL + API[method];
 		};
 	})
@@ -110,21 +111,20 @@ export default () => {
 			$window.localStorage.removeItem(LOCAL_USER_ID_KEY);
 		}
 
-		function login(id, pw) {
+		function login({ email, password }) {
 			console.info("[ViciAuth] Loggin in..");
-			return $q(function(resolve, reject) {
+			return $q((resolve, reject) => {
 				var body = {
-					id: id,
-					pw: pw,
+					email,
+					password
 				};
+
 				$http.post(apiFactory("LOGIN"), body)
-				.then(function(res) {
+				.then((res) => {
 					storeUserCredentials(res.data.token, res.data.userId);
+
 					resolve(res.data);
-				}, function(data) {
-					console.error(res.data);
-					reject(res.data);
-				});
+				}, reject);
 			});
 		}
 

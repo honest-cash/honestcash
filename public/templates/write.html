@@ -1,38 +1,41 @@
 <div class="container">
-			<div class="row">
-				<div class="col-md-2"></div>	  
-				<div class="col-md-8 col-xs-12" style="min-height:250px;">
-						<img ng-if="draft.post_image_url" style="max-width:100%;cursor:pointer;" ng-src="{{draft.post_image_url}}" alt="background" data-toggle="modal" data-target="#uploadBackgroundImageModal">
-					
-						<div class="text-center changeSomethingBtn" style="cursor:pointer;" id="uploadPostBackground">
-								<div class="btn btn-default" style="margin:10px;" >
-									<i class="fa fa-camera"></i> Change background pic
-								</div>	
-						</div>
+	<div class="row">
+		<div class="col-md-2"></div>	  
+		<div class="col-md-8 col-xs-12" style="min-height:250px;">
+				<img ng-if="draft.imageUrl" style="max-width:100%;cursor:pointer;" ng-src="{{draft.imageUrl}}" alt="background" data-toggle="modal" data-target="#uploadBackgroundImageModal">
 
-						<h2>
-							<strong>
-								<div id="title">{{ draft.title }}</div>
-								<div ng-if="draft.status==2" class="badge">
-									Published
-								</div>
-							</strong>
-						</h2>
-						<hr>
-	
-						<article id="body" ></article>
-						<hr>
-						<p>
-						Tag your article. Use relevant tags that reflect precicely the topic of your article.
-						</p>	
-						<div class="form-group">
-							<form>
-								<input id="description" name="tags" >
-							</form>
-						</div>
+				<div class="text-center changeSomethingBtn" style="cursor:pointer;" id="uploadPostBackground">
+						<div class="btn btn-default" style="margin:10px;" >
+							<i class="fa fa-camera"></i> Change background pic
+						</div>	
 				</div>
-			</div>
+
+				<h2>
+					<strong>
+						<div id="title">{{ draft.title }}</div>
+						<div ng-if="draft.status=='published'"" class="badge">
+							Published
+						</div>
+					</strong>
+				</h2>
+
+				<hr />
+
+				<article id="body"></article>
+
+				<hr />
+
+				<p>
+					Tag your article. Use relevant tags that reflect precicely the topic of your article.
+				</p>	
+				<div class="form-group">
+					<form>
+						<input id="description" name="tags" >
+					</form>
+				</div>
 		</div>
+	</div>
+</div>
 
 	<!-- UPLOAD IMAGE MODAL -->
 		<div class="modal fade" id="uploadBackgroundImageModal" tabindex="-1" role="dialog" aria-labelledby="uploadBackgroundImageModal">
@@ -64,7 +67,6 @@
 		</div>
 		<!-- UPLOAD IMAGE MODAL -->	
 
-
 		<div id="preview-template" style="display:none;">
 			<div class="dz-preview dz-file-preview">
 
@@ -77,10 +79,9 @@
 				<div class="dz-success-mark"><span></span></div>
 				<div class="dz-error-mark"><span></span></div>
 				<div class="dz-error-message"><span data-dz-errormessage></span></div>
-
 			</div>
 		</div>
-                  
+
 <link href="/css/froala/froala_editor.min.css" rel="stylesheet" type="text/css" />
 <link href="/css/froala/froala_style.min.css" rel="stylesheet" type="text/css" />
 <link href="/css/froala/themes/theme.css" rel="stylesheet" type="text/css" />	
@@ -93,11 +94,3 @@
 <script src="/js/froala-plugins/quote.min.js"></script>
 <script src="/js/froala-plugins/fullscreen.min.js"></script>
 <script src="/js/froala-plugins/code_view.min.js"></script>
-
-
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 export default class EditorCtrl {
-    constructor($rootScope, $state, $scope, $stateParams, $http, $timeout, ViciAuth) {
+    constructor($state, $scope, $stateParams, $http, $timeout, ViciAuth, API_URL) {
         $scope.draft = {};
         $scope.ready = false;
         $scope.Saving = {
@@ -8,16 +8,18 @@ export default class EditorCtrl {
         };
 
         $scope.publishPost = postId => {
-            $http.put("/api/draft/" + postId + "/publish")
+            $http.put(API_URL + "/draft/" + postId + "/publish")
             .then(response => {
                 if (response.status == 400) {
                     if (response.data.code == "POST_TOO_SHORT") {
                         return toastr.info("Your story is too short. The minimum number of characters is 300.");
                     }
                 }
+
                 if (response.status == 200) {
                     toastr.success("You have successfully published your story.");
-                    $timeout(function() {
+
+                    return $timeout(() => {
                         $state.go("vicigo.post", {
                             postId: postId
                         });
@@ -25,6 +27,8 @@ export default class EditorCtrl {
                 }
 
                 return toastr.warning(JSON.stringify(response.data));
+            }, response => {
+                return toastr.warning(response.data.code);
             });
         };
 	
@@ -41,10 +45,11 @@ export default class EditorCtrl {
                 }
             });
 
-            $scope.draft.hashtags.forEach(function(hashtag) {
+            const hashtags = $scope.draft.userPostHashtags;
+
+            hashtags.forEach((hashtag) => {
                 $("#description").tagit("createTag", hashtag.hashtag);
             });
-
 
             $('#title').froalaEditor({
                 key: 'krlenofG5hcj1==',
@@ -64,7 +69,7 @@ export default class EditorCtrl {
 
             $('#body').froalaEditor({
                 key: 'krlenofG5hcj1==',
-                imageUploadURL: "/upload/image?postId="+postId,
+                imageUploadURL: "/upload/image?postId=" + postId,
                 heightMin: 260,
                 imageDefaultWidth: 640,
                 imagePaste: false,
@@ -75,22 +80,25 @@ export default class EditorCtrl {
                 placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             })
 
+            $('#body').froalaEditor('html.set', $scope.draft.body ? $scope.draft.body : "");
 
-            $('#body').froalaEditor('html.set', $scope.draft.post_body ? $scope.draft.post_body : "");
             $('#body').on('froalaEditor.contentChanged', (e, editor) => {
-                if ($scope.Saving.body)
+                if ($scope.Saving.body) {
                     clearTimeout($scope.Saving.body);
-                $scope.Saving.body = setTimeout(function() {
+                }
+
+                $scope.Saving.body = setTimeout(() => {
                     $scope.saveDraftElement("body");
                 }, 1500);
             });
 
-            $('#title').froalaEditor('html.set', $scope.draft.post_title ? $scope.draft.post_title : "");
+            $('#title').froalaEditor('html.set', $scope.draft.title ? $scope.draft.title : "");
+
             $('#title').on('froalaEditor.contentChanged', (e, editor) => {
                 if ($scope.Saving.title) {
                     clearTimeout($scope.Saving.title);
                 }
-                    
+
                 $scope.Saving.title = setTimeout(() => {
                     $scope.saveDraftElement("title");
                 }, 1500);
@@ -119,43 +127,43 @@ export default class EditorCtrl {
         };
 
         const loadPostDraft = postId => {
-            $http.get(postId ? "/api/post/" + postId : "/api/draft")
+            $http.get(`${API_URL}${postId ? "/post/" + postId : "/draft"}`)
             .then(response => {
                 $scope.draft = response.data;
-                
-                initEditor($scope.draft.post_id);
+
+                initEditor($scope.draft.id);
             });
         };
-        
-        $scope.saveDraftElement = function(element) {
-            var Post = {};
 
-            Post.title = $("#title").froalaEditor('html.get') ? $("#title").froalaEditor('html.get') : null;
-            Post.body = $("#body").froalaEditor('html.get') ? $("#body").froalaEditor('html.get') : null;
-            Post.hashtags = $("input#description").val();
+        $scope.saveDraftElement = (element) => {
+            const post = {};
 
-            if (!Post.body && !Post.title && !Post.hashtags) {
+            post.title = $("#title").froalaEditor('html.get') ? $("#title").froalaEditor('html.get') : null;
+            post.body = $("#body").froalaEditor('html.get') ? $("#body").froalaEditor('html.get') : null;
+            post.hashtags = $("input#description").val();
+
+            if (!post.body && !post.title && !post.hashtags) {
                 $scope.saving = null;
+
                 return false;
             }
 
-            $http.put("/api/draft/" + $scope.draft.post_id + "/" + element, Post)
-            .then(function(response) {
+            $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
+            .then((response) => {
                 $scope.saving = null;
+
                 return toastr.success("Draft has been saved.");
             });
         };
 
-        $scope.saveDraft = function(draftId) {
-            var draft = {};
+        $scope.saveDraft = (draftId) => {
+            const draft = {};
+
             draft.title = $("#title").froalaEditor('html.get') ? $("#title").froalaEditor('html.get') : "";
             draft.hashtags = $("#description").val() ? $("#description").val() : "";
             draft.body = $("#body").froalaEditor('html.get') ? $("#body").froalaEditor('html.get') : "";
 
-
-            var postId = draftId;
-
-            $http.post("/api/draft/" + postId, draft)
+            $http.post(API_URL + "/draft/" + draftId, draft)
             .then(function(data) {
                 toastr.success("Draft has been saved.");
             });

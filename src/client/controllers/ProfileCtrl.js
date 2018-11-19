@@ -1,5 +1,6 @@
+
 export default class ProfileCtrl {
-    constructor($rootScope, $stateParams, $scope, $sce, $window, $location, $http, $q, FeedService, CommentService, ProfileService, RelsService, HashbookService, PostService, profile) {
+    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, profile) {
         $scope.filter = function(filterType) {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
@@ -19,7 +20,8 @@ export default class ProfileCtrl {
         });
 
         $scope.profile = profile;
-        $scope.profileId = $scope.profile.user_id;
+
+        $scope.profileId = $scope.profile.id;
         $scope.hashtag = $location.search()["hashtag"] ? $location.search()["hashtag"] : null;
         $scope.page = 1;
         $scope.feeds = [];
@@ -31,27 +33,17 @@ export default class ProfileCtrl {
         $scope.drafts = [];
         $scope.followedHashtags = [];
 
-        $http.get("/api/profile/" + $scope.profileId + "/drafts?post_type_id=5")
-        .then(function(response) {
+        $http.get(API_URL + "/user/" + $scope.profileId + "/drafts?status=draft")
+        .then((response) => {
             $scope.drafts = response.data;
         });
 
-        $scope.fetchPost = function(postId, index) {
-            $http.get("/api/post/" + postId).then(function(response) {
+        $scope.fetchPost = (postId, index) => {
+            $http.get("/post/" + postId).then(function(response) {
                 $scope.feeds[index].body = response.data.post_body;
                 $scope.feeds[index].isFull = true;
             });
         };
-
-        HashbookService.getHashbooks($scope.profileId, {
-            limit: 4
-        }, function(rHashbooks) {
-            $scope.hashbooks = rHashbooks;
-        });
-
-        RelsService.showFollowedHashtags($scope.profileId, function(rFollowedHashtags) {
-            $scope.followedHashtags = rFollowedHashtags;
-        });
 
         $scope.unfollowHashtag = function(hashtag, index) {
             RelsService.unfollowHashtag(hashtag);
@@ -59,15 +51,6 @@ export default class ProfileCtrl {
         };
 
         $scope.feedOnScreen = function(postId, index, inview) {
-            if ($rootScope.user) {
-                if ($rootScope.user.id !== $scope.profileId) {
-                    if (!$scope.feeds[index].seen && inview) {
-                        $scope.feeds[index].seen = true;
-                        $http.post("/api/post/" + postId + "/view");
-                    }
-                }
-            }
-
             if ($scope.feeds[index].comment_count) {
                 CommentService.getComments($scope.postId, function(rComments) {
                     $scope.feeds[index].comments = rComments;
@@ -76,43 +59,30 @@ export default class ProfileCtrl {
             }
         };
 
-        $scope.updateProfileName = function(data) {
+        const updateMutableProfileFieldFactory = (fieldName) => (fieldValue) => {
             var d = $q.defer();
-            $http.put('/api/profile/' + $scope.profileId + "/username", {
-                username: data
-            }).success(function(res) {
+
+            const data = {};
+
+            data[fieldName] = fieldValue;
+
+            $http.put(`${API_URL}/user/${$scope.profile.id}`, data)
+            .then((res) => {
                 res = res || {};
                 if (res.status === 'ok') { // {status: "ok"}
                     d.resolve()
                 } else { // {status: "error", msg: "Username should be `awesome`!"}
                     d.resolve(res.msg)
                 }
-            }).error(function(e) {
-                d.reject(e);
-            });
-            return d.promise;
-        };
-
-        $scope.updateProfileTitle = function(data) {
-            var d = $q.defer();
-
-            $http.put('/api/profile/' + $scope.profileId + "/title", {
-                title: data
-            })
-            .then(res => {
-                res = res || {};
-
-                if (res.status === 'ok') { // {status: "ok"}
-                    d.resolve()
-                } else { // {status: "error", msg: "Username should be `awesome`!"}
-                    d.resolve(res.msg)
-                }
-            }, function(e) {
+            }, (e) => {
                 d.reject(e);
             });
 
             return d.promise;
         };
+
+        $scope.updateUsername = updateMutableProfileFieldFactory("username");
+        $scope.updateAddressBCH = updateMutableProfileFieldFactory("addressBCH");
 
         $scope.clickProfilePic = (userId, profileId) => {
             if ($rootScope.user) {
@@ -150,7 +120,7 @@ export default class ProfileCtrl {
                 page: params.page ? params.page : $scope.page,
                 filter: $scope.filterType,
                 algorithm: "none",
-                profileId: $scope.profileId
+                userId: $scope.profileId
             }, data => {
                 if (!data) {
                     return;

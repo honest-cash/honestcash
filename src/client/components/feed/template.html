@@ -2,9 +2,7 @@
 <div class="push feed">
 				<!-- HEADER -->
 				<div class="feed-header">
-					
-									<!-- AUTHOR -->
-					<div class="feed-author" ng-if="feed.post_type_id > 1">
+					<div class="feed-author">
 						<ul class="list-unstyled" >
 							<!-- AUTHOR IMAGE -->
 							<li>
@@ -15,167 +13,66 @@
 
 							<!-- AUTHOR REFERENCES -->
 							<li>
-								<strong style="margin-top:15px;"><a ui-sref="vicigo.profile({profileId:feed.authorId})">{{feed.authorName}}</a></strong>
+								<strong style="margin-top:15px;"><a ui-sref="vicigo.profile({profileId:feed.user.id})">{{feed.user.username}}</a></strong>
 							</li>
 							<!-- END AUTHOR REFERENCES -->
 							<li class="feed-date">
-										<span class="text-muted"><small>{{ feed.created_at }}</small></span>
+								<span class="text-muted"><small>{{ feed.createdAt }}</small></span>
 							</li>
 						</ul>
 					</div>
-					<!-- END AUTHOR -->
-					
 				</div>
 				<!-- END HEADER -->
 		
-
-
-				
-				
-				
 				<div ng-class="{ 'post-feed-body' : feed.post_type_id == 2 || feed.post_type_id == 3, 'image-feed-body' : feed.post_type_id == 4 || feed.post_type_id == 5 }">
 					<!-- TITLE -->
 					<div class="feed-title" ng-if="hasTitle(feed.post_type_id)">
 						<h3><strong><a ng-href="{{feed.link}}">{{feed.title}}</a></strong></h3>
 					</div>
 					<!-- END TITLE -->
-
 					
 					<!-- IMAGE BODY href="/post/{{feed.id}}" -->
 					<div class="feed-body" ng-click="goToPost(feed)">
 						
 						<lazy-img ng-if="feed.image_url" class="lazy" ng-src="{{trustSrc(feed.image_url)}}" alt="image"></lazy-img>
+						
 						<p ng-if="feed.body && feed.post_type_id !== 4 && feed.post_type_id !== 5" class="feed-article">
-								{{displayFeedBody(feed.body)}}
+								{{ displayFeedBody(feed.body) }}
 						</p>
 						
 					</div>
 					<!-- END POST  BODY -->
 					
 				
-
 					<!----------------------- POST BODY ENDS ---------------------------------->
 				</div>
-				
+
 			<!-- footer -->	
 			<div class="feed-footer">
-			
-			<div class="row hashtags">
-						<div class="col-xs-12">
-							<div class="padding-left:5px;padding-right:5px;">
-								<a class="pull-left hashtag" ng-repeat="hashtag in feed.hashtags" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag})">#{{ ::hashtag.hashtag}}</a>
-							</div>
-							
+				<div class="row hashtags">
+					<div class="col-xs-12">
+						<div style="padding-left:8px;padding-right:5px;">
+							<a class="pull-left hashtag" ng-repeat="hashtag in feed.userPostHashtags" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag})">#{{ ::hashtag.hashtag}}</a>
 						</div>
-			</div>
-				
-				
-				<div style="row">
-					<div class="col-xs-12" >
-			<ul class="pointer pull-left list-inline list-unstyled list" ng-click="showUpvotes(feed)" >
-							<li>
-								<span class="btn default">
-									<i class="fa fa-heart-o"></i>
-									<span> {{ ::feed.upvotes_count}}</span>
-								</span>
-							</li>
-
-							<li>
-								<span class="btn default">
-									<i class="fa fa-comment-o"></i>
-									<span> {{ ::feed.comment_count}}</span>
-								</span>
-							</li>
-								<li>
-
-								<span class="btn default">
-									<i class="fa fa-eye"></i>
-									<span> {{ ::feed.views_count}}</span>
-								</span>
-							</li>
-
-						</ul>
-				</div>
-						
 					</div>
-			
-				
-					<!-- OPTIONS -->
-					<div class="row feed-actions" style="padding-bottom:5px;">
-							<div class="col-xs-12">
-								<form ng-submit="postComment(feed.id,feed.commentDraft,$index)">
-						<ul class=" list-unstyled list-inline list" >
+				</div>
+
+				<div class="row feed-actions" style="margin-top: 10px;">
+					<div class="col-xs-12">
+						<ul class="list-unstyled list-inline list" ng-mouseenter="mouseEnterAddress('bch-qr-'+ feed.id, feed.user.addressBCH)" ng-mouseleave="mouseLeaveAddress('bch-qr-' + feed.id)">
 							<li style="width:50px;">
-								<span ng-click="upvote(feed.id, $index)" style="cursor:pointer;">
+								<span style="cursor:pointer;">
 									<i ng-if="feed.alreadyUpvoted" class="upvoted rate-btn fa fa-heart"></i>
 									<i ng-if="!feed.alreadyUpvoted" class="rate-btn fa fa-heart-o fa-2x"></i>
 								</span>
 							</li>
-
-							<li style="width:500px;">
-											<input style="width:500px;" ng-model="feed.commentDraft" placeholder="Write your comment ...">
+							<li>
+								<a style="top:-5px;" href="#" >{{feed.user.addressBCH}}</a>
+								<div class="bch-qr-{{feed.id}}"></div>
 							</li>
-					
-							<li style="width:50px;" uib-dropdown on-toggle="toggled(open)">
-				
-      <a href="#" uib-dropdown-toggle ng-disabled="disabled">
-					<i class="fa fa-ellipsis-h"></i>
-      </a>
-      <ul uib-dropdown-menu class="uib-dropdown-menu header_menu list-unstyled" role="menu" aria-labelledby="single-button">
-        <li  ng-if="user.id==feed.authorId && (feed.post_type_id == 4 || feed.post_type_id == 5)"><a href="#"  ng-click="editPhoto(feed)">Edit</a>
-							</li>
-							<li ng-if="user.id==feed.authorId && (feed.post_type_id == 3 || feed.post_type_id == 2)"><a href="#"  target="_self" ng-href="/edit/{{feed.id}}">Edit</a>
-							</li>
-							<li ng-if="user.id==feed.authorId"><a href="#"  ng-click="removePost(feed,false,$index)">Remove</a>
-							</li>
-							<li><a href="#" >Share</a>
-							</li>
-							<li><a href="#" >Report</a>
-							</li>
-      </ul>
-
-							</li>
-
-							
-
-
 						</ul>
-					</form>
-				
 					</div>
-					</div>
-					<!-- END OPTIONS -->
-
-
-
-
-					<!--COMMENTS-->
-					<div class="row">
-						<div class="col-xs-12">
-						<div style="padding:5px;">
-							
-							
-							
-						<a ng-if="feed.comment_count&&!feed.showComments" class="text-muted" ng-click="showComments(feed.id,$index)">Show Comments</a>
-				
-    <table ng-if="feed.comments.length" style="padding:10px;">
-        <tbody>	
-                    <tr style="width:100%;" ng-repeat="comment in feed.comments">
-                            <td style="width:100%; float:left;font-size:13px;">
-                                <p style="float:left">
-                                        <strong > <a href="/profile/{{comment.authorId}}" >{{comment.authorName}} </a></strong> {{comment.body}} <small ng-if="user.id==comment.authorId"> <a href="#" ng-click="deleteComment(feed.id,comment.comment_id,$parent.$index,$index)">remove</a> </small>
-                                </p>
-                                
-                            </td>	
-                        </tr>
-        </tbody>	
-    </table>	
-							
-			</div>	
-					</div>
-
-					</div>
-      </div>
-			<!-- end footer-->
+				</div>
 			</div>
+		</div>
 </div>

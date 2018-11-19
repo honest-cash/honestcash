@@ -100,13 +100,14 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/profile.html",
 			controller: "profileController",
 			resolve: {
-				'profile': function($stateParams, $http, $q, ProfileService) {
+				'profile': ($stateParams, $q, ProfileService) => {
 					var defer = $q.defer();
-					ProfileService.fetchProfile($stateParams.profileId, function(rProfile) {
+
+					ProfileService.fetchProfile($stateParams.profileId, (rProfile) => {
 						defer.resolve(rProfile);
 					});
-					return defer.promise;
 
+					return defer.promise;
 				}
 			}
 		})
@@ -157,7 +158,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			controller: "postController",
 			resolve: {
 				'post': function($stateParams, $rootScope, $http, MetaService, PostService) {
-					return $http.get("/api/post/" + $stateParams.username + "/" + $stateParams.alias).then(function(response) {
+					return $http.get("/post/" + $stateParams.username + "/" + $stateParams.alias).then(function(response) {
 						MetaService.setForPost(response.data);
 						return response.data;
 					});

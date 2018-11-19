@@ -1,34 +1,13 @@
-
-
-
-<div class="row">
-
-
-<div style="max-width:640px;margin: auto;">
-  <button ng-class="{ 'selected' : filterType == 'posts' }" type="button" class="col-xs-6 btn btn-default" ng-click="filter('posts')">Posts</button>
-  <button ng-class="{ 'selected' : filterType == 'pics' }" type="button" class="col-xs-6 btn btn-default" ng-click="filter('pics')">Pics</button>
-  <button ng-class="{ 'selected' : filterType == 'upvotes' }" type="button" class="hidden col-xs-4 btn btn-default" ng-click="filter('upvotes')">Upvotes</button>
-</div>
-	
-	
-</div>
 <div class="container-fluid">
-<div infinite-scroll="loadMore()" infinite-scroll-distance="1">
+	<div infinite-scroll="loadMore()" infinite-scroll-distance="1">
+		<div class="row">
+			<div class="feed-container" ng-repeat="feed in feeds"  in-view="$inview && feedOnScreen(feed.id,$index,$inview)">
+				<feed></feed>
+			</div>
 
-	<div class="row">
-	
-	<div class="feed-container" ng-repeat="feed in feeds"  in-view="$inview&&feedOnScreen(feed.id,$index,$inview)">
+			<div style='clear: both;'></div>
+		</div>
 
-		<feed></feed>
-
+		<div class="text-center" ng-show='activeCalls'><i class="fa fa-circle-o-notch fa-spin  fa-2x"></i></div>
 	</div>
-		<!-- END FEED -->
-
-		<div style='clear: both;'></div>
-	</div>
-	<!-- END FEEDS REPEAT-->
-
-	<div class="text-center" ng-show='activeCalls'><i class="fa fa-circle-o-notch fa-spin  fa-2x"></i></div>
-
-</div>
 </div>

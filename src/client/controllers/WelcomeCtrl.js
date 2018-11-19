@@ -39,20 +39,11 @@ export default class WelcomeCtrl {
 			$rootScope.user = {
 				id: User.userId
 			};
-			$state.go("starter.thankyou");
-		}, function(response) {
-			if(response.err){
-				if (response.err.code) {
-					$state.go("starter.welcome", {
-						code: response.err.code
-					});
-				} else {
-					$state.go("starter.login", {
-						code: "ERROR"
-					});
-				}
-			}
-			
+			$state.go("vicigo.feeds");
+		}, (response) => {
+			$scope.isLoading = false;
+
+			return displayErrorMessage(response.data.code);
 		});
 	};
 

@@ -5,6 +5,7 @@ import 'jquery';
 import uiRouter from 'angular-ui-router';
 import infiniteScroll from  'ng-infinite-scroll';
 import ProfileCtrl from './controllers/ProfileCtrl';
+import FeedService from './services/FeedService';
 import FeedsCtrl from './controllers/FeedsCtrl';
 import WelcomeCtrl from './controllers/WelcomeCtrl';
 import DraftsCtrl from './controllers/DraftsCtrl';
@@ -14,13 +15,13 @@ import httpConfig from './config/http';
 import stateConfig from './config/state';
 import feedComponent from './components/feed/component';
 import AuthModule from './AuthModule';
-
+import * as runs from './runs/runs';
 AuthModule();
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
 var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infiniteScroll, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"])
 
-.constant("API_URL", "https://honestcash.alphateamhackers.com/api")
+.constant("API_URL", "http://localhost:8080/api"/*, "https://honestcash.alphateamhackers.com/api" */)
 .run(function(ngDialog) {
 	(function(i, s, o, g, r, a, m) {
 		i['GoogleAnalyticsObject'] = r;
@@ -238,12 +239,12 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 
 .service("CommentService", function($http) {
 	var deleteComment = function(postId, commentId) {
-		$http.delete("/api/post/" + postId + "/comments/" + commentId).then(function(response) {
+		$http.delete("/post/" + postId + "/comments/" + commentId).then(function(response) {
 		});
 	};
 
 	var getComments = function(postId, callback) {
-		$http.get("/api/post/" + postId + "/comments").then(function(response) {
+		$http.get("/post/" + postId + "/comments").then(function(response) {
 			callback(response.data);
 		});
 	};
@@ -256,7 +257,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 			postId: postId,
 			body: commentBody,
 		};
-		$http.post("/api/post/" + postId + "/comments/", comment).then(function(response) {
+		$http.post("/post/" + postId + "/comments/", comment).then(function(response) {
 			callback(response.data);
 		});
 	}
@@ -271,7 +272,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 .service("HashbookService", function($http, API_URL) {
 	var getHashbooks = function(profileId, params, callback) {
 		$http({
-			url: API_URL + "/api/profile/" + profileId + "/hashbooks",
+			url: API_URL + "/profile/" + profileId + "/hashbooks",
 			method: "GET",
 			params: params
 		}).then(function(response) {
@@ -342,102 +343,72 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 	};
 })
 
-
 .service("PostService", function($http, $sce, API_URL) {
+	var removePost = function(postId) {
+		return $http.delete(API_URL + "/post/" + postId);
+	};
 
-		var removePost = function(postId) {
-			return $http.delete(API_URL + "/api/post/" + postId);
-		};
+	var getById = function(postId, callback) {
+		return $http.get(API_URL + "/post/" + postId).then(function(response) {
+			callback(response.data);
+		});
+	}
 
+	var getByAlias = function(username, alias, callback) {
+		return $http.get(API_URL + "/post/" + username + "/" + alias).then(function(response) {
+			callback(response.data);
+		});
+	}
+	var displayHTML = function(html) {
+		return $sce.trustAsHtml(html);
+	};
 
+	var publishPic = function(postId, params, callback) {
+		$http.put(API_URL + "/post/image/publish", {
+			postId: postId,
+			tags: params.hashtags
+		}).then(function(response) {
+			callback(response.data);
+		});
+	};
 
-		var getById = function(postId, callback) {
-			return $http.get(API_URL + "/api/post/" + postId).then(function(response) {
-				callback(response.data);
-			});
-		}
+	var upvote = function(postId) {
+		$http.post(API_URL + "/post/" + postId + "/upvote").then(function(response) {
+			
+		});
+	};
 
-		var getByAlias = function(username, alias, callback) {
-			return $http.get(API_URL + "/api/post/" + username + "/" + alias).then(function(response) {
-				callback(response.data);
-			});
-		}
-		var displayHTML = function(html) {
-			return $sce.trustAsHtml(html);
-		};
+	var downvote = function(postId) {
+		$http.post(API_URL + "/post/" + postId + "/downvote").then(function(response) {
+			
+		});
+	};
 
+	var getUpvotes = function(postId, callback) {
+		$http.get(API_URL + "/post/" + postId + "/upvotes").then(function(response) {
+			callback(response.data);
+		});
+	};
 
-		var publishPic = function(postId, params, callback) {
-			$http.put(API_URL + "/api/post/image/publish", {
-				postId: postId,
-				tags: params.hashtags
-			}).then(function(response) {
-				callback(response.data);
-			});
-		};
+	var getViews = function(postId, callback) {
+		$http.get(API_URL + "/post/" + postId + "/views").then(function(response) {
+			callback(response.data);
+		});
+	};
 
-
-		var upvote = function(postId) {
-			$http.post(API_URL + "/api/post/" + postId + "/upvote").then(function(response) {
-				
-			});
-		};
-		var downvote = function(postId) {
-			$http.post(API_URL + "/api/post/" + postId + "/downvote").then(function(response) {
-				
-			});
-		};
-
-		var getUpvotes = function(postId, callback) {
-			$http.get(API_URL + "/api/post/" + postId + "/upvotes").then(function(response) {
-				callback(response.data);
-			});
-		};
-
-		var getViews = function(postId, callback) {
-			$http.get(API_URL + "/api/post/" + postId + "/views").then(function(response) {
-				callback(response.data);
-			});
-		};
-
-		return {
-			getViews: getViews,
-			getUpvotes: getUpvotes,
-			publishPic: publishPic,
-			getById: getById,
-			getByAlias: getByAlias,
-			removePost: removePost,
-			upvote: upvote,
-			downvote: downvote,
-			displayHTML: displayHTML
-		};
-
+	return {
+		getViews: getViews,
+		getUpvotes: getUpvotes,
+		publishPic: publishPic,
+		getById: getById,
+		getByAlias: getByAlias,
+		removePost: removePost,
+		upvote: upvote,
+		downvote: downvote,
+		displayHTML: displayHTML
+	};
 	})
-	.service("FeedService", function($http, API_URL) {
-
-		var fetchFeeds = function(query, callback) {
-			$http({
-				url: API_URL + "/api/feeds",
-				method: "GET",
-				params: {
-					hashtag: query.hashtag,
-					sort: query.sort,
-					filter: query.filter,
-					page: (query.page) ? query.page : 1,
-					profileId: query.profileId,
-					algorithm: query.algorithm
-				}
-			}).then(function(response) {
-				
-				callback(response.data);
-			});
-		};
-
-		return {
-			fetchFeeds: fetchFeeds
-		};
-
-	})
+	.service("FeedService", FeedService)
 
 .factory('AuthInterceptor', function($rootScope, $q) {
 
@@ -652,7 +623,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 			var post = angular.copy($scope.activePost);
 
 			post.tags = hashtags;
-			$http.post("/api/post/image/from_link", post).then(function(response) {
+			$http.post("/post/image/from_link", post).then(function(response) {
 				
 				$(".tags-area2").tagit("removeAll");
 
@@ -704,6 +675,23 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 				});
 			});
 		};
+
+        const mouseEnterAddress = (className, address) => {
+            const container = document.getElementsByClassName(className)[0];
+
+            container.innerHTML = "";
+
+            new QRCode(container, address);
+        };
+
+        const mouseLeaveAddress = (className) => {
+            const container = document.getElementsByClassName(className)[0];
+
+            container.innerHTML = "";
+        };
+
+        $scope.mouseEnterAddress = mouseEnterAddress;
+        $scope.mouseLeaveAddress = mouseLeaveAddress;
 
 		$scope.showUpvotes = function(feed, statType) {
 			PostService.getUpvotes(feed.id, function(rPostUpvotes) {
@@ -937,38 +925,34 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 })
 
 .service("ProfileService", function($http, API_URL) {
-
-	var fetchProfile = function(profileId, callback) {
-		$http.get(API_URL + "/api/profile/" + profileId).then(function(response) {
-			
+	const fetchProfile = (profileId, callback) => {
+		$http.get(API_URL + "/user/" + profileId).then(function(response) {
 			callback(response.data);
 		});
 	};
 
-	var fetchProfileStatus = function(query, callback) {
+	const fetchProfileStatus = function(query, callback) {
 		$http({
-			url: API_URL + "/api/profile/status",
+			url: API_URL + "/user/status",
 			method: "GET",
 			params: {
 
 			}
 		}).then(function(response) {
-			
 			callback(response.data);
 		});
 	};
 
-		var fetchRecommentedProfiles = function(profileId,params,callback) {
+	const fetchRecommentedProfiles = function(profileId,params,callback) {
 		$http({
-			url: API_URL + "/api/profile/"+profileId+"/recommented/accounts",
+			url: API_URL + "/user/" + profileId + "/recommented/accounts",
 			method: "GET",
 			params: params
 		}).then(function(response) {
-			
 			callback(response.data);
 		});
 	};
-	
+
 	return {
 		fetchProfileStatus: fetchProfileStatus,
 		fetchProfile: fetchProfile,
@@ -1044,43 +1028,14 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 		return "post";
 	}
 })
-	.controller("profileController", ProfileCtrl)
-	.controller("editorController", EditorCtrl)
-	.controller("feedsController", FeedsCtrl)
-	.controller("welcomeController", WelcomeCtrl)
-	.controller("draftsController", DraftsCtrl)
-	
-	.run(function($rootScope, $state, ViciAuth) {
-		$rootScope.$on('$stateChangeStart', function(event, next, nextParams, fromState) {
-			if (next.name == "starter.welcome") {
-				$rootScope.welcome = true;
-			} else {
-				$rootScope.welcome = false;
-			}
-			if (next.name == "starter.login" || next.name == "starter.signup" || next.name == "blog" || next.name == "starter.welcome" || next.name == "starter.thankyou") {
-				$rootScope.noHeader = true;
-			} else {
-				$rootScope.noHeader = false;
-			}
+.controller("profileController", ProfileCtrl)
+.controller("editorController", EditorCtrl)
+.controller("feedsController", FeedsCtrl)
+.controller("welcomeController", WelcomeCtrl)
+.controller("draftsController", DraftsCtrl)
 
-			ViciAuth.validate(function(data) {
-				if (data && data.userId) {
-					var u = {
-						id: data.userId,
-						profileImageUrl: data.profileImageUrl,
-						name: data.name
-					};
-					$rootScope.user = u;
-				} else {
-					$rootScope.user = false;
-					if (next.name == "vicigo.feeds") {
-						$state.go("starter.welcome");
-					}
-				}
-			});
+.run(runs.onStateChange)
 
-		});
-	})
 .directive('backImg', function() {
 	return function(scope, element, attrs) {
 		var url = attrs.backImg;

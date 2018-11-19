@@ -18,14 +18,8 @@ export default class FeedsCtrl {
 		});
 
 		$scope.feedOnScreen = function(postId, index, inview, userId) {
-			if (!$scope.feeds[index].seen && inview) {
-				$scope.feeds[index].seen = true;
-				$http.post("/api/post/" + postId + "/view");
-			}
-
-
 			if ($scope.feeds[index].comment_count) {
-				$http.get("/api/post/" + postId + "/comments/").then(function(response) {
+				$http.get("/post/" + postId + "/comments/").then(function(response) {
 					$scope.feeds[index].comments = response.data;
 					$scope.feeds[index].showComments = true;
 				});
@@ -56,7 +50,7 @@ export default class FeedsCtrl {
 		$scope.recommendedProfiles = [];
 
 		$scope.fetchPost = function(postId, index) {
-			$http.get("/api/post/" + postId).then(function(response) {
+			$http.get("/post/" + postId).then(function(response) {
 				$scope.feeds[index].body = response.data.post_body;
 				$scope.feeds[index].isFull = true;
 				
@@ -72,30 +66,26 @@ export default class FeedsCtrl {
 			});
 		};
 
-		$scope.fetchFeeds = function() {
-			FeedService.fetchFeeds({
-				page: $scope.page,
-				hashtag: $scope.hashtag,
-				filter: $scope.filterType,
-				algorithm: $scope.hashtag ? "none" : "feeds"
-			}, function(data) {
-				if (data) {
-					data.forEach(function(feed) {
-						$scope.feeds.push(feed);
-					});
+		$scope.fetchFeeds = () => FeedService.fetchFeeds({
+			page: $scope.page,
+			hashtag: $scope.hashtag,
+			filter: $scope.filterType,
+			algorithm: $scope.hashtag ? "none" : "feeds"
+		}, (data) => {
+			if (data) {
+				data.forEach((feed) => {
+					$scope.feeds.push(feed);
+				});
 
-					if (data.length < $scope.limit) {
-						$scope.postsAvailable = false;
-					} else {
-						$scope.postsAvailable = true;
-					}
-				} else {
+				if (data.length < $scope.limit) {
 					$scope.postsAvailable = false;
+				} else {
+					$scope.postsAvailable = true;
 				}
-
-
-			});
-		};
+			} else {
+				$scope.postsAvailable = false;
+			}
+		});
 
 		$scope.fetchFeeds();
 
@@ -122,7 +112,7 @@ export default class FeedsCtrl {
 				$scope.feeds[index].showComments = false;
 			} else {
 				$scope.feeds[index].showComments = true;
-				$http.get("/api/post/" + postId + "/comments/").then(function(response) {
+				$http.get("/post/" + postId + "/comments/").then(function(response) {
 					
 					$scope.feeds[index].comments = response.data;
 				});

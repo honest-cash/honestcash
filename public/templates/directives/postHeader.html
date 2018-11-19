@@ -1,64 +1,43 @@
 <header id="blog-intro" class="intro-block bg-color3">
-
 	<div class="container">
 		<!-- AUTHOR -->
 		<ul class="list-unstyled list-inline">
-
-
-			<li ng-if="!post.authorFollowed && user.id !== post.author_id">
-				<a href="#" class="btn btn-success" role="button" ng-click="follow(post.author_id)">FOLLOW</a>
-			</li>
-
 			<!-- AUTHOR IMAGE -->
 			<li>
 				<a ui-sref="vicigo.profile({profileId: post.author_id})">
-					<img ng-if="post.author_profile_image_url" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.author_profile_image_url}}" alt="{{post.author_name}}" class="img-circle img-thumbnail-avatar-small">
-					<img ng-if="!post.author_profile_image_url" src="/img/avatar.png" alt="{{post.author_name}}" class="img-circle img-thumbnail-avatar-small">
+					<img ng-if="post.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+					<img ng-if="!post.imageUrl" src="/img/avatar.png" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
 				</a>
 			</li>
 			<!-- END AUTHOR IMAGE -->
 
 			<!-- AUTHOR REFERENCES -->
 			<li style="vertical-align:middle">
-				<strong style="margin-top:50px;">{{::post.author_fullname}} <a ui-sref="vicigo.profile({profileId: post.author_id})">@{{::post.author_name}}</a></strong> {{::post.author_title}}
+				<strong style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId: post.user.id})">@{{::post.user.username}}</a></strong>
 
-				<a ng-if="post.author_facebook_id" ng-href="https://www.facebook.com/{{post.author_facebook_id}}" target="_blank" class="social-website" title="Visit my page"><i class="fa fa-facebook"></i></a>
-				<a ng-if="post.author_website_url" ng-href="{{post.author_website_url}}" target="_blank" class="social-website" title="Visit my page"><i class="fa fa-fw fa-link"></i></a>
-
-				<br>
+				<br />
 
 				<small class="text-muted">
-            <span ng-if="!post.post_publish_timestamp_formatted">{{::post.post_created_at_formatted}}</span> 
-            <span ng-if="post.post_publish_timestamp_formatted">{{::post.post_publish_timestamp_formatted}}</span>,
-            <span>{{::post.post_read_time_formatted}}</span> 
-          </span>
-          </small>
-
-
+					<span ng-if="!post.post_publish_timestamp_formatted">{{::post.createdAt}}</span> 
+					<span ng-if="post.readTime">{{::post.readTime}}</span> 
+          		</small>
 			</li>
-
+			<!-- END AUTHOR REFERENCES -->
 		</ul>
-
 	</div>
-
-
 
 	<div class="container post-title-container">
 		<h1>
-			<strong>{{post.post_title}}</strong>
-       <small ng-if="user.id==post.author_id && ( post.post_type_id == 2 ||  post.post_type_id == 3 )">
-				 <a ng-href="/edit/{{post.post_id}}"  target="_self">Edit</a>
+			<strong>{{post.title}}</strong>
+      		<small ng-if="user.id==post.user.id">
+				 <a ng-href="/edit/{{post.id}}"  target="_self">Edit</a>
 			</small>	
-      </h1>
-
+      	</h1>
 	</div>
 
-
-	<div class="row">
+	<div class="row" ng-if="post.imageUrl">
 		<div class="fill-screen">
-			<lazy-img style="max-height:640px;max-width:640px;" class="postMainPicture" ng-src="{{trustSrc(post.post_image_url)}}">
+			<lazy-img style="max-height:640px;max-width:640px;" class="postMainPicture" ng-src="{{trustSrc(post.imageUrl)}}">
 		</div>
 	</div>
-
-
 </header>
