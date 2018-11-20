@@ -48,14 +48,22 @@ export default class WelcomeCtrl {
 	};
 
 	const checkUserName = (username) => {
-		var pattern = new RegExp(/[~`!#@$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
-		
+		var pattern = new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
+
 		if (pattern.test(username)) {
 			return false;
 		}
 
 		return true; //good user input
-	}
+	};
+
+	const checkPassword = (password) => {
+		if (password.length < 8) {
+			return false;
+		}
+
+		return true; //good user input
+	};
 
 	$rootScope.signup = async (data) => {
 		if (!data) {
@@ -78,12 +86,22 @@ export default class WelcomeCtrl {
 			return;
 		}
 
-		if (!data.password) {
-			return alert("Password is required.");
-		}
-		
 		if (!data.email) {
-			return alert("Email is required.");
+			$scope.message = "Email is required..";
+
+			return;
+		}
+
+		if (!data.password) {
+			$scope.message = "Password is required..";
+
+			return;
+		}
+
+		if (!checkPassword(data.password)) {
+			$scope.message = "Password should be at least 8 characters.";
+
+			return;	
 		}
 
 		$scope.isLoading = true;

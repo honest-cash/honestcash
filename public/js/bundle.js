@@ -22150,9 +22150,17 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 	};
 
 	var checkUserName = function checkUserName(username) {
-		var pattern = new RegExp(/[~`!#@$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
+		var pattern = new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
 
 		if (pattern.test(username)) {
+			return false;
+		}
+
+		return true; //good user input
+	};
+
+	var checkPassword = function checkPassword(password) {
+		if (password.length < 8) {
 			return false;
 		}
 
@@ -22180,12 +22188,22 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 			return;
 		}
 
-		if (!data.password) {
-			return alert("Password is required.");
+		if (!data.email) {
+			$scope.message = "Email is required..";
+
+			return;
 		}
 
-		if (!data.email) {
-			return alert("Email is required.");
+		if (!data.password) {
+			$scope.message = "Password is required..";
+
+			return;
+		}
+
+		if (!checkPassword(data.password)) {
+			$scope.message = "Password should be at least 8 characters.";
+
+			return;
 		}
 
 		$scope.isLoading = true;
