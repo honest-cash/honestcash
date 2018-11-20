@@ -33,6 +33,9 @@ We strive for uncensorable content. Users will be able save its content on IPFS.
 
 There was one misconception about the definition of "uncesorable". We will not prohibit any opinion expressed on the platform or try to censor it. However, content that promotes rasism, crime, hate and similar will not be listed on the platform. Notwithstanding, the permissionless nature of the IPFS system does not stop the party to promote such content somewhere else.
 
+# Donate
+bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h 
+
 # Licence
 Copyright 2018 Honest Cash
 
