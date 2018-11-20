@@ -27,7 +27,7 @@ information booth at Grand Central Terminal”. There is nothing that makes noon
 ### Users can log in with Bitcoin Cash. Email/Passwords authentificaion will be optional.
 Up to this stage, participation will require a centralized login system. As next, we want to allow signup and creation of content without any need for an e-mail verification. This can be simply accomplished with a Bitcoin Cash signup.
 
-### Content can optonally optionally saved on blockchain (or IPFS)
+### Content can optionally be saved on blockchain (or IPFS)
 We strive for uncensorable content. Users will be able save its content on IPFS. We will provide decentralized repository of all content saved (for example as a smart contract). Besides, our technology is and will be open-sourced. This way in case we could not provide the service anymore (for whatever reason), others will be able to continue it without us.
 
 There was one misconception about the definition of "uncesorable". We will not prohibit any opinion expressed on the platform or try to censor it. However, content that promotes rasism, crime, hate and similar will not be listed on the platform. Notwithstanding, the permissionless nature of the IPFS system does not stop the party to promote such content somewhere else.
