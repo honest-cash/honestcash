@@ -4,10 +4,14 @@ export default class WelcomeCtrl {
 	$rootScope.noHeader = true;
 	$scope.hashtags = [ "general", "crypto", "fiction", "art", "music", "science", "funny", "photos", "meta" ];
 	$scope.isLoading = false;
+	$scope.forgot = false;
+	$scope.resetCode = $location.search().code;
+
+	console.log("Resetting password with code: " + $scope.resetCode);
 
 	const displayErrorMessage = (code) => {
-		if (code || $location.search().code) {
-			switch (code || $location.search().code) {
+		if (code) {
+			switch (code) {
 				case "EMAIL_EXISTS":
 					$scope.message = "E-Mail already exists";
 					break;
@@ -23,28 +27,19 @@ export default class WelcomeCtrl {
 				case "LOG_IN_WITH_FACEBOOK":
 					$scope.message = "Log in with Facebook";
 					break;
+				case "EMAIL_NOT_FOUND":
+					$scope.message = "E-mail could not be found.";
+					break;
 				default:
 					$scope.message = "Login error. Try again...";
 			}
 		}
 	};
-	
+
 	displayErrorMessage();
 
-	$rootScope.login = (data) => {
-		ViciAuth.login({
-			email: data.loginemail,
-			password: data.loginpassword
-		}).then((User) => {
-			$rootScope.user = {
-				id: User.userId
-			};
-			$state.go("vicigo.feeds");
-		}, (response) => {
-			$scope.isLoading = false;
-
-			return displayErrorMessage(response.data.code);
-		});
+	const mutateForgot = (forgotValue) => () => {
+		$scope.forgot = forgotValue;
 	};
 
 	const checkUserName = (username) => {
@@ -63,6 +58,71 @@ export default class WelcomeCtrl {
 		}
 
 		return true; //good user input
+	};
+
+	$scope.goToForgotPage = mutateForgot(true);
+	$scope.goToLoginPage = mutateForgot(false);
+
+	$rootScope.login = (data) => {
+		$scope.isLoading = true;
+
+		ViciAuth.login({
+			email: data.loginemail,
+			password: data.loginpassword
+		}).then((User) => {
+			$scope.isLoading = false;
+
+			$rootScope.user = {
+				id: User.userId
+			};
+
+			$state.go("vicigo.feeds");
+		}, (response) => {
+			$scope.isLoading = false;
+
+			return displayErrorMessage(response.data.code);
+		});
+	};
+
+	$scope.changePassword = (data) => {
+		$scope.isLoading = true;
+
+		ViciAuth.changePassword({
+			code: $scope.resetCode,
+			newPassword: data.loginpassword,
+			repeatNewPassword: data.loginpasswordrepeat,
+		})
+		.then(() => {
+			$scope.message = "Your password has been restarted. You can not log-in.";
+
+			$scope.resetCode = undefined;
+			$scope.data.loginemail = undefined;
+			$scope.data.loginpassword = undefined;
+			$scope.data.loginpasswordreset = undefined;
+			$scope.forgot = false;
+			$scope.isLoading = false;
+		}, (response) => {
+			$scope.isLoading = false;
+
+			return displayErrorMessage(response.data.code);
+		});
+	};
+
+	$scope.resetPassword = (data) => {
+		$scope.isLoading = true;
+
+		ViciAuth.resetPassword({
+			email: data.loginemail
+		})
+		.then(() => {
+			$scope.message = "Check your e-mail inbox.";
+
+			$scope.isLoading = false;
+		}, (response) => {
+			$scope.isLoading = false;
+
+			return displayErrorMessage(response.data.code);
+		});
 	};
 
 	$rootScope.signup = async (data) => {
@@ -105,7 +165,7 @@ export default class WelcomeCtrl {
 		}
 
 		$scope.isLoading = true;
-
+		
 		ViciAuth.signup({
 			username: data.username,
 			password: data.password,
@@ -134,5 +194,5 @@ export default class WelcomeCtrl {
 			return item.hashtag
 		});
 	});
-	 */
+	*/
 }}

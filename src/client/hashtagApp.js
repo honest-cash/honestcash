@@ -21,7 +21,7 @@ AuthModule();
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
 var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infiniteScroll, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"])
 
-.constant("API_URL", "https://honestcash.alphateamhackers.com/api", /*"http://localhost:8080/api"/*, "https://honestcash.alphateamhackers.com/api" */)
+.constant("API_URL", "http://localhost:8080/api"/*, "https://honestcash.alphateamhackers.com/api" */)
 
 .run(function(ViciAuth, Uploader) {
 

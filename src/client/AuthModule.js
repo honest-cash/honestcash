@@ -8,7 +8,9 @@ export default () => {
 		LOGIN: "/login",
 		SIGNUP: "/signup/email",
 		VALIDATE: "/me",
-		LOGOUT: "/logout"
+		LOGOUT: "/logout",
+		RESET: "/auth/request-password-reset",
+		CHANGE_PASSWORD: "/auth/reset-password"
 	})
 	.factory("apiFactory", function(API_URL, API) {
 		return (method) => {
@@ -16,31 +18,7 @@ export default () => {
 		};
 	})
 
-.factory('facebookFactory', function($q) {
-	return {
-		
-		login : function(callback){
-			FB.getLoginStatus(function(response) {
-				if(response.status == "connected"){
-					callback(response.authResponse);
-				} else {
-				FB.login(function(response) {
-    		if (response.authResponse) {
-     			callback(response.authResponse);
-				}else{
-					callback();
-				}
-			});
-				}
-				
-			});
-
-		},
-	}
-})
-
-.service("ViciAuth", function($rootScope,$window, $http, $q,facebookFactory,apiFactory) {
-
+.service("ViciAuth", function($rootScope,$window, $http, $q, apiFactory) {
 		var LOCAL_TOKEN_KEY = 'AdminDashAuthToken';
 		var LOCAL_USER_ID_KEY = 'AdminDashUserId';
 		var username = '';
@@ -73,33 +51,6 @@ export default () => {
 			$window.localStorage.setItem(LOCAL_USER_ID_KEY, userId);
 			$window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
 			useCredentials(token, userId);
-		}
-
-		function fbAuth(callback){
-			console.info("[ViciAuth] Checking fb login status..");
-			facebookFactory.login(function(fbAuth){
-					
-				var postBody = {
-					token : fbAuth.accessToken,
-					networkId : fbAuth.userID
-				};
-
-				if (!postBody.token) {
-					return console.error("[ViciAuth] Initial FB Access Token");
-				}
-				
-				if (!postBody.networkId) {
-					return console.error("[ViciAuth] Initial FB User Id");
-				}
-				
-					$http.post(apiFactory("FACEBOOK_TOKENS"), postBody)
-					.then(function(res) {
-						storeUserCredentials(res.data.token, res.data.userId);
-						callback({userId : res.data.userId});
-					}, function(data) {
-						console.error(res.data);
-					});
-			});
 		}
 
 		function destroyUserCredentials() {
@@ -163,13 +114,25 @@ export default () => {
 			});
 		}
 
-	  var getAuthToken = function(){
+		function resetPassword({ email }) {
+			console.info("[ViciAuth] Requesting new password.");
+
+			return $http.post(apiFactory("RESET"), { email });
+		}
+
+		function changePassword({ code, newPassword, repeatNewPassword }) {
+			console.info("[ViciAuth] Resetting password.");
+
+			return $http.post(apiFactory("CHANGE_PASSWORD"), { code, newPassword, repeatNewPassword });
+		}
+		
+	  	var getAuthToken = () => {
 			console.log("[ViciAuth] Getting Auth Token");
+
 			return authToken;
 		}
 	
 		return {
-			fbAuth:fbAuth,
 			authUserId: authUserId,
 			validate: validate,
 			login: login,
@@ -177,11 +140,13 @@ export default () => {
 			logout: logout,
 			getAuthToken : getAuthToken,
 			isAuthenticated: isAuthenticated,
+			resetPassword,
+			changePassword,
 			loadUserCredentials: loadUserCredentials
 		};
 
 	})
-	.run(function(ViciAuth, $rootScope) {
+	.run(function(ViciAuth) {
 		ViciAuth.loadUserCredentials();
 	});
 };

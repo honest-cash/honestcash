@@ -21056,32 +21056,14 @@ exports.default = function () {
 		LOGIN: "/login",
 		SIGNUP: "/signup/email",
 		VALIDATE: "/me",
-		LOGOUT: "/logout"
+		LOGOUT: "/logout",
+		RESET: "/auth/request-password-reset",
+		CHANGE_PASSWORD: "/auth/reset-password"
 	}).factory("apiFactory", function (API_URL, API) {
 		return function (method) {
 			return API_URL + API[method];
 		};
-	}).factory('facebookFactory', function ($q) {
-		return {
-
-			login: function login(callback) {
-				FB.getLoginStatus(function (response) {
-					if (response.status == "connected") {
-						callback(response.authResponse);
-					} else {
-						FB.login(function (response) {
-							if (response.authResponse) {
-								callback(response.authResponse);
-							} else {
-								callback();
-							}
-						});
-					}
-				});
-			}
-		};
-	}).service("ViciAuth", function ($rootScope, $window, $http, $q, facebookFactory, apiFactory) {
-
+	}).service("ViciAuth", function ($rootScope, $window, $http, $q, apiFactory) {
 		var LOCAL_TOKEN_KEY = 'AdminDashAuthToken';
 		var LOCAL_USER_ID_KEY = 'AdminDashUserId';
 		var username = '';
@@ -21112,32 +21094,6 @@ exports.default = function () {
 			$window.localStorage.setItem(LOCAL_USER_ID_KEY, userId);
 			$window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
 			useCredentials(token, userId);
-		}
-
-		function fbAuth(callback) {
-			console.info("[ViciAuth] Checking fb login status..");
-			facebookFactory.login(function (fbAuth) {
-
-				var postBody = {
-					token: fbAuth.accessToken,
-					networkId: fbAuth.userID
-				};
-
-				if (!postBody.token) {
-					return console.error("[ViciAuth] Initial FB Access Token");
-				}
-
-				if (!postBody.networkId) {
-					return console.error("[ViciAuth] Initial FB User Id");
-				}
-
-				$http.post(apiFactory("FACEBOOK_TOKENS"), postBody).then(function (res) {
-					storeUserCredentials(res.data.token, res.data.userId);
-					callback({ userId: res.data.userId });
-				}, function (data) {
-					console.error(res.data);
-				});
-			});
 		}
 
 		function destroyUserCredentials() {
@@ -21202,13 +21158,31 @@ exports.default = function () {
 			});
 		}
 
+		function resetPassword(_ref2) {
+			var email = _ref2.email;
+
+			console.info("[ViciAuth] Requesting new password.");
+
+			return $http.post(apiFactory("RESET"), { email: email });
+		}
+
+		function changePassword(_ref3) {
+			var code = _ref3.code,
+			    newPassword = _ref3.newPassword,
+			    repeatNewPassword = _ref3.repeatNewPassword;
+
+			console.info("[ViciAuth] Resetting password.");
+
+			return $http.post(apiFactory("CHANGE_PASSWORD"), { code: code, newPassword: newPassword, repeatNewPassword: repeatNewPassword });
+		}
+
 		var getAuthToken = function getAuthToken() {
 			console.log("[ViciAuth] Getting Auth Token");
+
 			return authToken;
 		};
 
 		return {
-			fbAuth: fbAuth,
 			authUserId: authUserId,
 			validate: validate,
 			login: login,
@@ -21216,9 +21190,11 @@ exports.default = function () {
 			logout: logout,
 			getAuthToken: getAuthToken,
 			isAuthenticated: isAuthenticated,
+			resetPassword: resetPassword,
+			changePassword: changePassword,
 			loadUserCredentials: loadUserCredentials
 		};
-	}).run(function (ViciAuth, $rootScope) {
+	}).run(function (ViciAuth) {
 		ViciAuth.loadUserCredentials();
 	});
 };
@@ -22106,10 +22082,14 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 	$rootScope.noHeader = true;
 	$scope.hashtags = ["general", "crypto", "fiction", "art", "music", "science", "funny", "photos", "meta"];
 	$scope.isLoading = false;
+	$scope.forgot = false;
+	$scope.resetCode = $location.search().code;
+
+	console.log("Resetting password with code: " + $scope.resetCode);
 
 	var displayErrorMessage = function displayErrorMessage(code) {
-		if (code || $location.search().code) {
-			switch (code || $location.search().code) {
+		if (code) {
+			switch (code) {
 				case "EMAIL_EXISTS":
 					$scope.message = "E-Mail already exists";
 					break;
@@ -22125,6 +22105,9 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 				case "LOG_IN_WITH_FACEBOOK":
 					$scope.message = "Log in with Facebook";
 					break;
+				case "EMAIL_NOT_FOUND":
+					$scope.message = "E-mail could not be found.";
+					break;
 				default:
 					$scope.message = "Login error. Try again...";
 			}
@@ -22133,20 +22116,10 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 
 	displayErrorMessage();
 
-	$rootScope.login = function (data) {
-		ViciAuth.login({
-			email: data.loginemail,
-			password: data.loginpassword
-		}).then(function (User) {
-			$rootScope.user = {
-				id: User.userId
-			};
-			$state.go("vicigo.feeds");
-		}, function (response) {
-			$scope.isLoading = false;
-
-			return displayErrorMessage(response.data.code);
-		});
+	var mutateForgot = function mutateForgot(forgotValue) {
+		return function () {
+			$scope.forgot = forgotValue;
+		};
 	};
 
 	var checkUserName = function checkUserName(username) {
@@ -22165,6 +22138,69 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 		}
 
 		return true; //good user input
+	};
+
+	$scope.goToForgotPage = mutateForgot(true);
+	$scope.goToLoginPage = mutateForgot(false);
+
+	$rootScope.login = function (data) {
+		$scope.isLoading = true;
+
+		ViciAuth.login({
+			email: data.loginemail,
+			password: data.loginpassword
+		}).then(function (User) {
+			$scope.isLoading = false;
+
+			$rootScope.user = {
+				id: User.userId
+			};
+
+			$state.go("vicigo.feeds");
+		}, function (response) {
+			$scope.isLoading = false;
+
+			return displayErrorMessage(response.data.code);
+		});
+	};
+
+	$scope.changePassword = function (data) {
+		$scope.isLoading = true;
+
+		ViciAuth.changePassword({
+			code: $scope.resetCode,
+			newPassword: data.loginpassword,
+			repeatNewPassword: data.loginpasswordrepeat
+		}).then(function () {
+			$scope.message = "Your password has been restarted. You can not log-in.";
+
+			$scope.resetCode = undefined;
+			$scope.data.loginemail = undefined;
+			$scope.data.loginpassword = undefined;
+			$scope.data.loginpasswordreset = undefined;
+			$scope.forgot = false;
+			$scope.isLoading = false;
+		}, function (response) {
+			$scope.isLoading = false;
+
+			return displayErrorMessage(response.data.code);
+		});
+	};
+
+	$scope.resetPassword = function (data) {
+		$scope.isLoading = true;
+
+		ViciAuth.resetPassword({
+			email: data.loginemail
+		}).then(function () {
+			$scope.message = "Check your e-mail inbox.";
+
+			$scope.isLoading = false;
+		}, function (response) {
+			$scope.isLoading = false;
+
+			return displayErrorMessage(response.data.code);
+		});
 	};
 
 	$rootScope.signup = async function (data) {
@@ -22235,7 +22271,7 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
  		return item.hashtag
  	});
  });
-  */
+ */
 };
 
 exports.default = WelcomeCtrl;
@@ -33018,7 +33054,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
-var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "https://honestcash.alphateamhackers.com/api" /*"http://localhost:8080/api"/*, "https://honestcash.alphateamhackers.com/api" */).run(function (ViciAuth, Uploader) {
+var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "http://localhost:8080/api" /*, "https://honestcash.alphateamhackers.com/api" */).run(function (ViciAuth, Uploader) {
 
 	Uploader.init();
 
