@@ -8,6 +8,7 @@
 * Privacy-first
 * User-centric
 * Community driven & fully open source
+* Decentralize without sacrificing user experience
 
 # Roadmap
 This is a proposed roadmap. We value feedback from the community. If you think we should optimize the roadmap to match our Honest manifesto better, join our Telegram group and submit your proposals here: https://t.me/honest_cash.
