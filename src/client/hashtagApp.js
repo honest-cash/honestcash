@@ -22,27 +22,7 @@ var imageDropzone, profilePicDropzone, hashbookBGDropzone;
 var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infiniteScroll, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"])
 
 .constant("API_URL", "http://localhost:8080/api"/*, "https://honestcash.alphateamhackers.com/api" */)
-.run(function(ngDialog) {
-	(function(i, s, o, g, r, a, m) {
-		i['GoogleAnalyticsObject'] = r;
-		i[r] = i[r] || function() {
-			(i[r].q = i[r].q || []).push(arguments)
-		}, i[r].l = 1 * new Date();
-		a = s.createElement(o),
-			m = s.getElementsByTagName(o)[0];
-		a.async = 1;
-		a.src = g;
-		m.parentNode.insertBefore(a, m)
-	})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-	ga('create', 'UA-128589022-2', 'auto');
-})
-.run(function($rootScope, $window, $location) {
-	$rootScope.$on('$stateChangeSuccess', function(event) {
-		$window.ga('send', 'pageview', {
-			page: $location.url()
-		});
-	});
-})
+
 .run(function(ViciAuth, Uploader) {
 
 	Uploader.init();
@@ -845,13 +825,12 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 
 		$rootScope.logoutMe = function() {
 			ViciAuth.logout();
-			
-			$http.post("/viciauth/logout").then(function(response) {
-				$rootScope.user = false;
-				$rootScope.fetchingNotifs = false;
 
-				$state.go("starter.welcome");
-			});
+			
+			$rootScope.user = false;
+			$rootScope.fetchingNotifs = false;
+
+			$state.go("starter.welcome");
 		};
 	})
 

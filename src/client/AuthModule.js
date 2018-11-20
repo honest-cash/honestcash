@@ -7,7 +7,8 @@ export default () => {
 	.constant("API", {
 		LOGIN: "/login",
 		SIGNUP: "/signup/email",
-		VALIDATE: "/me"
+		VALIDATE: "/me",
+		LOGOUT: "/logout"
 	})
 	.factory("apiFactory", function(API_URL, API) {
 		return (method) => {
@@ -156,6 +157,7 @@ export default () => {
 
 		function logout() {
 			console.info("[ViciAuth] Bye Bye..");
+
 			$http.post(apiFactory("LOGOUT")).then(function(data) {
 				destroyUserCredentials();
 			});

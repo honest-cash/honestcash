@@ -8,24 +8,21 @@ var bodyParser   = require('body-parser');
 var expressLayouts = require('express-ejs-layouts');
 var compression = require('compression');
 
-
 app.get('/*', function(req, res, next) {
 	if(!req.headers.host){
 		 next();   
-	} else{
-	  if (req.headers.host.match(/^www/) !== null ) {
-    res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url);
- 		 } else {
-    next();     
-  	}
+	} else {
+	  	if (req.headers.host.match(/^www/) !== null ) {
+    		res.redirect('https://' + req.headers.host.replace(/^www\./, '') + req.url);
+		} else {
+    		next();     
+		}
 	}
 });
 
 //app.use(compression());
 app.use(compression({filter: function(req,res){ return true; } } ));
-app.use(cors({
-	//origin: ['http://studentask.de','http://www.studentask.de']
-}));
+app.use(cors({}));
 app.use(function(req, res, next){
     res._uglifyMangle = true;
 	
