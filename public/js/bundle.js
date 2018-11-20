@@ -33000,7 +33000,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
-var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "http://localhost:8080/api" /*, "https://honestcash.alphateamhackers.com/api" */).run(function (ViciAuth, Uploader) {
+var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "https://honestcash.alphateamhackers.com/api" /*"http://localhost:8080/api"/*, "https://honestcash.alphateamhackers.com/api" */).run(function (ViciAuth, Uploader) {
 
 	Uploader.init();
 
