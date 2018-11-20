@@ -4697,7 +4697,8 @@ exports.default = function () {
 	}).constant("API_URL", "localhost:3010").constant("API", {
 		LOGIN: "/login",
 		SIGNUP: "/signup/email",
-		VALIDATE: "/me"
+		VALIDATE: "/me",
+		LOGOUT: "/logout"
 	}).factory("apiFactory", function (API_URL, API) {
 		return function (method) {
 			return API_URL + API[method];
@@ -4837,6 +4838,7 @@ exports.default = function () {
 
 		function logout() {
 			console.info("[ViciAuth] Bye Bye..");
+
 			$http.post(apiFactory("LOGOUT")).then(function (data) {
 				destroyUserCredentials();
 			});
@@ -16606,25 +16608,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
-var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "http://localhost:8080/api" /*, "https://honestcash.alphateamhackers.com/api" */).run(function (ngDialog) {
-	(function (i, s, o, g, r, a, m) {
-		i['GoogleAnalyticsObject'] = r;
-		i[r] = i[r] || function () {
-			(i[r].q = i[r].q || []).push(arguments);
-		}, i[r].l = 1 * new Date();
-		a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-		a.async = 1;
-		a.src = g;
-		m.parentNode.insertBefore(a, m);
-	})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-	ga('create', 'UA-128589022-2', 'auto');
-}).run(function ($rootScope, $window, $location) {
-	$rootScope.$on('$stateChangeSuccess', function (event) {
-		$window.ga('send', 'pageview', {
-			page: $location.url()
-		});
-	});
-}).run(function (ViciAuth, Uploader) {
+var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "http://localhost:8080/api" /*, "https://honestcash.alphateamhackers.com/api" */).run(function (ViciAuth, Uploader) {
 
 	Uploader.init();
 
@@ -17357,12 +17341,10 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 	$rootScope.logoutMe = function () {
 		ViciAuth.logout();
 
-		$http.post("/viciauth/logout").then(function (response) {
-			$rootScope.user = false;
-			$rootScope.fetchingNotifs = false;
+		$rootScope.user = false;
+		$rootScope.fetchingNotifs = false;
 
-			$state.go("starter.welcome");
-		});
+		$state.go("starter.welcome");
 	};
 }).controller("postController", function ($rootScope, $stateParams, $http, $scope, $sce, post, RelsService, CommentService) {
 	$scope.postId = post.post_id;
