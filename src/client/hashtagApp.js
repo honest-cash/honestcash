@@ -658,10 +658,24 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 
         const mouseEnterAddress = (className, address) => {
             const container = document.getElementsByClassName(className)[0];
-
+			
             container.innerHTML = "";
 
             new QRCode(container, address);
+		};
+		
+		const addressClicked = (address) => {
+			$('#tipModal').modal('show');
+
+			const inputEl = document.getElementById("bchTippingAddress");
+
+			inputEl.value = address;
+			
+			const qrContainer = document.getElementById("bchTippingAddressQR");
+
+			qrContainer.innerHTML = "";
+
+			new QRCode(qrContainer, address);
         };
 
         const mouseLeaveAddress = (className) => {
@@ -670,6 +684,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
             container.innerHTML = "";
         };
 
+		$scope.addressClicked = addressClicked;
         $scope.mouseEnterAddress = mouseEnterAddress;
         $scope.mouseLeaveAddress = mouseLeaveAddress;
 

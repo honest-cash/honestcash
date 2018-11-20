@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export default function($http, API_URL) {
     var fetchFeeds = (query, callback) => {
         $http({
@@ -12,7 +14,13 @@ export default function($http, API_URL) {
                 algorithm: query.algorithm
             }
         }).then((response) => {
-            callback(response.data);
+            let feeds = response.data;
+
+            for (let feed of feeds) {
+                feed.createdAt = moment(feed.createdAt).format("MMM Do YY");
+            }
+
+            callback(feeds);
         });
     };
 

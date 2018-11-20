@@ -1,4 +1,6 @@
-<div ng-controller="editorController">
+<div class="text-center" ng-show='activeCalls && !ready'><i class="fa fa-circle-o-notch fa-spin  fa-2x"></i></div>
+
+<div ng-show='!activeCalls || ready' ng-controller="editorController">
 	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
 		<div class="container">
 				<a ui-sref="vicigo.feeds">
@@ -22,7 +24,7 @@
 						</button>
 					</li>
 
-					<li ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
+					<li style="margin-top: 5px;" ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
 						<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
 						<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
 					</li>

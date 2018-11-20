@@ -12,7 +12,7 @@
 				<img class="header-logo" src="/img/vicigo_logo_short_dark_size_1.png" alt="Vicigo Logo">
 				</a>
 				<a class="visible-xs pull-right" ui-sref="starter.login">
-				 <button  class="btn btn-primary">login</button>
+				 	<button  class="btn btn-primary">login</button>
 				</a>	
 				</div>
 			</div>
@@ -96,11 +96,11 @@
 			</li>
 			-->
 
-            <li ng-if="user.id" class="menu-item-profile">
+            <li style="margin-top: 5px;" ng-if="user.id" class="menu-item-profile">
 				<div class="btn-group" uib-dropdown on-toggle="toggled(open)">
 					<a href="#" uib-dropdown-toggle ng-disabled="disabled">
-						<img ng-if="user.profileImageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.profileImageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
-						<img ng-if="!user.profileImageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+						<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+						<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
 					</a>
 					<ul uib-dropdown-menu class="uib-dropdown-menu header_menu" role="menu" aria-labelledby="single-button">
 						<li role="menuitem">
@@ -195,15 +195,7 @@
 			
 	<div class="text-center">
 		<big>
-			<ul class=" ul-breath list-unstyled list-inline">
-				<li><a href="/" target="_self">home</a></li>
-				<li><a href="https://alphateamhackers.com/imprint" target="_self">impressum</a>
-				</li>
-				<li><a href="https://www.alphateamhackers.com/about" target="_self">company</a>
-				</li>
-				<li><a href="https://www.alphateamhackers.com/datenschutzerklaerung" target="_self">privacy</a>
-				</li>
-			</ul>
+			Honest
 		</big>	
 	</div>
 
@@ -222,9 +214,8 @@
 
 		<div class="donate-bch"></div>
 		
-		<small ui-sref="vicigo.write">Crafted with <i class="fa fa-heart text-danger"></i> in Heidelberg, Germany</small>
 		<br />
-		<a href="http://viciqloud.com" target="_blank"><small>&copy;<span>2018</span> honest.cash</small></a>
+		<a href="https://github.com/honest-cash" target="_self"><small>&copy;<span>2018</span> honest.cash</small></a>
 	</div>
 		</div>
     	</div>

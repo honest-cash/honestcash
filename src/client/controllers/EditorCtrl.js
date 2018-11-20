@@ -54,6 +54,7 @@ export default class EditorCtrl {
             $('#title').froalaEditor({
                 key: 'krlenofG5hcj1==',
                 toolbarInline: true,
+                toolbarButtons: [],
                 charCounterMax: 50,
                 countCharacters: true,
                 alwaysVisible: false,
@@ -66,14 +67,13 @@ export default class EditorCtrl {
                 placeholderText: "Title"
             });
 
-
             $('#body').froalaEditor({
                 key: 'krlenofG5hcj1==',
-                imageUploadURL: "/upload/image?postId=" + postId,
+                imageUploadURL: API_URL + "/upload/file?postId=" + postId,
                 heightMin: 260,
                 imageDefaultWidth: 640,
                 imagePaste: false,
-                toolbarButtons: ['bold', 'italic', 'underline', 'insertLink', 'insertImage', 'insertVideo', 'quote', 'insertHR', "html"],
+                toolbarButtons: ['bold', 'italic', 'underline', 'insertLink', /*,'insertImage' */, 'insertVideo', 'quote', 'insertHR' /*, "html" */],
                 requestHeaders: {
                     "X-Auth-Token": ViciAuth.getAuthToken()
                 },
