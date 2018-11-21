@@ -1,8 +1,7 @@
 export default class WelcomeCtrl {
-  constructor($rootScope, $scope, $location, $state, $http, ViciAuth) {
+  constructor($rootScope, $scope, $location, $state, HashtagService, ViciAuth) {
 	$scope.message = "";
 	$rootScope.noHeader = true;
-	$scope.hashtags = [ "general", "crypto", "fiction", "art", "music", "science", "funny", "photos", "meta" ];
 	$scope.isLoading = false;
 	$scope.forgot = false;
 	$scope.resetCode = $location.search().code;
@@ -188,11 +187,4 @@ export default class WelcomeCtrl {
 			return displayErrorMessage(response.data.code);
 		});
 	};
-	/**
-	$http.get("/api/hashtags/trending").then(function(response) {
-		$scope.hashtags = response.data.map(function(item) {
-			return item.hashtag
-		});
-	});
-	*/
 }}

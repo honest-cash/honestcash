@@ -52,8 +52,6 @@ export default class EditorCtrl {
             }, 1500);
         };
 
-        
-
         const initMediumEditor = (title, body) => {
             titleEditor = new MediumEditor('#title', {
                 toolbar: false,
@@ -95,14 +93,12 @@ export default class EditorCtrl {
             });
 
             if (title) {
-                $("#title").click();
-               
+                document.getElementById("title").setAttribute("data-placeholder", "");
                 titleEditor.setContent(title, 0);
             }
-            
+
             if (body) {
-               
-                $("#body").click();
+                document.getElementById("body").setAttribute("data-placeholder", "");
                 bodyEditor.setContent(body, 0);
             }
 
@@ -129,7 +125,7 @@ export default class EditorCtrl {
                 $("#description").tagit("createTag", hashtag.hashtag);
             });
            
-            initMediumEditor();
+            initMediumEditor($scope.draft.title, $scope.draft.body);
 
             $scope.ready = true;
             

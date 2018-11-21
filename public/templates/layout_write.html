@@ -8,7 +8,6 @@
 	
 	<div class="navbar navbar-fixed-top navbar-default" style="padding-top:27px;" ng-if="!welcome&&!noHeader" >
 		<div class="container">
-
 				<a ui-sref="vicigo.feeds" class="pull-left" href="#">
 					<img class="header-logo" src="/img/honest-long-logo.png" alt="Honest Logo">
 				</a>
@@ -29,6 +28,28 @@
 						<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
 					</li>
 				</ul>
+
+			<a ui-sref="vicigo.feeds" class="pull-left" href="#">
+				<img class="header-logo" src="/img/honest-long-logo.png" alt="Vicigo Logo">
+			</a>
+
+			<ul class="nav navbar-nav navbar-right" >
+				<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
+					<button class="btn-default btn" style="margin:10px;" >
+						<strong>Ready to publish?</strong>
+					</button>
+				</li>
+
+				<li ng-if="draft.status === 'published'">
+					<span class="badge" style="margin:15px;" >Published</span>
+				</li>
+
+				<li style="margin-top: 5px;" ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
+					<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+					<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+				</li>
+			</ul>
+
 		</div>
 	</div>
 
