@@ -1,10 +1,20 @@
+import MediumEditor from "medium-editor";
+import "medium-editor/dist/css/medium-editor.min.css";
+
 export default class EditorCtrl {
     constructor($state, $scope, $stateParams, $http, $timeout, ViciAuth, API_URL) {
+        let titleEditor;
+        let bodyEditor;
+
         $scope.draft = {};
         $scope.ready = false;
         $scope.Saving = {
             body: false,
             title: false
+        };
+
+        $scope.readyToPublish = () => {
+            $('#publishModal').modal('show');
         };
 
         $scope.publishPost = postId => {
@@ -31,7 +41,75 @@ export default class EditorCtrl {
                 return toastr.warning(response.data.code);
             });
         };
-	
+
+        const onContentChangedFactory = (element) => () => {
+            if ($scope.Saving.body) {
+                clearTimeout($scope.Saving.body);
+            }
+
+            $scope.Saving.body = setTimeout(() => {
+                $scope.saveDraftElement(element);
+            }, 1500);
+        };
+
+        
+
+        const initMediumEditor = (title, body) => {
+            titleEditor = new MediumEditor('#title', {
+                toolbar: false,
+                buttons: [],
+                placeholder: {
+                    /* This example includes the default options for placeholder,
+                       if nothing is passed this is what it used */
+                    text: 'Title',
+                    hideOnClick: true
+                },
+                disableReturn: true,
+                paste: {
+                    forcePlainText: true,
+                    cleanPastedHTML: true,
+                    cleanReplacements: [],
+                    cleanAttrs: ['class', 'style', 'dir'],
+                    cleanTags: ['meta'],
+                    unwrapTags: []
+                }
+            });
+
+            bodyEditor = new MediumEditor('#body', {
+                placeholder: {
+                    /* This example includes the default options for placeholder,
+                       if nothing is passed this is what it used */
+                    text: 'Tell your story...',
+                    hideOnClick: true
+                },
+                paste: {
+                    /* This example includes the default options for paste,
+                       if nothing is passed this is what it used */
+                    forcePlainText: false,
+                    cleanPastedHTML: false,
+                    cleanReplacements: [],
+                    cleanAttrs: ['class', 'style', 'dir'],
+                    cleanTags: ['meta'],
+                    unwrapTags: []
+                }
+            });
+
+            if (title) {
+                $("#title").click();
+               
+                titleEditor.setContent(title, 0);
+            }
+            
+            if (body) {
+               
+                $("#body").click();
+                bodyEditor.setContent(body, 0);
+            }
+
+            bodyEditor.subscribe('editableInput', onContentChangedFactory("body"));
+            titleEditor.subscribe('editableInput', onContentChangedFactory("title"));
+        }
+
         const initEditor = postId => {
             if (!postId) {
                 alert("Editor cannot be initialized");
@@ -50,60 +128,11 @@ export default class EditorCtrl {
             hashtags.forEach((hashtag) => {
                 $("#description").tagit("createTag", hashtag.hashtag);
             });
+           
+            initMediumEditor();
 
-            $('#title').froalaEditor({
-                key: 'krlenofG5hcj1==',
-                toolbarInline: true,
-                toolbarButtons: [],
-                charCounterMax: 50,
-                countCharacters: true,
-                alwaysVisible: false,
-                buttons: [],
-                allowComments: false,
-                allowScript: false,
-                allowStyle: false,
-                plainPaste: true,
-                allowedAttrs: [],
-                placeholderText: "Title"
-            });
-
-            $('#body').froalaEditor({
-                key: 'krlenofG5hcj1==',
-                imageUploadURL: API_URL + "/upload/file?postId=" + postId,
-                heightMin: 260,
-                imageDefaultWidth: 640,
-                imagePaste: false,
-                toolbarButtons: ['bold', 'italic', 'underline', 'insertLink', /*,'insertImage' */, 'insertVideo', 'quote', 'insertHR' /*, "html" */],
-                requestHeaders: {
-                    "X-Auth-Token": ViciAuth.getAuthToken()
-                },
-                placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            })
-
-            $('#body').froalaEditor('html.set', $scope.draft.body ? $scope.draft.body : "");
-
-            $('#body').on('froalaEditor.contentChanged', (e, editor) => {
-                if ($scope.Saving.body) {
-                    clearTimeout($scope.Saving.body);
-                }
-
-                $scope.Saving.body = setTimeout(() => {
-                    $scope.saveDraftElement("body");
-                }, 1500);
-            });
-
-            $('#title').froalaEditor('html.set', $scope.draft.title ? $scope.draft.title : "");
-
-            $('#title').on('froalaEditor.contentChanged', (e, editor) => {
-                if ($scope.Saving.title) {
-                    clearTimeout($scope.Saving.title);
-                }
-
-                $scope.Saving.title = setTimeout(() => {
-                    $scope.saveDraftElement("title");
-                }, 1500);
-            });
-
+            $scope.ready = true;
+            
             var backgroundImageDropzone = new Dropzone("#backgroundImageDropzone", {
                 url: "/upload/image?isBackground=true&postId="+postId,
                 maxFiles: 10,
@@ -122,8 +151,6 @@ export default class EditorCtrl {
                 $scope.draft.post_image_url = response.link;
                 $scope.$digest();
             });
-
-            $scope.ready = true;
         };
 
         const loadPostDraft = postId => {
@@ -138,8 +165,8 @@ export default class EditorCtrl {
         $scope.saveDraftElement = (element) => {
             const post = {};
 
-            post.title = $("#title").froalaEditor('html.get') ? $("#title").froalaEditor('html.get') : null;
-            post.body = $("#body").froalaEditor('html.get') ? $("#body").froalaEditor('html.get') : null;
+            post.title = document.getElementById("title").innerHTML;
+            post.body = document.getElementById("body").innerHTML;
             post.hashtags = $("input#description").val();
 
             if (!post.body && !post.title && !post.hashtags) {
@@ -159,9 +186,9 @@ export default class EditorCtrl {
         $scope.saveDraft = (draftId) => {
             const draft = {};
 
-            draft.title = $("#title").froalaEditor('html.get') ? $("#title").froalaEditor('html.get') : "";
+            draft.title = document.getElementById("title").innerHTML || "";
             draft.hashtags = $("#description").val() ? $("#description").val() : "";
-            draft.body = $("#body").froalaEditor('html.get') ? $("#body").froalaEditor('html.get') : "";
+            draft.body = document.getElementById("body").innerHTML || "";
 
             $http.post(API_URL + "/draft/" + draftId, draft)
             .then(function(data) {

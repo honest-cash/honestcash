@@ -1,6 +1,11 @@
-<div class="text-center" ng-show='activeCalls && !ready'><i class="fa fa-circle-o-notch fa-spin  fa-2x"></i></div>
 
-<div ng-show='!activeCalls || ready' ng-controller="editorController">
+
+
+<div ng-controller="editorController">
+	<div class="text-center" ng-show='!ready'><i class="fa fa-circle-o-notch fa-spin  fa-2x"></i></div>
+
+	<div ng-show='ready' >
+	
 	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
 		<div class="container">
 				<a ui-sref="vicigo.feeds">
@@ -8,20 +13,14 @@
 				</a>
 
 				<ul class="nav navbar-nav navbar-right" >
-					<li ng-if="draft.status === 'draft'" ng-click="publishPost(draft.id)">
+					<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
 						<button class="btn-default btn" style="margin:10px;" >
-							<strong>Publish</strong>
+							<strong>Ready to publish?</strong>
 						</button>
 					</li>
 
 					<li ng-if="draft.status === 'published'">
 						<span class="badge" style="margin:15px;" >Published</span>
-					</li>
-
-					<li ng-if="draft.status === 'draft'" ui-sref="vicigo.post({postId : draft.id})">
-						<button class="btn-default btn" style="margin:10px;">
-							<strong>Go to post</strong>
-						</button>
 					</li>
 
 					<li style="margin-top: 5px;" ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
@@ -70,40 +69,37 @@
 		</ul>
 	</div>
 	</script>
-
-	<footer class="site-section site-content themed-background-muted">
-			<div class="container">
-						<hr>
-						<div class="row">
-							<div class="col-xs-12">
-
-								<div class="text-center">
-									<big>
-											<ul class=" ul-breath list-unstyled list-inline">
-													<li>
-														<a href="/" target="_self">home</a>
-													</li>
-													<li>
-														<a href="/impressum" target="_self">impressum</a>
-													</li>
-													<li>
-														<a href="/privacy" target="_self">privacy</a>
-													</li>
-													<li>
-														<a href="/terms" target="_self">terms</a>
-													</li>
-											</ul>
-									</big>	
-								</div>
-
-								<div class="text-center push">
-									<small ui-sref="vicigo.write">Crafted with <i class="fa fa-heart text-danger"></i> in Heidelberg, Germany</small>
-									<br>
-									<a href="http://viciqloud.com" target="_blank"><small>&copy;<span>2016</span> Viciqloud UG (haftungsbeschränkt)</small></a>
-								</div>
-						</div>
-					</div>
-			</div>
-	</footer>
-
 </div>
+
+<!-- PUBLISH MODAL -->
+<div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"><b>Prepare your story for readers</h4>
+			</div>
+
+			<div class="modal-body">
+				<div class="panel panel-info">
+					<div class="panel-body">
+						Add or change tags (up to 5) so readers know what your story is about
+					</div>
+				</div>
+
+				<div class="form-group">
+					<form>
+						<input id="description" name="tags" >
+					</form>
+				</div>
+			</div>
+
+			<!-- FOOTER IMAGE MODAL -->
+			<div class="modal-footer">
+					<button disabled ng-click="publishPost(draft.id)" type="button" class="btn btn-primary btn-lg btn-block">Post</button>
+			</div>
+			<!-- FOOTER IMAGE MODAL -->
+		</div>
+	</div>
+	</div>
+</div>
+<!-- PUBLISH MODAL -->

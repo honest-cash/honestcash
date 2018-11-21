@@ -46,6 +46,7 @@
     "jsonwebtoken": "^5.4.1",
     "keyword-extractor": "^0.0.12",
     "limiter": "^1.1.0",
+    "medium-editor": "^5.23.3",
     "method-override": "^3.0.0",
     "minify": "^4.0.3",
     "moment": "^2.22.2",
