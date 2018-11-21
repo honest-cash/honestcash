@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 142);
+/******/ 	return __webpack_require__(__webpack_require__.s = 143);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1905,7 +1905,7 @@
             try {
                 oldLocale = globalLocale._abbr;
                 var aliasedRequire = require;
-                __webpack_require__(151)("./" + name);
+                __webpack_require__(152)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {}
         }
@@ -4577,7 +4577,7 @@
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(156)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(157)(module)))
 
 /***/ }),
 /* 1 */
@@ -4659,7 +4659,7 @@ function toComment(sourceMap) {
   return '/*# ' + data + ' */';
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(144).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145).Buffer))
 
 /***/ }),
 /* 2 */
@@ -16531,7 +16531,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(153);
+	fixUrls = __webpack_require__(154);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -21570,7 +21570,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = feed;
 
-var _template = __webpack_require__(147);
+var _template = __webpack_require__(148);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -21806,11 +21806,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _mediumEditor = __webpack_require__(150);
+var _mediumEditor = __webpack_require__(151);
 
 var _mediumEditor2 = _interopRequireDefault(_mediumEditor);
 
-__webpack_require__(154);
+__webpack_require__(155);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21910,14 +21910,12 @@ var EditorCtrl = function EditorCtrl($state, $scope, $stateParams, $http, $timeo
         });
 
         if (title) {
-            $("#title").click();
-
+            document.getElementById("title").setAttribute("data-placeholder", "");
             titleEditor.setContent(title, 0);
         }
 
         if (body) {
-
-            $("#body").click();
+            document.getElementById("body").setAttribute("data-placeholder", "");
             bodyEditor.setContent(body, 0);
         }
 
@@ -21944,7 +21942,7 @@ var EditorCtrl = function EditorCtrl($state, $scope, $stateParams, $http, $timeo
             $("#description").tagit("createTag", hashtag.hashtag);
         });
 
-        initMediumEditor();
+        initMediumEditor($scope.draft.title, $scope.draft.body);
 
         $scope.ready = true;
 
@@ -22466,12 +22464,11 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $http, ViciAuth) {
+var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, HashtagService, ViciAuth) {
 	_classCallCheck(this, WelcomeCtrl);
 
 	$scope.message = "";
 	$rootScope.noHeader = true;
-	$scope.hashtags = ["general", "crypto", "fiction", "art", "music", "science", "funny", "photos", "meta"];
 	$scope.isLoading = false;
 	$scope.forgot = false;
 	$scope.resetCode = $location.search().code;
@@ -22656,13 +22653,6 @@ var WelcomeCtrl = function WelcomeCtrl($rootScope, $scope, $location, $state, $h
 			return displayErrorMessage(response.data.code);
 		});
 	};
-	/**
- $http.get("/api/hashtags/trending").then(function(response) {
- 	$scope.hashtags = response.data.map(function(item) {
- 		return item.hashtag
- 	});
- });
- */
 };
 
 exports.default = WelcomeCtrl;
@@ -22778,6 +22768,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 /* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+exports.default = function () {
+    var defaultHashtags = ["general", "crypto", "fiction", "art", "music", "science", "funny", "photos", "meta"];
+
+    return {
+        defaultHashtags: defaultHashtags
+    };
+};
+
+;
+
+/***/ }),
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -33148,7 +33159,7 @@ return jQuery;
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports) {
 
 /* ng-infinite-scroll - v1.3.0 - 2016-06-30 */
@@ -33343,13 +33354,13 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(146);
+var content = __webpack_require__(147);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(125)(content, {});
@@ -33358,8 +33369,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./style.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./style.css");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!./style.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -33369,21 +33380,21 @@ if(false) {
 }
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(141);
+__webpack_require__(142);
 
-__webpack_require__(139);
+__webpack_require__(140);
 
 var _angularUiRouter = __webpack_require__(126);
 
 var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-var _ngInfiniteScroll = __webpack_require__(140);
+var _ngInfiniteScroll = __webpack_require__(141);
 
 var _ngInfiniteScroll2 = _interopRequireDefault(_ngInfiniteScroll);
 
@@ -33431,6 +33442,10 @@ var _AuthModule = __webpack_require__(127);
 
 var _AuthModule2 = _interopRequireDefault(_AuthModule);
 
+var _HashtagService = __webpack_require__(139);
+
+var _HashtagService2 = _interopRequireDefault(_HashtagService);
+
 var _runs = __webpack_require__(137);
 
 var runs = _interopRequireWildcard(_runs);
@@ -33439,10 +33454,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _AuthModule2.default)();
-
 // import angular from 'angular';
-
+(0, _AuthModule2.default)();
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
 var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bootstrap', _ngInfiniteScroll2.default, "dcbImgFallback", "xeditable", "angular-inview", '720kb.socialshare', 'ngDialog', "angular.lazyimg", "ViciAuth"]).constant("API_URL", "https://honestcash.alphateamhackers.com/api" /*, "http://localhost:8080/api" "https://honestcash.alphateamhackers.com/api" */).run(function (ViciAuth, Uploader) {
@@ -33485,7 +33498,7 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
  */
 }).run(function (editableOptions) {
 	editableOptions.theme = 'bs3';
-}).config(_routing2.default).config(_http2.default).config(_state2.default).service('MetaService', function () {
+}).config(_routing2.default).config(_http2.default).config(_state2.default).service('HashtagService', _HashtagService2.default).service('MetaService', function () {
 	var metaDefault = {
 		title: "Honest.Cash"
 	};
@@ -34000,14 +34013,8 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 	$rootScope.$on('$stateChangeStart', function () {
 		$scope.cancel();
 	});
-}).controller("mainController", function ($rootScope, $scope, $state, $sce, $window, $location, $http, ViciAuth, MetaService, PostService, $uibModal) {
-	var init = function init() {
-		$http.get("/api/hashtags/trending").then(function (response) {
-			$scope.hashtags = response.data.map(function (item) {
-				return item.hashtag;
-			});
-		});
-	};
+}).controller("mainController", function ($rootScope, $scope, $state, $sce, $window, $location, $http, ViciAuth, HashtagService, MetaService, PostService, $uibModal) {
+	$scope.hashtags = HashtagService.defaultHashtags;
 
 	var mouseEnterAddress = function mouseEnterAddress(className, address) {
 		var container = document.getElementsByClassName(className)[0];
@@ -34374,7 +34381,7 @@ var vicigoApp = angular.module("hashtag-app", [_angularUiRouter2.default, 'ui.bo
 });
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34532,7 +34539,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34546,9 +34553,9 @@ function fromByteArray (uint8) {
 
 
 
-var base64 = __webpack_require__(143)
-var ieee754 = __webpack_require__(148)
-var isArray = __webpack_require__(149)
+var base64 = __webpack_require__(144)
+var ieee754 = __webpack_require__(149)
+var isArray = __webpack_require__(150)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -36326,10 +36333,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(155)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(156)))
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -36343,7 +36350,7 @@ exports.push([module.i, ".medium-editor-anchor-preview,.medium-editor-toolbar{fo
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -36358,13 +36365,13 @@ exports.push([module.i, "/*--------------------- FONT (OPEN SANS) IMPORT FROM GO
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"row\">\n<div class=\"push feed\">\n\t\t\t\t<!-- HEADER -->\n\t\t\t\t<div class=\"feed-header\">\n\t\t\t\t\t<div class=\"feed-author\">\n\t\t\t\t\t\t<ul class=\"list-unstyled\" >\n\t\t\t\t\t\t\t<!-- AUTHOR IMAGE -->\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<img fallback-src=\"{{'/img/avatar.png'}}\" ng-src=\"{{feed.authorImage ? feed.authorImage : '/img/avatar.png'}}\">\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t<!-- END AUTHOR IMAGE -->\n\n\t\t\t\t\t\t\t<!-- AUTHOR REFERENCES -->\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<strong style=\"margin-top:15px;\"><a ui-sref=\"vicigo.profile({profileId:feed.user.id})\">{{feed.user.username}}</a></strong>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<!-- END AUTHOR REFERENCES -->\n\t\t\t\t\t\t\t<li class=\"feed-date\">\n\t\t\t\t\t\t\t\t<span class=\"text-muted\"><small>{{ feed.createdAt }}</small></span>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<!-- END HEADER -->\n\n\t\t\t\t<div class=\"post-feed-body\">\n\t\t\t\t\t<!-- TITLE -->\n\t\t\t\t\t<div class=\"feed-title\">\n\t\t\t\t\t\t<h3><strong><a href=\"#\" ng-click=\"goToPost(feed)\">{{feed.title}}</a></strong></h3>\n\t\t\t\t\t</div>\n\t\t\t\t\t<!-- END TITLE -->\n\n\t\t\t\t\t<!-- IMAGE BODY href=\"/post/{{feed.id}}\" -->\n\t\t\t\t\t<div class=\"feed-body\" ng-click=\"goToPost(feed)\">\n\n\t\t\t\t\t\t<lazy-img ng-if=\"feed.image_url\" class=\"lazy\" ng-src=\"{{trustSrc(feed.imageUrl)}}\" alt=\"image\"></lazy-img>\n\n\t\t\t\t\t\t<p ng-if=\"feed.body && feed.post_type_id !== 4 && feed.post_type_id !== 5\" class=\"feed-article\">\n\t\t\t\t\t\t\t{{ displayFeedBody(feed.body) }}\n\t\t\t\t\t\t</p>\n\n\t\t\t\t\t</div>\n\t\t\t\t\t<!-- END POST  BODY -->\n\t\t\t\t\t<!----------------------- POST BODY ENDS ---------------------------------->\n\t\t\t\t</div>\n\n\t\t\t<!-- footer -->\t\n\t\t\t<div class=\"feed-footer\">\n\t\t\t\t<div class=\"row hashtags\">\n\t\t\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t\t\t<div style=\"padding-left:8px;padding-right:5px;\">\n\t\t\t\t\t\t\t<a class=\"pull-left hashtag\" ng-repeat=\"hashtag in feed.userPostHashtags\" ui-sref=\"vicigo.hashtag({ hashtag : hashtag.hashtag})\">#{{ ::hashtag.hashtag}}</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"row feed-actions\" style=\"padding-top: 10px; padding-bottom: 10px;\">\n\t\t\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t\t\t<ul class=\"list-unstyled list-inline list\" ng-click=\"addressClicked(feed.user.addressBCH)\">\n\t\t\t\t\t\t\t<li style=\"width:50px;\">\n\t\t\t\t\t\t\t\t<button style=\"font-size: 15px; font-weight: bold\" class=\"btn btn-default\">\n\t\t\t\t\t\t\t\t\t\t<i style=\"font-size: 15px;\" ng-if=\"feed.alreadyUpvoted\" class=\"upvoted rate-btn fa fa-heart\"> Upvote €0,50</i>\n\t\t\t\t\t\t\t\t\t\t<i style=\"font-size: 15px;\" ng-if=\"!feed.alreadyUpvoted\" class=\"rate-btn fa fa-heart-o fa-2x\"> Upvote €0,50</i>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n</div>";
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -36454,7 +36461,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -36465,7 +36472,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {var __WEBPACK_AMD_DEFINE_RESULT__;/*global self, document, DOMException */
@@ -44363,10 +44370,10 @@ MediumEditor.version = MediumEditor.parseVersionString.call(this, ({
     return MediumEditor;
 }()));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(152)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(153)))
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -44631,10 +44638,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 151;
+webpackContext.id = 152;
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -44824,7 +44831,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports) {
 
 
@@ -44893,13 +44900,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(145);
+var content = __webpack_require__(146);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(125)(content, {});
@@ -44919,7 +44926,7 @@ if(false) {
 }
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports) {
 
 var g;
@@ -44946,7 +44953,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

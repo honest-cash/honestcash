@@ -15,6 +15,7 @@ import httpConfig from './config/http';
 import stateConfig from './config/state';
 import feedComponent from './components/feed/component';
 import AuthModule from './AuthModule';
+import HashtagService from './services/HashtagService';
 import * as runs from './runs/runs';
 AuthModule();
 
@@ -72,6 +73,8 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 	.config(routingConfig)
 	.config(httpConfig)
 	.config(stateConfig)
+
+	.service('HashtagService', HashtagService)
 
 	.service('MetaService', function() {
 		var metaDefault = {
@@ -647,14 +650,8 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 		});
 	})
 
-	.controller("mainController", function($rootScope, $scope, $state, $sce, $window, $location, $http, ViciAuth, MetaService, PostService, $uibModal) {
-		const init = () => {
-			$http.get("/api/hashtags/trending").then(function(response) {
-				$scope.hashtags = response.data.map(function(item) {
-					return item.hashtag
-				});
-			});
-		};
+	.controller("mainController", function($rootScope, $scope, $state, $sce, $window, $location, $http, ViciAuth, HashtagService, MetaService, PostService, $uibModal) {
+		$scope.hashtags = HashtagService.defaultHashtags;
 
         const mouseEnterAddress = (className, address) => {
             const container = document.getElementsByClassName(className)[0];
@@ -663,7 +660,7 @@ var vicigoApp = angular.module("hashtag-app", [ uiRouter, 'ui.bootstrap', infini
 
             new QRCode(container, address);
 		};
-		
+
 		const addressClicked = (address) => {
 			$('#tipModal').modal('show');
 

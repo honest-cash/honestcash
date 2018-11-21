@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './src/client/hashtagApp.js',
+    entry: './src/hashtagApp.js',
     output: { 
         path: __dirname + "/public/js",
         filename: 'bundle.js'

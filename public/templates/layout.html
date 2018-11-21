@@ -126,28 +126,22 @@
          </ul>
       </div>
       <!--/.navbar-collapse -->
-   </div>
-   <div class="container">
-	   <ul class="list-unstyled list-inline">
-			<li ng-repeat="hashtag in hashtags">
-				<a ui-sref="vicigo.hashtag({hashtag: hashtag})">#{{hashtag}}</a>
-			</li>
-	   </ul>
-   </div>
-</div>
-
-
-	<div style="min-height:440px;">
-	<div class="visible-xs" style="height:50px;"></div>
-
-		<div style="height:40px;"></div>
-		<div ui-view autoscroll="true"></div>
-
-		
-		
+		</div>
 	</div>
 
+	<div style="min-height:440px;">
+		<div style="height:25px;"></div>
 
+		<div class="container text-center">
+			<ul class="list-unstyled list-inline">
+				<li ng-repeat="hashtag in hashtags">
+					<a ui-sref="vicigo.hashtag({hashtag: hashtag})">#{{hashtag}}</a>
+				</li>
+			</ul>
+		</div>
+
+		<div ui-view autoscroll="true"></div>
+	</div>
 
 	<script type="text/ng-template" id="searchResults.html">
 
