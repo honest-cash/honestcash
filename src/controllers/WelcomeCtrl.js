@@ -145,6 +145,12 @@ export default class WelcomeCtrl {
 			return;
 		}
 
+		if (data.username.length < 3) {
+			$scope.message = "Username should be at least 3 characters";
+
+			return;
+		}
+
 		if (!data.email) {
 			$scope.message = "Email is required..";
 

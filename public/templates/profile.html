@@ -26,12 +26,6 @@
 
 					<div class="profile-bch-qr-code"></div>
 
-					<p class="text-center-sm">
-						<span ng-if="profile.user_id == user.id && !profile.title" href="#" editable-text="profile.title" onbeforesave="updateProfileTitle($data)"><i class="fa fa-pencil-square-o"></i> add title</span>
-						<span ng-if="profile.user_id == user.id && profile.title" href="#" editable-text="profile.title" onbeforesave="updateProfileTitle($data)">{{profile.title}}</span>
-						<span ng-if="profile.user_id !== user.id">{{ profile.title }}</span>
-					</p>
-
 					<div class="row">
 							<ul class="list-unstyled list-inline" style="padding:3px">
 								<!--

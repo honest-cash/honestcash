@@ -26,56 +26,54 @@
 				</h2>
 
 				<hr />
-				
+
 				<article style="font-size: 21px;" id="body"></article>
 		</div>
 	</div>
 </div>
 
-	<!-- UPLOAD IMAGE MODAL -->
-		<div class="modal fade" id="uploadBackgroundImageModal" tabindex="-1" role="dialog" aria-labelledby="uploadBackgroundImageModal">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-
-					<div class="modal-header">
-						<h4 class="modal-title" id="myModalLabel"><b>Upload background picture</b> <button class="close" data-dismiss="modal">×</button></h4>
-					</div>
-
-					<div class="modal-body">
-				
-						<input id="uploadedImagePostId" type="hidden">
-						<form enctype="multipart/form-data" type="post" class="dz-clickable" id="backgroundImageDropzone">
-							<div class="dz-message">
-								<h3 class="push dz-message-text">drop files here or click to upload</h3>
-							</div>
-							<img id="uploadedImage" class="hidden" style="width:90%; max-width:600px; display: block; margin-left: auto; margin-right: auto" src="" />
-						</form>
-					</div>
-
-					<!-- FOOTER IMAGE MODAL -->
-					<div class="modal-footer">
-						<button disabled id="publishPicturePostBtn" ng-click="publishPicturePost()" type="button" class="btn btn-primary btn-lg btn-block">Post</button>
-					</div>
-					<!-- FOOTER IMAGE MODAL -->
-				</div>
+<!-- UPLOAD IMAGE MODAL -->
+<div class="modal fade" id="uploadBackgroundImageModal" tabindex="-1" role="dialog" aria-labelledby="uploadBackgroundImageModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"><b>Upload background picture</b> <button class="close" data-dismiss="modal">×</button></h4>
 			</div>
-		</div>
-		<!-- UPLOAD IMAGE MODAL -->	
 
-		<div id="preview-template" style="display:none;">
-			<div class="dz-preview dz-file-preview">
-
-				<div class="dz-details">
-					<div class="dz-filename"><span></span></div>
-					<div class="dz-size"></div>
-				</div>
-
-				<div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-				<div class="dz-success-mark"><span></span></div>
-				<div class="dz-error-mark"><span></span></div>
-				<div class="dz-error-message"><span data-dz-errormessage></span></div>
+			<div class="modal-body">
+				<input id="uploadedImagePostId" type="hidden">
+				<form enctype="multipart/form-data" type="post" class="dz-clickable" id="backgroundImageDropzone">
+					<div class="dz-message">
+						<h3 class="push dz-message-text">drop files here or click to upload</h3>
+					</div>
+					<img id="uploadedImage" class="hidden" style="width:90%; max-width:600px; display: block; margin-left: auto; margin-right: auto" src="" />
+				</form>
 			</div>
+
+			<!-- FOOTER IMAGE MODAL -->
+			<div class="modal-footer">
+				<button disabled id="publishPicturePostBtn" ng-click="publishPicturePost()" type="button" class="btn btn-primary btn-lg btn-block">Post</button>
+			</div>
+			<!-- FOOTER IMAGE MODAL -->
 		</div>
+	</div>
+</div>
+<!-- UPLOAD IMAGE MODAL -->	
+
+<div id="preview-template" style="display:none;">
+	<div class="dz-preview dz-file-preview">
+
+		<div class="dz-details">
+			<div class="dz-filename"><span></span></div>
+			<div class="dz-size"></div>
+		</div>
+
+		<div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+		<div class="dz-success-mark"><span></span></div>
+		<div class="dz-error-mark"><span></span></div>
+		<div class="dz-error-message"><span data-dz-errormessage></span></div>
+	</div>
+</div>
 
 <link href="/css/froala/froala_editor.min.css" rel="stylesheet" type="text/css" />
 <link href="/css/froala/froala_style.min.css" rel="stylesheet" type="text/css" />

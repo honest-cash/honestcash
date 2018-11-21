@@ -1,53 +1,47 @@
 <div class="visible-xs" style="height:50px;"></div>
 
-<div class="container" class="block-center">
-<!-- FILTER OPTION -->
-<div class="row" ng-if="hashtag">
-	<h1 class="text-center" ng-if="hashtag">
-		<strong>
-			#<span ng-bind="hashtag"></span>
-		</strong> 
-		</h1>
-	<hr>
-	<h3>
-		<ul class="horiontal-list text-center push hidden">
-			<li ng-class="{'selected' : sortType == 'hot' }" class="cursor-pointer" ng-click="sort('hot')">#hot</li>
-			<li ng-class="{'selected' : sortType == 'best' }" class="cursor-pointer" ng-click="sort('best')">#best</li>
-			<li ng-class="{'selected' : sortType == 'new' }" class="cursor-pointer" ng-click="sort('new')">#new</li>
+<div style="max-width:1300px;" class="container" class="block-center">
+	<div ng-if="!user.id" class="panel panel-default">
+		<div class="panel-body">
+				<h1>Earn bitcoin for your content.</h1>
+				<p>
+					Honest is a social network where you can earn Bitcoin Cash if you create value. Our mission to improve the quality of content on the internet and to get people paid for doing work they love. Sign up now to join us.
+				</p>
+
+				<button class="btn btn-default btn-lg" ui-sref="starter.welcome">Join us</button>
+		</div>
+	</div>
+
+	<div class="text-center">
+		<ul class="list-unstyled list-inline">
+			<li ng-repeat="hashtag in hashtags">
+				<a ui-sref="vicigo.hashtag({hashtag: hashtag})">#{{hashtag}}</a>
+			</li>
 		</ul>
-	</h3>
+	</div>
+
+	<div ng-if="hashtag">
+		<h1 class="text-center" ng-if="hashtag">
+			<strong>
+				#<span ng-bind="hashtag"></span>
+			</strong> 
+			</h1>
+		<hr>
+		<h3>
+			<ul class="horiontal-list text-center push hidden">
+				<li ng-class="{'selected' : sortType == 'hot' }" class="cursor-pointer" ng-click="sort('hot')">#hot</li>
+				<li ng-class="{'selected' : sortType == 'best' }" class="cursor-pointer" ng-click="sort('best')">#best</li>
+				<li ng-class="{'selected' : sortType == 'new' }" class="cursor-pointer" ng-click="sort('new')">#new</li>
+			</ul>
+		</h3>
+	</div>
 </div>
 
-<!-- FILTER OPTION END -->
-</div>
-	<div style="height:40px;"></div>
-<div class="container-fluid" class="block-center" style="max-width:1300px;">	
-	
-<div class="col-lg-3 hidden-xs hidden-sm hidden-md" >
-	<div ng-if="user.id && hidden">
-	<h5 class="bold">
-		trending hashtags
-	</h5>
-	<hr>
-	<ul class="list-unstyled">
-	<li ng-repeat="hashtag in hashtags track by $index" style="padding-top:7px;">
-		<div>
-		
-		<div class="pull-left">
-		<a ui-sref="vicigo.hashtag({hashtag:hashtag.hashtag})" >#{{hashtag.hashtag}}	</a>
-			<br> <i class="fa fa-bolt muted" ng-if="hashtag.promoted">Promoted</i>
+<div style="height:35px;"></div>
 
-		</div>
-			
-		<button ng-click="followHashtag(hashtag.hashtag,$index)" class="btn btn-sm btn-default pull-right">
-			Follow
-		</button>	
-		</div>
-		
-		<hr />
-	</li>
-	</ul>
-</div>
+<div class="block-center container" style="max-width:1300px;">	
+	<div class="col-lg-3 hidden-xs hidden-sm hidden-md" >
+
 	</div>
 
 	<div class="col-lg-6 row" >
@@ -55,7 +49,6 @@
 				<ng-include src="'templates/partials/feed-angular.html'">
 		</div>	
 	</div>
-
 		
 <div class="hidden-xs hidden-sm pull-right hidden" style="max-width:300px">
 	<div ng-if="user.id" class="pull-left">
