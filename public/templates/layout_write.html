@@ -4,12 +4,13 @@
 <div ng-controller="editorController">
 	<div class="text-center" ng-show='!ready'><i class="fa fa-circle-o-notch fa-spin  fa-2x"></i></div>
 
-	<div ng-show='ready' >
+	<div ng-show='ready'>
 	
-	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
+	<div class="navbar navbar-fixed-top navbar-default" style="padding-top:27px;" ng-if="!welcome&&!noHeader" >
 		<div class="container">
-				<a ui-sref="vicigo.feeds">
-					<img style="margin:13px;" src="/img/honest-long-logo.png"  alt="Vicigo Logo">
+
+				<a ui-sref="vicigo.feeds" class="pull-left" href="#">
+					<img class="header-logo" src="/img/honest-long-logo.png" alt="Vicigo Logo">
 				</a>
 
 				<ul class="nav navbar-nav navbar-right" >
