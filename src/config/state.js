@@ -127,6 +127,22 @@ export default function state ($stateProvider, $urlRouterProvider) {
 				}
 			}
 		})
+		.state('vicigo.postById', {
+			url: "/:postId",
+			templateUrl: "/templates/post.html",
+			controller: "postController",
+			resolve: {
+				'post': ($stateParams, $q, PostService) => {
+					var defer = $q.defer();
+
+					PostService.getById($stateParams.postId, (rPost) => {
+						defer.resolve(rPost);
+					});
+
+					return defer.promise;
+				}
+			}
+		})
 		.state('vicigo.hashbookNew', {
 			url: "/u/hashbook/create",
 			templateUrl: "/templates/blog_create.html",

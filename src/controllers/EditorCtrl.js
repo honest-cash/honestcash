@@ -32,7 +32,7 @@ export default class EditorCtrl {
                     toastr.success("You have successfully published your story.");
 
                     return $timeout(() => {
-                        $state.go("vicigo.post", {
+                        $state.go("vicigo.postById", {
                             postId: postId
                         });
                     }, 1500);

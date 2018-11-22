@@ -1,9 +1,20 @@
+import moment from "moment";
 export default class PostCtrl {
     constructor($rootScope, $scope, post, RelsService, CommentService) {
         $scope.postId = post.post_id;
         $scope.post = post;
-
+        $scope.post.createdAt = moment(post.createdAt).format("MMM Do YY");
         $scope.comments = [];
+
+        const init = () => {
+            const container = document.getElementById("post-tipping-container");
+
+            container.innerHTML = "";
+
+            new QRCode(container, post.user.addressBCH);
+
+            document.getElementById("userBCHAddress").value = post.user.addressBCH;
+        };
 
         $scope.follow = (profileId) => {
             if (!$rootScope.user.id) {
@@ -40,6 +51,8 @@ export default class PostCtrl {
                 }
             });
         };
+
+        init();
     }
 }
 

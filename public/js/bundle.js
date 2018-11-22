@@ -43180,7 +43180,7 @@ var EditorCtrl_EditorCtrl = /** @class */ (function () {
                 if (response.status == 200) {
                     toastr.success("You have successfully published your story.");
                     return $timeout(function () {
-                        $state.go("vicigo.post", {
+                        $state.go("vicigo.postById", {
                             postId: postId
                         });
                     }, 1500);
@@ -43458,6 +43458,20 @@ function state($stateProvider, $urlRouterProvider) {
             }
         }
     })
+        .state('vicigo.postById', {
+        url: "/:postId",
+        templateUrl: "/templates/post.html",
+        controller: "postController",
+        resolve: {
+            'post': function ($stateParams, $q, PostService) {
+                var defer = $q.defer();
+                PostService.getById($stateParams.postId, function (rPost) {
+                    defer.resolve(rPost);
+                });
+                return defer.promise;
+            }
+        }
+    })
         .state('vicigo.hashbookNew', {
         url: "/u/hashbook/create",
         templateUrl: "/templates/blog_create.html",
@@ -43714,11 +43728,19 @@ HashtagService.$inject = [
 ];
 
 // CONCATENATED MODULE: ./src/controllers/PostCtrl.js
-var PostCtrl = /** @class */ (function () {
+
+var PostCtrl_PostCtrl = /** @class */ (function () {
     function PostCtrl($rootScope, $scope, post, RelsService, CommentService) {
         $scope.postId = post.post_id;
         $scope.post = post;
+        $scope.post.createdAt = moment_default()(post.createdAt).format("MMM Do YY");
         $scope.comments = [];
+        var init = function () {
+            var container = document.getElementById("post-tipping-container");
+            container.innerHTML = "";
+            new QRCode(container, post.user.addressBCH);
+            document.getElementById("userBCHAddress").value = post.user.addressBCH;
+        };
         $scope.follow = function (profileId) {
             if (!$rootScope.user.id) {
                 return $("#loginModal").modal();
@@ -43752,11 +43774,12 @@ var PostCtrl = /** @class */ (function () {
                 }
             });
         };
+        init();
     }
     return PostCtrl;
 }());
-/* harmony default export */ var controllers_PostCtrl = (PostCtrl);
-PostCtrl.$inject = ["$rootScope", "$scope", "post", "RelsService", "CommentService"];
+/* harmony default export */ var controllers_PostCtrl = (PostCtrl_PostCtrl);
+PostCtrl_PostCtrl.$inject = ["$rootScope", "$scope", "post", "RelsService", "CommentService"];
 
 // CONCATENATED MODULE: ./src/services/PostService.js
 var PostService_PostService = /** @class */ (function () {

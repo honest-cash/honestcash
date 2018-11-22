@@ -1,14 +1,36 @@
-
-
-
 <div class="container">
+	<div class="col-xs-12 visible-xs" style="height:100px;"></div>
 	<div class="col-md-8 col-md-offset-2">
+		<div class="row">
 			<post-header></post-header>
-			
-			<hr />
+		</div>
 
-			<div class="row">
-				<article class="site-block post-body"  ng-bind-html="displayFeedBody(post.body)"></article>
-			</div> 
+		<hr />
+
+		<div class="row">
+			<article class="site-block post-body"  ng-bind-html="displayFeedBody(post.body)"></article>
+		</div>
+
+		<hr />
+
+		<div class="row">
+			<div class="block-center">
+				<div class="panel">
+					<div class="panel-body">
+						<h2>Give a tip to the author</h2>
+						<p>
+							... and support the best content in internet with bitcoin cash. Recommended amount: 0.50€.
+						</p>
+						<input readonly class="form-control" id="userBCHAddress">
+
+						<div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
+
+						<p>
+							<strong>Important:</strong> Soon you will be able to give tips directly from your Honest account for great content and also get paid for finding good content early! In the meantime, you can still tip from any Bitcoin Cash wallet.
+						</p>
+					</div>
+				</div>
+			</div>	
+		</div>
 	</div>			
 </div>
