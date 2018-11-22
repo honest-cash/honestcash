@@ -42998,6 +42998,9 @@ var WelcomeCtrl = /** @class */ (function () {
                     case "EMAIL_NOT_FOUND":
                         $scope.message = "E-mail could not be found.";
                         break;
+                    case "PASSWORDS_DO_NOT_MATCH":
+                        $scope.message = "Passwords do not match!";
+                        break;
                     default:
                         $scope.message = "Login error. Try again...";
                 }
@@ -43035,7 +43038,7 @@ var WelcomeCtrl = /** @class */ (function () {
                 $state.go("vicigo.feeds");
             }, function (response) {
                 $scope.isLoading = false;
-                return displayErrorMessage(response.data.code);
+                return displayErrorMessage(response.data.code, response.data.desc);
             });
         };
         $scope.changePassword = function (data) {
@@ -43907,8 +43910,7 @@ var vicigoApp = angular.module("hashtag-app", [
     "angular.lazyimg",
     "ViciAuth"
 ])
-    .constant("API_URL", "https://honestcash.alphateamhackers.com/api" //.."http://localhost:8080/api" /**"https://honestcash.alphateamhackers.com/api"/*, "http://localhost:8080/api" "https://honestcash.alphateamhackers.com/api" 
-)
+    .constant("API_URL", "https://honestcash.alphateamhackers.com/api")
     .run(["ViciAuth", "Uploader", function (ViciAuth, Uploader) {
         Uploader.init();
         profilePicDropzone = new Dropzone("#profilePicDropzone", {

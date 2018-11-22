@@ -33,6 +33,10 @@ export default class WelcomeCtrl {
 				case "EMAIL_NOT_FOUND":
 					$scope.message = "E-mail could not be found.";
 					break;
+				case "PASSWORDS_DO_NOT_MATCH":
+					$scope.message = "Passwords do not match!";
+					break;
+
 				default:
 					$scope.message = "Login error. Try again...";
 			}
@@ -83,7 +87,7 @@ export default class WelcomeCtrl {
 		}, (response) => {
 			$scope.isLoading = false;
 
-			return displayErrorMessage(response.data.code);
+			return displayErrorMessage(response.data.code, response.data.desc);
 		});
 	};
 
