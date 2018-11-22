@@ -43884,7 +43884,8 @@ var vicigoApp = angular.module("hashtag-app", [
     "angular.lazyimg",
     "ViciAuth"
 ])
-    .constant("API_URL", "http://localhost:8080/api" /**"https://honestcash.alphateamhackers.com/api"/*, "http://localhost:8080/api" "https://honestcash.alphateamhackers.com/api" */)
+    .constant("API_URL", "https://honestcash.alphateamhackers.com/api" //.."http://localhost:8080/api" /**"https://honestcash.alphateamhackers.com/api"/*, "http://localhost:8080/api" "https://honestcash.alphateamhackers.com/api" 
+)
     .run(["ViciAuth", "Uploader", function (ViciAuth, Uploader) {
         Uploader.init();
         profilePicDropzone = new Dropzone("#profilePicDropzone", {
