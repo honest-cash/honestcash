@@ -37,7 +37,7 @@ var vicigoApp = angular.module("hashtag-app", [
 	"ViciAuth"
 ])
 
-.constant("API_URL", "http://localhost:8080/api" /** ,"https://honestcash.alphateamhackers.com/api" */) 
+.constant("API_URL", "https://honestcash.alphateamhackers.com/api" /*"http://localhost:8080/api"*/ /** ,"https://honestcash.alphateamhackers.com/api" */) 
 
 .run([ "API_URL", "ViciAuth", "Uploader", function(API_URL, ViciAuth, Uploader) {
 	Uploader.init();
@@ -54,11 +54,11 @@ var vicigoApp = angular.module("hashtag-app", [
 	})
 	.on("sending", (file, xhr) => {
 		xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
+
+		setTimeout(() => $('#uploadProfilePicModal').modal('hide'), 500);
 	})
 	.on("success", (file, response) => {
-		$('#uploadProfilePicModal').modal('hide');
-
-		document.getElementById("profilePic").src=response.url;
+		document.getElementById("profilePic").src = response.url;
 	});
 }])
 

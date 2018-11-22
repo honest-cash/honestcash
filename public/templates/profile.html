@@ -21,7 +21,7 @@
 						</a>
 						<span ng-if="profile.id !== user.id">{{ profile.addressBCH }}</span>
 
-						<span ng-if="profile.user_id == user.id && !profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)"><i class="fa fa-pencil-square-o"></i> Specify your BCH address for tipping</span>
+						<span ng-if="profile.id == user.id && !profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)"><i class="fa fa-pencil-square-o"></i> Specify your BCH address for receiving tips</span>
 					</h3>
 
 					<div class="profile-bch-qr-code"></div>

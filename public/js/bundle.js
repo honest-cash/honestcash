@@ -43276,6 +43276,7 @@ var EditorCtrl_EditorCtrl = /** @class */ (function () {
             });
             backgroundImageDropzone
                 .on("sending", function (file, xhr) {
+                $scope.isBeingUploaded = true;
                 xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
             });
             backgroundImageDropzone
@@ -43910,7 +43911,7 @@ var vicigoApp = angular.module("hashtag-app", [
     "angular.lazyimg",
     "ViciAuth"
 ])
-    .constant("API_URL", "http://localhost:8080/api" /** ,"https://honestcash.alphateamhackers.com/api" */)
+    .constant("API_URL", "https://honestcash.alphateamhackers.com/api" /*"http://localhost:8080/api"*/ /** ,"https://honestcash.alphateamhackers.com/api" */)
     .run(["API_URL", "ViciAuth", "Uploader", function (API_URL, ViciAuth, Uploader) {
         var _this = this;
         Uploader.init();
@@ -43926,9 +43927,9 @@ var vicigoApp = angular.module("hashtag-app", [
         })
             .on("sending", function (file, xhr) {
             xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
+            setTimeout(function () { return $('#uploadProfilePicModal').modal('hide'); }, 500);
         })
             .on("success", function (file, response) {
-            $('#uploadProfilePicModal').modal('hide');
             document.getElementById("profilePic").src = response.url;
         });
     }])

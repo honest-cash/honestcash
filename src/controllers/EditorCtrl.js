@@ -141,6 +141,8 @@ export default class EditorCtrl {
 
             backgroundImageDropzone
             .on("sending", (file, xhr) => {
+                $scope.isBeingUploaded = true;
+
                 xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
             })
 
