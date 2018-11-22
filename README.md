@@ -31,7 +31,7 @@ Up to this stage, participation will require a centralized login system. As next
 ### Content can optionally be saved on blockchain (or IPFS)
 We strive for uncensorable content. Users will be able save its content on IPFS. We will provide decentralized repository of all content saved (for example as a smart contract). Besides, our technology is and will be open-sourced. This way in case we could not provide the service anymore (for whatever reason), others will be able to continue it without us.
 
-There was one misconception about the definition of "uncesorable". We will not prohibit any opinion expressed on the platform or try to censor it. However, content that promotes rasism, crime, hate and similar will not be listed on the platform. Notwithstanding, the permissionless nature of the IPFS system does not stop the party to promote such content somewhere else.
+There was one misconception about the definition of "Uncensorable". We will not prohibit any opinion expressed on the platform or try to censor it. However, content that promotes racism, crime, hate and similar will not be listed on the platform. Notwithstanding, the permissionless nature of the IPFS system does not stop the party to promote such content somewhere else.
 
 # Donate
 bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h 
