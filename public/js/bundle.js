@@ -43865,7 +43865,7 @@ var onStateChange = function ($rootScope, $state, ViciAuth) {
             if (data) {
                 $rootScope.user = {
                     id: data.id,
-                    profileImageUrl: data.imageUrl,
+                    imageUrl: data.imageUrl,
                     name: data.username
                 };
                 return;
@@ -43910,26 +43910,26 @@ var vicigoApp = angular.module("hashtag-app", [
     "angular.lazyimg",
     "ViciAuth"
 ])
-    .constant("API_URL", "https://honestcash.alphateamhackers.com/api")
-    .run(["ViciAuth", "Uploader", function (ViciAuth, Uploader) {
+    .constant("API_URL", "http://localhost:8080/api" /** ,"https://honestcash.alphateamhackers.com/api" */)
+    .run(["API_URL", "ViciAuth", "Uploader", function (API_URL, ViciAuth, Uploader) {
+        var _this = this;
         Uploader.init();
         profilePicDropzone = new Dropzone("#profilePicDropzone", {
-            url: "/upload/image?isProfileAvatar=true",
+            url: API_URL + "/upload/image?isProfileAvatar=true",
             maxFiles: 10,
             maxfilesexceeded: function (file) {
-                this.removeAllFiles();
-                this.addFile(file);
+                _this.removeAllFiles();
+                _this.addFile(file);
             },
             thumbnailWidth: null,
             previewTemplate: document.querySelector('#preview-template').innerHTML,
-        }).on("sending", function (file, xhr) {
+        })
+            .on("sending", function (file, xhr) {
             xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
-        }).on("success", function (file, response) {
+        })
+            .on("success", function (file, response) {
             $('#uploadProfilePicModal').modal('hide');
-            document.getElementById("profilePic").src = response.link;
-        });
-        $(".tags-area").tagit({
-            placeholderText: "tag it!",
+            document.getElementById("profilePic").src = response.url;
         });
     }])
     .run(["$rootScope", "$state", "$timeout", "$http", function ($rootScope, $state, $timeout, $http) {

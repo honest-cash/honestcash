@@ -16,7 +16,7 @@ export const onStateChange = function($rootScope, $state, ViciAuth) {
             if (data) {
                 $rootScope.user = {
                     id: data.id,
-                    profileImageUrl: data.imageUrl,
+                    imageUrl: data.imageUrl,
                     name: data.username
                 };
 
