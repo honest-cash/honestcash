@@ -243,3 +243,7 @@ export default class ProfileCtrl {
         };
     }
 }
+
+ProfileCtrl.$inject = [
+    "API_URL", "$rootScope", "$scope", "$location", "$http", "$q", "FeedService", "CommentService", "RelsService", "PostService", "profile" 
+];

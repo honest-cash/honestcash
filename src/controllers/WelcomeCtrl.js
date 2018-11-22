@@ -1,5 +1,5 @@
 export default class WelcomeCtrl {
-  constructor($rootScope, $scope, $location, $state, HashtagService, ViciAuth) {
+  constructor($rootScope, $scope, $location, $state, ViciAuth) {
 	$scope.message = "";
 	$rootScope.noHeader = true;
 	$scope.isLoading = false;
@@ -8,7 +8,11 @@ export default class WelcomeCtrl {
 
 	console.log("Resetting password with code: " + $scope.resetCode);
 
-	const displayErrorMessage = (code) => {
+	const displayErrorMessage = (code, desc) => {
+		if (desc) {
+			return $scope.message = desc;
+		}
+
 		if (code) {
 			switch (code) {
 				case "EMAIL_EXISTS":
@@ -190,7 +194,11 @@ export default class WelcomeCtrl {
 		}, response => {
 			$scope.isLoading = false;
 
-			return displayErrorMessage(response.data.code);
+			return displayErrorMessage(response.data.code, response.data.desc);
 		});
 	};
 }}
+
+WelcomeCtrl.$inject = [
+    "$rootScope", "$scope", "$location", "$state", "ViciAuth"
+];

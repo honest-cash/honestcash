@@ -6,16 +6,13 @@
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
          </button>
-         <a ui-sref="vicigo.feeds"><img class="header-logo" src="/img/honest-long-logo.png"  alt="Vicigo Logo"></a>
+         <a ui-sref="vicigo.feeds"><img class="header-logo" src="/img/honest-long-logo.png"  alt="Honest Logo"></a>
+
 					<form class="navbar-form pull-left" role="search">
 					<div class="input-group">
 		<!-- typeahead-popup-template-url="searchResultsPopup.html" -->
 		<input type="text" class="form-control"  placeholder="vicigo search" typeahead-on-select="searchResultSelected($item); asyncSelected = '';" typeahead-min-length="3" typeahead-wait-ms="500" typeahead-template-url="searchResults.html" ng-model="asyncSelected" uib-typeahead="result.header for result in searchVicigo($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
     <i ng-show="loadingLocations" class="fa fa-circle-o-notch fa-spin"></i>
-    
-					
-						
-						
 					</div>
 				</form>
       </div>
@@ -23,10 +20,10 @@
          <ul class="nav navbar-nav navbar-right" >
            
              <li ng-if="!user">
-							<a ui-sref="starter.login">
-								<i class="gi gi-settings fa-fw pull-right"></i> login
-							</a>
-						</li>
+				<a ui-sref="starter.login">
+					<i class="gi gi-settings fa-fw pull-right"></i> login
+				</a>
+			</li>
             <li ng-if="!user">
 							<a ui-sref="starter.signup">
 								<i class="gi gi-settings fa-fw pull-right"></i> signup

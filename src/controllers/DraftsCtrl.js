@@ -1,5 +1,5 @@
 export default class DraftsCtrl {
-    constructor($scope, $stateParams, $http) {
+    constructor($scope, $http) {
         $scope.drafts = [];
         $http.get("/api/drafts").then(response => {
             
@@ -7,3 +7,5 @@ export default class DraftsCtrl {
         });
     }
 }
+
+DraftsCtrl.$inject = [ "$scope", "$http" ];

@@ -18,6 +18,8 @@ export default class EditorCtrl {
         };
 
         $scope.publishPost = postId => {
+            $scope.isLoading = true;
+
             $http.put(API_URL + "/draft/" + postId + "/publish")
             .then(response => {
                 if (response.status == 400) {
@@ -67,8 +69,8 @@ export default class EditorCtrl {
                     forcePlainText: true,
                     cleanPastedHTML: true,
                     cleanReplacements: [],
-                    cleanAttrs: ['class', 'style', 'dir'],
-                    cleanTags: ['meta'],
+                    cleanAttrs: [ 'class', 'style', 'dir' ],
+                    cleanTags: [ 'meta' ],
                     unwrapTags: []
                 }
             });
@@ -83,8 +85,8 @@ export default class EditorCtrl {
                 paste: {
                     /* This example includes the default options for paste,
                        if nothing is passed this is what it used */
-                    forcePlainText: false,
-                    cleanPastedHTML: false,
+                    forcePlainText: true,
+                    cleanPastedHTML: true,
                     cleanReplacements: [],
                     cleanAttrs: ['class', 'style', 'dir'],
                     cleanTags: ['meta'],
@@ -161,9 +163,9 @@ export default class EditorCtrl {
         $scope.saveDraftElement = (element) => {
             const post = {};
 
-            post.title = document.getElementById("title").innerHTML;
-            post.body = document.getElementById("body").innerHTML;
-            post.hashtags = $("input#description").val();
+            post.title = document.getElementById("title").innerText || "";
+            post.body = document.getElementById("body").innerHTML || "";
+            post.hashtags = $("input#description").val() || "";
 
             if (!post.body && !post.title && !post.hashtags) {
                 $scope.saving = null;
@@ -183,8 +185,8 @@ export default class EditorCtrl {
             const draft = {};
 
             draft.title = document.getElementById("title").innerHTML || "";
-            draft.hashtags = $("#description").val() ? $("#description").val() : "";
             draft.body = document.getElementById("body").innerHTML || "";
+            draft.hashtags = $("#description").val() ? $("#description").val() : "";
 
             $http.post(API_URL + "/draft/" + draftId, draft)
             .then(function(data) {
@@ -195,3 +197,5 @@ export default class EditorCtrl {
         loadPostDraft($stateParams.postId);
     }
 }
+
+EditorCtrl.$inject = [ "$state", "$scope", "$stateParams", "$http", "$timeout", "ViciAuth", "API_URL" ];

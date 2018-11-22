@@ -165,3 +165,5 @@ export default class FeedsCtrl {
 		};
   }
 }
+
+FeedsCtrl.$inject = [ "$rootScope", "$scope", "$stateParams", "$location", "$http", "FeedService", "CommentService", "PostService" ];

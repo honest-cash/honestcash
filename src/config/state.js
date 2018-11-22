@@ -112,15 +112,17 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			}
 		})
 		.state('vicigo.post', {
-			url: "/post/:postId",
+			url: "/:username/:alias",
 			templateUrl: "/templates/post.html",
 			controller: "postController",
 			resolve: {
-				'post': function($stateParams, $http, $q, PostService) {
+				'post': ($stateParams, $q, PostService) => {
 					var defer = $q.defer();
-					PostService.getById($stateParams.postId, function(rPost) {
+
+					PostService.getById($stateParams.alias, (rPost) => {
 						defer.resolve(rPost);
 					});
+
 					return defer.promise;
 				}
 			}

@@ -12,13 +12,13 @@ export default () => {
 		RESET: "/auth/request-password-reset",
 		CHANGE_PASSWORD: "/auth/reset-password"
 	})
-	.factory("apiFactory", function(API_URL, API) {
+	.factory("apiFactory", ["API_URL", "API", function(API_URL, API) {
 		return (method) => {
 			return API_URL + API[method];
 		};
-	})
+	}])
 
-.service("ViciAuth", function($rootScope,$window, $http, $q, apiFactory) {
+.service("ViciAuth", [ "$window", "$http", "$q", "apiFactory", function($window, $http, $q, apiFactory) {
 		var LOCAL_TOKEN_KEY = 'AdminDashAuthToken';
 		var LOCAL_USER_ID_KEY = 'AdminDashUserId';
 		var username = '';
@@ -144,9 +144,8 @@ export default () => {
 			changePassword,
 			loadUserCredentials: loadUserCredentials
 		};
-
-	})
-	.run(function(ViciAuth) {
+	}])
+	.run([ "ViciAuth", function(ViciAuth) {
 		ViciAuth.loadUserCredentials();
-	});
+	}]);
 };

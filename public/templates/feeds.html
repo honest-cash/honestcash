@@ -43,9 +43,20 @@
 	<div class="col-lg-3 hidden-xs hidden-sm hidden-md" >
 
 	</div>
+	<div class="col-lg-6 row">
 
-	<div class="col-lg-6 row" >
 		<div class="block-center">
+				<div ng-if="user.id && !feeds.length" class="panel">
+						<div class="panel-body">
+								<h1>No content yet.</h1>
+								<p>
+									Be the first to create it!
+								</p>
+			
+								<button class="btn btn-default btn-lg" ui-sref="editor.write">Write a story</button>
+						</div>
+				</div>
+
 				<ng-include src="'templates/partials/feed-angular.html'">
 		</div>	
 	</div>
@@ -57,28 +68,25 @@
 	</h5>
 	<hr>
 	<ul class="list-unstyled">
-	<li  ng-repeat="profile in recommendedProfiles track by $index" style="padding-top:7px;">
-		<div>
-			
-		<div class="pull-left">
-			
-		  		<a>
-            <img ng-if="profile.avatar" class="img-circle img-thumbnail-avatar-smallest" fallback-src="{{'/img/avatar.png'}}" ng-src="{{profile.avatar}}">
-            <img ng-if="!profile.avatar" class="img-circle img-thumbnail-avatar-smallest" ng-src="/img/avatar.png">
-          </a>	
-			
-		<a class="bold" ui-sref="vicigo.profile({profileId: profile.profile_id})">{{profile.username}}</a>
-			<br> <i class="fa fa-bolt muted" ng-if="profile.promoted">Promoted</i>
-		</div>
-		
-			
-		<button ng-click="follow(profile.profile_id,$index)" class="btn btn-sm btn-default pull-right">
-			Follow
-		</button>	
-		</div>
-		
-		<hr>
-	</li>
+		<li ng-repeat="profile in recommendedProfiles track by $index" style="padding-top:7px;">
+			<div>
+				<div class="pull-left">
+				<a>
+					<img ng-if="profile.avatar" class="img-circle img-thumbnail-avatar-smallest" fallback-src="{{'/img/avatar.png'}}" ng-src="{{profile.avatar}}">
+					<img ng-if="!profile.avatar" class="img-circle img-thumbnail-avatar-smallest" ng-src="/img/avatar.png">
+				</a>	
+					
+					<a class="bold" ui-sref="vicigo.profile({profileId: profile.profile_id})">{{profile.username}}</a>
+						<br> <i class="fa fa-bolt muted" ng-if="profile.promoted">Promoted</i>
+					</div>
+					
+						
+					<button ng-click="follow(profile.profile_id,$index)" class="btn btn-sm btn-default pull-right">
+						Follow
+					</button>	
+				</div>
+			<hr />
+		</li>
 	</ul>
 </div>
 	</div>
