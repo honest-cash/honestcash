@@ -43450,7 +43450,7 @@ function state($stateProvider, $urlRouterProvider) {
         }
     })
         /**
-         * Someone posted a buggy link on reddit and we need to support it.
+         * dagur posted a buggy link on reddit and we need to support it.
          */
         .state('vicigo.postByIdBroken', {
         url: "/:postId",
@@ -43899,7 +43899,7 @@ var vicigoApp = angular.module("hashtag-app", [
     "angular.lazyimg",
     "ViciAuth"
 ])
-    .constant("API_URL", "http://localhost:8080/api" /*"http://localhost:8080/api"*/ /** ,"https://honestcash.alphateamhackers.com/api" */)
+    .constant("API_URL", "https://honestcash.alphateamhackers.com/api" /*"http://localhost:8080/api"*/ /** ,"https://honestcash.alphateamhackers.com/api" */)
     .run(["API_URL", "ViciAuth", "Uploader", function (API_URL, ViciAuth, Uploader) {
         var _this = this;
         Uploader.init();

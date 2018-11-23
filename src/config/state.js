@@ -144,7 +144,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			}
 		})
 		/**
-		 * Someone posted a buggy link on reddit and we need to support it.
+		 * dagur posted a buggy link on reddit and we need to support it.
 		 */
 		.state('vicigo.postByIdBroken', {
 			url: "/:postId",
