@@ -42559,14 +42559,6 @@ var ProfileCtrl = /** @class */ (function () {
             RelsService.unfollowHashtag(hashtag);
             $scope.followedHashtags.splice(index, 1);
         };
-        $scope.feedOnScreen = function (postId, index, inview) {
-            if ($scope.feeds[index].comment_count) {
-                CommentService.getComments($scope.postId, function (rComments) {
-                    $scope.feeds[index].comments = rComments;
-                    $scope.feeds[index].showComments = true;
-                });
-            }
-        };
         var updateMutableProfileFieldFactory = function (fieldName) { return function (fieldValue) {
             var d = $q.defer();
             var data = {};
@@ -42796,14 +42788,6 @@ var FeedsCtrl = /** @class */ (function () {
         $(".tags-area").tagit({
             placeholderText: "place for hashtags!"
         });
-        $scope.feedOnScreen = function (postId, index, inview, userId) {
-            if ($scope.feeds[index].comment_count) {
-                $http.get("/post/" + postId + "/comments/").then(function (response) {
-                    $scope.feeds[index].comments = response.data;
-                    $scope.feeds[index].showComments = true;
-                });
-            }
-        };
         $scope.feeds = [];
         $scope.page = 1;
         $scope.limit = 10;
@@ -43906,8 +43890,6 @@ var vicigoApp = angular.module("hashtag-app", [
     ng_infinite_scroll_default.a,
     "dcbImgFallback",
     "xeditable",
-    "angular-inview",
-    '720kb.socialshare',
     'ngDialog',
     "angular.lazyimg",
     "ViciAuth"

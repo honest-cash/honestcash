@@ -17,16 +17,6 @@ export default class FeedsCtrl {
 			placeholderText: "place for hashtags!"
 		});
 
-		$scope.feedOnScreen = function(postId, index, inview, userId) {
-			if ($scope.feeds[index].comment_count) {
-				$http.get("/post/" + postId + "/comments/").then(function(response) {
-					$scope.feeds[index].comments = response.data;
-					$scope.feeds[index].showComments = true;
-				});
-			}
-
-		};
-
 		$scope.feeds = [];
 		$scope.page = 1;
 		$scope.limit = 10;

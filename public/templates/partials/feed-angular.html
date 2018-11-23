@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div infinite-scroll="loadMore()" infinite-scroll-distance="1">
 		<div class="row">
-			<div class="feed-container" ng-repeat="feed in feeds"  in-view="$inview && feedOnScreen(feed.id,$index,$inview)">
+			<div class="feed-container" ng-repeat="feed in feeds">
 				<feed></feed>
 			</div>
 

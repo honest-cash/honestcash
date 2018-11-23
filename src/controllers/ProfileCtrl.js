@@ -50,15 +50,6 @@ export default class ProfileCtrl {
             $scope.followedHashtags.splice(index, 1);
         };
 
-        $scope.feedOnScreen = function(postId, index, inview) {
-            if ($scope.feeds[index].comment_count) {
-                CommentService.getComments($scope.postId, function(rComments) {
-                    $scope.feeds[index].comments = rComments;
-                    $scope.feeds[index].showComments = true;
-                });
-            }
-        };
-
         const updateMutableProfileFieldFactory = (fieldName) => (fieldValue) => {
             var d = $q.defer();
 

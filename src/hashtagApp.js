@@ -30,8 +30,6 @@ var vicigoApp = angular.module("hashtag-app", [
 	infiniteScroll,
 	"dcbImgFallback", 
 	"xeditable",
-	"angular-inview",
-	'720kb.socialshare',
 	'ngDialog',
 	"angular.lazyimg",
 	"ViciAuth"
