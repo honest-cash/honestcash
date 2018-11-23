@@ -17,7 +17,7 @@ This is a proposed roadmap. We value feedback from the community. If you think w
 In the first stage, we'll open the platform to a limited group of people for testing purposes. We are currently working to make it happen. Users will be able to create content. Every post will have an Bitcoin Cash address that will allow others to give tips directly to the author of the content.
 
 ### Generation of a new wallet for tipping (instead of your own BCH addresses)
-We will integrate with the Badget Wallet. It will allow users to create a new BCH address on signup or connect to an existing BCH wallet. This will allow to directly give tips to authors without using different wallet software.
+We will integrate with the Badger Wallet. It will allow users to create a new BCH address on signup or connect to an existing BCH wallet. This will allow to directly give tips to authors without using different wallet software.
 
 ### Incentivising upvotes for organic content promotion
 In this stage every tip/upvote will also reward people who upvoted the content.
@@ -31,7 +31,7 @@ Up to this stage, participation will require a centralized login system. As next
 ### Content can optionally be saved on blockchain (or IPFS)
 We strive for uncensorable content. Users will be able save its content on IPFS. We will provide decentralized repository of all content saved (for example as a smart contract). Besides, our technology is and will be open-sourced. This way in case we could not provide the service anymore (for whatever reason), others will be able to continue it without us.
 
-There was one misconception about the definition of "uncesorable". We will not prohibit any opinion expressed on the platform or try to censor it. However, content that promotes rasism, crime, hate and similar will not be listed on the platform. Notwithstanding, the permissionless nature of the IPFS system does not stop the party to promote such content somewhere else.
+There was one misconception about the definition of "Uncensorable". We will not prohibit any opinion expressed on the platform or try to censor it. However, content that promotes racism, crime, hate and similar will not be listed on the platform. Notwithstanding, the permissionless nature of the IPFS system does not stop the party to promote such content somewhere else.
 
 # Donate
 bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h 
