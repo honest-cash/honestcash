@@ -65,8 +65,10 @@ export default class ProfileCtrl {
                 } else { // {status: "error", msg: "Username should be `awesome`!"}
                     d.resolve(res.msg)
                 }
-            }, (e) => {
-                d.reject(e);
+            }, (response) => {
+                // toastr.warning(response.data.desc);
+
+                d.resolve(response.data.desc);
             });
 
             return d.promise;

@@ -14,7 +14,7 @@ export default class EditorCtrl {
             title: false
         };
 
-        const saveDraftElement = (element) => {
+        const saveDraftElement = (element, opts) => {
             const post = {};
 
             post.title = document.getElementById("title").innerText || "";
@@ -31,7 +31,9 @@ export default class EditorCtrl {
             .then((response) => {
                 $scope.saving = null;
 
-                return toastr.success("Draft has been saved.");
+                if ((opts || {}).disableNotifs) {
+                    return toastr.success("Draft has been saved.");
+                }
             });
         };
 
@@ -46,11 +48,24 @@ export default class EditorCtrl {
                 return toastr.info("Saving...");
             }
 
+            if ($scope.draft.status === "published") {
+                $scope.saveDraftElement("title", { disableNotifs: true });
+                $scope.saveDraftElement("body", { disableNotifs: true });
+                $scope.saveDraftElement("hashtags", { disableNotifs: true });
+
+                $('#publishModal').modal('hide');
+
+                return  $timeout(() => {
+                    $state.go("vicigo.postById", {
+                        postId: postId
+                    });
+                });
+            }
+
             $scope.isLoading = true;
 
             $http.put(API_URL + "/draft/" + postId + "/publish")
             .then(response => {
-                console.log(response);
                 $scope.isLoading = false;
 
                 if (response.status == 200) {
@@ -82,6 +97,10 @@ export default class EditorCtrl {
         };
 
         const onContentChangedFactory = (element) => () => {
+            if ($scope.draft.status === "published") {
+                return;
+            }
+
             if ($scope.Saving.body) {
                 clearTimeout($scope.Saving.body);
             }

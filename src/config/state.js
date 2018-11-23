@@ -128,6 +128,25 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			}
 		})
 		.state('vicigo.postById', {
+			url: "/post/:postId",
+			templateUrl: "/templates/post.html",
+			controller: "postController",
+			resolve: {
+				'post': ($stateParams, $q, PostService) => {
+					var defer = $q.defer();
+
+					PostService.getById($stateParams.postId, (rPost) => {
+						defer.resolve(rPost);
+					});
+
+					return defer.promise;
+				}
+			}
+		})
+		/**
+		 * Someone posted a buggy link on reddit and we need to support it.
+		 */
+		.state('vicigo.postByIdBroken', {
 			url: "/:postId",
 			templateUrl: "/templates/post.html",
 			controller: "postController",

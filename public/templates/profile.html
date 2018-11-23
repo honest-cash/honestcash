@@ -9,12 +9,13 @@
 				</div>
 				<div class="pull-left col-xs-12 col-sm-9 col-md-10">
 					<h1 class="text-center-sm">
+						<span ng-if="profile.id !== user.id">{{ profile.username }}</span>
+					</h1>
+					<h1>
 						<a ng-if="profile.id == user.id" href="#" editable-text="profile.username" onbeforesave="updateUsername($data)">
 							{{ profile.username }}
 						</a>
-						<span ng-if="profile.id !== user.id">{{ profile.username }}</span>
 					</h1>
-					
 					<h3 class="text-center-sm" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')">
 						<a ng-if="profile.id == user.id" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
 							{{ profile.addressBCH }}

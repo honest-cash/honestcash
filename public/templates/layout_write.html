@@ -9,15 +9,17 @@
 					<img class="header-logo" src="/img/honest-long-logo.png" alt="Honest Logo">
 				</a>
 
-				<ul class="nav navbar-nav navbar-right" >
+				<ul class="list-inline" style="float: right;">
 					<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
 						<button class="btn-default btn" style="margin:10px;" >
 							<strong>Ready to publish?</strong>
 						</button>
 					</li>
 
-					<li ng-if="draft.status === 'published'">
-						<span class="badge" style="margin:15px;" >Published</span>
+					<li ng-if="draft.status === 'published'" ng-click="readyToPublish(draft.id)">
+						<button class="btn-default btn" style="margin:10px;" >
+							<strong>Save</strong>
+						</button>
 					</li>
 
 					<li style="margin-top: 5px;" ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
@@ -91,7 +93,9 @@
 			</div>
 
 			<div class="modal-footer">
-				<button ng-disabled="isLoading" ng-click="publishPost(draft.id)" type="button" class="btn btn-default btn-lg btn-block">{{isLoading ? "Saving..." :  "Publish" }}</button>
+				<button ng-disabled="isLoading" ng-click="publishPost(draft.id)" type="button" class="btn btn-default btn-lg btn-block">
+					{{isLoading ? "Saving..." : draft.status === "published" ? "Save" : "Publish" }}
+				</button>
 			</div>
 		</div>
 	</div>
