@@ -10,14 +10,14 @@ const metaDefault = {
     ogDescription: 'honest.cash is a social network where you can earn (Bitcoin) Cash if you create value. Our mission is improve the quality of content on the internet and to get people paid for doing work they love.',
     ogType: "website",
     ogLocale: "locale",
-    ogImage: "http://www.honest.cash.com/img/fb_post.png",
+    ogImage: "http://www.honest.cash/img/fb_post.png",
     twitterTitle: "Honest Cash",
     twitterUrl: "https://www.honest.cash/",
     twitterDescription: 'honest.cash is a social network where you can earn (Bitcoin) Cash if you create value. Our mission is improve the quality of content on the internet and to get people paid for doing work they love.'
 };
 
 const getForPost = (post) => {
-    const url = "http://honestcash.com/" + post.user.username + "/" + post.alias;
+    const url = "http://honest.cash" + post.user.username + "/" + post.alias;
 
     const title = post.title + " by @" + post.user.username + " | Honest Cash";
 
