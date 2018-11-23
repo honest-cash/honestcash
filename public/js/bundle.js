@@ -43354,11 +43354,6 @@ function state($stateProvider, $urlRouterProvider) {
             },
         }
     })
-        .state('vicigo.importPhotos', {
-        url: "/import",
-        templateUrl: "/templates/import.html",
-        controller: "importController",
-    })
         .state('vicigo.chat', {
         url: "/chat/:userId",
         templateUrl: "/templates/chat.html",
@@ -43896,10 +43891,50 @@ var vicigoApp = angular.module("hashtag-app", [
     "ViciAuth"
 ])
     .constant("API_URL", "https://honestcash.alphateamhackers.com/api")
-    .run(["API_URL", "ViciAuth", "Uploader", function (API_URL, ViciAuth, Uploader) {
+    /**
+    var init = function() {
+        imageDropzone = new Dropzone("body", {
+            url: PATHS.IMAGE,
+            maxFiles: 10,
+            thumbnailWidth: null,
+            previewTemplate: document.querySelector('#preview-template').innerHTML,
+            clickable: '#imageDropzone',
+        })
+        .on("addedfile", function(file) {
+            $('#uploadImageModal').modal('show');
+            $('#uploadedImage').attr('src', null);
+            $(".tags-area").tagit("removeAll");
+            //imageDropzone.removeAllFiles(true);
+            $(".dz-message").removeClass("hidden");
+            $("#uploadedImage").addClass("hidden");
+        })
+        .on("sending", function(file, xhr) {
+            changeProgress(0);
+            $("#imageUploadProgress").removeClass("hidden");
+            xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
+        }).on("uploadprogress", function(file, progress) {
+            changeProgress(progress);
+        }).on("success", function(file, response) {
+            changeProgress(100);
+            setTimeout(function() {
+                $("#imageUploadProgress").addClass("hidden");
+            }, 500);
+    
+            document.getElementById("uploadedImage").src = response.link;
+            $("#uploadedImagePostId").val(response.postId)
+            document.getElementById("publishPicturePostBtn").disabled = false;
+            $(".dz-message").addClass("hidden");
+            $("#uploadedImage").removeClass("hidden");
+        });
+    };
+    */
+    .run(["API_URL", "ViciAuth", function (API_URL, ViciAuth) {
         var _this = this;
-        Uploader.init();
-        profilePicDropzone = new Dropzone("#profilePicDropzone", {
+        var changeProgress = function (progress) {
+            document.getElementById("imageUploadProgressBar").setAttribute("aria-valuenow", progress);
+            document.getElementById("imageUploadProgressBar").style.width = progress + "%";
+        };
+        new Dropzone("#profilePicDropzone", {
             url: API_URL + "/upload/image?isProfileAvatar=true",
             maxFiles: 10,
             maxfilesexceeded: function (file) {
@@ -43909,12 +43944,23 @@ var vicigoApp = angular.module("hashtag-app", [
             thumbnailWidth: null,
             previewTemplate: document.querySelector('#preview-template').innerHTML,
         })
+            .on("addedfile", function (file) {
+            $("#profilePicDropzone").addClass("hidden");
+        })
             .on("sending", function (file, xhr) {
+            changeProgress(0);
             xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
-            setTimeout(function () { return $('#uploadProfilePicModal').modal('hide'); }, 500);
+            $("#imageUploadProgress").removeClass("hidden");
+        })
+            .on("uploadprogress", function (_, progress) {
+            changeProgress(progress);
         })
             .on("success", function (file, response) {
+            changeProgress(100);
             document.getElementById("profilePic").src = response.url;
+            $("#imageUploadProgress").addClass("hidden");
+            $("#profilePicDropzone").removeClass("hidden");
+            $('#uploadProfilePicModal').modal('hide');
         });
     }])
     .run(["$rootScope", "$state", "$timeout", "$http", function ($rootScope, $state, $timeout, $http) {
@@ -44022,49 +44068,8 @@ var vicigoApp = angular.module("hashtag-app", [
     };
 })
     .service("Uploader", ["ViciAuth", function (ViciAuth) {
-        var PATHS = {
-            IMAGE: "/upload/image"
-        };
-        var changeProgress = function (progressValue) {
-            document.getElementById("imageUploadProgressBar").setAttribute("aria-valuenow", progressValue);
-            document.getElementById("imageUploadProgressBar").style.width = progressValue + "%";
-        };
-        var init = function () {
-            imageDropzone = new Dropzone("body", {
-                url: PATHS.IMAGE,
-                maxFiles: 10,
-                thumbnailWidth: null,
-                previewTemplate: document.querySelector('#preview-template').innerHTML,
-                clickable: '#imageDropzone',
-            })
-                .on("addedfile", function (file) {
-                $('#uploadImageModal').modal('show');
-                $('#uploadedImage').attr('src', null);
-                $(".tags-area").tagit("removeAll");
-                //imageDropzone.removeAllFiles(true);
-                $(".dz-message").removeClass("hidden");
-                $("#uploadedImage").addClass("hidden");
-            })
-                .on("sending", function (file, xhr) {
-                changeProgress(0);
-                $("#imageUploadProgress").removeClass("hidden");
-                xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
-            }).on("uploadprogress", function (file, progress) {
-                changeProgress(progress);
-            }).on("success", function (file, response) {
-                changeProgress(100);
-                setTimeout(function () {
-                    $("#imageUploadProgress").addClass("hidden");
-                }, 500);
-                document.getElementById("uploadedImage").src = response.link;
-                $("#uploadedImagePostId").val(response.postId);
-                document.getElementById("publishPicturePostBtn").disabled = false;
-                $(".dz-message").addClass("hidden");
-                $("#uploadedImage").removeClass("hidden");
-            });
-        };
         return {
-            init: init
+            init: function () { }
         };
     }])
     .service("CommentService", ["$http", function ($http) {
@@ -44289,33 +44294,6 @@ var vicigoApp = angular.module("hashtag-app", [
                 $state.go("hashbook.list", {
                     blogSlug: $scope.blog.slug
                 });
-            });
-        };
-    }])
-    .controller("importController", ["$scope", "$http", function ($scope, $http) {
-        $(".tags-area").tagit({
-            placeholderText: "place for hashtags!"
-        });
-        $scope.data = [];
-        $scope.activePost = false;
-        $http.get("/api/external_services/fb/fetch_photos").then(function (response) {
-            $scope.data = response.data;
-        });
-        $scope.selectedImageUrl = "";
-        $scope.tagExternalPost = function (item) {
-            $('#uploadExternalImageModal').modal('show');
-            $scope.selectedImageUrl = item.source;
-            $scope.activePost = item;
-        };
-        $scope.publishExternalPost = function () {
-            var index = $scope.data.indexOf($scope.activePost);
-            $scope.data.splice(index, 1);
-            $('#uploadExternalImageModal').modal('hide');
-            var hashtags = $("#hashtagsForImportedPhoto").val();
-            var post = angular.copy($scope.activePost);
-            post.tags = hashtags;
-            $http.post("/post/image/from_link", post).then(function (response) {
-                $(".tags-area2").tagit("removeAll");
             });
         };
     }])

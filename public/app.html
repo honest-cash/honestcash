@@ -92,14 +92,18 @@
 							<h3 class="push dz-message-text dz-message-text-style">Drop file here or click to upload</h3>
 						</div>
 					</form>
+					<div id="imageUploadProgress" class="progress hidden">
+						<div id="imageUploadProgressBar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+							<span class="sr-only">70% Complete</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- UPLOAD IMAGE MODAL -->
 
-<!-- Modal -->
-
+	<!-- Modal -->
     <script type="text/ng-template" id="userListModal.html">
          <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -157,7 +161,7 @@
 	<script type="text/javascript" src="/libs/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="/lib/jquery-hashtags-master/js/autosize.min.js"></script>
-	<script type="text/javascript" src="/lib/jquery-hashtags-master/js/jquery.hashtags.js"></script>`
+	<script type="text/javascript" src="/lib/jquery-hashtags-master/js/jquery.hashtags.js"></script>
 
 	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 	<script src="/lib/jquery.lazy.min.js" type="text/javascript"></script>

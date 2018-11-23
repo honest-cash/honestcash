@@ -45,11 +45,6 @@ export default function state ($stateProvider, $urlRouterProvider) {
 
             }
         })
-	    .state('vicigo.importPhotos', {
-			url: "/import",
-			templateUrl: "/templates/import.html",
-			controller: "importController",
-		})
 		.state('vicigo.chat', {
 			url: "/chat/:userId",
 			templateUrl: "/templates/chat.html",
