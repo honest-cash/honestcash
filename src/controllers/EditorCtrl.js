@@ -38,9 +38,6 @@ export default class EditorCtrl {
         $scope.saveDraftElement = saveDraftElement;
 
         $scope.readyToPublish = () => {
-            saveDraftElement("title");
-            saveDraftElement("body");
-
             $('#publishModal').modal('show');
         };
 
@@ -91,7 +88,7 @@ export default class EditorCtrl {
 
             $scope.Saving.body = setTimeout(() => {
                 $scope.saveDraftElement(element);
-            }, 1500);
+            }, 3000);
         };
 
         const initMediumEditor = (title, body) => {

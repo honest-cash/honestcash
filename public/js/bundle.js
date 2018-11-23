@@ -43186,8 +43186,6 @@ var EditorCtrl_EditorCtrl = /** @class */ (function () {
         };
         $scope.saveDraftElement = saveDraftElement;
         $scope.readyToPublish = function () {
-            saveDraftElement("title");
-            saveDraftElement("body");
             $('#publishModal').modal('show');
         };
         $scope.publishPost = function (postId) {
@@ -43227,7 +43225,7 @@ var EditorCtrl_EditorCtrl = /** @class */ (function () {
             }
             $scope.Saving.body = setTimeout(function () {
                 $scope.saveDraftElement(element);
-            }, 1500);
+            }, 3000);
         }; };
         var initMediumEditor = function (title, body) {
             titleEditor = new medium_editor_default.a('#title', {
