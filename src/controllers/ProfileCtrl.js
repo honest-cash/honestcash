@@ -7,7 +7,7 @@ export default class ProfileCtrl {
             } else {
                 $scope.filterType = filterType;
             }
-            
+
             $scope.postsAvailable = true;
             $location.search('filter', $scope.filterType);
             $scope.page = 1;
@@ -32,11 +32,6 @@ export default class ProfileCtrl {
         $rootScope.isLoading = true;
         $scope.drafts = [];
         $scope.followedHashtags = [];
-
-        $http.get(API_URL + "/user/" + $scope.profileId + "/drafts?status=draft")
-        .then((response) => {
-            $scope.drafts = response.data;
-        });
 
         $scope.fetchPost = (postId, index) => {
             $http.get("/post/" + postId).then(function(response) {

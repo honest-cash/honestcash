@@ -42545,10 +42545,6 @@ var ProfileCtrl = /** @class */ (function () {
         $rootScope.isLoading = true;
         $scope.drafts = [];
         $scope.followedHashtags = [];
-        $http.get(API_URL + "/user/" + $scope.profileId + "/drafts?status=draft")
-            .then(function (response) {
-            $scope.drafts = response.data;
-        });
         $scope.fetchPost = function (postId, index) {
             $http.get("/post/" + postId).then(function (response) {
                 $scope.feeds[index].body = response.data.post_body;
@@ -43899,7 +43895,7 @@ var vicigoApp = angular.module("hashtag-app", [
     "angular.lazyimg",
     "ViciAuth"
 ])
-    .constant("API_URL", "https://honestcash.alphateamhackers.com/api" /*"http://localhost:8080/api"*/ /** ,"https://honestcash.alphateamhackers.com/api" */)
+    .constant("API_URL", "http://localhost:8080/api" /*"http://localhost:8080/api"*/ /** ,"https://honestcash.alphateamhackers.com/api" */)
     .run(["API_URL", "ViciAuth", "Uploader", function (API_URL, ViciAuth, Uploader) {
         var _this = this;
         Uploader.init();
