@@ -43,16 +43,17 @@
 	<div class="col-lg-3 hidden-xs hidden-sm hidden-md" >
 
 	</div>
-	<div class="col-lg-6 row">
+	<div class="col-lg-6">
 		<div class="block-center">
-			<div ng-if="user.id && !feeds.length" class="panel">
+			<div ng-if="!feeds.length && !isLoading" class="panel">
 					<div class="panel-body">
 							<h1>No content yet.</h1>
 							<p>
 								Be the first to create it!
 							</p>
-		
-							<button class="btn btn-default btn-lg" ui-sref="editor.write">Write a story</button>
+
+							<button ng-if="user.id" class="btn btn-default btn-lg" ui-sref="editor.write">Write a story</button>
+							<button ng-if="!user.id" class="btn btn-default btn-lg" ui-sref="starter.welcome">Write a story</button>
 					</div>
 			</div>
 

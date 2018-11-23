@@ -42771,7 +42771,7 @@ FeedService_FeedService.$inject = [
 
 // CONCATENATED MODULE: ./src/controllers/FeedsCtrl.js
 var FeedsCtrl = /** @class */ (function () {
-    function FeedsCtrl($rootScope, $scope, $stateParams, $location, $http, FeedService, CommentService, PostService) {
+    function FeedsCtrl($rootScope, $scope, $stateParams, $location, $http, FeedService, PostService) {
         $scope.filter = function (filterType) {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
@@ -42785,9 +42785,6 @@ var FeedsCtrl = /** @class */ (function () {
             $scope.feeds = [];
             $scope.fetchFeeds();
         };
-        $(".tags-area").tagit({
-            placeholderText: "place for hashtags!"
-        });
         $scope.feeds = [];
         $scope.page = 1;
         $scope.limit = 10;
@@ -42838,6 +42835,7 @@ var FeedsCtrl = /** @class */ (function () {
             else {
                 $scope.postsAvailable = false;
             }
+            $rootScope.isLoading = false;
         }); };
         $scope.fetchFeeds();
         $scope.loadMore = function () {
@@ -42854,32 +42852,6 @@ var FeedsCtrl = /** @class */ (function () {
             $scope.feeds[index].alreadyUpvoted = true;
             $scope.feeds[index].upvotes_count = $scope.feeds[index].upvotes_count + 1;
             PostService.upvote(postId);
-        };
-        $scope.showComments = function (postId, index) {
-            if ($scope.feeds[index].showComments) {
-                $scope.feeds[index].showComments = false;
-            }
-            else {
-                $scope.feeds[index].showComments = true;
-                $http.get("/post/" + postId + "/comments/").then(function (response) {
-                    $scope.feeds[index].comments = response.data;
-                });
-            }
-        };
-        $scope.postComment = function (postId, body, index) {
-            $scope.feeds[index].commentDraft = "";
-            CommentService.postComment(postId, body, function (rComment) {
-                if ($scope.feeds[index].comments) {
-                    $scope.feeds[index].comments.unshift(rComment);
-                }
-                else {
-                    $scope.feeds[index].comments = [rComment];
-                }
-            });
-        };
-        $scope.deleteComment = function (postId, commentId, feedIndex, commentIndex) {
-            $scope.feeds[feedIndex].comments.splice(commentIndex, 1);
-            CommentService.deleteComment(postId, commentId);
         };
         $scope.hashtagFollowed = true;
         if ($stateParams.hashtag && $rootScope.user) {
