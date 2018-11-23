@@ -1,72 +1,56 @@
 <div class="row">
-<div class="push feed">
-				<!-- HEADER -->
-				<div class="feed-header">
-					<div class="feed-author">
-						<ul class="list-unstyled" >
-							<!-- AUTHOR IMAGE -->
-							<li>
-								<img fallback-src="{{'/img/avatar.png'}}" ng-src="{{feed.authorImage ? feed.authorImage : '/img/avatar.png'}}">
-							</li>
-						
-							<!-- END AUTHOR IMAGE -->
+	<div class="push feed">
+		<div class="feed-header">
+			<div class="feed-author">
+				<ul class="list-unstyled" >
+					<li>
+						<img fallback-src="{{'/img/avatar.png'}}" ng-src="{{feed.user.imageUrl ? feed.user.imageUrl : '/img/avatar.png'}}">
+					</li>
+					<li>
+						<strong style="margin-top:15px;"><a ui-sref="vicigo.profile({profileId:feed.user.id})">{{feed.user.username}}</a></strong>
+					</li>
+					<li class="feed-date">
+						<span class="text-muted"><small>{{ feed.createdAt }}</small></span>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-							<!-- AUTHOR REFERENCES -->
-							<li>
-								<strong style="margin-top:15px;"><a ui-sref="vicigo.profile({profileId:feed.user.id})">{{feed.user.username}}</a></strong>
-							</li>
-							<!-- END AUTHOR REFERENCES -->
-							<li class="feed-date">
-								<span class="text-muted"><small>{{ feed.createdAt }}</small></span>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<!-- END HEADER -->
+		<div class="post-feed-body">
+			<div class="feed-title">
+				<h3><strong><a href="#" ng-click="goToPost(feed)">{{feed.title}}</a></strong></h3>
+			</div>
 
-				<div class="post-feed-body">
-					<!-- TITLE -->
-					<div class="feed-title">
-						<h3><strong><a href="#" ng-click="goToPost(feed)">{{feed.title}}</a></strong></h3>
-					</div>
-					<!-- END TITLE -->
+			<div class="feed-body" ng-click="goToPost(feed)">
+				<lazy-img ng-if="feed.image_url" class="lazy" ng-src="{{trustSrc(feed.imageUrl)}}" alt="image"></lazy-img>
 
-					<!-- IMAGE BODY href="/post/{{feed.id}}" -->
-					<div class="feed-body" ng-click="goToPost(feed)">
+				<p ng-if="feed.body" class="feed-article">
+					{{ displayFeedBody(feed.body) }}
+				</p>
+			</div>
+		</div>
 
-						<lazy-img ng-if="feed.image_url" class="lazy" ng-src="{{trustSrc(feed.imageUrl)}}" alt="image"></lazy-img>
-
-						<p ng-if="feed.body && feed.post_type_id !== 4 && feed.post_type_id !== 5" class="feed-article">
-							{{ displayFeedBody(feed.body) }}
-						</p>
-
-					</div>
-					<!-- END POST  BODY -->
-					<!----------------------- POST BODY ENDS ---------------------------------->
-				</div>
-
-			<!-- footer -->	
-			<div class="feed-footer">
-				<div class="row hashtags">
-					<div class="col-xs-12">
-						<div style="padding-left:8px;padding-right:5px;">
-							<a class="pull-left hashtag" ng-repeat="hashtag in feed.userPostHashtags" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag})">#{{ ::hashtag.hashtag}}</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="row feed-actions" style="padding-top: 10px; padding-bottom: 10px;">
-					<div class="col-xs-12">
-						<ul class="list-unstyled list-inline list" ng-click="addressClicked(feed.user.addressBCH)">
-							<li style="width:50px;">
-								<button style="font-size: 15px; font-weight: bold" class="btn btn-default">
-										<i style="font-size: 15px;" ng-if="feed.alreadyUpvoted" class="upvoted rate-btn fa fa-heart"> Upvote €0,50</i>
-										<i style="font-size: 15px;" ng-if="!feed.alreadyUpvoted" class="rate-btn fa fa-heart-o fa-2x"> Upvote €0,50</i>
-								</button>
-							</li>
-						</ul>
+		<div class="feed-footer">
+			<div class="row hashtags">
+				<div class="col-xs-12">
+					<div style="padding-left:8px;padding-right:5px;">
+						<a class="pull-left hashtag" ng-repeat="hashtag in feed.userPostHashtags" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag})">#{{ ::hashtag.hashtag}}</a>
 					</div>
 				</div>
 			</div>
+
+			<div class="row feed-actions" style="padding-top: 10px; padding-bottom: 10px;">
+				<div class="col-xs-12">
+					<ul class="list-unstyled list-inline list" ng-click="addressClicked(feed.user.addressBCH)">
+						<li style="width:50px;">
+							<button style="font-size: 15px; font-weight: bold" class="btn btn-default">
+									<i style="font-size: 15px;" ng-if="feed.alreadyUpvoted" class="upvoted rate-btn fa fa-heart"> Upvote €0,50</i>
+									<i style="font-size: 15px;" ng-if="!feed.alreadyUpvoted" class="rate-btn fa fa-heart-o fa-2x"> Upvote €0,50</i>
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
+	</div>
 </div>

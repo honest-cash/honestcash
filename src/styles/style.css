@@ -574,9 +574,7 @@ img.lazy {
 	text-align: center
 }
 
-
 /* DROPZONE */
-
 .dz-message-style {
 	border-radius: 9px 9px 9px 9px;
 	-moz-border-radius: 9px 9px 9px 9px;
@@ -592,7 +590,6 @@ img.lazy {
 .dz-message-text-style {
 	text-align: center;
 }
-
 
 /* Slideshow style */
 .splash {
