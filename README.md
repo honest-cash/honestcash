@@ -13,9 +13,6 @@
 # Roadmap
 This is a proposed roadmap. We value feedback from the community. If you think we should optimize the roadmap to match our Honest manifesto better, join our Telegram group and submit your proposals here: https://t.me/honest_cash.
 
-### Basic functionality and registrations for early invitations
-In the first stage, we'll open the platform to a limited group of people for testing purposes. We are currently working to make it happen. Users will be able to create content. Every post will have an Bitcoin Cash address that will allow others to give tips directly to the author of the content.
-
 ### Generation of a new wallet for tipping (instead of your own BCH addresses)
 We will integrate with the Badger Wallet. It will allow users to create a new BCH address on signup or connect to an existing BCH wallet. This will allow to directly give tips to authors without using different wallet software.
 
