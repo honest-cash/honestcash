@@ -17,7 +17,7 @@ const metaDefault = {
 };
 
 const getForPost = (post) => {
-    const url = "http://honest.cash" + post.user.username + "/" + post.alias;
+    const url = "http://honest.cash/" + post.user.username + "/" + post.alias;
 
     const title = post.title + " by @" + post.user.username + " | Honest Cash";
 
