@@ -15,6 +15,8 @@ const isBot = (userAgent, push) => {
 	userAgent = userAgent ? userAgent.toLowerCase() : "unknown user-agent";
 
 	if (userAgent.indexOf("facebook") > -1 ||
+		userAgent.indexOf("twitter") > -1 ||
+		userAgent.indexOf("reddit") > -1 ||
 		userAgent.indexOf("google") > -1 ||
 		userAgent.indexOf("bing") > -1 ||
 		userAgent.indexOf("bot") > -1 ||
