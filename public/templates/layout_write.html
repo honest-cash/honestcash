@@ -91,7 +91,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<button ng-disabled="isLoading" ng-click="publishPost(draft.id)" type="button" class="btn btn-default btn-lg btn-block">Publish</button>
+				<button ng-disabled="isLoading" ng-click="publishPost(draft.id)" type="button" class="btn btn-default btn-lg btn-block">{{isLoading ? "Saving..." :  "Publish" }}</button>
 			</div>
 		</div>
 	</div>

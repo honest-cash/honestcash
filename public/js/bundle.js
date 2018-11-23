@@ -43162,24 +43162,43 @@ var EditorCtrl_EditorCtrl = /** @class */ (function () {
     function EditorCtrl($state, $scope, $stateParams, $http, $timeout, ViciAuth, API_URL) {
         var titleEditor;
         var bodyEditor;
+        $scope.isLoading = false;
         $scope.draft = {};
         $scope.ready = false;
         $scope.Saving = {
             body: false,
             title: false
         };
+        var saveDraftElement = function (element) {
+            var post = {};
+            post.title = document.getElementById("title").innerText || "";
+            post.body = document.getElementById("body").innerHTML || "";
+            post.hashtags = $("input#description").val() || "";
+            if (!post.body && !post.title && !post.hashtags) {
+                $scope.saving = null;
+                return false;
+            }
+            $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
+                .then(function (response) {
+                $scope.saving = null;
+                return toastr.success("Draft has been saved.");
+            });
+        };
+        $scope.saveDraftElement = saveDraftElement;
         $scope.readyToPublish = function () {
+            saveDraftElement("title");
+            saveDraftElement("body");
             $('#publishModal').modal('show');
         };
         $scope.publishPost = function (postId) {
+            if ($scope.isLoading === true) {
+                return toastr.info("Saving...");
+            }
             $scope.isLoading = true;
             $http.put(API_URL + "/draft/" + postId + "/publish")
                 .then(function (response) {
-                if (response.status == 400) {
-                    if (response.data.code == "POST_TOO_SHORT") {
-                        return toastr.info("Your story is too short. The minimum number of characters is 300.");
-                    }
-                }
+                console.log(response);
+                $scope.isLoading = false;
                 if (response.status == 200) {
                     toastr.success("You have successfully published your story.");
                     return $timeout(function () {
@@ -43188,9 +43207,18 @@ var EditorCtrl_EditorCtrl = /** @class */ (function () {
                         });
                     }, 1500);
                 }
-                return toastr.warning(JSON.stringify(response.data));
+                toastr.warning(JSON.stringify(response.data));
             }, function (response) {
-                return toastr.warning(response.data.code);
+                $scope.isLoading = false;
+                if (response.status == 400) {
+                    if (response.data.code == "POST_TOO_SHORT") {
+                        return toastr.info("Your story is too short. The minimum number of characters is 300.");
+                    }
+                    if (response.data.code == "TITLE_TOO_SHORT") {
+                        return toastr.info("Title is too short.");
+                    }
+                }
+                toastr.warning(response.data.code);
             });
         };
         var onContentChangedFactory = function (element) { return function () {
@@ -43290,31 +43318,6 @@ var EditorCtrl_EditorCtrl = /** @class */ (function () {
                 .then(function (response) {
                 $scope.draft = response.data;
                 initEditor($scope.draft.id);
-            });
-        };
-        $scope.saveDraftElement = function (element) {
-            var post = {};
-            post.title = document.getElementById("title").innerText || "";
-            post.body = document.getElementById("body").innerHTML || "";
-            post.hashtags = $("input#description").val() || "";
-            if (!post.body && !post.title && !post.hashtags) {
-                $scope.saving = null;
-                return false;
-            }
-            $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
-                .then(function (response) {
-                $scope.saving = null;
-                return toastr.success("Draft has been saved.");
-            });
-        };
-        $scope.saveDraft = function (draftId) {
-            var draft = {};
-            draft.title = document.getElementById("title").innerHTML || "";
-            draft.body = document.getElementById("body").innerHTML || "";
-            draft.hashtags = $("#description").val() ? $("#description").val() : "";
-            $http.post(API_URL + "/draft/" + draftId, draft)
-                .then(function (data) {
-                toastr.success("Draft has been saved.");
             });
         };
         loadPostDraft($stateParams.postId);

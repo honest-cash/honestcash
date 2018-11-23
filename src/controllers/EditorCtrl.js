@@ -6,6 +6,7 @@ export default class EditorCtrl {
         let titleEditor;
         let bodyEditor;
 
+        $scope.isLoading = false;
         $scope.draft = {};
         $scope.ready = false;
         $scope.Saving = {
@@ -13,20 +14,47 @@ export default class EditorCtrl {
             title: false
         };
 
+        const saveDraftElement = (element) => {
+            const post = {};
+
+            post.title = document.getElementById("title").innerText || "";
+            post.body = document.getElementById("body").innerHTML || "";
+            post.hashtags = $("input#description").val() || "";
+
+            if (!post.body && !post.title && !post.hashtags) {
+                $scope.saving = null;
+
+                return false;
+            }
+
+            $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
+            .then((response) => {
+                $scope.saving = null;
+
+                return toastr.success("Draft has been saved.");
+            });
+        };
+
+        $scope.saveDraftElement = saveDraftElement;
+
         $scope.readyToPublish = () => {
+            saveDraftElement("title");
+            saveDraftElement("body");
+
             $('#publishModal').modal('show');
         };
 
         $scope.publishPost = postId => {
+            if ($scope.isLoading === true) {
+                return toastr.info("Saving...");
+            }
+
             $scope.isLoading = true;
 
             $http.put(API_URL + "/draft/" + postId + "/publish")
             .then(response => {
-                if (response.status == 400) {
-                    if (response.data.code == "POST_TOO_SHORT") {
-                        return toastr.info("Your story is too short. The minimum number of characters is 300.");
-                    }
-                }
+                console.log(response);
+                $scope.isLoading = false;
 
                 if (response.status == 200) {
                     toastr.success("You have successfully published your story.");
@@ -38,9 +66,21 @@ export default class EditorCtrl {
                     }, 1500);
                 }
 
-                return toastr.warning(JSON.stringify(response.data));
+                toastr.warning(JSON.stringify(response.data));
             }, response => {
-                return toastr.warning(response.data.code);
+                $scope.isLoading = false;
+
+                if (response.status == 400) {
+                    if (response.data.code == "POST_TOO_SHORT") {
+                        return toastr.info("Your story is too short. The minimum number of characters is 300.");
+                    }
+
+                    if (response.data.code == "TITLE_TOO_SHORT") {
+                        return toastr.info("Title is too short.");
+                    }
+                }
+
+                toastr.warning(response.data.code);
             });
         };
 
@@ -159,40 +199,6 @@ export default class EditorCtrl {
                 $scope.draft = response.data;
 
                 initEditor($scope.draft.id);
-            });
-        };
-
-        $scope.saveDraftElement = (element) => {
-            const post = {};
-
-            post.title = document.getElementById("title").innerText || "";
-            post.body = document.getElementById("body").innerHTML || "";
-            post.hashtags = $("input#description").val() || "";
-
-            if (!post.body && !post.title && !post.hashtags) {
-                $scope.saving = null;
-
-                return false;
-            }
-
-            $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
-            .then((response) => {
-                $scope.saving = null;
-
-                return toastr.success("Draft has been saved.");
-            });
-        };
-
-        $scope.saveDraft = (draftId) => {
-            const draft = {};
-
-            draft.title = document.getElementById("title").innerHTML || "";
-            draft.body = document.getElementById("body").innerHTML || "";
-            draft.hashtags = $("#description").val() ? $("#description").val() : "";
-
-            $http.post(API_URL + "/draft/" + draftId, draft)
-            .then(function(data) {
-                toastr.success("Draft has been saved.");
             });
         };
 
