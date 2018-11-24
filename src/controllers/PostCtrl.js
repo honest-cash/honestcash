@@ -1,10 +1,13 @@
 import moment from "moment";
 export default class PostCtrl {
-    constructor($rootScope, $scope, post, RelsService, CommentService) {
+    constructor($rootScope, $scope, post, RelsService) {
         $scope.postId = post.post_id;
         $scope.post = post;
         $scope.post.createdAt = moment(post.createdAt).format("MMM Do YY");
-        $scope.comments = [];
+
+        $scope.post.userPosts && $scope.post.userPosts.forEach(userPost => {
+            userPost.createdAt = moment(userPost.createdAt).format("MMM Do YY");
+        });
 
         const init = () => {
             const container = document.getElementById("post-tipping-container");
@@ -24,24 +27,6 @@ export default class PostCtrl {
             RelsService.followProfile(profileId);
         };
 
-        /**
-            CommentService.getComments($scope.postId, function(rComments) {
-                $scope.comments = rComments;
-            });
-        */
-
-        $scope.postComment = (postId, body) => {
-            $scope.commentDraft = "";
-            CommentService.postComment(postId, body, function(rComment) {
-                $scope.comments.unshift(rComment);
-            });
-        };
-
-        $scope.deleteComment = (postId, commentId, commentIndex) => {
-            $scope.comments.splice(commentIndex, 1);
-            CommentService.deleteComment(postId, commentId);
-        };
-
         $scope.openShareModal = (postId, commentId, commentIndex) => {
             bootbox.confirm("Are you sure?", (result) => {
                 if (result) {
@@ -56,4 +41,9 @@ export default class PostCtrl {
     }
 }
 
-PostCtrl.$inject = [ "$rootScope", "$scope", "post", "RelsService", "CommentService" ];
+PostCtrl.$inject = [
+    "$rootScope",
+    "$scope",
+    "post",
+    "RelsService"
+];

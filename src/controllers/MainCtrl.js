@@ -174,7 +174,7 @@ export default class MainCtrl {
             $rootScope.user = false;
             $rootScope.fetchingNotifs = false;
     
-            $state.go("starter.welcome");
+            $state.go("vicigo.feeds");
         };
     }
 }

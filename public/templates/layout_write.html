@@ -22,7 +22,7 @@
 						</button>
 					</li>
 
-					<li style="margin-top: 5px;" ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
+					<li style="margin-top: 5px; cursor: pointer;" ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
 						<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
 						<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
 					</li>

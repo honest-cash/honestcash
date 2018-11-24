@@ -2,6 +2,17 @@
 	<div class="col-xs-12 visible-xs" style="height:100px;"></div>
 	<div class="col-md-8 col-md-offset-2">
 		<div class="row">
+			<div ng-if="post.parentPost" class="block-center">
+				<div class="panel" ui-sref="vicigo.post({ alias: post.parentPost.alias, username: post.parentPost.username })">
+					<div class="panel-body" style="cursor: pointer;">
+						Response to: <b>{{post.parentPost.title}}</b>
+						<p>by @{{post.parentPost.user.username}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
 			<post-header></post-header>
 		</div>
 
@@ -50,6 +61,7 @@
 </div>
 
 <div class="container">
+	<div class="row">
 	<div class="col-xs-12 visible-xs" style="height:100px;"></div>
 
 	<div class="col-md-8 col-md-offset-2">
@@ -57,18 +69,27 @@
 
 		<div class="block-center">
 			<div class="panel">
-				<div class="panel-body" style="cursor: pointer;" ui-sref="editor.response({ parentPostId: post.id })">
-					<img ng-if="post.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
-					<p>
-						{{ post.userPosts === 0 ? "Be the first to write a response..." : "Write a response..." }}
-					</p>
+				<div class="panel-body" style="cursor: pointer;">
+					<a ng-href="{{user.id ? 'write/response/' + post.id : '/signup' }}">
+						<ul style="margin-top: 10px;" class="list-unstyled list-inline">
+							<li>
+								<img ng-if="post.user.imageUrl" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+								<img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+							</li>
+							<li>
+								<p>
+									{{ post.userPosts === 0 ? "Be the first to write a response..." : "Write a response..." }}
+								</p>
+							</li>
+						</ul>
+					</a>
 				</div>
 			</div>
 		</div>
 
 		<div class="block-center" ng-repeat="response in post.userPosts">
 			<div class="panel">
-				<div class="panel-body" style="cursor: pointer;">
+				<div class="panel-body">
 					<ul class="list-unstyled list-inline">
 						<li>
 							<a ui-sref="vicigo.profile({profileId: response.user.id})">
@@ -76,9 +97,10 @@
 								<img ng-if="!response.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
 							</a>
 						</li>
-					
+
 						<li style="vertical-align:middle">
-							<strong style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}}</a></strong>
+							<strong style="margin-top:50px;">
+								<a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}}</a></strong>
 			
 							<br />
 
@@ -90,9 +112,13 @@
 
 					<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
 
-					<a ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Read more</a>
+					<ul style="margin-left: 5px;" class="list-inline list-unstyled">
+						<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Read more</a>
+						<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Give a tip</a>
+					</ul>
 				</div>
 			</div>
 		</div>
+		</div>
 	</div>
-</div
+</div>
