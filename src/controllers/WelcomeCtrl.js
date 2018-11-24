@@ -16,7 +16,7 @@ export default class WelcomeCtrl {
 		if (code) {
 			switch (code) {
 				case "NOT_ACTIVATED":
-					$scope.message = "The access the the platform is currently limited. Your account has not been activated. Tweet us at @HonestCash for a personal invitation.";
+					$scope.message = "The access the the platform is currently limited. Your account has not been activated. Tweet us at @Honest_Cash for a personal invitation.";
 					break;
 				case "EMAIL_EXISTS":
 					$scope.message = "E-Mail already exists";
