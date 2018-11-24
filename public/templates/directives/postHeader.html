@@ -4,9 +4,9 @@
 		<ul class="list-unstyled list-inline">
 			<!-- AUTHOR IMAGE -->
 			<li>
-				<a ui-sref="vicigo.profile({profileId: post.author_id})">
-					<img ng-if="post.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
-					<img ng-if="!post.imageUrl" src="/img/avatar.png" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+				<a ui-sref="vicigo.profile({profileId: post.user.id})">
+					<img ng-if="post.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+					<img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
 				</a>
 			</li>
 			<!-- END AUTHOR IMAGE -->

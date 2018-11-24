@@ -8,7 +8,7 @@
 		<hr />
 
 		<div class="row">
-			<article class="site-block post-body"  ng-bind-html="displayFeedBody(post.body)"></article>
+			<article class="site-block post-body" ng-bind-html="displayFeedBody(post.body)"></article>
 		</div>
 
 		<hr />
@@ -48,3 +48,51 @@
 		</div>
 	</div>			
 </div>
+
+<div class="container">
+	<div class="col-xs-12 visible-xs" style="height:100px;"></div>
+
+	<div class="col-md-8 col-md-offset-2">
+		<h4><strong>Responses</strong></h4>
+
+		<div class="block-center">
+			<div class="panel">
+				<div class="panel-body" style="cursor: pointer;" ui-sref="editor.response({ parentPostId: post.id })">
+					<img ng-if="post.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+					<p>
+						{{ post.userPosts === 0 ? "Be the first to write a response..." : "Write a response..." }}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="block-center" ng-repeat="response in post.userPosts">
+			<div class="panel">
+				<div class="panel-body" style="cursor: pointer;">
+					<ul class="list-unstyled list-inline">
+						<li>
+							<a ui-sref="vicigo.profile({profileId: response.user.id})">
+								<img ng-if="response.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{response.user.imageUrl}}" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+								<img ng-if="!response.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+							</a>
+						</li>
+					
+						<li style="vertical-align:middle">
+							<strong style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}}</a></strong>
+			
+							<br />
+
+							<small class="text-muted">
+								<span ng-if="!post.post_publish_timestamp_formatted">{{::response.createdAt}}</span> 
+							</small>
+						</li>
+					</ul>
+
+					<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
+
+					<a ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Read more</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div

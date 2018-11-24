@@ -7,7 +7,7 @@
     "angular": "^1.6.1",
     "angular-ui-router": "^0.3.2",
     "angularjs": "0.0.1",
-    "async": "^2.0.1",
+    "async": "^2.6.1",
     "aws-sdk": "^2.1.35",
     "axios": "^0.18.0",
     "bcrypt-nodejs": "^0.0.3",

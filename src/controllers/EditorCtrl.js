@@ -1,4 +1,5 @@
 import MediumEditor from "medium-editor";
+import async from "async";
 import "medium-editor/dist/css/medium-editor.min.css";
 
 export default class EditorCtrl {
@@ -14,7 +15,9 @@ export default class EditorCtrl {
             title: false
         };
 
-        const saveDraftElement = (element, opts) => {
+        const parentPostId = $stateParams.parentPostId;
+
+        const saveDraftElement = (element, opts, cb) => {
             const post = {};
 
             post.title = document.getElementById("title").innerText || "";
@@ -24,20 +27,16 @@ export default class EditorCtrl {
             if (!post.body && !post.title && !post.hashtags) {
                 $scope.saving = null;
 
-                return false;
+                return cb && cb();
             }
 
             $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
             .then((response) => {
                 $scope.saving = null;
 
-                if ((opts || {}).disableNotifs) {
-                    return toastr.success("Draft has been saved.");
-                }
-            });
+                return cb && cb();
+            }, cb);
         };
-
-        $scope.saveDraftElement = saveDraftElement;
 
         $scope.readyToPublish = () => {
             $('#publishModal').modal('show');
@@ -48,51 +47,57 @@ export default class EditorCtrl {
                 return toastr.info("Saving...");
             }
 
-            if ($scope.draft.status === "published") {
-                $scope.saveDraftElement("title", { disableNotifs: true });
-                $scope.saveDraftElement("body", { disableNotifs: true });
-                $scope.saveDraftElement("hashtags", { disableNotifs: true });
+            $scope.isLoading = true;
+
+            let publishedPost;
+
+            async.series([
+                (cb) => {
+                    async.parallel([
+                        (cb) => saveDraftElement("title", { disableNotifs: true }, cb),
+                        (cb) => saveDraftElement("body", { disableNotifs: true }, cb),
+                        (cb) => saveDraftElement("hashtags", { disableNotifs: true }, cb)
+                    ], cb);
+                },
+                (cb) => {
+                    $http.put(API_URL + "/draft/" + postId + "/publish")
+                    .then(response => {
+                        if (response.status !== 200) {
+                            return cb(response);
+                        }
+
+                        publishedPost = response.data;
+
+                        return cb();
+                    }, cb);
+                }
+            ], (errResponse) => {
+                $scope.isLoading = false;
+
+                if (errResponse) {
+                    if (errResponse.status == 400) {
+                        if (errResponse.data.code == "TITLE_TOO_SHORT") {
+                            return toastr.warning("Title is too short.");
+                        }
+
+                        if (errResponse.data.code == "POST_TOO_SHORT") {
+                            return toastr.warning("Your story is too short. The minimum number of characters is 300.");
+                        }
+                    }
+
+                    return toastr.warning(errResponse.data.desc || errResponse.data.code);
+                }
+
+                toastr.success("You have successfully published your story.");
 
                 $('#publishModal').modal('hide');
 
-                return  $timeout(() => {
-                    $state.go("vicigo.postById", {
-                        postId: postId
+                $timeout(() => {
+                    $state.go("vicigo.post", {
+                        alias: publishedPost.alias,
+                        username: publishedPost.user.username
                     });
-                });
-            }
-
-            $scope.isLoading = true;
-
-            $http.put(API_URL + "/draft/" + postId + "/publish")
-            .then(response => {
-                $scope.isLoading = false;
-
-                if (response.status == 200) {
-                    toastr.success("You have successfully published your story.");
-
-                    return $timeout(() => {
-                        $state.go("vicigo.postById", {
-                            postId: postId
-                        });
-                    }, 1500);
-                }
-
-                toastr.warning(JSON.stringify(response.data));
-            }, response => {
-                $scope.isLoading = false;
-
-                if (response.status == 400) {
-                    if (response.data.code == "POST_TOO_SHORT") {
-                        return toastr.info("Your story is too short. The minimum number of characters is 300.");
-                    }
-
-                    if (response.data.code == "TITLE_TOO_SHORT") {
-                        return toastr.info("Title is too short.");
-                    }
-                }
-
-                toastr.warning(response.data.code);
+                }, 500);
             });
         };
 
@@ -106,7 +111,7 @@ export default class EditorCtrl {
             }
 
             $scope.Saving.body = setTimeout(() => {
-                $scope.saveDraftElement(element);
+                saveDraftElement(element);
             }, 3000);
         };
 
@@ -172,7 +177,7 @@ export default class EditorCtrl {
             $("#description").tagit({
                 afterTagAdded: function(event, ui) {
                     if ($scope.ready) {
-                        $scope.saveDraftElement("hashtags");
+                        saveDraftElement("hashtags");
                     }
                 }
             });
@@ -210,7 +215,13 @@ export default class EditorCtrl {
         };
 
         const loadPostDraft = postId => {
-            $http.get(`${API_URL}${postId ? "/post/" + postId : "/draft"}`)
+            let url = API_URL;
+
+            url += parentPostId ?
+                `/draft?parentPostId=${parentPostId}` :
+                postId ? `/post/${postId}` : "/draft";
+
+            $http.get(url)
             .then(response => {
                 $scope.draft = response.data;
 

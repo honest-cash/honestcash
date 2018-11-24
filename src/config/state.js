@@ -7,7 +7,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			controller: "mainController"
 		})
 		.state('starter.welcome', {
-			url: "/",
+			url: "/signup",
 			templateUrl: "/templates/welcome.html",
 			controller: "welcomeController",
 		})
@@ -26,13 +26,14 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/welcome.html",
 			controller: "welcomeController"
 		})
+
 		.state('vicigo', {
 			abstract: true,
 			controller: "mainController",
 			templateUrl: "/templates/layout.html"
 		})
         .state('vicigo.feeds', {
-            url: "/feeds",
+            url: "/",
             templateUrl: "/templates/feeds.html",
             controller: "feedsController",
             resolve: {
@@ -74,6 +75,10 @@ export default function state ($stateProvider, $urlRouterProvider) {
 		})
 		.state('editor.write', {
 			url: "/write",
+			templateUrl: "/templates/write.html",
+		})
+		.state('editor.response', {
+			url: "/write/response/:parentPostId",
 			templateUrl: "/templates/write.html",
 		})
 		.state('editor.edit', {
