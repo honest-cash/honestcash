@@ -10,12 +10,13 @@
 
 body {
 	width:100%;  
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16px;
+	font-family: 'Helvetica', sans-serif;
+	font-size: 17px;
 	font-weight: 300;
 	/* color: #777; */
 	line-height: 1.6;
 	background-color:#fafafa;
+	padding-top: 70px;
 }
 
 a {
@@ -34,11 +35,14 @@ a:hover {
 }
 
 h1 {
-	font-size: 50px;
-	font-family: 'Roboto', sans-serif;
+	font-size: 45px;
+	font-family: 'Helvetica', sans-serif;
 }
 
-h2 { font-size: 34px; }
+h2 { 
+	font-size: 30px; 
+	font-family:'Helvetica', sans-serif;
+}
 
 h3 { font-size: 22px; }
 
@@ -49,7 +53,7 @@ h2,
 h3,
 h4 {
 	color: #444;
-	font-weight: lighter;
+	font-weight: normal;
 	line-height:1.2;
 	margin:5px 0 5px 0;
 }
@@ -229,9 +233,6 @@ font-size:24px;
 	.navbar .navbar-form {
 		width: 300px;
 	}
-	body {
-		padding-top: 70px;
-	}
 }
 
 img.lazy {
@@ -399,17 +400,18 @@ img.lazy {
 
 
 
-	.feed-hashtag {
-		font-size: 8px;
-	}
+.feed-hashtag {
+	font-family: 'Helvetica', sans-serif;
+	font-size: 8px;
+}
 
 .post-feed-body {
 	width:100%;  
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Helvetica', sans-serif;
 
-  font-weight: 500 !important;
+  font-weight: 300 !important;
   font-style: normal !important;
-  font-size: 21px !important;
+  font-size: 17px !important;
   line-height: 1.58 !important;
 	/* color: #777; */
 	line-height: 1.6;
@@ -432,8 +434,8 @@ img.lazy {
 	
 .post-body {
 	width:100%;  
-	font-family: 'Open Sans', sans-serif;
-  font-weight: 500 !important;
+	font-family: 'Helvetica', sans-serif;
+  font-weight: 300 !important;
   font-style: normal !important;
   font-size: 17px !important;
   line-height: 1.58 !important;
@@ -454,8 +456,8 @@ img.lazy {
 	}
 	.post-body {
 	width:100%;  
-	font-family: 'Open Sans', sans-serif;
-  font-weight: 500 !important;
+	font-family: 'Helvetica', sans-serif;
+  font-weight: 300 !important;
   font-style: normal !important;
   font-size: 17px !important;
   line-height: 1.58 !important;
