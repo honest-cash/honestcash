@@ -2,7 +2,7 @@ import MediumEditor from "medium-editor";
 import "medium-editor/dist/css/medium-editor.min.css";
 
 export default class EditorCtrl {
-    constructor($state, $scope, $stateParams, $http, $timeout, ViciAuth, API_URL) {
+    constructor($state, $scope, $stateParams, $http, $timeout, AuthService, API_URL) {
         let titleEditor;
         let bodyEditor;
 
@@ -199,7 +199,7 @@ export default class EditorCtrl {
             .on("sending", (file, xhr) => {
                 $scope.isBeingUploaded = true;
 
-                xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
+                xhr.setRequestHeader("X-Auth-Token", AuthService.getAuthToken());
             })
 
             backgroundImageDropzone
@@ -222,4 +222,4 @@ export default class EditorCtrl {
     }
 }
 
-EditorCtrl.$inject = [ "$state", "$scope", "$stateParams", "$http", "$timeout", "ViciAuth", "API_URL" ];
+EditorCtrl.$inject = [ "$state", "$scope", "$stateParams", "$http", "$timeout", "AuthService", "API_URL" ];

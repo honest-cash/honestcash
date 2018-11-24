@@ -36,13 +36,9 @@ export default function state ($stateProvider, $urlRouterProvider) {
             templateUrl: "/templates/feeds.html",
             controller: "feedsController",
             resolve: {
-                seo: function(MetaService) {
-                    return MetaService.setDefault();
-                },
                 checkLoggedIn: function() {
                     return true;
                 },
-
             }
         })
 		.state('vicigo.chat', {
@@ -55,23 +51,17 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/notifs.html",
 			controller: "notifsController",
 			resolve: {
-				'notifs': function($stateParams, $http, MetaService) {
+				'notifs': [ "$stateParams", "$http", function($stateParams, $http) {
 					return $http.get("/api/notifications?page=1&limit=30").then(function(response) {
 						return response.data;
 					});
-				}
+				}]
 			}
 		})
 		.state('vicigo.hashtag', {
 			url: "/hashtag/:hashtag",
 			templateUrl: "/templates/feeds.html",
 			controller: "feedsController",
-			resolve: {
-				'seo': function($stateParams, MetaService) {
-					return MetaService.setForHashtag($stateParams.hashtag);
-				},
-
-			}
 		})
 		.state('vicigo.drafts', {
 			url: "/drafts/",
@@ -95,7 +85,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/profile.html",
 			controller: "profileController",
 			resolve: {
-				'profile': ($stateParams, $q, ProfileService) => {
+				'profile': [ "$stateParams", "$q", "ProfileService", ($stateParams, $q, ProfileService) => {
 					var defer = $q.defer();
 
 					ProfileService.fetchProfile($stateParams.profileId, (rProfile) => {
@@ -103,7 +93,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 					});
 
 					return defer.promise;
-				}
+				}]
 			}
 		})
 		.state('vicigo.post', {
@@ -111,7 +101,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/post.html",
 			controller: "postController",
 			resolve: {
-				'post': ($stateParams, $q, PostService) => {
+				'post': [ "$stateParams", "$q", "PostService",($stateParams, $q, PostService) => {
 					var defer = $q.defer();
 
 					PostService.getById($stateParams.alias, (rPost) => {
@@ -119,7 +109,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 					});
 
 					return defer.promise;
-				}
+				}]
 			}
 		})
 		.state('vicigo.postById', {
@@ -127,7 +117,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/post.html",
 			controller: "postController",
 			resolve: {
-				'post': ($stateParams, $q, PostService) => {
+				'post': ["$stateParams", "$q", "PostService", ($stateParams, $q, PostService) => {
 					var defer = $q.defer();
 
 					PostService.getById($stateParams.postId, (rPost) => {
@@ -135,7 +125,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 					});
 
 					return defer.promise;
-				}
+				}]
 			}
 		})
 		/**
@@ -146,7 +136,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/post.html",
 			controller: "postController",
 			resolve: {
-				'post': ($stateParams, $q, PostService) => {
+				'post': ["$stateParams", "$q", "PostService", ($stateParams, $q, PostService) => {
 					var defer = $q.defer();
 
 					PostService.getById($stateParams.postId, (rPost) => {
@@ -154,48 +144,20 @@ export default function state ($stateProvider, $urlRouterProvider) {
 					});
 
 					return defer.promise;
-				}
+				}]
 			}
-		})
-		.state('vicigo.hashbookNew', {
-			url: "/u/hashbook/create",
-			templateUrl: "/templates/blog_create.html",
-			controller: "blogNewController"
-		})
-		.state('hashbook', {
-			abstract: true,
-			templateUrl: "/templates/layout_blog.html",
-			controller: "mainController",
-		})
-
-		.state('hashbook.list', {
-			url: "/hashbook/:blogSlug",
-			templateUrl: "/templates/blog.html",
-			controller: "blogController"
-		})
-		.state('hashbook.edit', {
-			url: "/u/hashbook/:blogSlug/edit",
-			templateUrl: "/templates/blog_edit_simple.html",
-			controller: "blogEditController"
-		})
-
-		.state('vicigo.hashbooks', {
-			url: "/profile/:profileIdentifier/hashbooks",
-			templateUrl: "/templates/blogs.html",
-			controller: "profileBlogsController"
 		})
 		.state('vicigo.postByAlias', {
 			url: "/post/:username/:alias",
 			templateUrl: "/templates/post.html",
 			controller: "postController",
 			resolve: {
-				'post': function($stateParams, $rootScope, $http, MetaService, PostService) {
-					return $http.get("/post/" + $stateParams.username + "/" + $stateParams.alias).then(function(response) {
-						MetaService.setForPost(response.data);
+				'post': [ "$stateParams", "$http", function($stateParams, $http) {
+					return $http.get("/post/" + $stateParams.username + "/" + $stateParams.alias)
+					.then(function(response) {
 						return response.data;
 					});
-
-				}
+				}]
 			}
 		})
 };

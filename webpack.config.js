@@ -6,7 +6,7 @@ module.exports = {
         filename: 'bundle.js'
     },
     optimization:{
-        minimize: false, // <---- disables uglify.
+        // minimize: false, // <---- disables uglify.
         // minimizer: [new UglifyJsPlugin()] if you want to customize it.
     },
     module: {

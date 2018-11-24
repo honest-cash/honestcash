@@ -27,3 +27,41 @@ export const onStateChange = function($rootScope, $state, ViciAuth) {
         });
     });
 };
+
+export const initProfileUpload = function(API_URL, ViciAuth) {
+	const changeProgress = (progress) => {
+		document.getElementById("imageUploadProgressBar").setAttribute("aria-valuenow", progress);
+		document.getElementById("imageUploadProgressBar").style.width = progress + "%";
+	};
+
+	new Dropzone("#profilePicDropzone", {
+		url: `${API_URL}/upload/image?isProfileAvatar=true`,
+		maxFiles: 10,
+		maxfilesexceeded: (file) => {
+			this.removeAllFiles();
+			this.addFile(file);
+		},
+		thumbnailWidth: null,
+		previewTemplate: document.querySelector('#preview-template').innerHTML,
+	})
+	.on("addedfile", function(file) {
+		$("#profilePicDropzone").addClass("hidden");
+	})
+	.on("sending", (file, xhr) => {
+		changeProgress(0);
+		xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
+		$("#imageUploadProgress").removeClass("hidden");
+	})
+	.on("uploadprogress", (_, progress) => {
+		changeProgress(progress);
+	})
+	.on("success", (file, response) => {
+		changeProgress(100);
+
+		document.getElementById("profilePic").src = response.url;
+		
+		$("#imageUploadProgress").addClass("hidden");
+		$("#profilePicDropzone").removeClass("hidden");
+		$('#uploadProfilePicModal').modal('hide');
+	});
+};

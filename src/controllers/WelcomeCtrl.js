@@ -1,5 +1,5 @@
 export default class WelcomeCtrl {
-  constructor($rootScope, $scope, $location, $state, ViciAuth) {
+  constructor($rootScope, $scope, $location, $state, AuthService) {
 	$scope.message = "";
 	$rootScope.noHeader = true;
 	$scope.isLoading = false;
@@ -73,7 +73,7 @@ export default class WelcomeCtrl {
 	$rootScope.login = (data) => {
 		$scope.isLoading = true;
 
-		ViciAuth.login({
+		AuthService.login({
 			email: data.loginemail,
 			password: data.loginpassword
 		}).then((User) => {
@@ -94,7 +94,7 @@ export default class WelcomeCtrl {
 	$scope.changePassword = (data) => {
 		$scope.isLoading = true;
 
-		ViciAuth.changePassword({
+		AuthService.changePassword({
 			code: $scope.resetCode,
 			newPassword: data.loginpassword,
 			repeatNewPassword: data.loginpasswordrepeat,
@@ -118,7 +118,7 @@ export default class WelcomeCtrl {
 	$scope.resetPassword = (data) => {
 		$scope.isLoading = true;
 
-		ViciAuth.resetPassword({
+		AuthService.resetPassword({
 			email: data.loginemail
 		})
 		.then(() => {
@@ -179,7 +179,7 @@ export default class WelcomeCtrl {
 
 		$scope.isLoading = true;
 		
-		ViciAuth.signup({
+		AuthService.signup({
 			username: data.username,
 			password: data.password,
 			email: data.email,
@@ -204,5 +204,5 @@ export default class WelcomeCtrl {
 }}
 
 WelcomeCtrl.$inject = [
-    "$rootScope", "$scope", "$location", "$state", "ViciAuth"
+    "$rootScope", "$scope", "$location", "$state", "AuthService"
 ];
