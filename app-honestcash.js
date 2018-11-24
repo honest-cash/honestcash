@@ -75,8 +75,8 @@ app.use("/css", express.static(__dirname + "/public/css"));
 app.use("/templates", express.static(__dirname + "/public/templates"));
 app.use("/lib", express.static(__dirname + "/public/lib"));
 app.use('/libs/', express.static(__dirname + '/node_modules'));
-
 app.use('/libs', express.static(__dirname + '/node_modules'));
+app.use("/", express.static(__dirname + "/public/"));
 
 /**
  * Server rendering for SEO purposes
