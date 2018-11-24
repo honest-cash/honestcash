@@ -1,6 +1,6 @@
 
 export default class ProfileCtrl {
-    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, profile) {
+    constructor(API_URL, $rootScope, $scope, $location, $http, $q, BitcoinService, FeedService, CommentService, RelsService, PostService, profile) {
         $scope.filter = function(filterType) {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
@@ -45,7 +45,7 @@ export default class ProfileCtrl {
             $scope.followedHashtags.splice(index, 1);
         };
 
-        const updateMutableProfileFieldFactory = (fieldName) => (fieldValue) => {
+        const updateMutableProfileFieldFactory = (fieldName) => async (fieldValue) => {
             var d = $q.defer();
 
             const data = {};
@@ -233,5 +233,16 @@ export default class ProfileCtrl {
 }
 
 ProfileCtrl.$inject = [
-    "API_URL", "$rootScope", "$scope", "$location", "$http", "$q", "FeedService", "CommentService", "RelsService", "PostService", "profile" 
+    "API_URL",
+    "$rootScope",
+    "$scope",
+    "$location",
+    "$http",
+    "$q",
+    "BitcoinService",
+    "FeedService",
+    "CommentService",
+    "RelsService",
+    "PostService",
+    "profile" 
 ];

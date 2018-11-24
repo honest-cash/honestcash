@@ -16,11 +16,11 @@
 							{{ profile.username }}
 						</a>
 					</h1>
-					<h3 class="text-center-sm" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')">
+					<h3 class="text-center-sm">
 						<a ng-if="profile.id == user.id" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
 							{{ profile.addressBCH }}
 						</a>
-						<span ng-if="profile.id !== user.id">{{ profile.addressBCH }}</span>
+						<span ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')" ng-if="profile.id !== user.id">{{ profile.addressBCH }}</span>
 
 						<span ng-if="profile.id == user.id && !profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)"><i class="fa fa-pencil-square-o"></i> Specify your BCH address for receiving tips</span>
 					</h3>

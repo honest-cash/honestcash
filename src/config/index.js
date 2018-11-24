@@ -1,2 +1,7 @@
+const PRODUCTION = "https://honestcash.alphateamhackers.com/api";
+const DEV = "http://localhost:8080/api";
+
+let api = DEV;
+
 angular.module("vqConfig", [])
-	.constant("API_URL", "https://honestcash.alphateamhackers.com/api");
+	.constant("API_URL", api); // https://honestcash.alphateamhackers.com
