@@ -64,16 +64,6 @@ export default class MainCtrl {
             return $sce.trustAsResourceUrl(src);
         }
     
-        $scope.goToPost = (feed) => {
-            console.log(feed);
-    
-            $state.go("vicigo.post", {
-                postId: feed.id,
-                alias: feed.alias,
-                username: feed.user.username
-            });
-        };
-    
         $rootScope.searchVicigo = function(searchInput) {
             searchInput = searchInput.toLowerCase();
             searchInput = searchInput.replace('#', '');

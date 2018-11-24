@@ -5,10 +5,6 @@ module.exports = {
         path: __dirname + "/public/js",
         filename: 'bundle.js'
     },
-    optimization:{
-        // minimize: false, // <---- disables uglify.
-        // minimizer: [new UglifyJsPlugin()] if you want to customize it.
-    },
     module: {
         rules: [
             {
