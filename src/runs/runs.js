@@ -1,4 +1,4 @@
-export const onStateChange = function($rootScope, $state, ViciAuth) {
+export const onStateChange = function($rootScope, $state, AuthService) {
     $rootScope.$on('$stateChangeStart', (event, next, nextParams, fromState) => {
         if (next.name == "starter.welcome") {
             $rootScope.welcome = true;
@@ -12,7 +12,7 @@ export const onStateChange = function($rootScope, $state, ViciAuth) {
             $rootScope.noHeader = false;
         }
 
-        ViciAuth.validate((data) => {
+        AuthService.validate((data) => {
             if (data) {
                 $rootScope.user = {
                     id: data.id,
@@ -28,7 +28,7 @@ export const onStateChange = function($rootScope, $state, ViciAuth) {
     });
 };
 
-export const initProfileUpload = function(API_URL, ViciAuth) {
+export const initProfileUpload = function(API_URL, AuthService) {
 	const changeProgress = (progress) => {
 		document.getElementById("imageUploadProgressBar").setAttribute("aria-valuenow", progress);
 		document.getElementById("imageUploadProgressBar").style.width = progress + "%";
@@ -49,7 +49,7 @@ export const initProfileUpload = function(API_URL, ViciAuth) {
 	})
 	.on("sending", (file, xhr) => {
 		changeProgress(0);
-		xhr.setRequestHeader("X-Auth-Token", ViciAuth.getAuthToken());
+		xhr.setRequestHeader("X-Auth-Token", AuthService.getAuthToken());
 		$("#imageUploadProgress").removeClass("hidden");
 	})
 	.on("uploadprogress", (_, progress) => {
