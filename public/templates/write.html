@@ -4,12 +4,12 @@
 	}
 </style>
 
-<div class="container">
+<div class="container ng-cloak">
 	<div class="row">
 		<div class="col-md-2"></div>	  
 		<div class="col-md-8 col-xs-12" style="min-height:250px;">
-				<div ng-if="draft.parentPost.id" class="block-center">
-					<div class="panel" ui-sref="vicigo.post({ alias: draft.parentPost.alias, username: draft.parentPost.username })">
+				<div ng-show="draft.parentPost.id" class="block-center">
+					<div class="panel" ui-sref="vicigo.post({ alias: draft.parentPost.alias, username: draft.parentPost.user.username })">
 						<div class="panel-body" style="cursor: pointer;">
 							Response to: <b>{{draft.parentPost.title}}</b>
 							<p>by @{{draft.parentPost.user.username}}</p>
@@ -17,7 +17,7 @@
 					</div>
 				</div>
 
-				<img ng-if="draft.imageUrl" style="max-width:100%;cursor:pointer;" ng-src="{{draft.imageUrl}}" alt="background" data-toggle="modal" data-target="#uploadBackgroundImageModal">
+				<img ng-if="draft.imageUrl" style="max-width:100%;cursor:pointer;" ng-src="{{draft.imageUrl}}" data-toggle="modal" data-target="#uploadBackgroundImageModal">
 
 				<div class="hidden text-center changeSomethingBtn" style="cursor:pointer;" id="uploadPostBackground">
 						<div class="btn btn-default" style="margin:10px;" >

@@ -17,7 +17,7 @@ export default class EditorCtrl {
 
         const parentPostId = $stateParams.parentPostId;
 
-        const saveDraftElement = (element, opts, cb) => {
+        const saveDraftElement = (element, cb) => {
             const post = {};
 
             post.title = document.getElementById("title").innerText || "";
@@ -54,9 +54,9 @@ export default class EditorCtrl {
             async.series([
                 (cb) => {
                     async.parallel([
-                        (cb) => saveDraftElement("title", { disableNotifs: true }, cb),
-                        (cb) => saveDraftElement("body", { disableNotifs: true }, cb),
-                        (cb) => saveDraftElement("hashtags", { disableNotifs: true }, cb)
+                        (cb) => saveDraftElement("title", cb),
+                        (cb) => saveDraftElement("body", cb),
+                        (cb) => saveDraftElement("hashtags", cb)
                     ], cb);
                 },
                 (cb) => {
@@ -111,7 +111,9 @@ export default class EditorCtrl {
             }
 
             $scope.Saving.body = setTimeout(() => {
-                saveDraftElement(element);
+                saveDraftElement(element, () => {
+                    return toastr.success("Draft has been saved.");
+                });
             }, 3000);
         };
 

@@ -78,6 +78,8 @@ app.use('/libs/', express.static(__dirname + '/node_modules'));
 app.use('/libs', express.static(__dirname + '/node_modules'));
 app.use("/", express.static(__dirname + "/public/"));
 
+app.get("/91", (_, res) => res.redirect(301, '/dagur/lets-talk-spec-3-remove-the-transaction-undersize-limit-91'));
+
 /**
  * Server rendering for SEO purposes
  */
@@ -89,7 +91,7 @@ app.get("/:username/:alias", async (req, res, next) => {
 		return next();
 	}
 
-	const url = `https://honestcash.alphateamhackers.com/api/post/${req.params.alias}`;
+	const url = `https://honest.cash/api/post/${req.params.alias}`;
 	const response = await axios.get(url);
 	const post = response.data;
 	const seoData = seo.getForPost(post);
