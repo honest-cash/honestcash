@@ -1,7 +1,7 @@
 import MediumEditor from "medium-editor";
 import async from "async";
 import "medium-editor/dist/css/medium-editor.min.css";
-
+import "medium-editor/dist/css/themes/default.min.css";
 export default class EditorCtrl {
     constructor($state, $scope, $stateParams, $http, $timeout, AuthService, API_URL) {
         let titleEditor;
@@ -127,31 +127,35 @@ export default class EditorCtrl {
                     text: 'Title',
                     hideOnClick: true
                 },
+                disableDoubleReturn: true,
                 disableReturn: true,
                 paste: {
                     forcePlainText: true,
                     cleanPastedHTML: true,
                     cleanReplacements: [],
-                    cleanAttrs: [ 'class', 'style', 'dir' ],
+                    cleanAttrs: [ 'class', 'style', 'dir', 'h1', 'h2', 'h4', 'h5', 'h6', 'a' ],
                     cleanTags: [ 'meta' ],
                     unwrapTags: []
                 }
             });
 
             bodyEditor = new MediumEditor('#body', {
+                buttonLabels: 'fontawesome',
                 placeholder: {
                     /* This example includes the default options for placeholder,
                        if nothing is passed this is what it used */
                     text: 'Tell your story...',
                     hideOnClick: true
                 },
+                anchorPreview: false,
+                disableDoubleReturn: true,
                 paste: {
                     /* This example includes the default options for paste,
                        if nothing is passed this is what it used */
                     forcePlainText: true,
                     cleanPastedHTML: true,
                     cleanReplacements: [],
-                    cleanAttrs: ['class', 'style', 'dir'],
+                    cleanAttrs: [ 'class', 'style', 'dir' ],
                     cleanTags: ['meta'],
                     unwrapTags: []
                 }
