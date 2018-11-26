@@ -133,7 +133,7 @@ export default class EditorCtrl {
                     forcePlainText: true,
                     cleanPastedHTML: true,
                     cleanReplacements: [],
-                    cleanAttrs: [ 'class', 'style', 'dir', 'h1', 'h2', 'h4', 'h5', 'h6', 'a' ],
+                    cleanAttrs: [ 'class', 'style' ],
                     cleanTags: [ 'meta' ],
                     unwrapTags: []
                 }
@@ -141,6 +141,7 @@ export default class EditorCtrl {
 
             bodyEditor = new MediumEditor('#body', {
                 buttonLabels: 'fontawesome',
+                autoLink: true,
                 placeholder: {
                     /* This example includes the default options for placeholder,
                        if nothing is passed this is what it used */
@@ -148,7 +149,6 @@ export default class EditorCtrl {
                     hideOnClick: true
                 },
                 anchorPreview: false,
-                disableDoubleReturn: true,
                 paste: {
                     /* This example includes the default options for paste,
                        if nothing is passed this is what it used */
@@ -156,7 +156,7 @@ export default class EditorCtrl {
                     cleanPastedHTML: true,
                     cleanReplacements: [],
                     cleanAttrs: [ 'class', 'style', 'dir' ],
-                    cleanTags: ['meta'],
+                    cleanTags: ['meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'a', 'table', 'tr', 'td', 'ul', 'li', 'code', 'pre' ],
                     unwrapTags: []
                 }
             });
