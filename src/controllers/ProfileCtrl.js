@@ -1,6 +1,6 @@
 
 export default class ProfileCtrl {
-    constructor(API_URL, $rootScope, $scope, $location, $http, $q, BitcoinService, FeedService, CommentService, RelsService, PostService, profile) {
+    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, profile) {
         $scope.filter = function(filterType) {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
@@ -239,7 +239,7 @@ ProfileCtrl.$inject = [
     "$location",
     "$http",
     "$q",
-    "BitcoinService",
+    // "BitcoinService",
     "FeedService",
     "CommentService",
     "RelsService",

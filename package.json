@@ -12,6 +12,8 @@
     "axios": "^0.18.0",
     "bcrypt-nodejs": "^0.0.3",
     "bindings": "^1.2.1",
+    "bitbox-sdk": "^2.2.2",
+    "bitcointoken": "0.1.0-alpha.1",
     "body-parser": "^1.0.2",
     "bootstrap": "^3.3.7",
     "bson": "^0.4.23",

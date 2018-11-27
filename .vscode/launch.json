@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Programm starten",
-            "program": "${workspaceRoot}/app-vicigo.js",
+            "program": "${workspaceRoot}/src/services/BitcoinService.js",
             "cwd": "${workspaceRoot}"
         },
         {
