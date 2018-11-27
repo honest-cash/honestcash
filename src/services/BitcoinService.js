@@ -13,7 +13,7 @@ export class SimpleWallet {
   }
 
   distributeFunds(outs) {
-    const db = BitcoinDb.fromHdPrivateKey(hdPrivateKey)
+    const db = BitcoinDb.fromHdPrivateKey(this.privateKey)
 
     /**
      * [
