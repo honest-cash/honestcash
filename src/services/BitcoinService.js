@@ -25,10 +25,10 @@ export class SimpleWallet {
     ]);
   }
 
-  createWithBitcoinToken(hdPrivateKey) {
-    this.hdPrivateKey = hdPrivateKey || BitcoinWallet.getHdPrivateKey();
+  createWithBitcoinToken(privateKey) {
+    this.privateKey = privateKey || BitcoinWallet.getHdPrivateKey();
     
-    const wallet = BitcoinWallet.fromHdPrivateKey(hdPrivateKey)
+    const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey)
 
     // this.path = path; // path missing
     // this.mnemonic = mnemonic;  // mnemonic missing
