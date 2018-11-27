@@ -10,14 +10,6 @@ export class SimpleWallet {
     console.log(this.address);
     console.log(this.publicKey);
     console.log(this.privateKey);
-   
-
-    this.createWithBitbox(hdPrivateKeyOrMnemonic);
-
-    console.log(this.address);
-    console.log(this.publicKey);
-    console.log(this.privateKey);
-    console.log(this.privateKeyWIF);
   }
 
   distributeFunds(outs) {
