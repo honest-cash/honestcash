@@ -27,7 +27,10 @@ export const onStateChange = function($rootScope, $state, AuthService) {
             }
 
             $rootScope.user = false;
-        });
+		});
+
+		// close all popups
+		$('#tipModal').modal('hide');
     });
 };
 
@@ -69,9 +72,17 @@ export const initProfileUpload = function(API_URL, AuthService) {
 	});
 };
 
-export const initBCHWallet = function() {
-	const bchPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
-	const simpleWallet = new SimpleWallet(bchPrivateKey);
+export const initBCHWallet = function($rootScope) {
+	const bchPrivateKey = localStorage.getItem("HC_BCH_MNEMONIC");
+	let simpleWallet;
 
-	simpleWalletProvider.set(simpleWallet);
+	if (bchPrivateKey) {
+		simpleWallet = new SimpleWallet(bchPrivateKey);
+
+		simpleWalletProvider.set(simpleWallet);
+	}
+
+	$rootScope.simpleWallet = bchPrivateKey ? {
+		address: simpleWallet.address
+	} : null;
 };

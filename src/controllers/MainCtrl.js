@@ -13,26 +13,45 @@ export default class MainCtrl {
             new QRCode(container, address);
         };
 
-        const addressClicked = async (address) => {
+        const addressClicked = async (address, postId) => {
             const simpleWallet = simpleWalletProvider.get();
-
-            $('#tipModal').modal('show');
 
             // users with connected BCH accounts
             if (simpleWallet) {
-                // distribute only to testnet of owner
-                const res = await simpleWallet.send([
-                    { address: address, amountSat: 1 }
-                ]);
+                let tx;
 
-                const url = `https://blockchair.com/bitcoin-cash/transaction/${res.txid}`;
+                // distribute only to testnet of owner
+                try {
+                    tx = await simpleWallet.send([
+                        { address: address, amountSat: 1 }
+                    ]);
+                } catch (err) {
+                    if (err.message && err.message.indexOf("Insufficient") > -1) {
+                        return toastr.warning("Insufficient balance on your BCH account.");
+                    }
+
+                    console.error(err);
+
+                    return toastr.warning("Error. Try again later.");
+                }
+
+                $('#tipSuccessModal').modal('show');
+
+                const url = `https://blockchair.com/bitcoin-cash/transaction/${tx.txid}`;
 
                 const anchorEl = document.getElementById("bchTippingAddressUrl");
 
                 anchorEl.href = url;
 
+                PostService.upvote({
+                    postId: postId,
+                    txId: tx.txid
+                });
+
                 return;
             }
+
+            $('#tipModal').modal('show');
 
             // users with no connected BCH accounts
             const inputEl = document.getElementById("bchTippingAddress");
@@ -141,39 +160,9 @@ export default class MainCtrl {
             $("#uploadedImage").addClass("hidden");
         };
     
-        $scope.editPhoto = function(feed) {
-            $('#uploadImageModal').modal('show'); //uploadExternalImageModal
-            $('#uploadedImage').attr('src', feed.image_url);
-    
-            $(".dz-message").addClass("hidden");
-            $("#uploadedImage").removeClass("hidden");
-            document.getElementById("publishPicturePostBtn").disabled = false;
-    
-            $(".tags-area").tagit("removeAll");
-            feed.hashtags = (feed.hashtags) ? feed.hashtags : [];
-            for (var index = 0; index < feed.hashtags.length; index++) {
-                $(".tags-area").tagit("createTag", feed.hashtags[index].hashtag);
-            }
-            $("#uploadedImagePostId").val(feed.id);
-    
-            imageDropzone.removeAllFiles(true);
-        };
-    
         $scope.displayFeedBody = PostService.displayHTML;
     
-        $scope.getFeedLink = function(feed) {
-            return "/post/" + feed.id;
-        };
-    
-        $scope.hasTitle = function(post_type_id) {
-            if (post_type_id == 4) {
-                return false;
-            } else {
-                return true;
-            }
-        };
-    
-        $rootScope.publishPicturePost = function() {
+        $rootScope.publishPicturePost = () => {
             var postId = $("#uploadedImagePostId").val();
             var tags = $("#uploadedPictureTags").val();
             $('#uploadImageModal').modal('toggle');
@@ -192,13 +181,15 @@ export default class MainCtrl {
             }
         };
     
-        $rootScope.logoutMe = function() {
+        $rootScope.logoutMe = () => {
             AuthService.logout();
-    
-            
+
             $rootScope.user = false;
             $rootScope.fetchingNotifs = false;
     
+            // destroy connected user wallet.
+            simpleWalletProvider.set(null);
+
             $state.go("vicigo.feeds");
         };
     }

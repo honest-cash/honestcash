@@ -1,5 +1,5 @@
 import MediumEditor from "medium-editor";
-import async from "async";
+import * as async from "async";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
 export default class EditorCtrl {

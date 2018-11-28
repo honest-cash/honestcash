@@ -54,7 +54,7 @@ angular.module("hashtag-app", [
 .controller("welcomeController", WelcomeCtrl)
 .controller("draftsController", DraftsCtrl)
 
-.run([ runs.initBCHWallet ])
+.run([ "$rootScope", runs.initBCHWallet ])
 
 .run([ "$rootScope", "$state", "AuthService", runs.onStateChange])
 

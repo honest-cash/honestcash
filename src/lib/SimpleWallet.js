@@ -1,11 +1,19 @@
-const Bitcoin = require('bitcointoken');
 
+import { distributeFunds } from "./distributeFunds";
+
+const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
+const BITBOX = new BITBOXSDK.default();
+
+/**
+const Bitcoin = require('bitcointoken');
+const bchaddrjs = require('bchaddrjs');
 const BitcoinWallet = Bitcoin.Wallet;
 const BitcoinDb = Bitcoin.Db;
+*/
 
-class SimpleWallet {
+export default class SimpleWallet {
   constructor(hdPrivateKeyOrMnemonic) {
-    this.createWithBitcoinToken(hdPrivateKeyOrMnemonic);
+    this.create(hdPrivateKeyOrMnemonic);
   }
 
   async send(outs) {
@@ -15,11 +23,29 @@ class SimpleWallet {
         { address: "bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h", amountSat: 1000 }
       ]
       */
+
+     return distributeFunds(outs[0].address, {
+       mnemonic: this.mnemonic,
+       cashAddress: this.address
+     });
+
+      /**
       const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey);
 
-      const whatIsIt = await wallet.send(outs[0].amountSat, outs[0].address);
+      let address = outs[0].address;
 
-      return whatIsIt;
+      if (!bchaddrjs.isLegacyAddress(address)) {
+        address = bchaddrjs.toLegacyAddress(address);
+      }
+
+      console.log(`Sending ${outs[0].amountSat} sBCH from ${this.legacyAddress} to ${address}`);
+
+      const tx = await wallet.send(outs[0].amountSat, address);
+
+      console.log(`Sent! The transaction ID is ${tx.txid}`)
+
+      return tx;
+      */
       /**
       const outputs = outs.map(_ => {
           return {
@@ -41,9 +67,9 @@ class SimpleWallet {
       { address: "bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h", amountSat: 1000 }
     ]
     */
-    const db = BitcoinDb.fromHdPrivateKey(this.privateKey);
+    //const db = BitcoinDb.fromHdPrivateKey(this.privateKey);
 
-    const id = await db.put({ a: 'aaa' })
+    // const id = await db.put({ a: 'aaa' });
 
     //const data = await db.get(a)
     //console.log(data);
@@ -62,16 +88,33 @@ class SimpleWallet {
     */
   }
 
-  createWithBitcoinToken(privateKey) {
-    this.privateKey = privateKey || BitcoinWallet.getHdPrivateKey();
-
-    const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey)
-
+  create(mnemonic) {
     // this.path = path; // path missing
     // this.mnemonic = mnemonic;  // mnemonic missing
-    this.address = wallet.getAddress('cashaddr');
-    this.legacyAddress = wallet.getAddress();
-    this.publicKey = wallet.getPublicKey();
-    this.privateKey = this.privateKey;
+    /**
+      this.privateKey = privateKey || BitcoinWallet.getHdPrivateKey();
+      const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey)
+      this.address = wallet.getAddress('cashaddr');
+      this.legacyAddress = wallet.getAddress();
+      this.publicKey = wallet.getPublicKey();
+      this.privateKey = this.privateKey;
+    */
+      mnemonic = mnemonic || BITBOX.Mnemonic.generate(128);
+
+      let rootSeedBuffer = BITBOX.Mnemonic.toSeed(mnemonic);
+
+      let masterHDNode = BITBOX.HDNode.fromSeed(rootSeedBuffer);
+
+      let HDPath = `m/44'/145'/0/0`;
+      const path = `${HDPath}/1'`;
+
+      let childNode = masterHDNode.derivePath(path);
+
+      let privateKey = BITBOX.HDNode.toWIF(childNode)
+
+      this.mnemonic = mnemonic;
+      this.privateKey = privateKey;
+      this.address = BITBOX.HDNode.toCashAddress(childNode);
+      this.legacyAddress = BITBOX.HDNode.toLegacyAddress(childNode);
   }
 }

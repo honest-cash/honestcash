@@ -31,7 +31,7 @@
 						<h2>This author does not accept tips.</h2>
 
 						<p>
-							<strong>Important:</strong> You can specify the address for receiving tips in your profile.
+							<strong>Important:</strong> You can specify the address for sending tips in your profile.
 						</p>
 					</div>
 				</div>
@@ -51,11 +51,22 @@
 						<div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
 
 						<p>
-							<strong>Important:</strong> Soon you will be able to give tips directly from your Honest account for great content and also get paid for finding good content early! In the meantime, you can still tip from any Bitcoin Cash wallet.
+							<strong>Important:</strong> You can give tips directly from you BCH wallet. <a ui-sref="wallet.create()">Connect your BCH wallet here.</a>
+							Soon, you will also be rewarded for giving tips for for great content and also get paid for finding good content early! 
+							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here!
 						</p>
 					</div>
 				</div>
 			</div>	
+		</div>
+
+		<div class="row" ng-show="post.userPostUpvotes">
+			<h4><strong>Upvotes</strong></h4>
+			<ul class="list-inline list-unstyled">
+				<li ng-repeat="upvote in post.userPostUpvotes">
+					<a ng-href="https://blockchair.com/bitcoin-cash/transaction/{{upvote.txId}}" target="_blank">{{upvote.txId}}</a>
+				</li>
+			</ul>
 		</div>
 	</div>			
 </div>

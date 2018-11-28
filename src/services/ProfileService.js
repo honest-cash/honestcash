@@ -27,6 +27,22 @@ export default function($http, API_URL) {
 		});
 	};
 
+	const updateUserProp = function(userId, propKey, propValue, callback) {
+		const props = {};
+
+		props[propKey] = propsValue;
+
+		$http({
+			url: API_URL + "/user/" + userId + "/",
+			method: "PUT",
+			params: {
+				props
+			}
+		}).then((response) => {
+			callback(response.data);
+		});
+	};
+
 	return {
 		fetchProfileStatus: fetchProfileStatus,
 		fetchProfile: fetchProfile,

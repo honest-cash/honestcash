@@ -56,30 +56,25 @@
 		<h1>Your browser does not support JavaScript.</h1>
 
 		<a href="?crawlerView=true">You can still view the content with a limited functionality under the following link</a>
-
 	</noscript>
 
 	<div ui-view autoscroll="true"></div>
 
-	<!-- WALLET MODAL -->
+	<!-- TIP MODAL -->
 	<div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel"><b>Give tip to the author (recommended amount: 0.50€)</h4>
+					<h4 class="modal-title" id="myModalLabel"><b>Give tip to the author</h4>
 				</div>
 
 				<div class="modal-body">
-					<div class="panel panel-info">
-						<div class="panel-body">
-							<strong>Important:</strong> Soon you will be able to give tips directly from your Honest account for great content and also get paid for finding good content early! In the meantime, you can still tip from any Bitcoin Cash wallet.
-
-							What's <a href="https://honest.cash/honest_cash/frequently-asked-questions">Bitcoin Cash</a>?
-						</div>
-					</div>
+					<button class="btn btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
 
 					<div class="form-group">
+						<h4>... or tip from any other Bitcoin Cash wallet. What's <a href="https://honest.cash/honest_cash/frequently-asked-questions">Bitcoin Cash</a>?</h4>
+
 						<input readonly class="form-control" id="bchTippingAddress">
 
 						<div style="margin-top: 10px;" id="bchTippingAddressQR"></div>
@@ -90,7 +85,34 @@
 			</div>
 		</div>
 	</div>
-	<!-- UPLOAD IMAGE MODAL -->
+	<!-- END OF TIP MODAL -->
+
+	<!-- TIP MODAL -->
+	<div class="modal fade" id="tipSuccessModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel"><b>Success!</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="panel panel-info">
+						<div class="panel-body">
+							<strong>You have just given a tip to an author.</strong>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<i class="fas fa-check"></i>
+						
+						<a id="bchTippingAddressUrl" href="">See the transaction Blockchair</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END OF TIP MODAL -->
 
 	<!-- UPLOAD IMAGE MODAL -->
 	<div class="modal fade" id="uploadProfilePicModal" tabindex="-1" role="dialog" aria-labelledby="uploadProfilePicModal">

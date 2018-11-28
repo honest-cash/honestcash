@@ -29,10 +29,11 @@ export default class PostService {
             });
         };
 
-        const upvote = function(postId) {
-            $http.post(API_URL + "/post/" + postId + "/upvote").then(function(response) {
-                
-            });
+        const upvote = (upvote) => {
+            return $http.post(API_URL + "/post/" + upvote.postId + "/upvote", {
+                txId: upvote.txId,
+                postId: upvote.postId
+            })
         };
 
         const downvote = function(postId) {
@@ -60,7 +61,6 @@ export default class PostService {
 	this.getByAlias = getByAlias;
 	this.removePost = removePost;
 	this.upvote = upvote;
-	this.downvote = downvote;
     this.displayHTML = displayHTML;
     }
 }
