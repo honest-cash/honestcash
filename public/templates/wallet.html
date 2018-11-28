@@ -1,0 +1,93 @@
+<div ng-if="connectedPrivateKey" class="container">
+    <h2>Connected wallet</h2>
+    <p>This wallet is connected locally in the browser. The keys never leave your browser. When logging out of the platform, all data about the wallet will be permanently erased.</p>
+
+    <div class="form-group">
+        <label for="exampleInputEmail1">Address for receiving tips</label>
+        <input readonly type="text" ng-model="addressBCH" class="form-control" aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">It will be generated.</small>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputEmail1">Private Key</label>
+        <input readonly type="password" ng-model="privateKey" class="form-control" aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">It will be generated.</small>
+    </div>
+
+    <div class="form-group">
+        <a href="https://blockchair.com/bitcoin-cash/address/{{legacyAddressBCH}}">Explore on Blockchair</a>
+    </div>
+
+    <button ng-click="disconnect()" type="submit" class="btn btn-danger">Disconnect</button>
+    <br />
+    <small id="emailHelp" class="form-text text-muted">Save your keys before you disconnect your wallet! Once disconnected, you will have to know your keys to restore it.</small>
+</div>
+
+<div ng-if="!connectedPrivateKey" class="container">
+    <div class="col-xs-12">
+        <h1>CONNECT BITCOIN CASH WALLET</h1>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Generate new</a>
+            </li>
+            <li class="hidden nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Import with mnemonic</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Import with private key</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="profile-tab">
+                    <p>Generate a new Bitcoin Cash account.</p>
+    
+                    <div class="form-group">
+                            <label for="exampleInputEmail1">Mnemonic (usually 12 words)</label>
+                            <input read-only type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter your private key">
+                            <small id="emailHelp" class="form-text text-muted">Your keys will never leave your browser</small>
+                    </div>
+
+                    <h2>Key pair for tips</h2>
+                    <div class="form-group">
+                            <label for="exampleInputEmail1">Address for receiving tips</label>
+                            <input read-only type="text" ng-model="privateKey" class="form-control" aria-describedby="emailHelp" placeholder="Enter your private key">
+                            <small id="emailHelp" class="form-text text-muted">It will be generated.</small>
+                    </div>
+
+                    <div class="form-group">
+                            <label for="exampleInputEmail1">Address for receiving tips</label>
+                            <input read-only type="text" ng-model="addressBCH" class="form-control" aria-describedby="emailHelp" placeholder="Enter your private key">
+                            <small id="emailHelp" class="form-text text-muted">It will be generated.</small>
+                    </div>
+                    <button ng-click="generate()" type="submit" class="btn btn-primary">Generate new</button>
+
+                    <button ng-if="addressBCH && privateKey" ng-click="connect()" type="submit" class="btn btn-primary">Connect</button>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <p>Upvote content and receive tips using the passphrase / mnemonic of your existing Bitcoin Cash account.</p>
+
+                <div class="form-group">
+                        <label for="exampleInputEmail1">Mnemonic (usually 12 words)</label>
+                        <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter your mnemonic / seed">
+                        <small class="form-text text-muted">Your keys will never leave your browser</small>
+                </div>
+
+                <button ng-if="privateKey" ng-click="connect()" type="submit" class="btn btn-primary">Connect</button>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <p>Upvote content and receive tips using the private key of your existing Bitcoin Cash account.</p>
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Private key</label>
+                    <input type="text" ng-model="privateKey" class="form-control" aria-describedby="emailHelp" placeholder="Enter your private key">
+                    <small class="form-text text-muted">Your keys will never leave your browser.</small>
+                </div>
+
+                <button ng-if="privateKey" ng-click="connect()" type="submit" class="btn btn-primary">Connect</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        Your private never leave the browser. All transactions are signed within your browser and keys are not exposed over the internet.
+    </div> 
+</div>

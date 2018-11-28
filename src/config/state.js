@@ -1,6 +1,18 @@
 export default function state ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("/");
 
+
+	$stateProvider
+		.state('wallet', {
+			abstract: true,
+			templateUrl: "/templates/layout.html",
+		})
+		.state('wallet.create', {
+			controller: "walletController",
+			url: "/wallet",
+			templateUrl: "/templates/wallet.html",
+		});
+
 	$stateProvider
 		.state('starter', {
 			templateUrl: "/templates/layout.html",
@@ -20,13 +32,13 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			url: "/login?code",
 			templateUrl: "/templates/login.html",
 			controller: "welcomeController"
-		})
-		.state('starter.signup', {
+		});
+
+	$stateProvider.state('starter.signup', {
 			url: "/signup",
 			templateUrl: "/templates/welcome.html",
 			controller: "welcomeController"
 		})
-
 		.state('vicigo', {
 			abstract: true,
 			controller: "mainController",
@@ -77,6 +89,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			url: "/write",
 			templateUrl: "/templates/write.html",
 		})
+
 		.state('editor.response', {
 			url: "/write/response/:parentPostId",
 			templateUrl: "/templates/write.html",

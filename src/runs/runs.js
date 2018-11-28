@@ -1,3 +1,6 @@
+import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+import SimpleWallet from "../lib/SimpleWallet";
+
 export const onStateChange = function($rootScope, $state, AuthService) {
     $rootScope.$on('$stateChangeStart', (event, next, nextParams, fromState) => {
         if (next.name == "starter.welcome") {
@@ -64,4 +67,11 @@ export const initProfileUpload = function(API_URL, AuthService) {
 		$("#profilePicDropzone").removeClass("hidden");
 		$('#uploadProfilePicModal').modal('hide');
 	});
+};
+
+export const initBCHWallet = function() {
+	const bchPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
+	const simpleWallet = new SimpleWallet(bchPrivateKey);
+
+	simpleWalletProvider.set(simpleWallet);
 };

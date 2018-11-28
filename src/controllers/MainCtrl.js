@@ -1,3 +1,4 @@
+import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 export default class MainCtrl {
     constructor(
         $rootScope, $scope, $state, $sce, $window, $location, $http, AuthService, HashtagService, PostService, $uibModal
@@ -11,18 +12,42 @@ export default class MainCtrl {
     
             new QRCode(container, address);
         };
-    
-        const addressClicked = (address) => {
+
+        const addressClicked = async (address) => {
+            const simpleWallet = simpleWalletProvider.get();
+
             $('#tipModal').modal('show');
-    
+
+            // users with connected BCH accounts
+            if (simpleWallet) {
+                // distribute only to testnet of owner
+                const res = await simpleWallet.send([
+                    { address: address, amountSat: 1 }
+                ]);
+
+                const url = `https://blockchair.com/bitcoin-cash/transaction/${res.txid}`;
+
+                const anchorEl = document.getElementById("bchTippingAddressUrl");
+
+                anchorEl.href = url;
+
+                return;
+            }
+
+            // users with no connected BCH accounts
             const inputEl = document.getElementById("bchTippingAddress");
     
             inputEl.value = address;
             
+            const anchorEl = document.getElementById("bchTippingAddressUrl");
+
+            const split = address.split("bitcoincash:")[0];
+            anchorEl.href = address ? "https://blockchair.com/bitcoin-cash/address/" + split[0] || split[1] : "";
+
             const qrContainer = document.getElementById("bchTippingAddressQR");
-    
+
             qrContainer.innerHTML = "";
-    
+
             new QRCode(qrContainer, address);
         };
     

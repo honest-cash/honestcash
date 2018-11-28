@@ -13,6 +13,7 @@ import routingConfig from './config/routing';
 import httpConfig from './config/http';
 import stateConfig from './config/state';
 import PostCtrl from './controllers/PostCtrl';
+import WalletCtrl from './controllers/WalletCtrl';
 import MainCtrl from './controllers/MainCtrl';
 import * as runs from './runs/runs';
 
@@ -43,6 +44,8 @@ angular.module("hashtag-app", [
 .controller("appController", [ "$scope", "AuthService", function($scope, AuthService) {
 	$scope.AUTH_TOKEN = AuthService.getAuthToken();
 }])
+
+.controller("walletController", WalletCtrl)
 .controller("mainController", MainCtrl)
 .controller("postController", PostCtrl)
 .controller("profileController", ProfileCtrl)
@@ -50,6 +53,8 @@ angular.module("hashtag-app", [
 .controller("feedsController", FeedsCtrl)
 .controller("welcomeController", WelcomeCtrl)
 .controller("draftsController", DraftsCtrl)
+
+.run([ runs.initBCHWallet ])
 
 .run([ "$rootScope", "$state", "AuthService", runs.onStateChange])
 
