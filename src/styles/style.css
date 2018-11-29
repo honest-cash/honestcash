@@ -805,3 +805,15 @@ img.lazy {
 .fill-screen img {
 	width:100%;
 }
+
+.textarea-bio{
+
+	margin-top: 10px;
+	width: 100%;
+	resize: none;
+	overflow:auto;	
+	border: none;
+	background-color: transparent;
+	overflow-y: hidden;
+
+}

@@ -1,49 +1,80 @@
-
 <div class="container">
 	<!-- INTRODUCTION ROW -->
 	<div class="row">
 		<div class="col-xs-12">
-				<div class="col-xs-12 col-sm-3 col-md-2">
-					<img ng-if="profile.imageUrl" ng-click="clickProfilePic(user.id,profile.id)" id="profilePic" fallback-src="{{'/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-big image-center" ng-src="{{profile.imageUrl}}">
-					<img ng-if="!profile.imageUrl" ng-click="clickProfilePic(user.id,profile.id)" id="profilePic" class="img-circle img-thumbnail-avatar-big image-center" ng-src="/img/avatar.png">
-				</div>
-				<div class="pull-left col-xs-12 col-sm-9 col-md-10">
-					<h1 class="text-center-sm">
-						<span ng-if="profile.id !== user.id">{{ profile.username }}</span>
-					</h1>
-					<h1>
-						<a ng-if="profile.id == user.id" href="#" editable-text="profile.username" onbeforesave="updateUsername($data)">
-							{{ profile.username }}
-						</a>
-					</h1>
-					<h3 class="text-center-sm">
-						<a ng-if="profile.id == user.id" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
-							{{ profile.addressBCH }}
-						</a>
-						<span ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')" ng-if="profile.id !== user.id">{{ profile.addressBCH }}</span>
+			<div class="col-xs-12 col-sm-3 col-md-2">
+				<img ng-if="profile.imageUrl" ng-click="clickProfilePic(user.id,profile.id)" id="profilePic" fallback-src="{{'/img/avatar.png'}}"
+				 class="img-circle img-thumbnail-avatar-big image-center" ng-src="{{profile.imageUrl}}">
+				<img ng-if="!profile.imageUrl" ng-click="clickProfilePic(user.id,profile.id)" id="profilePic" class="img-circle img-thumbnail-avatar-big image-center"
+				 ng-src="/img/avatar.png">
+			</div>
+			<div class="pull-left col-xs-12 col-sm-9 col-md-10">
+				<h1 class="text-center-sm">
+					<span ng-if="profile.id !== user.id">{{ profile.username }}</span>
+				</h1>
+				<h1>
+					<a ng-if="profile.id == user.id" href="#" editable-text="profile.username" onbeforesave="updateUsername($data)">
+						{{ profile.username }}
+					</a>
+				</h1>
+				<h3 class="text-center-sm">
+					<a ng-if="profile.id == user.id" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
+						{{ profile.addressBCH }}
+					</a>
+					<span ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')"
+					 ng-if="profile.id !== user.id">{{ profile.addressBCH }}</span>
 
-						<span ng-if="profile.id == user.id && !profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)"><i class="fa fa-pencil-square-o"></i> Specify your BCH address for receiving tips</span>
+					<span ng-if="profile.id == user.id && !profile.addressBCH" href="#" editable-text="profile.addressBCH"
+					 onbeforesave="updateAddressBCH($data)"><i class="fa fa-pencil-square-o"></i> Specify your BCH address for
+						receiving tips</span>
+				</h3>
+				<div class="profile-bch-qr-code"></div>
+				<div>
+
+					<h3 class="text-center-sm">
+						<span ng-if="profile.id !== user.id"><a href="">{{profile.twitter}}<i class="fa fa-twitter"></a></i></span>
 					</h3>
 
-					<div class="profile-bch-qr-code"></div>
+					<span ng-if="profile.id == user.id && !profile.twitter" href="#" editable-text="profile.twitter" onbeforesave="updateTwitter($data)"><i
+						 class="fa fa-twitter"></i> Link your Twitter Account</span>
 
-					<div class="row">
-							<ul class="list-unstyled list-inline" style="padding:3px">
-								<!--
+
+					<h3 class="text-center-sm">
+						<span ng-if="profile.id !== user.id"><a href="">{{profile.reddit}}<i class="fa fa-reddit"></a></i></span>
+					</h3>
+
+					<span ng-if="profile.id == user.id && !profile.reddit" href="#" editable-text="profile.reddit" onbeforesave="updateReddit($data)"><i
+						 class="fa fa-reddit"></i> Link your Reddit Account</span>
+
+						 <h3 class="text-center-sm">
+							<span ng-if="profile.id !== user.id">{{ profile.bio }}</span>
+						</h3>
+
+					<div>
+						<textarea ng-if="profile.id == user.id" class="textarea-bio" editable-text="profile.bio" placeholder="Add a Bio..." ng-model="string" 
+						maxlength="300" onbeforesave="updateBio($data)">{{ profile.bio }}</textarea>
+					</div>
+				</div>
+
+				
+
+				<div class="row">
+					<ul class="list-unstyled list-inline" style="padding:3px">
+						<!--
 								<li class=" bold middle-size side-padding" ng-click="showFeeds()"><a href="#"><span ng-bind="profile.feeds_count"></span> <small>Posts</small></a></li>
 								<li class="bold middle-size side-padding" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small>Followers</small></a></li>
 								<li class="bold middle-size side-padding" ng-click="showFollowing()"><a href="#"><span ng-bind="profile.following_count"></span> <small>Following</small></a></li>
 								<li ng-if="profile.networks.length" class="bold middle-size side-padding"><a ng-href="{{profile.networks[0].url}}" target="_blank"><i class="fa fa-facebook"></i></li>
 								<li class="bold middle-size side-padding hidden" ng-click="showHashtags()"><a href="#"><span ng-bind="profile.hashtag_count"></span> <small>Hashtags</small></a></li>
 								-->
-							</ul>
-					</div>
-					<!--
+					</ul>
+				</div>
+				<!--
 					<button ng-click="follow(profile.user_id)" ng-if="!profile.alreadyFollowing && user.id !== profile.user_id" class="btn btn-default btn-lg">FOLLOW</button>
 					<button ng-click="unfollow(profile.user_id)" ng-if="profile.alreadyFollowing && user.id !== profile.user_id" class="btn btn-success btn-lg">UNFOLLOW</button>
 					-->
-				</div>
 			</div>
+		</div>
 	</div>
 	<hr />
 
@@ -56,7 +87,7 @@
 			</ul>
 		</div>
 	</div>
-		
+
 </div>
 
 <div class="container">
@@ -70,7 +101,7 @@
 				<button class="btn-default btn" style="margin:10px;">
 					<strong>Create draft</strong>
 				</button>
-			<a>
+				<a>
 		</div>
 
 		<div ng-if="hashtag&&showProfileTab == 'feeds'" class="text-center">
@@ -137,39 +168,39 @@
 			</div>
 		</div>
 
-		<div ng-if="showProfileTab=='followers' || showProfileTab=='following'" >
+		<div ng-if="showProfileTab=='followers' || showProfileTab=='following'">
 			<div class="width640 block-center">
-			<h3 class="bold text-center" ng-if="showProfileTab=='followers'">Followers</h3>
-			<h3 class="bold text-center" ng-if="showProfileTab=='following'">Following</h3>
-			<div class="row" ng-repeat="followGuy in followGuys">
-				<hr>
+				<h3 class="bold text-center" ng-if="showProfileTab=='followers'">Followers</h3>
+				<h3 class="bold text-center" ng-if="showProfileTab=='following'">Following</h3>
+				<div class="row" ng-repeat="followGuy in followGuys">
+					<hr>
 
 					<!-- AUTHOR REFERENCES -->
-				<div class="pull-left width321" >
-					<!-- AUTHOR IMAGE -->
-					<a ui-sref="vicigo.profile({profileId:followGuy.id})">
-						<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{followGuy.profile_image_url ? followGuy.profile_image_url : '/img/avatar.png'}}">
-					</a>
-					<!-- END AUTHOR IMAGE -->
-					
+					<div class="pull-left width321">
+						<!-- AUTHOR IMAGE -->
+						<a ui-sref="vicigo.profile({profileId:followGuy.id})">
+							<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{followGuy.profile_image_url ? followGuy.profile_image_url : '/img/avatar.png'}}">
+						</a>
+						<!-- END AUTHOR IMAGE -->
+
 						<strong style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId:followGuy.id})">{{followGuy.name}}</a></strong>
-							
-							<!-- AUTHOR TITLE -->
+
+						<!-- AUTHOR TITLE -->
 						<small class="text-muted" ng-if="followGuy.title">{{followGuy.title}}</small>
 						<!-- END AUTHOR TITLE -->
-				</div>
-						
-						<!-- END AUTHOR REFERENCES -->
-					
+					</div>
+
+					<!-- END AUTHOR REFERENCES -->
+
 
 					<div class="pull-right" ng-if="!followGuy.alreadyFollowing && user.id && user.id !==followGuy.id">
 						<a href="#" class="btn btn-success" ng-click="follow(post.author_id)">FOLLOW</a>
 					</div>
 
-		
+
+				</div>
 			</div>
 		</div>
-</div>
 
 
 	</div>
