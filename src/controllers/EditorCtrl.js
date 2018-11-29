@@ -2,6 +2,9 @@ import MediumEditor from "medium-editor";
 import * as async from "async";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
+import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
+import "medium-editor-insert-plugin";
+
 export default class EditorCtrl {
     constructor($state, $scope, $stateParams, $http, $timeout, AuthService, API_URL) {
         let titleEditor;
@@ -159,6 +162,10 @@ export default class EditorCtrl {
                     cleanTags: ['meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'a', 'table', 'tr', 'td', 'ul', 'li', 'code', 'pre' ],
                     unwrapTags: []
                 }
+            });
+
+            $('#body').mediumInsert({
+                editor: editor
             });
 
             if (title) {

@@ -11,7 +11,6 @@
     "aws-sdk": "^2.1.35",
     "axios": "^0.18.0",
     "bchaddrjs": "^0.2.2",
-    "bitbox-sdk": "^2.2.4",
     "bitcoincashjs": "^0.1.14",
     "bitcointoken": "0.1.0-alpha.1",
     "body-parser": "^1.0.2",
@@ -47,6 +46,7 @@
     "keyword-extractor": "^0.0.12",
     "limiter": "^1.1.0",
     "medium-editor": "^5.23.3",
+    "medium-editor-insert-plugin": "^2.5.0",
     "method-override": "^3.0.0",
     "minify": "^4.0.3",
     "moment": "^2.22.2",
@@ -59,6 +59,7 @@
     "reading-time": "^1.0.2",
     "request": "^2.74.0",
     "sanitize-html": "^1.7.0",
+    "toastr": "^2.1.4",
     "twit": "^2.1.1",
     "ui-router": "^1.0.0-alpha.3"
   },
