@@ -1,45 +1,92 @@
-<div ng-if="connectedMnemonic" class="container">
+<div ng-if="connectedPrivateKey" class="container">
     <h2>Connected wallet</h2>
     <p>You can now upvote content directly from the browser. You don't need an account on Honest to upvote content.</p>
     <p>This wallet is saved locally in your browser. The keys never leave your browser. When you log out, all the wallet data is permanently erased.</p>
 
-    <div class="form-group">
-        <label for="exampleInputEmail1">Wallet mnemonic</label>
-        <input readonly type="text" ng-model="mnemonic" class="form-control" aria-describedby="emailHelp">
-        <small id="emailHelp" class="form-text text-muted">Write it down! If you logout it will be deleted forever.</small>
-    </div>
 
-    <div class="form-group">
-        <label for="exampleInputEmail1">Address for sending tips</label>
-        <input readonly type="text" ng-model="addressBCH" class="form-control" aria-describedby="emailHelp">
-    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item in active">
+            <a class="nav-link " id="wallet-tab" data-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="true">
+                Wallet keys
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="deposit-tab" data-toggle="tab" href="#deposit" role="tab" aria-controls="deposit" aria-selected="false" ng-click="onDepositClick()">Deposit</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="withdrawal-tab" data-toggle="tab" href="#withdrawal" role="tab" aria-controls="withdrawal" aria-selected="false">Withdrawal</a>
+        </li>
+    </ul>
 
-    <div class="form-group">
-        <label for="exampleInputEmail1">Private Key</label>
-        <input readonly type="password" ng-model="privateKey" class="form-control" aria-describedby="emailHelp">
-        <small id="emailHelp" class="form-text text-muted">It will be generated.</small>
-    </div>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade in active" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
+            <div class="hidden form-group">
+                <label for="exampleInputEmail1">Wallet mnemonic</label>
+                <input readonly type="text" ng-model="mnemonic" class="form-control" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">Write it down! If you logout it will be deleted forever.</small>
+            </div>
 
-    <div class="form-group">
-        <a href="https://blockchair.com/bitcoin-cash/address/{{legacyAddressBCH}}">Explore on Blockchair</a>
-    </div>
+            <div style="margin-top:15px;" class="hidden form-group">
+                <label for="exampleInputEmail1">Address for sending tips (Cash Format)</label>
+                <input readonly type="text" ng-model="addressBCH" class="form-control" aria-describedby="emailHelp">
+            </div>
 
-    <button ng-click="disconnect()" type="submit" class="btn btn-danger btn-lg">Disconnect</button>
-    <br />
-    <small id="emailHelp" class="form-text text-muted">Save your keys before you disconnect your wallet! Once disconnected, you will have to know your keys to restore it.</small>
+            <div class="hidden form-group">
+                <label for="exampleInputEmail1">Address for sending tips (Legacy Format)</label>
+                <input readonly type="text" ng-model="legacyAddressBCH" class="form-control" aria-describedby="emailHelp">
+            </div>
+
+            <div style="margin-top:15px;" class="form-group">
+                <label for="exampleInputEmail1">Private Key</label>
+                <input readonly type="password" ng-model="privateKey" class="form-control" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">
+                    Ownership and control over the private key is the root of user control over all funds associated with the corresponding Bitcoin Cash address. The private key is used to create signatures that are required to spend bitcoins by proving ownership of funds used in a transaction. <b>The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The private key must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.</b>
+                </small>
+            </div>
+            <div class="form-group">
+                <a href="https://blockchair.com/bitcoin-cash/address/{{legacyAddressBCH}}">Explore on Blockchair</a>
+            </div>
+
+            <button ng-click="disconnect()" type="submit" class="btn btn-danger btn-lg">Disconnect</button>
+            <br />
+            <small id="emailHelp" class="form-text text-muted">Save your keys before you disconnect your wallet! Once disconnected, you will have to know your keys to restore it.</small>
+        </div>
+
+        <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="wallet-tab">
+            <div style="margin-top:15px;" class="form-group">
+                <label for="exampleInputEmail1">Address for sending tips</label>
+                <input readonly type="text" ng-model="addressBCH" class="form-control" aria-describedby="emailHelp">
+
+                <label for="exampleInputEmail1">Address for sending tips (Legacy format)</label>
+                <input readonly type="text" ng-model="legacyAddressBCH" class="form-control" aria-describedby="emailHelp">
+
+                <div style="margin-top:15px;" class="deposit-address-qr"></div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="withdrawal" role="tabpanel" aria-labelledby="wallet-tab">
+            <div style="margin-top:15px;" class="form-group">
+                <label for="withrawalAddressBCH">Where should it be withdrew?</label>
+                <input type="text" placeholder="Enter your address here.." ng-model="withdrawalAddressBCH" class="form-control" aria-describedby="withrawalAddressBCH">
+            </div>
+
+            <button ng-click="withdraw(withdrawalAddressBCH)" type="submit" class="btn btn-danger btn-lg">Transfer</button>
+            <br />
+        </div>
+    </div>
 </div>
 
-<div ng-if="!connectedMnemonic" class="container">
+<div ng-if="!connectedPrivateKey" class="container">
     <div class="col-xs-12">
         <h1>CONNECT BITCOIN CASH WALLET</h1>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item in active">
                 <a class="nav-link " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Generate new</a>
             </li>
-            <li class="nav-item">
+            <li class="hidden nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Import with mnemonic</a>
             </li>
-            <li class="hidden nav-item">
+            <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Import with private key</a>
             </li>
         </ul>
@@ -53,7 +100,7 @@
                         <b>Beware of scams! Ensure that the domain is https://honest.cash with a secure connection.</b>
                     </p>
 
-                    <div class="form-group">
+                    <div class="hidden form-group">
                         <label for="exampleInputEmail1">Mnemonic (usually 12 words)</label>
                         <input readonly type="text" ng-model="mnemonic" class="form-control" aria-describedby="emailHelp">
                         <small id="emailHelp" class="form-text text-muted">Your keys will never leave your browser</small>
@@ -75,6 +122,10 @@
                         <button ng-click="generate()" type="submit" class="btn btn-primary btn-lg">Generate new</button>
 
                         <button ng-if="addressBCH && privateKey" ng-click="connect()" type="submit" class="btn btn-primary btn-lg">Connect</button>
+
+                        <p>
+                            A private key is simply a number, picked at random. Ownership and control over the private key is the root of user control over all funds associated with the corresponding Bitcoin Cash address. The private key is used to create signatures that are required to spend bitcoins by proving ownership of funds used in a transaction. The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The private key must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.
+                        </p>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <p style="margin-top: 15px;">Upvote content and receive tips using the passphrase / mnemonic of your existing Bitcoin Cash account.</p>
@@ -106,7 +157,7 @@
                     <small class="form-text text-muted">Your keys will never leave your browser.</small>
                 </div>
 
-                <button ng-if="privateKey" ng-click="connect()" type="submit" class="btn btn-primary">Connect</button>
+                <button ng-if="privateKey" ng-click="connect(privateKey)" type="submit" class="btn btn-primary">Connect</button>
             </div>
         </div>
     </div>

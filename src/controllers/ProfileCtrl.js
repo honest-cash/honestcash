@@ -1,4 +1,3 @@
-
 export default class ProfileCtrl {
     constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, profile) {
         $scope.filter = function(filterType) {

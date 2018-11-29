@@ -73,7 +73,7 @@ export const initProfileUpload = function(API_URL, AuthService) {
 };
 
 export const initBCHWallet = function($rootScope) {
-	const bchPrivateKey = localStorage.getItem("HC_BCH_MNEMONIC");
+	const bchPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
 	let simpleWallet;
 
 	if (bchPrivateKey) {

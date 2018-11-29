@@ -12,8 +12,8 @@ export default class WalletCtrl {
 
         let simpleWallet, lSimpleWallet;
 
-        if ($scope.connectedMnemonic) {
-            simpleWallet = new SimpleWallet($scope.connectedMnemonic);
+        if ($scope.connectedPrivateKey) {
+            simpleWallet = new SimpleWallet($scope.connectedPrivateKey);
 
             simpleWalletProvider.set(simpleWallet);
 
@@ -32,9 +32,21 @@ export default class WalletCtrl {
             $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
         }
 
-        $scope.connect = (mnemonic) => {
+        $scope.withdraw = async (toAddress) => {
+            const simpleWallet = simpleWalletProvider.get();
+            
+            const balance = await simpleWallet.getBalance();
+
+            console.log(`Transfering ${balance} to ${toAddress}`);
+
+            simpleWallet.send([
+                { address: toAddress, amountSat: 1000 }
+            ]);
+        };
+
+        $scope.connect = (privateKey) => {
             if (!lSimpleWallet) {
-                lSimpleWallet = new SimpleWallet(mnemonic);
+                lSimpleWallet = new SimpleWallet(privateKey);
 
                 $scope.privateKey = lSimpleWallet.privateKey;
             }
@@ -59,6 +71,16 @@ export default class WalletCtrl {
             simpleWalletProvider.set(lSimpleWallet);
         };
 
+        $scope.onDepositClick = () => {
+            setTimeout(() => {
+                const container = document.getElementsByClassName("deposit-address-qr")[0];
+
+                container.innerHTML = "";
+
+                new QRCode(container, simpleWalletProvider.get().address);
+            }, 50);
+        };
+
         $scope.disconnect = () => {
             lSimpleWallet = null;
 
@@ -70,7 +92,7 @@ export default class WalletCtrl {
             $scope.addressBCH = null;
             $scope.legacyAddressBCH = null;
 
-            simpleWalletProvider.set("");
+            simpleWalletProvider.set(null);
             $rootScope.simpleWallet = null;
 
             localStorage.setItem("HC_BCH_PRIVATE_KEY", "");

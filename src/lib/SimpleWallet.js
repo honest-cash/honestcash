@@ -1,19 +1,29 @@
 
 import { distributeFunds } from "./distributeFunds";
 
+/**
 const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk');
 const BITBOX = new BITBOXSDK.default();
+*/
 
-/**
-const Bitcoin = require('bitcointoken');
+const Bitcoin = require('./bitcointoken');
 const bchaddrjs = require('bchaddrjs');
 const BitcoinWallet = Bitcoin.Wallet;
 const BitcoinDb = Bitcoin.Db;
-*/
 
 export default class SimpleWallet {
   constructor(hdPrivateKeyOrMnemonic) {
     this.create(hdPrivateKeyOrMnemonic);
+  }
+
+  async getBalance() {
+    const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey);
+
+    const balance = await wallet.getBalance();
+
+    console.log(`Current balance: ${balance/1e8} bitcoin`);
+
+    return balance;
   }
 
   async send(outs) {
@@ -22,14 +32,13 @@ export default class SimpleWallet {
        * [
         { address: "bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h", amountSat: 1000 }
       ]
+
+      return distributeFunds(outs[0].address, {
+        mnemonic: this.mnemonic,
+        cashAddress: this.address
+      });
       */
-
-     return distributeFunds(outs[0].address, {
-       mnemonic: this.mnemonic,
-       cashAddress: this.address
-     });
-
-      /**
+ 
       const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey);
 
       let address = outs[0].address;
@@ -45,7 +54,7 @@ export default class SimpleWallet {
       console.log(`Sent! The transaction ID is ${tx.txid}`)
 
       return tx;
-      */
+
       /**
       const outputs = outs.map(_ => {
           return {
@@ -88,17 +97,18 @@ export default class SimpleWallet {
     */
   }
 
-  create(mnemonic) {
-    // this.path = path; // path missing
-    // this.mnemonic = mnemonic;  // mnemonic missing
-    /**
+  create(privateKey) {
+      // this.path = path; // path missing
+      // this.mnemonic = mnemonic;  // mnemonic missing
       this.privateKey = privateKey || BitcoinWallet.getHdPrivateKey();
-      const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey)
+      const wallet = BitcoinWallet.fromHdPrivateKey(this.privateKey);
+
       this.address = wallet.getAddress('cashaddr');
-      this.legacyAddress = wallet.getAddress();
+      this.legacyAddress = wallet.getAddress('legacy');
       this.publicKey = wallet.getPublicKey();
       this.privateKey = this.privateKey;
-    */
+
+      /**
       mnemonic = mnemonic || BITBOX.Mnemonic.generate(128);
 
       let rootSeedBuffer = BITBOX.Mnemonic.toSeed(mnemonic);
@@ -116,5 +126,6 @@ export default class SimpleWallet {
       this.privateKey = privateKey;
       this.address = BITBOX.HDNode.toCashAddress(childNode);
       this.legacyAddress = BITBOX.HDNode.toLegacyAddress(childNode);
+      */
   }
 }

@@ -1,11 +1,7 @@
-const Uglify = require("uglifyjs-webpack-plugin");
-const BabelEnginePlugin = require('babel-engine-plugin');
-const UglifyEsPlugin = require('uglify-es-webpack-plugin');
-
 module.exports = {
     entry: './src/hashtagApp.js',
     mode: 'production',
-    output: { 
+    output: {
         path: __dirname + "/public/js",
         filename: 'bundle.js'
     },
@@ -26,6 +22,7 @@ module.exports = {
     },
    
     plugins: [
+        /**
         new Uglify({
             uglifyOptions: {
                 cache: true,
@@ -50,6 +47,7 @@ module.exports = {
                 },
             },
         }),
+         */
     ],
     resolve: {
         extensions: [ '.tsx', '.ts', '.js' ]

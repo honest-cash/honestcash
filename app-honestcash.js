@@ -1,6 +1,7 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
-const port = 3010;
 const cors = require('cors');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
@@ -8,8 +9,9 @@ const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 const compression = require('compression');
 const seo = require('./server/seo');
-
 const axios = require("axios");
+
+const port = process.env.PORT;
 
 const isBot = (userAgent, push) => {
 	userAgent = userAgent ? userAgent.toLowerCase() : "unknown user-agent";
@@ -58,13 +60,6 @@ app.set('json spaces', 4);
 app.set('view engine', 'ejs');
 
 app.use(expressLayouts);
-
-/**
-require('./config/passport')(passport);
-app.use(session({ secret: 'ilovevicigo' }));
-app.use(passport.initialize());
-app.use(passport.session());
-*/
 
 app.use(cookieParser()); 
 app.use(bodyParser()); 
