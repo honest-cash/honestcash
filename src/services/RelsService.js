@@ -1,24 +1,24 @@
 export default function($http, API_URL) {
 	var followProfile = function(profileId) {
-		$http.post(API_URL + "/api/profile/" + profileId + "/follow/").then(function(response) {
+		$http.post(API_URL + "/user/" + profileId + "/follow/").then(function(response) {
 			
 		});
 	};
 	var unfollowProfile = function(profileId) {
-		$http.post(API_URL + "/api/profile/" + profileId + "/unfollow/").then(function(response) {
+		$http.post(API_URL + "/user/" + profileId + "/unfollow/").then(function(response) {
 			
 		});
 	};
 
 	var showFollowers = function(profileId, callback) {
-		$http.get(API_URL + "/api/profile/" + profileId + "/followers").then(function(response) {
+		$http.get(API_URL + "/user/" + profileId + "/followers").then(function(response) {
 			
 			callback(response.data);
 		});
 	};
 
 	var showFollowing = function(profileId, callback) {
-		$http.get(API_URL + "/api/profile/" + profileId + "/following").then(function(response) {
+		$http.get(API_URL + "/user/" + profileId + "/following").then(function(response) {
 			
 			callback(response.data);
 		});

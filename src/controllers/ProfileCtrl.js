@@ -32,6 +32,7 @@ export default class ProfileCtrl {
         $rootScope.isLoading = true;
         $scope.drafts = [];
         $scope.followedHashtags = [];
+        $scope.followsProfileAlready = false;
 
         $scope.fetchPost = (postId, index) => {
             $http.get("/post/" + postId).then(function(response) {
@@ -39,6 +40,25 @@ export default class ProfileCtrl {
                 $scope.feeds[index].isFull = true;
             });
         };
+
+        $scope.remove = function() {
+            elt.html('');
+        };
+
+        // list follows
+        RelsService.showFollowing($scope.user.id, function(rFollowing) {
+            $scope.followGuys = rFollowing;
+            var userFollowsList = [];
+            rFollowing.forEach(profile => {
+                userFollowsList.push(profile.id);
+            });
+            if (userFollowsList.indexOf(profile.id) !== -1) {
+                $scope.profile.alreadyFollowing = true;
+            }
+            else {
+                $scope.profile.alreadyFollowing = false;
+            }
+        });
 
         $scope.unfollowHashtag = function(hashtag, index) {
             RelsService.unfollowHashtag(hashtag);
@@ -148,22 +168,22 @@ export default class ProfileCtrl {
             $scope.profile.alreadyFollowing = true;
             RelsService.followProfile(profileId);
         };
-
+        
         $scope.unfollow = function(profileId) {
             $scope.profile.alreadyFollowing = false;
             RelsService.unfollowProfile(profileId);
         };
-
+        
         $scope.showFollowers = function(tab) {
             $scope.showProfileTab = "followers";
             RelsService.showFollowers($scope.profileId, function(rFollowers) {
                 $scope.followGuys = rFollowers;
             });
         };
-
+        
         $scope.showFollowing = function(tab) {
             $scope.showProfileTab = "following";
-            RelsService.showFollowing($scope.profileId, function(rFollowing) {
+            RelsService.showFollowing($scope.profile.id, function(rFollowing) {
                 $scope.followGuys = rFollowing;
             });
         };
@@ -229,6 +249,7 @@ export default class ProfileCtrl {
                 });
             }
         };
+
     }
 }
 
