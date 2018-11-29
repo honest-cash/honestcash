@@ -9,54 +9,70 @@
 				 ng-src="/img/avatar.png">
 			</div>
 			<div class="pull-left col-xs-12 col-sm-9 col-md-10">
-				<h1 class="text-center-sm">
-					<span ng-if="profile.id !== user.id">{{ profile.username }}</span>
-				</h1>
-				<h1>
-					<a ng-if="profile.id == user.id" href="#" editable-text="profile.username" onbeforesave="updateUsername($data)">
-						{{ profile.username }}
-					</a>
-				</h1>
-				<h3 class="text-center-sm">
-					<a ng-if="profile.id == user.id" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
-						{{ profile.addressBCH }}
-					</a>
-					<span ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')"
-					 ng-if="profile.id !== user.id">{{ profile.addressBCH }}</span>
-
-					<span ng-if="profile.id == user.id && !profile.addressBCH" href="#" editable-text="profile.addressBCH"
-					 onbeforesave="updateAddressBCH($data)"><i class="fa fa-pencil-square-o"></i> Specify your BCH address for
-						receiving tips</span>
-				</h3>
-				<div class="profile-bch-qr-code"></div>
-				<div>
+				<div ng-if="profile.id === user.id">
+					<h1>
+						<span href="#" editable-text="profile.username" onbeforesave="updateUsername($data)">
+							{{ profile.username }}
+						</span>
+					</h1>
 
 					<h3 class="text-center-sm">
-						<span ng-if="profile.id !== user.id"><a href="">{{profile.twitter}}<i class="fa fa-twitter"></a></i></span>
+						<span ng-if="profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
+							{{ profile.addressBCH }}
+						</span>
+						<span ng-if="!profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
+							<i class="fa fa-pencil-square-o"></i> Specify your BCH address for receiving tips
+						</span>
 					</h3>
+					<div class="profile-bch-qr-code"></div>
 
-					<span ng-if="profile.id == user.id && !profile.twitter" href="#" editable-text="profile.twitter" onbeforesave="updateTwitter($data)"><i
-						 class="fa fa-twitter"></i> Link your Twitter Account</span>
+					<span href="#" editable-text="profile.twitter" onbeforesave="updateTwitter($data)">
+						<i class="fa fa-twitter"></i>
+						<span ng-if="profile.twitter">{{profile.twitter}}</span>
+						<span ng-if="!profile.twitter">Link your Twitter Account</span>
+					</span>
 
+					<div></div>
 
-					<h3 class="text-center-sm">
-						<span ng-if="profile.id !== user.id"><a href="">{{profile.reddit}}<i class="fa fa-reddit"></a></i></span>
-					</h3>
+					<span href="#" editable-text="profile.reddit" onbeforesave="updateReddit($data)">
+						<i class="fa fa-reddit"></i>
+						<span ng-if="profile.reddit">{{profile.reddit}}</span>
+						<span ng-if="!profile.reddit">Link your Reddit Account</span>
+					</span>
 
-					<span ng-if="profile.id == user.id && !profile.reddit" href="#" editable-text="profile.reddit" onbeforesave="updateReddit($data)"><i
-						 class="fa fa-reddit"></i> Link your Reddit Account</span>
-
-						 <h3 class="text-center-sm">
-							<span ng-if="profile.id !== user.id">{{ profile.bio }}</span>
-						</h3>
-
-					<div>
-						<textarea ng-if="profile.id == user.id" class="textarea-bio" editable-text="profile.bio" placeholder="Add a Bio..." ng-model="string" 
-						maxlength="300" onbeforesave="updateBio($data)">{{ profile.bio }}</textarea>
-					</div>
+					<textarea class="textarea-bio" editable-text="profile.bio" placeholder="Add a Bio..." ng-model="string"
+										maxlength="300" onbeforesave="updateBio($data)">
+						{{ profile.bio }}
+					</textarea>
 				</div>
 
-				
+				<div ng-if="profile.id !== user.id">
+					<h1 class="text-center-sm">
+						{{ profile.username }}
+					</h1>
+
+					<h3 class="text-center-sm" ng-if="profile.addressBCH">
+						<span ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')">
+							{{ profile.addressBCH }}
+						</span>
+					</h3>
+					<div class="profile-bch-qr-code"></div>
+
+					<h3 class="text-center-sm" ng-if="profile.twitter">
+						<i class="fa fa-twitter"></i><a href="https://twitter.com/{{profile.twitter}}">{{profile.twitter}}</a>
+					</h3>
+
+					<h3 class="text-center-sm" ng-if="profile.reddit">
+						<i class="fa fa-reddit"></i><a href="https://reddit.com/user/{{profile.reddit}}">{{profile.reddit}}</a>
+					</h3>
+
+					<h3 class="text-center-sm" ng-if="profile.bio">
+						{{profile.bio}}
+					</h3>
+				</div>
+
+			</div>
+		</div>
 
 				<div class="row">
 					<ul class="list-unstyled list-inline" style="padding:3px">
