@@ -33,4 +33,29 @@
 		<% }  %>
 	  </p>
 	</div>
+
+
+    <div class="row">
+        <div style="margin:10px;" class="post-response">
+            <h3>Responses</h3>
+        </div>
+		<% for (var index = 0; index < post.userPosts.length; index++ ) { %>
+            <hr />
+		    <div style="margin:10px;" class="post-response" >
+                    <h2>
+                        <a href="/<%- post.userPosts[index].user.username %>/<%- post.userPosts[index].alias %>">
+                        <%- post.userPosts[index].title %>
+                        </a>
+                    </h2>
+
+                    <a href="/profile/<%- post.userPosts[index].user.username %>">
+                        by @<%- post.userPosts[index].user.username %>
+                    </a>
+
+                    <article>
+                        <%- post.userPosts[index].body %>
+                    </article>
+            </div>
+		<% }  %>
+	</div>
 </div>

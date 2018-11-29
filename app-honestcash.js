@@ -75,8 +75,47 @@ app.use("/", express.static(__dirname + "/public/"));
 
 app.get("/91", (_, res) => res.redirect(301, '/dagur/lets-talk-spec-3-remove-the-transaction-undersize-limit-91'));
 
+const renderFeed = async (req, res, next) => {
+	const userAgent = req.headers['user-agent'];
+	const crawlerView = req.query.crawlerView;
+
+	if (!isBot(userAgent, crawlerView)) {
+		return next();
+	}
+
+	let urlQuery = '';
+
+	if (req.params.hashtag) {
+		urlQuery += "?hashtag=" + req.params.hashtag;
+	}
+
+	const url = `https://honest.cash/api/feeds${urlQuery}`;
+	const response = await axios.get(url);
+	const feeds = response.data;
+	const seoData = seo.metaDefault;
+
+	if (!feeds) {
+		res.status(404).render("Not found");
+
+		return;
+	}
+
+	res.render('feedBody.ejs', {
+		layout: 'crawlerFeedLayout',
+		SEO: seoData,
+		feeds
+	});
+}
+
 /**
- * Server rendering for SEO purposes
+ * Server rendering for feed
+ */
+app.get("/", renderFeed);
+
+app.get("/hashtag/:hashtag", renderFeed);
+
+/**
+ * Server rendering for post
  */
 app.get("/:username/:alias", async (req, res, next) => {
 	const userAgent = req.headers['user-agent'];
@@ -103,6 +142,7 @@ app.get("/:username/:alias", async (req, res, next) => {
 		post
 	});
 });
+
 
 app.get("/*", (req, res, next) => {
 	res.sendfile("app.html", { root: __dirname + "/public" });
