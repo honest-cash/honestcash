@@ -1,7 +1,5 @@
-import ProfileService from "../services/ProfileService";
-
 export default class ProfileCtrl {
-    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, profile) {
+    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, ProfileService, profile) {
         $scope.filter = function (filterType) {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
@@ -15,6 +13,10 @@ export default class ProfileCtrl {
             $scope.feeds = [];
             $scope.fetchFeeds();
         };
+
+        // Initialise Twitter / Reddit props
+        profile.twitter = profile.userProperties.find(prop => prop.propKey === "twitter").propValue || null;
+        profile.reddit = profile.userProperties.find(prop => prop.propKey === "reddit").propValue || null;
 
         $(".tags-area").tagit({
             placeholderText: "place for hashtags!"
@@ -74,18 +76,9 @@ export default class ProfileCtrl {
         $scope.updateUsername = updateMutableProfileFieldFactory("username");
         $scope.updateAddressBCH = updateMutableProfileFieldFactory("addressBCH");
         $scope.updateBio = updateMutableProfileFieldFactory("bio");
-        $scope.updateTwitter = (fieldValue) => {
+        $scope.updateTwitter = (fieldValue) => updateMutableProfileFieldFactory("props")({ twitter: fieldValue });
+        $scope.updateReddit = (fieldValue) => updateMutableProfileFieldFactory("props")({ reddit: fieldValue });
 
-            console.log(fieldValue);
-            return updateMutableProfileFieldFactory("props")({ twitter: fieldValue });
-
-        };        
-        $scope.updateReddit = (fieldValue) => {
-
-            return updateMutableProfileFieldFactory("props")({ reddit: fieldValue });
-
-        };
-        
         $scope.clickProfilePic = (userId, profileId) => {
             if ($rootScope.user) {
                 if (userId == profileId) {
@@ -258,5 +251,6 @@ ProfileCtrl.$inject = [
     "CommentService",
     "RelsService",
     "PostService",
+    "ProfileService",
     "profile"
 ];
