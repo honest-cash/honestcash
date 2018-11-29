@@ -2,8 +2,8 @@ import MediumEditor from "medium-editor";
 import * as async from "async";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
-import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
-import "medium-editor-insert-plugin";
+// import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
+// import "medium-editor-insert-plugin";
 
 export default class EditorCtrl {
     constructor($state, $scope, $stateParams, $http, $timeout, AuthService, API_URL) {
@@ -164,9 +164,11 @@ export default class EditorCtrl {
                 }
             });
 
+            /**
             $('#body').mediumInsert({
                 editor: editor
             });
+            */
 
             if (title) {
                 document.getElementById("title").setAttribute("data-placeholder", "");
