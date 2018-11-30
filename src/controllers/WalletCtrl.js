@@ -12,8 +12,8 @@ export default class WalletCtrl {
 
         let simpleWallet, lSimpleWallet;
 
-        if ($scope.connectedPrivateKey) {
-            simpleWallet = new SimpleWallet($scope.connectedPrivateKey);
+        if ($scope.connectedMnemonic) {
+            simpleWallet = new SimpleWallet($scope.connectedMnemonic);
 
             simpleWalletProvider.set(simpleWallet);
 
