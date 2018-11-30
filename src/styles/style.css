@@ -44,7 +44,7 @@ h2 {
 	font-family:'Helvetica', sans-serif;
 }
 
-h3 { font-size: 22px; }
+h3 { font-size: 25px; }
 
 h4 { font-size: 17px; }
 
@@ -804,4 +804,16 @@ img.lazy {
 
 .fill-screen img {
 	width:100%;
+}
+
+.textarea-bio{
+
+	margin-top: 10px;
+	width: 100%;
+	resize: none;
+	overflow:auto;	
+	border: none;
+	background-color: transparent;
+	overflow-y: hidden;
+
 }

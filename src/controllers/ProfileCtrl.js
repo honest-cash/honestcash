@@ -1,6 +1,6 @@
 export default class ProfileCtrl {
-    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, profile) {
-        $scope.filter = function(filterType) {
+    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, ProfileService, profile) {
+        $scope.filter = function (filterType) {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
             } else {
@@ -14,6 +14,17 @@ export default class ProfileCtrl {
             $scope.fetchFeeds();
         };
 
+        // Initialise Twitter / Reddit props
+        const initSocialMediaLinks = () => {
+            const twitterProp = profile.userProperties.find(prop => prop.propKey === "twitter");
+            const redditProp = profile.userProperties.find(prop => prop.propKey === "reddit");
+
+            profile.twitter = twitterProp ? twitterProp.propValue : null;
+            profile.reddit = redditProp ? redditProp.propValue : null;
+        };
+
+        initSocialMediaLinks();
+
         $(".tags-area").tagit({
             placeholderText: "place for hashtags!"
         });
@@ -25,7 +36,7 @@ export default class ProfileCtrl {
         $scope.page = 1;
         $scope.feeds = [];
         $scope.followGuys = [];
-        $scope.showProfileTab = "feeds"; //following, //followers
+        $scope.showProfileTab = "feeds"; // following, // followers
         $scope.limit = 10;
         $scope.postsAvailable = true;
         $rootScope.isLoading = true;
@@ -33,13 +44,13 @@ export default class ProfileCtrl {
         $scope.followedHashtags = [];
 
         $scope.fetchPost = (postId, index) => {
-            $http.get("/post/" + postId).then(function(response) {
+            $http.get("/post/" + postId).then(function (response) {
                 $scope.feeds[index].body = response.data.post_body;
                 $scope.feeds[index].isFull = true;
             });
         };
 
-        $scope.unfollowHashtag = function(hashtag, index) {
+        $scope.unfollowHashtag = function (hashtag, index) {
             RelsService.unfollowHashtag(hashtag);
             $scope.followedHashtags.splice(index, 1);
         };
@@ -50,26 +61,30 @@ export default class ProfileCtrl {
             const data = {};
 
             data[fieldName] = fieldValue;
+            console.log(data);
 
             $http.put(`${API_URL}/user/${$scope.profile.id}`, data)
-            .then((res) => {
-                res = res || {};
-                if (res.status === 'ok') { // {status: "ok"}
-                    d.resolve()
-                } else { // {status: "error", msg: "Username should be `awesome`!"}
-                    d.resolve(res.msg)
-                }
-            }, (response) => {
-                // toastr.warning(response.data.desc);
+                .then((res) => {
+                    res = res || {};
+                    if (res.status === 'ok') { // {status: "ok"}
+                        d.resolve()
+                    } else { // {status: "error", msg: "Username should be `awesome`!"}
+                        d.resolve(res.msg)
+                    }
+                }, (response) => {
+                    // toastr.warning(response.data.desc);
 
-                d.resolve(response.data.desc);
-            });
+                    d.resolve(response.data.desc);
+                });
 
             return d.promise;
         };
 
         $scope.updateUsername = updateMutableProfileFieldFactory("username");
         $scope.updateAddressBCH = updateMutableProfileFieldFactory("addressBCH");
+        $scope.updateBio = updateMutableProfileFieldFactory("bio");
+        $scope.updateTwitter = (fieldValue) => updateMutableProfileFieldFactory("props")({ twitter: fieldValue });
+        $scope.updateReddit = (fieldValue) => updateMutableProfileFieldFactory("props")({ reddit: fieldValue });
 
         $scope.clickProfilePic = (userId, profileId) => {
             if ($rootScope.user) {
@@ -115,7 +130,7 @@ export default class ProfileCtrl {
                 if (params.page === 0) {
                     $scope.feeds = data;
                 } else {
-                    data.forEach(function(feed) {
+                    data.forEach(function (feed) {
                         $scope.feeds.push(feed);
                     });
                 }
@@ -130,17 +145,17 @@ export default class ProfileCtrl {
 
         $scope.fetchFeeds({});
 
-        $scope.showFeeds = function(tab) {
+        $scope.showFeeds = function (tab) {
             $scope.hashtag = null;
             $scope.showProfileTab = "feeds";
         };
 
-        $scope.showHashtags = function() {
+        $scope.showHashtags = function () {
             $scope.showProfileTab = "hashtags";
         };
 
 
-        $scope.follow = function(profileId) {
+        $scope.follow = function (profileId) {
             if (!$rootScope.user.id) {
                 return $("#loginModal").modal();
             }
@@ -148,27 +163,27 @@ export default class ProfileCtrl {
             RelsService.followProfile(profileId);
         };
 
-        $scope.unfollow = function(profileId) {
+        $scope.unfollow = function (profileId) {
             $scope.profile.alreadyFollowing = false;
             RelsService.unfollowProfile(profileId);
         };
 
-        $scope.showFollowers = function(tab) {
+        $scope.showFollowers = function (tab) {
             $scope.showProfileTab = "followers";
-            RelsService.showFollowers($scope.profileId, function(rFollowers) {
+            RelsService.showFollowers($scope.profileId, function (rFollowers) {
                 $scope.followGuys = rFollowers;
             });
         };
 
-        $scope.showFollowing = function(tab) {
+        $scope.showFollowing = function (tab) {
             $scope.showProfileTab = "following";
-            RelsService.showFollowing($scope.profileId, function(rFollowing) {
+            RelsService.showFollowing($scope.profileId, function (rFollowing) {
                 $scope.followGuys = rFollowing;
             });
         };
 
         /* repeting */
-        $scope.upvote = function(postId, index) {
+        $scope.upvote = function (postId, index) {
             if (!$rootScope.user.id) {
                 return $("#loginModal").modal();
             }
@@ -183,7 +198,7 @@ export default class ProfileCtrl {
             if ($scope.feeds[index].showComments) {
                 $scope.feeds[index].showComments = false;
             } else {
-                CommentService.getComments($scope.postId, function(rComments) {
+                CommentService.getComments($scope.postId, function (rComments) {
                     $scope.feeds[index].comments = rComments;
                     $scope.feeds[index].showComments = true;
                 });
@@ -196,7 +211,7 @@ export default class ProfileCtrl {
             comment.body = body;
             $scope.feeds[index].showComments = true;
             $scope.feeds[index].commentDraft = "";
-            CommentService.postComment(postId, body, function(rComment) {
+            CommentService.postComment(postId, body, function (rComment) {
                 if ($scope.feeds[index].comments) {
                     $scope.feeds[index].comments.unshift(rComment);
                 } else {
@@ -205,13 +220,13 @@ export default class ProfileCtrl {
             });
         };
 
-        $scope.deleteComment = function(postId, commentId, feedIndex, commentIndex) {
+        $scope.deleteComment = function (postId, commentId, feedIndex, commentIndex) {
             $scope.feeds[feedIndex].comments.splice(commentIndex, 1);
             CommentService.deleteComment(postId, commentId);
         };
 
-        $scope.removePost = function(feed, isDraft, $index) {
-            bootbox.confirm("Are you sure?", function(result) {
+        $scope.removePost = function (feed, isDraft, $index) {
+            bootbox.confirm("Are you sure?", function (result) {
                 if (result) {
                     if (isDraft) $scope.drafts.splice($index, 1);
                     else $scope.feeds.splice($index, 1);
@@ -243,5 +258,6 @@ ProfileCtrl.$inject = [
     "CommentService",
     "RelsService",
     "PostService",
-    "profile" 
+    "ProfileService",
+    "profile"
 ];
