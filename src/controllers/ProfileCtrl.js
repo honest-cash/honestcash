@@ -55,21 +55,6 @@ export default class ProfileCtrl {
             elt.html('');
         };
 
-        // list follows
-        RelsService.showFollowing($scope.user.id, function(rFollowing) {
-            $scope.followGuys = rFollowing;
-            var userFollowsList = [];
-            rFollowing.forEach(profile => {
-                userFollowsList.push(profile.id);
-            });
-            if (userFollowsList.indexOf(profile.id) !== -1) {
-                $scope.profile.alreadyFollowing = true;
-            }
-            else {
-                $scope.profile.alreadyFollowing = false;
-            }
-        });
-
         $scope.unfollowHashtag = function(hashtag, index) {
             RelsService.unfollowHashtag(hashtag);
             $scope.followedHashtags.splice(index, 1);
@@ -174,22 +159,24 @@ export default class ProfileCtrl {
             $scope.showProfileTab = "hashtags";
         };
 
-
         $scope.follow = function (profileId) {
             if (!$rootScope.user.id) {
                 return $("#loginModal").modal();
             }
-            $scope.profile.alreadyFollowing = true;
+            if ($scope.profile.id === profileId)
+                $scope.profile.alreadyFollowing = true;
             RelsService.followProfile(profileId);
         };
 
         $scope.unfollow = function (profileId) {
-            $scope.profile.alreadyFollowing = false;
+            if ($scope.profile.id === profileId)
+                $scope.profile.alreadyFollowing = false;
+            else
+                $scope.followGuys = $scope.followGuys.filter((guy) => guy.id !== profileId);
             RelsService.unfollowProfile(profileId);
         };
 
         $scope.showFollowers = function (tab) {
-
             $scope.showProfileTab = "followers";
             RelsService.showFollowers($scope.profileId, function (rFollowers) {
                 $scope.followGuys = rFollowers;
@@ -199,8 +186,8 @@ export default class ProfileCtrl {
         $scope.showFollowing = function (tab) {
             $scope.showProfileTab = "following";
             RelsService.showFollowing($scope.profileId, function (rFollowing) {
-
                 $scope.followGuys = rFollowing;
+                console.log($scope.followGuys);
             });
         };
 
@@ -213,8 +200,6 @@ export default class ProfileCtrl {
             $scope.feeds[index].alreadyUpvoted = true;
             PostService.upvote(postId);
         };
-
-
 
         $scope.showComments = (postId, index) => {
             if ($scope.feeds[index].showComments) {
