@@ -44,6 +44,21 @@ export default class ProfileCtrl {
         $scope.followedHashtags = [];
         $scope.followsProfileAlready = false;
 
+        // list follows
+        RelsService.showFollowing($scope.user.id, function(rFollowing) {
+            $scope.followGuys = rFollowing;
+            var userFollowsList = [];
+            rFollowing.forEach(profile => {
+                userFollowsList.push(profile.id);
+            });
+            if (userFollowsList.indexOf(profile.id) !== -1) {
+                $scope.profile.alreadyFollowing = true;
+            }
+            else {
+                $scope.profile.alreadyFollowing = false;
+            }
+        });
+
         $scope.fetchPost = (postId, index) => {
             $http.get("/post/" + postId).then(function (response) {
                 $scope.feeds[index].body = response.data.post_body;

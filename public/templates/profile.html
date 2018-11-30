@@ -45,6 +45,19 @@
 								{{ profile.bio }}
 							</span>
 						</div>
+						<div class="row">
+							<ul class="list-unstyled list-inline" style="padding-left:13px">
+									<li class="middle-size side-padding showFollowers" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small class="showFollowers">Followers</small></a></li>
+									<li class="middle-size side-padding showFollowing" ng-click="showFollowing()"><a href="#"><span ng-bind="profile.followers_count"></span> <small class="showFollowing">Following</small></a></li>
+								<!--
+										<li class=" bold middle-size side-padding" ng-click="showFeeds()"><a href="#"><span ng-bind="profile.feeds_count"></span> <small>Posts</small></a></li>
+										<li class="bold middle-size side-padding" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small>Followers</small></a></li>
+										<li class="bold middle-size side-padding" ng-click="showFollowing()"><a href="#"><span ng-bind="profile.following_count"></span> <small>Following</small></a></li>
+										<li ng-if="profile.networks.length" class="bold middle-size side-padding"><a ng-href="{{profile.networks[0].url}}" target="_blank"><i class="fa fa-facebook"></i></li>
+										<li class="bold middle-size side-padding hidden" ng-click="showHashtags()"><a href="#"><span ng-bind="profile.hashtag_count"></span> <small>Hashtags</small></a></li>
+										-->
+							</ul>
+						</div>
 				</div>
 
 				<div ng-if="profile.id !== user.id">
@@ -79,19 +92,6 @@
 			</div>
 		</div>
 
-				<div class="row">
-					<ul class="list-unstyled list-inline" style="padding:3px">
-							<li class="middle-size side-padding showFollowers" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small class="showFollowers">Followers</small></a></li>
-							<li class="middle-size side-padding showFollowing" ng-click="showFollowing()"><a href="#"><span ng-bind="profile.followers_count"></span> <small class="showFollowing">Following</small></a></li>
-						<!--
-								<li class=" bold middle-size side-padding" ng-click="showFeeds()"><a href="#"><span ng-bind="profile.feeds_count"></span> <small>Posts</small></a></li>
-								<li class="bold middle-size side-padding" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small>Followers</small></a></li>
-								<li class="bold middle-size side-padding" ng-click="showFollowing()"><a href="#"><span ng-bind="profile.following_count"></span> <small>Following</small></a></li>
-								<li ng-if="profile.networks.length" class="bold middle-size side-padding"><a ng-href="{{profile.networks[0].url}}" target="_blank"><i class="fa fa-facebook"></i></li>
-								<li class="bold middle-size side-padding hidden" ng-click="showHashtags()"><a href="#"><span ng-bind="profile.hashtag_count"></span> <small>Hashtags</small></a></li>
-								-->
-					</ul>
-				</div>
 				<!--
 					<button ng-click="follow(profile.user_id)" ng-if="!profile.alreadyFollowing && user.id !== profile.user_id" class="btn btn-default btn-lg">FOLLOW</button>
 					<button ng-click="unfollow(profile.user_id)" ng-if="profile.alreadyFollowing && user.id !== profile.user_id" class="btn btn-success btn-lg">UNFOLLOW</button>
@@ -208,7 +208,7 @@
 
 						<!-- END AUTHOR REFERENCES -->
 				<div class="following-unfollow" ng-if="profile.id === user.id">
-						<button ng-click="unfollow(followGuy.id);" class="pull-right btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
+						<button ng-click="unfollow(followGuy.id);" ng-if="showProfileTab=='following'" class="pull-right btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
 				</div>
 			</div>
 		</div>
