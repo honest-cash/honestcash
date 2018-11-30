@@ -39,9 +39,11 @@ export default class MainCtrl {
 
                 $('#tipSuccessModal').modal('show');
 
-                const url = `https://blockchair.com/bitcoin-cash/transaction/${tx.txid}`;
+                const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
-                const anchorEl = document.getElementById("bchTippingAddressUrl");
+                const anchorEl = document.getElementById("bchTippingTransactionUrl");
+
+                console.log(`Upvote transaction: ${url}`);
 
                 anchorEl.href = url;
 
