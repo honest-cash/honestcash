@@ -188,11 +188,16 @@ export default class MainCtrl {
 
             $rootScope.user = false;
             $rootScope.fetchingNotifs = false;
-    
+            $rootScope.simpleWallet = null;
+
             // destroy connected user wallet.
             simpleWalletProvider.set(null);
+            localStorage.setItem("HC_BCH_PRIVATE_KEY", "");
+            localStorage.setItem("HC_BCH_MNEMONIC", "");
 
             $state.go("vicigo.feeds");
+
+            location.reload();
         };
     }
 }
