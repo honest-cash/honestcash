@@ -21,9 +21,10 @@ export default class MainCtrl {
                 let tx;
 
                 // distribute only to testnet of owner
+                // default tip is 1000000 satoshis = 0.001 BCH, around 20 cents
                 try {
                     tx = await simpleWallet.send([
-                        { address: address, amountSat: 10 }
+                        { address: address, amountSat: 1000000 }
                     ]);
                 } catch (err) {
                     if (err.message && err.message.indexOf("Insufficient") > -1) {
