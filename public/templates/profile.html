@@ -52,6 +52,7 @@
 						{{ profile.username }}
 						<span class="follow-unfollow">
 							<button ng-click="follow(profile.id)" ng-if="!profile.alreadyFollowing" class="btn btn-default btn-lg btn-follow">FOLLOW</button>
+							<button ng-click="follow(profile.id)" ng-if="!profile.id" class="btn btn-default btn-lg btn-follow"><a href="https://honest.cash/signup">FOLLOW</a></button>
 							<button ng-click="unfollow(profile.id)" ng-if="profile.alreadyFollowing" class="btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
 						</span>
 					</h1>
