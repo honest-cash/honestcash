@@ -1,4 +1,4 @@
-import SimpleWallet from "../lib/SimpleWallet";
+// import SimpleWallet from "../../public/js/simplewallet.min";
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 
 export default class WalletCtrl {

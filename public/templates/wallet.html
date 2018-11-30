@@ -20,8 +20,8 @@
 
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade in active" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-            <div class="hidden form-group">
-                <label for="exampleInputEmail1">Wallet mnemonic</label>
+            <div style="margin-top:15px;" class="form-group">
+                <label for="exampleInputEmail1">Wallet seed phrase</label>
                 <input readonly type="text" ng-model="mnemonic" class="form-control" aria-describedby="emailHelp">
                 <small id="emailHelp" class="form-text text-muted">Write it down! If you logout it will be deleted forever.</small>
             </div>
@@ -36,13 +36,18 @@
                 <input readonly type="text" ng-model="legacyAddressBCH" class="form-control" aria-describedby="emailHelp">
             </div>
 
-            <div style="margin-top:15px;" class="form-group">
+            <div style="margin-top:15px;" class="hidden form-group">
                 <label for="exampleInputEmail1">Private Key</label>
                 <input readonly type="password" ng-model="privateKey" class="form-control" aria-describedby="emailHelp">
+                
+            </div>
+
+            <div>
                 <small id="emailHelp" class="form-text text-muted">
                     Ownership and control over the private key is the root of user control over all funds associated with the corresponding Bitcoin Cash address. The private key is used to create signatures that are required to spend bitcoins by proving ownership of funds used in a transaction. <b>The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The private key must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.</b>
                 </small>
             </div>
+
             <div class="form-group">
                 <a href="https://blockchair.com/bitcoin-cash/address/{{legacyAddressBCH}}">Explore on Blockchair</a>
             </div>
@@ -83,10 +88,10 @@
             <li class="nav-item in active">
                 <a class="nav-link " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Generate new</a>
             </li>
-            <li class="hidden nav-item">
+            <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Import with mnemonic</a>
             </li>
-            <li class="nav-item">
+            <li class="hidden nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Import with private key</a>
             </li>
         </ul>
@@ -100,8 +105,8 @@
                         <b>Beware of scams! Ensure that the domain is https://honest.cash with a secure connection.</b>
                     </p>
 
-                    <div class="hidden form-group">
-                        <label for="exampleInputEmail1">Mnemonic (usually 12 words)</label>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Mnemonic</label>
                         <input readonly type="text" ng-model="mnemonic" class="form-control" aria-describedby="emailHelp">
                         <small id="emailHelp" class="form-text text-muted">Your keys will never leave your browser</small>
                     </div>

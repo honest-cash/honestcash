@@ -1,5 +1,5 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
-import SimpleWallet from "../lib/SimpleWallet";
+// import SimpleWallet from "../../public/js/simplewallet.min";
 
 export const onStateChange = function($rootScope, $state, AuthService) {
     $rootScope.$on('$stateChangeStart', (event, next, nextParams, fromState) => {
@@ -73,16 +73,16 @@ export const initProfileUpload = function(API_URL, AuthService) {
 };
 
 export const initBCHWallet = function($rootScope) {
-	const bchPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
+	const mnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
 	let simpleWallet;
 
-	if (bchPrivateKey) {
-		simpleWallet = new SimpleWallet(bchPrivateKey);
+	if (mnemonic) {
+		simpleWallet = new SimpleWallet(mnemonic);
 
 		simpleWalletProvider.set(simpleWallet);
 	}
 
-	$rootScope.simpleWallet = bchPrivateKey ? {
+	$rootScope.simpleWallet = mnemonic ? {
 		address: simpleWallet.address
 	} : null;
 };

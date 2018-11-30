@@ -20,10 +20,12 @@ export default class MainCtrl {
             if (simpleWallet) {
                 let tx;
 
+                console.log(simpleWallet);
+
                 // distribute only to testnet of owner
                 try {
                     tx = await simpleWallet.send([
-                        { address: address, amountSat: 1 }
+                        { address: address, amountSat: 10 }
                     ]);
                 } catch (err) {
                     if (err.message && err.message.indexOf("Insufficient") > -1) {
