@@ -42,6 +42,7 @@ export default class ProfileCtrl {
         $rootScope.isLoading = true;
         $scope.drafts = [];
         $scope.followedHashtags = [];
+        $scope.followsProfileAlready = false;
 
         $scope.fetchPost = (postId, index) => {
             $http.get("/post/" + postId).then(function (response) {
@@ -50,7 +51,26 @@ export default class ProfileCtrl {
             });
         };
 
-        $scope.unfollowHashtag = function (hashtag, index) {
+        $scope.remove = function() {
+            elt.html('');
+        };
+
+        // list follows
+        RelsService.showFollowing($scope.user.id, function(rFollowing) {
+            $scope.followGuys = rFollowing;
+            var userFollowsList = [];
+            rFollowing.forEach(profile => {
+                userFollowsList.push(profile.id);
+            });
+            if (userFollowsList.indexOf(profile.id) !== -1) {
+                $scope.profile.alreadyFollowing = true;
+            }
+            else {
+                $scope.profile.alreadyFollowing = false;
+            }
+        });
+
+        $scope.unfollowHashtag = function(hashtag, index) {
             RelsService.unfollowHashtag(hashtag);
             $scope.followedHashtags.splice(index, 1);
         };
@@ -169,6 +189,7 @@ export default class ProfileCtrl {
         };
 
         $scope.showFollowers = function (tab) {
+
             $scope.showProfileTab = "followers";
             RelsService.showFollowers($scope.profileId, function (rFollowers) {
                 $scope.followGuys = rFollowers;
@@ -178,6 +199,7 @@ export default class ProfileCtrl {
         $scope.showFollowing = function (tab) {
             $scope.showProfileTab = "following";
             RelsService.showFollowing($scope.profileId, function (rFollowing) {
+
                 $scope.followGuys = rFollowing;
             });
         };
@@ -243,6 +265,7 @@ export default class ProfileCtrl {
                 });
             }
         };
+
     }
 }
 
