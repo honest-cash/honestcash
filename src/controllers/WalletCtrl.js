@@ -1,16 +1,39 @@
-// import SimpleWallet from "../../public/js/simplewallet.min";
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
-
 export default class WalletCtrl {
     constructor($scope, $rootScope) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
         $scope.addressBCH = "";
-
+        $scope.walletInfo = {};
         $scope.connectedPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
         $scope.connectedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
+        $scope.addressBalance = 0;
 
         let simpleWallet, lSimpleWallet;
+
+        const getBalance = async () => {
+            let walletInfo;
+
+            try {
+                walletInfo = await simpleWallet.getWalletInfo();
+            } catch (err) {
+                $scope.addressBalance = 0;
+            }
+
+            $scope.walletInfo = walletInfo
+            $scope.addressBalance = walletInfo.balance;
+        };
+
+
+        $scope.onMnemonicChange = (newMnemonic) => {
+            if (newMnemonic && newMnemonic.split(" ").length > 10) {
+                $scope.canConnectMnemonic = true;
+
+                return;
+            } 
+
+            $scope.canConnectMnemonic = false;
+        };
 
         if ($scope.connectedMnemonic) {
             simpleWallet = new SimpleWallet($scope.connectedMnemonic);
@@ -21,6 +44,8 @@ export default class WalletCtrl {
             $scope.privateKey = simpleWallet.privateKey;
             $scope.addressBCH = simpleWallet.address;
             $scope.legacyAddressBCH = simpleWallet.legacyAddress;
+
+            getBalance();
         }
 
         $scope.generate = () => {
@@ -91,6 +116,8 @@ export default class WalletCtrl {
             $scope.privateKey = null;
             $scope.addressBCH = null;
             $scope.legacyAddressBCH = null;
+
+            $scope.canConnectMnemonic = false;
 
             simpleWalletProvider.set(null);
             $rootScope.simpleWallet = null;

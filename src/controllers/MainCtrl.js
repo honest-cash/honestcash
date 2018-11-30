@@ -20,8 +20,6 @@ export default class MainCtrl {
             if (simpleWallet) {
                 let tx;
 
-                console.log(simpleWallet);
-
                 // distribute only to testnet of owner
                 try {
                     tx = await simpleWallet.send([
@@ -45,6 +43,7 @@ export default class MainCtrl {
 
                 console.log(`Upvote transaction: ${url}`);
 
+                anchorEl.innerHTML = `See transaction: ${tx.txid.substring(0, 9)}...`;
                 anchorEl.href = url;
 
                 PostService.upvote({

@@ -1,7 +1,7 @@
 {
-  "name": "honest.cash",
+  "name": "honestcash",
   "version": "0.0.1",
-  "description": "Website",
+  "description": "Front-end for https://honest.cash",
   "main": "app-honestcash.js",
   "dependencies": {
     "angular": "^1.6.1",
@@ -59,6 +59,7 @@
     "reading-time": "^1.0.2",
     "request": "^2.74.0",
     "sanitize-html": "^1.7.0",
+    "simple-bitcoin-wallet": "0.0.1-alpha.15",
     "toastr": "^2.1.4",
     "twit": "^2.1.1",
     "ui-router": "^1.0.0-alpha.3"
@@ -83,12 +84,13 @@
   },
   "scripts": {
     "start": "node app-honestcash",
-    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "build": "npm run transfer-libs && node ./node_modules/webpack/bin/webpack.js",
+    "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vq-labs/honestcash"
+    "url": "git+https://github.com/honest-cash/honestcash"
   },
   "author": "Adrian Barwicki (adrianbarwicki@gmail.com)",
   "license": "MIT",

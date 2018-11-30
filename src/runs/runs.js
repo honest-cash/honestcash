@@ -1,5 +1,4 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
-// import SimpleWallet from "../../public/js/simplewallet.min";
 
 export const onStateChange = function($rootScope, $state, AuthService) {
     $rootScope.$on('$stateChangeStart', (event, next, nextParams, fromState) => {
