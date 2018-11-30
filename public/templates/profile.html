@@ -13,7 +13,7 @@
 								{{ profile.username }}
 							</span>
 						</h1>
-	
+
 						<h3 class="text-center-sm">
 							<span ng-if="profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
 								{{ profile.addressBCH }}
@@ -22,9 +22,9 @@
 								<i class="fa fa-pencil-square-o"></i> Specify your BCH address for receiving tips
 							</span>
 						</h3>
-	
+
 						<div class="profile-bch-qr-code"></div>
-	
+
 						<div>
 							<span href="#" editable-text="profile.twitter" onbeforesave="updateTwitter($data)">
 								<i class="fa fa-twitter"></i>
@@ -32,7 +32,7 @@
 								<span ng-if="!profile.twitter">Link your Twitter Account</span>
 							</span>
 						</div>
-						
+
 						<div>
 							<span href="#" editable-text="profile.reddit" onbeforesave="updateReddit($data)">
 								<i class="fa fa-reddit"></i>
@@ -51,8 +51,8 @@
 					<h1 class="text-center-sm">
 						{{ profile.username }}
 						<span class="follow-unfollow">
-							<button ng-click="follow(profile.id)" ng-if="!profile.alreadyFollowing && user.id !== profile.id" class="btn btn-default btn-lg btn-follow">FOLLOW</button>
-							<button ng-click="unfollow(profile.id)" ng-if="profile.alreadyFollowing && user.id !== profile.id" class="btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
+							<button ng-click="follow(profile.id)" ng-if="!profile.alreadyFollowing" class="btn btn-default btn-lg btn-follow">FOLLOW</button>
+							<button ng-click="unfollow(profile.id)" ng-if="profile.alreadyFollowing" class="btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
 						</span>
 					</h1>
 
@@ -81,7 +81,8 @@
 
 				<div class="row">
 					<ul class="list-unstyled list-inline" style="padding:3px">
-						<li class="middle-size side-padding showFollowers" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small class="showFollowers">Followers</small></a></li>
+							<li class="middle-size side-padding showFollowers" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small class="showFollowers">Followers</small></a></li>
+							<li class="middle-size side-padding showFollowing" ng-click="showFollowing()"><a href="#"><span ng-bind="profile.followers_count"></span> <small class="showFollowing">Following</small></a></li>
 						<!--
 								<li class=" bold middle-size side-padding" ng-click="showFeeds()"><a href="#"><span ng-bind="profile.feeds_count"></span> <small>Posts</small></a></li>
 								<li class="bold middle-size side-padding" ng-click="showFollowers()"><a href="#"><span ng-bind="profile.followers_count"></span> <small>Followers</small></a></li>
@@ -127,7 +128,7 @@
 				<a>
 		</div>
 
-		<div ng-if="hashtag&&showProfileTab == 'feeds'" class="text-center">
+		<div ng-if="hashtag && showProfileTab == 'feeds'" class="text-center">
 			<h2>
 				<strong>#{{ hashtag }}</strong> <button class="btn btn-default btn-sm" ng-click="fetchFeeds({hashtag:null,page:0})">×</button>
 			</h2>
@@ -194,7 +195,7 @@
 					<div class="pull-left width321">
 						<!-- AUTHOR IMAGE -->
 						<a ui-sref="vicigo.profile({profileId:followGuy.id})">
-							<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{followGuy.profile_image_url ? followGuy.profile_image_url : '/img/avatar.png'}}">
+							<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{followGuy.imageUrl ? followGuy.imageUrl : '/img/avatar.png'}}">
 						</a>
 						<!-- END AUTHOR IMAGE -->
 
@@ -203,18 +204,14 @@
 						<!-- AUTHOR TITLE -->
 						<small class="text-muted" ng-if="followGuy.title">{{followGuy.title}}</small>
 						<!-- END AUTHOR TITLE -->
-
 				</div>
-						
+
 						<!-- END AUTHOR REFERENCES -->
-				<div class="following-unfollow">
-					<a remove-on-click href="#" class="pull-right btn btn-success btn-unfollow" ng-if="!followGuy.alreadyFollowing" ng-click="unfollow(followGuy.id); remove()">UNFOLLOW</a>
-					<a href="#" class="pull-right btn btn-success btn-follow" ng-if="followGuy.alreadyFollowing" ng-click="follow(followGuy.id)">FOLLOW</a>
+				<div class="following-unfollow" ng-if="profile.id === user.id">
+						<button ng-click="unfollow(followGuy.id);" class="pull-right btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
 				</div>
 			</div>
-		
 		</div>
-
 	</div>
 </div>
 
