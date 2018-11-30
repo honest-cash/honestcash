@@ -24,26 +24,29 @@
 							<i class="fa fa-pencil-square-o"></i> Specify your BCH address for receiving tips
 						</span>
 					</h3>
+
 					<div class="profile-bch-qr-code"></div>
 
-					<span href="#" editable-text="profile.twitter" onbeforesave="updateTwitter($data)">
-						<i class="fa fa-twitter"></i>
-						<span ng-if="profile.twitter">{{profile.twitter}}</span>
-						<span ng-if="!profile.twitter">Link your Twitter Account</span>
-					</span>
-
-					<div></div>
-
-					<span href="#" editable-text="profile.reddit" onbeforesave="updateReddit($data)">
-						<i class="fa fa-reddit"></i>
-						<span ng-if="profile.reddit">{{profile.reddit}}</span>
-						<span ng-if="!profile.reddit">Link your Reddit Account</span>
-					</span>
-
-					<textarea class="textarea-bio" editable-text="profile.bio" placeholder="Add a Bio..." ng-model="string"
-										maxlength="300" onbeforesave="updateBio($data)">
-						{{ profile.bio }}
-					</textarea>
+					<div>
+						<span href="#" editable-text="profile.twitter" onbeforesave="updateTwitter($data)">
+							<i class="fa fa-twitter"></i>
+							<span ng-if="profile.twitter">{{profile.twitter}}</span>
+							<span ng-if="!profile.twitter">Link your Twitter Account</span>
+						</span>
+					</div>
+					
+					<div>
+						<span href="#" editable-text="profile.reddit" onbeforesave="updateReddit($data)">
+							<i class="fa fa-reddit"></i>
+							<span ng-if="profile.reddit">{{profile.reddit}}</span>
+							<span ng-if="!profile.reddit">Link your Reddit Account</span>
+						</span>
+					</div>
+					<div>
+						<span class="textarea-bio" editable-text="profile.bio" placeholder="Add a Bio..." ng-model="string" maxlength="300" onbeforesave="updateBio($data)">
+							{{ profile.bio }}
+						</span>
+					</div>
 				</div>
 
 				<div ng-if="profile.id !== user.id">
