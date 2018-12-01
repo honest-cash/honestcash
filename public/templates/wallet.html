@@ -100,13 +100,11 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade in active" id="new-wallet" role="tabpanel" aria-labelledby="new-wallet-tab">
                     <h3 style="margin-top: 15px;">Generate a new Bitcoin Cash account.</h3>
-
                     <p>
                         Your private key never leaves the browser. All transactions are signed within the browser and keys are not exposed over the internet.
                         Do not connect wallets with bigger amounts! We recommend to generate a new wallet and transfer a small amount for the upvotes. In the future we plan to reward you for finding and upvoting good content early.</p>
                         <b>Beware of scams! Ensure that the domain is https://honest.cash with a secure connection.</b>
                     </p>
-
                     <div ng-if="mnemonic" class="form-group">
                         <label for="exampleInputEmail1">Mnemonic</label>
                         <input readonly type="text" ng-model="mnemonic" class="form-control" aria-describedby="emailHelp">

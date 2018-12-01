@@ -10,13 +10,15 @@ export default class PostCtrl {
         });
 
         const init = () => {
-            const container = document.getElementById("post-tipping-container");
+            if (!$rootScope.simpleWallet) {
+                const container = document.getElementById("post-tipping-container");
 
-            container.innerHTML = "";
+                container.innerHTML = "";
 
-            new QRCode(container, post.user.addressBCH);
+                new QRCode(container, post.user.addressBCH);
 
-            document.getElementById("userBCHAddress").value = post.user.addressBCH;
+                document.getElementById("userBCHAddress").value = post.user.addressBCH;
+            }
         };
 
         $scope.follow = (profileId) => {

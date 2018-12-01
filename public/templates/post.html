@@ -31,7 +31,7 @@
 						<h2>This author does not accept tips.</h2>
 
 						<p>
-							<strong>Important:</strong> You can specify the address for sending tips in your profile.
+							<strong>Important:</strong> You can specify the address for receiving tips in your profile.
 						</p>
 					</div>
 				</div>
@@ -41,10 +41,24 @@
 		<div class="row" ng-show="post.user.addressBCH">
 			<div class="block-center">
 				<div class="panel">
-					<div class="panel-body">
+					<div ng-if="simpleWallet" class="panel-body">
+							<h2>Give a tip to the author</h2>
+							<ul class="list-unstyled list-inline list" ng-click="addressClicked(post.user.addressBCH, post.id)">
+								<li style="width:50px;">
+									<a class="btn btn-lg btn-default" href="#">
+										<i class="fa fa-btc"></i> 0.001 Upvote</a>
+									</a>
+								</li>
+							</ul>
+					</div>
+
+					<div ng-if="!simpleWallet" class="panel-body">
 						<h2>Give a tip to the author</h2>
+
+						<button class="btn btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
+
 						<p>
-							... and support the best content in internet with bitcoin cash. Recommended amount: 0.50€.
+								... or tip from any other Bitcoin Cash wallet.
 						</p>
 						<input readonly class="form-control" id="userBCHAddress">
 
@@ -62,74 +76,71 @@
 
 		<div class="row" ng-show="post.userPostUpvotes">
 			<h4><strong>Upvotes</strong></h4>
+
+			<p ng-if="!post.userPostUpvotes.length"><small>No upvotes.</small></p>
+
 			<ul class="list-inline list-unstyled">
 				<li ng-repeat="upvote in post.userPostUpvotes">
 					<a ng-href="https://blockchair.com/bitcoin-cash/transaction/{{upvote.txId}}" target="_blank">{{upvote.txId}}</a>
 				</li>
 			</ul>
 		</div>
-	</div>			
-</div>
 
-<div class="container">
-	<div class="row">
-	<div class="col-xs-12 visible-xs" style="height:100px;"></div>
+		<div class="row" style="height:100px;">
+			<h4><strong>Responses</strong></h4>
 
-	<div class="col-md-8 col-md-offset-2">
-		<h4><strong>Responses</strong></h4>
+			<div class="block-center">
+				<div class="panel">
+					<div class="panel-body" style="cursor: pointer;">
+						<a ng-href="{{user.id ? 'write/response/' + post.id : '/signup' }}">
+							<ul style="margin-top: 10px;" class="list-unstyled list-inline">
+								<li>
+									<img ng-if="post.user.imageUrl" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+									<img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+								</li>
+								<li>
+									<p>
+										{{ post.userPosts === 0 ? "Be the first to write a response..." : "Write a response..." }}
+									</p>
+								</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
 
-		<div class="block-center">
-			<div class="panel">
-				<div class="panel-body" style="cursor: pointer;">
-					<a ng-href="{{user.id ? 'write/response/' + post.id : '/signup' }}">
-						<ul style="margin-top: 10px;" class="list-unstyled list-inline">
+			<div class="block-center" ng-repeat="response in post.userPosts">
+				<div class="panel">
+					<div class="panel-body">
+						<ul class="list-unstyled list-inline">
 							<li>
-								<img ng-if="post.user.imageUrl" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
-								<img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+								<a ui-sref="vicigo.profile({profileId: response.user.id})">
+									<img ng-if="response.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{response.user.imageUrl}}" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+									<img ng-if="!response.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+								</a>
 							</li>
-							<li>
-								<p>
-									{{ post.userPosts === 0 ? "Be the first to write a response..." : "Write a response..." }}
-								</p>
+
+							<li style="vertical-align:middle">
+								<strong style="margin-top:50px;">
+									<a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}}</a></strong>
+				
+								<br />
+
+								<small class="text-muted">
+									<span ng-if="!post.post_publish_timestamp_formatted">{{::response.createdAt}}</span> 
+								</small>
 							</li>
 						</ul>
-					</a>
+
+						<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
+
+						<ul style="margin-left: 5px;" class="list-inline list-unstyled">
+							<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Read more</a>
+							<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Give a tip</a>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="block-center" ng-repeat="response in post.userPosts">
-			<div class="panel">
-				<div class="panel-body">
-					<ul class="list-unstyled list-inline">
-						<li>
-							<a ui-sref="vicigo.profile({profileId: response.user.id})">
-								<img ng-if="response.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{response.user.imageUrl}}" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
-								<img ng-if="!response.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
-							</a>
-						</li>
-
-						<li style="vertical-align:middle">
-							<strong style="margin-top:50px;">
-								<a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}}</a></strong>
-			
-							<br />
-
-							<small class="text-muted">
-								<span ng-if="!post.post_publish_timestamp_formatted">{{::response.createdAt}}</span> 
-							</small>
-						</li>
-					</ul>
-
-					<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
-
-					<ul style="margin-left: 5px;" class="list-inline list-unstyled">
-						<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Read more</a>
-						<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">Give a tip</a>
-					</ul>
-				</div>
-			</div>
-		</div>
-		</div>
-	</div>
+	</div>			
 </div>
