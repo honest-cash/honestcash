@@ -1,5 +1,5 @@
 export default class ProfileCtrl {
-    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, RelsService, PostService, ProfileService, profile) {
+    constructor(API_URL, $rootScope, $state, $scope, $location, $http, $q, FeedService, RelsService, PostService, ProfileService, profile) {
         $scope.filter = (filterType) => {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
@@ -148,7 +148,7 @@ export default class ProfileCtrl {
             $scope.showProfileTab = "feeds";
         };
 
-        $scope.follow = (profileId) => {
+        $scope.follow = (profileId, followGuy) => {
             if (!$rootScope.user || !$rootScope.user.id) {
                 return $state.go("starter.welcome");
             }
@@ -157,14 +157,22 @@ export default class ProfileCtrl {
                 $scope.profile.alreadyFollowing = true;
             }
 
+            if (followGuy) {
+                followGuy.alreadyFollowing = true;
+            }
+
             RelsService.followProfile(profileId);
         };
 
-        $scope.unfollow = (profileId) => {
+        $scope.unfollow = (profileId, followGuy) => {
             if ($scope.profile.id === profileId) {
                 $scope.profile.alreadyFollowing = false;
             } else {
                 $scope.followGuys = $scope.followGuys.filter((guy) => guy.id !== profileId);
+            }
+
+            if (followGuy) {
+                followGuy.alreadyFollowing = false;
             }
 
             RelsService.unfollowProfile(profileId);
@@ -215,6 +223,7 @@ export default class ProfileCtrl {
 ProfileCtrl.$inject = [
     "API_URL",
     "$rootScope",
+    "$state",
     "$scope",
     "$location",
     "$http",

@@ -9,9 +9,7 @@
 			<div class="pull-left col-xs-12 col-sm-9 col-md-10">
 				<div ng-if="profile.id === user.id">
 						<h1>
-							<span href="#" editable-text="profile.username" onbeforesave="updateUsername($data)">
-								{{ profile.username }}
-							</span>
+							{{ profile.username }}
 						</h1>
 
 						<span class="clickable" ng-if="profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
@@ -57,25 +55,18 @@
 						</span>
 					</h1>
 
-					<span ng-if="profile.addressBCH" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')">
-						{{ profile.addressBCH }}
-					</span>
-
+					<div>
+						<span ng-if="profile.addressBCH" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)" ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')">
+							{{ profile.addressBCH }}
+						</span>
+					</div>
 					<div class="profile-bch-qr-code"></div>
 
-					<span class="text-center-sm" ng-if="profile.twitter">
-						<a href="https://twitter.com/{{profile.twitter}}" target="_blank">
-							<i class="fa fa-twitter"></i>
-						</a>
-					</span>
-
-					<span class="text-center-sm" ng-if="profile.reddit">
-						<i class="fa fa-reddit"></i><a href="https://reddit.com/user/{{profile.reddit}}">{{profile.reddit}}</a>
-					</span>
-
-					<span class="text-center-sm" ng-if="profile.bio">
-						{{profile.bio}}
-					</span>
+					<div>
+						<span class="text-center-sm" ng-if="profile.bio">
+							{{profile.bio}}
+						</span>
+					</div>
 				</div>
 
 				<div>
@@ -94,6 +85,23 @@
 							<a href="#" class="showProfileTab">
 								<span ng-bind="profile.followers_count"></span> <small>Following</small>
 							</a>
+						</li>
+
+						<li ng-if="profile.twitter || profile.reddit" >•</li>
+
+						<li>
+								<span class="text-center-sm" ng-if="profile.twitter">
+									<a href="https://twitter.com/{{profile.twitter}}" target="_blank">
+										<i class="fa fa-twitter"></i>
+									</a>
+								</span>
+						</li>
+						<li>
+								<span class="text-center-sm" ng-if="profile.reddit">
+									<a href="https://reddit.com/user/{{profile.reddit}}" target="_blank">
+										<i class="fa fa-reddit"></i>
+									</a>
+								</span>
 						</li>
 					</ul>
 				</div>
@@ -117,7 +125,7 @@
 
 <div class="container">
 	<div style="min-height:350px;">
-		<div ng-if="!feeds.length && user.id == profile.id" class="text-center">
+		<div ng-if="showProfileTab === 'feeds' && !feeds.length && user.id == profile.id" class="text-center">
 			<h2>
 				Write your first post!
 			</h2>
@@ -211,7 +219,9 @@
 				</div>
 
 				<div class="following-follow" ng-if="profile.id !== user.id">
-					<button style="margin-top: 5px;" ng-click="follow(followGuy.id);" class="pull-right btn btn-lg btn-follow">Follow</button>
+					<button ng-if="!followGuy.alreadyFollowing" style="margin-top: 5px;" ng-click="follow(followGuy.id, followGuy);" class="pull-right btn btn-lg btn-follow">Follow</button>
+
+					<button ng-if="followGuy.alreadyFollowing" style="margin-top: 5px;" ng-click="unfollow(followGuy.id, followGuy);" class="pull-right btn btn-lg btn-follow">Unfollow</button>
 				</div>
 			</div>
 		</div>
