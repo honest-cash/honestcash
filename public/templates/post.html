@@ -41,7 +41,7 @@
 		<div class="row" ng-show="post.user.addressBCH">
 			<div class="block-center">
 				<div class="panel">
-					<div ng-if="simpleWallet" class="panel-body">
+					<div ng-show="simpleWallet" class="panel-body">
 							<h2>Give a tip to the author</h2>
 							<ul class="list-unstyled list-inline list" ng-click="addressClicked(post.user.addressBCH, post.id)">
 								<li style="width:50px;">
@@ -52,10 +52,10 @@
 							</ul>
 					</div>
 
-					<div ng-if="!simpleWallet" class="panel-body">
+					<div ng-show="!simpleWallet" class="panel-body">
 						<h2>Give a tip to the author</h2>
 
-						<button class="btn btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
+						<button class="btn btn-lg btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
 
 						<p>
 								... or tip from any other Bitcoin Cash wallet.
@@ -65,7 +65,6 @@
 						<div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
 
 						<p>
-							<strong>Important:</strong> You can give tips directly from you BCH wallet. <a ui-sref="wallet.create()">Connect your BCH wallet here.</a>
 							Soon, you will also be rewarded for giving tips for great content and also get paid for finding good content early! 
 							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here!
 						</p>
