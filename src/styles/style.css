@@ -796,8 +796,7 @@ img.lazy {
 	width:100%;
 }
 
-.textarea-bio{
-
+.textarea-bio {
 	margin-top: 10px;
 	width: 100%;
 	resize: none;
@@ -810,11 +809,9 @@ img.lazy {
 /*----------------------------------------------------------------------------------------
 										CUSTOM STYLES
 ----------------------------------------------------------------------------------------*/
-
 /* buttons */
-
 .btn-follow, .btn-unfollow {
-	font-size: .25em;
+	font-size: 15px;
 	padding: 5px;
 }
 
@@ -822,12 +819,12 @@ img.lazy {
 	border-color: rgba(3, 168, 124, 1);
 	color: rgba(3, 168, 124, 1);
 }
+
 .btn-follow:hover, .btn-follow:active, .btn-follow:visited {
 	border-color: rgba(3, 168, 124, 1);
 	color: rgba(3, 168, 124, 1);
 	background-color: transparent;
 }
-
 
 /* social info */
 .social-info {

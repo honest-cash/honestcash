@@ -187,8 +187,9 @@
 
 		<div ng-if="showProfileTab=='followers' || showProfileTab=='following'">
 			<div class="width640 block-center">
-				<h3 class="bold text-center" ng-if="showProfileTab=='followers'">Followers</h3>
-				<h3 class="bold text-center" ng-if="showProfileTab=='following'">Following</h3>
+				<strong ng-if="showProfileTab=='followers'">{{profile.username}} is followed by</strong>
+				<strong ng-if="showProfileTab=='following'">{{profile.username}} follows</strong>
+
 				<div class="row" ng-repeat="followGuy in followGuys">
 					<hr />
 
@@ -209,12 +210,8 @@
 						<!-- END AUTHOR TITLE -->
 				</div>
 
-				<div class="following-unfollow" ng-if="profile.id === user.id">
-					<button ng-click="unfollow(followGuy.id);" class="pull-right btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
-				</div>
-
-				<div class="following-unfollow" ng-if="profile.id === user.id">
-					<button ng-click="unfollow(followGuy.id);" class="pull-right btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
+				<div class="following-follow" ng-if="profile.id !== user.id">
+					<button style="margin-top: 5px;" ng-click="follow(followGuy.id);" class="pull-right btn btn-lg btn-follow">Follow</button>
 				</div>
 			</div>
 		</div>
