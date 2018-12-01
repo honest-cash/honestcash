@@ -137,13 +137,15 @@ angular.module("vqAuth", [])
 		});
 	}
 
-	function logout() {
+	const logout = () => {
 		console.info("[AuthService] Bye Bye..");
 
-		$http.post(apiFactory("LOGOUT")).then(function(data) {
-			destroyUserCredentials();
+		destroyUserCredentials();
+
+		$http.post(apiFactory("LOGOUT")).then((data) => {
+			console.log("Tokens destroyed.")
 		});
-	}
+	};
 
 	function resetPassword({ email }) {
 		console.info("[AuthService] Requesting new password.");
@@ -168,7 +170,7 @@ angular.module("vqAuth", [])
 		validate: validate,
 		login: login,
 		signup: signup,
-		logout: logout,
+		logout,
 		getAuthToken : getAuthToken,
 		isAuthenticated: isAuthenticated,
 		resetPassword,
