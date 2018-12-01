@@ -1,7 +1,7 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 export default class MainCtrl {
     constructor(
-        $rootScope, $scope, $state, $sce, $window, $location, $http, AuthService, HashtagService, PostService, $uibModal
+        $rootScope, $scope, $state, $sce, $window, $location, $http, AuthService, RelsService, HashtagService, PostService, $uibModal
     ) {
         $scope.hashtags = HashtagService.defaultHashtags;
     
@@ -84,8 +84,18 @@ export default class MainCtrl {
         $scope.mouseEnterAddress = mouseEnterAddress;
         $scope.mouseLeaveAddress = mouseLeaveAddress;
     
-        $scope.showUpvotes = function(feed, statType) {
-            PostService.getUpvotes(feed.id, function(rPostUpvotes) {
+        $scope.follow = (profileId, followGuy) => {
+            if (!$rootScope.user || !$rootScope.user.id) {
+                return $state.go("starter.welcome");
+            }
+
+            followGuy.alreadyFollowing = !followGuy.alreadyFollowing;
+
+            RelsService.followProfile(profileId);
+        };
+
+        $scope.showUpvotes = (feed, statType) => {
+            PostService.getUpvotes(feed.id, (rPostUpvotes) => {
                 var modalInstance = $uibModal.open({
                     animation: $scope.animationsEnabled,
                     templateUrl: 'userListModal.html',
@@ -213,6 +223,7 @@ MainCtrl.$inject = [
     "$location",
     "$http",
     "AuthService",
+    "RelsService",
     "HashtagService",
     "PostService",
     "$uibModal"

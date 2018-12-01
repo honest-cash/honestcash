@@ -148,22 +148,6 @@ export default class ProfileCtrl {
             $scope.showProfileTab = "feeds";
         };
 
-        $scope.follow = (profileId, followGuy) => {
-            if (!$rootScope.user || !$rootScope.user.id) {
-                return $state.go("starter.welcome");
-            }
-
-            if ($scope.profile.id === profileId) {
-                $scope.profile.alreadyFollowing = true;
-            }
-
-            if (followGuy) {
-                followGuy.alreadyFollowing = true;
-            }
-
-            RelsService.followProfile(profileId);
-        };
-
         $scope.unfollow = (profileId, followGuy) => {
             if ($scope.profile.id === profileId) {
                 $scope.profile.alreadyFollowing = false;

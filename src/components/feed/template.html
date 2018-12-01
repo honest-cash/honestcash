@@ -6,11 +6,13 @@
 					<li>
 						<img fallback-src="{{'/img/avatar.png'}}" ng-src="{{feed.user.imageUrl ? feed.user.imageUrl : '/img/avatar.png'}}">
 					</li>
+
 					<li>
 						<strong style="margin-top:15px;">
 							<a ui-sref="vicigo.profile({ profileId:feed.user.id })">{{feed.user.username}}</a>
 						</strong>
 					</li>
+
 					<li class="feed-date">
 						<span class="text-muted"><small>{{ feed.createdAt }}</small></span>
 					</li>

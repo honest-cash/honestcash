@@ -49,9 +49,9 @@
 					<h1 class="text-center-sm">
 						{{ profile.username }}
 						<span class="follow-unfollow">
-							<button ng-click="follow(profile.id)" ng-if="!profile.alreadyFollowing" class="btn btn-default btn-lg btn-follow">FOLLOW</button>
-							<button ng-click="follow(profile.id)" ng-if="!profile.id" class="btn btn-default btn-lg btn-follow"><a href="https://honest.cash/signup">FOLLOW</a></button>
-							<button ng-click="unfollow(profile.id)" ng-if="profile.alreadyFollowing" class="btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
+							<button ng-click="follow(profile.id, profile)" ng-if="!profile.alreadyFollowing" class="btn btn-default btn-lg btn-follow">FOLLOW</button>
+							<button ng-click="follow(profile.id, profile)" ng-if="!profile.id" class="btn btn-default btn-lg btn-follow"><a href="https://honest.cash/signup">FOLLOW</a></button>
+							<button ng-click="unfollow(profile.id, profile)" ng-if="profile.alreadyFollowing" class="btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
 						</span>
 					</h1>
 
@@ -173,24 +173,6 @@
 			</div>
 
 			<ng-include src="'templates/partials/feed-angular.html'" />
-		</div>
-
-		<div class="text-center width640 block-center" ng-if="showProfileTab=='hashtags'">
-			<h3 class="bold text-center">
-				Followed hashtags
-			</h3>
-			<hr>
-			<div class="row" ng-if="!followedHashtags.length">
-				<span class="muted">no hashtags here</span>
-			</div>
-			<div class="row" ng-repeat="hashtag in followedHashtags">
-				<ul class="list-unstyled list-inline">
-					<li>
-						<a href="#" ng-click="unfollowHashtag(hashtag.hashtag,$index)" ng-if="user.id == profileId">×</a>
-						<a class="bold" ui-sref="vicigo.hashtag({hashtag:hashtag.hashtag})">#{{hashtag.hashtag}}</a>
-					</li>
-				</ul>
-			</div>
 		</div>
 
 		<div ng-if="showProfileTab=='followers' || showProfileTab=='following'">

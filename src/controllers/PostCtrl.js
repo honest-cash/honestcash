@@ -21,14 +21,6 @@ export default class PostCtrl {
             }
         };
 
-        $scope.follow = (profileId) => {
-            if (!$rootScope.user.id) {
-                return $("#loginModal").modal();
-            }
-            $scope.post.authorFollowed = true;
-            RelsService.followProfile(profileId);
-        };
-
         $scope.openShareModal = (postId, commentId, commentIndex) => {
             bootbox.confirm("Are you sure?", (result) => {
                 if (result) {

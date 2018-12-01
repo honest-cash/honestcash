@@ -9,11 +9,15 @@
 					<img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
 				</a>
 			</li>
-			<!-- END AUTHOR IMAGE -->
 
-			<!-- AUTHOR REFERENCES -->
 			<li style="vertical-align:middle">
-				<strong style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId: post.user.id})">{{::post.user.username}}</a></strong>
+				<strong style="margin-top:50px;">
+					<a ui-sref="vicigo.profile({profileId: post.user.id})">{{::post.user.username}}</a>
+				</strong>
+
+				<button ng-if="!post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(post.user.id, post.user);" class="btn btn-lg btn-follow">
+						Follow
+				</button>
 
 				<br />
 
@@ -22,7 +26,6 @@
 					<span ng-if="post.readTime">{{::post.readTime}}</span> 
           		</small>
 			</li>
-			<!-- END AUTHOR REFERENCES -->
 		</ul>
 	</div>
 
