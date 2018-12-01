@@ -1,4 +1,5 @@
 import './styles/style.css';
+import './styles/profile.css';
 
 // import angular from 'angular';
 import 'jquery';

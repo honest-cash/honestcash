@@ -1,6 +1,6 @@
 export default class ProfileCtrl {
-    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, CommentService, RelsService, PostService, ProfileService, profile) {
-        $scope.filter = function (filterType) {
+    constructor(API_URL, $rootScope, $scope, $location, $http, $q, FeedService, RelsService, PostService, ProfileService, profile) {
+        $scope.filter = (filterType) => {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
             } else {
@@ -43,13 +43,6 @@ export default class ProfileCtrl {
         $scope.drafts = [];
         $scope.followedHashtags = [];
         $scope.followsProfileAlready = false;
-
-        $scope.fetchPost = (postId, index) => {
-            $http.get("/post/" + postId).then(function (response) {
-                $scope.feeds[index].body = response.data.post_body;
-                $scope.feeds[index].isFull = true;
-            });
-        };
 
         $scope.remove = function() {
             elt.html('');
@@ -155,81 +148,47 @@ export default class ProfileCtrl {
             $scope.showProfileTab = "feeds";
         };
 
-        $scope.showHashtags = function () {
-            $scope.showProfileTab = "hashtags";
-        };
-
-        $scope.follow = function (profileId) {
-            if (!$rootScope.user.id) {
-                return $("#loginModal").modal();
+        $scope.follow = (profileId) => {
+            if (!$rootScope.user || !$rootScope.user.id) {
+                return $state.go("starter.welcome");
             }
-            if ($scope.profile.id === profileId)
+
+            if ($scope.profile.id === profileId) {
                 $scope.profile.alreadyFollowing = true;
+            }
+
             RelsService.followProfile(profileId);
         };
 
-        $scope.unfollow = function (profileId) {
-            if ($scope.profile.id === profileId)
+        $scope.unfollow = (profileId) => {
+            if ($scope.profile.id === profileId) {
                 $scope.profile.alreadyFollowing = false;
-            else
+            } else {
                 $scope.followGuys = $scope.followGuys.filter((guy) => guy.id !== profileId);
+            }
+
             RelsService.unfollowProfile(profileId);
         };
 
-        $scope.showFollowers = function (tab) {
+        $scope.showFollowers = (tab) => {
+            $scope.followGuys = [];
+
             $scope.showProfileTab = "followers";
+
             RelsService.showFollowers($scope.profileId, function (rFollowers) {
                 $scope.followGuys = rFollowers;
             });
         };
 
-        $scope.showFollowing = function (tab) {
+        $scope.showFollowing = (tab) => {
+            $scope.followGuys = [];
+
             $scope.showProfileTab = "following";
+
             RelsService.showFollowing($scope.profileId, function (rFollowing) {
                 $scope.followGuys = rFollowing;
                 console.log($scope.followGuys);
             });
-        };
-
-        /* repeting */
-        $scope.upvote = function (postId, index) {
-            if (!$rootScope.user.id) {
-                return $("#loginModal").modal();
-            }
-            $scope.feeds[index].upvotes_count = $scope.feeds[index].upvotes_count + 1;
-            $scope.feeds[index].alreadyUpvoted = true;
-            PostService.upvote(postId);
-        };
-
-        $scope.showComments = (postId, index) => {
-            if ($scope.feeds[index].showComments) {
-                $scope.feeds[index].showComments = false;
-            } else {
-                CommentService.getComments($scope.postId, function (rComments) {
-                    $scope.feeds[index].comments = rComments;
-                    $scope.feeds[index].showComments = true;
-                });
-            }
-        };
-
-        $scope.postComment = (postId, body, index) => {
-            var comment = {};
-            comment.postId = postId;
-            comment.body = body;
-            $scope.feeds[index].showComments = true;
-            $scope.feeds[index].commentDraft = "";
-            CommentService.postComment(postId, body, function (rComment) {
-                if ($scope.feeds[index].comments) {
-                    $scope.feeds[index].comments.unshift(rComment);
-                } else {
-                    $scope.feeds[index].comments = [rComment];
-                }
-            });
-        };
-
-        $scope.deleteComment = function (postId, commentId, feedIndex, commentIndex) {
-            $scope.feeds[feedIndex].comments.splice(commentIndex, 1);
-            CommentService.deleteComment(postId, commentId);
         };
 
         $scope.removePost = function (feed, isDraft, $index) {
@@ -250,7 +209,6 @@ export default class ProfileCtrl {
                 });
             }
         };
-
     }
 }
 
@@ -263,7 +221,6 @@ ProfileCtrl.$inject = [
     "$q",
     // "BitcoinService",
     "FeedService",
-    "CommentService",
     "RelsService",
     "PostService",
     "ProfileService",

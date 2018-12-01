@@ -1,13 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,700);
-@import url(https://fonts.googleapis.com/css?family=Roboto:100,500);
-
-/*--------------------- FONT (OPEN SANS) IMPORT FROM GOOGLE FONTS ----------------------*/
-
-/*----------------------------------------------------------------------------------------
-										COMMON STYLES
------------------------------------------------------------------------------------------*/
-
-
 body {
 	width:100%;  
 	font-family: 'Helvetica', sans-serif;
@@ -838,26 +828,9 @@ img.lazy {
 	background-color: transparent;
 }
 
-/* follow */
-
-.showFollowers, .showFollowing {
-	color: #999;
-}
-.showFollowers:visited, .showFollowing:visited {
-	text-decoration: none;
-}
-
-.following-unfollow .btn-unfollow, .following-unfollow .btn-follow {
-	font-size: 1em;
-}
-.following-unfollow .btn-follow {
-	background: transparent;
-}
 
 /* social info */
-
 .social-info {
 	margin-left: 0;
 	font-size: .1em;
-
 }

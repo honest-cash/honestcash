@@ -71,6 +71,7 @@
     "gulp-ng-annotate": "^2.0.0",
     "gulp-uglify": "^2.0.1",
     "html-loader": "^0.4.5",
+    "less-loader": "^4.1.0",
     "mocha": "^5.2.0",
     "ng-annotate-loader": "^0.6.1",
     "ng-annotate-webpack-plugin": "^0.3.0",
