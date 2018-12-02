@@ -12,7 +12,6 @@
     "axios": "^0.18.0",
     "bchaddrjs": "^0.2.2",
     "bitcoincashjs": "^0.1.14",
-    "bitcointoken": "0.1.0-alpha.1",
     "blueimp-canvas-to-blob": "^3.14.0",
     "blueimp-file-upload": "^9.28.0",
     "blueimp-load-image": "^2.20.1",
