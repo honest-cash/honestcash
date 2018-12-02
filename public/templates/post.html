@@ -92,7 +92,7 @@
 			<div class="block-center">
 				<div class="panel">
 					<div class="panel-body" style="cursor: pointer;">
-						<a ng-href="{{user.id ? 'write/response/' + post.id : '/signup' }}">
+						<a target="_self" ng-href="{{user.id ? '/write/response/' + post.id : '/signup' }}">
 							<ul style="margin-top: 10px;" class="list-unstyled list-inline">
 								<li>
 									<img ng-if="post.user.imageUrl" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">

@@ -111,11 +111,10 @@ const renderFeed = async (req, res, next) => {
  * Server rendering for feed
  */
 app.get("/", renderFeed);
-
 app.get("/hashtag/:hashtag", renderFeed);
 
 /**
- * Server rendering for post
+ * Server rendering for posts
  */
 app.get("/:username/:alias", async (req, res, next) => {
 	const userAgent = req.headers['user-agent'];
@@ -143,19 +142,13 @@ app.get("/:username/:alias", async (req, res, next) => {
 	});
 });
 
-/** START OF Editor App */
-app.get("/write", (_, res) => {
-	res.sendfile("editor.html", { root: __dirname + "/public" });
-});
+// Editor paths
+for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPostId" ]) {
+	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
+}
 
-app.get("/response/:postId", (_, res) => {
-	res.sendfile("editor.html", { root: __dirname + "/public" });
-});
-/** END OF Editor App */
-
-app.get("/*", (req, res, next) => {
-	res.sendfile("app.html", { root: __dirname + "/public" });
-});
+// all other paths
+app.get("/*", (_, res) => res.sendfile("app.html", { root: __dirname + "/public" }));
 
 var server = require('http').Server(app);
 

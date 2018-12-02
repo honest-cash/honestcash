@@ -1,7 +1,7 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 
 export const onStateChange = function($rootScope, $state, AuthService) {
-    $rootScope.$on('$stateChangeStart', (event, next, nextParams, fromState) => {
+    $rootScope.$on('$stateChangeStart', async (event, next, nextParams, fromState) => {
         if (next.name == "starter.welcome") {
             $rootScope.welcome = true;
         } else {
@@ -14,21 +14,22 @@ export const onStateChange = function($rootScope, $state, AuthService) {
             $rootScope.noHeader = false;
         }
 
-        AuthService.validate((data) => {
-            if (data) {
-                $rootScope.user = {
-                    id: data.id,
-                    imageUrl: data.imageUrl,
-                    name: data.username
-                };
+		let res;
 
-                return;
-            }
+		try {
+			res = await AuthService.validate();
 
-            $rootScope.user = false;
-		});
+			const data = res.data;    
 
-		// close all popups
+			$rootScope.user = {
+				id: data.id,
+				imageUrl: data.imageUrl,
+				name: data.username
+			};
+		} catch (err) {
+			$rootScope.user = null;
+		}
+
 		$('#tipModal').modal('hide');
     });
 };

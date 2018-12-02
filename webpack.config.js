@@ -3,9 +3,9 @@ const webpack = require("webpack");
 module.exports = {
     entry: {
         app: './src/app/app.js',
-        editor: './src/editor/editor.js'
+        editor: './src/editor/editor.ts'
     },
-    mode: 'production',
+    mode: 'development',
     output: {
         path: __dirname + "/public/js",
         filename: '[name].js',

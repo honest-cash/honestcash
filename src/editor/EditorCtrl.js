@@ -5,7 +5,7 @@ import "medium-editor/dist/css/themes/default.min.css";
 import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
 
 export default class EditorCtrl {
-    constructor($rootScope, $state, $scope, $stateParams, $http, $timeout, AuthService, API_URL) {
+    constructor($scope, $http, $timeout, AuthService, API_URL) {
         let titleEditor;
         let bodyEditor;
 
@@ -17,7 +17,21 @@ export default class EditorCtrl {
             title: false
         };
 
-        const parentPostId = $stateParams.parentPostId;
+        let parentPostId;
+        let postId;
+        const locPath = location.pathname.split("/");
+
+        if (locPath[1] === "write" && locPath[2] === "response") {
+            parentPostId = locPath[3]
+        }
+
+        if (locPath[1] === "write" && locPath[2] === "response") {
+            parentPostId = locPath[3]
+        }
+
+        if (locPath[1] === "edit") {
+            postId = locPath[2];
+        }
 
         const saveDraftElement = (element, cb) => {
             const post = {};
@@ -95,10 +109,7 @@ export default class EditorCtrl {
                 $('#publishModal').modal('hide');
 
                 $timeout(() => {
-                    $state.go("vicigo.post", {
-                        alias: publishedPost.alias,
-                        username: publishedPost.user.username
-                    });
+                    location.href= `/${publishedPost.user.username}/${publishedPost.alias}/`;
                 }, 500);
             });
         };
@@ -276,11 +287,13 @@ export default class EditorCtrl {
                 $scope.draft = response.data;
 
                 initEditor($scope.draft.id);
+            }, err => {
+                console.log(err);
             });
         };
 
-        loadPostDraft($stateParams.postId);
+        loadPostDraft(postId);
     }
 }
 
-EditorCtrl.$inject = [ "$rootScope", "$state", "$scope", "$stateParams", "$http", "$timeout", "AuthService", "API_URL" ];
+EditorCtrl.$inject = [ "$scope", "$http", "$timeout", "AuthService", "API_URL" ];

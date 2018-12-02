@@ -1,8 +1,6 @@
 
 angular.module("vqAuth", [])
-.run(function() {
-	console.info("[AuthService] Launching Auth Module..");
-})
+
 .constant("API_URL", "localhost:3010")
 
 .factory('AuthInterceptor', [ "$rootScope", "$q", function($rootScope, $q) {
@@ -11,19 +9,22 @@ angular.module("vqAuth", [])
 	}
 
 	return {
-		request: function(config) {
+		request: (config) => {
 			$rootScope.activeCalls += 1;
+
 			return config;
 		},
-		requestError: function(rejection) {
+		requestError: (rejection) => {
 			$rootScope.activeCalls -= 1;
+
 			return $q.reject(rejection);
 		},
-		response: function(response) {
+		response: (response) => {
 			$rootScope.activeCalls -= 1;
+
 			return response;
 		},
-		responseError: function(response) {
+		responseError: (response) => {
 			$rootScope.activeCalls -= 1;
 
 			if (response.status == 401) {
@@ -43,6 +44,7 @@ angular.module("vqAuth", [])
 	RESET: "/auth/request-password-reset",
 	CHANGE_PASSWORD: "/auth/reset-password"
 })
+
 .factory("apiFactory", ["API_URL", "API", function(API_URL, API) {
 	return (method) => {
 		return API_URL + API[method];
@@ -131,11 +133,7 @@ angular.module("vqAuth", [])
 	}
 
 	function validate(callback) {
-		console.info("[AuthService] Checking token ..");
-		$http.get(apiFactory("VALIDATE"))
-		.then(function(response) {
-			callback(response.data);
-		}, callback);
+		return $http.get(apiFactory("VALIDATE"))
 	}
 
 	const logout = () => {

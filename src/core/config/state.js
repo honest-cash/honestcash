@@ -81,23 +81,6 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			templateUrl: "/templates/drafts.html",
 			controller: "draftsController"
 		})
-		.state('editor', {
-			abstract: true,
-			templateUrl: "/templates/layout_write.html",
-		})
-		.state('editor.write', {
-			url: "/write",
-			templateUrl: "/templates/write.html",
-		})
-
-		.state('editor.response', {
-			url: "/write/response/:parentPostId",
-			templateUrl: "/templates/write.html",
-		})
-		.state('editor.edit', {
-			url: "/edit/:postId",
-			templateUrl: "/templates/write.html",
-		})
 		.state('vicigo.profile', {
 			url: "/profile/:profileId",
 			templateUrl: "/templates/profile.html",

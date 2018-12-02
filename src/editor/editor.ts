@@ -26,19 +26,20 @@ angular.module("editor-app", [
 
 .controller("EditorCtrl", EditorCtrl)
 
-.run([ "$rootScope", "AuthService", function($rootScope, AuthService) {
-    AuthService.validate((data) => {
-        if (data) {
-            $rootScope.user = {
-                id: data.id,
-                imageUrl: data.imageUrl,
-                name: data.username
-            };
+.run([ "$rootScope", "AuthService", async function($rootScope, AuthService) {
+    let res;
 
-            return;
-        }
+    try {
+        res = await AuthService.validate();
+    } catch (err) {
+        return location.href = "/login";
+    }
 
-        location.href = "/login";
-    });
+    const data = res.data;    
+
+    $rootScope.user = {
+        id: data.id,
+        imageUrl: data.imageUrl,
+        name: data.username
+    };
 }]);
-
