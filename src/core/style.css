@@ -336,10 +336,6 @@ img.lazy {
   margin-right: auto
 }
 
-.post-body {
-	word-break: break-all;
-}
-
 @media(min-width:768px) {
 	.post-title-container h1 {
 		font-size:38px;

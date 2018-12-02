@@ -28,6 +28,10 @@ export const onStateChange = function($rootScope, $state, AuthService) {
 			};
 		} catch (err) {
 			$rootScope.user = null;
+
+			if (location.pathname === "/") {
+				location.href = "/signup";
+			}
 		}
 
 		$('#tipModal').modal('hide');

@@ -1,5 +1,6 @@
 import '../core/style.css';
 import './styles/profile.css';
+import './styles/post.css';
 
 // import angular from 'angular';
 import 'jquery';

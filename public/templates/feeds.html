@@ -41,23 +41,21 @@
 
 <div class="block-center container" style="max-width:1300px;">	
 	<div class="col-lg-3 hidden-xs hidden-sm hidden-md" >
-
 	</div>
 	<div class="col-lg-6">
 		<div class="block-center">
 			<div ng-if="!feeds.length && !isLoading" class="panel">
 					<div class="panel-body">
-							<h1>No content yet.</h1>
-							<p>
-								Be the first to create it!
-							</p>
-							
-							<a class="btn btn-default btn-lg" ng-href="{{user.id ? '/write' : '/signup' }}" target="_self">
-								Write a story
-							</a>
+						<h1>No content yet.</h1>
+						<p>
+							Be the first to create it!
+						</p>
+						
+						<a class="btn btn-default btn-lg" ng-href="{{user.id ? '/write' : '/signup' }}" target="_self">
+							Write a story
+						</a>
 					</div>
 			</div>
-
 			<ng-include src="'templates/partials/feed-angular.html'">
 		</div>	
 	</div>

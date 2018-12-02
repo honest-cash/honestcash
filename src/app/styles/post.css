@@ -1,0 +1,7 @@
+.post-container .post-body .medium-insert-buttons {
+	display: none;
+}
+
+.post-body {
+	word-break: break-all;
+}
