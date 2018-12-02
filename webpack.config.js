@@ -1,11 +1,9 @@
-const webpack = require("webpack");
-
 module.exports = {
     entry: {
         app: './src/app/app.js',
         editor: './src/editor/editor.ts'
     },
-    mode: 'development',
+    mode: 'production',
     output: {
         path: __dirname + "/public/js",
         filename: '[name].js',
@@ -13,9 +11,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js?$/,
-                use: [ 'ts-loader' ],
+                test: /\.(js|ts)?$/,
+                loader: 'ts-loader',
                 exclude: [ __dirname + '/node_modules/' ],
+                options: {
+                    transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
+                }
             }, {
                 test: /\.css$/, 
                 use: [ 'style-loader', 'css-loader' ]
