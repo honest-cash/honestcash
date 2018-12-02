@@ -29,9 +29,11 @@
 					</h3>
 				</div>
 
-				<div class="feed-body">
-					<lazy-img ng-if="feed.image_url" class="lazy" ng-src="{{trustSrc(feed.imageUrl)}}" alt="image"></lazy-img>
+				<div ng-if="feed.imageUrl" class="feed-image">
+					<lazy-img ng-if="feed.imageUrl" class="lazy" ng-src="{{trustSrc(feed.imageUrl)}}" alt="image"></lazy-img>
+				</div>
 
+				<div class="feed-body">
 					<p ng-if="feed.body" class="feed-article">
 						{{ displayFeedBody(feed.body) }}
 					</p>

@@ -455,8 +455,6 @@ img.lazy {
 }
 }
 
-
-
 .post-body img {
 	display: block !important;
   margin-left: auto !important;
@@ -464,23 +462,6 @@ img.lazy {
 	margin-top: 10px !important;
 	margin-down: 10px !important;
 	max-width: 100% !important;
-}
-.post-feed-body img {
-	margin-top: 10px;
-	margin-down: 10px;
-	margin-left: auto;
-	margin-right: auto;
-	width: 100%;
-}
-
-.image-feed-body {
-	max-width: 100%;
-	padding: 0px;
-}
-
-.feed-title {
-	padding-left:5px;
-	padding-right:5px;
 }
 
 .block-center {

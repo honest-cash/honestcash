@@ -3,3 +3,33 @@
     text-decoration: none;
     color: #444 !important;
 }
+
+.feed-image {
+    display: block;
+    height: 200px;
+    line-height: 200px;
+	margin-left: auto;
+	margin-right: auto;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.feed-image img {
+    height: auto;
+    position: relative;
+	width: 100%;
+}
+
+.image-feed-body {
+	max-width: 100%;
+	padding: 0px;
+}
+
+.feed-title {
+	padding-left:5px;
+    padding-right:5px;
+    margin-bottom: 10px;
+}
+
+
