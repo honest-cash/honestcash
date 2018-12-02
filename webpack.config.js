@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 module.exports = {
     entry: './src/hashtagApp.js',
     mode: 'production',
@@ -17,7 +19,14 @@ module.exports = {
             }, {
                 test: /\.html$/,
                 use: [ "html-loader" ],
-            }
+            }, {
+                test: require.resolve("blueimp-file-upload"),
+                loader: "imports-loader?define=>false"
+              },
+              {
+                test: require.resolve("medium-editor-insert-plugin"),
+                loader: "imports-loader?define=>false"
+              }
         ]
     },
     plugins: [

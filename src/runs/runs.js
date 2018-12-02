@@ -40,6 +40,7 @@ export const initProfileUpload = function(API_URL, AuthService) {
 	};
 
 	new Dropzone("#profilePicDropzone", {
+		paramName: "files[]",
 		url: `${API_URL}/upload/image?isProfileAvatar=true`,
 		maxFiles: 10,
 		maxfilesexceeded: (file) => {
@@ -49,10 +50,10 @@ export const initProfileUpload = function(API_URL, AuthService) {
 		thumbnailWidth: null,
 		previewTemplate: document.querySelector('#preview-template').innerHTML,
 	})
-	.on("addedfile", function(file) {
+	.on("addedfile", () => {
 		$("#profilePicDropzone").addClass("hidden");
 	})
-	.on("sending", (file, xhr) => {
+	.on("sending", (_, xhr) => {
 		changeProgress(0);
 		xhr.setRequestHeader("X-Auth-Token", AuthService.getAuthToken());
 		$("#imageUploadProgress").removeClass("hidden");
@@ -60,11 +61,11 @@ export const initProfileUpload = function(API_URL, AuthService) {
 	.on("uploadprogress", (_, progress) => {
 		changeProgress(progress);
 	})
-	.on("success", (file, response) => {
+	.on("success", (_, response) => {
 		changeProgress(100);
 
-		document.getElementById("profilePic").src = response.url;
-		
+		document.getElementById("profilePic").src = response.files[0].url;
+
 		$("#imageUploadProgress").addClass("hidden");
 		$("#profilePicDropzone").removeClass("hidden");
 		$('#uploadProfilePicModal').modal('hide');
