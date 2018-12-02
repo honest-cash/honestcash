@@ -3,12 +3,14 @@
 		<div class="col-md-2"></div>	  
 		<div class="col-md-8 col-xs-12" style="min-height:250px;">
 				<div ng-show="draft.parentPost.id" class="block-center">
-					<div class="panel" ui-sref="vicigo.post({ alias: draft.parentPost.alias, username: draft.parentPost.user.username })">
-						<div class="panel-body" style="cursor: pointer;">
-							Response to: <b>{{draft.parentPost.title}}</b>
-							<p>by @{{draft.parentPost.user.username}}</p>
+					<a target="_self" ng-href="/{{draft.parentPost.user.username}}/{{draft.parentPost.alias}}">
+						<div class="panel">
+							<div class="panel-body" style="cursor: pointer;">
+								Response to: <b>{{draft.parentPost.title}}</b>
+								<p>by @{{draft.parentPost.user.username}}</p>
+							</div>
 						</div>
-					</div>
+					</a>
 				</div>
 
 				<img ng-if="draft.imageUrl" style="max-width:100%;cursor:pointer;" ng-src="{{draft.imageUrl}}" data-toggle="modal" data-target="#uploadBackgroundImageModal">
