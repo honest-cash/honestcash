@@ -15,7 +15,7 @@
 					<a ui-sref="vicigo.profile({profileId: post.user.id})">{{::post.user.username}}</a>
 				</strong>
 
-				<button ng-if="!post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(post.user.id, post.user);" class="btn btn-lg btn-follow">
+				<button ng-if="user.id !== post.user.id && !post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(post.user.id, post.user);" class="btn btn-lg btn-follow">
 						Follow
 				</button>
 
