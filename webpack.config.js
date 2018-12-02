@@ -1,11 +1,14 @@
 const webpack = require("webpack");
 
 module.exports = {
-    entry: './src/hashtagApp.js',
+    entry: {
+        app: './src/app/app.js',
+        editor: './src/editor/editor.js'
+    },
     mode: 'production',
     output: {
         path: __dirname + "/public/js",
-        filename: 'bundle.js'
+        filename: '[name].js',
     },
     module: {
         rules: [

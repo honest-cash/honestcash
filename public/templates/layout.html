@@ -28,12 +28,12 @@
       </div>
       <div class="navbar-collapse collapse">
          <ul class="nav navbar-nav navbar-right" >
-           
              <li ng-if="!user">
 				<a ui-sref="starter.login">
 					<i class="gi gi-settings fa-fw pull-right"></i> login
 				</a>
 			</li>
+
             <li ng-if="!user">
 				<a ui-sref="starter.signup">
 					<i class="gi gi-settings fa-fw pull-right"></i> signup
@@ -41,25 +41,13 @@
 			</li>
 
 			<li ng-if="user.id">
-				<a ui-sref="editor.write"><i class="fa fa-pencil"></i></a>
+				<a href="/write" target="_self"><i class="fa fa-pencil"></i></a>
 			</li>
 
 			<li ng-if="!user" role="menuitem">
 				<a ng-if="!simpleWallet" ui-sref="wallet.create()">connect wallet</a>
 				<a ng-if="simpleWallet" ui-sref="wallet.create()">connected wallet</a>
 			</li>
-
-			<!--
-			<li ng-if="user.id">
-				<a ng-click="newPhoto()"><i class="fa fa-camera"></i></a>
-			</li>
-
-			<li ng-if="user.id">
-				<a ui-sref="vicigo.notifs">
-						<i class="fa fa-bell-o"><span class="badge" ng-if="userStatus.notifications_count">{{userStatus.notifications_count}}</span></i>
-				</a>
-			</li>
-			-->
 
             <li style="margin-top: 5px;" ng-if="user.id" class="menu-item-profile">
 				<div class="btn-group" uib-dropdown on-toggle="toggled(open)">

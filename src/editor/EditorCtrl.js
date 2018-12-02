@@ -5,7 +5,7 @@ import "medium-editor/dist/css/themes/default.min.css";
 import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
 
 export default class EditorCtrl {
-    constructor($state, $scope, $stateParams, $http, $timeout, AuthService, API_URL) {
+    constructor($rootScope, $state, $scope, $stateParams, $http, $timeout, AuthService, API_URL) {
         let titleEditor;
         let bodyEditor;
 
@@ -262,27 +262,6 @@ export default class EditorCtrl {
             initMediumEditor($scope.draft.title, $scope.draft.body);
 
             $scope.ready = true;
-            
-            var backgroundImageDropzone = new Dropzone("#backgroundImageDropzone", {
-                url: "/upload/image?isBackground=true&postId="+postId,
-                maxFiles: 10,
-                thumbnailWidth: null,
-                previewTemplate: document.querySelector('#preview-template').innerHTML,
-                clickable: '#uploadPostBackground',
-            })
-
-            backgroundImageDropzone
-            .on("sending", (file, xhr) => {
-                $scope.isBeingUploaded = true;
-
-                xhr.setRequestHeader("X-Auth-Token", AuthService.getAuthToken());
-            })
-
-            backgroundImageDropzone
-            .on("success", (file, response) => {
-                $scope.draft.post_image_url = response.link;
-                $scope.$digest();
-            });
         };
 
         const loadPostDraft = postId => {
@@ -304,4 +283,4 @@ export default class EditorCtrl {
     }
 }
 
-EditorCtrl.$inject = [ "$state", "$scope", "$stateParams", "$http", "$timeout", "AuthService", "API_URL" ];
+EditorCtrl.$inject = [ "$rootScope", "$state", "$scope", "$stateParams", "$http", "$timeout", "AuthService", "API_URL" ];

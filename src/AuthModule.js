@@ -132,9 +132,10 @@ angular.module("vqAuth", [])
 
 	function validate(callback) {
 		console.info("[AuthService] Checking token ..");
-		$http.get(apiFactory("VALIDATE")).then(function(response) {
+		$http.get(apiFactory("VALIDATE"))
+		.then(function(response) {
 			callback(response.data);
-		});
+		}, callback);
 	}
 
 	const logout = () => {

@@ -143,6 +143,15 @@ app.get("/:username/:alias", async (req, res, next) => {
 	});
 });
 
+/** START OF Editor App */
+app.get("/write", (_, res) => {
+	res.sendfile("editor.html", { root: __dirname + "/public" });
+});
+
+app.get("/response/:postId", (_, res) => {
+	res.sendfile("editor.html", { root: __dirname + "/public" });
+});
+/** END OF Editor App */
 
 app.get("/*", (req, res, next) => {
 	res.sendfile("app.html", { root: __dirname + "/public" });

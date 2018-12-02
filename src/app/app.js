@@ -1,4 +1,4 @@
-import './styles/style.css';
+import '../core/style.css';
 import './styles/profile.css';
 
 // import angular from 'angular';
@@ -9,18 +9,17 @@ import ProfileCtrl from './controllers/ProfileCtrl';
 import FeedsCtrl from './controllers/FeedsCtrl';
 import WelcomeCtrl from './controllers/WelcomeCtrl';
 import DraftsCtrl from './controllers/DraftsCtrl';
-import EditorCtrl from './controllers/EditorCtrl';
-import routingConfig from './config/routing';
-import httpConfig from './config/http';
-import stateConfig from './config/state';
+import routingConfig from '../core/config/routing';
+import httpConfig from '../core/config/http';
+import stateConfig from '../core/config/state';
 import PostCtrl from './controllers/PostCtrl';
 import WalletCtrl from './controllers/WalletCtrl';
 import MainCtrl from './controllers/MainCtrl';
 import * as runs from './runs/runs';
 
-import './AuthModule';
-import './config';
-import './services';
+import '../AuthModule';
+import '../core/config';
+import '../core/services';
 import './components';
 
 var imageDropzone, profilePicDropzone, hashbookBGDropzone;
@@ -50,7 +49,6 @@ angular.module("hashtag-app", [
 .controller("mainController", MainCtrl)
 .controller("postController", PostCtrl)
 .controller("profileController", ProfileCtrl)
-.controller("editorController", EditorCtrl)
 .controller("feedsController", FeedsCtrl)
 .controller("welcomeController", WelcomeCtrl)
 .controller("draftsController", DraftsCtrl)

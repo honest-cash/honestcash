@@ -1,11 +1,11 @@
-<div ng-controller="editorController">
+<div>
 	<div class="text-center" ng-show='!ready'><i class="fa fa-circle-o-notch fa-spin fa-2x"></i></div>
 
 	<div ng-show='ready'>
 	
 	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
 		<div class="container">
-				<a ui-sref="vicigo.feeds" class="pull-left" href="#">
+				<a href="/" target="_self" class="pull-left">
 					<img class="header-logo" src="/img/honest-long-logo.png" alt="Honest Logo">
 				</a>
 
@@ -22,9 +22,11 @@
 						</button>
 					</li>
 
-					<li style="margin-top: 5px; cursor: pointer;" ui-sref="vicigo.profile({ profileId: user.id })" class="menu-item-profile">
-						<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
-						<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+					<li style="margin-top: 5px; cursor: pointer;" class="menu-item-profile">
+						<a ng-href="/profile/{{user.id}}" target="_self">
+							<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-smallest">
+							<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+						</a>
 					</li>
 				</ul>
 		</div>
