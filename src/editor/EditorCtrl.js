@@ -35,9 +35,9 @@ export default class EditorCtrl {
 
         const saveDraftElement = (element, cb) => {
             const post = {};
-
+          
+            post.body = bodyEditor.serialize().body.value;
             post.title = document.getElementById("title").innerText || "";
-            post.body = document.getElementById("body").innerHTML || "";
             post.hashtags = $("input#description").val() || "";
 
             if (!post.body && !post.title && !post.hashtags) {
@@ -103,7 +103,7 @@ export default class EditorCtrl {
 
                     return toastr.warning(errResponse.data.desc || errResponse.data.code);
                 }
-
+                
                 toastr.success("You have successfully published your story.");
 
                 $('#publishModal').modal('hide');
@@ -161,6 +161,13 @@ export default class EditorCtrl {
                     text: 'Tell your story...',
                     hideOnClick: true
                 },
+                toolbar: {
+                    buttons: ['bold', 'italic', 'underline', "anchor", 'h2', 'h3', {
+                        name: 'pre',
+                        contentDefault: 'code snippet', // default text
+                        contentFA: '<i class="fa fa-code"></i>' // custom icon if you're using font-awesome icons
+                    }]
+                },
                 anchorPreview: false,
                 paste: {
                     /* This example includes the default options for paste,
@@ -169,14 +176,13 @@ export default class EditorCtrl {
                     cleanPastedHTML: true,
                     cleanReplacements: [],
                     cleanAttrs: [ 'class', 'style', 'dir' ],
-                    cleanTags: ['meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'a', 'table', 'tr', 'td', 'ul', 'li', 'code', 'pre' ],
+                    cleanTags: ['meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'a', 'table', 'tr', 'td', /** 'ul', 'li', 'code', 'pre' */ ],
                     unwrapTags: []
                 }
             });
 
             $('#body').mediumInsert({
                 editor: bodyEditor,
-                
                 addons: { // (object) Addons configuration
                     images: { // (object) Image addon configuration
                         label: '<span class="fa fa-camera"></span>', // (string) A label for an image addon
