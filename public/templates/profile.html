@@ -201,7 +201,7 @@
 				</div>
 
 				<div class="following-follow" ng-if="profile.id !== user.id">
-					<button ng-if="!followGuy.alreadyFollowing" style="margin-top: 5px;" ng-click="follow(followGuy.id, followGuy);" class="pull-right btn btn-lg btn-follow">Follow</button>
+					<button ng-if="!followGuy.alreadyFollowing && followGuy.id !== user.id" style="margin-top: 5px;" ng-click="follow(followGuy.id, followGuy);" class="pull-right btn btn-lg btn-follow">Follow</button>
 
 					<button ng-if="followGuy.alreadyFollowing" style="margin-top: 5px;" ng-click="unfollow(followGuy.id, followGuy);" class="pull-right btn btn-lg btn-follow">Unfollow</button>
 				</div>
