@@ -115,6 +115,7 @@ export default class EditorCtrl {
 
             $scope.Saving.body = setTimeout(() => {
                 saveDraftElement(element, () => {
+                    toastr.options.positionClass = "toast-bottom-right";
                     return toastr.success("Draft has been saved.");
                 });
             }, 3000);
