@@ -145,6 +145,10 @@ export default class EditorCtrl {
             bodyEditor = new MediumEditor('#body', {
                 buttonLabels: 'fontawesome',
                 autoLink: true,
+                toolbar:{
+                    buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3']
+
+                },
                 placeholder: {
                     /* This example includes the default options for placeholder,
                        if nothing is passed this is what it used */
