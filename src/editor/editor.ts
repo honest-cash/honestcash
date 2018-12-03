@@ -26,7 +26,7 @@ angular.module("editor-app", [
 
 .controller("EditorCtrl", EditorCtrl)
 
-.run([ "$rootScope", "AuthService", async function($rootScope, AuthService) {
+.run([ "$rootScope", "AuthService", async ($rootScope, AuthService) => {
     let res;
 
     try {
@@ -35,7 +35,7 @@ angular.module("editor-app", [
         return location.href = "/login";
     }
 
-    const data = res.data;    
+    const data = res.data;
 
     $rootScope.user = {
         id: data.id,
