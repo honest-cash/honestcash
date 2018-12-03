@@ -42,11 +42,15 @@
 			<div class="block-center">
 				<div class="panel">
 					<div ng-show="simpleWallet" class="panel-body">
-						<h2>Give a tip to the author</h2>
-						<ul class="list-unstyled list-inline list" ng-click="addressClicked(post.user.addressBCH, post.id)">
-							<li style="width:50px;">
+						<ul class="list-unstyled list-inline list">
+							<li ng-click="addressClicked(post.user.addressBCH, post.id)">
 								<a class="btn btn-lg btn-default" href="#">
 									<i class="fa fa-btc"></i> 0.001 Upvote</a>
+								</a>
+							</li>
+							<li ng-click="makeUncesorable(post)">
+								<a class="disabled btn btn-lg btn-default" href="#">
+									<i class="fa fa-btc"></i> 0.05  Make it uncensorable</a>
 								</a>
 							</li>
 						</ul>
@@ -71,7 +75,7 @@
 						</p>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 
 		<div class="row" ng-show="post.userPostUpvotes">

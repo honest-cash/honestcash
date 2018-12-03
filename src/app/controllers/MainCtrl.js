@@ -13,6 +13,35 @@ export default class MainCtrl {
             new QRCode(container, address);
         };
 
+        const makeUncesorable = async (post) => {
+            const simpleWallet = simpleWalletProvider.get();
+
+            // users with connected BCH accounts
+            if (simpleWallet) {
+                const res = await simpleWallet.upload({
+                    title: post.title,
+                    body: post.plain,
+                    author: post.user.username,
+                }, {
+                    title: `${post.title} by ${post.user.username} | Honest Cash`,
+                    extUri: `https://honest.cash/${post.user.username}/${post.alias}`
+                });
+
+                const fileId = res.fileId;
+
+                console.log(res);
+                console.log("Story saved for all times on BCH: " + fileId);
+
+                const anchorEl = document.getElementById("bchTippingTransactionUrl");
+
+                anchorEl.innerHTML = `See bitcoin: ${fileId}`;
+                anchorEl.href = url;
+
+                return;
+            }
+        };
+
+
         const addressClicked = async (address, postId) => {
             const simpleWallet = simpleWalletProvider.get();
 
@@ -81,6 +110,7 @@ export default class MainCtrl {
         };
     
         $scope.addressClicked = addressClicked;
+        $scope.makeUncesorable = makeUncesorable;
         $scope.mouseEnterAddress = mouseEnterAddress;
         $scope.mouseLeaveAddress = mouseLeaveAddress;
     
