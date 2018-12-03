@@ -32,7 +32,7 @@
 	<div>
 		<h1>
 			<strong>{{post.title}}</strong>
-      		<small ng-if="user.id==post.user.id">
+      		<small ng-if="user.id==post.user.id && !post.userPostUpvotes.length">
 				 <a ng-href="/edit/{{post.id}}"  target="_self">Edit</a>
 			</small>	
       	</h1>
