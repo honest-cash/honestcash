@@ -7,7 +7,7 @@ export default class FeedsCtrl {
 		$scope.postsAvailable = true;
 		$scope.hashtagFollowed = false;
 		$scope.hashtag = $stateParams.hashtag;
-		
+
 		const feedType = location.pathname === "/" ? "userfeed" : "all";
 
 		$scope.feedType = feedType;
