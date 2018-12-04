@@ -147,7 +147,7 @@ export default class EditorCtrl {
                 buttonLabels: 'fontawesome',
                 autoLink: true,
                 toolbar:{
-                    buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3']
+                    buttons: ['bold', 'italic', 'underline', 'unorderedlist', 'anchor', 'h2', 'h3']
 
                 },
                 placeholder: {
