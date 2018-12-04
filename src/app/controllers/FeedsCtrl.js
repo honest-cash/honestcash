@@ -8,7 +8,7 @@ export default class FeedsCtrl {
 		$scope.hashtagFollowed = false;
 		$scope.hashtag = $stateParams.hashtag;
 		
-		const feedType = location.pathname === "/new" ? "all" : "userfeed";
+		const feedType = location.pathname === "/" ? "userfeed" : "all";
 
 		if ($scope.hashtag) {
 			$http.get("/api/hashtag/" + $scope.hashtag).then((response) => {

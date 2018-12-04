@@ -19,6 +19,7 @@ export default class FeedService {
 
                 for (let feed of feeds) {
                     feed.createdAt = moment(feed.createdAt).format("MMM Do YY");
+                    feed.publishedAt = moment(feed.publishedAt).format("MMM Do YY");
                 }
 
                 callback(feeds);
