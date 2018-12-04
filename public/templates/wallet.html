@@ -1,3 +1,5 @@
+<div class="visible-xs" style="margin-top: 50px;"></div>
+
 <div ng-if="connectedPrivateKey" class="container">
     <h2>Connected wallet</h2>
     <p>You can now upvote content directly from the browser. You don't need an account on Honest to upvote content.</p>
@@ -28,20 +30,10 @@
                 <small id="emailHelp" class="form-text text-muted">Write it down! If you logout it will be deleted forever.</small>
             </div>
 
-            <div style="margin-top:15px;" class="hidden form-group">
-                <label for="exampleInputEmail1">Address for sending tips (Cash Format)</label>
-                <input readonly type="text" ng-model="addressBCH" class="form-control" aria-describedby="emailHelp">
-            </div>
-
-            <div class="hidden form-group">
-                <label for="exampleInputEmail1">Address for sending tips (Legacy Format)</label>
-                <input readonly type="text" ng-model="legacyAddressBCH" class="form-control" aria-describedby="emailHelp">
-            </div>
-
-            <div style="margin-top:15px;" class="hidden form-group">
-                <label for="exampleInputEmail1">Private Key</label>
-                <input readonly type="password" ng-model="privateKey" class="form-control" aria-describedby="emailHelp">
-                
+            <div style="margin-top:15px;" class="form-group">
+                <label for="exampleInputEmail1">Private Key (WIF)</label>
+                <input readonly ng-model="privateKey" class="form-control" aria-describedby="emailHelp" />
+                <small>Derivation path: {{HdPath}}</small>
             </div>
 
             <div>
@@ -90,8 +82,8 @@
             <li class="nav-item in active">
                 <a class="nav-link " id="new-wallet-tab" data-toggle="tab" href="#new-wallet" role="tab" aria-controls="new-wallet" aria-selected="true">Generate new</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Import with mnemonic</a>
+            <li class="nav-item" ng-click="onImportClick()">
+                <a class="nav-link" id="import-tab" data-toggle="tab" href="#import" role="tab" aria-controls="import" aria-selected="false">Import with recovery phrase</a>
             </li>
             <li class="hidden nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Import with private key</a>
@@ -99,14 +91,14 @@
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade in active" id="new-wallet" role="tabpanel" aria-labelledby="new-wallet-tab">
-                    <h3 style="margin-top: 15px;">Generate a new Bitcoin Cash account.</h3>
+                    <h3 style="margin-top: 15px;">Generate a new Bitcoin Cash wallet.</h3>
                     <p>
-                        Your private key never leaves the browser. All transactions are signed within the browser and keys are not exposed over the internet.
-                        Do not connect wallets with bigger amounts! We recommend to generate a new wallet and transfer a small amount for the upvotes. In the future we plan to reward you for finding and upvoting good content early.</p>
+                        Your recovery phrase never leaves the browser. All transactions are signed within the browser and keys are not exposed over the internet.
+                        Do not connect wallets with bigger amounts! We recommend to generate a new wallet and transfer a small amount for the upvotes.</p>
                         <b>Beware of scams! Ensure that the domain is https://honest.cash with a secure connection.</b>
                     </p>
                     <div ng-if="mnemonic" class="form-group">
-                        <label for="exampleInputEmail1">Mnemonic</label>
+                        <label for="exampleInputEmail1">Recovery phrase</label>
                         <input readonly type="text" ng-model="mnemonic" class="form-control" aria-describedby="emailHelp">
                         <small id="emailHelp" class="form-text text-muted">Your keys / mnemonic will never leave your browser.</small>
                     </div>
@@ -134,7 +126,7 @@
                         A private key is simply a number, picked at random. Ownership and control over the private key is the root of user control over all funds associated with the corresponding Bitcoin Cash address. The private key is used to create signatures that are required to spend bitcoins by proving ownership of funds used in a transaction. The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The private key must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.
                     </p>
             </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="tab-pane fade" id="import" role="tabpanel" aria-labelledby="import-tab">
                 <p style="margin-top: 15px;">Upvote content and receive tips using the passphrase / mnemonic of your existing Bitcoin Cash account.</p>
                 <p>
                     Your private key never leaves the browser. All transactions are signed within your browser and keys are not exposed over the internet.
@@ -143,12 +135,21 @@
                 </p>
 
                 <div class="form-group">
-                        <label for="exampleInputEmail1">Mnemonic (usually 12 words)</label>
+                        <label for="exampleInputEmail1">Recovery phrase</label>
                         <input type="text" ng-model="mnemonic" ng-change="onMnemonicChange(mnemonic)" class="form-control" aria-describedby="emailHelp" placeholder="Enter your mnemonic / seed">
-                        <small class="form-text text-muted">Your keys will never leave your browser</small>
+                        <small class="form-text text-muted">Usually 12 words. Your keys will never leave your browser</small>
                 </div>
 
-                <button ng-if="canConnectMnemonic" ng-click="connect(mnemonic)" type="submit" class="btn btn-primary btn-lg">Connect</button>
+                <h3>Advanced options</h3>
+
+                <div class="form-group">
+                        <label>HD Derivation Path</label>
+                        <input type="text" ng-model="HdPath" class="form-control" aria-describedby="HdPath" placeholder="Enter your HD derivation path">
+                        <small class="form-text text-muted">Honest.Cash Default: m/44'/0'/0'/0/0</small><br />
+                        <small class="form-text text-muted">Honest.Cash (obsolete): m/44'/145'/0/0/1'</small>
+                </div>
+
+                <button ng-if="canConnectMnemonic" ng-click="connect(mnemonic, HdPath)" type="submit" class="btn btn-primary btn-lg">Connect</button>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <p style="margin-top: 15px;">Upvote content and receive tips using the private key of your existing Bitcoin Cash account.</p>
@@ -164,7 +165,7 @@
                     <small class="form-text text-muted">Your keys will never leave your browser.</small>
                 </div>
 
-                <button ng-if="privateKey" ng-click="connect(privateKey)" type="submit" class="btn btn-primary">Connect</button>
+                <button ng-if="privateKey" ng-click="connect(privateKey, HdPath)" type="submit" class="btn btn-primary">Connect</button>
             </div>
         </div>
     </div>

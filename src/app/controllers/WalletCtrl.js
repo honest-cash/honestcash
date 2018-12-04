@@ -1,29 +1,22 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+
+/**
+ * The path is same with yours.org
+ */
+
 export default class WalletCtrl {
     constructor($scope, $rootScope) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
         $scope.addressBCH = "";
+        $scope.showAdancedOptions = false;
         $scope.walletInfo = {};
         $scope.connectedPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
         $scope.connectedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
+        $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
         $scope.addressBalance = 0;
 
         let simpleWallet, lSimpleWallet;
-
-        const getBalance = async () => {
-            let walletInfo;
-
-            try {
-                walletInfo = await simpleWallet.getWalletInfo();
-            } catch (err) {
-                $scope.addressBalance = 0;
-            }
-
-            $scope.walletInfo = walletInfo
-            $scope.addressBalance = walletInfo.balance;
-        };
-
 
         $scope.onMnemonicChange = (newMnemonic) => {
             if (newMnemonic && newMnemonic.split(" ").length > 10) {
@@ -35,8 +28,20 @@ export default class WalletCtrl {
             $scope.canConnectMnemonic = false;
         };
 
+        const refreshBalance = (wallet) => {
+            wallet.getWalletInfo()
+            .then((walletInfo) => {
+                $scope.walletInfo = walletInfo
+                $scope.addressBalance = walletInfo.balance + walletInfo.unconfirmedBalance;
+            }, err => {
+                $scope.addressBalance = 0;
+            });
+        };
+
         if ($scope.connectedMnemonic) {
-            simpleWallet = new SimpleWallet($scope.connectedMnemonic);
+            simpleWallet = new SimpleWallet($scope.connectedMnemonic, {
+                HdPath: $scope.HdPath
+            });
 
             simpleWalletProvider.set(simpleWallet);
 
@@ -45,11 +50,13 @@ export default class WalletCtrl {
             $scope.addressBCH = simpleWallet.address;
             $scope.legacyAddressBCH = simpleWallet.legacyAddress;
 
-            getBalance();
+            refreshBalance(simpleWallet);
         }
 
         $scope.generate = () => {
-            lSimpleWallet = new SimpleWallet();
+            lSimpleWallet = new SimpleWallet(undefined, {
+                HdPath: $scope.HdPath
+            });
 
             $scope.mnemonic = lSimpleWallet.mnemonic;
             $scope.privateKey = lSimpleWallet.privateKey;
@@ -60,7 +67,7 @@ export default class WalletCtrl {
         $scope.withdraw = async (toAddress) => {
             const simpleWallet = simpleWalletProvider.get();
             
-            const balance = await simpleWallet.getBalance();
+            refreshBalance();
 
             console.log(`Transfering ${balance} to ${toAddress}`);
 
@@ -69,9 +76,11 @@ export default class WalletCtrl {
             ]);
         };
 
-        $scope.connect = (privateKey) => {
+        $scope.connect = (privateKey, HdPath) => {
             if (!lSimpleWallet) {
-                lSimpleWallet = new SimpleWallet(privateKey);
+                lSimpleWallet = new SimpleWallet(privateKey, {
+                    HdPath: HdPath
+                });
 
                 $scope.privateKey = lSimpleWallet.privateKey;
             }
@@ -79,6 +88,7 @@ export default class WalletCtrl {
             $scope.connectedPrivateKey = lSimpleWallet.privateKey;
             $scope.connectedMnemonic = lSimpleWallet.mnemonic;
 
+            $scope.HdPath = lSimpleWallet.HdPath;
             $scope.mnemonic = lSimpleWallet.mnemonic;
             $scope.privateKey = lSimpleWallet.privateKey;
             $scope.addressBCH = lSimpleWallet.address;
@@ -92,8 +102,36 @@ export default class WalletCtrl {
 
             localStorage.setItem("HC_BCH_PRIVATE_KEY", lSimpleWallet.privateKey);
             localStorage.setItem("HC_BCH_MNEMONIC", lSimpleWallet.mnemonic);
+            localStorage.setItem("HC_BCH_HD_PATH", lSimpleWallet.HdPath);
 
             simpleWalletProvider.set(lSimpleWallet);
+
+            refreshBalance(lSimpleWallet);
+        };
+
+        const disconnect = () => {
+            lSimpleWallet = null;
+
+            $scope.connectedPrivateKey = null;
+            $scope.connectedMnemonic = null;
+
+            $scope.mnemonic = null;
+            $scope.privateKey = null;
+            $scope.addressBCH = null;
+            $scope.legacyAddressBCH = null;
+            $scope.HdPath = simpleWalletProvider.defaultHdPath;
+            $scope.canConnectMnemonic = false;
+
+            simpleWalletProvider.set(null);
+            $rootScope.simpleWallet = null;
+
+            localStorage.setItem("HC_BCH_PRIVATE_KEY", "");
+            localStorage.setItem("HC_BCH_MNEMONIC", "");
+            localStorage.setItem("HC_BCH_HD_PATH", simpleWalletProvider.defaultHdPath);
+        };
+
+        $scope.onImportClick = () => {
+            disconnect();
         };
 
         $scope.onDepositClick = () => {
@@ -106,25 +144,7 @@ export default class WalletCtrl {
             }, 50);
         };
 
-        $scope.disconnect = () => {
-            lSimpleWallet = null;
-
-            $scope.connectedPrivateKey = null;
-            $scope.connectedMnemonic = null;
-
-            $scope.mnemonic = null;
-            $scope.privateKey = null;
-            $scope.addressBCH = null;
-            $scope.legacyAddressBCH = null;
-
-            $scope.canConnectMnemonic = false;
-
-            simpleWalletProvider.set(null);
-            $rootScope.simpleWallet = null;
-
-            localStorage.setItem("HC_BCH_PRIVATE_KEY", "");
-            localStorage.setItem("HC_BCH_MNEMONIC", "");
-        };
+        $scope.disconnect = disconnect;
     }
 }
 

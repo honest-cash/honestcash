@@ -79,10 +79,13 @@ export const initProfileUpload = function(API_URL, AuthService) {
 
 export const initBCHWallet = function($rootScope) {
 	const mnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
+	const hdPath = localStorage.getItem("HC_BCH_HD_PATH");
 	let simpleWallet;
 
 	if (mnemonic) {
-		simpleWallet = new SimpleWallet(mnemonic);
+		simpleWallet = new SimpleWallet(mnemonic, {
+			HdPath: hdPath || simpleWalletProvider.defaultHdPath
+		});
 
 		simpleWalletProvider.set(simpleWallet);
 	}
