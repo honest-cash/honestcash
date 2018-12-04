@@ -10,6 +10,8 @@ export default class FeedsCtrl {
 		
 		const feedType = location.pathname === "/" ? "userfeed" : "all";
 
+		$scope.feedType = feedType;
+
 		if ($scope.hashtag) {
 			$http.get("/api/hashtag/" + $scope.hashtag).then((response) => {
 				

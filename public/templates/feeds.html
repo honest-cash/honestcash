@@ -39,11 +39,11 @@
 					<div>
 						<ul class="list-unstyled">
 							<li>
-								<a class="bold" href="/">your feed</a>
+								<a ng-class="{ 'bold': feedType === 'userfeed' }" href="/">your feed</a>
 							</li>
 
 							<li tyle="margin-top:7px;">
-								<a class="bold" href="/new">all</a>
+								<a ng-class="{ 'bold': feedType === 'all' }" href="/new">all</a>
 							</li>
 						</ul>
 					</div>
@@ -53,7 +53,7 @@
 					</h5>
 					<ul class="list-unstyled">
 						<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
-							<a class="bold" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
+							<a ng-class="{ 'bold': hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
 						</li>
 					</ul>
 					<small>
