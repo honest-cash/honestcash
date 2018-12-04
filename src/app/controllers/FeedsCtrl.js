@@ -1,27 +1,14 @@
 export default class FeedsCtrl {
   constructor($rootScope, $scope, $stateParams, $location, $http, FeedService, PostService) {
-        $scope.filter = filterType => {
-			if (filterType == $scope.filterType) {
-				$scope.filterType = null;
-			} else {
-				$scope.filterType = filterType;
-			}
-			$scope.postsAvailable = true;
-			$location.search('filter', $scope.filterType);
-			$scope.page = 1;
-			$scope.feeds = [];
-			$scope.fetchFeeds();
-		};
-
 		$scope.feeds = [];
 		$scope.page = 1;
 		$scope.limit = 10;
 		$rootScope.isLoading = true;
 		$scope.postsAvailable = true;
-
 		$scope.hashtagFollowed = false;
-
 		$scope.hashtag = $stateParams.hashtag;
+		
+		const feedType = location.pathname === "/new" ? "all" : "userfeed";
 
 		if ($scope.hashtag) {
 			$http.get("/api/hashtag/" + $scope.hashtag).then((response) => {
@@ -39,7 +26,6 @@ export default class FeedsCtrl {
 			$http.get("/post/" + postId).then((response) => {
 				$scope.feeds[index].body = response.data.post_body;
 				$scope.feeds[index].isFull = true;
-				
 			});
 		};
 
@@ -52,28 +38,34 @@ export default class FeedsCtrl {
 			});
 		};
 
-		$scope.fetchFeeds = () => FeedService.fetchFeeds({
-			page: $scope.page,
-			hashtag: $scope.hashtag,
-			filter: $scope.filterType,
-			algorithm: $scope.hashtag ? "none" : "feeds"
-		}, (data) => {
-			if (data) {
-				data.forEach((feed) => {
-					$scope.feeds.push(feed);
-				});
+		$scope.fetchFeeds = () => {
+			const obj = {
+				page: $scope.page,
+				hashtag: $scope.hashtag,
+			};
 
-				if (data.length < $scope.limit) {
-					$scope.postsAvailable = false;
-				} else {
-					$scope.postsAvailable = true;
-				}
-			} else {
-				$scope.postsAvailable = false;
+			if (feedType === "userfeed") {
+				obj.followerId = $rootScope.user ? $rootScope.user.id : undefined;
 			}
 
-			$rootScope.isLoading = false;
-		});
+			FeedService.fetchFeeds(obj, (data) => {
+				if (data) {
+					data.forEach((feed) => {
+						$scope.feeds.push(feed);
+					});
+
+					if (data.length < $scope.limit) {
+						$scope.postsAvailable = false;
+					} else {
+						$scope.postsAvailable = true;
+					}
+				} else {
+					$scope.postsAvailable = false;
+				}
+
+				$rootScope.isLoading = false;
+			});
+		};
 
 		$scope.fetchFeeds();
 
@@ -126,4 +118,4 @@ export default class FeedsCtrl {
   }
 }
 
-FeedsCtrl.$inject = [ "$rootScope", "$scope", "$stateParams", "$location", "$http", "FeedService", "CommentService", "PostService" ];
+FeedsCtrl.$inject = [ "$rootScope", "$scope", "$stateParams", "$location", "$http", "FeedService", "PostService" ];

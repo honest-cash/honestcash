@@ -6,6 +6,7 @@ export default class FeedService {
                 url: API_URL + "/feeds",
                 method: "GET",
                 params: {
+                    followerId: query.followerId,
                     hashtag: query.hashtag,
                     sort: query.sort,
                     filter: query.filter,

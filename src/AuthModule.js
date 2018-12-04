@@ -52,14 +52,15 @@ angular.module("vqAuth", [])
 }])
 
 .service("AuthService", [ "$window", "$http", "$q", "apiFactory", function($window, $http, $q, apiFactory) {
-	var LOCAL_TOKEN_KEY = 'AdminDashAuthToken';
-	var LOCAL_USER_ID_KEY = 'AdminDashUserId';
+	var LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
+	var LOCAL_USER_ID_KEY = 'HC_USER_ID';
+	var LOCAL_USER = 'HC_CASH_USER';
+
 	var username = '';
 	var isAuthenticated = false;
 	var role = '';
 	var authToken;
 	var authUserId;
-
 
 	function useCredentials(token, userId) {
 		console.info("[AuthService] Using User Credentials..");
@@ -106,7 +107,7 @@ angular.module("vqAuth", [])
 
 			$http.post(apiFactory("LOGIN"), body)
 			.then((res) => {
-				storeUserCredentials(res.data.token, res.data.userId);
+				storeUserCredentials(res.data.token, res.data.user.id);
 
 				resolve(res.data);
 			}, reject);
@@ -125,7 +126,7 @@ angular.module("vqAuth", [])
 
 			$http.post(apiFactory("SIGNUP"), body)
 			.then(response => {
-				storeUserCredentials(response.data.token, response.data.userId);
+				storeUserCredentials(response.data.token, response.data.user.id);
 
 				resolve(response.data);
 			}, reject);
@@ -165,6 +166,7 @@ angular.module("vqAuth", [])
 	}
 
 	return {
+		getUserId: () => authUserId,
 		authUserId: authUserId,
 		validate: validate,
 		login: login,

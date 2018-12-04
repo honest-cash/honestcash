@@ -12,14 +12,6 @@
 		</div>
 	</div>
 
-	<div class="text-center">
-		<ul class="list-unstyled list-inline">
-			<li ng-repeat="hashtag in hashtags">
-				<a ui-sref="vicigo.hashtag({hashtag: hashtag})">#{{hashtag}}</a>
-			</li>
-		</ul>
-	</div>
-
 	<div ng-if="hashtag">
 		<h1 class="text-center" ng-if="hashtag">
 			<strong>
@@ -39,56 +31,57 @@
 
 <div style="height:35px;"></div>
 
-<div class="block-center container" style="max-width:1300px;">	
-	<div class="col-lg-3 hidden-xs hidden-sm hidden-md" >
-	</div>
+
+
+<div class="block-center container" style="max-width:1300px;">
+		<div class="hidden-xs hidden-sm col-lg-3" >
+				<div ng-if="user.id" class="pull-left" style="max-width:300px">
+					<div>
+						<ul class="list-unstyled">
+							<li>
+								<a class="bold" href="/">your feed</a>
+							</li>
+
+							<li tyle="margin-top:7px;">
+								<a class="bold" href="/new">all</a>
+							</li>
+						</ul>
+					</div>
+
+					<h5 class="bold">
+						top topics
+					</h5>
+					<ul class="list-unstyled">
+						<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
+							<a class="bold" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
+						</li>
+					</ul>
+					<small>
+						<a style="padding: 3px;" href="https://honest.cash/honest_cash/frequently-asked-questions">FAQ</a>
+						<a style="padding: 3px;" href="https://honest.cash/honest_cash/about-honest-cash">About</a>
+						<a style="padding: 3px;" href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/">Terms</a>
+						<br />
+						<span>Honest Cash © 2018</span>
+					</small>
+				</div>
+			</div>
+
 	<div class="col-lg-6">
 		<div class="block-center">
 			<div ng-if="!feeds.length && !isLoading" class="panel">
-					<div class="panel-body">
-						<h1>No content yet.</h1>
-						<p>
-							Be the first to create it!
-						</p>
-						
-						<a class="btn btn-default btn-lg" ng-href="{{user.id ? '/write' : '/signup' }}" target="_self">
-							Write a story
-						</a>
-					</div>
+				<div class="panel-body">
+					<h1>No content yet.</h1>
+					<p>
+						Be the first to create it!
+					</p>
+					
+					<a class="btn btn-default btn-lg" ng-href="{{user.id ? '/write' : '/signup' }}" target="_self">
+						Write a story
+					</a>
+				</div>
 			</div>
 			<ng-include src="'templates/partials/feed-angular.html'">
 		</div>	
-	</div>
-		
-<div class="hidden-xs hidden-sm pull-right hidden" style="max-width:300px">
-	<div ng-if="user.id" class="pull-left">
-	<h5 class="bold">
-		top accounts
-	</h5>
-	<hr>
-	<ul class="list-unstyled">
-		<li ng-repeat="profile in recommendedProfiles track by $index" style="padding-top:7px;">
-			<div>
-				<div class="pull-left">
-				<a>
-					<img ng-if="profile.avatar" class="img-circle img-thumbnail-avatar-smallest" fallback-src="{{'/img/avatar.png'}}" ng-src="{{profile.avatar}}">
-					<img ng-if="!profile.avatar" class="img-circle img-thumbnail-avatar-smallest" ng-src="/img/avatar.png">
-				</a>	
-					
-					<a class="bold" ui-sref="vicigo.profile({profileId: profile.profile_id})">{{profile.username}}</a>
-						<br> <i class="fa fa-bolt muted" ng-if="profile.promoted">Promoted</i>
-					</div>
-					
-						
-					<button ng-click="follow(profile.profile_id,$index)" class="btn btn-sm btn-default pull-right">
-						Follow
-					</button>	
-				</div>
-			<hr />
-		</li>
-	</ul>
-</div>
-	</div>
-		
+	</div>		
 		
 </div>

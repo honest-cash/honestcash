@@ -12,7 +12,8 @@ import WelcomeCtrl from './controllers/WelcomeCtrl';
 import DraftsCtrl from './controllers/DraftsCtrl';
 import routingConfig from '../core/config/routing';
 import httpConfig from '../core/config/http';
-import stateConfig from '../core/config/state';
+import stateConfig from './stateConfig';
+
 import PostCtrl from './controllers/PostCtrl';
 import WalletCtrl from './controllers/WalletCtrl';
 import MainCtrl from './controllers/MainCtrl';

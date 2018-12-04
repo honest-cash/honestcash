@@ -16,9 +16,20 @@ export const onStateChange = function($rootScope, $state, AuthService) {
 
 		let res;
 
-		try {
-			res = await AuthService.validate();
+		AuthService.loadUserCredentials();
 
+		if (AuthService.getUserId()) {
+			$rootScope.user = {
+				id: AuthService.getUserId()
+			};
+		} else {
+			if (location.pathname === "/") {
+				location.href = "/signup";
+			}
+		}
+
+		AuthService.validate()
+		.then(res => {
 			const data = res.data;    
 
 			$rootScope.user = {
@@ -26,13 +37,13 @@ export const onStateChange = function($rootScope, $state, AuthService) {
 				imageUrl: data.imageUrl,
 				name: data.username
 			};
-		} catch (err) {
+		}, () => {
 			$rootScope.user = null;
 
 			if (location.pathname === "/") {
 				location.href = "/signup";
 			}
-		}
+		});
 
 		$('#tipModal').modal('hide');
     });

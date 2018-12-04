@@ -13,8 +13,20 @@
 						</strong>
 					</li>
 
+					<li ng-if="feed.parentPostId">
+						<span style="margin-top:15px;">
+							•
+						</span>
+					</li>
+
+					<li ng-if="feed.parentPostId">
+						<span style="margin-top:15px;">
+								<small>Response</small>
+						</span>
+					</li>
+
 					<li class="feed-date">
-						<span class="text-muted"><small>{{ feed.createdAt }}</small></span>
+						<span class="text-muted"><small>{{ feed.publishedAt }}</small></span>
 					</li>
 				</ul>
 			</div>

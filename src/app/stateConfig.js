@@ -48,11 +48,11 @@ export default function state ($stateProvider, $urlRouterProvider) {
             url: "/",
             templateUrl: "/templates/feeds.html",
             controller: "feedsController",
-            resolve: {
-                checkLoggedIn: function() {
-                    return true;
-                },
-            }
+		})
+		.state('vicigo.feedsNew', {
+            url: "/new",
+            templateUrl: "/templates/feeds.html",
+            controller: "feedsController"
         })
 		.state('vicigo.chat', {
 			url: "/chat/:userId",
