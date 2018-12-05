@@ -6,7 +6,18 @@
     <p>This wallet is saved locally in your browser. The keys never leave your browser. When you log out, all the wallet data is permanently erased.</p>
 
 
-    <p><b>Your wallet balance: {{addressBalance}} BCH</b></p>
+    <p>
+            <div class="form-group">
+                    <ul class="list-inline list-unstyled" style="margin-top: 10px;">
+                            <li><b>Your wallet balance: {{addressBalance}} BCH</b></li>
+                    </ul>
+                    <ul class="list-inline list-unstyled" style="margin-top: 10px;">
+                        <li>Explore:</li>
+                        <li><a href="https://bch.btc.com/{{legacyAddressBCH}}" target="_blank">BTC.com</a></li>
+                        <li><a href="https://blockchair.com/bitcoin-cash/address/{{legacyAddressBCH}}" target="_blank">Blockchair</a></li>
+                    </ul>
+            </div>
+    </p>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item in active">
@@ -40,10 +51,6 @@
                 <small id="emailHelp" class="form-text text-muted">
                     Ownership and control over the private key is the root of user control over all funds associated with the corresponding Bitcoin Cash address. The private key is used to create signatures that are required to spend bitcoins by proving ownership of funds used in a transaction. <b>The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The private key must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.</b>
                 </small>
-            </div>
-
-            <div class="form-group">
-                <a href="https://blockchair.com/bitcoin-cash/address/{{legacyAddressBCH}}">Explore on Blockchair</a>
             </div>
 
             <button ng-click="disconnect()" type="submit" class="btn btn-danger btn-lg">Disconnect</button>
