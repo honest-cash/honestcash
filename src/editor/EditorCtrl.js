@@ -148,7 +148,7 @@ export default class EditorCtrl {
                     cleanPastedHTML: true,
                     cleanReplacements: [],
                     cleanAttrs: [ 'class', 'style' ],
-                    cleanTags: [ 'meta' ],
+                    cleanTags: [ 'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', 'a', 'ul', 'li', 'code', 'pre' ],
                     unwrapTags: []
                 }
             });
@@ -167,7 +167,7 @@ export default class EditorCtrl {
                     hideOnClick: true
                 },
                 toolbar: {
-                    buttons: ['bold', 'italic', 'underline', "anchor", 'h2', 'h3', {
+                    buttons: ['bold', 'italic', 'underline', "unorderedlist", "anchor", 'h2', 'h3', {
                         name: 'pre',
                         contentDefault: 'code snippet', // default text
                         contentFA: '<i class="fa fa-code"></i>' // custom icon if you're using font-awesome icons
