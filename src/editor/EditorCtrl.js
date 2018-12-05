@@ -176,7 +176,7 @@ export default class EditorCtrl {
                     cleanPastedHTML: true,
                     cleanReplacements: [],
                     cleanAttrs: [ 'class', 'style', 'dir' ],
-                    cleanTags: ['meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'a', 'table', 'tr', 'td', /** 'ul', 'li', 'code', 'pre' */ ],
+                    cleanTags: [ 'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', /**, 'a', 'ul', 'li', 'code', 'pre' */ ],
                     unwrapTags: []
                 }
             });
