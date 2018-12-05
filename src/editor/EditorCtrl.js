@@ -125,6 +125,7 @@ export default class EditorCtrl {
 
             $scope.Saving.body = setTimeout(() => {
                 saveDraftElement(element, () => {
+                    toastr.options.positionClass = "toast-bottom-right";
                     return toastr.success("Draft has been saved.");
                 });
             }, 3000);
@@ -155,6 +156,10 @@ export default class EditorCtrl {
             bodyEditor = new MediumEditor('#body', {
                 buttonLabels: 'fontawesome',
                 autoLink: true,
+                toolbar:{
+                    buttons: ['bold', 'italic', 'underline', 'unorderedlist', 'anchor', 'h2', 'h3']
+
+                },
                 placeholder: {
                     /* This example includes the default options for placeholder,
                        if nothing is passed this is what it used */
