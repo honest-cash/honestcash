@@ -58,7 +58,7 @@
 								</a>
 							</li>
 							<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
-							<li ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
+							<li ng-show="!post.userPostRefs.length" ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
 								<a class="btn btn-default" href="#">
 									<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> uncensorable</a>
 								</a>
