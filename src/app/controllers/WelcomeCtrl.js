@@ -82,9 +82,7 @@ export default class WelcomeCtrl {
 		}).then((User) => {
 			$scope.isLoading = false;
 
-			$rootScope.user = {
-				id: User.userId
-			};
+			$rootScope.user = User.user;
 
 			$state.go("vicigo.feeds");
 		}, (response) => {

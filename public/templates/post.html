@@ -22,6 +22,15 @@
 			<article class="site-block post-body" ng-bind-html="displayFeedBody(post.body)"></article>
 		</div>
 
+
+		<div class="row">
+			<ul class="list-unstyled list-inline">
+				<li ng-repeat="hashtag in post.userPostHashtags">
+					<a class="pull-left" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">#{{ ::hashtag.hashtag}}</a>
+				</li>
+			</ul>
+		</div>
+
 		<hr />
 
 		<div class="row" ng-show="!post.user.addressBCH">
@@ -44,13 +53,14 @@
 					<div ng-show="simpleWallet" class="panel-body">
 						<ul class="list-unstyled list-inline list">
 							<li ng-click="addressClicked(post.user.addressBCH, post.id)">
-								<a class="btn btn-lg btn-default" href="#">
+								<a class="btn btn-default" href="#">
 									<i class="fa fa-btc"></i> 0.001 Upvote</a>
 								</a>
 							</li>
-							<li ng-click="makeUncesorable(post)">
-								<a class="disabled btn btn-lg btn-default" href="#">
-									<i class="fa fa-btc"></i> 0.05  Make it uncensorable</a>
+							<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
+							<li ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
+								<a class="btn btn-default" href="#">
+									<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> uncensorable</a>
 								</a>
 							</li>
 						</ul>
@@ -78,20 +88,27 @@
 			</div>
 		</div>
 
+		<div class="post-uncensorable row" ng-if="post.userPostRefs.length" style="margin-bottom: 20px;">
+			<h4><i class="fa fa-shield"></i>  <strong>Uncensorable</strong></h4>
+			{{post.userPostRefs[0].extId}}
+		</div>
+
 		<div class="row" ng-show="post.userPostUpvotes">
-			<h4><strong>Upvotes</strong></h4>
+			<h4><i class="fa fa-btc"></i> <strong>Upvotes ({{post.userPostUpvotes.length}})</strong></h4>
 
 			<p ng-if="!post.userPostUpvotes.length"><small>No upvotes.</small></p>
 
 			<ul class="list-inline list-unstyled">
 				<li ng-repeat="upvote in post.userPostUpvotes">
-					<a ng-href="https://blockchair.com/bitcoin-cash/transaction/{{upvote.txId}}" target="_blank">{{upvote.txId}}</a>
+					<a ng-href="https://bch.btc.com/{{upvote.txId}}" target="_blank">{{upvote.txId.substring(0, 4)}}...{{upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)}}</a>
 				</li>
 			</ul>
 		</div>
 
 		<div class="row">
-			<h4><strong>Responses</strong></h4>
+			<h4>
+				<strong>Responses</strong>
+			</h4>
 
 			<div class="block-center">
 				<div class="panel">
@@ -99,8 +116,8 @@
 						<a target="_self" ng-href="{{user.id ? '/write/response/' + post.id : '/signup' }}">
 							<ul style="margin-top: 10px;" class="list-unstyled list-inline">
 								<li>
-									<img ng-if="post.user.imageUrl" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
-									<img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+									<img ng-if="user.imageUrl" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-small">
+									<img ng-if="!user.imageUrl" src="/img/avatar.png" class="img-circle img-thumbnail-avatar-small">
 								</li>
 								<li>
 									<p>

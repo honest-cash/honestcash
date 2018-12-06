@@ -114,6 +114,43 @@
 	</div>
 	<!-- END OF TIP MODAL -->
 
+	<!-- TIP MODAL -->
+	<div class="modal fade" id="uncensoredResultModal" tabindex="-1" role="dialog" >
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel"><b>You story will live forever!</h4>
+				</div>
+
+				<div id="uncensoredResultLoading" class="modal-body">
+					<p>
+						Uploading to BCH blockchain. This may take a while...
+					</p>
+				</div>
+
+				<div id="uncensoredResultSuccess" class="modal-body">
+						<p>
+							You can access it with this identifier:
+						</p>
+	
+						<input class="form-control" id="bitcoinFileId" readonly />
+
+						<p>
+							Your content is saved on Bitcoin Cash blockchain. You can access it with any explorer that supports the bitcoinfile protocol. <a href="https://bitcoinfiles.com/">Try here (bitcoinfiles.com).</a> Even if your content gets moderated, this reference will be displayed for everyone to check out your content.
+						</p>
+
+						<ul>
+							<li>Uncensorable</li>
+							<li>Immutable</li>
+							<li>Saved forever</li>
+						</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END OF TIP MODAL -->
+
 	<!-- UPLOAD IMAGE MODAL -->
 	<div class="modal fade" id="uploadProfilePicModal" tabindex="-1" role="dialog" aria-labelledby="uploadProfilePicModal">
 		<div class="modal-dialog" role="document">
@@ -180,20 +217,6 @@
       </div>
     </script>
 
-	<!-- LOGIN MODAL -->
-	<div class="modal fade" id="loginModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="loginModal">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="loginModalLabel"><b>Login to continue</b> <button class="close hidden" data-dismiss="modal">×</button></h4>
-				</div>
-				<div class="modal-body">
-					<button id="fbBtn" ng-click="fbLogin()" class="btn btn-block  btn-primary push btn btn-lg"><span class="fa fa-facebook"></span> Facebook</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- END LOGIN MODAL -->
 	<script type="text/javascript" src="/libs/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="/lib/jquery-hashtags-master/js/autosize.min.js"></script>
@@ -217,20 +240,6 @@
 	<script type="text/javascript" src="/js/simple-bitcoin-wallet.min.js"></script>
 
 	<script type="text/javascript" src="/js/app.js"></script>
-	
-	<div id="preview-template" >
-		<div class="dz-preview dz-file-preview">
-			<div class="dz-details">
-				<div class="dz-filename"><span></span></div>
-				<div class="dz-size"></div>
-			</div>
-
-			<div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-			<div class="dz-success-mark"><span></span></div>
-			<div class="dz-error-mark"><span></span></div>
-			<div class="dz-error-message"><span data-dz-errormessage></span></div>
-		</div>
-	</div>
 </body>
 
 </html>

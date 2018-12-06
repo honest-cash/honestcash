@@ -36,10 +36,11 @@ export default class PostService {
             })
         };
 
-        const downvote = function(postId) {
-            $http.post(API_URL + "/post/" + postId + "/downvote").then(function(response) {
-                
-            });
+        const createRef = (ref) => {
+            return $http.post(API_URL + "/post/" + ref.postId + "/ref", {
+                extId: ref.extId,
+                postId: ref.postId
+            })
         };
 
         const getUpvotes = function(postId, callback) {
@@ -48,20 +49,14 @@ export default class PostService {
             });
         };
 
-        const getViews = function(postId, callback) {
-            $http.get(API_URL + "/post/" + postId + "/views").then(function(response) {
-                callback(response.data);
-            });
-        };
-
-	this.getViews = getViews;
-	this.getUpvotes = getUpvotes;
-	this.publishPic = publishPic;
-	this.getById = getById;
-	this.getByAlias = getByAlias;
-	this.removePost = removePost;
-	this.upvote = upvote;
-    this.displayHTML = displayHTML;
+        this.createRef = createRef;
+        this.getUpvotes = getUpvotes;
+        this.publishPic = publishPic;
+        this.getById = getById;
+        this.getByAlias = getByAlias;
+        this.removePost = removePost;
+        this.upvote = upvote;
+        this.displayHTML = displayHTML;
     }
 }
 

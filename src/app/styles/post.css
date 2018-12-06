@@ -5,3 +5,7 @@
 .post-body {
 	overflow-wrap: break-word;
 }
+
+.post-uncensorable {
+	overflow-wrap: break-word;
+}

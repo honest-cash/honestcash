@@ -14,36 +14,32 @@ export const onStateChange = function($rootScope, $state, AuthService) {
             $rootScope.noHeader = false;
         }
 
-		let res;
+		if (!$rootScope.user) {
+			AuthService.loadUserCredentials();
 
-		AuthService.loadUserCredentials();
-
-		if (AuthService.getUserId()) {
-			$rootScope.user = {
-				id: AuthService.getUserId()
-			};
-		} else {
-			if (location.pathname === "/") {
-				location.href = "/signup";
+			if (AuthService.getUserId()) {
+				$rootScope.user = {
+					id: AuthService.getUserId()
+				};
+			} else {
+				if (location.pathname === "/") {
+					location.href = "/signup";
+				}
 			}
+
+			AuthService.validate()
+			.then(res => {
+				const user = res.data;    
+
+				$rootScope.user = user;
+			}, () => {
+				$rootScope.user = null;
+
+				if (location.pathname === "/") {
+					location.href = "/signup";
+				}
+			});
 		}
-
-		AuthService.validate()
-		.then(res => {
-			const data = res.data;    
-
-			$rootScope.user = {
-				id: data.id,
-				imageUrl: data.imageUrl,
-				name: data.username
-			};
-		}, () => {
-			$rootScope.user = null;
-
-			if (location.pathname === "/") {
-				location.href = "/signup";
-			}
-		});
 
 		$('#tipModal').modal('hide');
     });
@@ -63,8 +59,7 @@ export const initProfileUpload = function(API_URL, AuthService) {
 			this.removeAllFiles();
 			this.addFile(file);
 		},
-		thumbnailWidth: null,
-		previewTemplate: document.querySelector('#preview-template').innerHTML,
+		thumbnailWidth: null
 	})
 	.on("addedfile", () => {
 		$("#profilePicDropzone").addClass("hidden");

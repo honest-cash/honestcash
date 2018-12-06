@@ -13,34 +13,67 @@ export default class MainCtrl {
             new QRCode(container, address);
         };
 
+        const byteCount = (s) => {
+            return ((encodeURI(s).split(/%..|./).length - 1) / 1024).toFixed(2);
+        };
+
         const makeUncesorable = async (post) => {
             const simpleWallet = simpleWalletProvider.get();
 
+            const json = {
+                title: post.title,
+                body: post.plain,
+                author: post.user.username,
+            };
+
+            if (byteCount(JSON.stringify(json)) > 5) {
+                return toastr.warning("The story is too long! We are working on it!");
+            }
+
+            $('#uncensoredResultModal').modal({
+                backdrop: "static"
+            });
+
+            document.getElementById("uncensoredResultLoading").style.display = "block";
+            document.getElementById("uncensoredResultSuccess").style.display = "none";
+
             // users with connected BCH accounts
             if (simpleWallet) {
-                const res = await simpleWallet.upload({
-                    title: post.title,
-                    body: post.plain,
-                    author: post.user.username,
-                }, {
-                    title: `${post.title} by ${post.user.username} | Honest Cash`,
-                    extUri: `https://honest.cash/${post.user.username}/${post.alias}`
-                });
+                let res;
+
+                try {
+                    res = await simpleWallet.upload(json, {
+                        title: `${post.title} by ${post.user.username} | Honest Cash`,
+                        extUri: `https://honest.cash/${post.user.username}/${post.alias}`
+                    });
+                } catch (err) {
+                    $('#uncensoredResultModal').modal('hide');
+
+                    if (err.message.indexOf("mempool") > -1) {
+                        return toastr.warning("The story is too long! We are working on it!");
+                    }
+
+                    return toastr.warning(err.message);
+                }
+
+                document.getElementById("uncensoredResultLoading").style.display = "none";
+                document.getElementById("uncensoredResultSuccess").style.display = "block";
 
                 const fileId = res.fileId;
 
                 console.log(res);
                 console.log("Story saved for all times on BCH: " + fileId);
+               
+                const inputEl = document.getElementById("bitcoinFileId");
 
-                const anchorEl = document.getElementById("bchTippingTransactionUrl");
+                inputEl.value = fileId;
 
-                anchorEl.innerHTML = `See bitcoin: ${fileId}`;
-                anchorEl.href = url;
-
-                return;
+                PostService.createRef({
+                    postId: post.id,
+                    extId: fileId
+                });
             }
         };
-
 
         const addressClicked = async (address, postId) => {
             const simpleWallet = simpleWalletProvider.get();
@@ -70,7 +103,7 @@ export default class MainCtrl {
                 const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
                 const anchorEl = document.getElementById("bchTippingTransactionUrl");
-
+              
                 console.log(`Upvote transaction: ${url}`);
 
                 anchorEl.innerHTML = `See transaction: ${tx.txid.substring(0, 9)}...`;
