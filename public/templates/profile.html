@@ -186,13 +186,13 @@
 					<!-- AUTHOR REFERENCES -->
 					<div class="pull-left width321">
 						<!-- AUTHOR IMAGE -->
-						<a ui-sref="vicigo.profile({profileId:followGuy.id})">
+						<a ui-sref="vicigo.profile({profileId:followGuy.username})">
 							<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{followGuy.imageUrl ? followGuy.imageUrl : '/img/avatar.png'}}">
 						</a>
 						<!-- END AUTHOR IMAGE -->
 
 						<strong style="margin-top:50px;">
-							<a ui-sref="vicigo.profile({profileId:followGuy.id})">{{followGuy.username}}</a>
+							<a ui-sref="vicigo.profile({profileId:followGuy.username})">{{followGuy.username}}</a>
 						</strong>
 
 						<!-- AUTHOR TITLE -->
