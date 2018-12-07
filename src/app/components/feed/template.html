@@ -57,18 +57,21 @@
 			<div class="row hashtags">
 				<div class="col-xs-12">
 					<div style="padding-left:8px;padding-right:5px;">
-						<a class="pull-left hashtag" ng-repeat="hashtag in feed.userPostHashtags" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">#{{ ::hashtag.hashtag}}</a>
+						<a class="pull-left hashtag" ng-repeat="hashtag in feed.userPostHashtags" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">#{{ ::hashtag.hashtag }}</a>
 					</div>
 				</div>
 			</div>
 
 			<div class="row feed-actions" style="padding-top: 10px; padding-bottom: 10px;">
 				<div class="col-xs-12">
-					<ul class="list-unstyled list-inline list" ng-click="addressClicked(feed.user.addressBCH, feed.id)">
+					<ul class="list-unstyled list-inline list">
 						<li style="width:50px;">
-							<a class="btn btn-default" href="#">
-								<i class="fa fa-btc"></i> 0.001 Upvote</a>
-							</a>
+							<button ng-click="addressClicked(feed)" class="btn btn-default" ng-disabled="upvotingPostId === feed.id">
+								<i class="fa fa-btc"></i> 0.002</a>
+							</button>
+						</li>
+						<li style="width:50px;">
+							<small>{{feed.upvoteCount}} Upvotes</small>
 						</li>
 					</ul>
 				</div>

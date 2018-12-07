@@ -35,36 +35,36 @@
 
 <div class="block-center container" style="max-width:1300px;">
 		<div class="hidden-xs hidden-sm col-lg-3" >
-				<div ng-if="user.id" class="pull-left" style="max-width:300px">
-					<div>
-						<ul class="list-unstyled">
-							<li>
-								<a ng-class="{ 'bold': feedType === 'userfeed' }" href="/">my feed</a>
-							</li>
-
-							<li tyle="margin-top:7px;">
-								<a ng-class="{ 'bold': feedType === 'all' }" href="/new">all</a>
-							</li>
-						</ul>
-					</div>
-
-					<h5 class="bold">
-						top topics
-					</h5>
+			<div ng-if="user.id" class="pull-left" style="max-width:300px">
+				<div>
 					<ul class="list-unstyled">
-						<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
-							<a ng-class="{ 'bold': hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
+						<li>
+							<a ng-class="{ 'bold': feedType === 'userfeed' }" href="/">my feed</a>
+						</li>
+
+						<li tyle="margin-top:7px;">
+							<a ng-class="{ 'bold': feedType === 'all' }" href="/new">all</a>
 						</li>
 					</ul>
-					<small>
-						<a style="padding: 3px;" href="https://honest.cash/honest_cash/frequently-asked-questions">FAQ</a>
-						<a style="padding: 3px;" href="https://honest.cash/honest_cash/about-honest-cash">About</a>
-						<a style="padding: 3px;" href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/">Terms</a>
-						<br />
-						<span>Honest Cash © 2018</span>
-					</small>
 				</div>
+
+				<h5 class="bold">
+					top topics
+				</h5>
+				<ul class="list-unstyled">
+					<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
+						<a ng-class="{ 'bold': hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
+					</li>
+				</ul>
+				<small>
+					<a style="padding: 3px;" href="https://honest.cash/honest_cash/frequently-asked-questions">FAQ</a>
+					<a style="padding: 3px;" href="https://honest.cash/honest_cash/about-honest-cash">About</a>
+					<a style="padding: 3px;" href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/">Terms</a>
+					<br />
+					<span>Honest Cash © 2018</span>
+				</small>
 			</div>
+		</div>
 
 	<div class="col-lg-6">
 		<div class="block-center">

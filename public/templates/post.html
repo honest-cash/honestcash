@@ -47,26 +47,26 @@
 			</div>
 		</div>
 
-		<div class="row" ng-show="post.user.addressBCH">
+		<div class="row" ng-show="simpleWallet && post.user.addressBCH">
 			<div class="block-center">
-				<div class="panel">
-					<div ng-show="simpleWallet" class="panel-body">
-						<ul class="list-unstyled list-inline list">
-							<li ng-click="addressClicked(post.user.addressBCH, post.id)">
-								<a class="btn btn-default" href="#">
-									<i class="fa fa-btc"></i> 0.001 Upvote</a>
-								</a>
-							</li>
-							<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
-							<li ng-show="!post.userPostRefs.length" ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
-								<a class="btn btn-default" href="#">
-									<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> uncensorable</a>
-								</a>
-							</li>
-						</ul>
-					</div>
+				<div>
+					<ul class="list-unstyled list-inline list">
+						<li>
+							<button ng-disabled="upvotingPostId === post.id || post.userId === profile.id" ng-click="addressClicked(post)" class="btn btn-default">
+								<i class="fa fa-btc"></i> 0.002 Upvote
+							</button>
+						</li>
+						<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
+						<li ng-show="!post.userPostRefs.length" ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
+							<a class="btn btn-default" href="#">
+								<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> uncensorable</a>
+							</a>
+						</li>
+					</ul>
+				</div>
 
-					<div ng-show="!simpleWallet" class="panel-body">
+				<div class="panel" ng-show="!simpleWallet" >
+					<div class="panel-body">
 						<h2>Give a tip to the author</h2>
 
 						<button class="btn btn-lg btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
@@ -156,7 +156,7 @@
 						<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
 
 						<ul style="margin-left: 5px;" class="list-inline list-unstyled">
-							<li ng-click="addressClicked(response.user.addressBCH, response.id)" style="width:50px;">
+							<li ng-click="addressClicked(response)" style="width:50px;">
 								<a class="btn btn-default" href="#">
 									<i class="fa fa-btc"></i> 0.001 Upvote</a>
 								</a>

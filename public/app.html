@@ -66,7 +66,7 @@
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel"><b>Give tip to the author</h4>
+					<h4 class="modal-title" id="myModalLabel">Give tip to the author</h4>
 				</div>
 
 				<div class="modal-body">
@@ -93,20 +93,25 @@
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel"><b>Success!</h4>
+					<h4 class="modal-title" id="myModalLabel">Success!</h4>
 				</div>
 
 				<div class="modal-body">
-					<div class="panel panel-info">
-						<div class="panel-body">
-							<strong>You have just given a tip to an author.</strong>
-						</div>
+					<div>
+						<p><small>Your upvote has been distributed to the author of the story and the previous upvoters. <span ng-show="profile">You will be able to receive rewards from the next upvotes!</span></small></p>
+						<p><small>Current distribution: author (40%), previous upvoters (60%).</small></p>
 					</div>
+					<div id="distribution-info"></div>
+			
 
 					<div class="form-group">
 						<i class="fa fa-check"></i>
 
 						<a id="bchTippingTransactionUrl" href=""></a>
+					</div>
+
+					<div class="form-group">
+						<small>Disclaimer: We are still in beta and many features may not work as intended! We do not assume any risk or give any warranty that you will receive rewards.</small>
 					</div>
 				</div>
 			</div>
@@ -120,7 +125,7 @@
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel"><b>Your story will live forever!</h4>
+					<h4 class="modal-title" id="myModalLabel">Your story will live forever!</h4>
 				</div>
 
 				<div id="uncensoredResultLoading" class="modal-body">

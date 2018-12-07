@@ -75,46 +75,141 @@ export default class MainCtrl {
             }
         };
 
-        const addressClicked = async (address, postId) => {
+        const getBaseLog = (x, y) => {
+            return Math.log(y) / Math.log(x);
+        };
+
+        const determineUpvoteRewards = (upvotes, author) => {
+            const receivers = [];
+
+            const tipAmountSat = 200000;
+            const authorAmountPart = 0.4;
+
+             // filter only users with BCH address for receiving tips
+             upvotes = upvotes.filter(_ => _.user && _.user.addressBCH);
+
+             let authorAmount, numberOfEarlyUpvotersToBeRewarded;
+
+            if (upvotes.length === 0) {
+                authorAmount = tipAmountSat;
+                numberOfEarlyUpvotersToBeRewarded = 0;
+            } else {
+                authorAmount = tipAmountSat * authorAmountPart;
+                numberOfEarlyUpvotersToBeRewarded =  Math.floor(getBaseLog(2, upvotes.length)) + 1;
+            }
+
+            console.log(numberOfEarlyUpvotersToBeRewarded + " previous upvoters will be rewarded");
+
+            receivers.push({
+                user: author,
+                amountSat: authorAmount,
+                address: author.addressBCH
+            });
+
+            const tipAmountForUpvoters = tipAmountSat - authorAmount;
+
+            // upvotes = upvotes.slice(Math.max(upvotes.length - numberOfEarlyUpvotersToBeRewarded, 1));
+
+            for (let payoutIndex = 0; payoutIndex < numberOfEarlyUpvotersToBeRewarded; payoutIndex++) {
+                const upvote = upvotes[upvotes.length - Math.pow(2, payoutIndex)]
+                const amountSat = tipAmountForUpvoters / numberOfEarlyUpvotersToBeRewarded;
+
+                receivers.push({
+                    user: upvote.user,
+                    amountSat: amountSat,
+                    address: upvote.user.addressBCH
+                });
+            }
+
+            let totalPayouts = 0;
+
+            for (let receiver of receivers) {
+                totalPayouts += receiver.amountSat;
+            }
+
+            console.log(`Total rewards payouts: ${totalPayouts}`);
+
+            if (totalPayouts !== tipAmountSat) {
+                throw new Error(`Total payouts ${totalPayouts} are different than the tip amount ${tipAmountSat}. Stopping payouts!`)
+            }
+
+            return receivers;
+        };
+
+        const satoshiToBch = (amountSat) => {
+            return (amountSat / 100000000).toFixed(5);
+        }
+
+        const addressClicked = (post) => {
+            const postId = post.id;
+            const address = post.user.addressBCH;
             const simpleWallet = simpleWalletProvider.get();
+
+            $scope.upvotingPostId = postId;
 
             // users with connected BCH accounts
             if (simpleWallet) {
                 let tx;
 
-                // distribute only to testnet of owner
-                // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
-                try {
-                    tx = await simpleWallet.send([
-                        { address: address, amountSat: 100000 }
-                    ]);
-                } catch (err) {
-                    if (err.message && err.message.indexOf("Insufficient") > -1) {
-                        return toastr.warning("Insufficient balance on your BCH account.");
+               return PostService.getUpvotes(postId, async upvotes => {
+                    const receivers = determineUpvoteRewards(upvotes, post.user);
+
+                    $('#tipSuccessModal').modal('show');
+
+                    const distributionInfoEl = document.getElementById("distribution-info");
+
+                    distributionInfoEl.innerHTML = "";
+
+                    for (let receiver of receivers) {
+                        const el = document.createElement("div");
+
+                        let userHtml;
+
+                        if (receiver.user) {
+                            userHtml = `<a target="_self" href="/profile/${receiver.user.username}"><img style="border-radius:50%; width: 23px;" src="${receiver.user.imageUrl ? receiver.user.imageUrl : '/img/avatar.png'}" /> ${receiver.user.username}</a> ${post.userId === receiver.user.id ? '(Author)' : ''}`;
+                        } else {
+                            userHtml = `<img style="width: 23px;" src="/img/avatar.png" /> Anonymous`;
+                        }
+
+                        el.innerHTML = `${satoshiToBch(receiver.amountSat)} BCH -> ${userHtml}`;
+
+                        distributionInfoEl.appendChild(el);
                     }
 
-                    console.error(err);
+                    // distribute only to testnet of owner
+                    // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
+                    try {
+                        tx = await simpleWallet.send(receivers);
+                    } catch (err) {
+                        if (err.message && err.message.indexOf("Insufficient") > -1) {
+                            return toastr.warning("Insufficient balance on your BCH account.");
+                        }
 
-                    return toastr.warning("Error. Try again later.");
-                }
+                        if (err.message && err.message.indexOf("has no matching Script") > -1) {
+                            return toastr.warning("Could not find an unspent bitcoin that is big enough");
+                        }
 
-                $('#tipSuccessModal').modal('show');
+                        console.error(err);
 
-                const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
+                        return toastr.warning("Error. Try again later.");
+                    }
 
-                const anchorEl = document.getElementById("bchTippingTransactionUrl");
-              
-                console.log(`Upvote transaction: ${url}`);
+                    const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
-                anchorEl.innerHTML = `See transaction: ${tx.txid.substring(0, 9)}...`;
-                anchorEl.href = url;
+                    const anchorEl = document.getElementById("bchTippingTransactionUrl");
+                
+                    console.log(`Upvote transaction: ${url}`);
 
-                PostService.upvote({
-                    postId: postId,
-                    txId: tx.txid
+                    anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
+                    anchorEl.href = url;
+
+                    PostService.upvote({
+                        postId: postId,
+                        txId: tx.txid
+                    });
+
+                    $scope.upvotingPostId = null;
                 });
-
-                return;
             }
 
             $('#tipModal').modal('show');
