@@ -3,7 +3,7 @@ module.exports = {
         app: './src/app/app.js',
         editor: './src/editor/editor.ts'
     },
-    mode: 'development',
+    mode: 'production',
     output: {
         path: __dirname + "/public/js",
         filename: '[name].js',
