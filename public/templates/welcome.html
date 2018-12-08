@@ -54,8 +54,7 @@
         </h4>
         <ul>
           <li ng-repeat = "hashtag in hashtags">
-							<b>#{{hashtag}}</b>
-						<a ng-if="false" ui-sref="vicigo.hashtag({hashtag : hashtag})">#{{hashtag}}</a>
+						<a target="_self" href="/hashtag/{{hashtag}}">{{hashtag}}</a>
 					</li>
         </ul>
       </div>
