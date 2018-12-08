@@ -40,16 +40,43 @@
 				</a>
 			</li>
 
+			<li class="visible-xs" ng-if="user.id">
+				<a style="margin-top: 5px;" href="/" target="_self">my feed</a>
+			</li>
+
+			<li class="visible-xs" ng-if="user.id">
+				<a style="margin-top: 5px;" href="/new" target="_self">new stories</a>
+			</li>
+
 			<li ng-if="user.id">
-				<a href="/write" target="_self"><i class="fa fa-pencil"></i></a>
+				<a style="margin-top: 5px;" href="/write" target="_self">
+					<i class="hidden-xs fa fa-pencil"></i><span class="visible-xs">write a story</span>
+				</a>
 			</li>
 
-			<li ng-if="!user" role="menuitem">
+			<li class="visible-xs" ng-if="user.id">
+				<a style="margin-top: 5px;" ng-href="/profile/{{user.username}}"" target="_self">
+					my profile
+				</a>
+			</li>
+
+			<li class="visible-xs" ng-if="user.id" role="menuitem">
 				<a ng-if="!simpleWallet" ui-sref="wallet.create()">connect wallet</a>
-				<a ng-if="simpleWallet" ui-sref="wallet.create()">connected wallet</a>
+				<a ng-if="simpleWallet" ui-sref="wallet.create()">my wallet</a>
 			</li>
 
-            <li style="margin-top: 5px;" ng-if="user.id" class="menu-item-profile">
+			<li class="visible-xs" ng-if="user.id">
+					<a style="margin-top: 5px;" href="/honest_cash/honest-cash-terms-of-service-124/"" target="_self">
+						terms of service
+					</a>
+			</li>
+
+			<li class="visible-xs" role="menuitem">
+				<a href="#" ng-click="logoutMe()">logout</a>
+			</li>
+		
+
+            <li style="margin-top: 5px;" ng-if="user.id" class="hidden-xs menu-item-profile">
 				<div class="btn-group" uib-dropdown on-toggle="toggled(open)">
 					<a href="#" uib-dropdown-toggle ng-disabled="disabled">
 						<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
@@ -57,16 +84,16 @@
 					</a>
 					<ul uib-dropdown-menu class="uib-dropdown-menu header_menu" role="menu" aria-labelledby="single-button">
 						<li role="menuitem">
-							<a ui-sref="vicigo.profile({ profileId: user.username })">Profile</a>
+							<a ui-sref="vicigo.profile({ profileId: user.username })">profile</a>
 						</li>
 
 						<li role="menuitem">
-							<a ng-if="!simpleWallet" ui-sref="wallet.create()">Connect wallet</a>
-							<a ng-if="simpleWallet" ui-sref="wallet.create()">Connected wallet</a>
+							<a ng-if="!simpleWallet" ui-sref="wallet.create()">connect wallet</a>
+							<a ng-if="simpleWallet" ui-sref="wallet.create()">my wallet</a>
 						</li>
 
 						<li role="menuitem">
-							<a href="#" ng-click="logoutMe()">Logout</a>
+							<a href="#" ng-click="logoutMe()">logout</a>
 						</li>
 					</ul>
 				</div>
