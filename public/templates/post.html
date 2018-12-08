@@ -160,7 +160,7 @@
 								</button>
 							</li>
 							<li ng-click="addressClicked(response)" style="width:50px;">
-								<small>{{response.upvoteCount}} {{response.upvoteCount === 1 ? "Upvote" : Upvotes}}</small>
+								<small>{{response.upvoteCount}} {{response.upvoteCount === 1 ? "Upvote" : "Upvotes"}}</small>
 							</li>
 							<li style="margin-left:80px;">
 								<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">
