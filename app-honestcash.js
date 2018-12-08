@@ -114,6 +114,51 @@ app.get("/", renderFeed);
 app.get("/hashtag/:hashtag", renderFeed);
 
 /**
+ * Server rendering for profiles
+ */
+app.get("/profile/:username", async (req, res, next) => {
+	const userAgent = req.headers['user-agent'];
+	const crawlerView = req.query.crawlerView;
+
+	if (!isBot(userAgent, crawlerView)) {
+		return next();
+	}
+
+	let profileRes;
+	let feedRes;
+	let profile;
+	let feeds;
+
+	try {
+		profileRes = await axios.get(`https://honest.cash/api/user/${req.params.username}`);
+
+		profile = profileRes.data;
+
+		if (!profile) {
+			res.status(404).render("Not found");
+	
+			return;
+		}
+
+		feedRes = await axios.get(`https://honest.cash/api/feeds?userId=${profile.id}`);
+		feeds = feedRes.data;
+	} catch (err) {
+		console.error(err);
+
+		return res.status(500).send("Internal Server Error");
+	}
+
+	const seoData = seo.getForProfile(profile);
+
+	res.render('profileBody.ejs', {
+		layout: 'crawlerProfileLayout',
+		SEO: seoData,
+		profile,
+		feeds
+	});
+});
+
+/**
  * Server rendering for posts
  */
 app.get("/:username/:alias", async (req, res, next) => {

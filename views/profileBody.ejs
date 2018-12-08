@@ -1,0 +1,12 @@
+
+<div class="container">
+    <div class="row">
+        <h1><%- profile.username %></h1>
+
+        <img src="<%- profile.imageUrl %>" style="width:200px">
+    </div>
+</div>
+
+<% for (var index = 0; index < feeds.length; index++) { %>
+    <%- include('post', { post: feeds[index] }); %>
+<% } %>

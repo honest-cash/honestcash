@@ -17,7 +17,7 @@ const metaDefault = {
 };
 
 const getForPost = (post) => {
-    const url = "http://honest.cash/" + post.user.username + "/" + post.alias;
+    const url = "https://honest.cash/" + post.user.username + "/" + post.alias;
 
     const title = post.title + " by @" + post.user.username + " | Honest Cash";
 
@@ -32,11 +32,32 @@ const getForPost = (post) => {
         "twitterDescription": desc,
         "twitterTitle": title,
         "ogUrl": url,
-        "ogImage": "null"
+        "ogImage": post.imageUrl || metaDefault.ogImage
     };
-}
+};
+
+const getForProfile = (profile) => {
+    const url = "https://honest.cash/profile/" + profile.username;
+
+    const title = `@${profile.username} | Honest Cash`;
+
+    const desc = `The latest Stories from @${profile.username} on Honest Cash`;
+
+    return {
+        "title": title,
+        "description": desc,
+        "author": profile.username,
+        "ogTitle": title,
+        "ogDescription": desc,
+        "twitterDescription": desc,
+        "twitterTitle": title,
+        "ogUrl": url,
+        "ogImage": profile.imageUrl
+    };
+};
 
 module.exports = {
+    getForProfile,
     getForPost,
     metaDefault
 };
