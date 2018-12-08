@@ -154,15 +154,15 @@
 						<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
 
 						<ul class="list-inline list-unstyled">
-							<li  style="width:50px;">
+							<li>
 								<button ng-click="addressClicked(response)" class="btn btn-default">
 									<i class="fa fa-btc"></i> 0.002</a>
 								</button>
 							</li>
-							<li ng-click="addressClicked(response)" style="width:50px;">
+							<li ng-click="addressClicked(response)" >
 								<small>{{response.upvoteCount}} {{response.upvoteCount === 1 ? "Upvote" : "Upvotes"}}</small>
 							</li>
-							<li style="margin-left:80px;">
+							<li>
 								<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">
 									<small>Read more</small>
 								</a>
