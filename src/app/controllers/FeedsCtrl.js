@@ -77,46 +77,6 @@ export default class FeedsCtrl {
 				$scope.fetchFeeds();
 			}
 		};
-
-		/* repeating */
-		$scope.upvote = function(postId, index) {
-			if (!$rootScope.user.id) {
-				return $("#loginModal").modal();
-			}
-
-			$scope.feeds[index].alreadyUpvoted = true;
-			$scope.feeds[index].upvotes_count = $scope.feeds[index].upvotes_count + 1;
-			PostService.upvote(postId);
-		};
-
-		$scope.hashtagFollowed = true;
-		if ($stateParams.hashtag && $rootScope.user) {
-			$http.get("/api/hashtag/" + $stateParams.hashtag + "/follow").then(function(response) {
-				$scope.hashtagFollowed = response.data.isFollowing;
-			});
-		}
-		$scope.followHashtag = function(hashtag, index, list) {
-			if (!$rootScope.user.id) {
-				return $("#loginModal").modal()
-			}
-
-			if (index !== undefined) {
-				$scope.recommendedHashtags.splice(index, 1);
-			} else {
-				$scope.hashtagFollowed = true;
-			}
-
-			$http.post("/api/hashtag/follow", {
-				hashtag: hashtag
-			});
-		};
-
-		$scope.unfollowHashtag = function(hashtag) {
-			$scope.hashtagFollowed = false;
-			$http.post("/api/hashtag/unfollow", {
-				hashtag: hashtag
-			});
-		};
   }
 }
 

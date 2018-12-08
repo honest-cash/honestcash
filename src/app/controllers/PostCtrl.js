@@ -4,9 +4,11 @@ export default class PostCtrl {
         $scope.postId = post.post_id;
         $scope.post = post;
         $scope.post.createdAt = moment(post.createdAt).format("MMM Do YY");
+        $scope.post.publishedAt = moment(post.publishedAt).format("MMM Do YY");
 
         $scope.post.userPosts && $scope.post.userPosts.forEach(userPost => {
             userPost.createdAt = moment(userPost.createdAt).format("MMM Do YY");
+            userPost.publishedAt = moment(userPost.publishedAt).format("MMM Do YY");
         });
 
         const init = () => {
