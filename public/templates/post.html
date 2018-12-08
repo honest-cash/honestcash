@@ -22,6 +22,21 @@
 			<article class="site-block post-body" ng-bind-html="displayFeedBody(post.body)"></article>
 		</div>
 
+		<div class="row" ng-show="simpleWallet">
+			<ul class="list-unstyled list-inline list">
+				<li>
+					<button ng-disabled="upvotingPostId === post.id || post.userId === profile.id" ng-click="addressClicked(post)" class="btn btn-default">
+						<i class="fa fa-btc"></i> 0.002 Upvote
+					</button>
+				</li>
+				<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
+				<li ng-show="!post.userPostRefs.length" ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
+					<a class="btn btn-default" href="#">
+						<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> uncensorable</a>
+					</a>
+				</li>
+			</ul>
+		</div>
 
 		<div class="row">
 			<ul class="list-unstyled list-inline">
@@ -47,24 +62,8 @@
 			</div>
 		</div>
 
-		<div class="row" ng-show="simpleWallet && post.user.addressBCH">
+		<div class="row" ng-show="post.user.addressBCH">
 			<div class="block-center">
-				<div>
-					<ul class="list-unstyled list-inline list">
-						<li>
-							<button ng-disabled="upvotingPostId === post.id || post.userId === profile.id" ng-click="addressClicked(post)" class="btn btn-default">
-								<i class="fa fa-btc"></i> 0.002 Upvote
-							</button>
-						</li>
-						<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
-						<li ng-show="!post.userPostRefs.length" ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
-							<a class="btn btn-default" href="#">
-								<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> uncensorable</a>
-							</a>
-						</li>
-					</ul>
-				</div>
-
 				<div class="panel" ng-show="!simpleWallet" >
 					<div class="panel-body">
 						<h2>Give a tip to the author</h2>
@@ -80,7 +79,7 @@
 						<div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
 
 						<p>
-							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to have a connected wallet and be logged in for your tips to receive future rewards.
+							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to have a connected wallet and be logged in for your tips to receive future upvote rewards.
 						</p>
 					</div>
 				</div>
