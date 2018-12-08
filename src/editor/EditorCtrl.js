@@ -3,6 +3,7 @@ import * as async from "async";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
 import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
+import "../core/config/toastr";
 
 export default class EditorCtrl {
     constructor($scope, $http, $timeout, AuthService, API_URL) {
@@ -125,7 +126,6 @@ export default class EditorCtrl {
 
             $scope.Saving.body = setTimeout(() => {
                 saveDraftElement(element, () => {
-                    toastr.options.positionClass = "toast-bottom-right";
                     return toastr.success("Draft has been saved.");
                 });
             }, 3000);

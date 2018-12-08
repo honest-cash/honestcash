@@ -24,7 +24,7 @@ import '../core/config';
 import '../core/services';
 import './components';
 
-var imageDropzone, profilePicDropzone, hashbookBGDropzone;
+import "../core/config/toastr";
 
 angular.module("hashtag-app", [
 	uiRouter,

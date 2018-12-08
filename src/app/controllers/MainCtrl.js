@@ -85,6 +85,7 @@ export default class MainCtrl {
             const tipAmountSat = 200000;
             const authorAmountPart = 0.4;
 
+
              // filter only users with BCH address for receiving tips
              upvotes = upvotes.filter(_ => _.user && _.user.addressBCH);
 
@@ -146,6 +147,7 @@ export default class MainCtrl {
             const simpleWallet = simpleWalletProvider.get();
 
             $scope.upvotingPostId = postId;
+            $scope.upvotingStatus = "loading";
 
             // users with connected BCH accounts
             if (simpleWallet) {
@@ -154,7 +156,7 @@ export default class MainCtrl {
                return PostService.getUpvotes(postId, async upvotes => {
                     const receivers = determineUpvoteRewards(upvotes, post.user);
 
-                    $('#tipSuccessModal').modal('show');
+                    toastr.info("Upvoting...");
 
                     const distributionInfoEl = document.getElementById("distribution-info");
 
@@ -189,10 +191,14 @@ export default class MainCtrl {
                             return toastr.warning("Could not find an unspent bitcoin that is big enough");
                         }
 
+                        $scope.upvotingStatus = "error";
+
                         console.error(err);
 
                         return toastr.warning("Error. Try again later.");
                     }
+
+                    $('#tipSuccessModal').modal('show');
 
                     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
