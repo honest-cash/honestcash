@@ -1,4 +1,6 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+import * as upvoteDistribution from "../lib/upvoteDistribution";
+
 export default class MainCtrl {
     constructor(
         $rootScope, $scope, $state, $sce, $window, $location, $http, AuthService, RelsService, HashtagService, PostService, $uibModal
@@ -75,68 +77,6 @@ export default class MainCtrl {
             }
         };
 
-        const getBaseLog = (x, y) => {
-            return Math.log(y) / Math.log(x);
-        };
-
-        const determineUpvoteRewards = (upvotes, author) => {
-            const receivers = [];
-
-            const tipAmountSat = 200000;
-            const authorAmountPart = 0.4;
-
-
-             // filter only users with BCH address for receiving tips
-             upvotes = upvotes.filter(_ => _.user && _.user.addressBCH);
-
-             let authorAmount, numberOfEarlyUpvotersToBeRewarded;
-
-            if (upvotes.length === 0) {
-                authorAmount = tipAmountSat;
-                numberOfEarlyUpvotersToBeRewarded = 0;
-            } else {
-                authorAmount = tipAmountSat * authorAmountPart;
-                numberOfEarlyUpvotersToBeRewarded =  Math.floor(getBaseLog(2, upvotes.length)) + 1;
-            }
-
-            console.log(numberOfEarlyUpvotersToBeRewarded + " previous upvoters will be rewarded");
-
-            receivers.push({
-                user: author,
-                amountSat: authorAmount,
-                address: author.addressBCH
-            });
-
-            const tipAmountForUpvoters = tipAmountSat - authorAmount;
-
-            // upvotes = upvotes.slice(Math.max(upvotes.length - numberOfEarlyUpvotersToBeRewarded, 1));
-
-            for (let payoutIndex = 0; payoutIndex < numberOfEarlyUpvotersToBeRewarded; payoutIndex++) {
-                const upvote = upvotes[upvotes.length - Math.pow(2, payoutIndex)]
-                const amountSat = tipAmountForUpvoters / numberOfEarlyUpvotersToBeRewarded;
-
-                receivers.push({
-                    user: upvote.user,
-                    amountSat: amountSat,
-                    address: upvote.user.addressBCH
-                });
-            }
-
-            let totalPayouts = 0;
-
-            for (let receiver of receivers) {
-                totalPayouts += receiver.amountSat;
-            }
-
-            console.log(`Total rewards payouts: ${totalPayouts}`);
-
-            if (totalPayouts !== tipAmountSat) {
-                throw new Error(`Total payouts ${totalPayouts} are different than the tip amount ${tipAmountSat}. Stopping payouts!`)
-            }
-
-            return receivers;
-        };
-
         const satoshiToBch = (amountSat) => {
             return (amountSat / 100000000).toFixed(5);
         }
@@ -154,7 +94,7 @@ export default class MainCtrl {
                 let tx;
 
                return PostService.getUpvotes(postId, async upvotes => {
-                    const receivers = determineUpvoteRewards(upvotes, post.user);
+                    const receivers = upvoteDistribution.determineUpvoteRewards(upvotes, post.user);
 
                     toastr.info("Upvoting...");
 
