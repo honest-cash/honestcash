@@ -5,14 +5,15 @@
 	
 	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
 		<div class="container">
-				<a href="/" target="_self" class="pull-left">
+				<a href="/" target="_self" class="hidden-xs pull-left">
 					<img class="header-logo" src="/img/honest-long-logo.png" alt="Honest Logo">
 				</a>
 
 				<ul class="list-inline" style="float: right;">
 					<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
 						<button class="btn-default btn" style="margin:10px;" >
-							<strong>Ready to publish?</strong>
+							<strong class="hidden-xs">Ready to publish?</strong>
+							<strong class="visible-xs">Publish</strong>
 						</button>
 					</li>
 

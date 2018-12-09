@@ -55,6 +55,9 @@
 					<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
 						<a ng-class="{ 'bold': hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
 					</li>
+					<li style="margin-bottom:5px;">
+							<a ng-class="{ 'bold': 'adult' === $parent.hashtag }" ng-href="/hashtag/adult">adult</a>
+					</li>
 				</ul>
 				<small>
 					<a style="padding: 3px;" href="https://honest.cash/honest_cash/frequently-asked-questions">FAQ</a>

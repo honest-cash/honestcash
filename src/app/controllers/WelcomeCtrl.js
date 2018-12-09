@@ -149,7 +149,7 @@ export default class WelcomeCtrl {
 		}
 
 		if (data.username.length > 18) {
-			$scope.message = "Username cannot have more than 16 characters";
+			$scope.message = "Username cannot have more than 18 characters";
 
 			return;
 		}
