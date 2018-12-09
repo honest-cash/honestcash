@@ -5,7 +5,7 @@ import * as simpleWalletProvider from "../lib/simpleWalletProvider";
  */
 
 export default class WalletCtrl {
-    constructor($scope, $rootScope) {
+    constructor($scope, $rootScope, $q) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
         $scope.addressBCH = "";
@@ -33,8 +33,12 @@ export default class WalletCtrl {
             .then((walletInfo) => {
                 $scope.walletInfo = walletInfo
                 $scope.addressBalance = walletInfo.balance + walletInfo.unconfirmedBalance;
+
+                $scope.$apply();
             }, err => {
                 $scope.addressBalance = 0;
+
+                $scope.$apply();
             });
         };
 
@@ -148,4 +152,4 @@ export default class WalletCtrl {
     }
 }
 
-WalletCtrl.$inject = [ "$scope", "$rootScope" ];
+WalletCtrl.$inject = [ "$scope", "$rootScope", "$q" ];
