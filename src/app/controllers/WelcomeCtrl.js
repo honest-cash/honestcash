@@ -101,7 +101,7 @@ export default class WelcomeCtrl {
 			repeatNewPassword: data.loginpasswordrepeat,
 		})
 		.then(() => {
-			$scope.message = "Your password has been restarted. You can not log-in.";
+			$scope.message = "Your password has been restarted. You can now log-in.";
 
 			$scope.resetCode = undefined;
 			$scope.data.loginemail = undefined;
