@@ -5,7 +5,6 @@
     <p>You can now upvote content directly from the browser. You don't need an account on Honest to upvote content.</p>
     <p>This wallet is saved locally in your browser. The keys never leave your browser. When you log out, all the wallet data is permanently erased.</p>
 
-
     <p>
         <div class="form-group">
                 <ul class="list-inline list-unstyled" style="margin-top: 10px;">
@@ -29,7 +28,7 @@
         <li class="nav-item">
             <a class="nav-link" id="deposit-tab" data-toggle="tab" href="#deposit" role="tab" aria-controls="deposit" aria-selected="false" ng-click="onDepositClick()">Deposit</a>
         </li>
-        <li class="hidden nav-item">
+        <li class="nav-item">
             <a class="nav-link" id="withdrawal-tab" data-toggle="tab" href="#withdrawal" role="tab" aria-controls="withdrawal" aria-selected="false">Withdrawal</a>
         </li>
     </ul>
@@ -75,11 +74,16 @@
 
         <div class="tab-pane fade" id="withdrawal" role="tabpanel" aria-labelledby="wallet-tab">
             <div style="margin-top:15px;" class="form-group">
-                <label for="withrawalAddressBCH">Where should it be withdrew?</label>
-                <input type="text" placeholder="Enter your address here.." ng-model="withdrawalAddressBCH" class="form-control" aria-describedby="withrawalAddressBCH">
+                <label for="withrawalAddressBCH">Address</label>
+                <input type="text" placeholder="Enter your Bitcoin Cash address here.." ng-model="withdrawalAddressBCH" class="form-control" aria-describedby="withrawalAddressBCH">
+                <small ng-show="!isWithdrawalAddressBCHValid">Address is not valid.</small>
+
+                <label for="withdrawalAmount">Amount</label>
+                <input type="number" placeholder="How much would you like to transfer" ng-model="withdrawalAmount" class="form-control" aria-describedby="withdrawalAmount">
+                <span><a href="#" ng-click="setWithdrawalAmount()">Max amount (with 0.00001 BCH fees limit)</a></span>
             </div>
 
-            <button ng-click="withdraw(withdrawalAddressBCH)" type="submit" class="btn btn-danger btn-lg">Transfer</button>
+            <button ng-disabled="!withdrawalAmount || !withdrawalAddressBCH" ng-click="withdraw(withdrawalAmount, withdrawalAddressBCH)" type="submit" class="btn btn-danger btn-lg">Transfer</button>
             <br />
         </div>
     </div>

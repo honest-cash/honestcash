@@ -1,4 +1,6 @@
+import swal from 'sweetalert2';
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+
 
 /**
  * The path is same with yours.org
@@ -15,7 +17,7 @@ export default class WalletCtrl {
         $scope.connectedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
         $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
         $scope.addressBalance = 0;
-
+        $scope.isWithdrawalAddressBCHValid = true;
         let simpleWallet, lSimpleWallet;
 
         $scope.onMnemonicChange = (newMnemonic) => {
@@ -28,18 +30,23 @@ export default class WalletCtrl {
             $scope.canConnectMnemonic = false;
         };
 
-        const refreshBalance = (wallet) => {
-            wallet.getWalletInfo()
-            .then((walletInfo) => {
-                $scope.walletInfo = walletInfo
-                $scope.addressBalance = walletInfo.balance + walletInfo.unconfirmedBalance;
+        const refreshBalance = async (wallet) => {
+            let walletInfo;
 
-                $scope.$apply();
-            }, err => {
+            try {
+                walletInfo = await wallet.getWalletInfo();
+            } catch (err) {
                 $scope.addressBalance = 0;
 
                 $scope.$apply();
-            });
+
+                return;
+            }
+
+            $scope.walletInfo = walletInfo
+            $scope.addressBalance = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
+
+            $scope.$apply();
         };
 
         if ($scope.connectedMnemonic) {
@@ -68,16 +75,72 @@ export default class WalletCtrl {
             $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
         }
 
-        $scope.withdraw = async (toAddress) => {
+        $scope.setWithdrawalAmount = () => {
+            $scope.withdrawalAmount = $scope.addressBalance - 0.00001;
+        };
+
+        $scope.withdraw = async (withdrawalAmount, withdrawalAddressBCH) => {
             const simpleWallet = simpleWalletProvider.get();
-            
-            refreshBalance();
 
-            console.log(`Transfering ${balance} to ${toAddress}`);
+            const result = await bitbox.Util.validateAddress(withdrawalAddressBCH);
 
-            simpleWallet.send([
-                { address: toAddress, amountSat: 1000 }
-            ]);
+            if (!result.isvalid) {
+                return swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: `The address ${withdrawalAddressBCH} is not a valid Bitcoin Cash address!`,
+                  })
+            }
+
+            if (withdrawalAmount < 0.0005) {
+                return swal({
+                    type: 'error',
+                    title: 'Dust...',
+                    text: `The amount ${withdrawalAmount} is too small!`,
+                  })
+            }
+
+            swal({
+                title: 'Are you sure?',
+                text: `${withdrawalAmount} BCH will be transferred to ${withdrawalAddressBCH}`,
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, transfer it!'
+              }).then(async (result) => {
+                    if (!result.value) {
+                        return;
+                    }
+
+                    let txid;
+
+                    try {
+                        const res = await simpleWallet.send([
+                            {
+                                address: withdrawalAddressBCH,
+                                amountSat: bitbox.BitcoinCash.toSatoshi(withdrawalAmount).toFixed(8)
+                            }
+                        ]);
+
+                        txid = res.txid;
+                    } catch (err) {
+                        return swal({
+                            type: 'error',
+                            title: 'Error',
+                            text: err,
+                        });
+                    }
+
+                    swal({
+                        type: 'success',
+                        title: 'Transferred!',
+                        text: `${withdrawalAmount} BCH has been trasferred to ${withdrawalAddressBCH}`,
+                        footer: `<a target="_blank" href="https://explorer.bitcoin.com/bch/tx/${txid}">Receipt ${txid.substring(0,5)}..${txid.substring(txid.length - 5, txid.length)}</a>`
+                    }).then(() => {
+                        refreshBalance(simpleWallet);
+                    });
+              });
         };
 
         $scope.connect = (privateKey, HdPath) => {

@@ -62,7 +62,8 @@
     "reading-time": "^1.0.2",
     "request": "^2.74.0",
     "sanitize-html": "^1.7.0",
-    "simple-bitcoin-wallet": "0.0.3-alpha.3",
+    "simple-bitcoin-wallet": "0.0.4-alpha.3",
+    "sweetalert2": "^7.32.2",
     "toastr": "^2.1.4",
     "twit": "^2.1.1",
     "ui-router": "^1.0.0-alpha.3"
@@ -90,7 +91,7 @@
   "scripts": {
     "start": "node app-honestcash",
     "build": "npm run transfer-libs && node ./node_modules/webpack/bin/webpack.js",
-    "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js",
+    "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js && cp ./node_modules/simple-bitcoin-wallet/dist/bitboxlight.min.js ./public/js/bitboxlight.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
