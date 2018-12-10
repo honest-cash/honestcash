@@ -80,7 +80,7 @@
 
                 <label for="withdrawalAmount">Amount</label>
                 <input type="number" placeholder="How much would you like to transfer" ng-model="withdrawalAmount" class="form-control" aria-describedby="withdrawalAmount">
-                <span><a href="#" ng-click="setWithdrawalAmount()">Max amount (with 0.00001 BCH fees limit)</a></span>
+                <span><a href="#" ng-click="withdrawalAmount=addressBalance-0.00001">Max amount (with 0.00001 BCH fees limit)</a></span>
             </div>
 
             <button ng-disabled="!withdrawalAmount || !withdrawalAddressBCH" ng-click="withdraw(withdrawalAmount, withdrawalAddressBCH)" type="submit" class="btn btn-danger btn-lg">Transfer</button>

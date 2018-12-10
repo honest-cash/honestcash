@@ -75,10 +75,6 @@ export default class WalletCtrl {
             $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
         }
 
-        $scope.setWithdrawalAmount = () => {
-            $scope.withdrawalAmount = $scope.addressBalance - 0.00001;
-        };
-
         $scope.withdraw = async (withdrawalAmount, withdrawalAddressBCH) => {
             const simpleWallet = simpleWalletProvider.get();
 
@@ -115,11 +111,13 @@ export default class WalletCtrl {
 
                     let txid;
 
+                    console.log(`Paying out ${withdrawalAmount} BCH.`)
+
                     try {
                         const res = await simpleWallet.send([
                             {
                                 address: withdrawalAddressBCH,
-                                amountSat: bitbox.BitcoinCash.toSatoshi(withdrawalAmount).toFixed(8)
+                                amountSat: bitbox.BitcoinCash.toSatoshi(withdrawalAmount)
                             }
                         ]);
 
