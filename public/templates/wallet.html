@@ -88,7 +88,7 @@
         <h1>CONNECT BITCOIN CASH WALLET</h1>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item in active">
-                <a class="nav-link " id="new-wallet-tab" data-toggle="tab" href="#new-wallet" role="tab" aria-controls="new-wallet" aria-selected="true">Generate new</a>
+                <a class="nav-link " id="new-wallet-tab" data-toggle="tab" href="#new-wallet" role="tab" aria-controls="new-wallet" aria-selected="true">Regenerate</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Import with mnemonic</a>
@@ -127,9 +127,9 @@
                         <small id="emailHelp" class="form-text text-muted">It will be generated.</small>
                     </div>
 
-                    <button ng-click="generate()" type="submit" class="btn btn-primary btn-lg">Generate new</button>
+                    <button ng-click="generate()" type="submit" class="btn btn-primary btn-lg">Regenerate</button>
 
-                    <button ng-if="addressBCH && privateKey" ng-click="connect()" type="submit" class="btn btn-primary btn-lg">Connect</button>
+                    <button ng-if="addressBCH && privateKey" ng-click="connect()" type="submit" class="btn btn-primary btn-lg">Save</button>
 
                     <h3 style="margin-top: 20px;">Important: What is a private key?</h3>
                     <p>
@@ -150,7 +150,7 @@
                         <small class="form-text text-muted">Your keys will never leave your browser</small>
                 </div>
 
-                <button ng-if="canConnectMnemonic" ng-click="connect(mnemonic)" type="submit" class="btn btn-primary btn-lg">Connect</button>
+                <button ng-if="canConnectMnemonic" ng-click="connect(mnemonic)" type="submit" class="btn btn-primary btn-lg">Save</button>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <p style="margin-top: 15px;">Upvote content and receive tips using the private key of your existing Bitcoin Cash account.</p>
@@ -166,7 +166,7 @@
                     <small class="form-text text-muted">Your keys will never leave your browser.</small>
                 </div>
 
-                <button ng-if="privateKey" ng-click="connect(privateKey)" type="submit" class="btn btn-primary">Connect</button>
+                <button ng-if="privateKey" ng-click="connect(privateKey)" type="submit" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
