@@ -730,3 +730,16 @@ img.lazy {
 	margin-left: 0;
 	font-size: .1em;
 }
+
+/*Sidebar Navigation */
+.sidenav{
+
+	position:fixed;
+	height: 100%;
+	width: 200px;
+	overflow-x: hidden;
+	padding-top: 60x;
+	padding-left: 60px;
+
+
+}
