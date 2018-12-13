@@ -1,0 +1,11 @@
+.post-container .post-body .medium-insert-buttons {
+	display: none;
+}
+
+.post-body {
+	overflow-wrap: break-word;
+}
+
+.post-uncensorable {
+	overflow-wrap: break-word;
+}

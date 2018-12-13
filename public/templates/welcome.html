@@ -1,0 +1,92 @@
+<div class="container">
+	<div class="row">
+
+		<div class="col-xs-12">
+				<img src="/img/honest-long-logo.png"  alt="Honest Logo" height="50px" weight="100px"></a>
+		</div>
+
+		<div class="col-xs-12" style="padding-top:20px;">
+					<h1>
+						Earn cash for your content.
+					</h1>
+					<p>
+						<b>honest.cash</b> is a social network where you can earn (Bitcoin) Cash if you create value. Our mission is improve the quality of content on the internet and to get people paid for doing work they love. Sign up now to join us.
+					</p>
+					<p>
+						<b>honest.cash</b> is proud to be featured on <a href="https://news.bitcoin.com/content-creators-can-earn-bch-using-the-honest-cash-platform/">bitcoin.com</a>, <a href="https://blog.btc.com/btc-com-news-digest-7fc31e947fb3">btc.com</a> and <a href="https://coinspice.io/news/adrian-barwicki-honest-cash/">coinspice</a>.
+					</p>	
+		</div>
+	</div>
+	 <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <h2>
+				Join waiting list
+        </h2>
+				<form>
+						<div class="form-group">
+								<label>username</label>
+								<input type="text" class="form-control" ng-model="data.username">
+						</div>
+						<div class="form-group">
+								<label>email</label>
+								<input type="email" class="form-control" ng-model="data.email">
+						</div>
+
+						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+
+						<button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-lg" ng-click="signup(data)">{{isLoading ? "Loading.." : "Register"}}</button>
+			
+						<!-- <button ng-click="fbLogin()" class="btn btn-primary push btn btn-lg"><span class="fa fa-facebook"></span> facebook</button> -->
+				</form>
+
+    	<hr>
+					<p class="pull">by signing up you agree to our <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">terms of of service</a>.</p>       
+      </div>
+			
+			<div class="col-md-6">
+        <h4 ng-show="hashtags.length">
+          trending tags
+        </h4>
+        <ul>
+          <li ng-repeat = "hashtag in hashtags">
+						<a target="_self" href="/hashtag/{{hashtag}}">{{hashtag}}</a>
+					</li>
+        </ul>
+      </div>
+    </div>
+    <hr />
+	  <div class="row text-center">
+				<div class="col-sm-4">
+							<i class="fa fa-heart"></i>
+							<h3 class="text-enter">
+								Earn for creating content
+							</h3>
+							<p style="padding-top:20px;">
+								You earn Bitcoin Cash when your content is upvoted. 40% of every upvote of your content goes to you, the rest to other people who upvoted it.
+							</p>
+					</div>
+					<div class="col-sm-4">	
+							<i class="fa fa-share-alt"></i>
+							<h3 class="text-center">
+								Earn for upvoting content
+							</h3>
+							<p style="padding-top:20px;">
+								You can earn Bitcoin Cash by voting on good content early. Each vote costs 0.002 BCH and the payment goes to earlier voters and the creator. If many people vote on the same content after you, you profit.
+							</p>
+					</div>
+					<div class="col-sm-4">
+							<i class="fa fa-terminal"></i>
+							<h3 class="text-center">
+									Uncensorable content
+							</h3>
+							<p style="padding-top:20px;">
+								Your opinion is important, regardless what position do you represent. You can make your content uncensorable so it can never be censored or removed like it happens on /r/bitcoin or yours.org.
+							</p>
+						</div>
+	  </div>
+  </div>
+  
+
+  
+

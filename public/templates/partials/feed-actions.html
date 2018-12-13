@@ -1,0 +1,39 @@
+		<!-- FEED ACTION MENU -->
+		<div ng-if="user.id" class="row push push-top text-center">
+
+			<div class="col-xs-6 col-md-3 col-md-offset-3">
+				<a ui-sref="editor.write"><i class="fa fa-pencil fa-4x"></i></a>
+				<br>
+				<a href="#"  ng-class="{'selected' : filterType == 'posts' }" class="hidden hashtag-big cursor-pointer" ng-click="filter('posts')">#posts</a>
+			</div>
+
+			<div class="col-xs-6 col-md-3">
+				<a href="#" ng-click="newPhoto()"><i class="fa fa-camera fa-4x"></i></a>
+				<br>
+				<a href="#" ng-class="{'selected' : filterType == 'pics' }" class="hidden hashtag-big cursor-pointer" ng-click="filter('pics')">#pics</a>
+			</div>
+
+			<div class="col-xs-4 col-md-4 hidden">
+				<a ui-sref="vicigo.importPhotos" class=""><i class="fa fa-facebook fa-4x"></i></a>
+			</div>
+
+			
+		</div>
+		<!-- FEED ACTION MENU END -->
+
+	<hr ng-if="user.id">
+<!-- FILTER OPTION -->
+<!--
+		<div class="row">
+			<h1 class="text-center" ng-if="hashtag"><strong>#<span ng-bind="hashtag"></span></strong></h1>
+			<hr>
+			<h3>
+			<ul class="horiontal-list text-center push">
+			<li ng-class="{'selected' : sortType == 'hot' }" class="cursor-pointer" ng-click="sort('hot')">#hot</li>
+			<li ng-class="{'selected' : sortType == 'best' }" class="cursor-pointer" ng-click="sort('best')">#best</li>
+			<li ng-class="{'selected' : sortType == 'new' }" class="cursor-pointer" ng-click="sort('new')">#new</li>
+			</ul>
+			</h3>
+		</div>
+-->
+<!-- FILTER OPTION END -->

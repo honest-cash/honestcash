@@ -1,0 +1,81 @@
+<!-- tag IMAGE MODAL -->
+		<div class="modal fade" id="uploadExternalImageModal" tabindex="-1" role="dialog" aria-labelledby="uploadExternalImageModal">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel"><b>#tag it</b> <button class="close" data-dismiss="modal">×</button></h4>
+					</div>
+
+					<div class="modal-body">
+						<div class="form-group">
+							<form>
+                <script>
+                	$(".tags-area2").tagit({placeholderText:"tag it!"});
+                </script>
+								<input  id="hashtagsForImportedPhoto" name="tags" class="tags-area2">
+							</form>
+						</div>
+		
+						<img style="width:90%; max-width:600px; display: block; margin-left: auto; margin-right: auto" ng-src="{{selectedImageUrl}}" />
+				
+					</div>
+
+					<!-- FOOTER IMAGE MODAL -->
+					<div class="modal-footer">
+						<button ng-click="publishExternalPost()" type="button" class="btn btn-primary btn-lg btn-block">Tag it!</button>
+					</div>
+					<!-- FOOTER IMAGE MODAL -->
+				</div>
+			</div>
+		</div>
+<!-- tag IMAGE MODAL -->
+
+
+
+<div class="row" ng-repeat="item in data">
+ <div class="push feed">
+
+
+
+
+<div class="panel panel-info">
+				<!-- HEADER -->
+				<div class="panel-heading">
+<span class="fa fa-facebook"></span>
+				</div>
+				<!-- END HEADER -->
+	
+				<div class="panel-body image-feed-body">
+				
+				
+			
+					<!-- IMAGE BODY href="/post/{{feed.id}}" -->
+					<div class="feed-body">
+					  <lazy-img  class="lazy" ng-src="{{trustSrc(item.source)}}" alt="image"></a>
+					</div>
+					<!-- END BODY -->			
+				
+				</div>
+				
+			<!-- footer -->	
+			<div class="bold modal-footer btn btn-primary btn-block text-center" ng-click="tagExternalPost(item)">
+        TAG IT!
+			</div>
+					<!-- END OPTIONS -->		
+				
+      </div>
+			<!-- end footer-->
+			</div>
+  
+  
+  </div>
+   
+
+
+<div class="text-center" ng-show='activeCalls'>
+	<i class="fa fa-circle-o-notch fa-spin  fa-2x"></i>
+<br>
+	Loading from Facebook... this may last up to 10 seconds...
+</div>
+

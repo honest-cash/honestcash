@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row">
+   <div class="col-sm-8">
+  <h1>
+ Edit a Hashbook
+</h1>
+<p class="text-muted">
+
+</p> 
+</div>  
+    </div>  
+  <div class="row">
+    
+  
+<div class="col-sm-6">
+
+
+
+<hr>
+<form role="form">
+    <div class="form-group">
+    <label for="url">URL</label>
+    <div>
+       http://vicigo.com/hashbook/<b>{{blogSlug}}</b>
+    </div>
+   
+  </div>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input ng-model="blog.blog_title" type="text" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="desc">Description</label>
+    <input ng-model="blog.blog_desc" type="text" class="form-control">
+  </div>
+
+  <div class="form-group">
+    <label for="hashtags">Content with the following hashtags will be included in this blog (max. 5 hashtags):</label>
+    <input ng-model="blog.hashtags"  name="tags" class="tags-area form-control">
+  </div>
+  <button ng-click="updateBlog(blog)" type="submit" class="btn btn-primary btn-lg btn-block">Update</button>
+</form>
+  </div>
+    
+ </div>   
+</div>

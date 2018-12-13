@@ -1,0 +1,19 @@
+.clickable {
+    cursor: pointer;
+}
+
+.showProfileTab {
+    color: #999;
+    text-decoration: none;
+}
+
+.showProfileTab:visited {
+	text-decoration: none;
+}
+
+.following-unfollow .btn-unfollow, .following-unfollow .btn-follow {
+	font-size: 1em;
+}
+.following-unfollow .btn-follow {
+	background: transparent;
+}

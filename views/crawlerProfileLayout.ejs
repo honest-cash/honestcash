@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><%= SEO.title %></title>
+        <meta charset="utf-8">
+        <meta name="author" content="<%- SEO.author %>">
+        <meta name="description" content="<%- SEO.description %>">
+        <meta name="robots" content="index, follow">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+        <meta property="og:title" content="<%- SEO.ogTitle %>" />
+        <meta property="og:site_name" content="Honest Cash" />
+        <meta property="og:url" content="<%- SEO.ogUrl %>" />
+        <meta property="og:description" content="<%- SEO.ogDescription %>" />
+        <meta property="fb:app_id" content="1577245229193798" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="<%- SEO.ogImage %>" />
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="<%- SEO.twitterTitle %>" />
+        <meta name="twitter:url" content="<%- SEO.ogUrl %>" />
+        <meta name="twitter:description" content="<%- SEO.twitterDescription %>" />
+        <meta name="twitter:image" content="<%- SEO.ogImage %>" />
+        <link rel="icon"  type="image/png" href="/img/favicon.png" />
+
+        <style>
+            article {
+                font-size:20px;
+                max-width:800px;
+            }
+
+            .img-center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            .container {
+                max-width:1000px;
+                margin: 0 auto;
+            }
+
+            .feeds {
+                max-width:700px;
+                margin: 0 auto;
+            }
+
+            .feed-image img {
+                max-width:100%;
+            }
+
+            .list-unstyled li {
+                padding: 5px;
+                margin: 0;
+                list-style: none;
+            }
+
+            .list-inline li {
+                display: inline;
+            }
+        </style>	
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <nav>
+                    <ul class="site-navigation list-inline list-unstyled">
+                        <li><a href="/login" class="btn btn-info"><span class="fa fa-user"></span>Login</a></li>
+                        <li><a href="/signup" class="btn btn-info"><span class="fa fa-user"></span>Sign up</a></li>	
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div class="container">
+            <%- body %>
+        </div>
+
+        <footer class="site-section site-content themed-background-muted">
+                <div class="container">
+                    <hr />
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="text-center">
+                                <ul class="ul-breath list-unstyled list-inline">
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/honest_cash/about-honest-cash">About</a></li>
+                                    <li><a href="/honest_cash/frequently-asked-questions">FAQ</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="text-center push">
+                                <p><small>crafted with <i class="fa fa-heart text-danger"></i> in in heidelberg, germany</small></p>
+                            <br>
+                            <a href="http://honest.cash" target="_blank"><small>&copy;<span>2018</span> Honest Cash</small></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+    </body>
+</html>

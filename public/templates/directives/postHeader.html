@@ -1,0 +1,40 @@
+<header id="blog-intro" class="intro-block bg-color3">
+	<div>
+		<!-- AUTHOR -->
+		<ul class="list-unstyled list-inline">
+			<!-- AUTHOR IMAGE -->
+			<li>
+				<a ui-sref="vicigo.profile({profileId: post.user.id})">
+					<img ng-if="post.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+					<img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+				</a>
+			</li>
+
+			<li style="vertical-align:middle">
+				<strong style="margin-top:50px;">
+					<a ui-sref="vicigo.profile({profileId: post.user.username})">{{::post.user.username}}</a>
+				</strong>
+
+				<button ng-if="user.id !== post.user.id && !post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(post.user.id, post.user);" class="btn btn-lg btn-follow">
+						Follow
+				</button>
+
+				<br />
+
+				<small class="text-muted">
+					<span ng-if="!post.post_publish_timestamp_formatted">{{::post.publishedAt}}</span> 
+					<span ng-if="post.readTime">{{::post.readTime}}</span> 
+          		</small>
+			</li>
+		</ul>
+	</div>
+
+	<div>
+		<h1>
+			<strong>{{post.title}}</strong>
+      		<small ng-if="user.id==post.user.id && !post.userPostUpvotes.length">
+				 <a ng-href="/edit/{{post.id}}"  target="_self">Edit</a>
+			</small>	
+      	</h1>
+	</div>
+</header>

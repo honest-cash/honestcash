@@ -1,0 +1,84 @@
+
+/*----------------------------------------------------------------------------------------
+									PURPLE STYLESHEET 
+-----------------------------------------------------------------------------------------*/
+
+blockquote:before,
+code:before,
+.title h2:after,
+.download-btn .btn-slide,
+.bg-color-main,
+.download-btn-alt.invert,
+.owl-pagination .owl-page.active span,
+.navbar-toggle .icon-bar,
+.tags li a:hover,
+.post-content .read-more:hover,
+.soc-list li .icon:hover,
+#preloader .battery:after,
+ #preloader .battery .load-line { 
+	background-color: #ab8c5b; 
+}
+
+a:hover,
+.color,
+.download-btn-alt,
+.download-btn-alt:hover .icon,
+.nav-tabs li.active a,
+.nav-tabs li.active a:hover,
+.modal-title .icon,
+.navbar .nav li a:hover,
+.navbar .nav li.active a,
+aside.blog-sidebar .search .btn:hover,
+.tags.hollow li a:hover,
+.facts-list li:hover .icon,
+#subscribe_form button:hover  {
+	color: #ab8c5b; 
+}
+
+aside.blog-sidebar .category ul a:hover { border-bottom: 1px solid #ab8c5b; }
+
+.navbar .nav li a:hover,
+.navbar .nav li.active a {
+	border-bottom: 2px solid #ab8c5b;
+}
+
+@media (max-width: 992px) {
+	.navbar .nav li a:hover,
+	.navbar .nav li.active a{ border-bottom: 1px solid #ab8c5b; }
+}
+
+#preloader .radius .load-point {
+	border-top: 4px solid #ab8c5b;
+}
+
+.round-btn:hover,
+button#contact_submit:hover {
+	border: 2px solid #ab8c5b;
+}
+
+
+#preloader .battery,
+.round-btn-sm:hover,
+.tags.hollow li a:hover,
+.post-pagination li.active a,
+.post-pagination li a:hover {
+	border: 1px solid #ab8c5b;
+}
+
+
+.bg-color-grad{
+	background: #ab8c5b; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ab8c5b 0%, #f4d170 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ab8c5b), color-stop(100%,#f4d170)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ab8c5b 0%,#f4d170 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ab8c5b 0%,#f4d170 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ab8c5b 0%,#f4d170 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ab8c5b 0%,#f4d170 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ab8c5b', endColorstr='#f4d170',GradientType=0 ); /* IE6-9 */
+}
+
+.ray {
+	-webkit-box-shadow: 0px 0px 5px 2px rgba(171, 140, 91, .5);
+	-moz-box-shadow: 0px 0px 5px 2px rgba(171, 140, 91, .5);
+	box-shadow: 0px 0px 5px 2px rgba(171, 140, 91, .5);
+}

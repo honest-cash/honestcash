@@ -1,0 +1,90 @@
+<div class="visible-xs" style="height:50px;"></div>
+
+<div style="max-width:1300px;" class="container" class="block-center">
+	<div ng-if="!user.id" class="panel panel-default">
+		<div class="panel-body">
+				<h1>Earn Bitcoin Cash for your content.</h1>
+				<p>
+					Honest is a social network where you can earn Bitcoin Cash if you create value. Our mission to improve the quality of content on the internet and to get people paid for doing work they love. <a href="https://honest.cash/honest_cash/about-honest-cash">Read more...</a>
+				</p>
+
+				<button class="btn btn-default btn-lg" ui-sref="starter.welcome">Join the waiting list</button>
+		</div>
+	</div>
+
+	<div ng-if="hashtag">
+		<h1 class="text-center" ng-if="hashtag">
+			<strong>
+				#<span ng-bind="hashtag"></span>
+			</strong> 
+			</h1>
+		<hr>
+		<h3>
+			<ul class="horiontal-list text-center push hidden">
+				<li ng-class="{'selected' : sortType == 'hot' }" class="cursor-pointer" ng-click="sort('hot')">#hot</li>
+				<li ng-class="{'selected' : sortType == 'best' }" class="cursor-pointer" ng-click="sort('best')">#best</li>
+				<li ng-class="{'selected' : sortType == 'new' }" class="cursor-pointer" ng-click="sort('new')">#new</li>
+			</ul>
+		</h3>
+	</div>
+</div>
+
+<div style="height:35px;"></div>
+
+
+
+<div class="block-center container" style="max-width:1300px; z-index:99;">
+		<div class="hidden-xs hidden-sm col-md-3" >
+			<div ng-if="user.id" class="pull-left" style="max-width:300px">
+				<div>
+					<ul class="list-unstyled">
+						<li>
+							<a ng-class="{ 'bold': feedType === 'userfeed' }" href="/" target="_self">my feed</a>
+						</li>
+
+						<li tyle="margin-top:7px;">
+							<a ng-class="{ 'bold': feedType === 'all' }" href="/new" target="_self">all</a>
+						</li>
+					</ul>
+				</div>
+
+				<h5 class="bold">
+					top topics
+				</h5>
+				<ul class="list-unstyled">
+					<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
+						<a ng-class="{ 'bold': hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
+					</li>
+					<li style="margin-bottom:5px;">
+							<a ng-class="{ 'bold': 'adult' === $parent.hashtag }" ng-href="/hashtag/adult">adult</a>
+					</li>
+				</ul>
+				<small>
+					<a style="padding: 3px;" href="https://honest.cash/honest_cash/frequently-asked-questions">FAQ</a>
+					<a style="padding: 3px;" href="https://honest.cash/honest_cash/about-honest-cash">About</a>
+					<a style="padding: 3px;" href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/">Terms</a>
+					<br />
+					<span>Honest Cash © 2018</span>
+				</small>
+			</div>
+		</div>
+
+	<div class="col-md-6">
+		<div class="block-center">
+			<div ng-if="!feeds.length && !isLoading" class="panel">
+				<div class="panel-body">
+					<h1>No content yet.</h1>
+					<p>
+						Be the first to create it!
+					</p>
+					
+					<a class="btn btn-default btn-lg" ng-href="{{user.id ? '/write' : '/signup' }}" target="_self">
+						Write a story
+					</a>
+				</div>
+			</div>
+			<ng-include src="'templates/partials/feed-angular.html'">
+		</div>	
+	</div>		
+		
+</div>

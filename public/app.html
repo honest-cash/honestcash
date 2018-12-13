@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="hashtag-app">
+
+<head>
+	<meta charset="utf-8">
+	<title>Honest Cash</title>
+
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+	<!-- Search Engine -->
+	<meta name="description" content="honest.cash is a social network where you can earn (Bitcoin) Cash if you create value. Our mission is improve the quality of content on the internet and to get people paid for doing work they love.">
+	<!-- Schema.org for Google -->
+	<meta itemprop="name" content="Honest.Cash">
+	<meta itemprop="description" content="honest.cash is a social network where you can earn (Bitcoin) Cash if you create value. Our mission is improve the quality of content on the internet and to get people paid for doing work they love.">
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Honest.Cash">
+	<meta name="twitter:description" content="honest.cash is a social network where you can earn (Bitcoin) Cash if you create value. Our mission is improve the quality of content on the internet and to get people paid for doing work they love.">
+	<meta name="twitter:site" content="@honest_cash">
+	<meta name="twitter:image" content="https://honest.cash/img/honest_social.png" />
+	<!-- Open Graph general (Facebook, Pinterest & Google+) -->
+	<meta property="og:title" content="Honest.Cash">
+	<meta property="og:description" content="honest.cash is a social network where you can earn (Bitcoin) Cash if you create value. Our mission is improve the quality of content on the internet and to get people paid for doing work they love.">
+	<meta property="og:url" content="https://honest.cash">
+	<meta property="og:site_name" content="Honest.Cash">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="https://honest.cash/img/honest_social.png" />
+	<meta name="google-site-verification" content="FyWFQySzISHgzy0_hfgdzbHCm2WZ4TkXhyo_giXOGNQ" />
+	<link rel="icon" type="image/png" href="/img/favicon.png" />
+
+	<meta name="fragment" content="!" />
+
+	<link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+	<link href="/css/dropzone.css" media="all" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/flick/jquery-ui.css" />
+	<link href="/lib/tag-it/css/jquery.tagit.css" rel="stylesheet">
+	<link href="/lib/tag-it/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css" />
+	<link href="/css/dropzone.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="/lib/angular-xeditable-0.1.8/css/xeditable.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="/lib/jquery-hashtags-master/css/jquery.hashtags.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="/css/toastr.min.css" media="all" rel="stylesheet" type="text/css" />
+	
+	<base href="/">
+
+	<style>
+		.ng-cloak {
+			display: none !important;
+		}
+	</style>
+</head>
+
+<body ng-controller="appController">
+	<noscript>
+		<h1>Your browser does not support JavaScript.</h1>
+
+		<a href="?crawlerView=true">You can still view the content with a limited functionality under the following link</a>
+	</noscript>
+
+	<div ui-view autoscroll="true"></div>
+
+	<!-- TIP MODAL -->
+	<div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Give tip to the author</h4>
+				</div>
+
+				<div class="modal-body">
+					<button class="btn btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
+
+					<div class="form-group">
+						<h4>... or tip from any other Bitcoin Cash wallet. What's <a href="https://honest.cash/honest_cash/frequently-asked-questions">Bitcoin Cash</a>?</h4>
+
+						<input readonly class="form-control" id="bchTippingAddress">
+
+						<div style="margin-top: 10px;" id="bchTippingAddressQR"></div>
+
+						<a id="bchTippingAddressUrl" href="">Explore on Blockchair</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END OF TIP MODAL -->
+
+	<!-- TIP MODAL -->
+	<div class="modal fade" id="tipSuccessModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div>
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">Success!</h4>
+					</div>
+
+					<div class="modal-body">
+						<div>
+							<p><small>Your upvote has been distributed to the author of the story and the previous upvoters. <span ng-show="profile">You will be able to receive rewards from the next upvotes!</span></small></p>
+							<p><small>Current distribution: author (40%), previous upvoters (60%).</small></p>
+						</div>
+						<div id="distribution-info"></div>
+				
+
+						<div class="form-group">
+							<i class="fa fa-check"></i>
+
+							<a id="bchTippingTransactionUrl" href=""></a>
+						</div>
+
+						<div class="form-group">
+							<small>Disclaimer: We are still in beta and many features may not work as intended! We do not assume any risk or give any warranty that you will receive rewards.</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END OF TIP MODAL -->
+
+	<!-- TIP MODAL -->
+	<div class="modal fade" id="uncensoredResultModal" tabindex="-1" role="dialog" >
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Your story will live forever!</h4>
+				</div>
+
+				<div id="uncensoredResultLoading" class="modal-body">
+					<p>
+						Uploading to BCH blockchain. This may take a while...
+					</p>
+				</div>
+
+				<div id="uncensoredResultSuccess" class="modal-body">
+						<p>
+							You can access it with this identifier:
+						</p>
+	
+						<input class="form-control" id="bitcoinFileId" readonly />
+
+						<p>
+							Your content is saved on Bitcoin Cash blockchain. You can access it with any explorer that supports the bitcoinfile protocol. <a href="https://bitcoinfiles.com/">Try here (bitcoinfiles.com).</a> Even if your content gets moderated, this reference will be displayed for everyone to check out your content.
+						</p>
+
+						<ul>
+							<li>Uncensorable</li>
+							<li>Immutable</li>
+							<li>Saved forever</li>
+						</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END OF TIP MODAL -->
+
+	<!-- UPLOAD IMAGE MODAL -->
+	<div class="modal fade" id="uploadProfilePicModal" tabindex="-1" role="dialog" aria-labelledby="uploadProfilePicModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="uploadProfilePicLabel"><b>Upload Profile Picture</b> <button class="close" data-dismiss="modal">×</button></h4>
+				</div>
+				<div class="modal-body">
+					<form enctype="multipart/form-data" type="post" class="dz-clickable" id="profilePicDropzone">
+						<input type="hidden" ng-value="AUTH_TOKEN" name="x-auth-token">
+						<div class="dz-message dz-message-style">
+							<h3 class="push dz-message-text dz-message-text-style">Drop file here or click to upload</h3>
+						</div>
+					</form>
+					<div id="imageUploadProgress" class="progress hidden">
+						<div id="imageUploadProgressBar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+							<span class="sr-only">70% Complete</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- UPLOAD IMAGE MODAL -->
+
+	<!-- Modal -->
+    <script type="text/ng-template" id="userListModal.html">
+         <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="userListModalLabel">Post Stats</h4>
+      </div>
+      <div class="modal-body">
+				<ul class="list-unstyled list-inline text-center">
+	
+					<li style="width:32%;" ng-class="{'active' : statType == 'upvotes'}" class="btn btn-default" ng-click="showItems('upvotes')">
+						<h4>{{stats.upvotesCount}}</h4>
+						Upvotes
+					</li>
+					<li style="width:32%;" class="btn btn-default">
+						<h4>{{stats.commentsCount}}</h4>
+						Comments
+					</li>
+					<li style="width:32%;" ng-class="{'active' : statType == 'views'}" class="btn btn-default" ng-click="showItems('views')">
+						<h4>{{stats.viewsCount}}</h4>
+						Views
+					</li>
+			</ul>
+		<hr>
+
+        <ul class="list-unstyled">
+					<li ng-repeat="item in items" style="padding:5px;">
+						
+						<a ui-sref="vicigo.profile({profileId:item.user_id})">
+						<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{item.profile_image_url ? item.profile_image_url : '/img/avatar.png'}}">
+						
+						<strong>{{item.name}}</strong>
+						</a>
+						<span class="text-muted">{{item.title}}</span>
+					<div class="pull-right">
+						<a href="#" class="btn btn-success" ng-click="follow(item.user_id)">Follow</a>
+					</div>
+					</li>
+				</ul>
+      </div>
+    </script>
+
+	<script type="text/javascript" src="/libs/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/lib/jquery-hashtags-master/js/autosize.min.js"></script>
+	<script type="text/javascript" src="/lib/jquery-hashtags-master/js/jquery.hashtags.js"></script>
+
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script src="/lib/jquery.lazy.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/libs/angular/angular.min.js"></script>
+	<script type="text/javascript" src="/lib/angular-sanitize.min.js"></script>
+	<script type="text/javascript" src="/lib/angular.dcb-img-fallback.min.js"></script>
+	<script type="text/javascript" src="/lib/angular-xeditable-0.1.8/js/xeditable.js"></script>
+	<script type="text/javascript" src="/lib/flow.min.js" ></script>
+
+	<script type="text/javascript" src="/lib/ui-bootstrap-tpls-1.2.5.min.js"></script>
+	<script type="text/javascript" src="/lib/ngdialog/ngDialog.js"></script>
+	<script type="text/javascript" src="/lib/angular-jquery-lazy.js"></script>
+	<script type="text/javascript" src="/js/dropzone.js"></script>
+	<script type="text/javascript" src="/lib/tag-it/js/tag-it.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/js/toastr.min.js"></script>
+	<script type="text/javascript" src="/js/qrcode.min.js"></script>
+	<script type="text/javascript" src="/js/simple-bitcoin-wallet.min.js"></script>
+
+	<script type="text/javascript" src="/js/app.js"></script>
+</body>
+
+</html>

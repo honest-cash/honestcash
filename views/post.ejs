@@ -1,0 +1,33 @@
+<div style="margin-bottom: 30px;">
+    <div class="row">
+        <h2 class="text-left">
+             <a href="/<%- post.user.username %>/<%- post.alias %>">
+                <%- post.title %>
+            </a>
+        </h2>
+
+        <img src="<%- post.imageUrl %>" style="max-width:1000px;width:100%;" />
+    </div>
+
+    <div class="row">
+        <ul>
+            <li style="vertical-align:middle">
+                <a href="/profile/<%- post.user.username %>"><span><%- post.user.username %></span></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <article>
+            <%- post.body %>
+        </article>
+    </div>
+	
+	<div class="row">
+		<p>
+		<% for (var index = 0; index < post.userPostHashtags.length; index++ ) { %>
+		    <div style="margin:10px;" class="hashtag" ><a  href="/hashtag/<%- post.userPostHashtags[index].hashtag %>">#<%- post.userPostHashtags[index].hashtag %></a></div>
+		<% }  %>
+	  </p>
+	</div>
+</div>

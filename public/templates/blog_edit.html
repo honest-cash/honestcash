@@ -1,0 +1,55 @@
+<div id="wrap"> 
+
+  
+	<!-- INTRO BEGIN -->
+	<header id="blog-intro" class="intro-block bg-color3 text-center" >
+    
+    <div>
+
+			
+        <img class="img-circle img-avatar-blog" ng-src="{{blog.author_avatar}}">
+    {{blog.author_fullname}} (<a href="/profile/{{blog.author_username}}">@{{blog.author_username}}</a>)
+    </div>
+    
+		<div class="container">
+
+			<h1><strong><a href="#" ><span ng-if="blog.author_id == user.id" editable-text="blog.blog_title" onbeforesave="updateBlogTitle('title',$data)">{{blog.blog_title}}</span></a></strong></h1>
+
+    <h2> <a href="#" ><span ng-if="blog.author_id == user.id" editable-text="blog.blog_desc" onbeforesave="updateProfileTitle('title',$data)">{{blog.blog_desc}}</span></a></h2>
+      
+		</div>
+    
+  
+    
+		<div class="block-bg" data-stellar-ratio="0.5"></div>
+	</header>
+	<!-- INTRO END --> 
+	
+ <hr>
+	
+	
+	<section id="blog">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8 blog-content-sidebar">
+					<ul ng-if="blog.posts.length" class="news-list post-list list-unstyled" style="width:100%;">
+
+						<li ng-repeat="post in [{},{},{},{}]" style="width:100%;">
+							
+							
+							<div class="post-content" style="height:250px; border: 1px solid black;">
+							<h2 class="text-center padding-30" ><em>Your content</em></h2>
+							</div>
+						</li>
+					</ul>					
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	<!-- BLOG END -->
+	
+	
+
+	
+</div>

@@ -1,0 +1,88 @@
+
+/*----------------------------------------------------------------------------------------
+									PURPLE STYLESHEET 
+-----------------------------------------------------------------------------------------*/
+
+blockquote:before,
+code:before,
+.title h2:after,
+.download-btn .btn-slide,
+.bg-color-main,
+.download-btn-alt.invert,
+.navbar-toggle .icon-bar,
+.tags li a:hover,
+.post-content .read-more:hover,
+.soc-list li .icon:hover,
+#preloader .battery:after,
+ #preloader .battery .load-line,
+ .owl-pagination .owl-page.active span { 
+	background-color: #fff; 
+}
+
+.bg-color-main{
+	background-color: #000;
+}
+
+a:hover,
+.color,
+.download-btn-alt,
+.download-btn-alt:hover .icon,
+.nav-tabs li.active a,
+.nav-tabs li.active a:hover,
+.modal-title .icon,
+.navbar .nav li a:hover,
+.navbar .nav li.active a,
+aside.blog-sidebar .search .btn:hover,
+.tags.hollow li a:hover,
+.facts-list li:hover .icon,
+#subscribe_form button:hover  {
+	color: #fff; 
+}
+
+aside.blog-sidebar .category ul a:hover { border-bottom: 1px solid #fff; }
+
+.navbar .nav li a:hover,
+.navbar .nav li.active a {
+	border-bottom: 2px solid #fff;
+}
+
+@media (max-width: 992px) {
+	.navbar .nav li a:hover,
+	.navbar .nav li.active a{ border-bottom: 1px solid #fff; }
+}
+
+#preloader .radius .load-point {
+	border-top: 4px solid #fff;
+}
+
+.round-btn:hover,
+button#contact_submit:hover {
+	border: 2px solid #fff;
+}
+
+
+#preloader .battery,
+.round-btn-sm:hover,
+.tags.hollow li a:hover,
+.post-pagination li.active a,
+.post-pagination li a:hover {
+	border: 1px solid #fff;
+}
+
+
+.bg-color-grad{
+	background: #111111; /* Old browsers */
+	background: -moz-linear-gradient(top,  #111111 0%, #555555 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#111111), color-stop(100%,#555555)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #111111 0%,#555555 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #111111 0%,#555555 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #111111 0%,#555555 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #111111 0%,#555555 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#111111', endColorstr='#555555',GradientType=0 ); /* IE6-9 */
+}
+
+.ray {
+	-webkit-box-shadow: 0px 0px 5px 2px rgba(100, 100, 100, .5);
+	-moz-box-shadow: 0px 0px 5px 2px rgba(100, 100, 100, .5);
+	box-shadow: 0px 0px 5px 2px rgba(100, 100, 100, .5);
+}

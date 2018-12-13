@@ -1,0 +1,176 @@
+<div class="container">
+	<div class="col-xs-12 visible-xs" style="height:100px;"></div>
+	<div class="col-md-8 col-md-offset-2">
+		<div class="row ng-cloak">
+			<div ng-if="post.parentPost" class="block-center">
+				<div class="panel" ui-sref="vicigo.post({ alias: post.parentPost.alias, username: post.parentPost.user.username })">
+					<div class="panel-body" style="cursor: pointer;">
+						Response to: <b>{{post.parentPost.title}}</b>
+						<p>by @{{post.parentPost.user.username}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<post-header></post-header>
+		</div>
+
+		<hr />
+
+		<div class="row post-container">
+			<article class="site-block post-body" ng-bind-html="displayFeedBody(post.body)"></article>
+		</div>
+
+		<div class="row" ng-show="simpleWallet">
+			<ul class="list-unstyled list-inline list">
+				<li>
+					<button ng-disabled="upvotingPostId === post.id || post.userId === profile.id" ng-click="addressClicked(post)" class="btn btn-default">
+						<i class="fa fa-btc"></i> 0.002 Upvote
+					</button>
+				</li>
+				<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
+				<li ng-show="!post.userPostRefs.length" ng-if="user.id === post.userId" ng-click="makeUncesorable(post)">
+					<a class="btn btn-default" href="#">
+						<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> uncensorable</a>
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="row">
+			<ul class="list-unstyled list-inline">
+				<li ng-repeat="hashtag in post.userPostHashtags">
+					<a class="pull-left" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">#{{ ::hashtag.hashtag}}</a>
+				</li>
+			</ul>
+		</div>
+
+		<hr />
+
+		<div class="row" ng-show="!post.user.addressBCH">
+			<div class="block-center">
+				<div class="panel">
+					<div class="panel-body">
+						<h2>This author does not accept tips.</h2>
+
+						<p>
+							<strong>Important:</strong> You can specify the address for receiving tips in your profile.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" ng-show="post.user.addressBCH">
+			<div class="block-center">
+				<div class="panel" ng-show="!simpleWallet" >
+					<div class="panel-body">
+						<h2>Give a tip to the author</h2>
+
+						<button class="btn btn-lg btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
+
+						<p>
+							... or tip from any other Bitcoin Cash wallet.
+						</p>
+
+						<input readonly class="form-control" id="userBCHAddress" />
+
+						<div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
+
+						<p>
+							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to have a connected wallet and be logged in for your tips to receive future upvote rewards.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="post-uncensorable row" ng-if="post.userPostRefs.length" style="margin-bottom: 20px;">
+			<h4><i class="fa fa-shield"></i>  <strong>Uncensorable</strong></h4>
+			{{post.userPostRefs[0].extId}}
+		</div>
+
+		<div class="row" ng-show="post.userPostUpvotes">
+			<h4><i class="fa fa-btc"></i> <strong>Upvotes ({{post.userPostUpvotes.length}})</strong></h4>
+
+			<p ng-if="!post.userPostUpvotes.length"><small>No upvotes.</small></p>
+
+			<ul class="list-inline list-unstyled">
+				<li ng-repeat="upvote in post.userPostUpvotes">
+					<a ng-href="https://bch.btc.com/{{upvote.txId}}" target="_blank">{{upvote.txId.substring(0, 4)}}...{{upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)}}</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="row">
+			<h4>
+				<strong>Responses</strong>
+			</h4>
+
+			<div class="block-center">
+				<div class="panel">
+					<div class="panel-body" style="cursor: pointer;">
+						<a target="_self" ng-href="{{user.id ? '/write/response/' + post.id : '/signup' }}">
+							<ul style="margin-top: 10px;" class="list-unstyled list-inline">
+								<li>
+									<img ng-if="user.imageUrl" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-small">
+									<img ng-if="!user.imageUrl" src="/img/avatar.png" class="img-circle img-thumbnail-avatar-small">
+								</li>
+								<li>
+									<p>
+										{{ post.userPosts === 0 ? "Be the first to write a response..." : "Write a response..." }}
+									</p>
+								</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="block-center" ng-repeat="response in post.userPosts">
+				<div class="panel">
+					<div class="panel-body">
+						<ul class="list-unstyled list-inline">
+							<li>
+								<a ui-sref="vicigo.profile({profileId: response.user.id})">
+									<img ng-if="response.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{response.user.imageUrl}}" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+									<img ng-if="!response.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small">
+								</a>
+							</li>
+
+							<li style="vertical-align:middle">
+								<strong style="margin-top:50px;">
+									<a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}}</a></strong>
+				
+								<br />
+
+								<small class="text-muted">
+									<span ng-if="!post.post_publish_timestamp_formatted">{{::response.publishedAt}}</span> 
+								</small>
+							</li>
+						</ul>
+
+						<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
+
+						<ul class="list-inline list-unstyled">
+							<li>
+								<button ng-click="addressClicked(response)" class="btn btn-default">
+									<i class="fa fa-btc"></i> 0.002</a>
+								</button>
+							</li>
+							<li ng-click="addressClicked(response)" >
+								<small>{{response.upvoteCount}} {{response.upvoteCount === 1 ? "Upvote" : "Upvotes"}}</small>
+							</li>
+							<li>
+								<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">
+									<small>Read more</small>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>			
+</div>

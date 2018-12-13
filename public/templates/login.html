@@ -1,0 +1,27 @@
+<div ng-show="!resetCode" class="container">
+    <div class="col-sm-6 col-sm-offset-3 ">
+    <img style="width:100%; max-width:150px; display:block; margin:auto;" src="/img/honest-long-logo.png" >	
+        <h1><span class="fa fa-sign-in"></span> {{resetCode ? "Change password": "Login" }}</h1> 
+        <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+
+        <form ng-submit="resetCode ? changePassword(data) : forgot ? resetPassword(data) : login(data)">
+            <div ng-show="!resetCode" class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" ng-model="data.loginemail">
+            </div>
+
+            <div class="form-group" ng-show="!forgot">
+                <label>Recovery phrase (12 words)</label>
+                <input type="password" class="form-control" ng-model="data.loginpassword">
+            </div>
+
+            <button style="background-color:black; color: white;" type="submit" class="btn btn-lg" ng-disabled="isLoading">Login</button>
+        </form>
+
+        <hr />
+
+        <p class="text-center">Need an account? <a href="/signup">Signup</a></p>
+        <p class="text-center" ng-show="!forgot"><a href="#" ng-click="goToForgotPage()">Forgot password?</a></p>
+        <p class="text-center" ng-show="forgot"><a href="#" ng-click="goToLoginPage()">Login</a></p>
+    </div>
+</div>

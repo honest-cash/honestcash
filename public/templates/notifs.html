@@ -1,0 +1,88 @@
+
+<div class="col-md-3"></div>
+<div class="col-md-6">
+
+  
+  <h4>
+    All Notifications <span class="badge" ng-if="userStatus.notifications_count">{{userStatus.notifications_count}}</span> <button ng-if="userStatus.notifications_count" class="btn btn-success btn-sm" ng-click="markAllNotifsAsRead()">mark all as read</button>
+  </h4>
+
+  		<div infinite-scroll="loadMoreNotifs()" infinite-scroll-distance="1">
+  
+  <div ng-repeat="notif in notifs" ng-click="markNotifAsRead(notif,$index)" ng-class="{ 'bg-info' : notif.status == 0 || notif.status!==1 }">
+
+ <hr ng-if="notif.event_type==2 || notif.event_type==6 || notif.event_type==11 || notif.event_type==16">
+		<div  style="padding:7px;" >
+			
+			
+			
+			
+			
+			
+			
+		
+      <ul class="ul-breath list-unstyled list-inline" ng-if="notif.event_type==2">        
+				<li>
+					<a ui-sref="vicigo.profile({profileId:notif.related_user_id})">
+							<img ng-if="notif.related_user_profile_image_url" fallback-src="{{'/img/avatar.png'}}" ng-src="{{notif.related_user_profile_image_url}}" class="img-circle img-thumbnail-avatar-small">
+              <img ng-if="!notif.related_user_profile_image_url" src="/img/avatar.png" alt="{{post.author_name}}" class="img-circle img-thumbnail-avatar-small">
+					</a>
+				</li>
+				<li style="vertical-align:middle">
+					<span style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId:notif.related_user_id})" class="bold">{{notif.related_user_name}}</a> upvoted your <a ui-sref="vicigo.post({postId:notif.post_id})">{{ displayPost(notif) }}</a></span>
+					<small class="text-muted">{{notif.created_at}}</small>
+				</li>
+			</ul>
+		
+				  <ul class="ul-breath list-unstyled list-inline" ng-if="notif.event_type==6">        
+				<li>
+					<a ui-sref="vicigo.profile({profileId:notif.related_user_id})">
+							<img ng-if="notif.related_user_profile_image_url" fallback-src="{{'/img/avatar.png'}}" ng-src="{{notif.related_user_profile_image_url}}" class="img-circle img-thumbnail-avatar-small">
+              <img ng-if="!notif.related_user_profile_image_url" src="/img/avatar.png" alt="{{post.author_name}}" class="img-circle img-thumbnail-avatar-small">
+					</a>
+				</li>
+				<li style="vertical-align:middle">
+					<span style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId:notif.related_user_id})" class="bold">{{notif.related_user_name}}</a> is now following you.</span>
+					<small class="text-muted">{{notif.created_at}}</small>
+				</li>
+			</ul>
+		
+		
+		  <ul class="ul-breath list-unstyled list-inline" ng-if="notif.event_type==11">        
+				<li>
+					<a ui-sref="vicigo.profile({profileId:notif.related_user_id})">
+							<img ng-if="notif.related_user_profile_image_url" fallback-src="{{'/img/avatar.png'}}" ng-src="{{notif.related_user_profile_image_url}}" class="img-circle img-thumbnail-avatar-small">
+              <img ng-if="!notif.related_user_profile_image_url" src="/img/avatar.png" alt="{{post.author_name}}" class="img-circle img-thumbnail-avatar-small">
+					</a>
+				</li>
+				<li style="vertical-align:middle">
+					<span style="margin-top:50px;"><a ui-sref="vicigo.profile({profileId:notif.related_user_id})" class="bold">{{notif.related_user_name}}</a> commented on your <a ui-sref="vicigo.post({postId:notif.post_id})">{{ displayPost(notif) }}</a></span>
+					<small class="text-muted">{{notif.created_at}}</small>
+				</li>
+			</ul>
+			
+			
+			
+			 <ul class="ul-breath list-unstyled list-inline" ng-if="notif.event_type==16">        
+				<li>
+				
+							<i class="fa fa-eye fa-1x"></i>
+				</li>
+				<li style="vertical-align:middle">
+					<span style="margin-top:50px;"><span class="bold">{{notif.details}} views</span> on your <a ui-sref="vicigo.post({postId:notif.post_id})">{{ displayPost(notif) }}</a></span>
+					<small class="text-muted">{{notif.created_at}}</small>
+				</li>
+			</ul>
+			
+			
+		</div>
+		
+</div>
+        
+  	<div style='clear: both;'></div>
+  
+  </div>
+
+</div>
+<div class="col-md-3"></div>
+

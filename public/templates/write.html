@@ -1,0 +1,38 @@
+<div class="container ng-cloak">
+	<div class="row">
+		<div class="col-md-2"></div>	  
+		<div class="col-md-8 col-xs-12" style="min-height:250px;">
+				<div ng-show="draft.parentPost.id" class="block-center">
+					<a target="_self" ng-href="/{{draft.parentPost.user.username}}/{{draft.parentPost.alias}}">
+						<div class="panel">
+							<div class="panel-body" style="cursor: pointer;">
+								Response to: <b>{{draft.parentPost.title}}</b>
+								<p>by @{{draft.parentPost.user.username}}</p>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<img ng-if="draft.imageUrl" style="max-width:100%;cursor:pointer;" ng-src="{{draft.imageUrl}}" data-toggle="modal" data-target="#uploadBackgroundImageModal">
+
+				<div class="hidden text-center changeSomethingBtn" style="cursor:pointer;" id="uploadPostBackground">
+						<div class="btn btn-default" style="margin:10px;" >
+							<i class="fa fa-camera"></i> Change background pic
+						</div>	
+				</div>
+
+				<h2>
+					<strong>
+						<div id="title"></div>
+						<div ng-if="draft.status=='published'"" class="badge">
+							Published
+						</div>
+					</strong>
+				</h2>
+
+				<hr />
+
+				<article style="font-size: 21px;" id="body"></article>
+		</div>
+	</div>
+</div>

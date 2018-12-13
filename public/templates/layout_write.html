@@ -1,0 +1,78 @@
+<div>
+	<div class="text-center" ng-show='!ready'><i class="fa fa-circle-o-notch fa-spin fa-2x"></i></div>
+
+	<div ng-show='ready'>
+	
+	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
+		<div class="container">
+				<a href="/" target="_self" class="hidden-xs pull-left">
+					<img class="header-logo" src="/img/honest-long-logo.png" alt="Honest Logo">
+				</a>
+
+				<ul class="list-inline" style="float: right;">
+					<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
+						<button class="btn-default btn" style="margin:10px;" >
+							<strong class="hidden-xs">Ready to publish?</strong>
+							<strong class="visible-xs">Publish</strong>
+						</button>
+					</li>
+
+					<li ng-if="draft.status === 'published'" ng-click="readyToPublish(draft.id)">
+						<button class="btn-default btn" style="margin:10px;" >
+							<strong>Save</strong>
+						</button>
+					</li>
+
+					<li style="margin-top: 5px; cursor: pointer;" class="menu-item-profile">
+						<a ng-href="/profile/{{user.id}}" target="_self">
+							<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-smallest">
+							<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+						</a>
+					</li>
+				</ul>
+		</div>
+	</div>
+
+	<div style="min-height:440px;">
+		<div class="visible-xs" style="height:50px;"></div>
+		<div style="height:40px;"></div>
+		<div ui-view autoscroll="true"></div>
+	</div>
+</div>
+
+<!-- PUBLISH MODAL -->
+<div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"><b>Prepare your story for readers</h4>
+			</div>
+
+			<div class="modal-body">
+				<div class="panel panel-info">
+					<div class="panel-body">
+						<p>Add or change tags (up to 5) so readers know what your story is about</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<form>
+						<input id="description" name="tags" placeholder="Enter up to 5 hashtags" />
+					</form>
+				</div>
+
+				<div class="form-group">
+					<small>You are able to edit the story after publishing. After the first upvote the editing will become disabled.</small>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button ng-disabled="isLoading" ng-click="publishPost(draft.id)" type="button" class="btn btn-default btn-lg btn-block">
+					{{isLoading ? "Saving..." : draft.status === "published" ? "Save" : "Publish" }}
+				</button>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+<!-- PUBLISH MODAL -->
