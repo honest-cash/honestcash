@@ -27,10 +27,16 @@
 						<div class="form-group">
 								<label>username</label>
 								<input type="text" class="form-control" ng-model="data.username">
-						</div>
+            </div>
+
 						<div class="form-group">
 								<label>email</label>
 								<input type="email" class="form-control" ng-model="data.email">
+            </div>
+            
+            <div class="form-group">
+								<label>password</label>
+								<input type="password" class="form-control" ng-model="data.password">
 						</div>
 
 						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>

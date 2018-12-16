@@ -14,7 +14,6 @@ export default class ProfileCtrl {
             $scope.fetchFeeds();
         };
 
-        // Initialise Twitter / Reddit props
         const initSocialMediaLinks = () => {
             const twitterProp = profile.userProperties.find(prop => prop.propKey === "twitter");
             const redditProp = profile.userProperties.find(prop => prop.propKey === "reddit");
@@ -24,10 +23,6 @@ export default class ProfileCtrl {
         };
 
         initSocialMediaLinks();
-
-        $(".tags-area").tagit({
-            placeholderText: "place for hashtags!"
-        });
 
         $scope.profile = profile;
 

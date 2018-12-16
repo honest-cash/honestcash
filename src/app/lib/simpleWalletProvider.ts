@@ -1,3 +1,7 @@
+import { ISimpleWallet } from "./interfaces";
+
+declare var SimpleWallet;
+
 let wallet = null;
 
 export const defaultHdPath = "m/44'/0'/0'/0/0";
@@ -12,7 +16,7 @@ export const saveLocally = simpleWallet => {
   localStorage.setItem("HC_BCH_HD_PATH", simpleWallet.HdPath);
 };
 
-export const initWallet = mnemonic => {
+export const initWallet = (mnemonic?: string, password?: string) => {
   let HdPath;
 
   if (!mnemonic) {
@@ -20,8 +24,9 @@ export const initWallet = mnemonic => {
     HdPath = localStorage.getItem("HC_BCH_HD_PATH") || defaultHdPath;
   }
 
-  const simpleWallet = new SimpleWallet(mnemonic, {
-    HdPath
+  const simpleWallet: ISimpleWallet = new SimpleWallet(mnemonic, {
+    HdPath,
+    password
   });
  
   saveLocally(simpleWallet);

@@ -43,7 +43,9 @@ angular.module("vqAuth", [])
 	LOGOUT: "/logout",
 	RESET: "/auth/request-password-reset",
   CHANGE_PASSWORD: "/auth/reset-password",
-  SET_PASSWORD: "/auth/change-password"
+  SET_PASSWORD: "/auth/change-password",
+  SET_WALLET: "/auth/set-wallet",
+  PASSWORD_CHECK: "/auth/password-check"
 })
 
 .factory("apiFactory", ["API_URL", "API", function(API_URL, API) {
@@ -78,7 +80,6 @@ angular.module("vqAuth", [])
 		if (token) {
 			useCredentials(token, userId);
 		}
-		
 	}
 
 	function storeUserCredentials(token, userId) {
@@ -98,34 +99,33 @@ angular.module("vqAuth", [])
 		$window.localStorage.removeItem(LOCAL_USER_ID_KEY);
 	}
 
-	function login({ email, password }) {
+	function login(data: { email: string, password: string }) {
 		console.info("[AuthService] Loggin in..");
 		return $q((resolve, reject) => {
-			var body = {
-				email,
-				password
-			};
-
-			$http.post(apiFactory("LOGIN"), body)
+			$http.post(apiFactory("LOGIN"), data)
 			.then((res) => {
 				storeUserCredentials(res.data.token, res.data.user.id);
 
 				resolve(res.data);
 			}, reject);
 		});
+  }
+
+  function passwordCheck(data: { password: string }) {
+		return $q((resolve, reject) => {
+      $http
+      .post(apiFactory("PASSWORD_CHECK"), data)
+			.then((res) => {
+				resolve(res.data);
+			}, reject);
+		});
 	}
 
-	function signup(data) {
+	function signup(data: { username: string; password: string; email: string }) {
 		return $q(async (resolve, reject) => {
 			console.info("[AuthService] Signing Up..");
 
-			const body = {
-				username: data.username,
-				password: data.password,
-				email: data.email
-			};
-
-			$http.post(apiFactory("SIGNUP"), body)
+			$http.post(apiFactory("SIGNUP"), data)
 			.then(response => {
 				storeUserCredentials(response.data.token, response.data.user.id);
 
@@ -148,23 +148,29 @@ angular.module("vqAuth", [])
 		});
 	};
 
-	function resetPassword({ email }) {
+	function resetPassword(data: { email: string }) {
 		console.info("[AuthService] Requesting new password.");
 
-		return $http.post(apiFactory("RESET"), { email });
+		return $http.post(apiFactory("RESET"), data);
 	}
 
-	function changePassword({ code, newPassword, repeatNewPassword }) {
+	function changePassword(data: { code: string, newPassword: string, repeatNewPassword: string; mnemonicEncrypted: string; }) {
 		console.info("[AuthService] Resetting password.");
 
-		return $http.post(apiFactory("CHANGE_PASSWORD"), { code, newPassword, repeatNewPassword });
+		return $http.post(apiFactory("CHANGE_PASSWORD"), data);
 	}
   
   
-  function setPassword({ password }) {
+  function setPassword(data: { password: string }) {
 		console.info("[AuthService] Resetting password.");
 
-		return $http.post(apiFactory("SET_PASSWORD"), { password });
+		return $http.post(apiFactory("SET_PASSWORD"), data);
+  }
+  
+  function setWallet(data: { mnemonicEncrypted: string }) {
+		console.info("[AuthService] Resetting password.");
+
+		return $http.post(apiFactory("SET_WALLET"), data);
 	}
 
 	var getAuthToken = () => {
@@ -174,6 +180,8 @@ angular.module("vqAuth", [])
 	}
 
 	return {
+    passwordCheck,
+    setWallet,
 		getUserId: () => authUserId,
 		authUserId: authUserId,
 		validate: validate,

@@ -27,6 +27,14 @@ export default function ($http, API_URL) {
 		});
 	};
 
+  const updateUser = (userId, fieldName, fieldValue) => {
+    const data = {};
+
+    data[fieldName] = fieldValue;
+
+    return $http.put(`${API_URL}/user/${userId}`, data);
+  };
+
 	const updateUserProp = function (userId, propKey, propValue, callback) {
 		const props = {}; 
 
@@ -44,6 +52,7 @@ export default function ($http, API_URL) {
 	};
 
 	return {
+    updateUser,
 		fetchProfileStatus: fetchProfileStatus,
 		fetchProfile: fetchProfile,
 		fetchRecommentedProfiles: fetchRecommentedProfiles,
