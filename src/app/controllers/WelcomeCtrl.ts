@@ -126,7 +126,7 @@ export default class WelcomeCtrl {
             simpleWallet.address
           );
         } else {
-          await setAddressForTips();
+          await setAddressForTips(authData.user.id, simpleWallet.address);
         }
       }
 
