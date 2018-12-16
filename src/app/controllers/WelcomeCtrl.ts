@@ -130,12 +130,12 @@ export default class WelcomeCtrl {
         }
       }
 
-      $rootScope.user = authData.user;
-
       simpleWalletProvider.initWallet(
         mnemonicEncrypted,
         data.loginpassword
       );
+
+      $rootScope.user = authData.user;
 
       $state.go("vicigo.feeds");
     };
