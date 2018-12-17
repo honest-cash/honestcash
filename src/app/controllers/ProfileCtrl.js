@@ -14,16 +14,6 @@ export default class ProfileCtrl {
             $scope.fetchFeeds();
         };
 
-        const initSocialMediaLinks = () => {
-            const twitterProp = profile.userProperties.find(prop => prop.propKey === "twitter");
-            const redditProp = profile.userProperties.find(prop => prop.propKey === "reddit");
-
-            profile.twitter = twitterProp ? twitterProp.propValue : null;
-            profile.reddit = redditProp ? redditProp.propValue : null;
-        };
-
-        initSocialMediaLinks();
-
         $scope.profile = profile;
 
         $scope.profileId = $scope.profile.id;

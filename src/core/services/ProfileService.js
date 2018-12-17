@@ -1,7 +1,17 @@
 export default function ($http, API_URL) {
+	/* private */ const addSocialMediaToProfile = (profile) => {
+		const twitterProp = profile.userProperties.find(prop => prop.propKey === "twitter");
+		const redditProp = profile.userProperties.find(prop => prop.propKey === "reddit");
+
+		profile.twitter = twitterProp ? twitterProp.propValue : null;
+		profile.reddit = redditProp ? redditProp.propValue : null;
+		return profile;
+	};
+
 	const fetchProfile = (profileId, callback) => {
 		$http.get(API_URL + "/user/" + profileId).then(function (response) {
-			callback(response.data);
+			const profile = addSocialMediaToProfile(response.data);
+			callback(profile);
 		});
 	};
 
@@ -27,18 +37,18 @@ export default function ($http, API_URL) {
 		});
 	};
 
-  const updateUser = (userId, fieldName, fieldValue) => {
-    const data = {};
+	const updateUser = (userId, fieldName, fieldValue) => {
+		const data = {};
 
-    data[fieldName] = fieldValue;
+		data[fieldName] = fieldValue;
 
-    return $http.put(`${API_URL}/user/${userId}`, data);
-  };
+		return $http.put(`${API_URL}/user/${userId}`, data);
+	};
 
 	const updateUserProp = function (userId, propKey, propValue, callback) {
-		const props = {}; 
+		const props = {};
 
-		props[propKey] = propValue; 
+		props[propKey] = propValue;
 
 		$http({
 			url: API_URL + "/user/" + userId,
@@ -52,7 +62,7 @@ export default function ($http, API_URL) {
 	};
 
 	return {
-    updateUser,
+		updateUser,
 		fetchProfileStatus: fetchProfileStatus,
 		fetchProfile: fetchProfile,
 		fetchRecommentedProfiles: fetchRecommentedProfiles,
