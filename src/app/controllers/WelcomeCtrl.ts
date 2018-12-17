@@ -74,7 +74,7 @@ export default class WelcomeCtrl {
         buttons: {
           cancel: true,
           confirm: true,
-        },
+        }
       });
 
       if (hasConfirmed) {
@@ -122,6 +122,7 @@ export default class WelcomeCtrl {
 
         if (!authData.user.addressBCH) {
           await ProfileService.updateUser(
+            authData.user.id,
             "addressBCH",
             simpleWallet.address
           );
@@ -134,6 +135,12 @@ export default class WelcomeCtrl {
         mnemonicEncrypted,
         data.loginpassword
       );
+
+      const simpleWallet = simpleWalletProvider.get();
+
+      if (authData.wallet && !authData.user.addressBCH) {
+        await setAddressForTips(authData.user.id, simpleWallet.address);
+      }
 
       $rootScope.user = authData.user;
 

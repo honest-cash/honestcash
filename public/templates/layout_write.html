@@ -24,7 +24,7 @@
 					</li>
 
 					<li style="margin-top: 5px; cursor: pointer;" class="menu-item-profile">
-						<a ng-href="/profile/{{user.id}}" target="_self">
+						<a ng-href="/profile/{{user.username}}" target="_self">
 							<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-smallest">
 							<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
 						</a>

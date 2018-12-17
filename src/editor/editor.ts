@@ -15,7 +15,7 @@ import '../core/config';
 
 angular.module("editor-app", [
 	uiRouter,
-	'ui.bootstrap',
+	  'ui.bootstrap',
     "vqAuth",
     "vqConfig"
 ])
@@ -40,6 +40,6 @@ angular.module("editor-app", [
     $rootScope.user = {
         id: data.id,
         imageUrl: data.imageUrl,
-        name: data.username
+        username: data.username
     };
 }]);
