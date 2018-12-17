@@ -10,51 +10,16 @@
 				<img ng-if="!profile.imageUrl" ng-click="clickProfilePic(user.id,profile.id)" id="profilePic" class="img-circle img-thumbnail-avatar-big image-center" ng-src="/img/avatar.png">
 			</div>
 			<div class="pull-left col-xs-12 col-sm-9 col-md-10">
-				<div ng-if="profile.id === user.id">
-						<h1>
-							{{ profile.username }}
-						</h1>
-
-						<span class="clickable" ng-if="profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
-							{{ profile.addressBCH }}
-						</span>
-
-						<span class="clickable" ng-if="!profile.addressBCH" href="#" editable-text="profile.addressBCH" onbeforesave="updateAddressBCH($data)">
-							<i class="fa fa-pencil-square-o"></i> Specify your BCH address for receiving tips
-						</span>
-
-						<div class="profile-bch-qr-code"></div>
-
-						<div>
-							<span class="clickable" editable-text="profile.twitter" onbeforesave="updateTwitter($data)">
-								<i class="fa fa-twitter"></i>
-								<span ng-if="profile.twitter">{{profile.twitter}}</span>
-								<span ng-if="!profile.twitter">Link your Twitter Account</span>
-							</span>
-						</div>
-
-						<div>
-							<span class="clickable" editable-text="profile.reddit" onbeforesave="updateReddit($data)">
-								<i class="fa fa-reddit"></i>
-								<span ng-if="profile.reddit">{{profile.reddit}}</span>
-								<span ng-if="!profile.reddit">Link your Reddit Account</span>
-							</span>
-						</div>
-
-						<div>
-							<span class="clickable" class="textarea-bio" editable-text="profile.bio" placeholder="Add a Bio..." ng-model="string" maxlength="300" onbeforesave="updateBio($data)">
-								{{ profile.bio }}
-							</span>
-						</div>
-				</div>
-
-				<div ng-if="profile.id !== user.id">
+				<div>
 					<h1 class="text-center-sm">
 						{{ profile.username }}
-						<span class="follow-unfollow">
+						<span class="follow-unfollow" ng-if="profile.id !== user.id">
 							<button ng-click="follow(profile.id, profile)" ng-if="!profile.alreadyFollowing" class="btn btn-default btn-lg btn-follow">FOLLOW</button>
 							<button ng-click="follow(profile.id, profile)" ng-if="!profile.id" class="btn btn-default btn-lg btn-follow"><a href="https://honest.cash/signup">FOLLOW</a></button>
 							<button ng-click="unfollow(profile.id, profile)" ng-if="profile.alreadyFollowing" class="btn btn-success btn-lg btn-unfollow">UNFOLLOW</button>
+						</span>
+						<span class="edit-profile" ng-if="profile.id === user.id">
+								<button class="btn btn-default btn-md btn-edit"><a href="/profile/{{profile.username}}/edit">Edit profile</a></button>
 						</span>
 					</h1>
 
@@ -93,18 +58,18 @@
 						<li ng-if="profile.twitter || profile.reddit" >•</li>
 
 						<li>
-								<span class="text-center-sm" ng-if="profile.twitter">
-									<a href="https://twitter.com/{{profile.twitter}}" target="_blank">
-										<i class="fa fa-twitter"></i>
-									</a>
-								</span>
+							<span class="text-center-sm" ng-if="profile.twitter">
+								<a href="https://twitter.com/{{profile.twitter}}" target="_blank">
+									<i class="fa fa-twitter"></i>
+								</a>
+							</span>
 						</li>
 						<li>
-								<span class="text-center-sm" ng-if="profile.reddit">
-									<a href="https://reddit.com/user/{{profile.reddit}}" target="_blank">
-										<i class="fa fa-reddit"></i>
-									</a>
-								</span>
+							<span class="text-center-sm" ng-if="profile.reddit">
+								<a href="https://reddit.com/user/{{profile.reddit}}" target="_blank">
+									<i class="fa fa-reddit"></i>
+								</a>
+							</span>
 						</li>
 					</ul>
 				</div>

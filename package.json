@@ -94,7 +94,7 @@
   },
   "scripts": {
     "start": "node app-honestcash",
-    "build": "npm run transfer-libs && node ./node_modules/webpack/bin/webpack.js",
+    "build": "npm run transfer-libs && webpack",
     "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js && cp ./node_modules/simple-bitcoin-wallet/dist/bitboxlight.min.js ./public/js/bitboxlight.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
