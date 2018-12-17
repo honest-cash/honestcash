@@ -12,10 +12,10 @@ const generateWallet = async (data: { password: string }): Promise<ISimpleWallet
     type: 'warning',
     title: 'Write down your recovery phrase!',
     text: simpleWallet.mnemonic,
-    footer: `This is the key to your Bitcoin wallet. If you lose it, it cannot be recovered and you will loose your funds!`,
   });
 
   const repeatMnemonic = await swal({
+    text: "The recovery phrase must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The recovery phrase must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.",
     content: {
       element: "input",
       attributes: {
