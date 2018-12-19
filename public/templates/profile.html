@@ -80,13 +80,13 @@
 							</a>
 						</li>
 						<li ng-class="{ 'bold': showProfileTab === 'followers' }" class="middle-size side-padding showProfileTab" ng-click="showFollowers()">
-							<a href="#"  class="showProfileTab">
-								<span ng-bind="profile.followers_count"></span> <small>Followers</small>
+							<a href="#" class="showProfileTab">
+								<span ng-bind="profile.followerCount"></span> <small>Followers</small>
 							</a>
 						</li>
 						<li ng-class="{ 'bold': showProfileTab === 'following' }" class="middle-size side-padding showProfileTab" ng-click="showFollowing()">
 							<a href="#" class="showProfileTab">
-								<span ng-bind="profile.followers_count"></span> <small>Following</small>
+								<span ng-bind="profile.followingCount"></span> <small>Following</small>
 							</a>
 						</li>
 
