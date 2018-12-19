@@ -9,7 +9,7 @@
 
 					<li>
 						<strong style="margin-top:15px;">
-							<a ui-sref="vicigo.profile({ profileId:feed.user.username })">{{feed.user.username}}</a>
+							<a ui-sref="vicigo.profile({ profileId:feed.user.username })">{{feed.user.username}} ({{feed.user.followerCount}})</a>
 						</strong>
 					</li>
 
@@ -71,7 +71,10 @@
 							</button>
 						</li>
 						<li style="width:50px;">
-							<small>{{feed.upvoteCount}} {{feed.upvoteCount === 1 ? "Upvote" : "Upvotes"}}</small>
+							<small>{{feed.upvoteCount}} <i class="fa fa-bitcoin"></i></small>
+            </li>
+            <li style="width:50px;">
+							<small>{{feed.responseCount}} <i class="fa fa-comment-o"></i></small>
 						</li>
 					</ul>
 				</div>

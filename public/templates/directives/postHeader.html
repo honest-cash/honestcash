@@ -12,7 +12,7 @@
 
 			<li style="vertical-align:middle">
 				<strong style="margin-top:50px;">
-					<a ui-sref="vicigo.profile({profileId: post.user.username})">{{::post.user.username}}</a>
+					<a ui-sref="vicigo.profile({profileId: post.user.username})">{{::post.user.username}} ({{::post.user.followerCount}})</a>
 				</strong>
 
 				<button ng-if="user.id !== post.user.id && !post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(post.user.id, post.user);" class="btn btn-lg btn-follow">
