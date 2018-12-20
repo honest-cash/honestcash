@@ -7,6 +7,7 @@ import 'jquery';
 import uiRouter from 'angular-ui-router';
 import infiniteScroll from  'ng-infinite-scroll';
 import ProfileCtrl from './controllers/ProfileCtrl';
+import ProfileEditCtrl from './controllers/ProfileEditCtrl';
 import FeedsCtrl from './controllers/FeedsCtrl';
 import WelcomeCtrl from './controllers/WelcomeCtrl';
 import DraftsCtrl from './controllers/DraftsCtrl';
@@ -30,7 +31,7 @@ angular.module("hashtag-app", [
 	uiRouter,
 	'ui.bootstrap',
 	infiniteScroll,
-	"dcbImgFallback", 
+	"dcbImgFallback",
 	"xeditable",
 	'ngDialog',
 	"angular.lazyimg",
@@ -51,6 +52,7 @@ angular.module("hashtag-app", [
 .controller("mainController", MainCtrl)
 .controller("postController", PostCtrl)
 .controller("profileController", ProfileCtrl)
+.controller("profileEditController", ProfileEditCtrl)
 .controller("feedsController", FeedsCtrl)
 .controller("welcomeController", WelcomeCtrl)
 .controller("draftsController", DraftsCtrl)

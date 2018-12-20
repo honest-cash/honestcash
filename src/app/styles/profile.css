@@ -17,3 +17,8 @@
 .following-unfollow .btn-follow {
 	background: transparent;
 }
+
+.btn a {
+    color: inherit;
+    text-decoration: none;
+}
