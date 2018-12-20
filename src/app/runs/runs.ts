@@ -1,4 +1,5 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+import state from "../../editor/states";
 
 export const onStateChange = function($rootScope, $state, AuthService) {
     $rootScope.$on('$stateChangeStart', async (event, next, nextParams, fromState) => {
@@ -29,7 +30,7 @@ export const onStateChange = function($rootScope, $state, AuthService) {
 
 			AuthService.validate()
 			.then(res => {
-				const user = res.data;    
+				const user = res.data;
 
 				$rootScope.user = user;
 			}, () => {
@@ -39,6 +40,12 @@ export const onStateChange = function($rootScope, $state, AuthService) {
 					location.href = "/signup";
 				}
 			});
+		}
+
+		if (next.name == 'vicigo.profileEdit') {
+			if (!$rootScope.user || $rootScope.user.username != nextParams.profileId) {
+				location.href = `/profile/${nextParams.profileId}`;
+			}
 		}
 
 		$('#tipModal').modal('hide');

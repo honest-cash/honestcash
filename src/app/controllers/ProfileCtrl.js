@@ -14,16 +14,6 @@ export default class ProfileCtrl {
             $scope.fetchFeeds();
         };
 
-        const initSocialMediaLinks = () => {
-            const twitterProp = profile.userProperties.find(prop => prop.propKey === "twitter");
-            const redditProp = profile.userProperties.find(prop => prop.propKey === "reddit");
-
-            profile.twitter = twitterProp ? twitterProp.propValue : null;
-            profile.reddit = redditProp ? redditProp.propValue : null;
-        };
-
-        initSocialMediaLinks();
-
         $scope.profile = profile;
 
         $scope.profileId = $scope.profile.id;
@@ -46,45 +36,6 @@ export default class ProfileCtrl {
         $scope.unfollowHashtag = function(hashtag, index) {
             RelsService.unfollowHashtag(hashtag);
             $scope.followedHashtags.splice(index, 1);
-        };
-
-        const updateMutableProfileFieldFactory = (fieldName) => async (fieldValue) => {
-            var d = $q.defer();
-
-            const data = {};
-
-            data[fieldName] = fieldValue;
-            console.log(data);
-
-            $http.put(`${API_URL}/user/${$scope.profile.id}`, data)
-                .then((res) => {
-                    res = res || {};
-                    if (res.status === 'ok') { // {status: "ok"}
-                        d.resolve()
-                    } else { // {status: "error", msg: "Username should be `awesome`!"}
-                        d.resolve(res.msg)
-                    }
-                }, (response) => {
-                    // toastr.warning(response.data.desc);
-
-                    d.resolve(response.data.desc);
-                });
-
-            return d.promise;
-        };
-
-        $scope.updateUsername = updateMutableProfileFieldFactory("username");
-        $scope.updateAddressBCH = updateMutableProfileFieldFactory("addressBCH");
-        $scope.updateBio = updateMutableProfileFieldFactory("bio");
-        $scope.updateTwitter = (fieldValue) => updateMutableProfileFieldFactory("props")({ twitter: fieldValue });
-        $scope.updateReddit = (fieldValue) => updateMutableProfileFieldFactory("props")({ reddit: fieldValue });
-
-        $scope.clickProfilePic = (userId, profileId) => {
-            if ($rootScope.user) {
-                if (userId == profileId) {
-                    $('#uploadProfilePicModal').appendTo("body").modal('show');
-                }
-            }
         };
 
         $scope.fetchFeeds = params => {

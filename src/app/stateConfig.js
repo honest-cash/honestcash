@@ -1,7 +1,6 @@
 export default function state ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("/");
 
-
 	$stateProvider
 		.state('wallet', {
 			abstract: true,
@@ -85,6 +84,22 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			url: "/profile/:profileId",
 			templateUrl: "/templates/profile.html",
 			controller: "profileController",
+			resolve: {
+				'profile': [ "$stateParams", "$q", "ProfileService", ($stateParams, $q, ProfileService) => {
+					var defer = $q.defer();
+
+					ProfileService.fetchProfile($stateParams.profileId, (rProfile) => {
+						defer.resolve(rProfile);
+					});
+
+					return defer.promise;
+				}]
+			}
+		})
+		.state('vicigo.profileEdit', {
+			url: "/profile/:profileId/edit",
+			templateUrl: "/templates/profile-edit.html",
+			controller: "profileEditController",
 			resolve: {
 				'profile': [ "$stateParams", "$q", "ProfileService", ($stateParams, $q, ProfileService) => {
 					var defer = $q.defer();
