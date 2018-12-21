@@ -51,11 +51,11 @@
 			
 			<div class="col-md-6">
         <h4 ng-show="hashtags.length">
-          trending tags
+          trending topics
         </h4>
         <ul>
           <li ng-repeat = "hashtag in hashtags">
-						<a target="_self" href="/hashtag/{{hashtag}}">{{hashtag}}</a>
+						<a target="_self" href="/hashtag/{{hashtag.hashtag}}">{{hashtag.hashtag}} ({{hashtag.count}})</a>
 					</li>
         </ul>
       </div>

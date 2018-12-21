@@ -5,8 +5,14 @@ export default class MainCtrl {
     constructor(
         $rootScope, $scope, $state, $sce, $window, $location, $http, AuthService, RelsService, HashtagService, PostService, $uibModal
     ) {
-        $scope.hashtags = HashtagService.defaultHashtags;
-    
+        HashtagService.getTopHashtags()
+        .then(hashtags => {
+          console.log(hashtags);
+          $scope.hashtags = hashtags;
+
+          $scope.$apply();
+        });
+
         const mouseEnterAddress = (className, address) => {
             const container = document.getElementsByClassName(className)[0];
             

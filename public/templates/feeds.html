@@ -31,8 +31,6 @@
 
 <div style="height:35px;"></div>
 
-
-
 <div class="block-center container" style="max-width:1300px; z-index:99;">
 		<div class="hidden-xs hidden-sm col-md-3" >
 			<div ng-if="user.id" class="pull-left" style="max-width:300px">
@@ -49,14 +47,11 @@
 				</div>
 
 				<h5 class="bold">
-					top topics
+					trending topics
 				</h5>
 				<ul class="list-unstyled">
 					<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
-						<a ng-class="{ 'bold': hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag}}">{{hashtag}}</a>
-					</li>
-					<li style="margin-bottom:5px;">
-							<a ng-class="{ 'bold': 'adult' === $parent.hashtag }" ng-href="/hashtag/adult">adult</a>
+						<a ng-class="{ 'bold': hashtag.hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag.hashtag}}">{{hashtag.hashtag}} ({{hashtag.count}})</a>
 					</li>
 				</ul>
 				<small style="font-size: 70%">
