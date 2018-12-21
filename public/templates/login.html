@@ -21,14 +21,14 @@
             </div>
 
             <button style="background-color:black; color: white;" type="submit" class="btn btn-lg" ng-disabled="isLoading">
-            {{resetCode ? "Confirm" : forgot ? "Restart" : "Login" }}
+            {{resetCode ? "Confirm" : forgot ? "Reset" : "Login" }}
           </button>
         </form>
 
         <hr />
 
         <p class="text-center">Need an account? <a href="/signup">Signup</a></p>
-        <p class="text-center" ng-show="!forgot"><a href="#" ng-click="goToForgotPage()">Restart password</a></p>
+        <p class="text-center" ng-show="!forgot"><a href="#" ng-click="goToForgotPage()">Reset password</a></p>
         <p class="text-center" ng-show="forgot"><a href="#" ng-click="goToLoginPage()">Login</a></p>
     </div>
 </div>

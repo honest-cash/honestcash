@@ -177,7 +177,7 @@ export default class WelcomeCtrl {
         mnemonicEncrypted: simpleWallet.mnemonicEncrypted
       });
 
-      $scope.message = "Your password has been restarted and a new wallet has been generated. You can now log-in.";
+      $scope.message = "Your password has been resetted and a new wallet has been generated. You can now log-in.";
 
       $scope.resetCode = undefined;
       $scope.data.loginemail = undefined;
