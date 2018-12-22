@@ -141,7 +141,7 @@
 
 							<li style="vertical-align:middle">
 								<strong style="margin-top:50px;">
-									<a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}}</a></strong>
+									<a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}} ({{response.user.followerCount}})</a></strong>
 				
 								<br />
 
@@ -151,6 +151,10 @@
 							</li>
 						</ul>
 
+            <h2>
+              <strong>{{response.title}}</strong>
+            </h2>
+
 						<article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
 
 						<ul class="list-inline list-unstyled">
@@ -158,10 +162,18 @@
 								<button ng-click="addressClicked(response)" class="btn btn-default">
 									<i class="fa fa-btc"></i> 0.002</a>
 								</button>
-							</li>
-							<li ng-click="addressClicked(response)" >
-								<small>{{response.upvoteCount}} {{response.upvoteCount === 1 ? "Upvote" : "Upvotes"}}</small>
-							</li>
+              </li>
+              <li>
+                  <small>{{response.upvoteCount}} <i class="fa fa-bitcoin"></i></small>
+              </li>
+              <li >
+                <small>{{response.responseCount}} <i class="fa fa-comment-o"></i></small>
+              </li>
+              <li>
+                  <a target="_self" ng-href="/write/response/{{response.id}}">
+                    <small>Reply</small>
+                  </a>
+              </li>
 							<li>
 								<a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">
 									<small>Read more</small>

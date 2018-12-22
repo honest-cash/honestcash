@@ -3,10 +3,15 @@ import { ISimpleWallet } from "./interfaces";
 
 declare var SimpleWallet: any;
 
-const generateWallet = async (data: { password: string }): Promise<ISimpleWallet> => {
-  const simpleWallet = new SimpleWallet(null, {
-    password: data.password
-  });
+interface IGenerateWalletArgs {
+  password: string;
+  mnemonic?: string;
+}
+
+const generateWallet = async (data: IGenerateWalletArgs): Promise<ISimpleWallet> => {
+  const simpleWallet = new SimpleWallet(data.mnemonic);
+
+  simpleWallet.mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, data.password);
 
   await swal({
     type: 'warning',
@@ -16,6 +21,7 @@ const generateWallet = async (data: { password: string }): Promise<ISimpleWallet
 
   const repeatMnemonic = await swal({
     text: "The recovery phrase must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The recovery phrase must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.",
+    buttons: true,
     content: {
       element: "input",
       attributes: {
@@ -25,8 +31,24 @@ const generateWallet = async (data: { password: string }): Promise<ISimpleWallet
     },
   });
 
+  if (!repeatMnemonic) {
+    return generateWallet({
+      password: data.password,
+      mnemonic: simpleWallet.mnemonic
+    });
+  }
+
   if (repeatMnemonic !== simpleWallet.mnemonic) {
-    return generateWallet(data);
+    await swal({
+      type: 'errpr',
+      title: 'Wrong',
+      text: "Try again!",
+    });
+
+    return generateWallet({
+      password: data.password,
+      mnemonic: simpleWallet.mnemonic
+    });
   }
 
   return simpleWallet;

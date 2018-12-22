@@ -32,7 +32,6 @@ angular.module("hashtag-app", [
 	'ui.bootstrap',
 	infiniteScroll,
 	"dcbImgFallback",
-	"xeditable",
 	'ngDialog',
 	"angular.lazyimg",
 	"vqAuth",
@@ -62,7 +61,3 @@ angular.module("hashtag-app", [
 .run([ "$rootScope", "$state", "AuthService", runs.onStateChange])
 
 .run([ "API_URL", "AuthService", runs.initProfileUpload ])
-
-.run([ "editableOptions", function(editableOptions) {
-	editableOptions.theme = 'bs3';
-}]);

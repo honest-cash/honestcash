@@ -329,57 +329,11 @@ img.lazy {
 	font-size: 17px;
 }
 
-.postMainPicture{
+.postMainPicture {
 	max-width:100%;
 	display: block;
   margin-left: auto;
   margin-right: auto
-}
-
-@media(min-width:768px) {
-	.post-title-container h1 {
-		font-size:38px;
-	}
-		
-	.post-body {
-		width:100%;  
-		font-family: 'Helvetica', sans-serif;
-		font-weight: 300 !important;
-		font-style: normal !important;
-		font-size: 17px !important;
-		line-height: 1.58 !important;
-		/* color: #777; */
-		line-height: 1.6;
-		max-width: 100%;
-		padding: 5px;
-	}
-}
-@media(max-width:768px) {
-	.hashbook-title h1 {
-		font-size:24px !important;
-	}
-	
-	.post-title-container h1 {
-		font-size:24px;
-	}
-	.post-body {
-	width:100%;  
-	font-family: 'Helvetica', sans-serif;
-  font-weight: 300 !important;
-  font-style: normal !important;
-  font-size: 17px !important;
-  line-height: 1.58 !important;
-	max-width: 100%;
-}
-}
-
-.post-body img {
-	display: block !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-	margin-top: 10px !important;
-	margin-down: 10px !important;
-	max-width: 100% !important;
 }
 
 .block-center {

@@ -2,6 +2,50 @@
 	display: none;
 }
 
+@media(min-width:768px) {
+	.post-title-container h1 {
+		font-size:38px;
+	}
+
+	.post-body {
+		width:100%;  
+		font-family: 'Helvetica', sans-serif;
+		font-weight: 300 !important;
+		font-style: normal !important;
+		font-size: 17px !important;
+		line-height: 1.58 !important;
+		/* color: #777; */
+		line-height: 1.6;
+		max-width: 100%;
+	}
+}
+
+
+@media(max-width:768px) {
+	.post-title-container h1 {
+		font-size:24px;
+  }
+
+	.post-body {
+    width:100%;  
+    font-family: 'Helvetica', sans-serif;
+    font-weight: 300 !important;
+    font-style: normal !important;
+    font-size: 17px !important;
+    line-height: 1.58 !important;
+    max-width: 100%;
+  }
+}
+
+.post-body img {
+	display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+	margin-top: 10px !important;
+	margin-bottom: 10px !important;
+	max-width: 100% !important;
+}
+
 .post-body {
 	overflow-wrap: break-word;
 }
