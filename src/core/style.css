@@ -63,10 +63,6 @@ h4 {
 	width: 321px !important;
 }
 
-btn {
-	background-color: #4B9E70;
-}
-
 .padding-5 {
 	padding: 5px;
 }
@@ -79,7 +75,7 @@ btn {
 
 
 /* BOOTSTRAP OVERRIDES */
-.navbar-default{
+.navbar-default {
 	background-color:white;
 	border-bottom: 1px solid #eeeeee;
 	-webkit-box-shadow:0px 1px 1px #de1dde;
@@ -104,12 +100,6 @@ btn {
 		height:200px;
 }
 
-.hashbook h2 {
-	font-size:22px;
-}
-.hashbook h4 {
-	margin:10px 0 10px 0 !important;
-}
 .header_menu {
 	padding:5px;
 	font-size:17px;
@@ -128,86 +118,33 @@ btn {
 	padding:10px;
 }
 
-.news-list {
-	border-bottom: 1px solid #eee;
-	margin-bottom: 60px;
-}
-
-.news-list .news-element {
-	border-bottom: 1px solid #eee;
-	padding: 60px 0;
-}
-
 .list-feed-actions {
 	padding-left : 30px;
 	padding-right : 30px;
 }
+
 .list-feed-actions li {
 	padding-left : 20px;
 	padding-right : 20px;
 }
 
-.news-list li h3{
-	font-size: 25px;
-	font-weight: bold;
-	text-transform: none;
-	margin: 0 0 25px 0;
-}
-
-.news-info{ margin:0 0 30px 0;}
-
-#news .news-info { margin:0;}
-
-.news-info > div {
-	display: inline-block;
-	padding: 0 30px 0 0;
-}
-
-.news-info div:last-child {padding:0;}
-
-.news-info > div .icon {
-	margin: 0 10px 0 0;
-	color: #ccc;
-}
-
 @media (max-width: 767px) {
+  .text-center-sm {
+      text-align: center;
+  }
 
-.text-center-sm {
-		text-align: center;
+  textarea {
+    resize: vertical;
+  }
+
+  div.inline {
+    float: left;
+  }
+
+  .rate-btn {
+  font-size:24px;	
+  }
 }
-	
-.news-list li { padding: 40px 0; }
-
-.news-list li h3 { font-size: 20px; }
-
-.news-info > div {
-	font-size: 14px;
-	padding: 0 10px 0 0;
-}
-
-.news-info > div .icon { margin: 0 5px 0 0; }
-
-}
-
-/* OTHER */
-
-
-textarea {
-	resize: vertical;
-}
-
-div.inline {
-	float: left;
-}
-
-.rate-btn {
-font-size:24px;	
-}
-.upvoted{
-	color:rgb(255,70,0)
-}
-/* header */
-
 @media(max-width:767px) {
 	.navbar .navbar-form {
 		width: 200px;
@@ -291,10 +228,6 @@ img.lazy {
 	font-weight: bold;
 }
 
-.slogan {
-	font-size: 16px;
-	font-weight: bold;
-}
 .middle-size {
 	font-size: 20px;
 	padding: 14px;
@@ -327,13 +260,6 @@ img.lazy {
 	background-color:white;
 	max-width: 100%;
 	font-size: 17px;
-}
-
-.postMainPicture {
-	max-width:100%;
-	display: block;
-  margin-left: auto;
-  margin-right: auto
 }
 
 .block-center {
@@ -436,65 +362,6 @@ img.lazy {
 	text-align: center;
 }
 
-/* Slideshow style */
-.splash {
-    position: fixed;
-    background: rgba(0,0,0,0.85);
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 500;
-    opacity: 0;
-    visibility: hidden;
-    overflow: hidden;
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
-    transition: opacity 0.5s, visibility 0s 0.5s;
-    -webkit-transition: opacity 0.5s, visibility 0s 0.5s;
-}
-
-.splash-open.splash {
-    opacity: 1;
-    visibility: visible;
-    -webkit-transition: opacity 0.5s;
-    transition: opacity 0.5s;
-}
-
-.splash .splash-inner {
-    width: 100%;
-    height: 100%;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    -webkit-transform: translate3d(0,0,150px);
-    transform: translate3d(0,0,150px);
-    -webkit-transition: -webkit-transform 0.5s;
-    transition: transform 0.5s;
-}
-
-
-.splash-open.splash .splash-inner {
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-}
-
-.splash .splash-content {
-    width: 660px;
-    height: 350px;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    margin: -175px 0 0 -330px;
-    color: #fff;
-    font-size: 18px;
-}
-
-.splash-content h1 {
-    color: #fff;
-    margin-bottom: 40px;
-}
-
-
 .btn-outline {
     margin-top: 40px;
     color: #fff;
@@ -507,142 +374,6 @@ img.lazy {
 .btn-outline:hover {
     color: #fff;
     background-color: rgba(255, 255, 255, 0.05);
-}
-
-
-
-
-/*----------------------------------------------------------------------------------------
-											COMMENTS
-----------------------------------------------------------------------------------------*/
-
-
-
-.comments { padding: 80px 0 0 0; }
-
-.comments li { padding: 0; }
-
-.comment-list .children { margin-left: 80px; }
-
-.comment-body {
-	border-top: 1px solid #eee;
-	position: relative;
-	padding: 40px 0 40px 80px;
-}
-
-.comment-body .photo {
-	position: absolute;
-	left: 0;
-	top: 40px;
-}
-
-.comment-body .photo img{
-	border-radius: 5px;
-	width:50px;
-	height:auto;
-	}
-
-.comment-body .comment-data {
-	margin-top: 10px;
-	font-size: 14px;
-}
-
-.comment-body .comment-data .author {
-	color: #444;
-	font-weight: bold;
-	padding-right: 20px;
-	font-size: 14px;
-}
-
-.comment-body .comment-data .date {
-	color: #ccc;
-	padding-right: 20px;
-}
-
-.comment-body .comment-data a { color: black; }
-
-
-.comments .comment-respond { margin: 0 0 0 0; }
-
-.comments #comment_form { border: 1px solid #eee; }
-
-.comments #comment_form:after {
-	content: '';
-	display: block;
-	clear: both;
-}
-
-.comments #comment_form > div { padding: 0; }
-
-#comment_form .btn_send {
-	width: 100%;
-	background: #eee;
-	font-weight:bold;
-	color:#777;
-	margin:0;
-}
-
-#comment_form .form-group { border-bottom: 1px solid #eee; }
-
-#comment_form .form-group label.error,
-#comment_form .form-group label.valid {
-	display: block;
-	margin: 0;
-	font-size: 12px;
-	position: relative;
-	padding: 5px 20px;
-	font-weight: 300;
-	color: #fff;
-	text-align: left;
-}
-
-#comment_form .form-group label.error { background: #d12525; }
-
-#comment_form .form-group label.error:before {
-	position: absolute;
-	left: 20px;
-	top: -7px;
-	content: "";
-	display: block;
-	width: 0;
-	height: 0;
-	border-style: solid;
-	border-width: 0 7px 7px 7px;
-	border-color: transparent transparent #d12525 transparent;
-}
-
-#comment_form .form-group label.valid { padding: 0; }
-
-#comment_form .form-group label.valid:before { display: none; }
-
-@media (max-width: 992px) {
-
-.comments{ padding:60px 0 0 0;}
-
-.comments .form-control{ text-align:center;}
-
-.comments .comment-respond{margin:40px 0 0 0;}
-
-.comment-body { padding: 30px 0; }
-
-.comment-list .children { margin-left: 0; }
-
-.comment-body .photo {
-	position: relative;
-	left: auto;
-	top: auto;
-	margin: 0 auto 20px auto;
-}
-
-.comment-body .comment-data .author {
-	display: block;
-	padding: 0;
-}
-
-.comment-body .comment-data .date {
-	display: block;
-	padding: 0;
-}
 }
 
 .fill-screen img {
@@ -677,10 +408,4 @@ img.lazy {
 	border-color: rgba(3, 168, 124, 1);
 	color: rgba(3, 168, 124, 1);
 	background-color: transparent;
-}
-
-/* social info */
-.social-info {
-	margin-left: 0;
-	font-size: .1em;
 }

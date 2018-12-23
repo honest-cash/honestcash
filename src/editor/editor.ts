@@ -1,5 +1,4 @@
 // import angular from 'angular';
-import 'jquery';
 import uiRouter from 'angular-ui-router';
 
 import '../core/style.css';

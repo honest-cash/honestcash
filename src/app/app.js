@@ -1,9 +1,10 @@
 import '../core/style.css';
+import '../core/layout.css';
 import './styles/profile.css';
 import './styles/post.css';
+import './styles/feed.css';
 
 // import angular from 'angular';
-import 'jquery';
 import uiRouter from 'angular-ui-router';
 import infiniteScroll from  'ng-infinite-scroll';
 import ProfileCtrl from './controllers/ProfileCtrl';

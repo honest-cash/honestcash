@@ -278,7 +278,6 @@ export default class MainCtrl {
         $scope.newPhoto = function() {
             $('#uploadImageModal').modal('show');
             $('#uploadedImage').attr('src', null);
-            $(".tags-area").tagit("removeAll");
             //imageDropzone.removeAllFiles(true);
             $(".dz-message").removeClass("hidden");
             $("#uploadedImage").addClass("hidden");
@@ -297,7 +296,6 @@ export default class MainCtrl {
                 }, function() {
                     $(".dz-message").removeClass("hidden");
                     $('#uploadedImage').attr('src', "");
-                    $("#uploadedPictureTags").tagit("removeAll");
                     document.getElementById("publishPicturePostBtn").disabled = true;
                     $(".dz-message").removeClass("hidden");
                     $("#uploadedImage").addClass("hidden");

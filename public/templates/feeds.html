@@ -1,4 +1,5 @@
-<div class="visible-xs" style="height:50px;"></div>
+<div class="visible-xs" style="height:90px;"></div>
+<div class="hidden-xs" style="height:30px;"></div>
 
 <div style="max-width:1300px;" class="container" class="block-center">
 	<div ng-if="!user.id" class="panel panel-default">
@@ -29,23 +30,10 @@
 	</div>
 </div>
 
-<div style="height:35px;"></div>
 
 <div class="block-center container" style="max-width:1300px; z-index:99;">
-		<div class="hidden-xs hidden-sm col-md-3" >
+		<div class="hidden-xs hidden-sm col-md-3 hc-feed-sidebar" >
 			<div ng-if="user.id" class="pull-left" style="max-width:300px">
-				<div>
-					<ul class="list-unstyled">
-						<li>
-							<a ng-class="{ 'bold': feedType === 'userfeed' }" href="/" target="_self">my feed</a>
-						</li>
-
-						<li tyle="margin-top:7px;">
-							<a ng-class="{ 'bold': feedType === 'all' }" href="/new" target="_self">all</a>
-						</li>
-					</ul>
-				</div>
-
 				<h5 class="bold">
 					trending topics
 				</h5>

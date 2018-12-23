@@ -7,10 +7,14 @@ export default class FeedsCtrl {
 		$scope.postsAvailable = true;
 		$scope.hashtagFollowed = false;
 		$scope.hashtag = $stateParams.hashtag;
+  
+    const feedType = location.pathname === "/" ?
+      "userfeed" :
+      location.pathname === "/top" ?
+      "top" :
+      "all";
 
-		const feedType = location.pathname === "/" ? "userfeed" : "all";
-
-		$scope.feedType = feedType;
+    $rootScope.feedType = feedType;
 
 		if ($scope.hashtag) {
 			$http.get("/api/hashtag/" + $scope.hashtag).then((response) => {
@@ -48,9 +52,13 @@ export default class FeedsCtrl {
 
 			if (feedType === "userfeed") {
 				obj.followerId = $rootScope.user ? $rootScope.user.id : undefined;
+      }
+
+      if (feedType === "top") {
+				obj.orderBy = "upvoteCount";
 			}
 
-			FeedService.fetchFeeds(obj, (data) => {
+      FeedService.fetchFeeds(obj, (data) => {
 				if (data) {
 					data.forEach((feed) => {
 						$scope.feeds.push(feed);

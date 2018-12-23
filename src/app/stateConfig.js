@@ -42,8 +42,11 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			abstract: true,
 			controller: "mainController",
 			templateUrl: "/templates/layout.html"
-		})
-        .state('vicigo.feeds', {
+    })
+    /**
+     * START OF Feeds
+     */
+    .state('vicigo.feeds', {
             url: "/",
             templateUrl: "/templates/feeds.html",
             controller: "feedsController",
@@ -52,12 +55,15 @@ export default function state ($stateProvider, $urlRouterProvider) {
             url: "/new",
             templateUrl: "/templates/feeds.html",
             controller: "feedsController"
-        })
-		.state('vicigo.chat', {
-			url: "/chat/:userId",
-			templateUrl: "/templates/chat.html",
-			controller: "chatController",
-		})
+    })
+    .state('vicigo.feedsTop', {
+      url: "/top",
+      templateUrl: "/templates/feeds.html",
+      controller: "feedsController"
+    })
+    /**
+     * END OF Feeds
+     */
 		.state('vicigo.notifs', {
 			url: "/notifs",
 			templateUrl: "/templates/notifs.html",

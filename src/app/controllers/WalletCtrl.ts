@@ -21,7 +21,6 @@ export default class WalletCtrl {
         $scope.isWithdrawalAddressBCHValid = true;
         let simpleWallet, lSimpleWallet;
 
-
         const checkPassword = async (): Promise<{ password?: string; aborted: boolean; isValid: boolean }> => {
           const password = await swal({
             buttons: {
