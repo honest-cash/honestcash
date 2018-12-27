@@ -1,5 +1,17 @@
+class User {
+  username: string;
+  imageUrl: string;
+}
+
+class Upvote {
+  txId: string;
+  userPostId: number;
+  userId: number;
+  user: User;
+}
+
 export default class PostService {
-    constructor ($http, $sce, API_URL) {
+    constructor (private $http, private $sce, private API_URL) {
         const removePost = function(postId) {
             return $http.delete(API_URL + "/post/" + postId);
         };
@@ -43,14 +55,7 @@ export default class PostService {
             })
         };
 
-        const getUpvotes = function(postId, callback) {
-            $http.get(API_URL + "/post/" + postId + "/upvotes").then(function(response) {
-                callback(response.data);
-            });
-        };
-
         this.createRef = createRef;
-        this.getUpvotes = getUpvotes;
         this.publishPic = publishPic;
         this.getById = getById;
         this.getByAlias = getByAlias;
@@ -58,8 +63,10 @@ export default class PostService {
         this.upvote = upvote;
         this.displayHTML = displayHTML;
     }
-}
 
-PostService.$inject = [
-    "$http", "$sce", "API_URL"
-];
+    static $inject = [
+      "$http", "$sce", "API_URL"
+    ];
+
+    public getUpvotes = async (postId: number) : Promise<Upvote[]> => this.$http.get(this.API_URL + "/post/" + postId + "/upvotes");
+}

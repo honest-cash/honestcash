@@ -1,5 +1,5 @@
 <div class="container">
-	<div class="col-xs-12 visible-xs" style="height:100px;"></div>
+	<div class="col-xs-12 visible-xs" style="height:70px;"></div>
 	<div class="col-md-8 col-md-offset-2">
 		<div class="row ng-cloak">
 			<div ng-if="post.parentPost" class="block-center">
@@ -22,6 +22,45 @@
 			<article class="site-block post-body" ng-bind-html="displayFeedBody(post.body)"></article>
 		</div>
 
+
+		<div class="row">
+        <ul class="list-unstyled list-inline">
+          <li ng-repeat="hashtag in post.userPostHashtags">
+            <a class="pull-left" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">#{{ ::hashtag.hashtag}}</a>
+          </li>
+        </ul>
+    </div>
+
+    <hr />
+
+    <div class="row" style="margin-bottom:15px;">
+        <ul class="list-unstyled list-inline">
+            <!-- AUTHOR IMAGE -->
+            <li>
+              <a ui-sref="vicigo.profile({profileId: post.user.id})">
+                <img ng-if="post.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{post.user.imageUrl}}" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+                <img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
+              </a>
+            </li>
+      
+            <li style="vertical-align:middle">
+              <strong style="margin-top:50px;">
+                <a href="/profile/{{post.user.username}}" target="_self">{{::post.user.username}}</a>
+              </strong>
+      
+              <button ng-if="user.id !== post.user.id && !post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(post.user.id, post.user);" class="btn btn-lg btn-follow">
+                  Follow
+              </button>
+      
+              <br />
+      
+              <small class="text-muted">
+                <span ng-if="!post.post_publish_timestamp_formatted">{{::post.user.bio}}</span> 
+              </small>
+            </li>
+          </ul>
+    </div>
+
 		<div class="row" ng-show="simpleWallet">
 			<ul class="list-unstyled list-inline list">
 				<li>
@@ -38,13 +77,6 @@
 			</ul>
 		</div>
 
-		<div class="row">
-			<ul class="list-unstyled list-inline">
-				<li ng-repeat="hashtag in post.userPostHashtags">
-					<a class="pull-left" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">#{{ ::hashtag.hashtag}}</a>
-				</li>
-			</ul>
-		</div>
 
 		<hr />
 
@@ -64,22 +96,22 @@
 
 		<div class="row" ng-show="post.user.addressBCH">
 			<div class="block-center">
-				<div class="panel" ng-show="!simpleWallet" >
+				<div class="panel" ng-show="!user" >
 					<div class="panel-body">
 						<h2>Give a tip to the author</h2>
 
-						<button class="btn btn-lg btn-default" ui-sref="wallet.create()">Connect your Bitcoin Cash wallet</button>
+						<a class="btn btn-lg btn-default" href="/signup" target="_self">Join Honest community and upvote it</a>
 
 						<p>
 							... or tip from any other Bitcoin Cash wallet.
 						</p>
 
-						<input readonly class="form-control" id="userBCHAddress" />
+						<input disabled="true" ng-model="post.user.addressBCH" class="form-control" />
 
-						<div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
+            <div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
 
 						<p>
-							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to have a connected wallet and be logged in for your tips to receive future upvote rewards.
+							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to be logged in for your tips to receive future upvote rewards.
 						</p>
 					</div>
 				</div>
@@ -97,8 +129,13 @@
 			<p ng-if="!post.userPostUpvotes.length"><small>No upvotes.</small></p>
 
 			<ul class="list-inline list-unstyled">
-				<li ng-repeat="upvote in post.userPostUpvotes">
-					<a ng-href="https://bch.btc.com/{{upvote.txId}}" target="_blank">{{upvote.txId.substring(0, 4)}}...{{upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)}}</a>
+				<li ng-repeat="upvote in upvotes" style="margin-bottom:5px;">
+          <a ng-href="/profile/{{upvote.user.username}}" target="_self">
+            <img src="{{upvote.user.imageUrl || '/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-smallest" />
+          </a>
+          <a ng-href="https://bch.btc.com/{{upvote.txId}}" target="_blank">
+            {{upvote.txId.substring(0, 4)}}...{{upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)}}
+          </a>
 				</li>
 			</ul>
 		</div>
