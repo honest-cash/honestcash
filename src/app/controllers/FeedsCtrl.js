@@ -1,3 +1,5 @@
+import ProfileService from "../../core/services/ProfileService";
+
 export default class FeedsCtrl {
   constructor($rootScope, $scope, $stateParams, $location, $http, FeedService, PostService) {
 		$scope.feeds = [];

@@ -47,14 +47,14 @@ export default function state ($stateProvider, $urlRouterProvider) {
      * START OF Feeds
      */
     .state('vicigo.feeds', {
-            url: "/",
-            templateUrl: "/templates/feeds.html",
-            controller: "feedsController",
+      url: "/",
+      templateUrl: "/templates/feeds.html",
+      controller: "feedsController",
 		})
 		.state('vicigo.feedsNew', {
-            url: "/new",
-            templateUrl: "/templates/feeds.html",
-            controller: "feedsController"
+      url: "/new",
+      templateUrl: "/templates/feeds.html",
+      controller: "feedsController"
     })
     .state('vicigo.feedsTop', {
       url: "/top",
@@ -105,7 +105,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 		.state('vicigo.profileEdit', {
 			url: "/profile/:profileId/edit",
 			templateUrl: "/templates/profile-edit.html",
-			controller: "profileEditController",
+      controller: "profileEditController",
 			resolve: {
 				'profile': [ "$stateParams", "$q", "ProfileService", ($stateParams, $q, ProfileService) => {
 					var defer = $q.defer();

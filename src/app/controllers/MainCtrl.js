@@ -3,15 +3,22 @@ import * as upvoteDistribution from "../lib/upvoteDistribution";
 
 export default class MainCtrl {
     constructor(
-        $rootScope, $scope, $state, $sce, $window, $location, $http, AuthService, RelsService, HashtagService, PostService, $uibModal
+        $rootScope, $scope, $state, $sce, $window, $location, $http, scopeService, AuthService, RelsService, HashtagService, ProfileService, PostService
     ) {
         HashtagService.getTopHashtags()
         .then(hashtags => {
-          console.log(hashtags);
           $scope.hashtags = hashtags;
 
-          $scope.$apply();
+          scopeService.safeApply($scope, () => {});
         });
+
+        if ($rootScope.user) {
+          ProfileService.fetchRecommentedProfiles($rootScope.user.id, {}, (users) => {
+            $scope.recommendedUsers = users;
+  
+            scopeService.safeApply($scope, () => {});
+          });
+        }
 
         const mouseEnterAddress = (className, address) => {
             const container = document.getElementsByClassName(className)[0];
@@ -204,27 +211,17 @@ export default class MainCtrl {
             RelsService.followProfile(profileId);
         };
 
+        $scope.unfollow = (profileId, followGuy) => {
+          if (followGuy) {
+              followGuy.alreadyFollowing = false;
+          }
+
+          RelsService.unfollowProfile(profileId);
+        };
+
         $scope.showUpvotes = (feed, statType) => {
             PostService.getUpvotes(feed.id, (rPostUpvotes) => {
-                var modalInstance = $uibModal.open({
-                    animation: $scope.animationsEnabled,
-                    templateUrl: 'userListModal.html',
-                    controller: 'userListCtrl',
-                    resolve: {
-                        statType: statType,
-                        postId: feed.id,
-                        stats: function() {
-                            return {
-                                upvotesCount: feed.upvotes_count,
-                                viewsCount: feed.views_count,
-                                commentsCount: feed.comment_count
-                            };
-                        },
-                        postUpvotes: function() {
-                            return rPostUpvotes;
-                        }
-                    }
-                });
+              
             });
         };
     
@@ -330,9 +327,10 @@ MainCtrl.$inject = [
     "$window",
     "$location",
     "$http",
+    "scopeService",
     "AuthService",
     "RelsService",
     "HashtagService",
-    "PostService",
-    "$uibModal"
+    "ProfileService",
+    "PostService"
 ];

@@ -32,8 +32,8 @@
 
 
 <div class="block-center container" style="max-width:1300px; z-index:99;">
-		<div class="hidden-xs hidden-sm col-md-3 hc-feed-sidebar" >
-			<div ng-if="user.id" class="pull-left" style="max-width:300px">
+		<div class="hidden-xs hidden-sm col-md-3 hc-feed-sidebar">
+			<div ng-if="user.id" class="pull-left affix" style="min-width: 203px; max-width: 253px; width: 25%;">
 				<h5 class="bold">
 					trending topics
 				</h5>
@@ -71,5 +71,30 @@
 			<ng-include src="'templates/partials/feed-angular.html'">
 		</div>	
 	</div>		
-		
+
+  <div class="hidden-xs hidden-sm col-md-3">
+    <div ng-if="recommendedUsers && recommendedUsers.length" class="affix" style="min-width: 203px; max-width: 253px; width: 25%;">
+      <div class="panel panel-default">
+          <div class="panel-body">
+              <h5 class="bold">Who to follow</h5>
+              <div style="margin-bottom: 5px;" ng-repeat="user in recommendedUsers | limitTo: 3">
+                 <hr />
+                  <div>
+                    <a href="/profile/{{user.username}}" target="_self">
+                        <img ng-src="{{user.imageUrl || '/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-smallest" />
+                        <span>{{user.username}} ({{user.followerCount}})</span>
+                    </a>
+                  </div>
+                  <div>
+                    <p class="text-muted">{{user.bio}}</p>
+                  </div>
+                  <div>
+                      <button ng-if="!user.alreadyFollowing" ng-click="follow(user.id, user);" class="btn btn-lg btn-follow">Follow</button>
+                      <button ng-if="user.alreadyFollowing" ng-click="unfollow(user.id, user);" class="btn btn-lg btn-follow">Following</button>
+                  </div>
+                <div>
+          </div>
+      </div>
+    </div>
+  </div>
 </div>

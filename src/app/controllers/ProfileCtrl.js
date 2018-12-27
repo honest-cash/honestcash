@@ -1,5 +1,5 @@
 export default class ProfileCtrl {
-    constructor(API_URL, $rootScope, $state, $scope, $location, $http, $q, FeedService, RelsService, PostService, ProfileService, profile) {
+    constructor(API_URL, $rootScope, $state, $scope, $location, FeedService, RelsService, PostService, ProfileService, profile) {
         $scope.filter = (filterType) => {
             if (filterType == $scope.filterType) {
                 $scope.filterType = null;
@@ -94,20 +94,6 @@ export default class ProfileCtrl {
             $scope.showProfileTab = "feeds";
         };
 
-        $scope.unfollow = (profileId, followGuy) => {
-            if ($scope.profile.id === profileId) {
-                $scope.profile.alreadyFollowing = false;
-            } else {
-                $scope.followGuys = $scope.followGuys.filter((guy) => guy.id !== profileId);
-            }
-
-            if (followGuy) {
-                followGuy.alreadyFollowing = false;
-            }
-
-            RelsService.unfollowProfile(profileId);
-        };
-
         $scope.showFollowers = (tab) => {
             $scope.followGuys = [];
 
@@ -156,9 +142,6 @@ ProfileCtrl.$inject = [
     "$state",
     "$scope",
     "$location",
-    "$http",
-    "$q",
-    // "BitcoinService",
     "FeedService",
     "RelsService",
     "PostService",

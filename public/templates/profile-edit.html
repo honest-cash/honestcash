@@ -33,8 +33,13 @@
 					<div class="form-group">
 						<label for="bio">Bio</label>
 						<textarea class="form-control" id="bio" rows="3" ng-model="profile.bio" ng-maxlength=300></textarea>
-					</div>
-					<button type="submit" class="btn btn-default" ng-click="submitChanges()">Submit</button>
+          </div>
+
+          <button ng-disabled="isSaving" type="submit" class="btn btn-default" ng-click="submitChanges()">
+            <span ng-if="!isSaving">Submit</span>
+            <i ng-if="isSaving"class="fa fa-circle-o-notch fa-spin"></i>
+          </button>
+          
 					<a class="btn btn-default" href="/profile/{{profile.username}}">Cancel</a>
 				</form>
 			</div>

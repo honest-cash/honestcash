@@ -29,7 +29,7 @@ export default function ($http, API_URL) {
 
 	const fetchRecommentedProfiles = function (profileId, params, callback) {
 		$http({
-			url: API_URL + "/user/" + profileId + "/recommented/accounts",
+			url: API_URL + "/user/" + profileId + "/recommended-profiles",
 			method: "GET",
 			params: params
 		}).then(function (response) {
