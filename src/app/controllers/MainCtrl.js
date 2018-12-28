@@ -15,16 +15,16 @@ export default class MainCtrl {
         if ($rootScope.user) {
           ProfileService.fetchRecommentedProfiles($rootScope.user.id, {}, (users) => {
             $scope.recommendedUsers = users;
-  
+
             scopeService.safeApply($scope, () => {});
           });
         }
 
         const mouseEnterAddress = (className, address) => {
             const container = document.getElementsByClassName(className)[0];
-            
+
             container.innerHTML = "";
-    
+
             new QRCode(container, address);
         };
 
@@ -78,7 +78,7 @@ export default class MainCtrl {
 
                 console.log(res);
                 console.log("Story saved for all times on BCH: " + fileId);
-               
+
                 const inputEl = document.getElementById("bitcoinFileId");
 
                 inputEl.value = fileId;
@@ -94,7 +94,7 @@ export default class MainCtrl {
             return (amountSat / 100000000).toFixed(5);
         }
 
-        const addressClicked = (post) => {
+        const addressClicked = async (post) => {
             const postId = post.id;
             const address = post.user.addressBCH;
             const simpleWallet = simpleWalletProvider.get();
@@ -105,79 +105,98 @@ export default class MainCtrl {
             // users with connected BCH accounts
             if (simpleWallet) {
                 let tx;
+                let upvotes;
 
-               return PostService.getUpvotes(postId, async upvotes => {
-                    const receivers = upvoteDistribution.determineUpvoteRewards(upvotes, post.user);
+                try {
+                    upvotes = (await PostService.getUpvotes(postId)).data;
+                } catch (err) {
+                    return toastr.warning("Error. Try again later.");
+                }
 
-                    toastr.info("Upvoting...");
+                const receivers = upvoteDistribution.determineUpvoteRewards(upvotes, post.user);
+                toastr.info("Upvoting...");
 
-                    const distributionInfoEl = document.getElementById("distribution-info");
+                const distributionInfoEl = document.getElementById("distribution-info");
 
-                    distributionInfoEl.innerHTML = "";
+                distributionInfoEl.innerHTML = "";
 
-                    for (let receiver of receivers) {
-                        const el = document.createElement("div");
+                for (let receiver of receivers) {
+                    const el = document.createElement("div");
 
-                        let userHtml;
+                    let userHtml;
 
-                        if (receiver.user) {
-                            userHtml = `<a target="_self" href="/profile/${receiver.user.username}"><img style="border-radius:50%; width: 23px;" src="${receiver.user.imageUrl ? receiver.user.imageUrl : '/img/avatar.png'}" /> ${receiver.user.username}</a> ${post.userId === receiver.user.id ? '(Author)' : ''}`;
-                        } else {
-                            userHtml = `<img style="width: 23px;" src="/img/avatar.png" /> Anonymous`;
-                        }
-
-                        el.innerHTML = `${satoshiToBch(receiver.amountSat)} BCH -> ${userHtml}`;
-
-                        distributionInfoEl.appendChild(el);
+                    if (receiver.user) {
+                        userHtml = `<a target="_self" href="/profile/${receiver.user.username}"><img style="border-radius:50%; width: 23px;" src="${receiver.user.imageUrl ? receiver.user.imageUrl : '/img/avatar.png'}" /> ${receiver.user.username}</a> ${post.userId === receiver.user.id ? '(Author)' : ''}`;
+                    } else {
+                        userHtml = `<img style="width: 23px;" src="/img/avatar.png" /> Anonymous`;
                     }
 
-                    // distribute only to testnet of owner
-                    // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
-                    try {
-                        tx = await simpleWallet.send(receivers);
-                    } catch (err) {
-                        if (err.message && err.message.indexOf("Insufficient") > -1) {
-                            return toastr.warning("Insufficient balance on your BCH account.");
-                        }
+                    el.innerHTML = `${satoshiToBch(receiver.amountSat)} BCH -> ${userHtml}`;
 
-                        if (err.message && err.message.indexOf("has no matching Script") > -1) {
-                            return toastr.warning("Could not find an unspent bitcoin that is big enough");
-                        }
+                    distributionInfoEl.appendChild(el);
+                }
 
-                        $scope.upvotingStatus = "error";
+                // distribute only to testnet of owner
+                // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
+                try {
+                    tx = await simpleWallet.send(receivers);
+                } catch (err) {
+                    if (err.message && err.message.indexOf("Insufficient") > -1) {
+                        $scope.upvotingPostId = null;
+                        $scope.$apply();
 
-                        console.error(err);
+                        const addressContainer = document.getElementById("load-wallet-modal-address");
+                        const legacyAddressContainer = document.getElementById("load-wallet-modal-legacy-address");
+                        const qrContainer = document.getElementById("load-wallet-modal-qr");
 
-                        return toastr.warning("Error. Try again later.");
+                        addressContainer.value = simpleWallet.cashAddress;
+                        legacyAddressContainer.value = simpleWallet.legacyAddress;
+
+                        qrContainer.innerHTML = "";
+                        new QRCode(qrContainer, simpleWallet.cashAddress);
+
+                        $('#loadWalletModal').modal('show');
+
+                        return toastr.warning("Insufficient balance on your BCH account.");
                     }
 
-                    $('#tipSuccessModal').modal('show');
+                    if (err.message && err.message.indexOf("has no matching Script") > -1) {
+                        return toastr.warning("Could not find an unspent bitcoin that is big enough");
+                    }
 
-                    const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
+                    $scope.upvotingStatus = "error";
 
-                    const anchorEl = document.getElementById("bchTippingTransactionUrl");
-                
-                    console.log(`Upvote transaction: ${url}`);
+                    console.error(err);
 
-                    anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
-                    anchorEl.href = url;
+                    return toastr.warning("Error. Try again later.");
+                }
 
-                    PostService.upvote({
-                        postId: postId,
-                        txId: tx.txid
-                    });
+                $('#tipSuccessModal').modal('show');
 
-                    $scope.upvotingPostId = null;
+                const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
+
+                const anchorEl = document.getElementById("bchTippingTransactionUrl");
+
+                console.log(`Upvote transaction: ${url}`);
+
+                anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
+                anchorEl.href = url;
+
+                PostService.upvote({
+                    postId: postId,
+                    txId: tx.txid
                 });
+
+                $scope.upvotingPostId = null;
             }
 
             $('#tipModal').modal('show');
 
             // users with no connected BCH accounts
             const inputEl = document.getElementById("bchTippingAddress");
-    
+
             inputEl.value = address;
-            
+
             const anchorEl = document.getElementById("bchTippingAddressUrl");
 
             const split = address.split("bitcoincash:")[0];
@@ -189,18 +208,17 @@ export default class MainCtrl {
 
             new QRCode(qrContainer, address);
         };
-    
+
         const mouseLeaveAddress = (className) => {
             const container = document.getElementsByClassName(className)[0];
-    
             container.innerHTML = "";
         };
-    
+
         $scope.addressClicked = addressClicked;
         $scope.makeUncesorable = makeUncesorable;
         $scope.mouseEnterAddress = mouseEnterAddress;
         $scope.mouseLeaveAddress = mouseLeaveAddress;
-    
+
         $scope.follow = (profileId, followGuy) => {
             if (!$rootScope.user || !$rootScope.user.id) {
                 return $state.go("starter.welcome");
@@ -221,26 +239,26 @@ export default class MainCtrl {
 
         $scope.showUpvotes = (feed, statType) => {
             PostService.getUpvotes(feed.id, (rPostUpvotes) => {
-              
+
             });
         };
-    
+
         $rootScope.trustSrc = (src) => {
             return $sce.trustAsResourceUrl(src);
         }
-    
+
         $rootScope.searchVicigo = function(searchInput) {
             searchInput = searchInput.toLowerCase();
             searchInput = searchInput.replace('#', '');
             searchInput = searchInput.replace('@', '');
-    
+
             return $http.get('/api/search?q=' + searchInput).then(function(response) {
                 return response.data.map(function(item) {
                     return item;
                 });
             });
         };
-    
+
         $rootScope.searchResultSelected = function($item) {
             switch ($item.type) {
                 case "profile":
@@ -261,7 +279,7 @@ export default class MainCtrl {
                 default:
             }
         };
-    
+
         $scope.sort = function(sortType) {
             if (sortType == $scope.sortType) {
                 $window.location.reload();
@@ -271,7 +289,7 @@ export default class MainCtrl {
                 $location.search('sort', $scope.sortType);
             }
         };
-    
+
         $scope.newPhoto = function() {
             $('#uploadImageModal').modal('show');
             $('#uploadedImage').attr('src', null);
@@ -279,14 +297,14 @@ export default class MainCtrl {
             $(".dz-message").removeClass("hidden");
             $("#uploadedImage").addClass("hidden");
         };
-    
+
         $scope.displayFeedBody = PostService.displayHTML;
-    
+
         $rootScope.publishPicturePost = () => {
             var postId = $("#uploadedImagePostId").val();
             var tags = $("#uploadedPictureTags").val();
             $('#uploadImageModal').modal('toggle');
-    
+
             if (postId) {
                 PostService.publishPic(postId, {
                     hashtags: tags
@@ -299,7 +317,7 @@ export default class MainCtrl {
                 });
             }
         };
-    
+
         $rootScope.logoutMe = () => {
             AuthService.logout();
 
@@ -321,7 +339,7 @@ export default class MainCtrl {
 
 MainCtrl.$inject = [
     "$rootScope",
-    "$scope", 
+    "$scope",
     "$state",
     "$sce",
     "$window",
