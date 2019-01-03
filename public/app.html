@@ -37,7 +37,7 @@
 	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/flick/jquery-ui.css" />
 	<link href="/css/dropzone.css" media="all" rel="stylesheet" type="text/css" />
 	<link href="/css/toastr.min.css" media="all" rel="stylesheet" type="text/css" />
-	
+
 	<base href="/">
 
 	<style>
@@ -84,6 +84,29 @@
 	<!-- END OF TIP MODAL -->
 
 	<!-- TIP MODAL -->
+	<div class="modal fade" id="loadWalletModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Load your wallet with BCH to upvote and try again</h4>
+				</div>
+
+				<div style="margin-top:15px;" class="modal-body form-group">
+					<label for="addressBCH">Address for upvoting</label>
+					<input readonly type="text" class="form-control" id="load-wallet-modal-address">
+
+					<label for="exampleInputEmail1">Address for upvoting (Legacy format)</label>
+					<input readonly type="text" class="form-control" id="load-wallet-modal-legacy-address">
+
+					<div style="margin-top:15px;" id="load-wallet-modal-qr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END OF TIP MODAL -->
+
+	<!-- TIP MODAL -->
 	<div class="modal fade" id="tipSuccessModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -98,7 +121,7 @@
 							<p><small>Current distribution: author (40%), previous upvoters (60%).</small></p>
 						</div>
 						<div id="distribution-info"></div>
-				
+
 
 						<div class="form-group">
 							<i class="fa fa-check"></i>
@@ -135,7 +158,7 @@
 						<p>
 							You can access it with this identifier:
 						</p>
-	
+
 						<input class="form-control" id="bitcoinFileId" readonly />
 
 						<p>
@@ -186,7 +209,7 @@
       </div>
       <div class="modal-body">
 				<ul class="list-unstyled list-inline text-center">
-	
+
 					<li style="width:32%;" ng-class="{'active' : statType == 'upvotes'}" class="btn btn-default" ng-click="showItems('upvotes')">
 						<h4>{{stats.upvotesCount}}</h4>
 						Upvotes
@@ -204,10 +227,10 @@
 
         <ul class="list-unstyled">
 					<li ng-repeat="item in items" style="padding:5px;">
-						
+
 						<a ui-sref="vicigo.profile({profileId:item.user_id})">
 						<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{item.profile_image_url ? item.profile_image_url : '/img/avatar.png'}}">
-						
+
 						<strong>{{item.name}}</strong>
 						</a>
 						<span class="text-muted">{{item.title}}</span>
