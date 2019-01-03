@@ -42,20 +42,20 @@
                 <img ng-if="!post.user.imageUrl" src="/img/avatar.png" alt="{{post.user.username}}" class="img-circle img-thumbnail-avatar-small">
               </a>
             </li>
-      
+
             <li style="vertical-align:middle">
               <strong style="margin-top:50px;">
                 <a href="/profile/{{post.user.username}}" target="_self">{{::post.user.username}}</a>
               </strong>
-      
+
               <button ng-if="user.id !== post.user.id && !post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(post.user.id, post.user);" class="btn btn-lg btn-follow">
                   Follow
               </button>
-      
+
               <br />
-      
+
               <small class="text-muted">
-                <span ng-if="!post.post_publish_timestamp_formatted">{{::post.user.bio}}</span> 
+                <span ng-if="!post.post_publish_timestamp_formatted">{{::post.user.bio}}</span>
               </small>
             </li>
           </ul>
@@ -179,11 +179,11 @@
 							<li style="vertical-align:middle">
 								<strong style="margin-top:50px;">
 									<a ui-sref="vicigo.profile({profileId: response.user.id})">{{::response.user.username}} ({{response.user.followerCount}})</a></strong>
-				
+
 								<br />
 
 								<small class="text-muted">
-									<span ng-if="!post.post_publish_timestamp_formatted">{{::response.publishedAt}}</span> 
+									<span ng-if="!post.post_publish_timestamp_formatted">{{::response.publishedAt}}</span>
 								</small>
 							</li>
 						</ul>
@@ -221,5 +221,5 @@
 				</div>
 			</div>
 		</div>
-	</div>			
+	</div>
 </div>
