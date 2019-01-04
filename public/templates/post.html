@@ -61,7 +61,7 @@
           </ul>
     </div>
 
-		<div class="row" ng-show="simpleWallet">
+		<div ng-if="post.user.addressBCH" class="row" ng-show="simpleWallet">
 			<ul class="list-unstyled list-inline list">
 				<li>
 					<button ng-disabled="upvotingPostId === post.id || post.userId === profile.id" ng-click="addressClicked(post)" class="btn btn-default">
@@ -84,17 +84,21 @@
 			<div class="block-center">
 				<div class="panel">
 					<div class="panel-body">
-						<h2>This author does not accept tips.</h2>
+						<b ng-if="post.userId !== profile.id">This author does not accept tips.</b>
 
-						<p>
+						<!--
+								there is no need for this because since when the author logs in they will have a wallet.
+								when they are not logged in this will not be visible to anyone anyways.
+								
+							 <p ng-if="post.userId === profile.id">
 							<strong>Important:</strong> You can specify the address for receiving tips in your profile.
-						</p>
+						</p> -->
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row" ng-show="post.user.addressBCH">
+		<div class="row" ng-if="post.user.addressBCH">
 			<div class="block-center">
 				<div class="panel" ng-show="!user" >
 					<div class="panel-body">
@@ -123,7 +127,7 @@
 			{{post.userPostRefs[0].extId}}
 		</div>
 
-		<div class="row" ng-show="post.userPostUpvotes">
+		<div class="row" ng-if="post.userPostUpvotes && post.user.addressBCH">
 			<h4><i class="fa fa-btc"></i> <strong>Upvotes ({{post.userPostUpvotes.length}})</strong></h4>
 
 			<p ng-if="!post.userPostUpvotes.length"><small>No upvotes.</small></p>
