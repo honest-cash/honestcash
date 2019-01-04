@@ -80,19 +80,11 @@
 
 		<hr />
 
-		<div class="row" ng-show="!post.user.addressBCH">
+		<div class="row" ng-if="!post.user.addressBCH">
 			<div class="block-center">
 				<div class="panel">
 					<div class="panel-body">
-						<b ng-if="post.userId !== profile.id">This author does not accept tips.</b>
-
-						<!--
-								there is no need for this because since when the author logs in they will have a wallet.
-								when they are not logged in this will not be visible to anyone anyways.
-								
-							 <p ng-if="post.userId === profile.id">
-							<strong>Important:</strong> You can specify the address for receiving tips in your profile.
-						</p> -->
+						<b>This author does not accept tips.</b>
 					</div>
 				</div>
 			</div>
@@ -122,7 +114,7 @@
 			</div>
 		</div>
 
-		<div class="post-uncensorable row" ng-if="post.userPostRefs.length" style="margin-bottom: 20px;">
+		<div class="post-uncensorable row" ng-if="post.userPostRefs.length && post.user.addressBCH"" style="margin-bottom: 20px;">
 			<h4><i class="fa fa-shield"></i>  <strong>Uncensorable</strong></h4>
 			{{post.userPostRefs[0].extId}}
 		</div>
