@@ -20,8 +20,9 @@ import PostCtrl from './controllers/PostCtrl';
 import WalletCtrl from './controllers/WalletCtrl';
 import MainCtrl from './controllers/MainCtrl';
 import * as runs from './runs/runs';
+import { AuthService } from '../auth/AuthService';
 
-import '../AuthModule';
+import '../auth/AuthModule';
 import '../core/config';
 import '../core/services';
 import './components';
@@ -44,9 +45,13 @@ angular.module("hashtag-app", [
 .config([ "$httpProvider", httpConfig])
 .config([ "$stateProvider", "$urlRouterProvider", stateConfig ])
 
-.controller("appController", [ "$scope", "AuthService", function($scope, AuthService) {
-	$scope.AUTH_TOKEN = AuthService.getAuthToken();
-}])
+.controller("appController", [
+  "$scope",
+  "AuthService",
+  function($scope, AuthService: AuthService) {
+	  $scope.AUTH_TOKEN = AuthService.getAuthToken();
+  }
+])
 
 .controller("walletController", WalletCtrl)
 .controller("mainController", MainCtrl)

@@ -1,6 +1,6 @@
 module.exports = {
     entry: {
-        app: './src/app/app.js',
+        app: './src/app/app.ts',
         editor: './src/editor/editor.ts'
     },
     mode: 'production',

@@ -67,6 +67,7 @@
     "reading-time": "^1.0.2",
     "request": "^2.74.0",
     "sanitize-html": "^1.7.0",
+    "sha3": "^2.0.0",
     "simple-bitcoin-wallet": "0.0.5-alpha.3",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^7.32.2",

@@ -2,12 +2,14 @@ import swal from "sweetalert";
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 import generateWallet from '../lib/bitcoinAuthFlow';
 import md5 from "md5";
+import WelcomeCtrl from "./WelcomeCtrl";
+import { AuthService } from "../../auth/AuthService";
 
 declare var SimpleWallet: any;
 declare var bitbox: any;
 
 export default class WalletCtrl {
-    constructor($scope, $rootScope, AuthService) {
+    constructor($scope, $rootScope, AuthService: AuthService) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
         $scope.addressBCH = "";
@@ -40,8 +42,10 @@ export default class WalletCtrl {
             return { isValid: false, aborted: true };
           }
 
+          const emails = await AuthService.getEmails();
+
           const data = await AuthService.passwordCheck({
-            password: md5(password)
+            password: WelcomeCtrl.calculatePasswordHash(emails[0], password)
           });
 
           if (!data.isValid) {
@@ -70,13 +74,13 @@ export default class WalletCtrl {
             let walletInfo;
 
             try {
-                walletInfo = await wallet.getWalletInfo();
+              walletInfo = await wallet.getWalletInfo();
             } catch (err) {
-                $scope.addressBalance = 0;
+              $scope.addressBalance = 0;
 
-                $scope.$apply();
+              $scope.$apply();
 
-                return;
+              return;
             }
 
             $scope.walletInfo = walletInfo
@@ -86,18 +90,18 @@ export default class WalletCtrl {
         };
 
         if ($scope.connectedMnemonic) {
-            simpleWallet = new SimpleWallet($scope.connectedMnemonic, {
-                HdPath: $scope.HdPath
-            });
+          simpleWallet = new SimpleWallet($scope.connectedMnemonic, {
+              HdPath: $scope.HdPath
+          });
 
-            simpleWalletProvider.set(simpleWallet);
+          simpleWalletProvider.set(simpleWallet);
 
-            $scope.mnemonic = simpleWallet.mnemonic;
-            $scope.privateKey = simpleWallet.privateKey;
-            $scope.addressBCH = simpleWallet.address;
-            $scope.legacyAddressBCH = simpleWallet.legacyAddress;
+          $scope.mnemonic = simpleWallet.mnemonic;
+          $scope.privateKey = simpleWallet.privateKey;
+          $scope.addressBCH = simpleWallet.address;
+          $scope.legacyAddressBCH = simpleWallet.legacyAddress;
 
-            refreshBalance(simpleWallet);
+          refreshBalance(simpleWallet);
         }
 
         $scope.generate = () => {

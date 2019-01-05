@@ -19,7 +19,7 @@ import WalletCtrl from './controllers/WalletCtrl';
 import MainCtrl from './controllers/MainCtrl';
 import * as runs from './runs/runs';
 
-import '../AuthModule';
+import '../auth/AuthModule';
 import '../core/config';
 import '../core/services';
 import './components';

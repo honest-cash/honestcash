@@ -4,8 +4,8 @@
         <h1><span class="fa fa-sign-in"></span> {{resetCode ? "Change password": "Login" }}</h1> 
         <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
 
-        <form ng-submit="resetCode ? changePassword(data) : forgot ? resetPassword(data) : login(data)">
-            <div ng-show="!resetCode" class="form-group">
+        <form ng-if="!hideForm" ng-submit="resetCode ? changePassword(data) : forgot ? resetPassword(data) : login(data)">
+            <div class="form-group">
                 <label>Email</label>
                 <input type="email" class="form-control" ng-model="data.loginemail">
             </div>
@@ -21,7 +21,8 @@
             </div>
 
             <button style="background-color:black; color: white;" type="submit" class="btn btn-lg" ng-disabled="isLoading">
-            {{resetCode ? "Confirm" : forgot ? "Reset" : "Login" }}
+              <i ng-show="isLoading" class="fa fa-circle-o-notch fa-spin"></i>
+              {{resetCode ? "Confirm" : forgot ? "Reset" : "Login" }}
           </button>
         </form>
 

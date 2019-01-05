@@ -5,11 +5,13 @@
   line-height: 20px;
 }
 
-.hc-header-submenu > ul {
-  padding-left: 15px;
-}
-
 .hc-header-submenu {
   font-size: 15px;
   padding-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .hc-header-submenu > ul {
+    padding-left: 15px;
+  }
 }

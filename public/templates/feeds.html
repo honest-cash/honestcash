@@ -86,7 +86,7 @@
                     </a>
                   </div>
                   <div>
-                    <p class="text-muted">{{user.bio}}</p>
+                    <p style="word-wrap: break-word;" class="text-muted">{{user.bio}}</p>
                   </div>
                   <div>
                       <button ng-if="!user.alreadyFollowing" ng-click="follow(user.id, user);" class="btn btn-lg btn-follow">Follow</button>

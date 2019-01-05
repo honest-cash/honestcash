@@ -9,8 +9,18 @@ import routingConfig from '../core/config/routing';
 import httpConfig from '../core/config/http';
 import stateConfig from './states';
 
-import '../AuthModule';
+import '../auth/AuthModule';
+import { AuthService } from '../auth/AuthService';
 import '../core/config';
+
+declare var angular: any;
+interface IGlobalScope {
+  user: {
+    imageUrl: string;
+    id: number;
+    username: string;
+  }
+}
 
 angular.module("editor-app", [
 	uiRouter,
@@ -25,11 +35,11 @@ angular.module("editor-app", [
 
 .controller("EditorCtrl", EditorCtrl)
 
-.run([ "$rootScope", "AuthService", async ($rootScope, AuthService) => {
+.run([ "$rootScope", "AuthService", async ($rootScope: IGlobalScope, AuthService: AuthService) => {
     let res;
 
     try {
-        res = await AuthService.validate();
+        res = await AuthService.validate(() => {});
     } catch (err) {
         return location.href = "/login";
     }
@@ -37,8 +47,8 @@ angular.module("editor-app", [
     const data = res.data;
 
     $rootScope.user = {
-        id: data.id,
-        imageUrl: data.imageUrl,
-        username: data.username
+      id: data.id,
+      imageUrl: data.imageUrl,
+      username: data.username
     };
 }]);

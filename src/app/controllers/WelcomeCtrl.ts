@@ -1,66 +1,40 @@
 import md5 from "md5";
+import { SHA3 } from "sha3";
 import generateWallet from "../lib/bitcoinAuthFlow";
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 import swal from "sweetalert";
+import { AuthService } from "../../auth/AuthService";
+
+interface ILoginForm {
+  loginemail: string;
+  loginpassword: string;
+  loginpasswordreset?: string;
+}
+
+interface ISignupForm {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export default class WelcomeCtrl {
-  constructor($rootScope, $scope, $location, $state, AuthService, ProfileService) {
+  constructor(
+    private $rootScope,
+    private $scope,
+    private $location,
+    private $state,
+    private AuthService: AuthService,
+    private ProfileService,
+    private scopeService
+  ) {
     $scope.message = "";
     $rootScope.noHeader = true;
     $scope.isLoading = false;
     $scope.forgot = false;
     $scope.resetCode = $location.search().code;
-
-    const displayErrorMessage = (code, desc?) => {
-      if (desc) {
-        $scope.message = desc;
-      } else if (code) {
-        switch (code) {
-          case "NOT_ACTIVATED":
-            $scope.message = "The access the the platform is currently limited. Your account has not been activated. Tweet to @Honest_Cash for a personal invitation.";
-            break;
-          case "EMAIL_EXISTS":
-            $scope.message = "E-Mail already exists";
-            break;
-          case "EMAIL_WRONGLY_FORMATTED":
-            $scope.message = "E-Mail wrongly formatted!";
-            break;
-          case "WRONG_PASSWORD":
-            $scope.message = "Wrong password";
-            break;
-          case "NO_USER_FOUND":
-            $scope.message = "User not found";
-            break;
-          case "LOG_IN_WITH_FACEBOOK":
-            $scope.message = "Log in with Facebook";
-            break;
-          case "EMAIL_NOT_FOUND":
-            $scope.message = "E-mail could not be found.";
-            break;
-          case "PASSWORDS_DO_NOT_MATCH":
-            $scope.message = "Passwords do not match!";
-            break;
-
-          default:
-            $scope.message = "Login error. Try again...";
-        }
-      }
-
-      $scope.$apply();
-    };
-
+  
     const mutateForgot = (forgotValue) => () => {
       $scope.forgot = forgotValue;
-    };
-
-    const checkUserName = (username) => {
-      var pattern = new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
-
-      if (pattern.test(username)) {
-        return false;
-      }
-
-      return true; // good user input
     };
 
     $scope.goToForgotPage = mutateForgot(true);
@@ -88,19 +62,45 @@ export default class WelcomeCtrl {
       return;
     };
 
-    $rootScope.login = async (data) => {
+    $scope.login = async (data: ILoginForm) => {
       $scope.isLoading = true;
+
+      const userSpecificSalt = data.loginemail;
+      const hash = new SHA3(512);
+      const passwordHash = hash.update(`${userSpecificSalt}:${data.loginpassword}`).digest('hex');
+
       let authData;
 
       try {
-        authData = await AuthService.login({
-          email: data.loginemail,
-          password: md5(data.loginpassword),
-        });
+        try {
+          authData = await AuthService.login({
+            email: data.loginemail,
+            password: passwordHash,
+          });
+        } catch (err) {
+          /**
+           START OF obsolete code
+           Remove it in the future! If the passwords matches, we will change it the salted sha3 hashing to move away from md5.
+
+           It has been implemented on 4th Jan 2019. Let's wait 2 months to allow users to replace the hashes at subsequent logins!
+          */ 
+          authData = await AuthService.login({
+            email: data.loginemail,
+            password: md5(data.loginpassword),
+          });
+
+          // change the password
+          await AuthService.setPassword({
+            password: passwordHash
+          });
+          /**
+           END OF obsolete code
+          */ 
+        }
       } catch (response) {
         $scope.isLoading = false;
 
-        return displayErrorMessage(response.data.code, response.data.desc);
+        return this.displayErrorMessage(response.data.code, response.data.desc);
       }
       
       $scope.isLoading = false;
@@ -147,135 +147,230 @@ export default class WelcomeCtrl {
       $state.go("vicigo.feeds");
     };
 
-    $scope.changePassword = async (data: { loginpassword: string; loginpasswordreset: string }) => {
-      if (data.loginpassword !== data.loginpasswordreset) {
-        $scope.message = "Passwords do not match!";
+    $scope.changePassword = (data: ILoginForm) => this.changePassword(data);
 
-        return;
-      }
-
+    $scope.resetPassword = async (data) => {
       $scope.isLoading = true;
-
-      let simpleWallet;
 
       try {
-        simpleWallet = await generateWallet({
-          password: data.loginpassword
+        await AuthService.resetPassword({
+          email: data.loginemail
         });
+
+        $scope.hideForm = true;
+        $scope.message = "Check your e-mail inbox.";
+        $scope.isLoading = false;
+        scopeService.safeApply($scope, () => {});
       } catch (err) {
-        await swal("Your link is invalid!");
+        $scope.isLoading = false;
 
-        location.href = "/login";
-
-        return;
+        return this.displayErrorMessage(
+          typeof err.data === "string" ? err.data : err.data.code
+        );
       }
+    };
 
-      await AuthService.changePassword({
-        code: $scope.resetCode,
-        newPassword: md5(data.loginpassword),
-        repeatNewPassword: md5(data.loginpasswordreset),
+    $scope.signup = (data: ISignupForm) => this.signup(data);
+  }
+
+  static $inject = [
+    "$rootScope",
+    "$scope",
+    "$location",
+    "$state",
+    "AuthService",
+    "ProfileService",
+    "scopeService"
+  ];
+
+  static calculatePasswordHash(email: string, password: string): string {
+    return WelcomeCtrl.calculateSHA3Hash(
+      WelcomeCtrl.determineMessageForHashing(email, password)
+    );
+  }
+
+  static determineMessageForHashing(salt: string, password: string): string {
+    return `${salt}:${password}`;
+  }
+
+  static calculateSHA3Hash(message: string): string {
+    const hash = new SHA3(512);
+    const passwordHash = hash.update(message).digest('hex');
+
+    return passwordHash;
+  }
+
+  private checkUserName(username: string): boolean {
+    var pattern = new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
+
+    if (pattern.test(username)) {
+      return false;
+    }
+
+    return true; // good user input
+  };
+
+  private displayErrorMessage(code: string, desc?): void {
+    if (desc) {
+      this.$scope.message = desc;
+    } else if (code) {
+      switch (code) {
+        case "NOT_ACTIVATED":
+          this.$scope.message = "The access the the platform is currently limited. Your account has not been activated. Tweet to @Honest_Cash for a personal invitation.";
+          break;
+        case "EMAIL_EXISTS":
+          this.$scope.message = "E-Mail already exists";
+          break;
+        case "EMAIL_WRONGLY_FORMATTED":
+          this.$scope.message = "E-Mail wrongly formatted!";
+          break;
+        case "WRONG_PASSWORD":
+          this.$scope.message = "Wrong password";
+          break;
+        case "NO_USER_FOUND":
+          this.$scope.message = "User not found";
+          break;
+        case "LOG_IN_WITH_FACEBOOK":
+          this.$scope.message = "Log in with Facebook";
+          break;
+        case "EMAIL_NOT_FOUND":
+          this.$scope.message = "E-mail could not be found.";
+          break;
+        case "PASSWORDS_DO_NOT_MATCH":
+          this.$scope.message = "Passwords do not match!";
+          break;
+        case "WRONG_RESET_CODE":
+          this.$scope.message = "Could not reset the password. Is the reset link and e-mail valid?";
+          break;
+        default:
+          this.$scope.message = "Login error. Try again...";
+      }
+    }
+
+    this.scopeService.safeApply(this.$scope, () => {});
+  };
+
+  protected async changePassword(data: ILoginForm) {
+    if (data.loginpassword !== data.loginpasswordreset) {
+      this.$scope.message = "Passwords do not match!";
+
+      return;
+    }
+
+    this.$scope.isLoading = true;
+
+    let simpleWallet;
+
+    try {
+      simpleWallet = await generateWallet({
+        password: data.loginpassword
+      });
+    } catch (err) {
+      await swal("Your link is invalid!");
+
+      location.href = "/login";
+
+      return;
+    }
+
+    const passwordHash = this.calculatePasswordHash(data.loginemail, data.loginpassword);
+
+    try {
+      await this.AuthService.changePassword({
+        code: this.$scope.resetCode,
+        email: data.loginemail,
+        newPassword: passwordHash,
+        repeatNewPassword: passwordHash,
         mnemonicEncrypted: simpleWallet.mnemonicEncrypted
       });
+    } catch (err) {
+      this.$scope.isLoading = false;
 
-      $scope.message = "Your password has been resetted and a new wallet has been generated. You can now log-in.";
+      return this.displayErrorMessage(
+        typeof err.data === "string" ? err.data : err.data.code
+      );
+    }
 
-      $scope.resetCode = undefined;
-      $scope.data.loginemail = undefined;
-      $scope.data.loginpassword = undefined;
-      $scope.data.loginpasswordreset = undefined;
-      $scope.forgot = false;
-      $scope.isLoading = false;
+    this.$scope.message = "Your password has been reset and a new wallet has been generated. You can now log-in.";
 
-      $scope.$apply();
-    };
+    data.loginemail = undefined;
+    data.loginpassword = undefined;
+    data.loginpasswordreset = undefined;
 
-    $scope.resetPassword = (data) => {
-      $scope.isLoading = true;
+    this.$scope.resetCode = undefined;
+    this.$scope.forgot = false;
+    this.$scope.isLoading = false;
 
-      AuthService.resetPassword({
-        email: data.loginemail
-      })
-      .then(() => {
-        $scope.message = "Check your e-mail inbox.";
-
-        $scope.isLoading = false;
-      }, (response) => {
-        $scope.isLoading = false;
-
-        return displayErrorMessage(response.data.code);
-      });
-    };
-
-    $rootScope.signup = async (data) => {
-      if (!data) {
-        return alert("Username is required.");
-      }
-
-      if (!data.username) {
-        return alert("Username is required.");
-      }
-
-      if (!checkUserName(data.username)) {
-        $scope.message = "Username: please only use standard alphanumerics";
-
-        return;	
-      }
-
-      if (data.username.length > 25) {
-        $scope.message = "Username cannot have more than 25 characters";
-
-        return;
-      }
-
-      if (data.username.length < 3) {
-        $scope.message = "Username should be at least 3 characters";
-
-        return;
-      }
-
-      if (!data.email) {
-        $scope.message = "Email is required..";
-
-        return;
-      }
-
-      if (!data.password) {
-        $scope.message = "Password is required..";
-
-        return;
-      }
-
-      if (data.password.length < 8) {
-        $scope.message = "Password must have at least 8 characters.";
-
-        return;
-      }
-
-      $scope.isLoading = true;
-
-        AuthService.signup({
-            username: data.username,
-            password: md5(data.password),
-            email: data.email,
-            userType: 0
-          })
-          .then((user) => {
-              const User = user;
-
-              $scope.isLoading = false;
-
-              // $rootScope.user = user.user;
-    
-              $state.go("starter.thankyou");
-          }, response => {
-            $scope.isLoading = false;
-
-            return displayErrorMessage(response.data.code, response.data.desc);
-          });
-    };
+    this.scopeService.safeApply(this.$scope, () => {});
   }
-}
 
-WelcomeCtrl.$inject = [
-    "$rootScope", "$scope", "$location", "$state", "AuthService", "ProfileService"
-];
+  protected async signup(data: ISignupForm) {
+    if (!data) {
+      return alert("Username is required.");
+    }
+
+    if (!data.username) {
+      return alert("Username is required.");
+    }
+
+    if (!this.checkUserName(data.username)) {
+      this.$scope.message = "Username: please only use standard alphanumerics";
+
+      return;	
+    }
+
+    if (data.username.length > 25) {
+      this.$scope.message = "Username cannot have more than 25 characters";
+
+      return;
+    }
+
+    if (data.username.length < 3) {
+      this.$scope.message = "Username should be at least 3 characters";
+
+      return;
+    }
+
+    if (!data.email) {
+      this.$scope.message = "Email is required..";
+
+      return;
+    }
+
+    if (!data.password) {
+      this.$scope.message = "Password is required..";
+
+      return;
+    }
+
+    if (data.password.length < 8) {
+      this.$scope.message = "Password must have at least 8 characters.";
+
+      return;
+    }
+
+    this.$scope.isLoading = true;
+
+    const passwordHash = this.calculatePasswordHash(data.email, data.password);
+
+    this.AuthService.signup({
+      username: data.username,
+      password: passwordHash,
+      email: data.email,
+      userType: 0
+    })
+    .then((user) => {
+      const User = user;
+
+      this.$scope.isLoading = false;
+
+      // $rootScope.user = user.user;
+
+      this.$state.go("starter.thankyou");
+    }, response => {
+      this.$scope.isLoading = false;
+
+      return this.displayErrorMessage(response.data.code, response.data.desc);
+    });
+  };
+}
