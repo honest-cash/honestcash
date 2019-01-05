@@ -64,7 +64,7 @@
 		<div ng-if="post.user.addressBCH" class="row" ng-show="simpleWallet">
 			<ul class="list-unstyled list-inline list">
 				<li>
-					<button ng-disabled="upvotingPostId === post.id || post.userId === profile.id" ng-click="addressClicked(post)" class="btn btn-default">
+					<button ng-disabled="upvotingPostId === post.id || post.userId === user.id" ng-click="addressClicked(post)" class="btn btn-default">
 						<i class="fa fa-btc"></i> 0.002 Upvote
 					</button>
 				</li>

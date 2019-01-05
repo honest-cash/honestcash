@@ -28,5 +28,5 @@ angular.module("vqDirectives", [ "vqConfig" ])
 		return {
 			templateUrl: '/templates/directives/postHeader.html'
 		};
-    });
+  });
     
