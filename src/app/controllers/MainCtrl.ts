@@ -96,6 +96,12 @@ export default class MainCtrl {
 
         const addressClicked = async (post) => {
             const postId = post.id;
+
+            if (!post.user.addressBCH) {
+                toastr.error("Upvoting is not possible because the author does not have a Bitcoin address to receive");
+                return;
+            }
+
             const address = post.user.addressBCH;
             const simpleWallet = simpleWalletProvider.get();
 
