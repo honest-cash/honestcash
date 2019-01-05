@@ -1,9 +1,8 @@
 import md5 from "md5";
-import { SHA3 } from "sha3";
-import generateWallet from "../lib/bitcoinAuthFlow";
-import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+import generateWallet from "../core/lib/bitcoinAuthFlow";
+import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
 import swal from "sweetalert";
-import { AuthService } from "../../auth/AuthService";
+import { AuthService } from "../auth/AuthService";
 
 interface ILoginForm {
   loginemail: string;
@@ -25,7 +24,8 @@ export default class WelcomeCtrl {
     private $state,
     private AuthService: AuthService,
     private ProfileService,
-    private scopeService
+    private scopeService,
+    private hashtagService
   ) {
     $scope.message = "";
     $rootScope.noHeader = true;
@@ -33,6 +33,8 @@ export default class WelcomeCtrl {
     $scope.forgot = false;
     $scope.resetCode = $location.search().code;
   
+    this.ngInit();
+
     const mutateForgot = (forgotValue) => () => {
       $scope.forgot = forgotValue;
     };
@@ -52,7 +54,7 @@ export default class WelcomeCtrl {
       });
 
       if (hasConfirmed) {
-        await ProfileService.updateUser(
+        await this.ProfileService.updateUser(
           userId,
           "addressBCH",
           bchAddress
@@ -65,9 +67,10 @@ export default class WelcomeCtrl {
     $scope.login = async (data: ILoginForm) => {
       $scope.isLoading = true;
 
-      const userSpecificSalt = data.loginemail;
-      const hash = new SHA3(512);
-      const passwordHash = hash.update(`${userSpecificSalt}:${data.loginpassword}`).digest('hex');
+      const passwordHash = AuthService.calculatePasswordHash(
+        data.loginemail,
+        data.loginpassword
+      );
 
       let authData;
 
@@ -121,7 +124,7 @@ export default class WelcomeCtrl {
         });
 
         if (!authData.user.addressBCH) {
-          await ProfileService.updateUser(
+          await this.ProfileService.updateUser(
             authData.user.id,
             "addressBCH",
             simpleWallet.address
@@ -144,7 +147,7 @@ export default class WelcomeCtrl {
 
       $rootScope.user = authData.user;
 
-      $state.go("vicigo.feeds");
+      location.href = "/";
     };
 
     $scope.changePassword = (data: ILoginForm) => this.changePassword(data);
@@ -180,24 +183,18 @@ export default class WelcomeCtrl {
     "$state",
     "AuthService",
     "ProfileService",
-    "scopeService"
+    "ScopeService",
+    "HashtagService"
   ];
 
-  static calculatePasswordHash(email: string, password: string): string {
-    return WelcomeCtrl.calculateSHA3Hash(
-      WelcomeCtrl.determineMessageForHashing(email, password)
-    );
-  }
+  private async ngInit() {
+    const hashtags = this.hashtagService.getTopHashtags();
 
-  static determineMessageForHashing(salt: string, password: string): string {
-    return `${salt}:${password}`;
-  }
+    this.$scope.welcome = true;
+    this.$scope.noHeader = true;
+    this.$scope.hashtags = hashtags;
 
-  static calculateSHA3Hash(message: string): string {
-    const hash = new SHA3(512);
-    const passwordHash = hash.update(message).digest('hex');
-
-    return passwordHash;
+    this.scopeService.safeApply(this.$scope, () => {});
   }
 
   private checkUserName(username: string): boolean {
@@ -273,7 +270,10 @@ export default class WelcomeCtrl {
       return;
     }
 
-    const passwordHash = this.calculatePasswordHash(data.loginemail, data.loginpassword);
+    const passwordHash = this.AuthService.calculatePasswordHash(
+      data.loginemail,
+      data.loginpassword
+    );
 
     try {
       await this.AuthService.changePassword({
@@ -351,7 +351,7 @@ export default class WelcomeCtrl {
 
     this.$scope.isLoading = true;
 
-    const passwordHash = this.calculatePasswordHash(data.email, data.password);
+    const passwordHash = this.AuthService.calculatePasswordHash(data.email, data.password);
 
     this.AuthService.signup({
       username: data.username,

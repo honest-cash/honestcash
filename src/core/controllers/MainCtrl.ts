@@ -354,7 +354,7 @@ MainCtrl.$inject = [
     "$window",
     "$location",
     "$http",
-    "scopeService",
+    "ScopeService",
     "AuthService",
     "RelsService",
     "HashtagService",

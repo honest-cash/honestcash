@@ -188,6 +188,11 @@ app.get("/:username/:alias", async (req, res, next) => {
 });
 
 // Editor paths
+for (let welcomePath of [ "/signup", "/login" ]) {
+	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
+}
+
+// Editor paths
 for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPostId" ]) {
 	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }

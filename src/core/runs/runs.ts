@@ -1,61 +1,58 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
-import state from "../../editor/states";
 
 export const onStateChange = function($rootScope, $state, AuthService) {
-    $rootScope.$on('$stateChangeStart', async (event, next, nextParams, fromState) => {
-      if (next.name == "starter.welcome") {
-          $rootScope.welcome = true;
+  $rootScope.$on('$stateChangeStart', async (event, next, nextParams, fromState) => {
+    if (next.name == "starter.welcome") {
+        $rootScope.welcome = true;
+    } else {
+        $rootScope.welcome = false;
+    }
+
+    if (next.name.indexOf("vicigo.feeds") > -1 || next.name === "vicigo.hashtag") {
+      $rootScope.showSubheader = true;
+    } else {
+      $rootScope.showSubheader = false;
+    }
+
+    if (next.name.indexOf("starter.") > -1) {
+        $rootScope.noHeader = true;
+    } else {
+        $rootScope.noHeader = false;
+    }
+
+    if (!$rootScope.user) {
+      AuthService.loadUserCredentials();
+
+      if (AuthService.getUserId()) {
+        $rootScope.user = {
+          id: AuthService.getUserId()
+        };
       } else {
-          $rootScope.welcome = false;
-      }
-
-      if (next.name.indexOf("vicigo.feeds") > -1 || next.name === "vicigo.hashtag") {
-        $rootScope.showSubheader = true;
-      } else {
-        $rootScope.showSubheader = false;
-      }
-
-      if (next.name.indexOf("starter.") > -1) {
-          $rootScope.noHeader = true;
-      } else {
-          $rootScope.noHeader = false;
-      }
-
-      if (!$rootScope.user) {
-        AuthService.loadUserCredentials();
-
-        if (AuthService.getUserId()) {
-          $rootScope.user = {
-            id: AuthService.getUserId()
-          };
-        } else {
-          if (location.pathname === "/") {
-            location.href = "/signup";
-          }
-        }
-
-        AuthService.validate()
-        .then(res => {
-          const user = res.data;
-
-          $rootScope.user = user;
-        }, () => {
-          $rootScope.user = null;
-
-          if (location.pathname === "/") {
-            location.href = "/signup";
-          }
-        });
-      }
-
-      if (next.name == 'vicigo.profileEdit') {
-        if (!$rootScope.user || $rootScope.user.username != nextParams.profileId) {
-          location.href = `/profile/${nextParams.profileId}`;
+        if (location.pathname === "/") {
+          location.href = "/signup";
         }
       }
 
-      $('#tipModal').modal('hide');
-    });
+      AuthService.validate()
+      .then(res => {
+        const user = res.data;
+
+        $rootScope.user = user;
+      }, () => {
+        $rootScope.user = null;
+
+        if (location.pathname === "/") {
+          location.href = "/signup";
+        }
+      });
+    }
+
+    if (next.name == 'vicigo.profileEdit') {
+      if (!$rootScope.user || $rootScope.user.username != nextParams.profileId) {
+        location.href = `/profile/${nextParams.profileId}`;
+      }
+    }
+  });
 };
 
 export const initProfileUpload = function(API_URL, AuthService) {

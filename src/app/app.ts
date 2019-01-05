@@ -10,7 +10,6 @@ import infiniteScroll from  'ng-infinite-scroll';
 import ProfileCtrl from './controllers/ProfileCtrl';
 import ProfileEditCtrl from './controllers/ProfileEditCtrl';
 import FeedsCtrl from './controllers/FeedsCtrl';
-import WelcomeCtrl from './controllers/WelcomeCtrl';
 import DraftsCtrl from './controllers/DraftsCtrl';
 import routingConfig from '../core/config/routing';
 import httpConfig from '../core/config/http';
@@ -18,8 +17,8 @@ import stateConfig from './stateConfig';
 
 import PostCtrl from './controllers/PostCtrl';
 import WalletCtrl from './controllers/WalletCtrl';
-import MainCtrl from './controllers/MainCtrl';
-import * as runs from './runs/runs';
+import MainCtrl from '../core/controllers/MainCtrl';
+import * as runs from '../core/runs/runs';
 import { AuthService } from '../auth/AuthService';
 
 import '../auth/AuthModule';
@@ -59,26 +58,10 @@ angular.module("hashtag-app", [
 .controller("profileController", ProfileCtrl)
 .controller("profileEditController", ProfileEditCtrl)
 .controller("feedsController", FeedsCtrl)
-.controller("welcomeController", WelcomeCtrl)
 .controller("draftsController", DraftsCtrl)
 
 .run([ "$rootScope", runs.initBCHWallet ])
 
 .run([ "$rootScope", "$state", "AuthService", runs.onStateChange])
 
-.run([ "API_URL", "AuthService", runs.initProfileUpload ])
-
-.service('scopeService', function() {
-  return {
-      safeApply: function ($scope, fn) {
-          var phase = $scope.$root.$$phase;
-          if (phase == '$apply' || phase == '$digest') {
-              if (fn && typeof fn === 'function') {
-                  fn();
-              }
-          } else {
-              $scope.$apply(fn);
-          }
-      },
-  };
-});
+.run([ "API_URL", "AuthService", runs.initProfileUpload ]);

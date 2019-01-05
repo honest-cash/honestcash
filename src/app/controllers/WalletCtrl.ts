@@ -1,15 +1,19 @@
 import swal from "sweetalert";
-import * as simpleWalletProvider from "../lib/simpleWalletProvider";
-import generateWallet from '../lib/bitcoinAuthFlow';
+import * as simpleWalletProvider from "../../core/lib/simpleWalletProvider";
+import generateWallet from '../../core/lib/bitcoinAuthFlow';
 import md5 from "md5";
-import WelcomeCtrl from "./WelcomeCtrl";
-import { AuthService } from "../../auth/AuthService";
+import { AuthService } from '../../auth/AuthService';
 
 declare var SimpleWallet: any;
 declare var bitbox: any;
+declare var QRCode: any;
 
 export default class WalletCtrl {
-    constructor($scope, $rootScope, AuthService: AuthService) {
+    constructor(
+      private $scope,
+      private $rootScope,
+      private AuthService: AuthService
+    ) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
         $scope.addressBCH = "";
@@ -45,7 +49,7 @@ export default class WalletCtrl {
           const emails = await AuthService.getEmails();
 
           const data = await AuthService.passwordCheck({
-            password: WelcomeCtrl.calculatePasswordHash(emails[0], password)
+            password: this.AuthService.calculatePasswordHash(emails[0], password)
           });
 
           if (!data.isValid) {
@@ -246,7 +250,7 @@ export default class WalletCtrl {
 
           const mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, password);
 
-          AuthService
+          this.AuthService
           .setWallet({ mnemonicEncrypted })
           .then(() => {
             $scope.connect(newMnemonic, HdPath);
@@ -278,7 +282,7 @@ export default class WalletCtrl {
 
             const simpleWallet = await generateWallet({ password });
 
-            AuthService
+            this.AuthService
             .setWallet({ mnemonicEncrypted: simpleWallet.mnemonicEncrypted })
             .then(() => {
               $scope.connect(simpleWallet.mnemonic, simpleWallet.HdPath);
@@ -300,6 +304,6 @@ export default class WalletCtrl {
         $scope.onDepositClick();
         $scope.disconnect = disconnect;
     }
-}
 
-WalletCtrl.$inject = [ "$scope", "$rootScope", "AuthService" ];
+    static $inject = [ "$scope", "$rootScope", "AuthService" ];
+}

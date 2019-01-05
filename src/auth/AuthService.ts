@@ -1,3 +1,4 @@
+import { SHA3 } from "sha3";
 export class AuthService {
   constructor(
     private $window,
@@ -120,6 +121,23 @@ export class AuthService {
 
   public getAuthToken = () => {
     return this.authToken;
+  }
+
+  public calculatePasswordHash(email: string, password: string): string {
+    return this.calculateSHA3Hash(
+      this.determineMessageForHashing(email, password)
+    );
+  }
+
+  public determineMessageForHashing(salt: string, password: string): string {
+    return `${salt}:${password}`;
+  }
+
+  public calculateSHA3Hash(message: string): string {
+    const hash = new SHA3(512);
+    const passwordHash = hash.update(message).digest('hex');
+
+    return passwordHash;
   }
 
   static $inject = [ "$window", "$http", "$q", "apiFactory" ];

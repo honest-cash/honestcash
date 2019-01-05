@@ -54,7 +54,7 @@ export default class ProfileEditCtrl {
     "$scope",
     "$http",
     "$location",
-    "scopeService",
+    "ScopeService",
     "profile"
   ];
 
