@@ -61,7 +61,7 @@
           </ul>
     </div>
 
-		<div class="row" ng-show="simpleWallet">
+		<div ng-if="post.user.addressBCH" class="row" ng-show="simpleWallet">
 			<ul class="list-unstyled list-inline list">
 				<li>
 					<button ng-disabled="upvotingPostId === post.id || post.userId === profile.id" ng-click="addressClicked(post)" class="btn btn-default">
@@ -80,21 +80,17 @@
 
 		<hr />
 
-		<div class="row" ng-show="!post.user.addressBCH">
+		<div class="row" ng-if="!post.user.addressBCH">
 			<div class="block-center">
 				<div class="panel">
 					<div class="panel-body">
-						<h2>This author does not accept tips.</h2>
-
-						<p>
-							<strong>Important:</strong> You can specify the address for receiving tips in your profile.
-						</p>
+						<b>This author does not accept tips.</b>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row" ng-show="post.user.addressBCH">
+		<div class="row" ng-if="post.user.addressBCH">
 			<div class="block-center">
 				<div class="panel" ng-show="!user" >
 					<div class="panel-body">
@@ -118,14 +114,14 @@
 			</div>
 		</div>
 
-		<div class="post-uncensorable row" ng-if="post.userPostRefs.length" style="margin-bottom: 20px;">
+		<div class="post-uncensorable row" ng-if="post.userPostRefs.length && post.user.addressBCH"" style="margin-bottom: 20px;">
 			<h4><i class="fa fa-shield"></i>  <strong>Uncensorable</strong></h4>
       <a ng-href="https://bitcoinfiles.com/{{post.userPostRefs[0].extId}}" target="_blank">
         {{post.userPostRefs[0].extId}}
       </a>
 		</div>
 
-		<div class="row" ng-show="post.userPostUpvotes">
+		<div class="row" ng-if="post.userPostUpvotes && post.user.addressBCH">
 			<h4><i class="fa fa-btc"></i> <strong>Upvotes ({{post.userPostUpvotes.length}})</strong></h4>
 
 			<p ng-if="!post.userPostUpvotes.length"><small>No upvotes.</small></p>
