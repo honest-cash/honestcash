@@ -13,31 +13,6 @@ export default function state ($stateProvider, $urlRouterProvider) {
 		});
 
 	$stateProvider
-		.state('starter', {
-			templateUrl: "/templates/layout.html",
-			controller: "mainController"
-		})
-		.state('starter.welcome', {
-			url: "/signup",
-			templateUrl: "/templates/welcome.html",
-			controller: "welcomeController",
-		})
-		.state('starter.thankyou', {
-			url: "/thank-you",
-			templateUrl: "/templates/thankyou.html",
-			controller: "welcomeController",
-		})
-		.state('starter.login', {
-			url: "/login?code",
-			templateUrl: "/templates/login.html",
-			controller: "welcomeController"
-		});
-
-	$stateProvider.state('starter.signup', {
-			url: "/signup",
-			templateUrl: "/templates/welcome.html",
-			controller: "welcomeController"
-		})
 		.state('vicigo', {
 			abstract: true,
 			controller: "mainController",

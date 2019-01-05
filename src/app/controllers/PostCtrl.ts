@@ -40,5 +40,5 @@ PostCtrl.$inject = [
     "post",
     "RelsService",
     "PostService",
-    "scopeService"
+    "ScopeService"
 ];
