@@ -200,7 +200,12 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }
 
-// all other paths
+// Editor paths
+for (let welcomePath of [ "/signup", "/login" ]) {
+	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
+}
+
+// Welcome paths
 app.get("/*", (_, res) => res.sendfile("app.html", { root: __dirname + "/public" }));
 
 var server = require('http').Server(app);

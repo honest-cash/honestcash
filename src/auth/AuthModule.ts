@@ -59,6 +59,6 @@ angular.module("vqAuth", [])
 }])
 
 .service("AuthService", [ "$window", "$http", "$q", "apiFactory", AuthService])
-.run([ "AuthService", function(AuthService: AuthService) {
-	AuthService.loadUserCredentials();
+.run([ "AuthService", function(authService: AuthService) {
+	authService.loadUserCredentials();
 }]);

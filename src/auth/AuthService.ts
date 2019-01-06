@@ -25,8 +25,9 @@ export class AuthService {
   }
 
   public loadUserCredentials(): void {
-    var token = this.$window.localStorage.getItem(this.LOCAL_TOKEN_KEY);
-    var userId = this.$window.localStorage.getItem(this.LOCAL_USER_ID_KEY);
+    const token = this.$window.localStorage.getItem(this.LOCAL_TOKEN_KEY);
+    const userId = this.$window.localStorage.getItem(this.LOCAL_USER_ID_KEY);
+
     if (token) {
       this.useCredentials(token, userId);
     }

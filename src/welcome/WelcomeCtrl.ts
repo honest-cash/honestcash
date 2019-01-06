@@ -3,6 +3,7 @@ import generateWallet from "../core/lib/bitcoinAuthFlow";
 import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
 import swal from "sweetalert";
 import { AuthService } from "../auth/AuthService";
+import HashtagService from "../core/services/HashtagService";
 
 interface ILoginForm {
   loginemail: string;
@@ -25,7 +26,7 @@ export default class WelcomeCtrl {
     private AuthService: AuthService,
     private ProfileService,
     private scopeService,
-    private hashtagService
+    private hashtagService: HashtagService
   ) {
     $scope.message = "";
     $rootScope.noHeader = true;
@@ -188,7 +189,7 @@ export default class WelcomeCtrl {
   ];
 
   private async ngInit() {
-    const hashtags = this.hashtagService.getTopHashtags();
+    const hashtags = await this.hashtagService.getTopHashtags();
 
     this.$scope.welcome = true;
     this.$scope.noHeader = true;

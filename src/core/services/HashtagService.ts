@@ -15,6 +15,7 @@ export default class HashtagService {
   };
 
   static $inject = [
-    "$http", "API_URL"
+    "$http",
+    "API_URL"
   ];
 }
