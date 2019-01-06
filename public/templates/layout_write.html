@@ -1,8 +1,9 @@
-<div>
-	<div class="text-center" ng-show='!ready'><i class="fa fa-circle-o-notch fa-spin fa-2x"></i></div>
+<div style="margin-top:50px;" class="text-center" ng-show='!ready'>
+    <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+</div>
 
-	<div ng-show='ready'>
-	
+<div ng-show='ready'>
+	<div>
 	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
 		<div class="container">
 				<a href="/" target="_self" class="hidden-xs pull-left">
@@ -49,12 +50,9 @@
 			</div>
 
 			<div class="modal-body">
-				<div class="panel panel-info">
-					<div class="panel-body">
-						<p>Add or change tags (up to 5) so readers know what your story is about</p>
-					</div>
-				</div>
-
+		
+        <p>Add or change topics so readers know what your story is about.</p>
+				
 				<div class="form-group">
 					<form>
 						<input id="description" name="tags" placeholder="Enter up to 5 hashtags" />
@@ -62,7 +60,12 @@
 				</div>
 
 				<div class="form-group">
-					<small>You are able to edit the story after publishing. After the first upvote the editing will become disabled.</small>
+          <small>
+            <ul>
+              <li>You can edit the story after publishing.</li>
+              <li>An email will be sent to your followers.</li>
+            </ul>
+          </small>
 				</div>
 			</div>
 

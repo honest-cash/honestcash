@@ -1,72 +1,83 @@
-class User {
-  username: string;
-  imageUrl: string;
-}
-
-class Upvote {
-  txId: string;
-  userPostId: number;
-  userId: number;
-  user: User;
-}
-
+import moment from "moment";
+import { Post, Upvote } from "../models/models";
 export default class PostService {
-    constructor (private $http, private $sce, private API_URL) {
-        const removePost = function(postId) {
-            return $http.delete(API_URL + "/post/" + postId);
-        };
+  constructor (
+    private $http,
+    private $sce,
+    private API_URL
+  ) {}
 
-        const getById = function(postId, callback) {
-            return $http.get(API_URL + "/post/" + postId).then(function(response) {
-                callback(response.data);
-            });
-        };
+  private postDateFormat = "MMM Do YY";
 
-        const getByAlias = (username, alias, callback) => {
-            return $http.get(API_URL + "/post/" + username + "/" + alias).then(function(response) {
-                callback(response.data);
-            });
-        };
+  public removePost(postId) {
+    return this.$http.delete(this.API_URL + "/post/" + postId);
+  };
 
-        const displayHTML = function(html) {
-            return $sce.trustAsHtml(html);
-        };
+  public publishPic(postId, params, callback) {
+    this.$http.put(this.API_URL + "/post/image/publish", {
+        postId: postId,
+        tags: params.hashtags
+    }).then((response) => {
+        callback(response.data);
+    });
+  };
 
-        const publishPic = function(postId, params, callback) {
-            $http.put(API_URL + "/post/image/publish", {
-                postId: postId,
-                tags: params.hashtags
-            }).then(function(response) {
-                callback(response.data);
-            });
-        };
+  public upvote(upvote) {
+      return this.$http.post(this.API_URL + "/post/" + upvote.postId + "/upvote", {
+          txId: upvote.txId,
+          postId: upvote.postId
+      })
+  }
 
-        const upvote = (upvote) => {
-            return $http.post(API_URL + "/post/" + upvote.postId + "/upvote", {
-                txId: upvote.txId,
-                postId: upvote.postId
-            })
-        };
+  public createRef(ref) {
+      return this.$http.post(this.API_URL + "/post/" + ref.postId + "/ref", {
+          extId: ref.extId,
+          postId: ref.postId
+      });
+  };
 
-        const createRef = (ref) => {
-            return $http.post(API_URL + "/post/" + ref.postId + "/ref", {
-                extId: ref.extId,
-                postId: ref.postId
-            })
-        };
+  private processPost(post: Post): Post {
+    post.createdAt = moment(post.createdAt).format(this.postDateFormat);
+    post.publishedAt = moment(post.publishedAt).format(this.postDateFormat);
 
-        this.createRef = createRef;
-        this.publishPic = publishPic;
-        this.getById = getById;
-        this.getByAlias = getByAlias;
-        this.removePost = removePost;
-        this.upvote = upvote;
-        this.displayHTML = displayHTML;
-    }
+    post.userPosts && post.userPosts.forEach(userPost => {
+      userPost = this.processPost(userPost);
+    });
 
-    static $inject = [
-      "$http", "$sce", "API_URL"
-    ];
+    return post;
+  }
 
-    public getUpvotes = async (postId: number) : Promise<Upvote[]> => this.$http.get(this.API_URL + "/post/" + postId + "/upvotes");
+  public displayHTML(html: string): string {
+    return this.$sce.trustAsHtml(html);
+  }
+
+  public async getById(postId: number): Promise<Post> {
+    const res = await this.$http.get(this.API_URL + "/post/" + postId);
+      
+    return this.processPost(res.data);
+  };
+
+  public async getByAlias(username, alias): Promise<Post> {
+    const res = await this.$http.get(this.API_URL + "/post/" + username + "/" + alias);
+
+    return this.processPost(res.data);
+  };
+
+  public async getUpvotes(postId: number) : Promise<Upvote[]> {
+    const res = await this.$http.get(this.API_URL + "/post/" + postId + "/upvotes");
+
+    return res.data;
+  };
+
+  public async getResponses(postId: number) : Promise<Post[]> {
+    const res = await this.$http.get(this.API_URL + "/post/" + postId + "/responses");
+
+    return res.data.map(post => this.processPost(post));
+  };
+
+  static $inject = [
+    "$http",
+    "$sce",
+    "API_URL"
+  ];
 }

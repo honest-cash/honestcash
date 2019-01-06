@@ -96,65 +96,19 @@ export default function state ($stateProvider, $urlRouterProvider) {
 		.state('vicigo.post', {
 			url: "/:username/:alias",
 			templateUrl: "/templates/post.html",
-			controller: "postController",
-			resolve: {
-				'post': [ "$stateParams", "$q", "PostService",($stateParams, $q, PostService) => {
-					var defer = $q.defer();
-
-					PostService.getById($stateParams.alias, (rPost) => {
-						defer.resolve(rPost);
-					});
-
-					return defer.promise;
-				}]
-			}
+      controller: "postController",
+      controllerAs: "postCtrl",
 		})
 		.state('vicigo.postById', {
 			url: "/post/:postId",
 			templateUrl: "/templates/post.html",
-			controller: "postController",
-			resolve: {
-				'post': ["$stateParams", "$q", "PostService", ($stateParams, $q, PostService) => {
-					var defer = $q.defer();
-
-					PostService.getById($stateParams.postId, (rPost) => {
-						defer.resolve(rPost);
-					});
-
-					return defer.promise;
-				}]
-			}
-		})
-		/**
-		 * dagur posted a buggy link on reddit and we need to support it.
-		 */
-		.state('vicigo.postByIdBroken', {
-			url: "/:postId",
-			templateUrl: "/templates/post.html",
-			controller: "postController",
-			resolve: {
-				'post': ["$stateParams", "$q", "PostService", ($stateParams, $q, PostService) => {
-					var defer = $q.defer();
-
-					PostService.getById($stateParams.postId, (rPost) => {
-						defer.resolve(rPost);
-					});
-
-					return defer.promise;
-				}]
-			}
+      controller: "postController",
+      controllerAs: "postCtrl"
 		})
 		.state('vicigo.postByAlias', {
 			url: "/post/:username/:alias",
 			templateUrl: "/templates/post.html",
-			controller: "postController",
-			resolve: {
-				'post': [ "$stateParams", "$http", function($stateParams, $http) {
-					return $http.get("/post/" + $stateParams.username + "/" + $stateParams.alias)
-					.then(function(response) {
-						return response.data;
-					});
-				}]
-			}
+      controller: "postController",
+      controllerAs: "postCtrl"
 		})
 };

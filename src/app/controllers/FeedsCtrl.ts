@@ -1,7 +1,19 @@
-import ProfileService from "../../core/services/ProfileService";
+import HashtagService from "../../core/services/HashtagService";
+import ScopeService from "../../core/services/ScopeService";
 
 export default class FeedsCtrl {
-  constructor($rootScope, $scope, $stateParams, $location, $http, FeedService, PostService) {
+  constructor(
+    private $rootScope,
+    private $scope,
+    private $stateParams,
+    private $location,
+    private $http,
+    private FeedService,
+    private PostService,
+    private hashtagService: HashtagService,
+    private profileService,
+    private scopeService: ScopeService,
+  ) {
 		$scope.feeds = [];
 		$scope.page = 1;
 		$scope.limit = 10;
@@ -29,6 +41,21 @@ export default class FeedsCtrl {
 		$scope.filterType = $location.search()["filter"] ? $location.search()["filter"] : null;
 		$scope.recommendedHashtags = [];
 		$scope.recommendedProfiles = [];
+
+    hashtagService.getTopHashtags()
+    .then(hashtags => {
+      $scope.hashtags = hashtags;
+
+      scopeService.safeApply($scope, () => {});
+    });
+
+    if ($rootScope.user) {
+      profileService.fetchRecommentedProfiles($rootScope.user.id, {}, (users) => {
+        $scope.recommendedUsers = users;
+
+        scopeService.safeApply($scope, () => {});
+      });
+    }
 
 		$scope.fetchPost = (postId, index) => {
 			$http.get("/post/" + postId).then((response) => {
@@ -90,4 +117,15 @@ export default class FeedsCtrl {
   }
 }
 
-FeedsCtrl.$inject = [ "$rootScope", "$scope", "$stateParams", "$location", "$http", "FeedService", "PostService" ];
+FeedsCtrl.$inject = [
+  "$rootScope",
+  "$scope",
+  "$stateParams",
+  "$location",
+  "$http",
+  "FeedService",
+  "PostService",
+  "HashtagService",
+  "ProfileService",
+  "ScopeService"
+];
