@@ -201,47 +201,6 @@
 	</div>
 	<!-- UPLOAD IMAGE MODAL -->
 
-	<!-- Modal -->
-    <script type="text/ng-template" id="userListModal.html">
-         <div class="modal-header">
-        <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="userListModalLabel">Post Stats</h4>
-      </div>
-      <div class="modal-body">
-				<ul class="list-unstyled list-inline text-center">
-
-					<li style="width:32%;" ng-class="{'active' : statType == 'upvotes'}" class="btn btn-default" ng-click="showItems('upvotes')">
-						<h4>{{stats.upvotesCount}}</h4>
-						Upvotes
-					</li>
-					<li style="width:32%;" class="btn btn-default">
-						<h4>{{stats.commentsCount}}</h4>
-						Comments
-					</li>
-					<li style="width:32%;" ng-class="{'active' : statType == 'views'}" class="btn btn-default" ng-click="showItems('views')">
-						<h4>{{stats.viewsCount}}</h4>
-						Views
-					</li>
-			</ul>
-		<hr>
-
-        <ul class="list-unstyled">
-					<li ng-repeat="item in items" style="padding:5px;">
-
-						<a ui-sref="vicigo.profile({profileId:item.user_id})">
-						<img class="img-circle img-thumbnail-avatar-small" fallback-src="/img/avatar.png" ng-src="{{item.profile_image_url ? item.profile_image_url : '/img/avatar.png'}}">
-
-						<strong>{{item.name}}</strong>
-						</a>
-						<span class="text-muted">{{item.title}}</span>
-					<div class="pull-right">
-						<a href="#" class="btn btn-success" ng-click="follow(item.user_id)">Follow</a>
-					</div>
-					</li>
-				</ul>
-      </div>
-    </script>
-
 	<script type="text/javascript" src="/libs/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/lib/jquery-hashtags-master/js/autosize.min.js"></script>
 

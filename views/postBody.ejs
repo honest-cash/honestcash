@@ -4,13 +4,15 @@
     <div class="row">
         <h1 class="text-center"><%- post.title %></h1>
 
-        <img src="<%- post.imageUrl %>" style="max-width:1000px;width:100%;">
-
         <h5>	
-            <span class="hashtag" style="padding:3px;" ><%- post.post_created_at_formatted_calendar %></span> 
+            <span class="hashtag" style="padding:3px;" ><%- post.createdAt %></span> 
             <span style="padding:3px;"><span>Honest Cash</span></span> 
         </h5>
     </div>
+
+    <% if (post.parentPost) { %>
+      Response to <a href="/<%- post.parentPost.user.username %>/<%- post.parentPost.alias %>">"<%- post.parentPost.title %>"</a> by <a href="/profile/<%- post.parentPost.user.username %>"><%- post.parentPost.user.username %></a>
+    <% }  %>
 
     <div class="row">
         <ul>
@@ -26,6 +28,22 @@
         </article>
     </div>
 	
+  <div class="row">
+		<p>
+		<% for (var index = 0; index < upvotes.length; index++ ) { %>
+		    <div style="margin:10px;" class="upvote" >
+          <a  href="/profile/<%- upvotes[index].user.username %>">
+            <%- upvotes[index].user.username %>
+          </a>
+
+          <a  href="https://bch.btc.com/<%- upvotes[index].txId %>">
+            Receipt
+          </a>
+        </div>
+		<% }  %>
+	  </p>
+	</div>
+
 	<div class="row">
 		<p>
 		<% for (var index = 0; index < post.userPostHashtags.length; index++ ) { %>
@@ -39,23 +57,9 @@
         <div style="margin:10px;" class="post-response">
             <h3>Responses</h3>
         </div>
-		<% for (var index = 0; index < post.userPosts.length; index++ ) { %>
-            <hr />
-		    <div style="margin:10px;" class="post-response" >
-                    <h2>
-                        <a href="/<%- post.userPosts[index].user.username %>/<%- post.userPosts[index].alias %>">
-                        <%- post.userPosts[index].title %>
-                        </a>
-                    </h2>
-
-                    <a href="/profile/<%- post.userPosts[index].user.username %>">
-                        by @<%- post.userPosts[index].user.username %>
-                    </a>
-
-                    <article>
-                        <%- post.userPosts[index].body %>
-                    </article>
-            </div>
-		<% }  %>
+        <% for (var index = 0; index < responses.length; index++ ) { %>
+          <hr />
+          <%- include('response', { response: responses[index] }); %>
+        <% }  %>
 	</div>
 </div>

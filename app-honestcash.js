@@ -111,6 +111,8 @@ const renderFeed = async (req, res, next) => {
  * Server rendering for feed
  */
 app.get("/", renderFeed);
+app.get("/top", renderFeed);
+app.get("/new", renderFeed);
 app.get("/hashtag/:hashtag", renderFeed);
 
 /**
@@ -167,11 +169,15 @@ app.get("/:username/:alias", async (req, res, next) => {
 
 	if (!isBot(userAgent, crawlerView)) {
 		return next();
-	}
+  }
 
-	const url = `https://honest.cash/api/post/${req.params.alias}`;
-	const response = await axios.get(url);
-	const post = response.data;
+  const postBaseUrl = "https://honest.cash/api/post";
+  const url = `${postBaseUrl}/${req.params.alias}`;
+  
+	const post = (await axios.get(url)).data;
+  const responses = (await axios.get(`${postBaseUrl}/${post.id}/responses`)).data;
+  const upvotes = (await axios.get(`${postBaseUrl}/${post.id}/upvotes`)).data;
+
 	const seoData = seo.getForPost(post);
 
 	if (!post) {
@@ -183,7 +189,9 @@ app.get("/:username/:alias", async (req, res, next) => {
 	res.render('postBody.ejs', {
 		layout: 'crawlerLayout',
 		SEO: seoData,
-		post
+    post,
+    responses,
+    upvotes
 	});
 });
 
@@ -192,7 +200,12 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }
 
-// all other paths
+// Editor paths
+for (let welcomePath of [ "/signup", "/login" ]) {
+	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
+}
+
+// Welcome paths
 app.get("/*", (_, res) => res.sendfile("app.html", { root: __dirname + "/public" }));
 
 var server = require('http').Server(app);

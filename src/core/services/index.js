@@ -4,6 +4,7 @@ import ProfileService from './ProfileService';
 import CommentService from './CommentService';
 import FeedService from './FeedService';
 import RelsService from './RelsService';
+import ScopeService from './ScopeService';
 
 angular.module("vqServices", [ "vqConfig" ])
 .service('HashtagService', HashtagService)
@@ -12,3 +13,4 @@ angular.module("vqServices", [ "vqConfig" ])
 .service("ProfileService", [ "$http", "API_URL", ProfileService ])
 .service("CommentService", [ "$http", CommentService ])
 .service("RelsService", [ "$http", "API_URL", RelsService ])
+.service("ScopeService", [ ScopeService ])

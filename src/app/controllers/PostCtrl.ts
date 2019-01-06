@@ -1,44 +1,57 @@
-import moment from "moment";
+import ScopeService from "../../core/services/ScopeService";
+import PostService from "../../core/services/PostService";
+import { Post, Upvote } from "../../core/models/models";
 
 declare var QRCode: any;
-
 export default class PostCtrl {
-    constructor($rootScope, $scope, post, RelsService, PostService, scopeService) {
-        $scope.postId = post.id;
-        $scope.post = post;
-        $scope.post.createdAt = moment(post.createdAt).format("MMM Do YY");
-        $scope.post.publishedAt = moment(post.publishedAt).format("MMM Do YY");
-        $scope.upvotes = [];
-        $scope.post.userPosts && $scope.post.userPosts.forEach(userPost => {
-            userPost.createdAt = moment(userPost.createdAt).format("MMM Do YY");
-            userPost.publishedAt = moment(userPost.publishedAt).format("MMM Do YY");
-        });
-
-        const init = async () => {
-            if (!$rootScope.user) {
-                const container = document.getElementById("post-tipping-container");
-
-                container.innerHTML = "";
-
-                new QRCode(container, post.user.addressBCH);
-            }
-
-            const res = await PostService.getUpvotes(post.id);
-
-            $scope.upvotes = res.data;
-
-            scopeService.safeApply($scope, () => {});
-        };
-
-        init();
+    constructor(
+      private $scope,
+      private $rootScope,
+      private $stateParams,
+      private postService: PostService,
+      private scopeService: ScopeService
+    ) {
+        this.ngInit();
     }
-}
 
-PostCtrl.$inject = [
-    "$rootScope",
+    public isLoading: boolean = true;
+    public post: Post;
+    public upvotes: Upvote[] = [];
+    public responses: Post[] = [];
+
+    private async ngInit() {
+      this.post = await this.postService.getById(
+        this.$stateParams.alias
+      );
+
+      this.isLoading = false;
+
+      this.scopeService.safeApply(this.$scope, () => {});
+
+      const data = await Promise.all([
+        this.postService.getUpvotes(this.post.id),
+        this.postService.getResponses(this.post.id)
+      ]);
+
+      this.upvotes = data[0];
+      this.responses = data[1];
+
+      this.scopeService.safeApply(this.$scope, () => {});
+
+      if (!this.$rootScope.user) {
+        const container = document.getElementById("post-tipping-container");
+
+        container.innerHTML = "";
+
+        new QRCode(container, this.post.user.addressBCH);
+    }
+  }
+
+  static $inject = [
     "$scope",
-    "post",
-    "RelsService",
+    "$rootScope",
+    "$stateParams",
     "PostService",
-    "scopeService"
-];
+    "ScopeService"
+  ]
+}

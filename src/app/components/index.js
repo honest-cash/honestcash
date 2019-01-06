@@ -22,11 +22,4 @@ angular.module("vqDirectives", [ "vqConfig" ])
 		return fallbackSrc;
     })
 
-	.directive('feed', feedComponent)
-
-	.directive('postHeader', function() {
-		return {
-			templateUrl: '/templates/directives/postHeader.html'
-		};
-    });
-    
+	.directive('feed', feedComponent);

@@ -1,34 +1,21 @@
-interface IHashtagStat {
+class HashtagStat {
   hashtag: string;
   count: number;
 }
 export default class HashtagService {
-    constructor ($http, API_URL) {
-      const defaultHashtags = [
-          "general",
-          "bitcoin",
-          "crypto",
-          "ann",
-          "trading",
-          "economics",
-          "politics",
-          "altcoin",
-          "dev"
-      ];
+  constructor (
+    private $http,
+    private API_URL
+  ) {}
 
-      const getTopHashtags = async (): Promise<IHashtagStat[]> => {
-        const res = await $http.get(API_URL + "/hashtag");
+  public async getTopHashtags(): Promise<HashtagStat[]> {
+    const res = await this.$http.get(this.API_URL + "/hashtag");
 
-        return res.data;
-      };
-      
-      return {
-        getTopHashtags,
-        defaultHashtags
-      };
-    }
+    return res.data;
+  };
+
+  static $inject = [
+    "$http",
+    "API_URL"
+  ];
 }
-
-HashtagService.$inject = [
-    "$http", "API_URL"
-];

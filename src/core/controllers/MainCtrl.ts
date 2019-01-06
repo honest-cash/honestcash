@@ -1,25 +1,13 @@
+import * as lzutf8 from "lzutf8";
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+import PostService from "../../core/services/PostService";
 import * as upvoteDistribution from "../lib/upvoteDistribution";
 
 export default class MainCtrl {
     constructor(
-        $rootScope, $scope, $state, $sce, $window, $location, $http, scopeService, AuthService, RelsService, HashtagService, ProfileService, PostService
+        $rootScope, $scope, $state, $sce, $window, $location, $http, scopeService, AuthService, RelsService, HashtagService, ProfileService,
+        private PostService: PostService
     ) {
-        HashtagService.getTopHashtags()
-        .then(hashtags => {
-          $scope.hashtags = hashtags;
-
-          scopeService.safeApply($scope, () => {});
-        });
-
-        if ($rootScope.user) {
-          ProfileService.fetchRecommentedProfiles($rootScope.user.id, {}, (users) => {
-            $scope.recommendedUsers = users;
-
-            scopeService.safeApply($scope, () => {});
-          });
-        }
-
         const mouseEnterAddress = (className, address) => {
             const container = document.getElementsByClassName(className)[0];
 
@@ -28,25 +16,30 @@ export default class MainCtrl {
             new QRCode(container, address);
         };
 
-        const byteCount = (s) => {
-            return ((encodeURI(s).split(/%..|./).length - 1) / 1024).toFixed(2);
+        const byteCount = (s): number =>{
+            return Number(((encodeURI(s).split(/%..|./).length - 1) / 1024).toFixed(2));
         };
 
         const makeUncesorable = async (post) => {
             const simpleWallet = simpleWalletProvider.get();
-
             const json = {
                 title: post.title,
                 body: post.plain,
                 author: post.user.username,
             };
 
-            if (byteCount(JSON.stringify(json)) > 5) {
+            const compressedJson = lzutf8.compress(JSON.stringify(json), {
+              outputEncoding: "Base64"
+            });
+
+            console.log("Base64 Story: " + compressedJson);
+
+            if (byteCount(compressedJson) > 5) {
                 return toastr.warning("The story is too long! We are working on it!");
             }
 
             $('#uncensoredResultModal').modal({
-                backdrop: "static"
+              // backdrop: "static"
             });
 
             document.getElementById("uncensoredResultLoading").style.display = "block";
@@ -54,39 +47,40 @@ export default class MainCtrl {
 
             // users with connected BCH accounts
             if (simpleWallet) {
-                let res;
+              let res;
 
-                try {
-                    res = await simpleWallet.upload(json, {
-                        title: `${post.title} by ${post.user.username} | Honest Cash`,
-                        extUri: `https://honest.cash/${post.user.username}/${post.alias}`
-                    });
-                } catch (err) {
-                    $('#uncensoredResultModal').modal('hide');
-
-                    if (err.message.indexOf("mempool") > -1) {
-                        return toastr.warning("The story is too long! We are working on it!");
-                    }
-
-                    return toastr.warning(err.message);
-                }
-
-                document.getElementById("uncensoredResultLoading").style.display = "none";
-                document.getElementById("uncensoredResultSuccess").style.display = "block";
-
-                const fileId = res.fileId;
-
-                console.log(res);
-                console.log("Story saved for all times on BCH: " + fileId);
-
-                const inputEl = document.getElementById("bitcoinFileId");
-
-                inputEl.value = fileId;
-
-                PostService.createRef({
-                    postId: post.id,
-                    extId: fileId
+              try {
+                res = await simpleWallet.upload(compressedJson, {
+                  ext: "json.lzutf8",
+                  title: `${post.title} by ${post.user.username} | Honest Cash`,
+                  extUri: `https://honest.cash/${post.user.username}/${post.alias}`
                 });
+              } catch (err) {
+                  $('#uncensoredResultModal').modal('hide');
+
+                  if (err.message.indexOf("mempool") > -1) {
+                      return toastr.warning("The story is too long! We are working on it!");
+                  }
+
+                  return toastr.warning(err.message);
+              }
+
+              document.getElementById("uncensoredResultLoading").style.display = "none";
+              document.getElementById("uncensoredResultSuccess").style.display = "block";
+
+              const fileId = res.fileId;
+
+              console.log(res);
+              console.log("Story saved for all times on BCH: " + fileId);
+
+              const inputEl = document.getElementById("bitcoinFileId");
+
+              inputEl.value = fileId;
+
+              PostService.createRef({
+                  postId: post.id,
+                  extId: fileId
+              });
             }
         };
 
@@ -95,15 +89,14 @@ export default class MainCtrl {
         }
 
         const addressClicked = async (post) => {
-            const postId = post.id;
+          if (!post.user.addressBCH) {
+              toastr.error("Upvoting is not possible because the author does not have a Bitcoin address to receive");
+              return;
+          }
 
-            if (!post.user.addressBCH) {
-                toastr.error("Upvoting is not possible because the author does not have a Bitcoin address to receive");
-                return;
-            }
-
-            const address = post.user.addressBCH;
-            const simpleWallet = simpleWalletProvider.get();
+          const postId = post.id;
+          const address = post.user.addressBCH;
+          const simpleWallet = simpleWalletProvider.get();
 
           $scope.upvotingPostId = postId;
           $scope.upvotingStatus = "loading";
@@ -113,7 +106,7 @@ export default class MainCtrl {
           let upvotes;
 
           try {
-            upvotes = (await PostService.getUpvotes(postId)).data;
+            upvotes = (await PostService.getUpvotes(postId));
           } catch (err) {
             toastr.error("Can't connect.");
 
@@ -183,7 +176,7 @@ export default class MainCtrl {
 
           const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
-          const anchorEl = document.getElementById("bchTippingTransactionUrl");
+          const anchorEl = document.getElementById("bchTippingTransactionUrl") as HTMLAnchorElement;
       
           console.log(`Upvote transaction: ${url}`);
 
@@ -245,12 +238,6 @@ export default class MainCtrl {
           RelsService.unfollowProfile(profileId);
         };
 
-        $scope.showUpvotes = (feed, statType) => {
-            PostService.getUpvotes(feed.id, (rPostUpvotes) => {
-
-            });
-        };
-
         $rootScope.trustSrc = (src) => {
             return $sce.trustAsResourceUrl(src);
         }
@@ -306,7 +293,7 @@ export default class MainCtrl {
             $("#uploadedImage").addClass("hidden");
         };
 
-        $scope.displayFeedBody = PostService.displayHTML;
+        $scope.displayFeedBody = (html: string): string => PostService.displayHTML(html);
 
         $rootScope.publishPicturePost = () => {
             var postId = $("#uploadedImagePostId").val();
@@ -353,7 +340,7 @@ MainCtrl.$inject = [
     "$window",
     "$location",
     "$http",
-    "scopeService",
+    "ScopeService",
     "AuthService",
     "RelsService",
     "HashtagService",
