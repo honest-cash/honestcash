@@ -1,0 +1,22 @@
+<div style="margin:10px;" class="post-response" >
+  <h2>
+      <a href="/<%- response.user.username %>/<%- response.alias %>">
+      <%- response.title %>
+      </a>
+  </h2>
+
+  <a href="/profile/<%- response.user.username %>">
+      by @<%- response.user.username %>
+  </a>
+
+  <article>
+      <%- response.body %>
+  </article>
+
+  <div style="margin:20px;" class="post-response">
+     <% if (response.userPosts) { for (var index = 0; index < response.userPosts.length; index++) { %>
+          <hr />
+          <%- include('response', { response: response.userPosts[index] }); %>
+      <% } } %>
+  </div>
+</div>
