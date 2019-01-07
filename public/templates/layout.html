@@ -28,13 +28,13 @@
       <div class="navbar-collapse collapse">
          <ul class="nav navbar-nav navbar-right" >
             <li ng-if="!user">
-              <a ui-sref="starter.login">
+              <a href="/login" target="_self">
                 <i class="gi gi-settings fa-fw pull-right"></i> login
               </a>
             </li>
 
             <li ng-if="!user">
-              <a ui-sref="starter.signup">
+              <a href="/signup" target="_self">
                 <i class="gi gi-settings fa-fw pull-right"></i> signup
               </a>
             </li>
@@ -170,7 +170,7 @@
             <small>
               <ul class="list-unstyled list-inline">
                 <li>
-                  <a href="/login">Login</a>
+                  <a href="/login" target="_self">Login</a>
                 </li>
                 <li>
                   <a href="https://honest.cash/honest_cash/about-honest-cash" target="_self">About</a>
