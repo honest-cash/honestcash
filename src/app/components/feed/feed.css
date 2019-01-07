@@ -115,4 +115,9 @@
 	font-size: 8px;
 }
 
-
+@media (max-width: 990px) {
+	.feed-row {
+		margin-left: -40px;
+		margin-right: -40px;
+	}
+  }
