@@ -14,8 +14,13 @@
 .following-unfollow .btn-unfollow, .following-unfollow .btn-follow {
 	font-size: 1em;
 }
+
 .following-unfollow .btn-follow {
 	background: transparent;
+}
+
+.profile-bio {
+  overflow-wrap: break-word;
 }
 
 .btn a {

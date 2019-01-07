@@ -1,11 +1,23 @@
 import * as lzutf8 from "lzutf8";
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 import PostService from "../../core/services/PostService";
+import AuthService from "../../auth/AuthService";
 import * as upvoteDistribution from "../lib/upvoteDistribution";
 
 export default class MainCtrl {
     constructor(
-        $rootScope, $scope, $state, $sce, $window, $location, $http, scopeService, AuthService, RelsService, HashtagService, ProfileService,
+        private $rootScope,
+        private $scope,
+        private $state,
+        private $sce,
+        private $window,
+        private $location,
+        private $http,
+        private scopeService,
+        private AuthService: AuthService,
+        private RelsService,
+        private HashtagService,
+        private ProfileService,
         private PostService: PostService
     ) {
         const mouseEnterAddress = (className, address) => {
@@ -89,6 +101,10 @@ export default class MainCtrl {
         }
 
         const addressClicked = async (post) => {
+          if (!this.$rootScope.user) {
+            return location.href = "/signup";
+          }
+
           if (!post.user.addressBCH) {
               toastr.error("Upvoting is not possible because the author does not have a Bitcoin address to receive");
               return;
@@ -222,7 +238,7 @@ export default class MainCtrl {
 
         $scope.follow = (profileId, followGuy) => {
             if (!$rootScope.user || !$rootScope.user.id) {
-                return $state.go("starter.welcome");
+                return location.href = "/signup";
             }
 
             followGuy.alreadyFollowing = !followGuy.alreadyFollowing;
@@ -239,7 +255,7 @@ export default class MainCtrl {
         };
 
         $rootScope.trustSrc = (src) => {
-            return $sce.trustAsResourceUrl(src);
+          return $sce.trustAsResourceUrl(src);
         }
 
         $rootScope.searchVicigo = function(searchInput) {
