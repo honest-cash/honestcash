@@ -4,6 +4,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 	$stateProvider
 		.state('wallet', {
 			abstract: true,
+			controller: "mainController",
 			templateUrl: "/templates/layout.html",
 		})
 		.state('wallet.create', {

@@ -12,6 +12,7 @@ export default class WalletCtrl {
     constructor(
       private $scope,
       private $rootScope,
+      private $http,
       private AuthService: AuthService
     ) {
         $scope.mnemonic = "";
@@ -24,6 +25,8 @@ export default class WalletCtrl {
         $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
         $scope.newHdPath = simpleWalletProvider.defaultHdPath;
         $scope.addressBalance = 0;
+        $scope.addressBalanceInUSD = 0;
+        $scope.balanceLoading = true;
         $scope.isWithdrawalAddressBCHValid = true;
         let simpleWallet, lSimpleWallet;
 
@@ -87,8 +90,13 @@ export default class WalletCtrl {
               return;
             }
 
-            $scope.walletInfo = walletInfo
-            $scope.addressBalance = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
+            $scope.walletInfo = walletInfo;
+            const balanceInBHC = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
+            const currencyRequest = await $http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
+            const balanceInUSD = currencyRequest.data.data.rates.USD;            
+            $scope.addressBalance = balanceInBHC;
+            $scope.addressBalanceInUSD  = balanceInBHC * balanceInUSD;
+            $scope.balanceLoading = false;
 
             $scope.$apply();
         };
@@ -305,5 +313,5 @@ export default class WalletCtrl {
         $scope.disconnect = disconnect;
     }
 
-    static $inject = [ "$scope", "$rootScope", "AuthService" ];
+    static $inject = [ "$scope", "$rootScope", "$http", "AuthService" ];
 }

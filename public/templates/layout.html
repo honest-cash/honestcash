@@ -40,6 +40,23 @@
             </li>
 
             <li ng-if="user.id">
+              <div class="visible-xs" style="margin-top: 5px; margin-left: 15px; line-height: 25px;">
+                <b ng-if="!balanceLoading">
+                    <i class="fa fa-btc"></i> {{addressBalance}}</br>
+                    <i class="fa fa-usd"></i> {{addressBalanceInUSD}}
+                </b>
+                <b ng-if="balanceLoading">Loading balance...</b>
+              </div>
+              <div class="hidden-xs" style="margin-top: 5px; line-height: 25px; text-align: right;">
+                  <b ng-if="!balanceLoading">
+                    {{addressBalance}} <i class="fa fa-btc"></i></br>
+                    {{addressBalanceInUSD}} <i class="fa fa-usd"></i>
+                  </b>
+                  <b ng-if="balanceLoading">Loading balance...</b>
+                </div>
+            </li>
+
+            <li ng-if="user.id">
               <a href="/write" target="_self">
                 <i class="hidden-xs fa fa-pencil"></i><span class="visible-xs">write a story</span>
               </a>

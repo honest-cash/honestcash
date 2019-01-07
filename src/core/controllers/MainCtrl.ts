@@ -8,6 +8,36 @@ export default class MainCtrl {
         $rootScope, $scope, $state, $sce, $window, $location, $http, scopeService, AuthService, RelsService, HashtagService, ProfileService,
         private PostService: PostService
     ) {
+        $scope.addressBalance = 0;
+        $scope.addressBalanceInUSD = 0;
+        $scope.balanceLoading = true;
+
+        $scope.$on('$viewContentLoaded', async function() {
+            let balances = await getAddressBalances();
+            $scope.addressBalance = balances.bhc;
+            $scope.addressBalanceInUSD = balances.usd;
+            $scope.balanceLoading = false;
+
+            setInterval(async () => {
+                balances = await getAddressBalances();
+                $scope.addressBalance = balances.bhc;
+                $scope.addressBalanceInUSD = balances.usd;
+            }, 30000)
+        });
+
+        const getAddressBalances = async () => {
+            const simpleWallet = simpleWalletProvider.get();
+            const balanceWallet = new SimpleWallet(simpleWallet.mnemonic, {
+                HdPath: simpleWallet.HdPath
+            });
+
+            const balanceWalletInfo = await balanceWallet.getWalletInfo();
+            const balanceInBHC = (balanceWalletInfo.balance + balanceWalletInfo.unconfirmedBalance).toFixed(8);
+            const currencyRequest = await $http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
+            const balanceInUSD = currencyRequest.data.data.rates.USD;
+            return {bhc: balanceInBHC, usd: balanceInUSD * balanceInBHC};
+        }
+
         const mouseEnterAddress = (className, address) => {
             const container = document.getElementsByClassName(className)[0];
 
@@ -21,6 +51,8 @@ export default class MainCtrl {
         };
 
         const makeUncesorable = async (post) => {
+            $scope.balanceLoading = true;
+
             const simpleWallet = simpleWalletProvider.get();
             const json = {
                 title: post.title,
@@ -81,6 +113,11 @@ export default class MainCtrl {
                   postId: post.id,
                   extId: fileId
               });
+
+              const balances = await getAddressBalances();
+              $scope.addressBalance = balances.bhc;
+              $scope.addressBalanceInUSD = balances.usd;
+              $scope.balanceLoading = false;
             }
         };
 
@@ -188,6 +225,10 @@ export default class MainCtrl {
               txId: tx.txid
           });
 
+          const balances = await getAddressBalances();
+          $scope.addressBalance = balances.bhc
+          $scope.addressBalanceInUSD = balances.usd;
+          $scope.balanceLoading = false;
           $scope.upvotingPostId = null;
 
           /**
