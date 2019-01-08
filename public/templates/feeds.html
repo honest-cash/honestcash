@@ -1,3 +1,26 @@
+<div style="margin-top: 52px;" class="navbar-fixed-top navbar-default hc-header-submenu">
+    <ul class="container list-unstyled list-inline">
+      <li ng-if="hashtag" class="bold" style="color: black">
+          {{hashtag}}
+      </li>
+
+      <li ng-if="!hashtag" ng-class="{ 'bold': feedType === 'userfeed' }" style="color: #777;">
+          Feed
+      </li>
+
+      <li ng-class="{ 'bold': feedType === 'top' }">
+        <a ng-href="{{hashtag ? '/hashtag/' + hashtag : ''}}/top" target="_self">
+          top
+        </a>
+      </li> 
+      <li ng-class="{ 'bold': feedType === 'new' }">
+        <a ng-href="{{hashtag ? '/hashtag/' + hashtag : ''}}/new" target="_self">
+          latest
+        </a>
+      </li>
+    </ul>
+</div>
+
 <div class="visible-xs" style="height:90px;"></div>
 <div class="hidden-xs" style="height:30px;"></div>
 
@@ -9,37 +32,24 @@
 					Honest is a social network where you can earn Bitcoin Cash if you create value. Our mission to improve the quality of content on the internet and to get people paid for doing work they love. <a href="https://honest.cash/honest_cash/about-honest-cash">Read more...</a>
 				</p>
 
-				<button class="btn btn-default btn-lg" ui-sref="starter.welcome">Join the waiting list</button>
+				<a class="btn btn-default btn-lg" href="/signup" target="_self">Join the waiting list</a>
 		</div>
 	</div>
-
-	<div ng-if="hashtag">
-		<h1 class="text-center" ng-if="hashtag">
-			<strong>
-				<span ng-bind="hashtag"></span>
-			</strong> 
-			</h1>
-		<hr>
-		<h3>
-			<ul class="horiontal-list text-center push hidden">
-				<li ng-class="{'selected' : sortType == 'hot' }" class="cursor-pointer" ng-click="sort('hot')">#hot</li>
-				<li ng-class="{'selected' : sortType == 'best' }" class="cursor-pointer" ng-click="sort('best')">#best</li>
-				<li ng-class="{'selected' : sortType == 'new' }" class="cursor-pointer" ng-click="sort('new')">#new</li>
-			</ul>
-		</h3>
-	</div>
 </div>
-
 
 <div class="block-center" style="max-width:1300px; z-index:99;">
 		<div class="hidden-xs hidden-sm col-md-3 hc-feed-sidebar">
 			<div ng-if="user.id" class="pull-left affix" style="min-width: 203px; max-width: 253px; width: 25%;">
-				<h5 class="bold">
-					trending topics
-				</h5>
 				<ul class="list-unstyled">
+          <li ng-class="{ 'bold': feedType === 'userfeed' }" style="margin-bottom:5px;">
+            <a style="margin-bottom:5px;" href="/" target="_self">
+              Feed
+            </a>
+          </li>
 					<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
-						<a ng-class="{ 'bold': hashtag.hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag.hashtag}}">{{hashtag.hashtag}} ({{hashtag.count}})</a>
+            <a ng-class="{ 'bold': hashtag.hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag.hashtag}}">
+              {{hashtag.hashtag}} ({{hashtag.count}})
+            </a>
 					</li>
 				</ul>
 				<small style="font-size: 70%">

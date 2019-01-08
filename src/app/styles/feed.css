@@ -1,3 +1,30 @@
 .hc-feed-sidebar {
   font-size: 12px;
 }
+
+.hc-header-submenu {
+  z-index: 999;
+}
+
+.hc-header-submenu > ul {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.hc-header-submenu > ul > li > a {
+  color: #777;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+
+.hc-header-submenu {
+  min-height: 30px;
+  font-size: 15px;
+}
+
+@media (min-width: 768px) {
+  .hc-header-submenu > ul {
+    padding-left: 15px;
+  }
+}

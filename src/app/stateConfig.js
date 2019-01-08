@@ -1,3 +1,11 @@
+const getFeedState = (url) => {
+  return {
+    url,
+    templateUrl: "/templates/feeds.html",
+    controller: "feedsController"
+  };
+};
+
 export default function state ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("/");
 
@@ -21,21 +29,11 @@ export default function state ($stateProvider, $urlRouterProvider) {
     /**
      * START OF Feeds
      */
-    .state('vicigo.feeds', {
-      url: "/",
-      templateUrl: "/templates/feeds.html",
-      controller: "feedsController",
-		})
-		.state('vicigo.feedsNew', {
-      url: "/new",
-      templateUrl: "/templates/feeds.html",
-      controller: "feedsController"
-    })
-    .state('vicigo.feedsTop', {
-      url: "/top",
-      templateUrl: "/templates/feeds.html",
-      controller: "feedsController"
-    })
+    .state('vicigo.feeds', getFeedState("/"))
+		.state('vicigo.feedsNew', getFeedState("/{feedType:new|top}"))
+    .state('vicigo.hashtag', getFeedState("/hashtag/:hashtag"))
+    .state('vicigo.hashtagFeed', getFeedState("/hashtag/:hashtag/{feedType:new|top}"))
+   
     /**
      * END OF Feeds
      */
@@ -51,11 +49,7 @@ export default function state ($stateProvider, $urlRouterProvider) {
 				}]
 			}
 		})
-		.state('vicigo.hashtag', {
-			url: "/hashtag/:hashtag",
-			templateUrl: "/templates/feeds.html",
-			controller: "feedsController",
-		})
+	
 		.state('vicigo.drafts', {
 			url: "/drafts/",
 			templateUrl: "/templates/drafts.html",
