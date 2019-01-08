@@ -15,7 +15,9 @@ export class Upvote {
 export class Post {
   id: number;
   title: string;
+  alias: string;
   body: string;
+  plain: string;
   user: User;
   createdAt: string;
   publishedAt: string;

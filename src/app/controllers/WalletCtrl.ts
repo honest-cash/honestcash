@@ -1,8 +1,8 @@
 import swal from "sweetalert";
 import * as simpleWalletProvider from "../../core/lib/simpleWalletProvider";
 import generateWallet from '../../core/lib/bitcoinAuthFlow';
-import md5 from "md5";
 import { AuthService } from '../../auth/AuthService';
+import ScopeService from '../../core/services/ScopeService';
 
 declare var SimpleWallet: any;
 declare var bitbox: any;
@@ -13,7 +13,8 @@ export default class WalletCtrl {
       private $scope,
       private $rootScope,
       private $http,
-      private AuthService: AuthService
+      private authService: AuthService,
+      private scopeService: ScopeService,
     ) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
@@ -49,10 +50,10 @@ export default class WalletCtrl {
             return { isValid: false, aborted: true };
           }
 
-          const emails = await AuthService.getEmails();
+          const emails = await this.authService.getEmails();
 
-          const data = await AuthService.passwordCheck({
-            password: this.AuthService.calculatePasswordHash(emails[0], password)
+          const data = await this.authService.passwordCheck({
+            password: this.authService.calculatePasswordHash(emails[0], password)
           });
 
           if (!data.isValid) {
@@ -85,20 +86,21 @@ export default class WalletCtrl {
             } catch (err) {
               $scope.addressBalance = 0;
 
-              $scope.$apply();
+              this.scopeService.safeApply($scope, () => {});
 
               return;
             }
-
-            $scope.walletInfo = walletInfo;
+            
             const balanceInBHC = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
             const currencyRequest = await $http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
-            const balanceInUSD = currencyRequest.data.data.rates.USD;            
+            const balanceInUSD = currencyRequest.data.data.rates.USD;
+            
+            $scope.walletInfo = walletInfo;
             $scope.addressBalance = balanceInBHC;
-            $scope.addressBalanceInUSD  = balanceInBHC * balanceInUSD;
+            $scope.addressBalanceInUSD  = (balanceInBHC * balanceInUSD).toFixed(2);
             $scope.balanceLoading = false;
 
-            $scope.$apply();
+            this.scopeService.safeApply($scope, () => {});
         };
 
         if ($scope.connectedMnemonic) {
@@ -258,7 +260,7 @@ export default class WalletCtrl {
 
           const mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, password);
 
-          this.AuthService
+          this.authService
           .setWallet({ mnemonicEncrypted })
           .then(() => {
             $scope.connect(newMnemonic, HdPath);
@@ -290,7 +292,7 @@ export default class WalletCtrl {
 
             const simpleWallet = await generateWallet({ password });
 
-            this.AuthService
+            this.authService
             .setWallet({ mnemonicEncrypted: simpleWallet.mnemonicEncrypted })
             .then(() => {
               $scope.connect(simpleWallet.mnemonic, simpleWallet.HdPath);
@@ -313,5 +315,11 @@ export default class WalletCtrl {
         $scope.disconnect = disconnect;
     }
 
-    static $inject = [ "$scope", "$rootScope", "$http", "AuthService" ];
+    static $inject = [
+      "$scope",
+      "$rootScope",
+      "$http",
+      "AuthService",
+      "ScopeService"
+    ];
 }
