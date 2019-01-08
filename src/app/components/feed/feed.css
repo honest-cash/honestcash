@@ -116,8 +116,7 @@
 }
 
 @media (max-width: 990px) {
-	.feed-row {
-		margin-left: -40px;
-		margin-right: -40px;
+	.feed-column {
+		padding: 5px;
 	}
   }
