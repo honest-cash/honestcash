@@ -1,135 +1,132 @@
-<div class="container">
+<div class="col-xs-12">
   <div class="row visible-xs" style="margin-top: 80px;"></div>
 
-  <!-- INTRODUCTION ROW -->
   <div class="row">
-    <div class="col-xs-12">
-      <div class="col-xs-12 col-sm-3 col-md-2">
-        <img
-          ng-if="profile.imageUrl"
-          id="profilePic"
-          fallback-src="{{ '/img/avatar.png' }}"
-          class="img-circle img-thumbnail-avatar-big image-center"
-          ng-src="{{ profile.imageUrl }}"
-        />
-        <img
-          ng-if="!profile.imageUrl"
-          id="profilePic"
-          class="img-circle img-thumbnail-avatar-big image-center"
-          ng-src="/img/avatar.png"
-        />
+    <div class="col-xs-12 col-sm-3 col-md-2">
+      <img
+        ng-if="profile.imageUrl"
+        id="profilePic"
+        fallback-src="{{ '/img/avatar.png' }}"
+        class="img-circle img-thumbnail-avatar-big image-center"
+        ng-src="{{ profile.imageUrl }}"
+      />
+      <img
+        ng-if="!profile.imageUrl"
+        id="profilePic"
+        class="img-circle img-thumbnail-avatar-big image-center"
+        ng-src="/img/avatar.png"
+      />
+    </div>
+    <div class="pull-left col-xs-12 col-sm-9 col-md-10">
+      <div>
+        <h1 class="text-center-sm">
+          {{ profile.username }}
+          <span class="follow-unfollow" ng-if="profile.id !== user.id">
+            <button
+              ng-click="follow(profile.id, profile)"
+              ng-if="!profile.alreadyFollowing"
+              class="btn btn-default btn-lg btn-follow"
+            >
+              FOLLOW
+            </button>
+            <button
+              ng-click="follow(profile.id, profile)"
+              ng-if="!profile.id"
+              class="btn btn-default btn-lg btn-follow"
+            >
+              <a href="https://honest.cash/signup">FOLLOW</a>
+            </button>
+            <button
+              ng-click="unfollow(profile.id, profile)"
+              ng-if="profile.alreadyFollowing"
+              class="btn btn-success btn-lg btn-unfollow"
+            >
+              UNFOLLOW
+            </button>
+          </span>
+          <span class="edit-profile" ng-if="profile.id === user.id">
+            <a
+              class="btn btn-default btn-md"
+              href="/profile/{{ profile.username }}/edit"
+              >Edit profile</a
+            >
+          </span>
+        </h1>
+
+        <div class="hidden-xs">
+          <span
+            ng-if="profile.addressBCH"
+            ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)"
+            ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')"
+          >
+            {{ profile.addressBCH }}
+          </span>
+        </div>
+        <div class="profile-bch-qr-code"></div>
+
+        <div>
+          <span class="text-center-sm" ng-if="profile.bio">
+            {{ profile.bio }}
+          </span>
+        </div>
       </div>
-      <div class="pull-left col-xs-12 col-sm-9 col-md-10">
-        <div>
-          <h1 class="text-center-sm">
-            {{ profile.username }}
-            <span class="follow-unfollow" ng-if="profile.id !== user.id">
-              <button
-                ng-click="follow(profile.id, profile)"
-                ng-if="!profile.alreadyFollowing"
-                class="btn btn-default btn-lg btn-follow"
-              >
-                FOLLOW
-              </button>
-              <button
-                ng-click="follow(profile.id, profile)"
-                ng-if="!profile.id"
-                class="btn btn-default btn-lg btn-follow"
-              >
-                <a href="https://honest.cash/signup">FOLLOW</a>
-              </button>
-              <button
-                ng-click="unfollow(profile.id, profile)"
-                ng-if="profile.alreadyFollowing"
-                class="btn btn-success btn-lg btn-unfollow"
-              >
-                UNFOLLOW
-              </button>
-            </span>
-            <span class="edit-profile" ng-if="profile.id === user.id">
+
+      <div>
+        <ul class="list-unstyled list-inline" style="margin-top:3px">
+          <li
+            ng-class="{ 'bold': showProfileTab === 'feeds' }"
+            class="middle-size showProfileTab"
+            ng-click="showFeeds()"
+          >
+            <a href="#" class="showProfileTab">
+              <span ng-bind="profile.followers_count"></span>
+              <small>Stories</small>
+            </a>
+          </li>
+          <li
+            ng-class="{ 'bold': showProfileTab === 'followers' }"
+            class="middle-size showProfileTab"
+            ng-click="showFollowers()"
+          >
+            <a href="#" class="showProfileTab">
+              <span ng-bind="profile.followerCount"></span>
+              <small>Followers</small>
+            </a>
+          </li>
+          <li
+            ng-class="{ 'bold': showProfileTab === 'following' }"
+            class="middle-size showProfileTab"
+            ng-click="showFollowing()"
+          >
+            <a href="#" class="showProfileTab">
+              <span ng-bind="profile.followingCount"></span>
+              <small>Following</small>
+            </a>
+          </li>
+
+          <li ng-if="profile.twitter || profile.reddit">•</li>
+
+          <li>
+            <span class="text-center-sm" ng-if="profile.twitter">
               <a
-                class="btn btn-default btn-md"
-                href="/profile/{{ profile.username }}/edit"
-                >Edit profile</a
+                href="https://twitter.com/{{ profile.twitter }}"
+                target="_blank"
               >
-            </span>
-          </h1>
-
-          <div class="hidden-xs">
-            <span
-              ng-if="profile.addressBCH"
-              ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)"
-              ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')"
-            >
-              {{ profile.addressBCH }}
-            </span>
-          </div>
-          <div class="profile-bch-qr-code"></div>
-
-          <div>
-            <span class="text-center-sm" ng-if="profile.bio">
-              {{ profile.bio }}
-            </span>
-          </div>
-        </div>
-
-        <div>
-          <ul class="list-unstyled list-inline" style="margin-top:3px">
-            <li
-              ng-class="{ 'bold': showProfileTab === 'feeds' }"
-              class="middle-size showProfileTab"
-              ng-click="showFeeds()"
-            >
-              <a href="#" class="showProfileTab">
-                <span ng-bind="profile.followers_count"></span>
-                <small>Stories</small>
+                <i class="fa fa-twitter"></i>
               </a>
-            </li>
-            <li
-              ng-class="{ 'bold': showProfileTab === 'followers' }"
-              class="middle-size showProfileTab"
-              ng-click="showFollowers()"
-            >
-              <a href="#" class="showProfileTab">
-                <span ng-bind="profile.followerCount"></span>
-                <small>Followers</small>
+            </span>
+          </li>
+          <li>
+            <span class="text-center-sm" ng-if="profile.reddit">
+              <a
+                href="https://reddit.com/user/{{ profile.reddit }}"
+                target="_blank"
+              >
+                <i class="fa fa-reddit"></i>
               </a>
-            </li>
-            <li
-              ng-class="{ 'bold': showProfileTab === 'following' }"
-              class="middle-size showProfileTab"
-              ng-click="showFollowing()"
-            >
-              <a href="#" class="showProfileTab">
-                <span ng-bind="profile.followingCount"></span>
-                <small>Following</small>
-              </a>
-            </li>
-
-            <li ng-if="profile.twitter || profile.reddit">•</li>
-
-            <li>
-              <span class="text-center-sm" ng-if="profile.twitter">
-                <a
-                  href="https://twitter.com/{{ profile.twitter }}"
-                  target="_blank"
-                >
-                  <i class="fa fa-twitter"></i>
-                </a>
-              </span>
-            </li>
-            <li>
-              <span class="text-center-sm" ng-if="profile.reddit">
-                <a
-                  href="https://reddit.com/user/{{ profile.reddit }}"
-                  target="_blank"
-                >
-                  <i class="fa fa-reddit"></i>
-                </a>
-              </span>
-            </li>
-          </ul>
-        </div>
+            </span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -149,11 +146,11 @@
   </div>
 </div>
 
-<div class="container">
-  <div style="min-height:350px;">
+<div class="col-xs-12 feed-column">
+  <div class="row" style="min-height:350px;">
     <div
       ng-if="showProfileTab === 'feeds' && !feeds.length && user.id == profile.id"
-      class="text-center"
+      class="text-center col-xs-12"
     >
       <h2>Write your first post!</h2>
       <a ui-sref="editor.write">
@@ -163,7 +160,10 @@
       </a>
     </div>
 
-    <div ng-if="hashtag && showProfileTab == 'feeds'" class="text-center">
+    <div
+      ng-if="hashtag && showProfileTab == 'feeds'"
+      class="text-center col-xs-12"
+    >
       <h2>
         <strong>#{{ hashtag }}</strong>
         <button
@@ -175,7 +175,7 @@
       </h2>
     </div>
 
-    <div ng-if="showProfileTab=='feeds'">
+    <div ng-if="showProfileTab=='feeds'" class="col-xs-12">
       <div ng-if="user.id==profileId">
         <div class="row" ng-repeat="draft in drafts">
           <div class="push feed">
@@ -203,7 +203,10 @@
       <ng-include src="'templates/partials/feed-angular.html'"></ng-include>
     </div>
 
-    <div ng-if="showProfileTab=='followers' || showProfileTab=='following'">
+    <div
+      ng-if="showProfileTab=='followers' || showProfileTab=='following'"
+      class="col-xs-12"
+    >
       <div class="width640 block-center">
         <strong ng-if="showProfileTab=='followers'"
           >{{ profile.username }} is followed by</strong
