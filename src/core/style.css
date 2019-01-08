@@ -1,12 +1,16 @@
 body {
 	width:100%;  
 	font-family: 'Helvetica', sans-serif;
-	font-size: 15px;
+	font-size: 12px;
 	font-weight: 300;
 	/* color: #777; */
 	line-height: 1.6;
 	background-color:#fafafa;
 	padding-top: 70px;
+}
+
+img {
+  max-width: 100%;
 }
 
 a {
@@ -48,10 +52,6 @@ h4 {
 	margin:5px 0 5px 0;
 }
 
-.editable-error {
-	font-size: 12px;
-}
-
 .uppercase {
 	text-transform: uppercase;
 }
@@ -67,9 +67,6 @@ h4 {
 .navbar-default {
 	background-color:white;
 	border-bottom: 1px solid #eeeeee;
-	-webkit-box-shadow:0px 1px 1px #de1dde;
-  -moz-box-shadow:0px 1px 1px #de1dde;
-  box-shadow:0px 1px 1px #de1dde;
 }
 
 .header_menu {
@@ -79,27 +76,17 @@ h4 {
 }
 
 .header_menu li {
-				list-style-type: none;
-        margin: 0;
-        padding: 0;
-        padding-top: 3px;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid #eeeeee;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 3px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .menu-item-profile {
 	padding:10px;
-}
-
-.list-feed-actions {
-	padding-left : 30px;
-	padding-right : 30px;
-}
-
-.list-feed-actions li {
-	padding-left : 20px;
-	padding-right : 20px;
 }
 
 img.lazy {
@@ -168,39 +155,8 @@ img.lazy {
 	font-weight: bold;
 }
 
-.middle-size {
-	font-size: 20px;
-	padding: 14px;
-}
-
-.bold-big {
-	font-size: 24px;
-	padding: 15px;
-	font-weight: bold;
-}
-
 .padding-top {
 	padding-top: 5px;
-}
-
-.side-padding {
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-.post-feed-body {
-	width:100%;  
-	font-family: 'Helvetica', sans-serif;
-
-  font-weight: 300 !important;
-  font-style: normal !important;
-  font-size: 17px !important;
-  line-height: 1.58 !important;
-	/* color: #777; */
-	line-height: 1.6;
-	background-color:white;
-	max-width: 100%;
-	font-size: 17px;
 }
 
 .block-center {
@@ -208,8 +164,8 @@ img.lazy {
 }
 
 .img-thumbnail-avatar-big {
-	height: 150px;
-	width: 150px;
+	height: 135px;
+	width: 135px;
 }
 
 .img-thumbnail-avatar-normal {
@@ -217,11 +173,7 @@ img.lazy {
 	width: 100px;
 }
 
-.img-avatar-blog {
-	height: 30px;
-	width: 30px;
-}
-.post-content{
+.post-content {
 	width:100%;
 }
 .img-thumbnail-avatar-small {
@@ -371,4 +323,11 @@ img.lazy {
 	.feed-hashtag {
 		font-size: 8px;
 	}
+}
+
+.hashtag {
+  color: #444;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
 }

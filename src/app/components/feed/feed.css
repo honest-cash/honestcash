@@ -4,6 +4,21 @@
     color: #444 !important;
 }
 
+.post-feed-body {
+	width:100%;  
+	font-family: 'Helvetica', sans-serif;
+
+  font-weight: 300 !important;
+  font-style: normal !important;
+  font-size: 17px !important;
+  line-height: 1.58 !important;
+	/* color: #777; */
+	line-height: 1.6;
+	background-color:white;
+	max-width: 100%;
+	font-size: 17px;
+}
+
 .feed {
     overflow-wrap: break-word;
     /*word-break: break-all;*/
@@ -17,20 +32,20 @@
 }
 
 .feed-image {
-    display: block;
-    height: 200px;
-    line-height: 200px;
-	margin-left: auto;
-	margin-right: auto;
-    width: 100%;
-    overflow: hidden;
-    margin-bottom: 10px;
+  display: block;
+  height: 200px;
+  line-height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 10px;
 }
 
 .feed-image img {
-    height: auto;
-    position: relative;
-	width: 100%;
+  height: auto;
+  position: relative;
+  width: 100%;
 }
 
 .image-feed-body {
@@ -40,15 +55,18 @@
 
 .feed-title {
 	padding-left:5px;
-    padding-right:5px;
-    margin-bottom: 10px;
+  padding-right:5px;
+  margin-bottom: 10px;
 }
 
-.feed-container{
+.feed-title h3 {
+  font-size: 18px;
+}
+
+.feed-container {
 	margin-top:5px;
 	margin-bottom:20px;
-} 
-
+}
 
 .feed .feed-header {
 	  background-color:white;
@@ -88,15 +106,15 @@
 
 .feed-body p {
 	padding: 8px;
-	font-size: 15px;
+	font-size: 14px;
 	cursor: pointer;
 }
 
 .feed .feed-footer .hashtag {
-	padding: 2px;
-	font-weight: bold;
-	font-size: 12px;
-	cursor: pointer;
+  padding: 2px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .feed .feed-footer .feed-actions .list {

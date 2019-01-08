@@ -223,16 +223,16 @@ export default class WelcomeCtrl {
           this.$scope.message = "E-Mail wrongly formatted!";
           break;
         case "WRONG_PASSWORD":
-          this.$scope.message = "Wrong password";
+          this.$scope.message = "Incorrect email address and / or password.";
           break;
         case "NO_USER_FOUND":
-          this.$scope.message = "User not found";
+          this.$scope.message = "Incorrect email address and / or password.";
           break;
         case "LOG_IN_WITH_FACEBOOK":
           this.$scope.message = "Log in with Facebook";
           break;
         case "EMAIL_NOT_FOUND":
-          this.$scope.message = "E-mail could not be found.";
+          this.$scope.message = "Incorrect email address and / or password.";
           break;
         case "PASSWORDS_DO_NOT_MATCH":
           this.$scope.message = "Passwords do not match!";

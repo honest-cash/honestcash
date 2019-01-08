@@ -8,12 +8,6 @@ export const onStateChange = function($rootScope, $state, AuthService) {
         $rootScope.welcome = false;
     }
 
-    if (next.name.indexOf("vicigo.feeds") > -1 || next.name === "vicigo.hashtag") {
-      $rootScope.showSubheader = true;
-    } else {
-      $rootScope.showSubheader = false;
-    }
-
     if (next.name.indexOf("starter.") > -1) {
         $rootScope.noHeader = true;
     } else {

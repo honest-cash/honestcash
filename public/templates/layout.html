@@ -28,13 +28,13 @@
       <div class="navbar-collapse collapse">
          <ul class="nav navbar-nav navbar-right" >
             <li ng-if="!user">
-              <a ui-sref="starter.login">
+              <a href="/login" target="_self">
                 <i class="gi gi-settings fa-fw pull-right"></i> login
               </a>
             </li>
 
             <li ng-if="!user">
-              <a ui-sref="starter.signup">
+              <a href="/signup" target="_self">
                 <i class="gi gi-settings fa-fw pull-right"></i> signup
               </a>
             </li>
@@ -74,9 +74,21 @@
             </li>
 
             <li class="visible-xs" ng-if="user.id">
-                <a style="margin-top: 5px;" href="/honest_cash/honest-cash-terms-of-service-124/"" target="_self">
-                  terms of service
-                </a>
+              <a style="margin-top: 5px;" href="/honest_cash/frequently-asked-questions/"" target="_self">
+                help
+              </a>
+            </li>
+
+            <li class="visible-xs" ng-if="user.id">
+              <a style="margin-top: 5px;" href="/honest_cash/honest-cash-terms-of-service-124/"" target="_self">
+                terms of service
+              </a>
+            </li>
+
+            <li class="visible-xs" ng-if="user.id">
+              <a style="margin-top: 5px;" href="/honest_cash/honestcash-privacy-policy/"" target="_self">
+                privacy policy
+              </a>
             </li>
 
             <li ng-if="user" class="visible-xs" role="menuitem">
@@ -106,71 +118,13 @@
          </ul>
       </div>
     </div>
-    <div ng-if="showSubheader" class="container hc-header-submenu">
-      <ul class="list-unstyled list-inline" style="color: #777;" >
-        <li ng-class="{ 'bold': feedType === 'userfeed' }">
-          <a href="/" target="_self">
-            my feed
-          </a>
-        </li>
-        <li ng-class="{ 'bold': feedType === 'top' }">
-          <a href="/top" target="_self">
-            top
-          </a>
-        </li> 
-        <li ng-class="{ 'bold': feedType === 'all' }">
-          <a href="/new" target="_self">
-            latest
-          </a>
-        </li>
-      </ul>
-    </div>
+    
 </div>
-
- 
-
 
 	<div style="min-height:440px;">
 		<div style="height:25px;"></div>
 		<div ui-view class="container" autoscroll="true"></div>
 	</div>
-
-	<script type="text/ng-template" id="searchResults.html">
-
-			<div class="padding">
-			<span ng-if="match.model.type=='profile'"><i class="fa fa-user fa-2x"></i></span>
-			<span ng-if="match.model.type=='hashtag'"><i class="fa fa-hashtag fa-2x"></i></span>
-			<span ng-if="match.model.type=='post'"><i class="fa fa-file-text-o fa-2x"></i></span>
-			
-
-			<span ng-bind-html="match.model.header | uibTypeaheadHighlight:query"></span>
-			
-			<div ng-show="noResults">
-      <i class="fa fa-times"></i> No Results Found
-   		</div>
-			<div>
-
-</script>	
-		
-<script type="text/ng-template" id="searchResultsPopup.html">
-  <div class="search-results-wrapper"
-     ng-style="{top: position().top+'px', left: position().left+'px'}"
-     style="display: block;"
-     ng-show="isOpen() && !moveInProgress"
-     aria-hidden="{{!isOpen()}}">
-   
-
-    <ul class="dropdown-menu" role="listbox">
-			
-        <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }"
-            ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
-            <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
-				<hr if="!&first">		
-        </li>
-				
-    </ul>
-  </div>
-</script>
 
 <footer class="site-section site-content themed-background-muted" ng-if="welcome">
 		<div class="container">
@@ -187,7 +141,7 @@
             <small>
               <ul class="list-unstyled list-inline">
                 <li>
-                  <a href="/login">Login</a>
+                  <a href="/login" target="_self">Login</a>
                 </li>
                 <li>
                   <a href="https://honest.cash/honest_cash/about-honest-cash" target="_self">About</a>

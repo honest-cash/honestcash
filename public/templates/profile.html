@@ -22,7 +22,7 @@
       <div class="pull-left col-xs-12 col-sm-9 col-md-10">
         <div>
           <h1 class="text-center-sm">
-            {{ profile.username }}
+            <span class="bold">{{ profile.username }}</span>
             <span class="follow-unfollow" ng-if="profile.id !== user.id">
               <button
                 ng-click="follow(profile.id, profile)"
@@ -58,16 +58,16 @@
           <div class="hidden-xs">
             <span
               ng-if="profile.addressBCH"
-              ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)"
-              ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')"
             >
-              {{ profile.addressBCH }}
+              <a href="https://explorer.bitcoin.com/bch/address/{{profile.addressBCH}}" target="_blank">{{ profile.addressBCH }}</a>
+              <i style="cursor:pointer;" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)"
+              ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')" class="fa fa-qrcode" aria-hidden="true"></i>
             </span>
           </div>
           <div class="profile-bch-qr-code"></div>
 
           <div>
-            <span class="text-center-sm" ng-if="profile.bio">
+            <span class="profile-bio text-center-sm" ng-if="profile.bio">
               {{ profile.bio }}
             </span>
           </div>
@@ -77,7 +77,7 @@
           <ul class="list-unstyled list-inline" style="margin-top:3px">
             <li
               ng-class="{ 'bold': showProfileTab === 'feeds' }"
-              class="middle-size showProfileTab"
+              class="showProfileTab"
               ng-click="showFeeds()"
             >
               <a href="#" class="showProfileTab">
@@ -87,7 +87,7 @@
             </li>
             <li
               ng-class="{ 'bold': showProfileTab === 'followers' }"
-              class="middle-size showProfileTab"
+              class="showProfileTab"
               ng-click="showFollowers()"
             >
               <a href="#" class="showProfileTab">
@@ -97,7 +97,7 @@
             </li>
             <li
               ng-class="{ 'bold': showProfileTab === 'following' }"
-              class="middle-size showProfileTab"
+              class="showProfileTab"
               ng-click="showFollowing()"
             >
               <a href="#" class="showProfileTab">

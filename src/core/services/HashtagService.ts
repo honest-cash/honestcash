@@ -8,10 +8,16 @@ export default class HashtagService {
     private API_URL
   ) {}
 
-  public async getTopHashtags(): Promise<HashtagStat[]> {
-    const res = await this.$http.get(this.API_URL + "/hashtag");
+  private hashtags: HashtagStat[];
 
-    return res.data;
+  public async getTopHashtags(): Promise<HashtagStat[]> {
+    if (!this.hashtags) {
+      const res = await this.$http.get(this.API_URL + "/hashtag");
+
+      this.hashtags = res.data;
+    }
+
+    return this.hashtags;
   };
 
   static $inject = [

@@ -27,13 +27,21 @@ export default function ($http, API_URL) {
 		});
 	};
 
+  let recommendedProfiles;
+
 	const fetchRecommentedProfiles = function (profileId, params, callback) {
+    if (recommendedProfiles) {
+      return callback(recommendedProfiles);
+    }
+
 		$http({
 			url: API_URL + "/user/" + profileId + "/recommended-profiles",
 			method: "GET",
 			params: params
 		}).then(function (response) {
-			callback(response.data);
+      recommendedProfiles = response.data;
+
+			callback(recommendedProfiles);
 		});
 	};
 

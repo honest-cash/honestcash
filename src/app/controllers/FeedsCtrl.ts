@@ -14,35 +14,20 @@ export default class FeedsCtrl {
     private profileService,
     private scopeService: ScopeService,
   ) {
-		$scope.feeds = [];
-		$scope.page = 1;
-		$scope.limit = 10;
-		$rootScope.isLoading = true;
-		$scope.postsAvailable = true;
-		$scope.hashtagFollowed = false;
-		$scope.hashtag = $stateParams.hashtag;
-  
-    const feedType = location.pathname === "/" ?
-      "userfeed" :
-      location.pathname === "/top" ?
-      "top" :
-      "all";
+    this.$rootScope.isLoading = true;
+		this.$scope.feeds = [];
+		this.$scope.page = 1;
+		this.$scope.limit = 10;
+		this.$scope.postsAvailable = true;
+		this.$scope.hashtagFollowed = false;
+    this.$scope.hashtag = $stateParams.hashtag;
+    this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed") as "userfeed" | "top" | "new";
 
-    $rootScope.feedType = feedType;
+		this.$scope.sortType = "new";
+		this.$scope.recommendedHashtags = [];
+		this.$scope.recommendedProfiles = [];
 
-		if ($scope.hashtag) {
-			$http.get("/api/hashtag/" + $scope.hashtag).then((response) => {
-				
-				$scope.hashtagInfo = response.data;
-			});
-		}
-
-		$scope.sortType = "new";
-		$scope.filterType = $location.search()["filter"] ? $location.search()["filter"] : null;
-		$scope.recommendedHashtags = [];
-		$scope.recommendedProfiles = [];
-
-    hashtagService.getTopHashtags()
+    this.hashtagService.getTopHashtags()
     .then(hashtags => {
       $scope.hashtags = hashtags;
 
@@ -57,75 +42,65 @@ export default class FeedsCtrl {
       });
     }
 
-		$scope.fetchPost = (postId, index) => {
-			$http.get("/post/" + postId).then((response) => {
-				$scope.feeds[index].body = response.data.post_body;
-				$scope.feeds[index].isFull = true;
-			});
-		};
+		this.$scope.fetchFeeds = () => this.fetchFeeds();
+    this.$scope.loadMore = () => this.loadMore();
 
-		$scope.removePost = (feed, isDraft, $index) => {
-			bootbox.confirm("Are you sure?", (result) => {
-				if (result) {
-					PostService.removePost(feed.id);
-					return (isDraft) ? $scope.drafts.splice($index, 1) : $scope.feeds.splice($index, 1);
-				}
-			});
-		};
+    this.fetchFeeds();
+  }
 
-		$scope.fetchFeeds = () => {
-			const obj = {
-				page: $scope.page,
-				hashtag: $scope.hashtag,
-			};
+  protected loadMore() {
+    if (!this.$rootScope.activeCalls && this.$scope.postsAvailable) {
+      this.$scope.page = this.$scope.page + 1;
 
-			if (feedType === "userfeed") {
-				obj.followerId = $rootScope.user ? $rootScope.user.id : undefined;
+      this.fetchFeeds();
+    }
+  };
+
+  protected fetchFeeds() {
+    const obj = {
+      page: this.$scope.page,
+      hashtag: this.$scope.hashtag,
+      followerId: undefined,
+      orderBy: undefined
+    };
+
+    if (this.$scope.feedType === "userfeed") {
+      obj.followerId = this.$rootScope.user ? this.$rootScope.user.id : undefined;
+    }
+
+    if (this.$scope.feedType === "top") {
+      obj.orderBy = "upvoteCount";
+    }
+
+    this.FeedService.fetchFeeds(obj, (data) => {
+      if (data) {
+        data.forEach((feed) => {
+          this.$scope.feeds.push(feed);
+        });
+
+        if (data.length < this.$scope.limit) {
+          this.$scope.postsAvailable = false;
+        } else {
+          this.$scope.postsAvailable = true;
+        }
+      } else {
+        this.$scope.postsAvailable = false;
       }
 
-      if (feedType === "top") {
-				obj.orderBy = "upvoteCount";
-			}
+      this.$rootScope.isLoading = false;
+    });
+  };
 
-      FeedService.fetchFeeds(obj, (data) => {
-				if (data) {
-					data.forEach((feed) => {
-						$scope.feeds.push(feed);
-					});
-
-					if (data.length < $scope.limit) {
-						$scope.postsAvailable = false;
-					} else {
-						$scope.postsAvailable = true;
-					}
-				} else {
-					$scope.postsAvailable = false;
-				}
-
-				$rootScope.isLoading = false;
-			});
-		};
-
-		$scope.fetchFeeds();
-
-		$scope.loadMore = () => {
-			if (!$rootScope.activeCalls && $scope.postsAvailable) {
-				$scope.page = $scope.page + 1;
-				$scope.fetchFeeds();
-			}
-		};
-  }
+  static $inject = [
+    "$rootScope",
+    "$scope",
+    "$stateParams",
+    "$location",
+    "$http",
+    "FeedService",
+    "PostService",
+    "HashtagService",
+    "ProfileService",
+    "ScopeService"
+  ];
 }
-
-FeedsCtrl.$inject = [
-  "$rootScope",
-  "$scope",
-  "$stateParams",
-  "$location",
-  "$http",
-  "FeedService",
-  "PostService",
-  "HashtagService",
-  "ProfileService",
-  "ScopeService"
-];

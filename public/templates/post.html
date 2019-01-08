@@ -2,7 +2,7 @@
   <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
 </div>
 
-<div ng-if="!postCtrl.isLoading" class="container">
+<div ng-if="!postCtrl.isLoading">
 	<div class="col-xs-12 visible-xs" style="height:70px;"></div>
 	<div class="col-md-8 col-md-offset-2">
 		<div class="row ng-cloak">
@@ -20,8 +20,6 @@
 			<div ng-include="'postHeader'"></div>
 		</div>
 
-		<hr />
-
 		<div class="row post-container">
 			<article class="site-block post-body" ng-bind-html="displayFeedBody(postCtrl.post.body)"></article>
 		</div>
@@ -30,7 +28,7 @@
 		<div class="row">
         <ul class="list-unstyled list-inline">
           <li ng-repeat="hashtag in postCtrl.post.userPostHashtags">
-            <a class="pull-left" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">#{{ ::hashtag.hashtag}}</a>
+            <a class="pull-left hashtag" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">{{ ::hashtag.hashtag}}</a>
           </li>
         </ul>
     </div>
@@ -97,20 +95,14 @@
 			<div class="block-center">
 				<div class="panel" ng-show="!user" >
 					<div class="panel-body">
-						<h2>Give a tip to the author</h2>
-
-						<a class="btn btn-lg btn-default" href="/signup" target="_self">Join Honest community and upvote it</a>
-
-						<p>
-							... or tip from any other Bitcoin Cash wallet.
-						</p>
+						<h3>Give a tip to the author</h3>
 
 						<input disabled="true" ng-model="postCtrl.post.user.addressBCH" class="form-control" />
 
             <div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
 
 						<p>
-							You can also tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to be logged in for your tips to receive future upvote rewards.
+							You can tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to be logged in for your tips to receive future upvote rewards.
 						</p>
 					</div>
 				</div>
@@ -130,12 +122,12 @@
 		</div>
 
 		<div class="row" ng-if="postCtrl.upvotes && postCtrl.post.user.addressBCH">
-			<h4><i class="fa fa-btc"></i> <strong>Upvotes ({{postCtrl.upvotes.length}})</strong></h4>
+			<span><i class="fa fa-btc"></i> <strong>Upvotes ({{postCtrl.upvotes.length}})</strong></span>
 
 			<p ng-if="!postCtrl.upvotes.length"><small>No upvotes.</small></p>
 
 			<ul class="list-inline list-unstyled">
-				<li ng-repeat="upvote in postCtrl.upvotes" style="margin-bottom:5px;">
+				<li ng-repeat="upvote in postCtrl.upvotes" class="post-upvote" style="margin-bottom:5px;">
           <a ng-href="/profile/{{upvote.user.username}}" target="_self">
             <img src="{{upvote.user.imageUrl || '/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-smallest" />
           </a>
@@ -147,9 +139,9 @@
 		</div>
 
 		<div class="row">
-			<h4 style="margin-bottom: 10px;">
+			<span style="margin-bottom: 15px;">
 				<strong>Responses ({{postCtrl.post.responseCount}})</strong>
-			</h4>
+      </span>
 
 			<div class="block-center">
 				<div class="panel">
@@ -173,9 +165,6 @@
 
 			<div class="block-center" ng-repeat="response in postCtrl.responses">
         <div ng-include="'response'"></div>
-        <div ng-repeat="response in response.userPosts" >
-          <div style="margin-left: 30px;" ng-include="'response'"></div>
-        </div>
 			</div>
 		</div>
 	</div>
@@ -185,30 +174,25 @@
   <div class="panel">
     <div class="panel-body">
       <ul class="list-unstyled list-inline">
-        <li>
-          <a ui-sref="vicigo.profile({profileId: response.user.id})">
-            <img ng-if="response.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{response.user.imageUrl}}" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small" />
-            <img ng-if="!response.user.imageUrl" src="/img/avatar.png" alt="{{response.user.username}}" class="img-circle img-thumbnail-avatar-small" />
-          </a>
+        <li style="vertical-align:middle">
+          <small style="margin-top:50px;">
+            <a ui-sref="vicigo.profile({profileId: response.user.id})">
+            {{::response.user.username}} ({{response.user.followerCount}})</a>
+            </small>
         </li>
 
         <li style="vertical-align:middle">
-          <strong style="margin-top:50px;">
-            <a ui-sref="vicigo.profile({profileId: response.user.id})">
-            {{::response.user.username}} ({{response.user.followerCount}})</a></strong>
-          <br />
-
           <small class="text-muted">
             <span ng-if="!post.post_publish_timestamp_formatted">{{::response.publishedAt}}</span>
           </small>
         </li>
       </ul>
 
-      <h2>
+      <h2 class="response-title">
         <strong>{{response.title}}</strong>
       </h2>
 
-      <article class="site-block post-body" ng-bind-html="displayFeedBody(response.body)"></article>
+      <article class="site-block response-body" ng-bind-html="displayFeedBody(response.body)"></article>
 
       <ul class="list-inline list-unstyled">
         <li>
@@ -234,6 +218,13 @@
         </li>
       </ul>
     </div>
+  </div>
+  <div ng-repeat="response in response.userPosts" >
+    <div style="border-left: 2px solid rgb(237, 239, 241); margin-left: 20px;" ng-include="'response'"></div>
+  </div>
+
+  <div ng-if="!response.userPosts && response.responseCount" style="margin-bottom:25px; border-left: 2px solid rgb(237, 239, 241); margin-left: 20px;">
+    <a ng-href="/{{response.user.username}}/{{response.alias}}" class="btn btn-block btn-primary">Load more replies</a>
   </div>
 </script>
 
