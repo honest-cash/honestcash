@@ -15,10 +15,10 @@ export default class PostService {
 
   public publishPic(postId, params, callback) {
     this.$http.put(this.API_URL + "/post/image/publish", {
-        postId: postId,
-        tags: params.hashtags
+      postId: postId,
+      tags: params.hashtags
     }).then((response) => {
-        callback(response.data);
+      callback(response.data);
     });
   };
 
@@ -45,6 +45,12 @@ export default class PostService {
     });
 
     return post;
+  }
+
+  public async createPost(post: Post): Promise<Post> {
+    const res = await this.$http.post(`${this.API_URL}/post`, post);
+
+    return this.processPost(res.data);
   }
 
   public displayHTML(html: string): string {

@@ -71,6 +71,7 @@
     "simple-bitcoin-wallet": "0.0.5-alpha.3",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^7.32.2",
+    "tippy.js": "^3.4.0",
     "toastr": "^2.1.4",
     "twit": "^2.1.1",
     "ui-router": "^1.0.0-alpha.3"

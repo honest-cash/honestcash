@@ -72,7 +72,7 @@
 				</li>
 				<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
 				<li ng-show="!postCtrl.post.userPostRefs.length" ng-if="user.id === postCtrl.post.userId" ng-click="makeUncesorable(postCtrl.post)">
-					<a class="btn btn-default" href="#">
+					<a data-tippy-content="Your story will be saved on blockchain." class="hc-tooltip btn btn-default" href="#">
 						<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> Uncensorable</a>
 					</a>
 				</li>
@@ -143,7 +143,7 @@
 				<strong>Responses ({{postCtrl.post.responseCount}})</strong>
       </span>
 
-			<div class="block-center">
+      <div class="block-center">
 				<div class="panel">
 					<div class="panel-body" style="cursor: pointer;">
 						<a target="_self" ng-href="{{user.id ? '/write/response/' + postCtrl.post.id : '/signup' }}">
@@ -212,7 +212,7 @@
           </a>
         </li>
         <li>
-          <a href="#" ui-sref="vicigo.post({ alias: response.alias, username: response.user.username })">
+          <a href="#" ui-sref="vicigo.post({ alias: response.alias || response.id, username: response.user.username })">
             <small>Read more</small>
           </a>
         </li>

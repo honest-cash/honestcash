@@ -11,6 +11,7 @@ import stateConfig from './states';
 
 import '../auth/AuthModule';
 import { AuthService } from '../auth/AuthService';
+import PostService from '../core/services/PostService';
 import '../core/config';
 
 declare var angular: any;
@@ -32,7 +33,7 @@ angular.module("editor-app", [
 .config([ "$locationProvider", "$urlMatcherFactoryProvider", routingConfig ])
 .config([ "$httpProvider", httpConfig ])
 .config([ "$stateProvider", "$urlRouterProvider", stateConfig ])
-
+.service("PostService", PostService)
 .controller("EditorCtrl", EditorCtrl)
 
 .run([ "$rootScope", "AuthService", async ($rootScope: IGlobalScope, AuthService: AuthService) => {
