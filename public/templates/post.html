@@ -70,6 +70,15 @@
 						<i class="fa fa-btc"></i> 0.002 Upvote
 					</button>
 				</li>
+				<li>
+          <small>Share on:</small>
+          <a ng-href="{{postCtrl.post.shareURLs.reddit}}" target="_blank" class="btn btn-default btn-xs">
+            <i class="fa fa-reddit"></i>
+          </a>
+          <a ng-href="{{postCtrl.post.shareURLs.twitter}}" target="_blank" class="btn btn-default btn-xs">
+            <i class="fa fa-twitter"></i>
+          </a>
+				</li>
 				<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
 				<li ng-show="!postCtrl.post.userPostRefs.length" ng-if="user.id === postCtrl.post.userId" ng-click="makeUncesorable(postCtrl.post)">
 					<a data-tippy-content="Your story will be saved on blockchain." class="hc-tooltip btn btn-default" href="#">
