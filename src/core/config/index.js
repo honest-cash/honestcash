@@ -1,7 +1,9 @@
-const PRODUCTION = "https://honest.cash/api";
-const STAGE = "https://stage.honest.cash/api";
-const DEV = "http://localhost:8080/api";
+const PRODUCTION = "https://honest.cash";
+const STAGE = "https://stage.honest.cash";
+const DEV_API = "http://localhost:8080";
+const DEV_CLIENT = "http://localhost:3010";
 
-let api = PRODUCTION;
+export let api = `${PRODUCTION}/api`;
+export const client = DEV_CLIENT
 
 angular.module("vqConfig", []).constant("API_URL", api);

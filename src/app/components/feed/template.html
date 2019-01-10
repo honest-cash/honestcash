@@ -1,84 +1,119 @@
 <div class="row">
-	<div class="push feed">
-		<div class="feed-header">
-			<div class="feed-author">
-				<ul class="list-unstyled" >
-					<li>
-						<img fallback-src="{{'/img/avatar.png'}}" ng-src="{{feed.user.imageUrl ? feed.user.imageUrl : '/img/avatar.png'}}">
-					</li>
+  <div class="push feed">
+    <div class="feed-header">
+      <div class="feed-author">
+        <ul class="list-unstyled">
+          <li>
+            <img
+              fallback-src="{{ '/img/avatar.png' }}"
+              ng-src="{{
+                feed.user.imageUrl ? feed.user.imageUrl : '/img/avatar.png'
+              }}"
+            />
+          </li>
 
-					<li>
-						<strong style="margin-top:15px;">
-							<a ui-sref="vicigo.profile({ profileId:feed.user.username })">{{feed.user.username}} ({{feed.user.followerCount}})</a>
-						</strong>
-					</li>
+          <li>
+            <strong style="margin-top:15px;">
+              <a ui-sref="vicigo.profile({ profileId:feed.user.username })"
+                >{{ feed.user.username }} ({{ feed.user.followerCount }})</a
+              >
+            </strong>
+          </li>
 
-					<li ng-if="feed.parentPostId">
-						<span style="margin-top:15px;">
-							•
-						</span>
-					</li>
+          <li ng-if="feed.parentPostId">
+            <span style="margin-top:15px;"> • </span>
+          </li>
 
-					<li ng-if="feed.parentPostId">
-						<span style="margin-top:15px;">
-								<small>Response</small>
-						</span>
-					</li>
+          <li ng-if="feed.parentPostId">
+            <span style="margin-top:15px;"> <small>Response</small> </span>
+          </li>
 
-					<li class="feed-date">
-						<span class="text-muted"><small>{{ feed.publishedAt }}</small></span>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<a ui-sref="vicigo.post({ postId: feed.id, alias: feed.alias || feed.id, username: feed.user.username })">
-			<div class="post-feed-body">
-				<div class="feed-title">
-					<h3>
-						<strong>
-							{{feed.title}}
-						</strong>
-					</h3>
-				</div>
+          <li class="feed-date">
+            <span class="text-muted"
+              ><small>{{ feed.publishedAt }}</small></span
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+    <a
+      ui-sref="vicigo.post({ postId: feed.id, alias: feed.alias || feed.id, username: feed.user.username })"
+    >
+      <div class="post-feed-body">
+        <div class="feed-title">
+          <h3>
+            <strong> {{ feed.title }} </strong>
+          </h3>
+        </div>
 
-				<div ng-if="feed.imageUrl" class="feed-image">
-					<lazy-img ng-if="feed.imageUrl" class="lazy" ng-src="{{trustSrc(feed.imageUrl)}}" alt="image"></lazy-img>
-				</div>
+        <div ng-if="feed.imageUrl" class="feed-image">
+          <lazy-img
+            ng-if="feed.imageUrl"
+            class="lazy"
+            ng-src="{{ trustSrc(feed.imageUrl) }}"
+            alt="image"
+          ></lazy-img>
+        </div>
 
-				<div class="feed-body">
-					<p ng-if="feed.body" class="feed-article">
-						{{ displayFeedBody(feed.body) }}
-					</p>
-				</div>
-			</div>
-		</a>
+        <div class="feed-body">
+          <p ng-if="feed.body" class="feed-article">
+            {{ displayFeedBody(feed.body) }}
+          </p>
+        </div>
+      </div>
+    </a>
 
-		<div class="feed-footer">
-			<div class="row hashtags">
-				<div class="col-xs-12">
-					<div style="padding-left:8px;padding-right:5px;">
-						<a class="pull-left hashtag" ng-repeat="hashtag in feed.userPostHashtags" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">{{ ::hashtag.hashtag }}</a>
-					</div>
-				</div>
-			</div>
+    <div class="feed-footer">
+      <div class="row hashtags">
+        <div class="col-xs-12">
+          <div style="padding-left:8px;padding-right:5px;">
+            <a
+              class="pull-left hashtag"
+              ng-repeat="hashtag in feed.userPostHashtags"
+              ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })"
+              >{{ ::hashtag.hashtag }}</a
+            >
+          </div>
+        </div>
+      </div>
 
-			<div class="row feed-actions" style="padding-top: 10px; padding-bottom: 10px;">
-				<div class="col-xs-12">
-					<ul class="list-unstyled list-inline list">
-						<li style="width:50px;">
-							<button ng-click="addressClicked(feed)" class="btn btn-default" ng-disabled="upvotingPostId === feed.id || feed.userId === user.id">
-								<i class="fa fa-btc"></i> 0.002</a>
-							</button>
-						</li>
-						<li style="width:50px;">
-							<small>{{feed.upvoteCount}} <i class="fa fa-bitcoin"></i></small>
+      <div
+        class="row feed-actions"
+        style="padding-top: 10px; padding-bottom: 10px;"
+      >
+        <div class="col-xs-12">
+          <ul class="list-unstyled list-inline list">
+            <li style="width:50px;">
+              <button
+                ng-click="addressClicked(feed)"
+                class="btn btn-default"
+                ng-disabled="upvotingPostId === feed.id || feed.userId === user.id"
+              >
+                <i class="fa fa-btc"></i> 0.002
+              </button>
             </li>
             <li style="width:50px;">
-							<small>{{feed.responseCount}} <i class="fa fa-comment-o"></i></small>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+              <small
+                >{{ feed.upvoteCount }} <i class="fa fa-bitcoin"></i
+              ></small>
+            </li>
+            <li style="width:50px;">
+              <small
+                >{{ feed.responseCount }} <i class="fa fa-comment-o"></i
+              ></small>
+            </li>
+            <li style="width:50px;">
+			  <small>Share on:</small>
+              <a ng-href="{{feed.shareURLs.reddit}}" target="_blank" class="btn btn-default btn-xs">
+                <i class="fa fa-reddit"></i>
+              </a>
+              <a ng-href="{{feed.shareURLs.twitter}}" target="_blank" class="btn btn-default btn-xs">
+                <i class="fa fa-twitter"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
