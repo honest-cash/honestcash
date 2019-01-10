@@ -4,6 +4,7 @@ import 'tippy.js/dist/tippy.css';
 import ScopeService from "../../core/services/ScopeService";
 import PostService from "../../core/services/PostService";
 import { Post, Upvote } from "../../core/models/models";
+import {client as clientURL} from '../../core/config/index';
 
 import toastr from "../../core/config/toastr";
 
@@ -30,6 +31,7 @@ export default class PostCtrl {
     this.post = await this.postService.getById(
       this.$stateParams.alias
     );
+    this.post.shareURLs = this.getFeedShareURLs(this.post);
 
     this.isLoading = false;
 
@@ -54,6 +56,13 @@ export default class PostCtrl {
     }
 
     tippy(".hc-tooltip");
+  }
+
+  protected getFeedShareURLs(feed) {
+    return {
+      reddit: `https://reddit.com/submit?url=${clientURL}/${feed.user.username}/${feed.alias}&title=${feed.title}`,
+      twitter: `https://twitter.com/intent/tweet?url=${clientURL}/${feed.user.username}/${feed.alias}&text=${feed.title}&via=honest_cash&hashtags=${feed.userPostHashtags.map(h => h.hashtag).join(',')}`
+    }
   }
 
   private async createPost() {
