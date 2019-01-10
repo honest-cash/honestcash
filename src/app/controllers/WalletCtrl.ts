@@ -1,18 +1,48 @@
 import swal from "sweetalert";
 import * as simpleWalletProvider from "../../core/lib/simpleWalletProvider";
 import generateWallet from '../../core/lib/bitcoinAuthFlow';
-import md5 from "md5";
 import { AuthService } from '../../auth/AuthService';
+import ScopeService from '../../core/services/ScopeService';
+import WalletService from '../../core/services/WalletService';
+import { IGlobalScope } from '../../core/lib/interfaces';
 
 declare var SimpleWallet: any;
 declare var bitbox: any;
 declare var QRCode: any;
 
+interface IScopeWalletCtrl extends ng.IScope {
+  mnemonic: string;
+  privateKey: string;
+  addressBCH: string;
+  showAdancedOptions: boolean;
+  walletInfo: any;
+  connectedPrivateKey: string;
+  connectedMnemonic: string;
+  legacyAddressBCH: string;
+  HdPath: string;
+  newHdPath: string;
+  addressBalance: number;
+  balanceLoading: boolean;
+  isWithdrawalAddressBCHValid: boolean;
+  addressBalanceInUSD: number;
+  canConnectMnemonic: boolean;
+
+  withdraw: (withdrawalAmount: number, withdrawalAddressBCH: string) => Promise<any>
+  onMnemonicChange: (mnemonic: string) => void;
+  generate: () => void;
+  connect: (privateKey: string, HdPath: string) => void;
+  importNewWallet: (newMnemonic, HdPath) => Promise<any>;
+  onDepositClick: () => void;
+  disconnect: () => void;
+}
+
 export default class WalletCtrl {
     constructor(
-      private $scope,
-      private $rootScope,
-      private AuthService: AuthService
+      private $scope: IScopeWalletCtrl,
+      private $rootScope: IGlobalScope,
+      private authService: AuthService,
+      private scopeService: ScopeService,
+      private walletService: WalletService
     ) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
@@ -24,7 +54,10 @@ export default class WalletCtrl {
         $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
         $scope.newHdPath = simpleWalletProvider.defaultHdPath;
         $scope.addressBalance = 0;
+        $scope.addressBalanceInUSD = 0;
+        $scope.balanceLoading = true;
         $scope.isWithdrawalAddressBCHValid = true;
+
         let simpleWallet, lSimpleWallet;
 
         const checkPassword = async (): Promise<{ password?: string; aborted: boolean; isValid: boolean }> => {
@@ -46,10 +79,10 @@ export default class WalletCtrl {
             return { isValid: false, aborted: true };
           }
 
-          const emails = await AuthService.getEmails();
+          const emails = await this.authService.getEmails();
 
-          const data = await AuthService.passwordCheck({
-            password: this.AuthService.calculatePasswordHash(emails[0], password)
+          const data = await this.authService.passwordCheck({
+            password: this.authService.calculatePasswordHash(emails[0], password)
           });
 
           if (!data.isValid) {
@@ -65,32 +98,36 @@ export default class WalletCtrl {
         };
 
         $scope.onMnemonicChange = (newMnemonic) => {
-            if (newMnemonic && newMnemonic.split(" ").length > 10) {
-                $scope.canConnectMnemonic = true;
+          if (newMnemonic && newMnemonic.split(" ").length > 10) {
+              $scope.canConnectMnemonic = true;
 
-                return;
-            } 
+              return;
+          } 
 
-            $scope.canConnectMnemonic = false;
+          $scope.canConnectMnemonic = false;
         };
 
         const refreshBalance = async (wallet) => {
-            let walletInfo;
+          let walletInfo;
 
-            try {
-              walletInfo = await wallet.getWalletInfo();
-            } catch (err) {
-              $scope.addressBalance = 0;
+          try {
+            walletInfo = await wallet.getWalletInfo();
+          } catch (err) {
+            $scope.addressBalance = 0;
 
-              $scope.$apply();
+            this.scopeService.safeApply($scope, () => {});
 
-              return;
-            }
+            return;
+          }
+          
+          const { bch, usd } = await this.walletService.getAddressBalances();
 
-            $scope.walletInfo = walletInfo
-            $scope.addressBalance = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
+          $scope.walletInfo = walletInfo;
+          $scope.addressBalance = bch;
+          $scope.addressBalanceInUSD  = usd;
+          $scope.balanceLoading = false;
 
-            $scope.$apply();
+          this.scopeService.safeApply($scope, () => {});
         };
 
         if ($scope.connectedMnemonic) {
@@ -109,14 +146,14 @@ export default class WalletCtrl {
         }
 
         $scope.generate = () => {
-            lSimpleWallet = new SimpleWallet(undefined, {
-                HdPath: $scope.HdPath
-            });
+          lSimpleWallet = new SimpleWallet(undefined, {
+              HdPath: $scope.HdPath
+          });
 
-            $scope.mnemonic = lSimpleWallet.mnemonic;
-            $scope.privateKey = lSimpleWallet.privateKey;
-            $scope.addressBCH = lSimpleWallet.address;
-            $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
+          $scope.mnemonic = lSimpleWallet.mnemonic;
+          $scope.privateKey = lSimpleWallet.privateKey;
+          $scope.addressBCH = lSimpleWallet.address;
+          $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
         }
 
         $scope.withdraw = async (withdrawalAmount, withdrawalAddressBCH) => {
@@ -213,11 +250,11 @@ export default class WalletCtrl {
             $scope.addressBCH = lSimpleWallet.address;
             $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
 
-            $rootScope.simpleWallet = {
-                address: lSimpleWallet.address,
-                mnemonic: lSimpleWallet.mnemonic,
-                privateKey: lSimpleWallet.privateKey
-            };
+            this.$rootScope.simpleWallet = {
+                address: lSimpleWallet.address as string,
+                mnemonic: lSimpleWallet.mnemonic as string,
+                privateKey: lSimpleWallet.privateKey as string
+            } as any;
 
             simpleWalletProvider.saveLocally(lSimpleWallet);
             simpleWalletProvider.set(lSimpleWallet);
@@ -225,7 +262,7 @@ export default class WalletCtrl {
             refreshBalance(lSimpleWallet);
         };
 
-        $scope.importNewWallet = async (newMnemonic, HdPath) => {
+        $scope.importNewWallet = async (newMnemonic: string, HdPath: string) => {
           const result = await swal({
             type: 'warning',
             title: 'Are you sure?',
@@ -250,7 +287,7 @@ export default class WalletCtrl {
 
           const mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, password);
 
-          this.AuthService
+          this.authService
           .setWallet({ mnemonicEncrypted })
           .then(() => {
             $scope.connect(newMnemonic, HdPath);
@@ -282,7 +319,7 @@ export default class WalletCtrl {
 
             const simpleWallet = await generateWallet({ password });
 
-            this.AuthService
+            this.authService
             .setWallet({ mnemonicEncrypted: simpleWallet.mnemonicEncrypted })
             .then(() => {
               $scope.connect(simpleWallet.mnemonic, simpleWallet.HdPath);
@@ -305,5 +342,11 @@ export default class WalletCtrl {
         $scope.disconnect = disconnect;
     }
 
-    static $inject = [ "$scope", "$rootScope", "AuthService" ];
+    static $inject = [
+      "$scope",
+      "$rootScope",
+      "AuthService",
+      "ScopeService",
+      "WalletService"
+    ];
 }
