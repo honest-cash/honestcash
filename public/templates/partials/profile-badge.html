@@ -1,0 +1,32 @@
+<div class="dropdown-toggle" id="profile-badge" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div id="profile-badge-thumbnail">
+            <img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+          <img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+          </div>
+          <div id="profile-badge-details">
+            <b>@{{user.username}}</b> <br>
+            <b ng-if="balanceLoading" class="text-gray">Loading balance...</b>
+            <span ng-if="!balanceLoading"><i class="fa fa-btc"></i> {{addressBalance | number:3}} | 
+              <i class="fa fa-usd"></i> {{addressBalanceInUSD}}</span>
+          </div>
+        </div>
+   
+    <ul class="dropdown-menu" id="profile-dropdown">
+      <li><a style="margin-top: 5px;" ng-href="/profile/{{user.username}}"" target="_self">
+        my profile
+      </a></li>
+      <li><a ng-if="!simpleWallet" ui-sref="wallet.create()">connect wallet</a>
+        <a ng-if="simpleWallet" ui-sref="wallet.create()">my wallet</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a style="margin-top: 5px;" href="/honest_cash/frequently-asked-questions/"" target="_self">
+          help
+        </a></li>
+      <li><a style="margin-top: 5px;" href="/honest_cash/honest-cash-terms-of-service-124/"" target="_self">
+        terms of service
+      </a></li>
+      <li><a style="margin-top: 5px;" href="/honest_cash/honestcash-privacy-policy/"" target="_self">
+        privacy policy
+      </a></li>
+      <li role="seperator" class="divider"></li>
+      <li><a href="#" ng-click="logoutMe()">logout</a></li>
+    </ul>

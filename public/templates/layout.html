@@ -39,7 +39,7 @@
               </a>
             </li>
 
-            <li ng-if="user.id">
+            <!-- <li ng-if="user.id">
               <div class="visible-xs" style="margin-top: 5px; margin-left: 15px; line-height: 25px;">
                 <b ng-if="!balanceLoading">
                     <i class="fa fa-btc"></i> {{addressBalance}}</br>
@@ -54,8 +54,10 @@
                   </b>
                   <b ng-if="balanceLoading">Loading balance...</b>
                 </div>
-            </li>
+            </li> -->
 
+            <hr ng-if="user.id" class="visible-xs" style="margin-top: 5px; margin-bottom: 5px;">
+            
             <li ng-if="user.id">
               <a href="/write" target="_self">
                 <i class="hidden-xs fa fa-pencil"></i><span class="visible-xs">write a story</span>
@@ -73,6 +75,8 @@
               <a ng-if="simpleWallet" ui-sref="wallet.create()">my wallet</a>
             </li>
 
+            <hr ng-if="user.id" class="visible-xs" style="margin-top: 5px; margin-bottom: 5px;">
+            
             <li class="visible-xs" ng-if="user.id">
               <a style="margin-top: 5px;" href="/honest_cash/frequently-asked-questions/"" target="_self">
                 help
@@ -95,7 +99,11 @@
               <a href="#" ng-click="logoutMe()">logout</a>
             </li>
 
-            <li style="margin-top: 5px;" ng-if="user.id" class="hidden-xs menu-item-profile">
+
+            <li class="hidden-xs" style="margin-right: 10px;">
+                <ng-include src="'templates/partials/profile-badge.html'"></ng-include>
+            </li>
+             <!--<li style="margin-top: 5px;" ng-if="user.id" class="hidden-xs menu-item-profile">
               <div class="btn-group" uib-dropdown on-toggle="toggled(open)">
                 <a href="#" uib-dropdown-toggle ng-disabled="disabled">
                   <img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
@@ -114,7 +122,7 @@
                   </li>
                 </ul>
               </div>
-            </li>
+            </li> -->
          </ul>
       </div>
     </div>

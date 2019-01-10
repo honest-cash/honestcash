@@ -91,13 +91,13 @@ export default class WalletCtrl {
               return;
             }
             
-            const balanceInBHC = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
-            const currencyRequest = await $http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
-            const balanceInUSD = currencyRequest.data.data.rates.USD;
+            const balanceInBCH = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
+            const currencyResponse = await $http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
+            const balanceInUSD = currencyResponse.data.data.rates.USD;
             
             $scope.walletInfo = walletInfo;
-            $scope.addressBalance = balanceInBHC;
-            $scope.addressBalanceInUSD  = (balanceInBHC * balanceInUSD).toFixed(2);
+            $scope.addressBalance = balanceInBCH;
+            $scope.addressBalanceInUSD  = (balanceInBCH * balanceInUSD).toFixed(2);
             $scope.balanceLoading = false;
 
             this.scopeService.safeApply($scope, () => {});

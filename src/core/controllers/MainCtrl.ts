@@ -27,13 +27,13 @@ export default class MainCtrl {
 
         $scope.$on('$viewContentLoaded', async () => {
             let balances = await this.getAddressBalances();
-            $scope.addressBalance = balances.bhc;
+            $scope.addressBalance = balances.bch;
             $scope.addressBalanceInUSD = balances.usd;
             $scope.balanceLoading = false;
 
             setInterval(async () => {
                 balances = await this.getAddressBalances();
-                $scope.addressBalance = balances.bhc;
+                $scope.addressBalance = balances.bch;
                 $scope.addressBalanceInUSD = balances.usd;
             }, 30000)
         });
@@ -98,18 +98,18 @@ export default class MainCtrl {
         };
     }
 
-    protected async getAddressBalances(): Promise<{ bhc: number; usd: number }> {
+    protected async getAddressBalances(): Promise<{ bch: number; usd: number }> {
       const simpleWallet = simpleWalletProvider.get();
 
       const walletInfo = await simpleWallet.getWalletInfo();
-      const balanceInBHC = Number((walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8));
+      const balanceInBCH = Number((walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8));
 
       const res = await this.$http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
       const bchUSDRate = Number(res.data.data.rates.USD);
       
       return {
-        bhc: balanceInBHC,
-        usd: Number((bchUSDRate * balanceInBHC).toFixed(2))
+        bch: balanceInBCH,
+        usd: Number((bchUSDRate * balanceInBCH).toFixed(2))
       };
     }
 
@@ -227,7 +227,7 @@ export default class MainCtrl {
 
       const balances = await this.getAddressBalances();
 
-      this.$scope.addressBalance = balances.bhc
+      this.$scope.addressBalance = balances.bch
       this.$scope.addressBalanceInUSD = balances.usd;
       this.$scope.balanceLoading = false;
       this.$scope.upvotingPostId = null;
@@ -308,7 +308,7 @@ export default class MainCtrl {
 
         const balances = await this.getAddressBalances();
 
-        this.$scope.addressBalance = balances.bhc;
+        this.$scope.addressBalance = balances.bch;
         this.$scope.addressBalanceInUSD = balances.usd;
         this.$scope.balanceLoading = false;
       }
