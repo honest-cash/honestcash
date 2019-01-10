@@ -2,40 +2,53 @@ import * as lzutf8 from "lzutf8";
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
+import WalletService from "../../core/services/WalletService";
 import { Post } from "../../core/models/models";
 import { AuthService } from "../../auth/AuthService";
 import * as upvoteDistribution from "../lib/upvoteDistribution";
+import { IGlobalScope } from '../../core/lib/interfaces';
+
+interface IScopeMainCtrl extends ng.IScope {
+  addressBalance: number;
+  addressBalanceInUSD: number;
+  balanceLoading: boolean;
+  upvotingPostId: any;
+
+  addressClicked: any;
+  makeUncesorable: any;
+  mouseEnterAddress: any
+  mouseLeaveAddress: any;
+  upvotingStatus: "loading" | "error";
+
+  follow: any;
+  unfollow: any;
+}
 
 export default class MainCtrl {
     constructor(
-        private $rootScope,
-        private $scope,
+        private $rootScope: IGlobalScope,
+        private $scope: IScopeMainCtrl,
         private $state,
         private $sce,
         private $window,
         private $location,
-        private $http,
         private scopeService: ScopeService,
         private AuthService: AuthService,
         private RelsService,
         private ProfileService,
-        private postService: PostService
+        private postService: PostService,
+        private walletService: WalletService
     ) {
         $scope.addressBalance = 0;
         $scope.addressBalanceInUSD = 0;
         $scope.balanceLoading = true;
 
         $scope.$on('$viewContentLoaded', async () => {
-            let balances = await this.getAddressBalances();
-            $scope.addressBalance = balances.bch;
-            $scope.addressBalanceInUSD = balances.usd;
-            $scope.balanceLoading = false;
+          const balances = await this.walletService.getAddressBalances();
 
-            setInterval(async () => {
-                balances = await this.getAddressBalances();
-                $scope.addressBalance = balances.bch;
-                $scope.addressBalanceInUSD = balances.usd;
-            }, 30000)
+          $scope.balanceLoading = false;
+          $scope.addressBalance = balances.bch;
+          $scope.addressBalanceInUSD = balances.usd;
         });
 
         const mouseEnterAddress = (className, address) => {
@@ -57,13 +70,13 @@ export default class MainCtrl {
         $scope.mouseLeaveAddress = mouseLeaveAddress;
 
         $scope.follow = (profileId, followGuy) => {
-            if (!$rootScope.user || !$rootScope.user.id) {
-                return location.href = "/signup";
-            }
+          if (!$rootScope.user || !$rootScope.user.id) {
+              return location.href = "/signup";
+          }
 
-            followGuy.alreadyFollowing = !followGuy.alreadyFollowing;
+          followGuy.alreadyFollowing = !followGuy.alreadyFollowing;
 
-            RelsService.followProfile(profileId);
+          RelsService.followProfile(profileId);
         };
 
         $scope.unfollow = (profileId, followGuy) => {
@@ -76,41 +89,22 @@ export default class MainCtrl {
 
         $rootScope.trustSrc = (src) => {
           return $sce.trustAsResourceUrl(src);
-        }
+        };
 
         $scope.displayFeedBody = (html: string): string => this.postService.displayHTML(html);
 
         $rootScope.logoutMe = () => {
             AuthService.logout();
 
-            $rootScope.user = false;
-            $rootScope.fetchingNotifs = false;
-            $rootScope.simpleWallet = null;
+            this.$rootScope.user = undefined;
+            this.$rootScope.simpleWallet = null;
 
-            // destroy connected user wallet.
-            simpleWalletProvider.set(null);
-            localStorage.setItem("HC_BCH_PRIVATE_KEY", "");
-            localStorage.setItem("HC_BCH_MNEMONIC", "");
+            simpleWalletProvider.clean();
 
             $state.go("vicigo.feeds");
 
             location.reload();
         };
-    }
-
-    protected async getAddressBalances(): Promise<{ bch: number; usd: number }> {
-      const simpleWallet = simpleWalletProvider.get();
-
-      const walletInfo = await simpleWallet.getWalletInfo();
-      const balanceInBCH = Number((walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8));
-
-      const res = await this.$http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
-      const bchUSDRate = Number(res.data.data.rates.USD);
-      
-      return {
-        bch: balanceInBCH,
-        usd: Number((bchUSDRate * balanceInBCH).toFixed(2))
-      };
     }
 
     private satoshiToBch = (amountSat: number): string => {
@@ -225,7 +219,7 @@ export default class MainCtrl {
           txId: tx.txid
       });
 
-      const balances = await this.getAddressBalances();
+      const balances = await this.walletService.getAddressBalances();
 
       this.$scope.addressBalance = balances.bch
       this.$scope.addressBalanceInUSD = balances.usd;
@@ -259,7 +253,7 @@ export default class MainCtrl {
       console.log("Base64 Story: " + compressedJson);
 
       if (this.byteCount(compressedJson) > 5) {
-          return toastr.warning("The story is too long! We are working on it!");
+        return toastr.warning("The story is too long! We are working on it!");
       }
 
       $('#uncensoredResultModal').modal({
@@ -280,13 +274,13 @@ export default class MainCtrl {
             extUri: `https://honest.cash/${post.user.username}/${post.alias}`
           });
         } catch (err) {
-            $('#uncensoredResultModal').modal('hide');
+          $('#uncensoredResultModal').modal('hide');
 
-            if (err.message.indexOf("mempool") > -1) {
-                return toastr.warning("The story is too long! We are working on it!");
-            }
+          if (err.message.indexOf("mempool") > -1) {
+              return toastr.warning("The story is too long! We are working on it!");
+          }
 
-            return toastr.warning(err.message);
+          return toastr.warning(err.message);
         }
 
         document.getElementById("uncensoredResultLoading").style.display = "none";
@@ -306,7 +300,7 @@ export default class MainCtrl {
             extId: fileId
         });
 
-        const balances = await this.getAddressBalances();
+        const balances = await this.walletService.getAddressBalances();
 
         this.$scope.addressBalance = balances.bch;
         this.$scope.addressBalanceInUSD = balances.usd;
@@ -321,11 +315,11 @@ export default class MainCtrl {
       "$sce",
       "$window",
       "$location",
-      "$http",
       "ScopeService",
       "AuthService",
       "RelsService",
       "ProfileService",
-      "PostService"
+      "PostService",
+      "WalletService"
   ]
 }

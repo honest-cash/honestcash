@@ -4,7 +4,7 @@
           <img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
           </div>
           <div id="profile-badge-details">
-            <b>@{{user.username}}</b> <br>
+            <b>{{user.username}}</b> <br />
             <b ng-if="balanceLoading" class="text-gray">Loading balance...</b>
             <span ng-if="!balanceLoading"><i class="fa fa-btc"></i> {{addressBalance | number:3}} | 
               <i class="fa fa-usd"></i> {{addressBalanceInUSD}}</span>

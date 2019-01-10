@@ -10,6 +10,13 @@ export const set = (_wallet) => {
     wallet = _wallet;
 };
 
+export const clean = () => {
+  wallet = null;
+
+  localStorage.setItem("HC_BCH_PRIVATE_KEY", "");
+  localStorage.setItem("HC_BCH_MNEMONIC", "");
+};
+
 export const saveLocally = simpleWallet => {
   localStorage.setItem("HC_BCH_PRIVATE_KEY", simpleWallet.privateKey);
   localStorage.setItem("HC_BCH_MNEMONIC", simpleWallet.mnemonic);

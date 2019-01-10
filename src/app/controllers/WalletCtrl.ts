@@ -3,18 +3,46 @@ import * as simpleWalletProvider from "../../core/lib/simpleWalletProvider";
 import generateWallet from '../../core/lib/bitcoinAuthFlow';
 import { AuthService } from '../../auth/AuthService';
 import ScopeService from '../../core/services/ScopeService';
+import WalletService from '../../core/services/WalletService';
+import { IGlobalScope } from '../../core/lib/interfaces';
 
 declare var SimpleWallet: any;
 declare var bitbox: any;
 declare var QRCode: any;
 
+interface IScopeWalletCtrl extends ng.IScope {
+  mnemonic: string;
+  privateKey: string;
+  addressBCH: string;
+  showAdancedOptions: boolean;
+  walletInfo: any;
+  connectedPrivateKey: string;
+  connectedMnemonic: string;
+  legacyAddressBCH: string;
+  HdPath: string;
+  newHdPath: string;
+  addressBalance: number;
+  balanceLoading: boolean;
+  isWithdrawalAddressBCHValid: boolean;
+  addressBalanceInUSD: number;
+  canConnectMnemonic: boolean;
+
+  withdraw: (withdrawalAmount: number, withdrawalAddressBCH: string) => Promise<any>
+  onMnemonicChange: (mnemonic: string) => void;
+  generate: () => void;
+  connect: (privateKey: string, HdPath: string) => void;
+  importNewWallet: (newMnemonic, HdPath) => Promise<any>;
+  onDepositClick: () => void;
+  disconnect: () => void;
+}
+
 export default class WalletCtrl {
     constructor(
-      private $scope,
-      private $rootScope,
-      private $http,
+      private $scope: IScopeWalletCtrl,
+      private $rootScope: IGlobalScope,
       private authService: AuthService,
       private scopeService: ScopeService,
+      private walletService: WalletService
     ) {
         $scope.mnemonic = "";
         $scope.privateKey = "";
@@ -29,6 +57,7 @@ export default class WalletCtrl {
         $scope.addressBalanceInUSD = 0;
         $scope.balanceLoading = true;
         $scope.isWithdrawalAddressBCHValid = true;
+
         let simpleWallet, lSimpleWallet;
 
         const checkPassword = async (): Promise<{ password?: string; aborted: boolean; isValid: boolean }> => {
@@ -69,38 +98,36 @@ export default class WalletCtrl {
         };
 
         $scope.onMnemonicChange = (newMnemonic) => {
-            if (newMnemonic && newMnemonic.split(" ").length > 10) {
-                $scope.canConnectMnemonic = true;
+          if (newMnemonic && newMnemonic.split(" ").length > 10) {
+              $scope.canConnectMnemonic = true;
 
-                return;
-            } 
+              return;
+          } 
 
-            $scope.canConnectMnemonic = false;
+          $scope.canConnectMnemonic = false;
         };
 
         const refreshBalance = async (wallet) => {
-            let walletInfo;
+          let walletInfo;
 
-            try {
-              walletInfo = await wallet.getWalletInfo();
-            } catch (err) {
-              $scope.addressBalance = 0;
-
-              this.scopeService.safeApply($scope, () => {});
-
-              return;
-            }
-            
-            const balanceInBCH = (walletInfo.balance + walletInfo.unconfirmedBalance).toFixed(8);
-            const currencyResponse = await $http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
-            const balanceInUSD = currencyResponse.data.data.rates.USD;
-            
-            $scope.walletInfo = walletInfo;
-            $scope.addressBalance = balanceInBCH;
-            $scope.addressBalanceInUSD  = (balanceInBCH * balanceInUSD).toFixed(2);
-            $scope.balanceLoading = false;
+          try {
+            walletInfo = await wallet.getWalletInfo();
+          } catch (err) {
+            $scope.addressBalance = 0;
 
             this.scopeService.safeApply($scope, () => {});
+
+            return;
+          }
+          
+          const { bch, usd } = await this.walletService.getAddressBalances();
+
+          $scope.walletInfo = walletInfo;
+          $scope.addressBalance = bch;
+          $scope.addressBalanceInUSD  = usd;
+          $scope.balanceLoading = false;
+
+          this.scopeService.safeApply($scope, () => {});
         };
 
         if ($scope.connectedMnemonic) {
@@ -119,14 +146,14 @@ export default class WalletCtrl {
         }
 
         $scope.generate = () => {
-            lSimpleWallet = new SimpleWallet(undefined, {
-                HdPath: $scope.HdPath
-            });
+          lSimpleWallet = new SimpleWallet(undefined, {
+              HdPath: $scope.HdPath
+          });
 
-            $scope.mnemonic = lSimpleWallet.mnemonic;
-            $scope.privateKey = lSimpleWallet.privateKey;
-            $scope.addressBCH = lSimpleWallet.address;
-            $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
+          $scope.mnemonic = lSimpleWallet.mnemonic;
+          $scope.privateKey = lSimpleWallet.privateKey;
+          $scope.addressBCH = lSimpleWallet.address;
+          $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
         }
 
         $scope.withdraw = async (withdrawalAmount, withdrawalAddressBCH) => {
@@ -223,11 +250,11 @@ export default class WalletCtrl {
             $scope.addressBCH = lSimpleWallet.address;
             $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
 
-            $rootScope.simpleWallet = {
-                address: lSimpleWallet.address,
-                mnemonic: lSimpleWallet.mnemonic,
-                privateKey: lSimpleWallet.privateKey
-            };
+            this.$rootScope.simpleWallet = {
+                address: lSimpleWallet.address as string,
+                mnemonic: lSimpleWallet.mnemonic as string,
+                privateKey: lSimpleWallet.privateKey as string
+            } as any;
 
             simpleWalletProvider.saveLocally(lSimpleWallet);
             simpleWalletProvider.set(lSimpleWallet);
@@ -235,7 +262,7 @@ export default class WalletCtrl {
             refreshBalance(lSimpleWallet);
         };
 
-        $scope.importNewWallet = async (newMnemonic, HdPath) => {
+        $scope.importNewWallet = async (newMnemonic: string, HdPath: string) => {
           const result = await swal({
             type: 'warning',
             title: 'Are you sure?',
@@ -318,8 +345,8 @@ export default class WalletCtrl {
     static $inject = [
       "$scope",
       "$rootScope",
-      "$http",
       "AuthService",
-      "ScopeService"
+      "ScopeService",
+      "WalletService"
     ];
 }
