@@ -31,7 +31,7 @@
 				</ul>
 			</div>
 		</div>
-		<a ui-sref="vicigo.post({ postId: feed.id, alias: feed.alias, username: feed.user.username })">
+		<a ui-sref="vicigo.post({ postId: feed.id, alias: feed.alias || feed.id, username: feed.user.username })">
 			<div class="post-feed-body">
 				<div class="feed-title">
 					<h3>

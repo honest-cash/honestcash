@@ -3,10 +3,19 @@ import * as async from "async";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
 import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
-import "../core/config/toastr";
+import toastr from "../core/config/toastr";
+import { AuthService } from "../auth/AuthService";
+import PostService from "../core/services/PostService";
 
 export default class EditorCtrl {
-    constructor($scope, $http, $timeout, AuthService, API_URL) {
+    constructor(
+      private $scope,
+      private $http,
+      private $timeout,
+      private postService: PostService,
+      private authService: AuthService,
+      private API_URL: string
+    ) {
         let titleEditor;
         let bodyEditor;
 
@@ -14,8 +23,8 @@ export default class EditorCtrl {
         $scope.draft = {};
         $scope.ready = false;
         $scope.Saving = {
-            body: false,
-            title: false
+          body: false,
+          title: false
         };
 
         let parentPostId;
@@ -35,11 +44,11 @@ export default class EditorCtrl {
         }
 
         const saveDraftElement = (element, cb) => {
-            const post = {};
-          
-            post.body = bodyEditor.serialize().body.value;
-            post.title = document.getElementById("title").innerText || "";
-            post.hashtags = $("input#description").val() || "";
+            const post = {
+              body: bodyEditor.serialize().body.value,
+              title: document.getElementById("title").innerText,
+              hashtags: $("input#description").val() || ""
+            };
 
             if (!post.body && !post.title && !post.hashtags) {
                 $scope.saving = null;
@@ -56,38 +65,46 @@ export default class EditorCtrl {
         };
 
         $scope.readyToPublish = () => {
-            $('#publishModal').modal('show');
+          if (!document.getElementById("title").innerText) {
+            return toastr.error("The story needs to have a title");
+          }
+
+          if (bodyEditor.serialize().body.value.length < 50) {
+            return toastr.error("The story needs to be at least 50 characters.");
+          }
+
+          $('#publishModal').modal('show');
         };
 
         $scope.publishPost = postId => {
-            if ($scope.isLoading === true) {
-                return toastr.info("Saving...");
-            }
+          if ($scope.isLoading === true) {
+            return toastr.info("Saving...");
+          }
 
-            $scope.isLoading = true;
+          $scope.isLoading = true;
 
-            let publishedPost;
+          let publishedPost;
 
-            async.series([
-                (cb) => {
-                    async.parallel([
-                        (cb) => saveDraftElement("title", cb),
-                        (cb) => saveDraftElement("body", cb),
-                        (cb) => saveDraftElement("hashtags", cb)
-                    ], cb);
-                },
-                (cb) => {
-                    $http.put(API_URL + "/draft/" + postId + "/publish")
-                    .then(response => {
-                        if (response.status !== 200) {
-                            return cb(response);
-                        }
+          async.series([
+              (cb) => {
+                async.parallel([
+                  (cb) => saveDraftElement("title", cb),
+                  (cb) => saveDraftElement("body", cb),
+                  (cb) => saveDraftElement("hashtags", cb)
+                ], cb);
+              },
+              (cb) => {
+                  $http.put(API_URL + "/draft/" + postId + "/publish")
+                  .then(response => {
+                    if (response.status !== 200) {
+                        return cb(response);
+                    }
 
-                        publishedPost = response.data;
+                    publishedPost = response.data;
 
-                        return cb();
-                    }, cb);
-                }
+                    return cb();
+                  }, cb);
+              }
             ], (errResponse) => {
                 $scope.isLoading = false;
 
@@ -98,7 +115,7 @@ export default class EditorCtrl {
                         }
 
                         if (errResponse.data.code == "POST_TOO_SHORT") {
-                            return toastr.warning("Your story is too short. The minimum number of characters is 300.");
+                            return toastr.warning("Your story is too short. The minimum number of characters is 50.");
                         }
                     }
 
@@ -133,47 +150,41 @@ export default class EditorCtrl {
 
         const initMediumEditor = (title, body) => {
             titleEditor = new MediumEditor('#title', {
-                toolbar: false,
-                buttons: [],
-                placeholder: {
-                    /* This example includes the default options for placeholder,
-                       if nothing is passed this is what it used */
-                    text: 'Title',
-                    hideOnClick: true
-                },
-                disableDoubleReturn: true,
-                disableReturn: true,
-                paste: {
-                    forcePlainText: true,
-                    cleanPastedHTML: true,
-                    cleanReplacements: [],
-                    cleanAttrs: [ 'class', 'style' ],
-                    cleanTags: [ 'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', 'a', 'ul', 'li', 'code', 'pre' ],
-                    unwrapTags: []
-                }
+              toolbar: false,
+              buttons: [],
+              placeholder: {
+                  /* This example includes the default options for placeholder,
+                      if nothing is passed this is what it used */
+                  text: 'Title',
+                  hideOnClick: true
+              },
+              disableDoubleReturn: true,
+              disableReturn: true,
+              paste: {
+                  forcePlainText: true,
+                  cleanPastedHTML: true,
+                  cleanReplacements: [],
+                  cleanAttrs: [ 'class', 'style' ],
+                  cleanTags: [ 'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', 'a', 'ul', 'li', 'code', 'pre' ],
+                  unwrapTags: []
+              }
             });
 
             bodyEditor = new MediumEditor('#body', {
+                anchorPreview: false,
                 buttonLabels: 'fontawesome',
                 autoLink: true,
-                toolbar:{
-                    buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3']
-
-                },
                 placeholder: {
-                    /* This example includes the default options for placeholder,
-                       if nothing is passed this is what it used */
-                    text: 'Tell your story...',
-                    hideOnClick: true
+                  text: $scope.draft.parentPostId ? "Write your comment" : "Tell your story...",
+                  hideOnClick: true
                 },
                 toolbar: {
-                    buttons: ['bold', 'italic', 'underline', "unorderedlist", "anchor", 'h2', 'h3', {
-                        name: 'pre',
-                        contentDefault: 'code snippet', // default text
-                        contentFA: '<i class="fa fa-code"></i>' // custom icon if you're using font-awesome icons
-                    }]
+                  buttons: ['bold', 'italic', 'underline', "unorderedlist", "anchor", 'h2', 'h3', {
+                      name: 'pre',
+                      contentDefault: 'code snippet', // default text
+                      contentFA: '<i class="fa fa-code"></i>' // custom icon if you're using font-awesome icons
+                  }]
                 },
-                anchorPreview: false,
                 paste: {
                     /* This example includes the default options for paste,
                        if nothing is passed this is what it used */
@@ -204,7 +215,7 @@ export default class EditorCtrl {
                             url: API_URL + '/upload/image', // (string) A relative path to an upload script
                             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
                             headers: {
-                                'x-auth-token': AuthService.getAuthToken()
+                                'x-auth-token': this.authService.getAuthToken()
                             },
                         },
                         styles: { // (object) Available image styles configuration
@@ -249,8 +260,12 @@ export default class EditorCtrl {
             });
 
             if (title) {
-                document.getElementById("title").setAttribute("data-placeholder", "");
-                titleEditor.setContent(title, 0);
+              document.getElementById("title").setAttribute("data-placeholder", "");
+              titleEditor.setContent(title, 0);
+            }
+
+            if (!title && this.$scope.draft.parentPostId) {
+              titleEditor.setContent(title || `RE: ${this.$scope.draft.parentPost.title}`, 0);
             }
 
             if (body) {
@@ -275,7 +290,7 @@ export default class EditorCtrl {
                 }
             });
 
-            const hashtags = $scope.draft.userPostHashtags;
+            const hashtags = $scope.draft.userPostHashtags || [];
 
             hashtags.forEach((hashtag) => {
                 $("#description").tagit("createTag", hashtag.hashtag);
@@ -305,6 +320,8 @@ export default class EditorCtrl {
 
         loadPostDraft(postId);
     }
-}
 
-EditorCtrl.$inject = [ "$scope", "$http", "$timeout", "AuthService", "API_URL" ];
+    private titleEl: HTMLElement;
+
+    static $inject = [ "$scope", "$http", "$timeout", "PostService", "AuthService", "API_URL" ];
+}

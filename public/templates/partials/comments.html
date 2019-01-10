@@ -1,0 +1,105 @@
+
+<div class="comment-wrap">
+  <div class="photo">
+    <img ng-if="user.imageUrl" ng-src="{{user.imageUrl}}" class="avatar img-circle img-thumbnail-avatar-small">
+    <img ng-if="!user.imageUrl" src="/img/avatar.png" class="avatar img-circle img-thumbnail-avatar-small">
+  </div>
+  <div class="comment-block">
+    <textarea
+      cols="30"
+      ng-model="postCtrl.newResponse"
+      placeholder="{{ postCtrl.responses.length === 0 ? 'Be the first to write a response...' : 'Write a response...' }}"
+      rows="3"
+    ></textarea>
+    
+    <button class="btn btn-default" ng-click="postCtrl.createPost()">Publish</button>
+    <a
+      data-tippy-content="Every response is its own story."
+      class="btn btn-default hc-tooltip"
+      ng-href="{{user.id ? '/write/response/' + postCtrl.post.id : '/signup' }}" target="_self"
+    >
+      Go full screen
+    </a>
+  </div>
+</div>
+
+<style>
+  input, textarea {
+    outline: none;
+    border: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    
+  }
+
+  .comment-wrap {
+    margin-bottom: rem(20);
+    display: table;
+    width: 100%;
+    min-height: rem(85);
+  }
+
+  .photo {
+    padding-top: rem(10);
+    display: table-cell;
+    width: rem(56);
+  }
+
+  .avatar {
+      border-radius: 50%;
+      background-size: contain;
+  }
+
+  .comment-block {
+    padding: 7px;
+    background-color: #fff;
+    display: table-cell;
+    vertical-align: top;
+    border-radius: rem(3);
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
+  }
+
+  textarea {
+    width: 100%;
+    border-color: Transparent;
+    resize: none;
+    border: none;
+    padding-bottom:20px;
+    display: block;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+  }
+
+  .comment-text {
+    margin-bottom: rem(20);
+  }
+
+  .bottom-comment {
+    color: #acb4c2;
+    font-size: rem(14);
+  }
+
+  .comment-date {
+    float: left;
+  }
+</style>
+
+
+<script>
+var textarea = document.querySelector('textarea');
+
+textarea.addEventListener('keydown', autosize);
+             
+function autosize(){
+  var el = this;
+  setTimeout(function(){
+    el.style.cssText = 'height:auto; padding:0';
+    // for box-sizing other than "content-box" use:
+    // el.style.cssText = '-moz-box-sizing:content-box';
+    el.style.cssText = 'height:' + el.scrollHeight + 'px';
+  },0);
+}
+</script>

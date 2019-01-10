@@ -1,3 +1,4 @@
+export type TPostTypeId = "comment" | "article" | "response";
 export class User {
   id: number;
   username: string;
@@ -11,7 +12,6 @@ export class Upvote {
   userId: number;
   user: User;
 }
-
 export class Post {
   id: number;
   title: string;
@@ -19,6 +19,8 @@ export class Post {
   body: string;
   plain: string;
   user: User;
+  postTypeId: TPostTypeId;
+  parentPostId: number;
   createdAt: string;
   publishedAt: string;
   userPosts?: Post[]
