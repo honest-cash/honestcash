@@ -4,6 +4,7 @@
   "description": "Front-end for https://honest.cash",
   "main": "app-honestcash.js",
   "dependencies": {
+    "@types/angular": "^1.6.53",
     "@types/jquery": "^3.3.29",
     "angular": "^1.6.1",
     "angular-ui-router": "^0.3.2",

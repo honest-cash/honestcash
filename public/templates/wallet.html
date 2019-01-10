@@ -6,7 +6,13 @@
     <p>
         <div class="form-group">
                 <ul class="list-inline list-unstyled" style="margin-top: 10px;">
-                        <li>Balance: <b>{{addressBalance}} BCH</b></li>
+                        <li>Balance: 
+                            <b ng-if="!balanceLoading">
+                                {{addressBalance}} <i class="fa fa-btc"></i> | 
+                                {{addressBalanceInUSD}} <i class="fa fa-usd"></i>
+                            </b>
+                            <b ng-if="balanceLoading">Loading balance...</b>
+                        </li>
                 </ul>
                 <ul class="list-inline list-unstyled" style="margin-top: 10px;">
                     <li>Explore:</li>
