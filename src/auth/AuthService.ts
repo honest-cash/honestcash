@@ -74,7 +74,7 @@ export class AuthService {
     return this.$q(async (resolve, reject) => {
       this.$http.post(this.apiFactory("SIGNUP"), data)
       .then(response => {
-        this.storeUserCredentials(response.data.token, response.data.user.id);
+        // this.storeUserCredentials(response.data.token, response.data.user.id);
 
         resolve(response.data);
       }, reject);

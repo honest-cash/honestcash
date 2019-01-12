@@ -8,7 +8,6 @@ import {client as clientURL} from '../../core/config/index';
 
 import toastr from "../../core/config/toastr";
 
-
 declare var QRCode: any;
 export default class PostCtrl {
   constructor(
