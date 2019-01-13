@@ -26,11 +26,11 @@
 
 
 		<div class="row">
-        <ul class="list-unstyled list-inline">
-          <li ng-repeat="hashtag in postCtrl.post.userPostHashtags">
-            <a class="pull-left hashtag" ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })">{{ ::hashtag.hashtag}}</a>
-          </li>
-        </ul>
+      <ul class="list-unstyled list-inline">
+        <li ng-repeat="hashtag in postCtrl.post.userPostHashtags">
+          <a href="/hashtag/{{ ::hashtag.hashtag }}" class="pull-left hashtag">{{ ::hashtag.hashtag}}</a>
+        </li>
+      </ul>
     </div>
 
     <hr />
