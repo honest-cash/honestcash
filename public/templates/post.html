@@ -71,7 +71,14 @@
 					<button ng-disabled="upvotingPostId === postCtrl.post.id || postCtrl.post.userId === user.id" ng-click="addressClicked(postCtrl.post)" class="btn btn-default">
 						<i class="fa fa-btc"></i> 0.002 Upvote
 					</button>
-				</li>
+        </li>
+        	<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
+				<li ng-show="!postCtrl.post.userPostRefs.length" ng-if="user.id === postCtrl.post.userId" ng-click="makeUncesorable(postCtrl.post)">
+					<a data-tippy-content="Your story will be saved on blockchain." class="hc-tooltip btn btn-default btn-xs" href="#">
+						<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> Uncensorable</a>
+					</a>
+        </li>
+
 				<li>
           <small>Share on:</small>
           <a ng-href="{{postCtrl.post.shareURLs.reddit}}" target="_blank" class="btn btn-default btn-xs">
@@ -81,12 +88,7 @@
             <i class="fa fa-twitter"></i>
           </a>
 				</li>
-				<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
-				<li ng-show="!postCtrl.post.userPostRefs.length" ng-if="user.id === postCtrl.post.userId" ng-click="makeUncesorable(postCtrl.post)">
-					<a data-tippy-content="Your story will be saved on blockchain." class="hc-tooltip btn btn-default" href="#">
-						<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> Uncensorable</a>
-					</a>
-				</li>
+			
 			</ul>
 		</div>
 
