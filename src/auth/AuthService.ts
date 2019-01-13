@@ -70,7 +70,12 @@ export class AuthService {
     });
   }
 
-  public signup(data: { username: string; password: string; email: string }) {
+  public signup(data: {
+    username: string;
+    password: string;
+    email: string;
+    userType: number;
+  }) {
     return this.$q(async (resolve, reject) => {
       this.$http.post(this.apiFactory("SIGNUP"), data)
       .then(response => {
@@ -98,6 +103,7 @@ export class AuthService {
   }
 
   public changePassword(data: {
+    email: string;
     code: string,
     newPassword: string,
     repeatNewPassword: string;

@@ -1,47 +1,62 @@
 import md5 from "md5";
+import swal from "sweetalert";
 import generateWallet from "../core/lib/bitcoinAuthFlow";
 import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
-import swal from "sweetalert";
 import { AuthService } from "../auth/AuthService";
 import HashtagService from "../core/services/HashtagService";
+import { IGlobalScope, IHashtagStat, ISimpleWallet } from "../core/lib/interfaces";
+import ScopeService from '../core/services/ScopeService';
+
+declare var SimpleWallet: any;
 
 interface ILoginForm {
   loginemail: string;
   loginpassword: string;
   loginpasswordreset?: string;
 }
-
 interface ISignupForm {
   username: string;
   email: string;
   password: string;
 }
 
+interface IScopeWelcomeCtrl extends ng.IScope {
+  forgot: boolean;
+  isLoading: boolean;
+  hideForm: boolean;
+  message: string;
+  resetCode: string;
+  noHeader: boolean;
+  hashtags: IHashtagStat[]
+  welcome: boolean;
+
+  goToForgotPage: () => void;
+  goToLoginPage: () => void;
+  login: (data: ILoginForm) => void;
+  signup: (data: ISignupForm) => void;
+  changePassword: (data: ILoginForm) => Promise<void>;
+  resetPassword: (data: ILoginForm) => Promise<void>;
+}
+
 export default class WelcomeCtrl {
   constructor(
-    private $rootScope,
-    private $scope,
-    private $location,
+    private $rootScope: IGlobalScope,
+    private $scope: IScopeWelcomeCtrl,
+    private $location: ng.ILocationService,
     private $state,
     private AuthService: AuthService,
     private ProfileService,
-    private scopeService,
+    private scopeService: ScopeService,
     private hashtagService: HashtagService
   ) {
-    $scope.message = "";
-    $rootScope.noHeader = true;
-    $scope.isLoading = false;
-    $scope.forgot = false;
-    $scope.resetCode = $location.search().code;
-  
     this.ngInit();
 
     const mutateForgot = (forgotValue) => () => {
-      $scope.forgot = forgotValue;
+      this.$scope.forgot = forgotValue;
     };
 
-    $scope.goToForgotPage = mutateForgot(true);
-    $scope.goToLoginPage = mutateForgot(false);
+    this.$scope.goToForgotPage = mutateForgot(true);
+    this.$scope.goToLoginPage = mutateForgot(false);
 
     const setAddressForTips = async (userId: string, bchAddress: string) => {
       const hasConfirmed = await swal({
@@ -65,8 +80,8 @@ export default class WelcomeCtrl {
       return;
     };
 
-    $scope.login = async (data: ILoginForm) => {
-      $scope.isLoading = true;
+    this.$scope.login = async (data: ILoginForm) => {
+      this.$scope.isLoading = true;
 
       const passwordHash = AuthService.calculatePasswordHash(
         data.loginemail,
@@ -102,21 +117,21 @@ export default class WelcomeCtrl {
           */ 
         }
       } catch (response) {
-        $scope.isLoading = false;
+        this.$scope.isLoading = false;
 
         return this.displayErrorMessage(response.data.code, response.data.desc);
       }
       
-      $scope.isLoading = false;
+      this.$scope.isLoading = false;
 
       let mnemonicEncrypted;
 
       if (authData.wallet) {
         mnemonicEncrypted = authData.wallet.mnemonicEncrypted;
       } else {
-        const simpleWallet = await generateWallet({
-          password: data.loginpassword
-        });
+        const simpleWallet: ISimpleWallet = new SimpleWallet();
+
+        simpleWallet.mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, data.loginpassword);
 
         mnemonicEncrypted = simpleWallet.mnemonicEncrypted;
 
@@ -151,9 +166,9 @@ export default class WelcomeCtrl {
       location.href = "/";
     };
 
-    $scope.changePassword = (data: ILoginForm) => this.changePassword(data);
+    this.$scope.changePassword = (data: ILoginForm) => this.changePassword(data);
 
-    $scope.resetPassword = async (data) => {
+    this.$scope.resetPassword = async (data: ILoginForm) => {
       $scope.isLoading = true;
 
       try {
@@ -177,6 +192,7 @@ export default class WelcomeCtrl {
     $scope.signup = (data: ISignupForm) => this.signup(data);
   }
 
+
   static $inject = [
     "$rootScope",
     "$scope",
@@ -189,6 +205,12 @@ export default class WelcomeCtrl {
   ];
 
   private async ngInit() {
+    this.$scope.message = "";
+    this.$rootScope.noHeader = true;
+    this.$scope.isLoading = false;
+    this.$scope.forgot = false;
+    this.$scope.resetCode = this.$location.search().code;
+  
     const hashtags = await this.hashtagService.getTopHashtags();
 
     this.$scope.welcome = true;
