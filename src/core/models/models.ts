@@ -19,6 +19,7 @@ export class Post {
   body: string;
   plain: string;
   user: User;
+  shareURLs: any;
   postTypeId: TPostTypeId;
   parentPostId: number;
   createdAt: string;

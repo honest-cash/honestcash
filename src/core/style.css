@@ -61,10 +61,13 @@ h4 {
 }
 
 .width640 {
-  width: 640px !important;
+  width: 100%;
+  max-width: 640px !important;
 }
+
 .width321 {
-  width: 321px !important;
+  width: 100%;
+  max-width: 321px !important;
 }
 
 /* BOOTSTRAP OVERRIDES */
@@ -165,11 +168,6 @@ img.lazy {
 
 .block-center {
   margin: 0 auto;
-}
-
-.img-thumbnail-avatar-big {
-  height: 135px;
-  width: 135px;
 }
 
 .img-thumbnail-avatar-normal {

@@ -79,10 +79,16 @@
 						Write a story
 					</a>
 				</div>
-			</div>
-			<ng-include src="'templates/partials/feed-angular.html'">
-		</div>	
-	</div>		
+      </div>
+      <feeds
+        feeds="feeds"
+        load-more="loadMore()"
+        is-loading="isLoading"
+        on-upvote="addressClicked"
+      >
+      </feeds>
+		</div>
+	</div>
 
   <div class="hidden-xs hidden-sm col-md-3">
     <div ng-if="recommendedUsers && recommendedUsers.length" class="affix" style="min-width: 203px; max-width: 253px; width: 25%;">

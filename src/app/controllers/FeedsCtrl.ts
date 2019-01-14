@@ -1,6 +1,5 @@
 import HashtagService from "../../core/services/HashtagService";
 import ScopeService from "../../core/services/ScopeService";
-import { client as clientURL } from "../../core/config/index";
 
 export default class FeedsCtrl {
   constructor(
@@ -15,7 +14,7 @@ export default class FeedsCtrl {
     private profileService,
     private scopeService: ScopeService,
   ) {
-    this.$rootScope.isLoading = true;
+    this.$scope.isLoading = true;
 		this.$scope.feeds = [];
 		this.$scope.page = 1;
 		this.$scope.limit = 10;
@@ -49,13 +48,6 @@ export default class FeedsCtrl {
     this.fetchFeeds();
   }
 
-  protected getFeedShareURLs(feed) {
-    return {
-      reddit: `https://reddit.com/submit?url=${clientURL}/${feed.user.username}/${feed.alias}&title=${feed.title}`,
-      twitter: `https://twitter.com/intent/tweet?url=${clientURL}/${feed.user.username}/${feed.alias}&text=${feed.title}&via=honest_cash&hashtags=${feed.userPostHashtags.map(h => h.hashtag).join(',')}`
-    }
-  }
-
   protected loadMore() {
     if (!this.$rootScope.activeCalls && this.$scope.postsAvailable) {
       this.$scope.page = this.$scope.page + 1;
@@ -65,6 +57,8 @@ export default class FeedsCtrl {
   };
 
   protected fetchFeeds() {
+    this.$scope.isLoading = true;
+
     const obj = {
       page: this.$scope.page,
       hashtag: this.$scope.hashtag,
@@ -83,7 +77,6 @@ export default class FeedsCtrl {
     this.FeedService.fetchFeeds(obj, (data) => {
       if (data) {
         data.forEach((feed) => {
-          feed.shareURLs = this.getFeedShareURLs(feed);
           this.$scope.feeds.push(feed);
         });
 
@@ -96,7 +89,7 @@ export default class FeedsCtrl {
         this.$scope.postsAvailable = false;
       }
 
-      this.$rootScope.isLoading = false;
+      this.$scope.isLoading = false;
     });
   };
 

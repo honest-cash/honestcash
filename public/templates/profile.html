@@ -6,61 +6,57 @@
     <div class="col-xs-12">
       <div class="col-xs-12 col-sm-3 col-md-2">
         <img
-          ng-if="profile.imageUrl"
           id="profilePic"
           fallback-src="{{ '/img/avatar.png' }}"
-          class="img-circle img-thumbnail-avatar-big image-center"
-          ng-src="{{ profile.imageUrl }}"
-        />
-        <img
-          ng-if="!profile.imageUrl"
-          id="profilePic"
-          class="img-circle img-thumbnail-avatar-big image-center"
-          ng-src="/img/avatar.png"
+          class="img-circle img-thumbnail-avatar-normal image-center"
+          ng-src="{{ profileCtrl.profile.imageUrl || '/img/avatar.png' }}"
         />
       </div>
       <div class="pull-left col-xs-12 col-sm-9 col-md-10">
         <div>
           <h1 class="text-center-sm">
-            <span class="bold">{{ profile.username }}</span>
-            <span class="follow-unfollow" ng-if="profile.id !== user.id">
+            <span class="bold">{{ profileCtrl.profile.username }}</span>
+            <span class="follow-unfollow" ng-if="profileCtrl.profile.id !== user.id">
               <button
-                ng-click="follow(profile.id, profile)"
-                ng-if="!profile.alreadyFollowing"
+                ng-click="follow(profileCtrl.profile.id, profileCtrl.profile)"
+                ng-if="!profileCtrl.profile.alreadyFollowing"
                 class="btn btn-default btn-xs"
               >
                 FOLLOW
               </button>
               <button
-                ng-click="follow(profile.id, profile)"
-                ng-if="!profile.id"
+                ng-click="profileCtrl.follow(profileCtrl.profile.id, profileCtrl.profile)"
+                ng-if="!profileCtrl.profile.id"
                 class="btn btn-default btn-xs"
               >
-                <a href="https://honest.cash/signup">FOLLOW</a>
+                <a href="https://honest.cash/signup">
+                  FOLLOW
+                </a>
               </button>
               <button
-                ng-click="unfollow(profile.id, profile)"
-                ng-if="profile.alreadyFollowing"
+                ng-click="unfollow(profileCtrl.profile.id, profileCtrl.profile)"
+                ng-if="profileCtrl.profile.alreadyFollowing"
                 class="btn btn-success btn-xs"
               >
                 UNFOLLOW
               </button>
             </span>
-            <span class="edit-profile" ng-if="profile.id === user.id">
+            <span class="edit-profile" ng-if="profileCtrl.profile.id === user.id">
               <a
                 class="btn btn-default btn-xs"
-                href="/profile/{{ profile.username }}/edit"
-                >Edit profile</a
+                href="/profile/{{ profileCtrl.profile.username }}/edit"
               >
+                Edit profile
+              </a>
             </span>
           </h1>
 
           <div class="hidden-xs">
             <span
-              ng-if="profile.addressBCH"
+              ng-if="profileCtrl.profile.addressBCH"
             >
-              <a href="https://explorer.bitcoin.com/bch/address/{{profile.addressBCH}}" target="_blank">{{ profile.addressBCH }}</a>
-              <i style="cursor:pointer;" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profile.addressBCH)"
+              <a href="https://explorer.bitcoin.com/bch/address/{{profile.addressBCH}}" target="_blank">{{ profileCtrl.profile.addressBCH }}</a>
+              <i style="cursor:pointer;" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profileCtrl.profile.addressBCH)"
               ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')" class="fa fa-qrcode" aria-hidden="true"></i>
             </span>
           </div>
@@ -68,50 +64,17 @@
 
           <div>
             <span class="profile-bio text-center-sm" ng-if="profile.bio">
-              {{ profile.bio }}
+              {{ profileCtrl.profile.bio }}
             </span>
           </div>
         </div>
 
         <div>
           <ul class="list-unstyled list-inline" style="margin-top:3px">
-            <li
-              ng-class="{ 'bold': showProfileTab === 'feeds' }"
-              class="showProfileTab"
-              ng-click="showFeeds()"
-            >
-              <a href="#" class="showProfileTab">
-                <span ng-bind="profile.followers_count"></span>
-                <small>Stories</small>
-              </a>
-            </li>
-            <li
-              ng-class="{ 'bold': showProfileTab === 'followers' }"
-              class="showProfileTab"
-              ng-click="showFollowers()"
-            >
-              <a href="#" class="showProfileTab">
-                <span ng-bind="profile.followerCount"></span>
-                <small>Followers</small>
-              </a>
-            </li>
-            <li
-              ng-class="{ 'bold': showProfileTab === 'following' }"
-              class="showProfileTab"
-              ng-click="showFollowing()"
-            >
-              <a href="#" class="showProfileTab">
-                <span ng-bind="profile.followingCount"></span>
-                <small>Following</small>
-              </a>
-            </li>
-
-            <li ng-if="profile.twitter || profile.reddit">•</li>
-
             <li>
-              <span class="text-center-sm" ng-if="profile.twitter">
+              <span class="text-center-sm" ng-if="profileCtrl.profile.twitter">
                 <a
-                  href="https://twitter.com/{{ profile.twitter }}"
+                  href="https://twitter.com/{{ profileCtrl.profile.twitter }}"
                   target="_blank"
                 >
                   <i class="fa fa-twitter"></i>
@@ -119,9 +82,9 @@
               </span>
             </li>
             <li>
-              <span class="text-center-sm" ng-if="profile.reddit">
+              <span class="text-center-sm" ng-if="profileCtrl.profile.reddit">
                 <a
-                  href="https://reddit.com/user/{{ profile.reddit }}"
+                  href="https://reddit.com/user/{{ profileCtrl.profile.reddit }}"
                   target="_blank"
                 >
                   <i class="fa fa-reddit"></i>
@@ -133,26 +96,18 @@
       </div>
     </div>
   </div>
-  <hr />
+</div>
+
+<div class="container-fluid">
   <div class="row">
-    <div class="col-xs-12">
-      <ul class="list-unstyled list-inline text-center">
-        <li
-          class="hashtag pointer"
-          ng-repeat="hashtag in profile.hashtags"
-          ng-click="fetchFeeds({hashtag:hashtag.hashtag, page:0})"
-        >
-          <a>#<span ng-bind="hashtag.hashtag"></span></a>
-        </li>
-      </ul>
-    </div>
+    <div ng-include="'profileNav'"></div>
   </div>
 </div>
 
 <div class="container">
   <div style="min-height:350px;">
     <div
-      ng-if="showProfileTab === 'feeds' && !feeds.length && user.id == profile.id"
+      ng-if="profileCtrl.showProfileTab === 'feeds' && !profileCtrl.feeds.length && user.id == profileCtrl.profile.id"
       class="text-center"
     >
       <h2>Write your first post!</h2>
@@ -163,62 +118,37 @@
       </a>
     </div>
 
-    <div ng-if="hashtag && showProfileTab == 'feeds'" class="text-center">
+    <div ng-if="hashtag && profileCtrl.showProfileTab == 'feeds'" class="text-center">
       <h2>
         <strong>#{{ hashtag }}</strong>
         <button
           class="btn btn-default btn-sm"
-          ng-click="fetchFeeds({hashtag:null,page:0})"
+          ng-click="profileCtrl.fetchFeeds({hashtag:null,page:0})"
         >
           ×
         </button>
       </h2>
     </div>
 
-    <div ng-if="showProfileTab=='feeds'">
-      <div ng-if="user.id==profileId">
-        <div class="row" ng-repeat="draft in drafts">
-          <div class="push feed">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <span class="fa fa-hashtag"></span>
-                <button class="close" ng-click="removePost(draft,true,$index)">
-                  ×
-                </button>
-              </div>
-
-              <div class="panel-body image-feed-body">
-                <div class="feed-body">
-                  <lazy-img
-                    class="lazy"
-                    ng-src="{{ trustSrc(draft.image_url) }}"
-                    alt="image"
-                  ></lazy-img>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <ng-include src="'templates/partials/feed-angular.html'"></ng-include>
+    <div ng-if="profileCtrl.showProfileTab=='feeds' || profileCtrl.showProfileTab=='responses'">
+      <feeds
+        feeds="profileCtrl.feeds"
+        load-more="profileCtrl.loadMore()"
+        is-loading="profileCtrl.isLoading"
+        on-upvote="addressClicked"
+      >
+      </feeds>
     </div>
 
-    <div ng-if="showProfileTab=='followers' || showProfileTab=='following'">
+    <div ng-if="profileCtrl.showProfileTab=='followers' || profileCtrl.showProfileTab=='following'">
       <div class="width640 block-center">
-        <strong ng-if="showProfileTab=='followers'"
-          >{{ profile.username }} is followed by</strong
-        >
-        <strong ng-if="showProfileTab=='following'"
-          >{{ profile.username }} follows</strong
-        >
-
-        <div class="row" ng-repeat="followGuy in followGuys">
+        <div class="row" ng-repeat="followGuy in profileCtrl.followGuys">
           <hr />
 
           <!-- AUTHOR REFERENCES -->
           <div class="pull-left width321">
             <!-- AUTHOR IMAGE -->
-            <a ui-sref="vicigo.profile({profileId:followGuy.username})">
+            <a ui-sref="vicigo.profile({ profileId:followGuy.username })">
               <img
                 class="img-circle img-thumbnail-avatar-small"
                 fallback-src="/img/avatar.png"
@@ -242,12 +172,12 @@
             <!-- END AUTHOR TITLE -->
           </div>
 
-          <div class="following-follow" ng-if="profile.id !== user.id">
+          <div class="following-follow" ng-if="profileCtrl.profile.id !== user.id">
             <button
               ng-if="!followGuy.alreadyFollowing && followGuy.id !== user.id"
               style="margin-top: 5px;"
               ng-click="follow(followGuy.id, followGuy);"
-              class="pull-right btn btn-xs"
+              class="pull-right btn btn-default btn-xs"
             >
               Follow
             </button>
@@ -256,7 +186,7 @@
               ng-if="followGuy.alreadyFollowing"
               style="margin-top: 5px;"
               ng-click="unfollow(followGuy.id, followGuy);"
-              class="pull-right btn btn-xs"
+              class="pull-right btn btn-success btn-xs"
             >
               Unfollow
             </button>
@@ -266,3 +196,51 @@
     </div>
   </div>
 </div>
+
+
+<script type="text/ng-template" id="profileNav">
+  <div class="hc-profile-nav">
+    <ul class="width640 nav nav-tabs text-center">
+        <li
+        ng-class="{ 'bold': profileCtrl.showProfileTab === 'feeds' }"
+        class="showProfileTab"
+        ng-click="profileCtrl.showFeeds()"
+      >
+        <a href="#" class="showProfileTab">
+          <small>Stories</small>
+        </a>
+      </li>
+
+      <li
+        ng-class="{ 'bold': profileCtrl.showProfileTab === 'responses' }"
+        class="showProfileTab"
+        ng-click="profileCtrl.showResponses()"
+      >
+        <a href="#" class="showProfileTab">
+          <small>Responses</small>
+        </a>
+      </li>
+
+      <li
+        ng-class="{ 'bold': profileCtrl.showProfileTab === 'followers' }"
+        class="showProfileTab"
+        ng-click="profileCtrl.showFollowers()"
+      >
+        <a href="#" class="showProfileTab">
+          <span class="hidden-xs" ng-bind="profileCtrl.profile.followerCount"></span>
+          <small>Followers</small>
+        </a>
+      </li>
+      <li
+        ng-class="{ 'bold': profileCtrl.showProfileTab === 'following' }"
+        class="showProfileTab"
+        ng-click="profileCtrl.showFollowing()"
+      >
+        <a href="#" class="showProfileTab">
+          <span class="hidden-xs" ng-bind="profileCtrl.profile.followingCount"></span>
+          <small>Following</small>
+        </a>
+      </li>
+    </ul>
+  </div>
+</script>

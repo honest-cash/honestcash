@@ -1,4 +1,5 @@
 import feedComponent from './feed/component';
+import feeds from './feeds/component';
 
 angular.module("vqDirectives", [ "vqConfig" ])
 	.directive('backImg', function() {
@@ -22,4 +23,6 @@ angular.module("vqDirectives", [ "vqConfig" ])
 		return fallbackSrc;
     })
 
-	.directive('feed', feedComponent);
+  .directive('feed', feedComponent)
+  .directive('feeds', feeds);
+  

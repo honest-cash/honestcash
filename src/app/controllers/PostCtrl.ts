@@ -30,7 +30,6 @@ export default class PostCtrl {
     this.post = await this.postService.getById(
       this.$stateParams.alias
     );
-    this.post.shareURLs = this.getFeedShareURLs(this.post);
 
     this.isLoading = false;
 
@@ -57,13 +56,6 @@ export default class PostCtrl {
     tippy(".hc-tooltip");
   }
 
-  protected getFeedShareURLs(feed) {
-    return {
-      reddit: `https://reddit.com/submit?url=${clientURL}/${feed.user.username}/${feed.alias}&title=${feed.title}`,
-      twitter: `https://twitter.com/intent/tweet?url=${clientURL}/${feed.user.username}/${feed.alias}&text=${feed.title}&via=honest_cash&hashtags=${feed.userPostHashtags.map(h => h.hashtag).join(',')}`
-    }
-  }
-
   private async createPost() {
     if (!this.newResponse || this.newResponse.length < 10) {
       return toastr.error("Comments need to be at least 10 characters.")
@@ -80,6 +72,10 @@ export default class PostCtrl {
     this.newResponse = "";
 
     this.scopeService.safeApply(this.$scope, () => {});
+  }
+
+  private displayFeedBody(html: string): string {
+    return this.postService.displayHTML(html);
   }
 
   static $inject = [

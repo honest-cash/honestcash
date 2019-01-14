@@ -87,12 +87,6 @@ export default class MainCtrl {
           RelsService.unfollowProfile(profileId);
         };
 
-        $rootScope.trustSrc = (src) => {
-          return $sce.trustAsResourceUrl(src);
-        };
-
-        $scope.displayFeedBody = (html: string): string => this.postService.displayHTML(html);
-
         $rootScope.logoutMe = () => {
             AuthService.logout();
 

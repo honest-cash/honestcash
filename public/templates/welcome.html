@@ -39,7 +39,11 @@
             
             <div class="form-group">
 								<label>password</label>
-								<input type="password" class="form-control" ng-model="data.password">
+                <input type="password" class="form-control" ng-model="data.password">
+                
+                <p class="text-muted">
+                  Disclaimer: Honest takes no responsibility for your account, keys, or wallet. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. Your wallet is encrypted with your account password, so make sure to use a strong password.
+                </p>
 						</div>
 
 						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
@@ -50,7 +54,7 @@
 				</form>
 
     	<hr>
-					<p class="pull">by signing up you agree to our <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">terms of of service</a> and <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.</p>       
+          <p class="pull">by signing up you agree to our <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">terms of of service</a> and <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.</p>
       </div>
 			
 			<div class="col-md-6">

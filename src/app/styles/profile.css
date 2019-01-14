@@ -19,3 +19,20 @@
     color: inherit;
     text-decoration: none;
 }
+
+.hc-profile-nav {
+  display: flex;
+}
+
+.hc-profile-nav ul {
+  margin: 0 auto;
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.hc-profile-nav ul li {
+  display: inline-block;
+}

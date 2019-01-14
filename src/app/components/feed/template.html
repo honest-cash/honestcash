@@ -85,9 +85,9 @@
           <ul class="list-unstyled list-inline list">
             <li style="width:50px;">
               <button
-                ng-click="addressClicked(feed)"
+                ng-click="upvote(feed)"
                 class="btn btn-default"
-                ng-disabled="upvotingPostId === feed.id || feed.userId === user.id"
+                ng-disabled="upvotingPostId === feed.id || feed.userId == user.id"
               >
                 <i class="fa fa-btc"></i> 0.002
               </button>

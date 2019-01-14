@@ -59,7 +59,8 @@ export default function state ($stateProvider, $urlRouterProvider) {
 		.state('vicigo.profile', {
 			url: "/profile/:profileId",
 			templateUrl: "/templates/profile.html",
-			controller: "profileController",
+      controller: "profileController",
+      controllerAs: "profileCtrl",
 			resolve: {
 				'profile': [ "$stateParams", "$q", "ProfileService", ($stateParams, $q, ProfileService) => {
 					var defer = $q.defer();

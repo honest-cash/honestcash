@@ -1,5 +1,6 @@
 import moment from "moment";
 import { Post, Upvote } from "../models/models";
+import SocialSharing from '../lib/SocialSharing';
 export default class PostService {
   constructor (
     private $http,
@@ -39,6 +40,7 @@ export default class PostService {
   private processPost(post: Post): Post {
     post.createdAt = moment(post.createdAt).format(this.postDateFormat);
     post.publishedAt = moment(post.publishedAt).format(this.postDateFormat);
+    post.shareURLs = SocialSharing.getFeedShareURLs(post);
 
     post.userPosts && post.userPosts.forEach(userPost => {
       userPost = this.processPost(userPost);
@@ -59,7 +61,7 @@ export default class PostService {
 
   public async getById(postId: number): Promise<Post> {
     const res = await this.$http.get(this.API_URL + "/post/" + postId);
-      
+
     return this.processPost(res.data);
   };
 
