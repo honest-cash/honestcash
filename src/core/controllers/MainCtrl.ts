@@ -142,7 +142,7 @@ export default class MainCtrl {
 
         return console.error(err);
       }
-      
+
       const receivers = upvoteDistribution.determineUpvoteRewards(upvotes, post.user);
 
       toastr.info("Upvoting...");
@@ -170,6 +170,9 @@ export default class MainCtrl {
       // distribute only to testnet of owner
       // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
       try {
+          receivers.push({
+            opReturn: ["0x4801", postId.toString()]
+          });
           tx = await simpleWallet.send(receivers);
       } catch (err) {
           if (err.message && err.message.indexOf("Insufficient") > -1) {
@@ -208,7 +211,7 @@ export default class MainCtrl {
       const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
       const anchorEl = document.getElementById("bchTippingTransactionUrl") as HTMLAnchorElement;
-  
+
       console.log(`Upvote transaction: ${url}`);
 
       anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
