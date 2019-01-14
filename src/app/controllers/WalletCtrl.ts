@@ -207,19 +207,21 @@ export default class WalletCtrl {
 
           try {
               const res = await simpleWallet.send([
-                  {
-                      address: withdrawalAddressBCH,
-                      amountSat: bitbox.BitcoinCash.toSatoshi(withdrawalAmount)
-                  }
+                {
+                  address: withdrawalAddressBCH,
+                  amountSat: bitbox.BitcoinCash.toSatoshi(withdrawalAmount)
+                }
               ]);
 
               txid = res.txid;
           } catch (err) {
-              return swal({
-                  type: 'error',
-                  title: 'Error',
-                  text: err,
-              });
+            console.error(err);
+
+            return swal({
+                type: "error",
+                title: "Cound not send",
+                text: err.message,
+            });
           }
 
           await swal({
