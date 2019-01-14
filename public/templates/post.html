@@ -52,7 +52,7 @@
                 <a href="/profile/{{postCtrl.post.user.username}}" target="_self">{{::postCtrl.post.user.username}}</a>
               </strong>
 
-              <button ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);" class="btn btn-lg btn-follow">
+              <button ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);" class="btn btn-xs btn-default">
                   Follow
               </button>
 
@@ -259,7 +259,11 @@
             <a href="/profile/{{postCtrl.post.user.username}}" target="_self">{{::postCtrl.post.user.username}} ({{::postCtrl.post.user.followerCount}})</a>
           </strong>
   
-          <button ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);" class="btn btn-lg btn-follow">
+          <button
+            ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing"
+            style="margin-left: 15px;"
+            ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);"
+            class="btn btn-xs btn-default">
               Follow
           </button>
   

@@ -27,28 +27,28 @@
               <button
                 ng-click="follow(profile.id, profile)"
                 ng-if="!profile.alreadyFollowing"
-                class="btn btn-default btn-lg btn-follow"
+                class="btn btn-default btn-xs"
               >
                 FOLLOW
               </button>
               <button
                 ng-click="follow(profile.id, profile)"
                 ng-if="!profile.id"
-                class="btn btn-default btn-lg btn-follow"
+                class="btn btn-default btn-xs"
               >
                 <a href="https://honest.cash/signup">FOLLOW</a>
               </button>
               <button
                 ng-click="unfollow(profile.id, profile)"
                 ng-if="profile.alreadyFollowing"
-                class="btn btn-success btn-lg btn-unfollow"
+                class="btn btn-success btn-xs"
               >
                 UNFOLLOW
               </button>
             </span>
             <span class="edit-profile" ng-if="profile.id === user.id">
               <a
-                class="btn btn-default btn-md"
+                class="btn btn-default btn-xs"
                 href="/profile/{{ profile.username }}/edit"
                 >Edit profile</a
               >
@@ -247,7 +247,7 @@
               ng-if="!followGuy.alreadyFollowing && followGuy.id !== user.id"
               style="margin-top: 5px;"
               ng-click="follow(followGuy.id, followGuy);"
-              class="pull-right btn btn-lg btn-follow"
+              class="pull-right btn btn-xs"
             >
               Follow
             </button>
@@ -256,7 +256,7 @@
               ng-if="followGuy.alreadyFollowing"
               style="margin-top: 5px;"
               ng-click="unfollow(followGuy.id, followGuy);"
-              class="pull-right btn btn-lg btn-follow"
+              class="pull-right btn btn-xs"
             >
               Unfollow
             </button>
