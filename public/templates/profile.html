@@ -55,7 +55,7 @@
             <span
               ng-if="profileCtrl.profile.addressBCH"
             >
-              <a href="https://explorer.bitcoin.com/bch/address/{{profile.addressBCH}}" target="_blank">{{ profileCtrl.profile.addressBCH }}</a>
+              <a href="https://explorer.bitcoin.com/bch/address/{{profileCtrl.profile.addressBCH}}" target="_blank">{{ profileCtrl.profile.addressBCH }}</a>
               <i style="cursor:pointer;" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profileCtrl.profile.addressBCH)"
               ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')" class="fa fa-qrcode" aria-hidden="true"></i>
             </span>
@@ -63,7 +63,7 @@
           <div class="profile-bch-qr-code"></div>
 
           <div>
-            <span class="profile-bio text-center-sm" ng-if="profile.bio">
+            <span class="profile-bio text-center-sm" ng-if="profileCtrl.profile.bio">
               {{ profileCtrl.profile.bio }}
             </span>
           </div>
