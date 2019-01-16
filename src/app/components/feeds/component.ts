@@ -13,7 +13,6 @@ class FeedsDirectiveCtrl {
   ) {
     this.$scope.user = this.$rootScope.user;
     
-    this.$scope.displayFeedBody = (html) => this.postService.displayHTML(html);
     this.initTippy();
   }
 
