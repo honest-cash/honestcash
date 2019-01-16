@@ -35,7 +35,7 @@ export default class ProfileCtrl {
 
       this.showProfileTab = "feeds";
 
-      this.feedService.fetchFeeds({
+      this.postService.getPosts({
         page: params.page ? params.page : this.page,
         userId: this.profile.id
       }, data => {

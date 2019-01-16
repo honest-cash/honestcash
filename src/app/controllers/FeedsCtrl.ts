@@ -1,5 +1,7 @@
 import HashtagService from "../../core/services/HashtagService";
 import ScopeService from "../../core/services/ScopeService";
+import FeedService from '../../core/services/FeedService';
+import PostService from '../../core/services/PostService';
 
 export default class FeedsCtrl {
   constructor(
@@ -8,15 +10,15 @@ export default class FeedsCtrl {
     private $stateParams,
     private $location,
     private $http,
-    private FeedService,
-    private PostService,
+    private feedService: FeedService,
+    private postService: PostService,
     private hashtagService: HashtagService,
     private profileService,
     private scopeService: ScopeService,
   ) {
     this.$scope.isLoading = true;
-		this.$scope.feeds = [];
-		this.$scope.page = 1;
+    this.$scope.feeds = [];
+    this.$scope.page = 1;
 		this.$scope.limit = 10;
 		this.$scope.postsAvailable = true;
 		this.$scope.hashtagFollowed = false;
@@ -50,7 +52,11 @@ export default class FeedsCtrl {
 
   protected loadMore() {
     if (!this.$rootScope.activeCalls && this.$scope.postsAvailable) {
-      this.$scope.page = this.$scope.page + 1;
+      if (this.$scope.feedType === "userfeed") {
+        this.$scope.until = this.$scope.feeds[this.$scope.feeds.length - 1].publishedAt;
+      } else {
+        this.$scope.page = this.$scope.page + 1;
+      }
 
       this.fetchFeeds();
     }
@@ -60,8 +66,9 @@ export default class FeedsCtrl {
     this.$scope.isLoading = true;
 
     const obj = {
-      page: this.$scope.page,
       hashtag: this.$scope.hashtag,
+      until: this.$scope.until,
+      page: this.$scope.page,
       followerId: undefined,
       orderBy: undefined
     };
@@ -74,7 +81,9 @@ export default class FeedsCtrl {
       obj.orderBy = "upvoteCount";
     }
 
-    this.FeedService.fetchFeeds(obj, (data) => {
+    const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ? this.feedService.fetchFeeds(obj, cb) : this.postService.getPosts(obj, cb);
+
+    fetchFn(obj, (data) => {
       if (data) {
         data.forEach((feed) => {
           this.$scope.feeds.push(feed);
