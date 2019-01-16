@@ -3,12 +3,13 @@
 	<div class="row">
 		<div class="col-md-2"></div>	  
 		<div class="col-md-8 col-xs-12" style="min-height:250px;">
-				<div ng-show="draft.parentPost.id" class="block-center">
+				<div ng-if="draft.parentPost.id" class="block-center">
 					<a target="_self" ng-href="/{{draft.parentPost.user.username}}/{{draft.parentPost.alias}}">
 						<div class="panel">
 							<div class="panel-body" style="cursor: pointer;">
 								Response to: <b>{{draft.parentPost.title}}</b>
 								<p>by @{{draft.parentPost.user.username}}</p>
+								<article style="color: #333" class="site-block post-body" ng-bind-html="displayFeedBody(draft.parentPost.body)"></article>
 							</div>
 						</div>
 					</a>
@@ -16,7 +17,7 @@
 
 				<h2>
 					<strong>
-            <div id="title"></div>
+            			<div ng-if="!draft.parentPost.id" id="title"></div>
 
 						<div ng-if="draft.status=='published'" class="badge">
 							Published

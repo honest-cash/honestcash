@@ -64,6 +64,8 @@ export default class EditorCtrl {
             }, cb);
         };
 
+        $scope.displayFeedBody = (html: string) => this.postService.displayHTML(html);
+
         $scope.readyToPublish = () => {
           if (!document.getElementById("title").innerText) {
             return toastr.error("The story needs to have a title");

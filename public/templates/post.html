@@ -10,7 +10,7 @@
 				<div class="panel" ui-sref="vicigo.post({ alias: postCtrl.post.parentPost.alias, username: postCtrl.post.parentPost.user.username })">
 					<div class="panel-body" style="cursor: pointer;">
 						Response to: <b>{{postCtrl.post.parentPost.title}}</b>
-						<p>by @{{postCtrl.post.parentPost.user.username}}</p>
+            			<p>by @{{postCtrl.post.parentPost.user.username}}</p>
 					</div>
 				</div>
 			</div>
@@ -201,9 +201,9 @@
         </li>
       </ul>
 
-      <h2 class="response-title">
+      <!-- <h2 class="response-title">
         <strong>{{response.title}}</strong>
-      </h2>
+      </h2> -->
 
       <article class="site-block response-body" ng-bind-html="postCtrl.displayFeedBody(response.body)"></article>
 
