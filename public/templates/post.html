@@ -190,7 +190,7 @@
         <li style="vertical-align:middle">
           <small style="margin-top:50px;">
             <a ui-sref="vicigo.profile({profileId: response.user.id})">
-            {{::response.user.username}} <span data-tippy-content="This author has {{::response.user.followerCount}} followers" class="user-follower-count">({{response.user.followerCount}})</span></a>
+            {{::response.user.username}} <span data-tippy-content="{{::response.user.followerCount}} followers, {{::response.user.followingCount}} following" class="user-follower-count">({{response.user.followerCount}})</span></a>
             </small>
         </li>
 
@@ -256,7 +256,7 @@
   
         <li style="vertical-align:middle">
           <strong style="margin-top:50px;">
-            <a href="/profile/{{postCtrl.post.user.username}}" target="_self">{{::postCtrl.post.user.username}} <span data-tippy-content="This author has {{::postCtrl.post.user.followerCount}} followers" class="user-follower-count">({{::postCtrl.post.user.followerCount}})</span></a>
+            <a href="/profile/{{postCtrl.post.user.username}}" target="_self">{{::postCtrl.post.user.username}} <span data-tippy-content="{{::postCtrl.post.user.followerCount}} followers, {{::postCtrl.post.user.followingCount}} following" class="user-follower-count">({{::postCtrl.post.user.followerCount}})</span></a>
           </strong>
   
           <button

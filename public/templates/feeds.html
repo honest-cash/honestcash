@@ -153,7 +153,7 @@
               />
               {{ user.username }}
               <span
-                data-tippy-content="This author has {{::user.followerCount}} followers"
+                data-tippy-content="{{::user.followerCount}} followers, {{::user.followingCount}} following"
                 class="user-follower-count"
                 >({{ user.followerCount }})</span
               >
