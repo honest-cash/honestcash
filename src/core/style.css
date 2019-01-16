@@ -1,6 +1,6 @@
 body {
   width: 100%;
-  font-family: "Helvetica", sans-serif;
+  font-family: 'Helvetica', sans-serif;
   font-size: 12px;
   font-weight: 300;
   /* color: #777; */
@@ -30,12 +30,12 @@ a:hover {
 
 h1 {
   font-size: 42px;
-  font-family: "Helvetica", sans-serif;
+  font-family: 'Helvetica', sans-serif;
 }
 
 h2 {
   font-size: 30px;
-  font-family: "Helvetica", sans-serif;
+  font-family: 'Helvetica', sans-serif;
 }
 
 h3 {
@@ -102,7 +102,7 @@ img.lazy {
   min-height: 180px;
   display: block;
   /* optional way, set loading as background */
-  background-image: url("/img/loader-pacman.gif");
+  background-image: url('/img/loader-pacman.gif');
   background-repeat: no-repeat;
   background-position: 50% 50%;
 }
@@ -362,7 +362,7 @@ img.lazy {
   -ms-user-select: none;
   user-select: none;
   background-image: none;
-  border: 2px solid buttonface;
+  border: 1px solid buttonface;
 }
 
 #profile-badge-thumbnail {
@@ -373,4 +373,14 @@ img.lazy {
   float: right;
   line-height: 14px;
   margin-left: 5px;
+}
+
+#profile-badge-mobile {
+  position: relative;
+  float: right;
+  padding: 7px;
+  border: 1px solid buttonface;
+  border-radius: 4px;
+  margin-top: 8px;
+  margin-right: 5px;
 }
