@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" ng-style="styles">
   <div class="push feed">
     <div class="feed-header">
       <div class="feed-author">
@@ -15,7 +15,7 @@
           <li>
             <strong style="margin-top:15px;">
               <a ui-sref="vicigo.profile({ profileId:feed.user.username })"
-                >{{ feed.user.username }} ({{ feed.user.followerCount }})</a
+                >{{ feed.user.username }} <span class="user-follower-count">({{ feed.user.followerCount }})</span></a
               >
             </strong>
           </li>

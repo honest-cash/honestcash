@@ -1,3 +1,6 @@
+import tippy from "tippy.js";
+import 'tippy.js/dist/tippy.css';
+
 import HashtagService from "../../core/services/HashtagService";
 import ScopeService from "../../core/services/ScopeService";
 
@@ -8,6 +11,7 @@ export default class FeedsCtrl {
     private $stateParams,
     private $location,
     private $http,
+    private $timeout,
     private FeedService,
     private PostService,
     private hashtagService: HashtagService,
@@ -29,16 +33,17 @@ export default class FeedsCtrl {
 
     this.hashtagService.getTopHashtags()
     .then(hashtags => {
-      $scope.hashtags = hashtags;
+      this.$scope.hashtags = hashtags;
 
       scopeService.safeApply($scope, () => {});
     });
 
-    if ($rootScope.user) {
-      profileService.fetchRecommentedProfiles($rootScope.user.id, {}, (users) => {
-        $scope.recommendedUsers = users;
+    if (this.$rootScope.user) {
+      this.profileService.fetchRecommentedProfiles(this.$rootScope.user.id, {}, (users) => {
+        this.$scope.recommendedUsers = users;
 
         scopeService.safeApply($scope, () => {});
+        this.initTippy();
       });
     }
 
@@ -93,12 +98,20 @@ export default class FeedsCtrl {
     });
   };
 
+  private async initTippy() {
+    //Timeout is somehow required
+    this.$timeout(() => {
+      tippy('.user-follower-count');
+    });
+  }
+
   static $inject = [
     "$rootScope",
     "$scope",
     "$stateParams",
     "$location",
     "$http",
+    "$timeout",
     "FeedService",
     "PostService",
     "HashtagService",
