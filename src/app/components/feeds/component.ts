@@ -1,30 +1,16 @@
-import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
-
 import template from './template.html';
-import PostService from '../../../core/services/PostService';
 
 class FeedsDirectiveCtrl {
   constructor(
     private $rootScope,
     private $scope,
-    private $sce,
-    private postService: PostService
   ) {
     this.$scope.user = this.$rootScope.user;
-    
-    this.initTippy();
-  }
-
-  private async initTippy() {
-    tippy(".user-follower-count");
   }
 
   static $inject = [
     "$rootScope",
-    "$scope",
-    "$sce",
-    "PostService"
+    "$scope"
   ]
 }
 

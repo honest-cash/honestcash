@@ -3,7 +3,8 @@
 		<div class="navbar-header" style="padding-top:27px;">
 			<div class="col-xs-12">
         <a class="pull-left" href="/" target="_self">
-          <img class="header-logo" src="/img/honest-long-logo.png" alt="Honest Logo">
+          <img class="header-logo visible-xs" src="/img/honest-logo-2.png" style="max-height: 50px;width: auto;padding: 8px;" alt="Honest Logo">
+          <img class="header-logo hidden-xs" src="/img/honest-long-logo.png" alt="Honest Logo">
         </a>
         <a class="visible-xs pull-right" ui-sref="starter.login">
           <button  class="btn btn-primary">login</button>
@@ -21,12 +22,21 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
+        <div ng-if="user.id" id="profile-badge-mobile" class="visible-xs">
+            <b style="margin-right: 5px;">{{ user.username }}</b>
+            <b ng-if="balanceLoading" class="text-gray">Loading balance...</b>
+            <span ng-if="!balanceLoading"
+              ><i class="fa fa-btc"></i> {{ addressBalance | number: 3 }} |
+              <i class="fa fa-usd"></i> {{ addressBalanceInUSD }}</span
+            >
+          </div>
         <a href="/" target="_self">
-          <img class="header-logo" src="/img/honest-long-logo.png"  alt="Honest Logo">
+          <img class="header-logo visible-xs" src="/img/honest-logo-2.png" style="max-height: 50px;width: auto;padding: 8px;" alt="Honest Logo">
+          <img class="header-logo hidden-xs" src="/img/honest-long-logo.png" alt="Honest Logo">
         </a>
       </div>
       <div class="navbar-collapse collapse">
-         <ul class="nav navbar-nav navbar-right" >
+         <ul class="nav navbar-nav navbar-right">
             <li ng-if="!user">
               <a href="/login" target="_self">
                 <i class="gi gi-settings fa-fw pull-right"></i> login
@@ -141,7 +151,7 @@
 				<div class="col-xs-12">
 					<div class="text-center">
 						<a href="/" target="_self">
-							<img src="/img/honest-long-logo.png"  style="padding:5px;" alt="Honest Logo" height="50px" weight="100px">
+							<img src="/img/honest-long-logo.png"  style="padding:5px;" alt="Honest Logo" height="50px">
 						</a>
 					</div>
 

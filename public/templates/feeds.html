@@ -151,11 +151,10 @@
                 ng-src="{{ user.imageUrl || '/img/avatar.png' }}"
                 class="img-circle img-thumbnail-avatar-smallest"
               />
-              {{ user.username }}
-              <span
-                data-tippy-content="{{::user.followerCount}} followers, {{::user.followingCount}} following"
-                class="user-follower-count"
-                >({{ user.followerCount }})</span
+
+              <span data-tippy-content="{{::user.followerCount}} followers, {{::user.followingCount}} following" class="user-follower-count">
+                {{ user.username }}
+              </span
               >
             </a>
             <br />

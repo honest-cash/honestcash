@@ -3,29 +3,50 @@ import 'tippy.js/dist/tippy.css';
 
 import HashtagService from "../../core/services/HashtagService";
 import ScopeService from "../../core/services/ScopeService";
+import FeedService from '../../core/services/FeedService';
+import PostService from '../../core/services/PostService';
+import { IGlobalScope } from '../../core/lib/interfaces';
+interface IScopeFeedsCtrl extends ng.IScope {
+  isLoading: boolean;
+  feeds: any[];
+  page: number;
+  limit: number;
+  postsAvailable: boolean;
+  hashtagFollowed: boolean;
+  hashtag: string;
+  feedType: "userfeed" | "top" | "new";
+  sortType: "new";
+  until: string;
+  recommendedHashtags: any[];
+  recommendedProfiles: any[];
+  recommendedUsers: any[];
+  hashtags: any[];
+
+  fetchFeeds: () => void;
+  loadMore: () => void
+}
 
 export default class FeedsCtrl {
   constructor(
-    private $rootScope,
-    private $scope,
+    private $rootScope: IGlobalScope,
+    private $scope: IScopeFeedsCtrl,
     private $stateParams,
-    private $location,
-    private $http,
-    private $timeout,
-    private FeedService,
-    private PostService,
+    private $location: ng.ILocationService,
+    private $timeout: ng.ITimeoutService,
+    private feedService: FeedService,
+    private postService: PostService,
     private hashtagService: HashtagService,
     private profileService,
     private scopeService: ScopeService,
   ) {
     this.$scope.isLoading = true;
-		this.$scope.feeds = [];
-		this.$scope.page = 1;
+    this.$scope.feeds = [];
+    this.$scope.page = 1;
 		this.$scope.limit = 10;
 		this.$scope.postsAvailable = true;
 		this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
-    this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed") as "userfeed" | "top" | "new";
+    this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
 
 		this.$scope.sortType = "new";
 		this.$scope.recommendedHashtags = [];
@@ -35,14 +56,14 @@ export default class FeedsCtrl {
     .then(hashtags => {
       this.$scope.hashtags = hashtags;
 
-      scopeService.safeApply($scope, () => {});
+      this.scopeService.safeApply($scope, () => {});
     });
 
     if (this.$rootScope.user) {
       this.profileService.fetchRecommentedProfiles(this.$rootScope.user.id, {}, (users) => {
         this.$scope.recommendedUsers = users;
 
-        scopeService.safeApply($scope, () => {});
+        this.scopeService.safeApply($scope, () => {});
         this.initTippy();
       });
     }
@@ -55,7 +76,11 @@ export default class FeedsCtrl {
 
   protected loadMore() {
     if (!this.$rootScope.activeCalls && this.$scope.postsAvailable) {
-      this.$scope.page = this.$scope.page + 1;
+      if (this.$scope.feedType === "userfeed") {
+        this.$scope.until = this.$scope.feeds[this.$scope.feeds.length - 1].publishedAt;
+      } else {
+        this.$scope.page = this.$scope.page + 1;
+      }
 
       this.fetchFeeds();
     }
@@ -65,10 +90,12 @@ export default class FeedsCtrl {
     this.$scope.isLoading = true;
 
     const obj = {
-      page: this.$scope.page,
       hashtag: this.$scope.hashtag,
+      until: this.$scope.until,
+      page: this.$scope.page,
       followerId: undefined,
-      orderBy: undefined
+      orderBy: undefined,
+      includeResponses: undefined
     };
 
     if (this.$scope.feedType === "userfeed") {
@@ -79,7 +106,9 @@ export default class FeedsCtrl {
       obj.orderBy = "upvoteCount";
     }
 
-    this.FeedService.fetchFeeds(obj, (data) => {
+    const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ? this.feedService.fetchFeeds(obj, cb) : this.postService.getPosts(obj, cb);
+
+    fetchFn(obj, (data) => {
       if (data) {
         data.forEach((feed) => {
           this.$scope.feeds.push(feed);
@@ -110,7 +139,6 @@ export default class FeedsCtrl {
     "$scope",
     "$stateParams",
     "$location",
-    "$http",
     "$timeout",
     "FeedService",
     "PostService",

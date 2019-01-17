@@ -24,8 +24,9 @@ class FeedDirectiveCtrl {
   }
 
   private async initTippy() {
-    //data-tippy-content is not used in the HTML
-    //because angular cannot interpolate the followerCount
+    /**
+     * data-tippy-content is not used in the HTML because angular cannot interpolate the followerCount
+    */
     tippy(".user-follower-count", {
       content: `${this.$scope.feed.user.followerCount} followers, ${this.$scope.feed.user.followingCount} following`
     });
