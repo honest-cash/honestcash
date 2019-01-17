@@ -148,7 +148,7 @@
           <a ng-href="/profile/{{upvote.user.username}}" target="_self">
             <img src="{{upvote.user.imageUrl || '/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-smallest" />
           </a>
-          <a ng-href="https://bch.btc.com/{{upvote.txId}}" target="_blank">
+          <a ng-href="https://explorer.bitcoin.com/bch/tx/{{upvote.txId}}" target="_blank">
             {{upvote.txId.substring(0, 4)}}...{{upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)}}
           </a>
 				</li>
