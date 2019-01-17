@@ -36,30 +36,33 @@ export default class ProfileCtrl {
       this.showProfileTab = "feeds";
 
       this.postService.getPosts({
+        includeResponses: true,
+        status: "published",
+        orderBy: "publishedAt",
         page: params.page ? params.page : this.page,
         userId: this.profile.id
       }, data => {
-          if (!data) {
-              return;
-          }
+        if (!data) {
+            return;
+        }
 
-          if (params.page === 0) {
-            this.postsAll = data;
-          } else {
-            data.forEach((feed) => {
-              this.postsAll.push(feed);
-            });
-          }
+        if (params.page === 0) {
+          this.postsAll = data;
+        } else {
+          data.forEach((feed) => {
+            this.postsAll.push(feed);
+          });
+        }
 
-          if (data.length < this.limit) {
-            this.postsAvailable = false;
-          } else {
-            this.postsAvailable = true;
-          }
+        if (data.length < this.limit) {
+          this.postsAvailable = false;
+        } else {
+          this.postsAvailable = true;
+        }
 
-          this.isLoading = false;
+        this.isLoading = false;
 
-          this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ? !_.parentPostId : _.parentPostId);
+        this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ? !_.parentPostId : _.parentPostId);
       });
   }
 

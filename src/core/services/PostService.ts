@@ -84,8 +84,6 @@ export default class PostService {
   };
 
   public getPosts(query: IFetchPostsArgs, callback) {
-    query.until = query.until || new Date().toISOString();
-
     this.$http({
         url: this.API_URL + "/posts",
         method: "GET",

@@ -33,7 +33,7 @@
           </li>
 
           <li ng-if="feed.feedMetaInfo.type === 'followerUpvote'">
-            <span style="margin-top:15px;"> <small>{{feed.feedMetaInfo.data.username}} upvoted it.</small> </span>
+            <span style="margin-top:15px;"> <small><a target="_self" href="/profile/{{feed.feedMetaInfo.data.username}}">{{feed.feedMetaInfo.data.username}}</a> upvoted it.</small> </span>
           </li>
 
           <li class="feed-date">
