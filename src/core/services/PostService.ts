@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Post, Upvote } from "../models/models";
+import { Post, Upvote, IFetchPostsArgs } from '../models/models';
 import SocialSharing from '../lib/SocialSharing';
 export default class PostService {
   constructor (
@@ -82,6 +82,24 @@ export default class PostService {
 
     return res.data.map(post => this.processPost(post));
   };
+
+  public getPosts(query: IFetchPostsArgs, callback) {
+    this.$http({
+        url: this.API_URL + "/posts",
+        method: "GET",
+        params: query
+    }).then((response) => {
+        let feeds = response.data;
+
+        for (let feed of feeds) {
+          feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
+          feed.createdAtFormatted = moment(feed.createdAt).format("MMM Do YY");
+          feed.publishedAtFormatted = moment(feed.publishedAt).format("MMM Do YY");
+        }
+
+        callback(feeds);
+    });
+  }
 
   static $inject = [
     "$http",
