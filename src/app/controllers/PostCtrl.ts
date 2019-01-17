@@ -53,7 +53,7 @@ export default class PostCtrl {
       new QRCode(container, this.post.user.addressBCH);
     }
 
-    tippy(".hc-tooltip");
+    this.initTippy();    
   }
 
   private async createPost() {
@@ -72,6 +72,11 @@ export default class PostCtrl {
     this.newResponse = "";
 
     this.scopeService.safeApply(this.$scope, () => {});
+  }
+
+  private async initTippy() {
+    tippy(".hc-tooltip");
+    tippy(".user-follower-count");
   }
 
   private displayFeedBody(html: string): string {

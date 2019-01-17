@@ -1,14 +1,6 @@
 import moment from "moment";
 import SocialSharing from '../lib/SocialSharing';
-
-interface IFetchArgs {
-  orderBy?: "upvoteCount";
-  userId?: number;
-  followerId?: number;
-  hashtag?: string;
-  limit?: number;
-  page?: number;
-}
+import { IFetchFeedsArgs } from '../models/models';
 
 export default class FeedService {
     constructor (
@@ -19,8 +11,8 @@ export default class FeedService {
       "$http", "API_URL"
     ]
 
-    public fetchFeeds(query: IFetchArgs, callback) {
-      query.page = query.page || 1;
+    public fetchFeeds(query: IFetchFeedsArgs, callback) {
+      query.until = query.until || new Date().toISOString();
 
       this.$http({
           url: this.API_URL + "/feeds",
@@ -31,8 +23,8 @@ export default class FeedService {
 
           for (let feed of feeds) {
             feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
-            feed.createdAt = moment(feed.createdAt).format("MMM Do YY");
-            feed.publishedAt = moment(feed.publishedAt).format("MMM Do YY");
+            feed.createdAtFormatted = moment(feed.createdAt).format("MMM Do YY");
+            feed.publishedAtFormatted = moment(feed.publishedAt).format("MMM Do YY");
           }
 
           callback(feeds);

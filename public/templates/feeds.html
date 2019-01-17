@@ -1,117 +1,187 @@
-<div style="margin-top: 52px;" class="navbar-fixed-top navbar-default hc-header-submenu">
-    <ul class="container list-unstyled list-inline">
-      <li ng-if="hashtag" class="bold" style="color: black">
-          {{hashtag}}
-      </li>
+<div
+  style="margin-top: 52px;"
+  class="navbar-fixed-top navbar-default hc-header-submenu"
+>
+  <ul class="container list-unstyled list-inline">
+    <li ng-if="hashtag" class="bold" style="color: black">{{ hashtag }}</li>
 
-      <li ng-if="!hashtag" ng-class="{ 'bold': feedType === 'userfeed' }" style="color: #777;">
-        <a href="/" target="_self">
-          Feed
-        </a>
-      </li>
+    <li
+      ng-if="!hashtag"
+      ng-class="{ 'bold': feedType === 'userfeed' }"
+      style="color: #777;"
+    >
+      <a href="/" target="_self"> Feed </a>
+    </li>
 
-      <li ng-class="{ 'bold': feedType === 'top' }">
-        <a ng-href="{{hashtag ? '/hashtag/' + hashtag : ''}}/top" target="_self">
-          top
-        </a>
-      </li> 
-      <li ng-class="{ 'bold': feedType === 'new' }">
-        <a ng-href="{{hashtag ? '/hashtag/' + hashtag : ''}}/new" target="_self">
-          latest
-        </a>
-      </li>
-    </ul>
+    <li ng-class="{ 'bold': feedType === 'top' }">
+      <a
+        ng-href="{{ hashtag ? '/hashtag/' + hashtag : '' }}/top"
+        target="_self"
+      >
+        top
+      </a>
+    </li>
+    <li ng-class="{ 'bold': feedType === 'new' }">
+      <a
+        ng-href="{{ hashtag ? '/hashtag/' + hashtag : '' }}/new"
+        target="_self"
+      >
+        latest
+      </a>
+    </li>
+  </ul>
 </div>
 
 <div class="visible-xs" style="height:90px;"></div>
 <div class="hidden-xs" style="height:30px;"></div>
 
 <div style="max-width:1300px;" class="container" class="block-center">
-	<div ng-if="!user.id" class="panel panel-default">
-		<div class="panel-body">
-				<h1>Earn Bitcoin Cash for your content.</h1>
-				<p>
-					Honest is a social network where you can earn Bitcoin Cash if you create value. Our mission to improve the quality of content on the internet and to get people paid for doing work they love. <a href="https://honest.cash/honest_cash/about-honest-cash">Read more...</a>
-				</p>
+  <div ng-if="!user.id" class="panel panel-default">
+    <div class="panel-body">
+      <h1>Earn Bitcoin Cash for your content.</h1>
+      <p>
+        Honest is a social network where you can earn Bitcoin Cash if you create
+        value. Our mission to improve the quality of content on the internet and
+        to get people paid for doing work they love.
+        <a href="https://honest.cash/honest_cash/about-honest-cash"
+          >Read more...</a
+        >
+      </p>
 
-				<a class="btn btn-default btn-lg" href="/signup" target="_self">Join the waiting list</a>
-		</div>
-	</div>
+      <a class="btn btn-default btn-lg" href="/signup" target="_self"
+        >Join the waiting list</a
+      >
+    </div>
+  </div>
 </div>
 
 <div class="block-center" style="max-width:1300px; z-index:99;">
-		<div class="hidden-xs hidden-sm col-md-3 hc-feed-sidebar">
-			<div ng-if="user.id" class="pull-left affix" style="min-width: 203px; max-width: 253px; width: 25%;">
-				<ul class="list-unstyled">
-          <li ng-class="{ 'bold': feedType === 'userfeed' }" style="margin-bottom:5px;">
-            <a style="margin-bottom:5px;" href="/" target="_self">
-              Feed
-            </a>
-          </li>
-					<li ng-repeat="hashtag in hashtags track by $index" style="margin-bottom:5px;">
-            <a ng-class="{ 'bold': hashtag.hashtag === $parent.hashtag }" ng-href="/hashtag/{{hashtag.hashtag}}">
-              {{hashtag.hashtag}} ({{hashtag.count}})
-            </a>
-					</li>
-				</ul>
-				<small style="font-size: 70%">
-					<a href="https://honest.cash/honest_cash/frequently-asked-questions">FAQ</a>
-          <a href="https://honest.cash/honest_cash/about-honest-cash">About</a>
-          <a href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129">Transparency</a>
-          <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/">Terms</a>
-          <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">Privacy</a>
-					<br />
-					<span>Honest Cash © 2018</span>
-				</small>
-			</div>
-		</div>
+  <div class="hidden-xs hidden-sm col-md-3 hc-feed-sidebar">
+    <div
+      ng-if="user.id"
+      class="pull-left affix"
+      style="min-width: 203px; max-width: 253px; width: 25%;"
+    >
+      <ul class="list-unstyled">
+        <li
+          ng-class="{ 'bold': feedType === 'userfeed' }"
+          style="margin-bottom:5px;"
+        >
+          <a style="margin-bottom:5px;" href="/" target="_self"> Feed </a>
+        </li>
+        <li
+          ng-repeat="hashtag in hashtags track by $index"
+          style="margin-bottom:5px;"
+        >
+          <a
+            ng-class="{ 'bold': hashtag.hashtag === $parent.hashtag }"
+            ng-href="/hashtag/{{ hashtag.hashtag }}"
+          >
+            {{ hashtag.hashtag }} ({{ hashtag.count }})
+          </a>
+        </li>
+      </ul>
+      <small style="font-size: 70%">
+        <a href="https://honest.cash/honest_cash/frequently-asked-questions"
+          >FAQ</a
+        >
+        <a href="https://honest.cash/honest_cash/about-honest-cash">About</a>
+        <a
+          href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
+          >Transparency</a
+        >
+        <a
+          href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/"
+          >Terms</a
+        >
+        <a href="https://honest.cash/honest_cash/honestcash-privacy-policy"
+          >Privacy</a
+        >
+        <br />
+        <span>Honest Cash © 2018</span>
+      </small>
+    </div>
+  </div>
 
-	<div class="col-md-6">
-		<div class="block-center">
-			<div ng-if="!feeds.length && !isLoading" class="panel">
-				<div class="panel-body">
-					<h1>No content yet.</h1>
-					<p>
-						Be the first to create it!
-					</p>
-					
-					<a class="btn btn-default btn-lg" ng-href="{{user.id ? '/write' : '/signup' }}" target="_self">
-						Write a story
-					</a>
-				</div>
+  <div class="col-md-6">
+    <div class="block-center">
+      <div ng-if="!feeds.length && !isLoading" class="panel">
+        <div class="panel-body">
+          <h1>No content yet.</h1>
+          <p>Be the first to create it!</p>
+
+          <a
+            class="btn btn-default btn-lg"
+            ng-href="{{ user.id ? '/write' : '/signup' }}"
+            target="_self"
+          >
+            Write a story
+          </a>
+        </div>
       </div>
       <feeds
         feeds="feeds"
         load-more="loadMore()"
         is-loading="isLoading"
-        on-upvote="addressClicked"
+        on-upvote="(addressClicked)"
       >
       </feeds>
-		</div>
-	</div>
+    </div>
+  </div>
 
   <div class="hidden-xs hidden-sm col-md-3">
-    <div ng-if="recommendedUsers && recommendedUsers.length" class="affix" style="min-width: 203px; max-width: 253px; width: 25%;">
+    <div
+      ng-show="recommendedUsers && recommendedUsers.length"
+      class="affix"
+      style="min-width: 203px; max-width: 253px; width: 25%;"
+    >
       <div class="panel panel-default">
-          <div class="panel-body">
-              <h5 class="bold">Who to follow</h5>
-              <div style="margin-bottom: 5px;" ng-repeat="user in recommendedUsers | limitTo: 3">
-                 <hr />
-                  <div>
-                    <a href="/profile/{{user.username}}" target="_self">
-                        <img ng-src="{{user.imageUrl || '/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-smallest" />
-                        <span>{{user.username}} ({{user.followerCount}})</span>
-                    </a>
-                  </div>
-                  <div>
-                    <p style="word-wrap: break-word;" class="text-muted">{{user.bio}}</p>
-                  </div>
-                  <div>
-                      <button ng-if="!user.alreadyFollowing" ng-click="follow(user.id, user);" class="btn btn-xs btn-default">Follow</button>
-                      <button ng-if="user.alreadyFollowing" ng-click="unfollow(user.id, user);" class="btn btn-xs btn-success">Following</button>
-                  </div>
-                <div>
+        <div class="panel-body">
+          <h5 class="bold">Who to follow</h5>
+          <div
+            style="margin-bottom: 5px;"
+            ng-repeat="user in recommendedUsers | limitTo: 3"
+          >
+            <hr />
+            <a
+              ui-sref="vicigo.profile({ profileId: user.username })"
+              target="_self"
+            >
+              <img
+                ng-src="{{ user.imageUrl || '/img/avatar.png' }}"
+                class="img-circle img-thumbnail-avatar-smallest"
+              />
+
+              <span data-tippy-content="{{::user.followerCount}} followers, {{::user.followingCount}} following" class="user-follower-count">
+                {{ user.username }}
+              </span
+              >
+            </a>
+            <br />
+            <p
+              ng-if="user.bio"
+              style="word-wrap: break-word;"
+              class="text-muted"
+            >
+              {{ user.bio }}
+            </p>
+            <br />
+            <button
+              ng-if="!user.alreadyFollowing"
+              ng-click="follow(user.id, user);"
+              class="btn btn-xs btn-default"
+            >
+              Follow
+            </button>
+            <button
+              ng-if="user.alreadyFollowing"
+              ng-click="unfollow(user.id, user);"
+              class="btn btn-xs btn-success"
+            >
+              Following
+            </button>
           </div>
+        </div>
       </div>
     </div>
   </div>

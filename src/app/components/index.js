@@ -1,4 +1,4 @@
-import feedComponent from './feed/component';
+import feed from './feed/component';
 import feeds from './feeds/component';
 
 angular.module("vqDirectives", [ "vqConfig" ])
@@ -23,6 +23,6 @@ angular.module("vqDirectives", [ "vqConfig" ])
 		return fallbackSrc;
     })
 
-  .directive('feed', feedComponent)
+  .directive('feed', feed)
   .directive('feeds', feeds);
   
