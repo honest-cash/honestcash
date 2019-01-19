@@ -20,6 +20,7 @@ export default function feeds(): ng.IDirective {
     scope: {
       "isLoading": "=isLoading",
       "feeds": "=feeds",
+      "user": "=user",
       "loadMore": "&loadMore",
       "upvote": "=onUpvote"
     },

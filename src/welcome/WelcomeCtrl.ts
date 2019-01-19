@@ -6,6 +6,7 @@ import { AuthService } from "../auth/AuthService";
 import HashtagService from "../core/services/HashtagService";
 import { IGlobalScope, IHashtagStat, ISimpleWallet } from "../core/lib/interfaces";
 import ScopeService from '../core/services/ScopeService';
+import ProfileService from '../core/services/ProfileService';
 
 declare var SimpleWallet: any;
 
@@ -45,7 +46,7 @@ export default class WelcomeCtrl {
     private $location: ng.ILocationService,
     private $state,
     private AuthService: AuthService,
-    private ProfileService,
+    private profileService: ProfileService,
     private scopeService: ScopeService,
     private hashtagService: HashtagService
   ) {
@@ -70,8 +71,8 @@ export default class WelcomeCtrl {
       });
 
       if (hasConfirmed) {
-        await this.ProfileService.updateUser(
-          userId,
+        await this.profileService.updateUser(
+          Number(userId),
           "addressBCH",
           bchAddress
         );
@@ -140,7 +141,7 @@ export default class WelcomeCtrl {
         });
 
         if (!authData.user.addressBCH) {
-          await this.ProfileService.updateUser(
+          await this.profileService.updateUser(
             authData.user.id,
             "addressBCH",
             simpleWallet.address
@@ -210,11 +211,11 @@ export default class WelcomeCtrl {
     this.$scope.isLoading = false;
     this.$scope.forgot = false;
     this.$scope.resetCode = this.$location.search().code;
-  
-    const hashtags = await this.hashtagService.getTopHashtags();
-
     this.$scope.welcome = true;
     this.$scope.noHeader = true;
+
+    const hashtags = await this.hashtagService.getTopHashtags();
+
     this.$scope.hashtags = hashtags;
 
     this.scopeService.safeApply(this.$scope, () => {});

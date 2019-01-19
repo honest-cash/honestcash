@@ -12,7 +12,6 @@ export default class ProfileCtrl {
       private RelsService,
       private postService: PostService,
       private scopeService: ScopeService,
-      private ProfileService,
       private profile
     ) {
       this.fetchFeeds({});
@@ -121,7 +120,6 @@ export default class ProfileCtrl {
       "RelsService",
       "PostService",
       "ScopeService",
-      "ProfileService",
       "profile"
   ]
 }

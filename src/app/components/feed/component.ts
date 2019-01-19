@@ -45,6 +45,7 @@ export default function feed(): ng.IDirective {
     scope: {
         "feed": "=",
         "upvote": "=",
+        "user": "=",
     },
     template,
     controller: FeedDirectiveCtrl
