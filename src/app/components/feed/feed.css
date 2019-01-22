@@ -33,7 +33,15 @@
 
 .feed-image {
   display: block;
-  height: 200px;
+	/* 
+		the image in the feed will:
+			1) if taller than the container, the height will be limited to 200px
+			and the rest of the image will be overflown and hidden
+			2) if shorten than the container, the container will shrink
+			to the size of the image 
+			max-height: 200px;
+	*/
+	max-height: 200px; 
   line-height: 200px;
   margin-left: auto;
   margin-right: auto;
