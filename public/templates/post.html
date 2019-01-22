@@ -27,8 +27,9 @@
 
 		<div class="row">
       <ul class="list-unstyled list-inline">
-        <li ng-repeat="hashtag in postCtrl.post.userPostHashtags">
-          <a href="/hashtag/{{ ::hashtag.hashtag }}" target="_self" class="pull-left hashtag">
+        <li class="pull-left hashtag-container" ng-repeat="hashtag in postCtrl.post.userPostHashtags">
+          <i class="fa fa-tag"></i>
+          <a href="/hashtag/{{ ::hashtag.hashtag }}" target="_self" class="hashtag">
             {{ ::hashtag.hashtag}}
           </a>
         </li>
