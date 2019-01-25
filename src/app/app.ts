@@ -10,6 +10,7 @@ import infiniteScroll from  'ng-infinite-scroll';
 import ProfileCtrl from './controllers/ProfileCtrl';
 import ProfileEditCtrl from './controllers/ProfileEditCtrl';
 import FeedsCtrl from './controllers/FeedsCtrl';
+import PostsCtrl from './controllers/PostsCtrl';
 import DraftsCtrl from './controllers/DraftsCtrl';
 import routingConfig from '../core/config/routing';
 import httpConfig from '../core/config/http';
@@ -59,6 +60,7 @@ angular.module("hashtag-app", [
 .controller("profileEditController", ProfileEditCtrl)
 .controller("feedsController", FeedsCtrl)
 .controller("draftsController", DraftsCtrl)
+.controller("postsController", PostsCtrl)
 
 .run([ "$rootScope", runs.initBCHWallet ])
 

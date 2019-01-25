@@ -1,0 +1,31 @@
+
+<div style="margin-top: 50px;" class="text-center" ng-if="postsCtrl.isLoading">
+  <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+</div>
+
+
+<div ng-if="!postsCtrl.isLoading">
+    <a
+      ng-repeat="feed in postsCtrl.feeds"
+      ui-sref="vicigo.post({ postId: feed.id, alias: feed.alias || feed.id, username: feed.user.username })"
+    >
+      <div class="post-feed-body">
+        <div class="feed-title">
+          <h3>
+            <strong> {{ feed.title }} </strong>
+          </h3>
+        </div>
+
+        <div class="feed-body">
+          <p ng-if="feed.body" class="feed-article">
+            {{ displayFeedBody(feed.body) }}
+          </p>
+        </div>
+        <div class="feed-footer">
+            <span class="text-muted"
+            ><small>{{ feed.publishedAtFormatted }}</small></span
+          >
+        </div>
+      </div>
+    </a>
+</div>

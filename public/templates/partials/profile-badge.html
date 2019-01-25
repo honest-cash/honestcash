@@ -41,6 +41,15 @@
     </a>
   </li>
   <li>
+    <a
+      style="margin-top: 5px;"
+      ng-href="/posts"
+      target="_self"
+    >
+      my posts
+    </a>
+  </li>
+  <li>
     <a ng-if="!simpleWallet" ui-sref="wallet.create()">connect wallet</a>
     <a ng-if="simpleWallet" ui-sref="wallet.create()">my wallet</a>
   </li>

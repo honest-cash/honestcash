@@ -51,6 +51,12 @@ export default function state ($stateProvider, $urlRouterProvider) {
 			}
 		})
 	
+		.state('vicigo.posts', {
+			url: "/posts",
+			templateUrl: "/templates/posts.html",
+			controller: "postsController",
+			controllerAs: "postsCtrl"
+		})
 		.state('vicigo.drafts', {
 			url: "/drafts/",
 			templateUrl: "/templates/drafts.html",
