@@ -110,7 +110,14 @@ const renderFeed = async (req, res, next) => {
 /**
  * Server rendering for feed
  */
-app.get("/", async (req, res) => {
+app.get("/", async (req, res, next) => {
+  const userAgent = req.headers['user-agent'];
+	const crawlerView = req.query.crawlerView;
+
+	if (!isBot(userAgent, crawlerView)) {
+		return next();
+  }
+
   const hashtags = (await axios.get(`https://honest.cash/api/hashtag?limit=50`)).data;
 
   res.render('index.ejs', {
