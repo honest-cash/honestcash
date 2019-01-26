@@ -67,7 +67,7 @@
 
             <hr ng-if="user.id" class="visible-xs" style="margin-top: 5px; margin-bottom: 5px;">
 
-            <li>
+            <li ng-if="user.id">
               <a href="/notifs" target="_self">
                 <i class="hidden-xs fa fa-bell"></i>
                 <span ng-if="user.notifCount && user.notifCount > 0" style="margin-top: -20px; margin-left: -7px; background-color: black;" class="hidden-xs badge">
