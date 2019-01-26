@@ -1,11 +1,11 @@
 import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
-
+import "tippy.js/dist/tippy.css";
+import { IGlobalScope } from "../../core/lib/interfaces";
+import FeedService from "../../core/services/FeedService";
 import HashtagService from "../../core/services/HashtagService";
+import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
-import FeedService from '../../core/services/FeedService';
-import PostService from '../../core/services/PostService';
-import { IGlobalScope } from '../../core/lib/interfaces';
+
 interface IScopeFeedsCtrl extends ng.IScope {
   isLoading: boolean;
   feeds: any[];
@@ -23,10 +23,23 @@ interface IScopeFeedsCtrl extends ng.IScope {
   hashtags: any[];
 
   fetchFeeds: () => void;
-  loadMore: () => void
+  loadMore: () => void;
 }
 
 export default class FeedsCtrl {
+  public static $inject = [
+    "$rootScope",
+    "$scope",
+    "$stateParams",
+    "$location",
+    "$timeout",
+    "FeedService",
+    "PostService",
+    "HashtagService",
+    "ProfileService",
+    "ScopeService"
+  ];
+
   constructor(
     private $rootScope: IGlobalScope,
     private $scope: IScopeFeedsCtrl,
@@ -84,7 +97,7 @@ export default class FeedsCtrl {
 
       this.fetchFeeds();
     }
-  };
+  }
 
   protected fetchFeeds() {
     this.$scope.isLoading = true;
@@ -106,7 +119,9 @@ export default class FeedsCtrl {
       obj.orderBy = "upvoteCount";
     }
 
-    const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ? this.feedService.fetchFeeds(obj, cb) : this.postService.getPosts(obj, cb);
+    const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ?
+      this.feedService.fetchFeeds(obj, cb) :
+      this.postService.getPosts(obj, cb);
 
     fetchFn(obj, (data) => {
       if (data) {
@@ -128,22 +143,9 @@ export default class FeedsCtrl {
   };
 
   private async initTippy() {
-    //Timeout is somehow required
+    // Timeout is somehow required
     this.$timeout(() => {
-      tippy('.user-follower-count');
+      tippy(".user-follower-count");
     });
   }
-
-  static $inject = [
-    "$rootScope",
-    "$scope",
-    "$stateParams",
-    "$location",
-    "$timeout",
-    "FeedService",
-    "PostService",
-    "HashtagService",
-    "ProfileService",
-    "ScopeService"
-  ];
 }

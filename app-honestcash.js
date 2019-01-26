@@ -110,7 +110,15 @@ const renderFeed = async (req, res, next) => {
 /**
  * Server rendering for feed
  */
-app.get("/", renderFeed);
+app.get("/", async (req, res) => {
+  const hashtags = (await axios.get(`https://honest.cash/api/hashtag?limit=50`)).data;
+
+  res.render('index.ejs', {
+    SEO: seo.metaDefault,
+    layout: 'crawlerLayout',
+    hashtags
+  })
+});
 app.get("/top", renderFeed);
 app.get("/new", renderFeed);
 app.get("/hashtag/:hashtag", renderFeed);
@@ -187,7 +195,7 @@ app.get("/:username/:alias", async (req, res, next) => {
 	}
 
 	res.render('postBody.ejs', {
-		layout: 'crawlerLayout',
+		layout: 'crawlerPostLayout',
 		SEO: seoData,
     post,
     responses,
