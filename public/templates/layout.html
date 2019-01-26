@@ -70,7 +70,9 @@
             <li>
               <a href="/notifs" target="_self">
                 <i class="hidden-xs fa fa-bell"></i>
-                <span ng-if="user.notifCount" style="margin-top: -20px; margin-left: -7px; background-color: black;" class="hidden-xs badge">{{user.notifCount}}</span>
+                <span ng-if="user.notifCount && user.notifCount > 0" style="margin-top: -20px; margin-left: -7px; background-color: black;" class="hidden-xs badge">
+                  {{user.notifCount}}
+                </span>
                 <span class="visible-xs">{{user.notifCount}} notifications</span>
               </a>
             </li>

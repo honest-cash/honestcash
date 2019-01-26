@@ -4,6 +4,7 @@ import { IGlobalScope } from "../../core/lib/interfaces";
 import FeedService from "../../core/services/FeedService";
 import HashtagService from "../../core/services/HashtagService";
 import PostService from "../../core/services/PostService";
+import ProfileService from "../../core/services/ProfileService";
 import ScopeService from "../../core/services/ScopeService";
 
 interface IScopeFeedsCtrl extends ng.IScope {
@@ -31,7 +32,6 @@ export default class FeedsCtrl {
     "$rootScope",
     "$scope",
     "$stateParams",
-    "$location",
     "$timeout",
     "FeedService",
     "PostService",
@@ -44,29 +44,28 @@ export default class FeedsCtrl {
     private $rootScope: IGlobalScope,
     private $scope: IScopeFeedsCtrl,
     private $stateParams,
-    private $location: ng.ILocationService,
     private $timeout: ng.ITimeoutService,
     private feedService: FeedService,
     private postService: PostService,
     private hashtagService: HashtagService,
-    private profileService,
-    private scopeService: ScopeService,
+    private profileService: ProfileService,
+    private scopeService: ScopeService
   ) {
     this.$scope.isLoading = true;
     this.$scope.feeds = [];
     this.$scope.page = 1;
-		this.$scope.limit = 10;
-		this.$scope.postsAvailable = true;
-		this.$scope.hashtagFollowed = false;
+    this.$scope.limit = 10;
+    this.$scope.postsAvailable = true;
+    this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
     this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
 
-		this.$scope.sortType = "new";
-		this.$scope.recommendedHashtags = [];
-		this.$scope.recommendedProfiles = [];
+    this.$scope.sortType = "new";
+    this.$scope.recommendedHashtags = [];
+    this.$scope.recommendedProfiles = [];
 
     this.hashtagService.getTopHashtags()
-    .then(hashtags => {
+    .then((hashtags) => {
       this.$scope.hashtags = hashtags;
 
       this.scopeService.safeApply($scope, () => {});
@@ -76,12 +75,12 @@ export default class FeedsCtrl {
       this.profileService.fetchRecommentedProfiles(this.$rootScope.user.id, {}, (users) => {
         this.$scope.recommendedUsers = users;
 
-        this.scopeService.safeApply($scope, () => {});
+        this.scopeService.safeApply($scope);
         this.initTippy();
       });
     }
 
-		this.$scope.fetchFeeds = () => this.fetchFeeds();
+    this.$scope.fetchFeeds = () => this.fetchFeeds();
     this.$scope.loadMore = () => this.loadMore();
 
     this.fetchFeeds();
@@ -140,7 +139,7 @@ export default class FeedsCtrl {
 
       this.$scope.isLoading = false;
     });
-  };
+  }
 
   private async initTippy() {
     // Timeout is somehow required
