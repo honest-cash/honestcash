@@ -1,5 +1,5 @@
 const upvoteData = require("./upvoteData");
-const upvoteDistribution = require("../src/app/lib/upvoteDistribution");
+const upvoteDistribution = require("../src/core/lib/upvoteDistribution");
 
 describe("upvoteDistribution", () => {
     it ("calculates receivers of the upvote", () => {
