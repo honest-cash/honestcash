@@ -1,86 +1,145 @@
-import PostService from '../../core/services/PostService';
-import { IGlobalScope } from '../../core/lib/interfaces';
+import tippy from "tippy.js";
+import 'tippy.js/dist/tippy.css';
+import swal from "sweetalert";
+
+import PostService from "../../core/services/PostService";
+import ScopeService from "../../core/services/ScopeService";
+import { IGlobalScope } from "../../core/lib/interfaces";
+import { Post } from "../../core/models/models";
+
+enum TabStatus {
+  drafts = "drafts",
+  published = "published"
+}
 
 interface IScopePostsCtrl extends ng.IScope {
   isLoading: boolean;
+  isLoadingMore: boolean;
+  isDeleting: boolean;
   feeds: any[];
   page: number;
   limit: number;
   postsAvailable: boolean;
-  feedType: "drafts" | "published";
-  sortType: "new";
+  currentTab: TabStatus;
 
   fetchFeeds: () => void;
-  loadMore: () => void
+  loadMore: () => void;
+  switchTab: () => void;
+  displayFeedBody: () => void;
+  deletePost: () => void;
 }
 
 export default class PostsCtrl {
   constructor(
     private $rootScope: IGlobalScope,
     private $scope: IScopePostsCtrl,
+    private $timeout: ng.ITimeoutService,
     private postService: PostService,
+    private scopeService: ScopeService
   ) {
-    this.$scope.isLoading = true;
-    this.$scope.feeds = [];
-    this.$scope.page = 1;
-		this.$scope.limit = 10;
-		this.$scope.postsAvailable = true;
-    this.$scope.feedType = "published";
-
-		this.$scope.fetchFeeds = () => this.fetchFeeds({});
-    this.$scope.loadMore = () => this.loadMore();
-
-    this.fetchFeeds({});
+    this.fetchFeeds();
   }
 
-  protected loadMore() {
-    if (!this.$rootScope.activeCalls && this.$scope.postsAvailable) {
-      this.$scope.page = this.$scope.page + 1;
+  public isLoading: boolean = true;
+  public isLoadingMore: boolean = false;
+  public isDeleting: boolean = false;
+  public feeds: Post[] = [];
+  public postsAvailable: boolean = true;
+  public currentTab = "published";
+  private page: number = 1;
+  private limit: number = 20;
 
-      this.fetchFeeds({page: this.$scope.page});
+  public loadMore() {
+    if (!this.$rootScope.activeCalls && this.postsAvailable) {
+      this.page += 1;
+      this.isLoadingMore = true;
+      this.fetchFeeds();
     }
-  };
+  }
 
-  
-  protected fetchFeeds(params) {
-    this.$scope.isLoading = true;
-    params = params ? params : {};
+  public fetchFeeds() {
+    console.log('fetching feed', this.page)
+    this.isLoading = this.isLoadingMore ? false : true;
 
-    this.postService.getPosts({
-      includeResponses: false,
-      status: "published",
-      orderBy: "publishedAt",
-      page: params.page ? params.page : this.$scope.page,
-      userId: 243 //this.$rootScope.user.id
-    }, data => {
-      console.log('data', data)
-      if (!data) {
+    this.postService.getPosts(
+      {
+        includeResponses: false,
+        status: "published",
+        orderBy: "publishedAt",
+        page: this.page,
+        userId: this.$rootScope.user.id
+      },
+      data => {
+
+        if (!data) {
           return;
+        }
+
+        if (this.page === 0) {
+          this.feeds = data;
+        } else {
+          data.forEach(feed => {
+            this.feeds.push(feed);
+          });
+        }
+
+        if (data.length < this.limit) {
+          this.postsAvailable = false;
+        } else {
+          this.postsAvailable = true;
+        }
+
+        this.isLoading = this.isLoadingMore ? false : false;
+        this.isLoadingMore = false;
+
+        this.scopeService.safeApply(this.$scope, () => {});
+
+        this.initTippy();
       }
+    );
+  }
 
-      if (params.page === 0) {
-        this.$scope.feeds = data;
-      } else {
-        data.forEach((feed) => {
-          this.$scope.feeds.push(feed);
-        });
-      }
+  public switchTab(currentTab: TabStatus) {
+    this.currentTab = currentTab;
+  }
 
-      if (data.length < this.$scope.limit) {
-        this.$scope.postsAvailable = false;
-      } else {
-        this.$scope.postsAvailable = true;
-      }
+  public async deletePost(id: number) {
+    this.isDeleting = true;
 
-      this.$scope.isLoading = false;
-
+    const confirmationResult = await swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this post!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
     });
-}
 
+    if (confirmationResult) {
+      const deleteResult = await this.postService.deletePost(id);
 
-  static $inject = [
-    "$rootScope",
-    "$scope",
-    "PostService",
-  ];
+      if (deleteResult.status === 200) {
+        this.feeds = this.feeds.filter(f => f.id === id);
+        toastr.success("Your post has been deleted");
+      } else {
+        toastr.error("There was an error while deleting your post")
+      }
+    } else {
+      toastr.info("Your post has not been deleted");
+    }
+
+    this.isDeleting = false;
+  }
+
+  private async initTippy() {
+    //Timeout is somehow required
+    this.$timeout(() => {
+      tippy('.hc-tooltip');
+    });
+  }
+
+  private displayFeedBody(html: string): string {
+    return this.postService.displayHTML(html);
+  }
+
+  static $inject = ["$rootScope", "$scope", "$timeout", "PostService", "ScopeService"];
 }

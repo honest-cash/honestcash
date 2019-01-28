@@ -1,31 +1,102 @@
-
 <div style="margin-top: 50px;" class="text-center" ng-if="postsCtrl.isLoading">
   <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
 </div>
 
-
 <div ng-if="!postsCtrl.isLoading">
-    <a
-      ng-repeat="feed in postsCtrl.feeds"
-      ui-sref="vicigo.post({ postId: feed.id, alias: feed.alias || feed.id, username: feed.user.username })"
-    >
-      <div class="post-feed-body">
-        <div class="feed-title">
-          <h3>
-            <strong> {{ feed.title }} </strong>
-          </h3>
-        </div>
+  <div class="row" style="margin-bottom: 30px;">
+    <div class="col-xs-12">
+      <strong style="font-size: 30px;">Your posts</strong>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12" style="margin-bottom: 20px;">
+      <ul class="nav nav-tabs text-center">
+        <li
+          ng-class="{ 'bold': postsCtrl.currentTab === 'drafts' }"
+          class="showProfileTab disabled hc-tooltip"
+          ng-click="postsCtrl.switchTab('drafts')"
+          data-tippy-content="This section is still under development."
+        >
+          <a href="#" class="showProfileTab" ng-disabled="true"> Drafts </a>
+        </li>
 
-        <div class="feed-body">
-          <p ng-if="feed.body" class="feed-article">
-            {{ displayFeedBody(feed.body) }}
-          </p>
-        </div>
-        <div class="feed-footer">
-            <span class="text-muted"
-            ><small>{{ feed.publishedAtFormatted }}</small></span
-          >
-        </div>
+        <li
+          ng-class="{ 'bold': postsCtrl.currentTab === 'published' }"
+          class="showProfileTab"
+          ng-click="postsCtrl.switchTab('published')"
+        >
+          <a href="#" class="showProfileTab">
+            Published ({{ postsCtrl.feeds.length }})
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div
+  ng-if="postsCtrl.currentTab === 'published' && !postsCtrl.feeds.length"
+  class="text-center"
+>
+  <h2>Write your first post!</h2>
+  <a href="/write" target="_self">
+    <button class="btn-default btn" style="margin:10px;">
+      <strong>Create draft</strong>
+    </button>
+  </a>
+</div>
+  <div
+    class="post-feed-body"
+    ng-repeat="feed in postsCtrl.feeds"
+    style="padding: 10px; margin-bottom: 10px;"
+  >
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>
+          <strong> {{ feed.title }} </strong>
+        </h3>
+        <article ng-if="feed.body" style="font-size: 14px;">
+          {{ postsCtrl.displayFeedBody(feed.body) }}
+        </article>
       </div>
-    </a>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 pull-left">
+        <span class="text-muted" style="font-size: 12px;"
+          >Published on {{ feed.publishedAtFormatted }}</span
+        >
+      </div>
+      <div class="col-xs-12 col-sm-4 pull-right text-right">
+        <a
+          class="btn btn-default btn-xs"
+          ui-sref="vicigo.post({ alias: feed.alias, username: feed.user.username })"
+          target="_blank"
+        >
+          <i class="fa fa-eye"></i>&nbsp;View
+        </a>
+        <a
+          class="btn btn-default btn-xs"
+          ng-href="/edit/{{ feed.id }}"
+          target="_blank"
+        >
+          <i class="fa fa-eraser"></i>&nbsp;Edit
+        </a>
+        <button
+          class="btn btn-default btn-xs"
+          ng-disabled="isDeleting"
+          ng-click="postsCtrl.deletePost(feed.id)"
+        >
+          <i class="fa fa-trash"></i>&nbsp;Delete
+        </button>
+      </div>
+    </div>
+  </div>
+  <button
+    ng-disabled="postsCtrl.isLoadingMore"
+    ng-if="postsCtrl.postsAvailable"
+    class="btn btn-default btn-block"
+    style="margin-top: 20px;margin-bottom: 50px;"
+    ng-click="postsCtrl.loadMore()"
+  >
+    Load more...
+  </button>
+  <div ng-if="!postsCtrl.postsAvailable" style="margin-bottom: 50px;"></div>
 </div>

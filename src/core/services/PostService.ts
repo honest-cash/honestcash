@@ -55,6 +55,10 @@ export default class PostService {
     return this.processPost(res.data);
   }
 
+  public async deletePost(postId: number): Promise {
+    return this.$http.delete(this.API_URL + "/post/" + postId);
+  }
+
   public displayHTML(html: string): string {
     return this.$sce.trustAsHtml(html);
   }
