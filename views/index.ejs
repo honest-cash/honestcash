@@ -1,0 +1,144 @@
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+				<img src="/img/honest-long-logo.png"  alt="Honest Logo" height="50px" weight="100px"></a>
+		</div>
+
+		<div class="col-xs-12" style="padding-top:20px;">
+					<h1>
+              A place to publish your best work and discuss freely
+					</h1>
+					<p>
+            The internet should reward quality thinking and be a place for an uncensored discussion. That’s why we’ve created a better home for writers, creators and thinkers. Honest allows you to earn money for your content, connects you to curious, avid readers, it's a place that is free from ads, uncensorable and simple to use, so you can focus on what matters: putting your best work out there to work for you.
+          </p>
+          
+          <p>
+              For top authors, thinkers, and emerging storytellers, <b>Honest</b> is a social network where you can earn Bitcoin if you create value.
+          </p>
+					<p>
+						<b>honest.cash</b> is proud to be featured on <a href="https://news.bitcoin.com/content-creators-can-earn-bch-using-the-honest-cash-platform/">bitcoin.com</a>, <a href="https://blog.btc.com/btc-com-news-digest-7fc31e947fb3">btc.com</a> and <a href="https://coinspice.io/news/adrian-barwicki-honest-cash/">coinspice</a>.
+					</p>	
+		</div>
+	</div>
+	 
+    <hr />
+
+    <div class="row text-center" style="margin-bottom: 30px;">
+      <div class="col-xs-12">
+        <h2><strong>Benefits for writers, creators and thinkers</strong></h2>
+      </div>
+      <div class="col-sm-4">
+            <i class="fa fa-heart"></i>
+            <h3 class="text-enter">
+                Write something good
+            </h3>
+            <p style="padding-top:20px;">
+              Share your thinking about something that matters to you. It can be short or long, serious or funny, reported or opinionated - it’s the quality of your perspective that counts.
+            </p>
+        </div>
+        <div class="col-sm-4">	
+            <i class="fa fa-share-alt"></i>
+            <h3 class="text-center">
+              Put your story to work
+            </h3>
+            <p style="padding-top:20px;">
+              If you’d like to earn money through your stories, make sure to backup your wallet recovery phrase in your wallet and you're good to go!
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <i class="fa fa-terminal"></i>
+            <h3 class="text-center">
+                Get featured
+            </h3>
+            <p style="padding-top:20px;">
+              Our editorial team reviews stories every day. When a story meets our Honest standards, a curator will recommend it to readers interested in relevant topics across Honest.Cash, our app, and email digests.
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <i class="fa fa-bitcoin"></i>
+            <h3 class="text-center">
+                Get paid instantly
+            </h3>
+            <p style="padding-top:20px;">
+                The readers can upvote your story and the money is directly deposited to your non-custodial wallet that only you have a control over!
+            </p>
+        </div>
+
+        <div class="col-sm-4">
+            <i class="fa fa-retweet"></i>
+            <h3 class="text-center">
+              Expand your audience
+            </h3>
+            <p style="padding-top:20px;">
+                Your story doesn’t end here. Keep writing about what you love to build and broaden your readership. We’ll help spread the word, too. Also, your followers are directly notified about your new stories.
+            </p>
+        </div>
+
+        <div class="col-sm-4">
+            <i class="fa fa-globe"></i>
+            <h3 class="text-center">
+              Make your story live forever
+            </h3>
+            <p style="padding-top:20px;">
+              You can make your content uncensorable so it can never be removed from the internet. You can upload your story onto blockchain and make it accessible to other publishing platforms around the world.
+            </p>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row text-center" style="margin-bottom: 30px;">
+        <div class="col-xs-12">
+          <h2>You are rewarded by readers, directly!</h2>
+        </div>
+
+        <div class="col-xs-12">
+            <p>
+              On Honest, you are paid with Bitcoin based on the amount of upvotes that your story receives. The upvotes are distributed directly to you without any intermediary in between. It happens instantly as the reader clicks the upvote button.
+
+              The only thing you need to do is to secure your wallet recovery phrase and write amazing content.
+            </p>
+      </div>
+    </div>
+
+    <div class="row text-center" style="margin-bottom: 20px;">
+        <div class="col-xs-12">
+            <h2><strong>Benefits for readers</strong></h2>
+        </div>
+			
+					<div class="col-sm-4">	
+							<i class="fa fa-bitcoin"></i>
+							<h3 class="text-center">
+								Earn for upvoting content
+							</h3>
+							<p style="padding-top:20px;">
+								You can earn Bitcoin Cash by voting on good content early. Each vote costs a little fraction of Bitcoin and the payment goes to earlier voters and the creator. If many people vote on the same content after you, you profit. 
+							</p>
+					</div>
+					<div class="col-sm-4">
+							<i class="fa fa-terminal"></i>
+							<h3 class="text-center">
+                Personalize your experience
+							</h3>
+							<p style="padding-top:20px;">
+                  Logging in to your Honest account allows us to deliver the most relevant and timely stories directly to you, based on your interests. When you follow users, topics and communities on Honest, you’re customizing the content you receive.
+							</p>
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-comments-o"></i>
+                <h3 class="text-center">
+                  Place for discussion
+                </h3>
+                <p style="padding-top:20px;">
+                  In order to respect open discussion and debate, Honest allows you to make your content uncensorable. You can upload your story onto blockchain and make it accessible to other publishing platforms around the world.
+                </p>
+            </div>
+	  </div>
+  </div>
+
+<ul>
+  <% for (const hashtag of hashtags) { %>
+    <li>
+      <a href="/hashtag/<%- hashtag.hashtag %>"><%- hashtag.count %> stories about <%- hashtag.hashtag %></a>
+    </li>
+  <% } %>
+</ul>

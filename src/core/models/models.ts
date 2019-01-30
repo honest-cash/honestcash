@@ -1,4 +1,19 @@
 export type TPostTypeId = "comment" | "article" | "response";
+
+export interface IFetchPostsArgs {
+  orderBy?: "upvoteCount" | "publishedAt";
+  userId?: number;
+  hashtag?: string;
+  page?: number;
+  includeResponses?: boolean;
+  status?: "published" | "draft"
+}
+
+export interface IFetchFeedsArgs {
+  followerId?: number;
+  until?: string;
+}
+
 export class User {
   id: number;
   username: string;

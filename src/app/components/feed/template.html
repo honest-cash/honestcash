@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" ng-style="styles">
   <div class="push feed">
     <div class="feed-header">
       <div class="feed-author">
@@ -14,13 +14,13 @@
 
           <li>
             <strong style="margin-top:15px;">
-              <a ui-sref="vicigo.profile({ profileId:feed.user.username })"
-                >{{ feed.user.username }} ({{ feed.user.followerCount }})</a
-              >
+              <a ui-sref="vicigo.profile({ profileId:feed.user.username })">
+                  <span class="user-follower-count">{{ feed.user.username }}</span>
+              </a>
             </strong>
           </li>
 
-          <li ng-if="feed.parentPostId">
+          <li ng-if="feed.parentPostId || feed.feedMetaInfo.type === 'followerUpvote'">
             <span style="margin-top:15px;"> • </span>
           </li>
 
@@ -28,9 +28,17 @@
             <span style="margin-top:15px;"> <small>Response</small> </span>
           </li>
 
+          <li ng-if="feed.parentPostId && feed.feedMetaInfo.type === 'followerUpvote'">
+            <span style="margin-top:15px;"> • </span>
+          </li>
+
+          <li ng-if="feed.feedMetaInfo.type === 'followerUpvote'">
+            <span style="margin-top:15px;"> <small><a target="_self" href="/profile/{{feed.feedMetaInfo.data.username}}">{{feed.feedMetaInfo.data.username}}</a> upvoted it.</small> </span>
+          </li>
+
           <li class="feed-date">
             <span class="text-muted"
-              ><small>{{ feed.publishedAt }}</small></span
+              ><small>{{ feed.publishedAtFormatted }}</small></span
             >
           </li>
         </ul>
@@ -67,12 +75,14 @@
       <div class="row hashtags">
         <div class="col-xs-12">
           <div style="padding-left:8px;padding-right:5px;">
-            <a
-              class="pull-left hashtag"
-              ng-repeat="hashtag in feed.userPostHashtags"
-              ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })"
-              >{{ ::hashtag.hashtag }}</a
-            >
+            <span class="pull-left hashtag-container" ng-repeat="hashtag in feed.userPostHashtags">
+                <i class="fa fa-tag"></i>
+                <a
+                class="hashtag"
+                ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })"
+                >{{ ::hashtag.hashtag }}</a
+              >
+            </span>
           </div>
         </div>
       </div>

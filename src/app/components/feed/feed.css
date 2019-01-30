@@ -110,6 +110,11 @@
 	cursor: pointer;
 }
 
+.feed .feed-footer .hashtag-container {
+  padding: 2px;
+  margin-right: 4px;
+}
+
 .feed .feed-footer .hashtag {
   padding: 2px;
   font-weight: bold;

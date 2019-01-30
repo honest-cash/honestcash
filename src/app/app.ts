@@ -11,6 +11,7 @@ import ProfileCtrl from './controllers/ProfileCtrl';
 import ProfileEditCtrl from './controllers/ProfileEditCtrl';
 import FeedsCtrl from './controllers/FeedsCtrl';
 import DraftsCtrl from './controllers/DraftsCtrl';
+import NotifCtrl from './controllers/NotifsCtrl';
 import routingConfig from '../core/config/routing';
 import httpConfig from '../core/config/http';
 import stateConfig from './stateConfig';
@@ -59,6 +60,7 @@ angular.module("hashtag-app", [
 .controller("profileEditController", ProfileEditCtrl)
 .controller("feedsController", FeedsCtrl)
 .controller("draftsController", DraftsCtrl)
+.controller("notifsCtrl", NotifCtrl)
 
 .run([ "$rootScope", runs.initBCHWallet ])
 
