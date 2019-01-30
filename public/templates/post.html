@@ -49,7 +49,11 @@
 
             <li style="vertical-align:middle">
               <strong style="margin-top:50px;">
-                <a href="/profile/{{postCtrl.post.user.username}}" target="_self">{{::postCtrl.post.user.username}}</a>
+                <a href="/profile/{{postCtrl.post.user.username}}" target="_self">
+                  <span data-tippy-content="{{::postCtrl.post.user.followerCount}} followers, {{::postCtrl.post.user.followingCount}} following" class="user-follower-count">
+                      {{::postCtrl.post.user.username}}
+                  </span>
+                </a>
               </strong>
 
               <button ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);" class="btn btn-xs btn-default">
@@ -144,7 +148,7 @@
           <a ng-href="/profile/{{upvote.user.username}}" target="_self">
             <img src="{{upvote.user.imageUrl || '/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-smallest" />
           </a>
-          <a ng-href="https://bch.btc.com/{{upvote.txId}}" target="_blank">
+          <a ng-href="https://explorer.bitcoin.com/bch/tx/{{upvote.txId}}" target="_blank">
             {{upvote.txId.substring(0, 4)}}...{{upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)}}
           </a>
 				</li>
@@ -190,8 +194,11 @@
         <li style="vertical-align:middle">
           <small style="margin-top:50px;">
             <a ui-sref="vicigo.profile({profileId: response.user.id})">
-            {{::response.user.username}} ({{response.user.followerCount}})</a>
-            </small>
+              <span data-tippy-content="{{::response.user.followerCount}} followers, {{::response.user.followingCount}} following" class="user-follower-count">
+                {{::response.user.username}}
+              </span>
+            </a>
+          </small>
         </li>
 
         <li style="vertical-align:middle">
@@ -260,7 +267,11 @@
   
         <li style="vertical-align:middle">
           <strong style="margin-top:50px;">
-            <a href="/profile/{{postCtrl.post.user.username}}" target="_self">{{::postCtrl.post.user.username}} ({{::postCtrl.post.user.followerCount}})</a>
+            <a href="/profile/{{postCtrl.post.user.username}}" target="_self">
+              <span data-tippy-content="{{::postCtrl.post.user.followerCount}} followers, {{::postCtrl.post.user.followingCount}} following" class="user-follower-count">
+                {{::postCtrl.post.user.username}}
+              </span>
+            </a>
           </strong>
   
           <button

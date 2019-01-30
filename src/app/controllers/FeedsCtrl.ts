@@ -1,48 +1,86 @@
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+import { IGlobalScope } from "../../core/lib/interfaces";
+import FeedService from "../../core/services/FeedService";
 import HashtagService from "../../core/services/HashtagService";
+import PostService from "../../core/services/PostService";
+import ProfileService from "../../core/services/ProfileService";
 import ScopeService from "../../core/services/ScopeService";
 
+interface IScopeFeedsCtrl extends ng.IScope {
+  isLoading: boolean;
+  feeds: any[];
+  page: number;
+  limit: number;
+  postsAvailable: boolean;
+  hashtagFollowed: boolean;
+  hashtag: string;
+  feedType: "userfeed" | "top" | "new";
+  sortType: "new";
+  until: string;
+  recommendedHashtags: any[];
+  recommendedProfiles: any[];
+  recommendedUsers: any[];
+  hashtags: any[];
+
+  fetchFeeds: () => void;
+  loadMore: () => void;
+}
+
 export default class FeedsCtrl {
+  public static $inject = [
+    "$rootScope",
+    "$scope",
+    "$stateParams",
+    "$timeout",
+    "FeedService",
+    "PostService",
+    "HashtagService",
+    "ProfileService",
+    "ScopeService"
+  ];
+
   constructor(
-    private $rootScope,
-    private $scope,
+    private $rootScope: IGlobalScope,
+    private $scope: IScopeFeedsCtrl,
     private $stateParams,
-    private $location,
-    private $http,
-    private FeedService,
-    private PostService,
+    private $timeout: ng.ITimeoutService,
+    private feedService: FeedService,
+    private postService: PostService,
     private hashtagService: HashtagService,
-    private profileService,
-    private scopeService: ScopeService,
+    private profileService: ProfileService,
+    private scopeService: ScopeService
   ) {
     this.$scope.isLoading = true;
-		this.$scope.feeds = [];
-		this.$scope.page = 1;
-		this.$scope.limit = 10;
-		this.$scope.postsAvailable = true;
-		this.$scope.hashtagFollowed = false;
+    this.$scope.feeds = [];
+    this.$scope.page = 1;
+    this.$scope.limit = 10;
+    this.$scope.postsAvailable = true;
+    this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
-    this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed") as "userfeed" | "top" | "new";
+    this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
 
-		this.$scope.sortType = "new";
-		this.$scope.recommendedHashtags = [];
-		this.$scope.recommendedProfiles = [];
+    this.$scope.sortType = "new";
+    this.$scope.recommendedHashtags = [];
+    this.$scope.recommendedProfiles = [];
 
     this.hashtagService.getTopHashtags()
-    .then(hashtags => {
-      $scope.hashtags = hashtags;
+    .then((hashtags) => {
+      this.$scope.hashtags = hashtags;
 
-      scopeService.safeApply($scope, () => {});
+      this.scopeService.safeApply($scope, () => {});
     });
 
-    if ($rootScope.user) {
-      profileService.fetchRecommentedProfiles($rootScope.user.id, {}, (users) => {
-        $scope.recommendedUsers = users;
+    if (this.$rootScope.user) {
+      this.profileService.fetchRecommentedProfiles(this.$rootScope.user.id, {}, (users) => {
+        this.$scope.recommendedUsers = users;
 
-        scopeService.safeApply($scope, () => {});
+        this.scopeService.safeApply($scope);
+        this.initTippy();
       });
     }
 
-		this.$scope.fetchFeeds = () => this.fetchFeeds();
+    this.$scope.fetchFeeds = () => this.fetchFeeds();
     this.$scope.loadMore = () => this.loadMore();
 
     this.fetchFeeds();
@@ -50,20 +88,26 @@ export default class FeedsCtrl {
 
   protected loadMore() {
     if (!this.$rootScope.activeCalls && this.$scope.postsAvailable) {
-      this.$scope.page = this.$scope.page + 1;
+      if (this.$scope.feedType === "userfeed") {
+        this.$scope.until = this.$scope.feeds[this.$scope.feeds.length - 1].publishedAt;
+      } else {
+        this.$scope.page = this.$scope.page + 1;
+      }
 
       this.fetchFeeds();
     }
-  };
+  }
 
   protected fetchFeeds() {
     this.$scope.isLoading = true;
 
     const obj = {
-      page: this.$scope.page,
       hashtag: this.$scope.hashtag,
+      until: this.$scope.until,
+      page: this.$scope.page,
       followerId: undefined,
-      orderBy: undefined
+      orderBy: undefined,
+      includeResponses: undefined
     };
 
     if (this.$scope.feedType === "userfeed") {
@@ -74,7 +118,11 @@ export default class FeedsCtrl {
       obj.orderBy = "upvoteCount";
     }
 
-    this.FeedService.fetchFeeds(obj, (data) => {
+    const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ?
+      this.feedService.fetchFeeds(obj, cb) :
+      this.postService.getPosts(obj, cb);
+
+    fetchFn(obj, (data) => {
       if (data) {
         data.forEach((feed) => {
           this.$scope.feeds.push(feed);
@@ -91,18 +139,12 @@ export default class FeedsCtrl {
 
       this.$scope.isLoading = false;
     });
-  };
+  }
 
-  static $inject = [
-    "$rootScope",
-    "$scope",
-    "$stateParams",
-    "$location",
-    "$http",
-    "FeedService",
-    "PostService",
-    "HashtagService",
-    "ProfileService",
-    "ScopeService"
-  ];
+  private async initTippy() {
+    // Timeout is somehow required
+    this.$timeout(() => {
+      tippy(".user-follower-count");
+    });
+  }
 }

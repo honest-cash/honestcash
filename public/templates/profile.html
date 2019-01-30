@@ -132,6 +132,7 @@
 
     <div ng-if="profileCtrl.showProfileTab=='feeds' || profileCtrl.showProfileTab=='responses'">
       <feeds
+        user="user"
         feeds="profileCtrl.feeds"
         load-more="profileCtrl.loadMore()"
         is-loading="profileCtrl.isLoading"

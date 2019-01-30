@@ -27,6 +27,7 @@ export class SimpleWalletClass implements ISimpleWallet {
 
 
 export interface IGlobalScope extends ng.IRootScopeService {
+  activeCalls: number;
   user: {
     imageUrl: string;
     id: number;
