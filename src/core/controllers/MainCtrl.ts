@@ -13,6 +13,7 @@ interface IScopeMainCtrl extends ng.IScope {
   addressBalanceInUSD: number;
   balanceLoading: boolean;
   upvotingPostId: any;
+  isUpvoting: boolean;
 
   addressClicked: any;
   makeUncesorable: any;
@@ -42,6 +43,7 @@ export default class MainCtrl {
         $scope.addressBalance = 0;
         $scope.addressBalanceInUSD = 0;
         $scope.balanceLoading = true;
+        $scope.isUpvoting = false;
 
         $scope.$on('$viewContentLoaded', async () => {
           const balances = await this.walletService.getAddressBalances();
@@ -66,6 +68,7 @@ export default class MainCtrl {
 
         $scope.addressClicked = (post: Post) => this.addressClicked(post);
         $scope.makeUncesorable = (post: Post) => this.makeUncesorable(post);
+        
         $scope.mouseEnterAddress = mouseEnterAddress;
         $scope.mouseLeaveAddress = mouseLeaveAddress;
 
@@ -117,13 +120,14 @@ export default class MainCtrl {
           toastr.error("Upvoting is not possible because the author does not have a Bitcoin address to receive");
           return;
       }
-
+      
       const postId = post.id;
       const address = post.user.addressBCH;
       const simpleWallet = simpleWalletProvider.get();
-
+      
       this.$scope.upvotingPostId = postId;
       this.$scope.upvotingStatus = "loading";
+      this.$scope.isUpvoting = true;
 
       // users with connected BCH accounts
       let tx;
@@ -221,6 +225,7 @@ export default class MainCtrl {
       this.$scope.addressBalance = balances.bch
       this.$scope.addressBalanceInUSD = balances.usd;
       this.$scope.balanceLoading = false;
+      this.$scope.isUpvoting = false;
       this.$scope.upvotingPostId = null;
 
       this.scopeService.safeApply(this.$scope, () => {});

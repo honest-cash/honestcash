@@ -103,11 +103,12 @@
       <ul class="list-unstyled list-inline list">
         <li>
           <style>
-            .btn-bch-upvote {
-              position: relative;
+            .btn-bch-upvote-container {
+              cursor: pointer;
             }
 
-            .btn-bch-upvote > button {
+            .btn-bch-upvote-container > button {
+              position: relative;
               padding: 4px 5px 4px 20px;
               line-height: 20px;
               background: #f7941d;
@@ -116,15 +117,15 @@
               color: #fff !important;
               outline: none !important;
               box-shadow: none !important;
-              min-width: 85px;
-              width: 85px;
-              max-width: 85px;
+              min-width: 115px;
+              width: 115px;
+              max-width: 115px;
               margin-left: 14px;
               float: left;
               overflow: hidden;
             }
 
-            .btn-bch-upvote > .bch-icon {
+            .btn-bch-upvote-container > .bch-icon {
               content: url('../img/bch-icon.svg');
               width: 30px;
               height: 30px;
@@ -133,58 +134,157 @@
               z-index: 10;
             }
 
-            .btn-bch-upvote:hover,
-            .btn-bch-upvote > button:hover {
+            .btn-bch-upvote-container:hover,
+            .btn-bch-upvote-container > button:hover {
               color: #fff !important;
             }
 
-            .btn-bch-upvote > button > .amount,
-            .btn-bch-upvote > button > .text {
+            .btn-bch-upvote-container > button > .loading {
+              display: none;
+            }
+
+            .btn-bch-upvote-container.active > button > .loading {
+              display: inline-block;
+            }
+
+            .btn-bch-upvote-container.active > button > .amount,
+            .btn-bch-upvote-container.active > button > .text
+             {
+              display: none;
+            }
+
+            .btn-bch-upvote-container > button > .amount,
+            .btn-bch-upvote-container > button > .text {
               position: absolute;
               top: 4px;
               left: 0;
-              margin-left: 15px;
+              margin-left: 30px;
               width: 68px;
               padding-left: 4px;
               padding-right: 4px;
               transition: all 0.3s ease-in-out;
             }
 
-            .btn-bch-upvote > button > .text {
+            .btn-bch-upvote-container > button > .text,
+            .btn-bch-upvote-container > button > .amount,
+            .btn-bch-upvote-container > button > .loading
+            {
               text-transform: uppercase;
               font-weight: bold;
             }
 
-            .btn-bch-upvote > button > .amount {
+            .btn-bch-upvote-container > button > .amount {
               opacity: 1;
               transform: translate(0, 0);
             }
 
-            .btn-bch-upvote > button > .text {
+            .btn-bch-upvote-container > button > .text {
               opacity: 0;
               transform: translate(100%, 0);
             }
 
-            .btn-bch-upvote:hover > button > .amount {
+            .btn-bch-upvote-container:hover > button > .amount {
               opacity: 0;
               transform: translate(100%, 0);
             }
 
-            .btn-bch-upvote:hover > button > .text {
+            .btn-bch-upvote-container:hover > button > .text {
               opacity: 1;
               transform: translate(0, 0);
             }
 
+            .btn-bch-upvote-container.active > .bch-icon,
+            .btn-bch-upvote-container.active > .bch-icon-loading {
+              cursor: not-allowed;
+            }
+
+            .btn-bch-upvote-container.active > .bch-icon-loading
+            {
+              display: initial;
+            }
+
+            .bch-icon-loading {
+              display: none;
+              background-color: rgba(0, 0, 0, 0);
+              border: 2px solid #f7941d;
+              opacity: 0.9;
+              border-left: 2px solid rgba(0, 0, 0, 0);
+              border-right: 2px solid rgba(0, 0, 0, 0);
+              border-radius: 50px;
+              width: 30px;
+              z-index: 11;
+              height: 30px;
+              position: absolute;
+              -moz-animation: spinoffPulse 1s infinite linear;
+              -webkit-animation: spinoffPulse 1s infinite linear;
+            }
+
+            @-moz-keyframes spinPulse {
+              0% {
+                -moz-transform: rotate(160deg);
+                opacity: 0;
+                box-shadow: 0 0 1px #f7941d;
+              }
+
+              50% {
+                -moz-transform: rotate(145deg);
+                opacity: 1;
+              }
+
+              100% {
+                -moz-transform: rotate(-320deg);
+                opacity: 0;
+              }
+            }
+
+            @-moz-keyframes spinoffPulse {
+              0% {
+                -moz-transform: rotate(0deg);
+              }
+
+              100% {
+                -moz-transform: rotate(360deg);
+              }
+            }
+
+            @-webkit-keyframes spinPulse {
+              0% {
+                -webkit-transform: rotate(160deg);
+                opacity: 0;
+                box-shadow: 0 0 1px #f7941d;
+              }
+
+              50% {
+                -webkit-transform: rotate(145deg);
+                opacity: 1;
+              }
+
+              100% {
+                -webkit-transform: rotate(-320deg);
+                opacity: 0;
+              }
+            }
+
+            @-webkit-keyframes spinoffPulse {
+              0% {
+                -webkit-transform: rotate(0deg);
+              }
+
+              100% {
+                -webkit-transform: rotate(360deg);
+              }
+            }
           </style>
-          <div class="btn-bch-upvote">
+          <div class="btn-bch-upvote-container" ng-class="{'active': isUpvoting}">
             <span class="bch-icon"></span>
-            <!-- ng-click="addressClicked(postCtrl.post)" -->
+            <span class="bch-icon-loading"></span>
             <button
               ng-disabled="upvotingPostId === postCtrl.post.id || postCtrl.post.userId === user.id"
+              ng-click="addressClicked(postCtrl.post)"
               class="btn btn-bch-upvote"
-              data-hover="UPVOTE"
             >
               <span class="amount">0.002</span> <span class="text">Upvote</span>
+              <span class="loading">Upvoting...</span>
             </button>
           </div>
         </li>
