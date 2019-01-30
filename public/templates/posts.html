@@ -12,7 +12,7 @@
       <ul class="nav nav-tabs text-center">
         <li
           ng-class="{ 'bold': currentTab === 'drafts' }"
-          class="showProfileTab disabled hc-tooltip"
+          class="hidden showProfileTab disabled hc-tooltip"
           ng-click="switchTab('drafts')"
           data-tippy-content="This section is still under development."
         >
@@ -79,7 +79,7 @@
           <i class="fa fa-eraser"></i>&nbsp;Edit
         </a>
         <button
-          class="btn btn-default btn-xs"
+          class="hidden btn btn-default btn-xs"
           ng-disabled="isDeleting"
           ng-click="deletePost(post.id)"
         >

@@ -1,21 +1,12 @@
 export type TPostTypeId = "comment" | "article" | "response";
 
-export interface IHTTPResponse {
-  config: any;
-  data: any;
-  headers: () => void;
-  status: number;
-  statusText: string;
-  xhrStatus: string;
-}
-
 export interface IFetchPostsArgs {
   orderBy?: "upvoteCount" | "publishedAt";
   userId?: number;
   hashtag?: string;
   page?: number;
   includeResponses?: boolean;
-  status?: "published" | "draft"
+  status?: "published" | "draft";
 }
 
 export interface IFetchFeedsArgs {

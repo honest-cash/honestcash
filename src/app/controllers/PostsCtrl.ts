@@ -1,13 +1,12 @@
 
+import swal from "sweetalert";
+import tippy from "tippy.js";
+import 'tippy.js/dist/tippy.css';
+import toastr from "../../core/config/toastr";
 import { IGlobalScope } from "../../core/lib/interfaces";
 import { Post } from "../../core/models/models";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
-import swal from "sweetalert";
-import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
-
-declare const toastr;
 
 enum TabStatus {
   drafts = "drafts",
@@ -33,7 +32,9 @@ interface IScopePostsCtrl extends ng.IScope {
 }
 
 export default class PostsCtrl {
-  public static $inject = ["$rootScope", "$scope", "$timeout", "PostService", "ScopeService"];
+  public static $inject = [
+    "$rootScope", "$scope", "$timeout", "PostService", "ScopeService"
+  ];
 
   constructor(
     private $rootScope: IGlobalScope,
@@ -72,12 +73,11 @@ export default class PostsCtrl {
     this.postService.getPosts(
       {
         includeResponses: false,
-        status: "published",
         orderBy: "publishedAt",
         page: this.$scope.page,
+        status: "published",
         userId: this.$rootScope.user.id
-      },
-      data => {
+      }, (data) => {
 
         if (!data) {
           return;
