@@ -11,7 +11,7 @@ export default class PostService {
   ];
 
   constructor(
-    private $http,
+    private $http: ng.IHttpService,
     private $sce,
     private API_URL
   ) {}
@@ -46,7 +46,11 @@ export default class PostService {
   public async createPost(post: Post): Promise<Post> {
     const res = await this.$http.post(`${this.API_URL}/post`, post);
 
-    return this.processPost(res.data);
+    return this.processPost(res.data as Post);
+  }
+
+  public async deletePost(postId: number) {
+    return this.$http.delete(this.API_URL + "/post/" + postId);
   }
 
   public displayHTML(html: string): string {
@@ -56,40 +60,34 @@ export default class PostService {
   public async getById(postId: number): Promise<Post> {
     const res = await this.$http.get(this.API_URL + "/post/" + postId);
 
-    return this.processPost(res.data);
+    return this.processPost(res.data as Post);
   }
 
   public async getByAlias(username, alias): Promise<Post> {
     const res = await this.$http.get(this.API_URL + "/post/" + username + "/" + alias);
 
-    return this.processPost(res.data);
+    return this.processPost(res.data as Post);
   }
 
-  public async getUpvotes(postId: number) : Promise<Upvote[]> {
+  public async getUpvotes(postId: number): Promise<Upvote[]> {
     const res = await this.$http.get(this.API_URL + "/post/" + postId + "/upvotes");
 
-    return res.data;
+    return res.data as Upvote[];
   }
 
-  public async getResponses(postId: number) : Promise<Post[]> {
+  public async getResponses(postId: number): Promise<Post[]> {
     const res = await this.$http.get(this.API_URL + "/post/" + postId + "/responses");
 
-    return res.data.map((post) => this.processPost(post));
+    return (res.data as Post[]).map((post) => this.processPost(post));
   }
 
-  public getPosts(query: IFetchPostsArgs, callback) {
+  public getPosts(query: IFetchPostsArgs, callback: (posts: Post[]) => void) {
     this.$http({
       method: "GET",
       params: query,
       url: this.API_URL + "/posts"
     }).then((response) => {
-      const feeds = response.data;
-
-      for (const feed of feeds) {
-        feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
-        feed.createdAtFormatted = moment(feed.createdAt).format("MMM Do YY");
-        feed.publishedAtFormatted = moment(feed.publishedAt).format("MMM Do YY");
-      }
+      const feeds = (response.data as Post[]).map((post) => this.processPost(post));
 
       callback(feeds);
     });

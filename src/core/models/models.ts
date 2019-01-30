@@ -6,7 +6,7 @@ export interface IFetchPostsArgs {
   hashtag?: string;
   page?: number;
   includeResponses?: boolean;
-  status?: "published" | "draft"
+  status?: "published" | "draft";
 }
 
 export interface IFetchFeedsArgs {
