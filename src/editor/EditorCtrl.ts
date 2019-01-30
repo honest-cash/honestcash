@@ -1,12 +1,19 @@
-import MediumEditor from "medium-editor";
 import * as async from "async";
+import MediumEditor from "medium-editor";
+import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
+import { MeMarkdown } from "medium-editor-markdown/dist/me-markdown.standalone.min";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
-import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
-import toastr from "../core/config/toastr";
 import { AuthService } from "../auth/AuthService";
+import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
 
+var showdown  = require('showdown'),
+    converter = new showdown.Converter();
+
+console.log(showdown);
+console.log(converter);
+let currentBody = "";
 export default class EditorCtrl {
     constructor(
       private $scope,
@@ -44,24 +51,28 @@ export default class EditorCtrl {
         }
 
         const saveDraftElement = (element, cb) => {
-            const post = {
-              body: bodyEditor.serialize().body.value,
-              title: document.getElementById("title").innerText,
-              hashtags: $("input#description").val() || ""
-            };
+          
+          const md = converter.makeMd(bodyEditor.serialize().body.value);
+          console.log(md);
 
-            if (!post.body && !post.title && !post.hashtags) {
-                $scope.saving = null;
+          const post = {
+            body: md, /** bodyEditor.serialize().body.value */
+            hashtags: $("input#description").val() || "",
+            title: document.getElementById("title").innerText
+          };
 
-                return cb && cb();
-            }
+          if (!post.body && !post.title && !post.hashtags) {
+              $scope.saving = null;
 
-            $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
-            .then((response) => {
-                $scope.saving = null;
+              return cb && cb();
+          }
 
-                return cb && cb();
-            }, cb);
+          $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
+          .then((response) => {
+              $scope.saving = null;
+
+              return cb && cb();
+          }, cb);
         };
 
         $scope.readyToPublish = () => {
@@ -121,7 +132,7 @@ export default class EditorCtrl {
 
                     return toastr.warning(errResponse.data.desc || errResponse.data.code);
                 }
-                
+
                 toastr.success("You have successfully published your story.");
 
                 $('#publishModal').modal('hide');
@@ -148,114 +159,121 @@ export default class EditorCtrl {
             }, 3000);
         };
 
+        const markDownEl = document.querySelector(".markdown");
+
         const initMediumEditor = (title, body) => {
             titleEditor = new MediumEditor('#title', {
-              toolbar: false,
               buttons: [],
-              placeholder: {
-                  /* This example includes the default options for placeholder,
-                      if nothing is passed this is what it used */
-                  text: 'Title',
-                  hideOnClick: true
-              },
               disableDoubleReturn: true,
               disableReturn: true,
               paste: {
-                  forcePlainText: true,
-                  cleanPastedHTML: true,
-                  cleanReplacements: [],
-                  cleanAttrs: [ 'class', 'style' ],
-                  cleanTags: [ 'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', 'a', 'ul', 'li', 'code', 'pre' ],
-                  unwrapTags: []
-              }
+                cleanAttrs: [ 'class', 'style' ],
+                cleanPastedHTML: true,
+                cleanReplacements: [],
+                cleanTags: [
+                  'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', 'a', 'ul', 'li', 'code', 'pre'
+                ],
+                forcePlainText: true,
+                unwrapTags: []
+              },
+              placeholder: {
+                hideOnClick: true,
+                text: 'Title'
+              },
+              toolbar: false
             });
 
             bodyEditor = new MediumEditor('#body', {
-                anchorPreview: false,
-                buttonLabels: 'fontawesome',
-                autoLink: true,
-                placeholder: {
-                  text: $scope.draft.parentPostId ? "Write your comment" : "Tell your story...",
-                  hideOnClick: true
-                },
-                toolbar: {
-                  buttons: ['bold', 'italic', 'underline', "unorderedlist", "anchor", 'h2', 'h3', {
-                      name: 'pre',
-                      contentDefault: 'code snippet', // default text
-                      contentFA: '<i class="fa fa-code"></i>' // custom icon if you're using font-awesome icons
-                  }]
-                },
-                paste: {
-                    /* This example includes the default options for paste,
-                       if nothing is passed this is what it used */
-                    forcePlainText: true,
-                    cleanPastedHTML: true,
-                    cleanReplacements: [],
-                    cleanAttrs: [ 'class', 'style', 'dir' ],
-                    cleanTags: [ 'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', /**, 'a', 'ul', 'li', 'code', 'pre' */ ],
-                    unwrapTags: []
-                }
+              anchorPreview: true,
+              autoLink: true,
+              buttonLabels: 'fontawesome',
+              extensions: {
+                /**
+                markdown: new MeMarkdown({
+                  fence: "```"
+                }, (md) => {
+                  currentBody = md.substring(0, md.length - 1);
+
+                  console.log(currentBody);
+                })
+                */
+              },
+              placeholder: {
+                hideOnClick: true,
+                text: $scope.draft.parentPostId ? "Write your comment" : "Tell your story...",
+              },
+              toolbar: {
+                buttons: [ 'bold', 'italic', "unorderedlist", "anchor", 'h2', 'h3', 'pre' ]
+              },
+              paste: {
+                cleanAttrs: [ "id", 'class', 'style', 'dir' ],
+                cleanPastedHTML: true,
+                cleanReplacements: [],
+                cleanTags: [
+                  "img",
+                  'meta',
+                  "div",
+                  'h1',
+                  'h4',
+                  'h5',
+                  'h6',
+                  'table',
+                  'tr',
+                  'td',
+                  /**, 'a', 'ul', 'li', 'code', 'pre' */
+                ],
+                forcePlainText: true,
+                unwrapTags: []
+              }
             });
 
             $('#body').mediumInsert({
                 editor: bodyEditor,
                 addons: { // (object) Addons configuration
-                    images: { // (object) Image addon configuration
-                        label: '<span class="fa fa-camera"></span>', // (string) A label for an image addon
-                        uploadScript: null, // DEPRECATED: Use fileUploadOptions instead
-                        deleteScript: '', // (string) A relative path to a delete script
-                        deleteMethod: '',
-                        fileDeleteOptions: {}, // (object) extra parameters send on the delete ajax request, see http://api.jquery.com/jquery.ajax/
-                        preview: true, // (boolean) Show an image before it is uploaded (only in browsers that support this feature)
-                        captions: true, // (boolean) Enable captions
-                        captionPlaceholder: 'Type caption for image (optional)', // (string) Caption placeholder
-                        autoGrid: 3, // (integer) Min number of images that automatically form a grid
-                        formData: {}, // DEPRECATED: Use fileUploadOptions instead
-                        fileUploadOptions: { // (object) File upload configuration. See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-                            url: API_URL + '/upload/image', // (string) A relative path to an upload script
-                            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
-                            headers: {
-                                'x-auth-token': this.authService.getAuthToken()
-                            },
+                  images: { // (object) Image addon configuration
+                    autoGrid: 3, // (integer) Min number of images that automatically form a grid
+                      captionPlaceholder: '',
+                      captions: false, // (boolean) Enable captions
+                      deleteMethod: '',
+                      deleteScript: '', // (string) A relative path to a delete script
+                      // (object) extra parameters send on the delete ajax request
+                      // see http://api.jquery.com/jquery.ajax/
+                      fileDeleteOptions: {},
+                      formData: {}, // DEPRECATED: Use fileUploadOptions instead
+                      label: '<span class="fa fa-camera"></span>', // (string) A label for an image addon
+                      uploadScript: null, // DEPRECATED: Use fileUploadOptions instead
+                      preview: false, // (boolean) Show an image before it is uploaded (only in browsers that support this feature)
+                      fileUploadOptions: {
+                        // (object) File upload configuration.
+                        // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
+                        url: API_URL + '/upload/image', // (string) A relative path to an upload script
+                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
+                        headers: {
+                          'x-auth-token': this.authService.getAuthToken()
                         },
-                        styles: { // (object) Available image styles configuration
-                            wide: { // (object) Image style configuration. Key is used as a class name added to an image, when the style is selected (.medium-insert-images-wide)
-                                label: '<span class="fa fa-align-justify"></span>', // (string) A label for a style
-                                added: function ($el) {}, // (function) Callback function called after the style was selected. A parameter $el is a current active paragraph (.medium-insert-active)
-                                removed: function ($el) {} // (function) Callback function called after a different style was selected and this one was removed. A parameter $el is a current active paragraph (.medium-insert-active)
-                            },
-                            left: {
-                                label: '<span class="fa fa-align-left"></span>'
-                            },
-                            right: {
-                                label: '<span class="fa fa-align-right"></span>'
-                            },
-                            grid: {
-                                label: '<span class="fa fa-th"></span>'
-                            }
-                        },
-                        actions: { // (object) Actions for an optional second toolbar
-                            remove: { // (object) Remove action configuration
-                                label: '<span class="fa fa-times"></span>', // (string) Label for an action
-                                clicked: function ($el) { // (function) Callback function called when an action is selected
-                                    var $event = $.Event('keydown');
-                                    
-                                    $event.which = 8;
-                                    $(document).trigger($event);   
-                                }
-                            }
-                        },
-                        messages: {
-                            acceptFileTypesError: 'This file is not in a supported format: ',
-                            maxFileSizeError: 'This file is too big: '
-                        },
-                        uploadCompleted: function ($el, data) {
-                            console.log($el, data);
-                        }, // (function) Callback function called when upload is completed
-                        uploadFailed: function (uploadErrors, data) {
-                            console.log(uploadErrors, data);
-                        } // (function) Callback function called when upload failed
-                    }
+                      },
+                      actions: { // (object) Actions for an optional second toolbar
+                          remove: { // (object) Remove action configuration
+                              label: '<span class="fa fa-times"></span>', // (string) Label for an action
+                              clicked: function ($el) { // (function) Callback function called when an action is selected
+                                  var $event = $.Event('keydown');
+
+                                  $event.which = 8;
+                                  $(document).trigger($event);   
+                              }
+                          }
+                      },
+                      messages: {
+                          acceptFileTypesError: 'This file is not in a supported format: ',
+                          maxFileSizeError: 'This file is too big: '
+                      },
+                      uploadCompleted: function ($el, data) {
+                          console.log($el, data);
+                      }, // (function) Callback function called when upload is completed
+                      uploadFailed: function (uploadErrors, data) {
+                          console.log(uploadErrors, data);
+                      } // (function) Callback function called when upload failed
+                  }
                 }
             });
 
@@ -270,12 +288,13 @@ export default class EditorCtrl {
 
             if (body) {
                 document.getElementById("body").setAttribute("data-placeholder", "");
-                bodyEditor.setContent(body, 0);
-            }
 
+                bodyEditor.setContent(converter.makeHtml(body), 0);
+            }
+            
             bodyEditor.subscribe('editableInput', onContentChangedFactory("body"));
             titleEditor.subscribe('editableInput', onContentChangedFactory("title"));
-        }
+        };
 
         const initEditor = postId => {
             if (!postId) {
@@ -283,11 +302,11 @@ export default class EditorCtrl {
             }
 
             $("#description").tagit({
-                afterTagAdded: function(event, ui) {
-                    if ($scope.ready) {
-                        saveDraftElement("hashtags");
-                    }
-                }
+              afterTagAdded: function(event, ui) {
+                  if ($scope.ready) {
+                      saveDraftElement("hashtags");
+                  }
+              }
             });
 
             const hashtags = $scope.draft.userPostHashtags || [];
