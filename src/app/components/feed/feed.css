@@ -102,6 +102,7 @@
 .feed-body {
 	cursor: pointer;
 	width:100% !important;
+	word-wrap: break-word;
 }
 
 .feed-body lazy-img {
