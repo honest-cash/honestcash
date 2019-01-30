@@ -1,7 +1,7 @@
 import moment from "moment";
 import { dateFormat } from "../../core/config/index";
 import SocialSharing from "../lib/SocialSharing";
-import { IFetchPostsArgs, Post, Upvote } from "../models/models";
+import { IFetchPostsArgs, IHTTPResponse, Post, Upvote } from "../models/models";
 
 export default class PostService {
   public static $inject = [
@@ -49,7 +49,7 @@ export default class PostService {
     return this.processPost(res.data);
   }
 
-  public async deletePost(postId: number): Promise<IPostRequestResponse> {
+  public async deletePost(postId: number): Promise<IHTTPResponse> {
     return this.$http.delete(this.API_URL + "/post/" + postId);
   }
 

@@ -7,6 +7,8 @@ import swal from "sweetalert";
 import tippy from "tippy.js";
 import 'tippy.js/dist/tippy.css';
 
+declare const toastr;
+
 enum TabStatus {
   drafts = "drafts",
   published = "published"
@@ -16,20 +18,23 @@ interface IScopePostsCtrl extends ng.IScope {
   isLoading: boolean;
   isLoadingMore: boolean;
   isDeleting: boolean;
-  feeds: any[];
+  posts: Post[];
   page: number;
   limit: number;
   postsAvailable: boolean;
   currentTab: TabStatus;
+  this: any;
 
   fetchPosts: () => void;
   loadMore: () => void;
-  switchTab: () => void;
-  displayFeedBody: () => void;
-  deletePost: () => void;
+  switchTab: (tab: TabStatus) => void;
+  displayPostBody: (html: string) => string;
+  deletePost: (id: number) => void;
 }
 
 export default class PostsCtrl {
+  public static $inject = ["$rootScope", "$scope", "$timeout", "PostService", "ScopeService"];
+
   constructor(
     private $rootScope: IGlobalScope,
     private $scope: IScopePostsCtrl,
@@ -37,35 +42,39 @@ export default class PostsCtrl {
     private postService: PostService,
     private scopeService: ScopeService
   ) {
+    this.$scope.isLoading = true;
+    this.$scope.isLoadingMore = false;
+    this.$scope.isDeleting = false;
+    this.$scope.posts = [];
+    this.$scope.page = 1;
+    this.$scope.limit = 20;
+    this.$scope.postsAvailable = true;
+    this.$scope.currentTab = TabStatus.published;
+    this.$scope.deletePost = (id: number) => this.deletePost(id);
+    this.$scope.switchTab = (tab: TabStatus) => this.switchTab(tab);
+    this.$scope.displayPostBody = (html: string) => this.displayPostBody(html);
+    this.$scope.loadMore = () => this.loadMore();
+
     this.fetchPosts();
   }
 
-  public isLoading: boolean = true;
-  public isLoadingMore: boolean = false;
-  public isDeleting: boolean = false;
-  public feeds: Post[] = [];
-  public postsAvailable: boolean = true;
-  public currentTab = "published";
-  private page: number = 1;
-  private limit: number = 20;
-
   public loadMore() {
-    if (!this.$rootScope.activeCalls && this.postsAvailable) {
-      this.page += 1;
-      this.isLoadingMore = true;
+    if (!this.$rootScope.activeCalls && this.$scope.postsAvailable) {
+      this.$scope.page += 1;
+      this.$scope.isLoadingMore = true;
       this.fetchPosts();
     }
   }
 
   public fetchPosts() {
-    this.isLoading = this.isLoadingMore ? false : true;
+    this.$scope.isLoading = this.$scope.isLoadingMore ? false : true;
 
     this.postService.getPosts(
       {
         includeResponses: false,
         status: "published",
         orderBy: "publishedAt",
-        page: this.page,
+        page: this.$scope.page,
         userId: this.$rootScope.user.id
       },
       data => {
@@ -74,22 +83,22 @@ export default class PostsCtrl {
           return;
         }
 
-        if (this.page === 0) {
-          this.feeds = data;
+        if (this.$scope.page === 0) {
+          this.$scope.posts = data;
         } else {
-          data.forEach(feed => {
-            this.feeds.push(feed);
+          data.forEach(post => {
+            this.$scope.posts.push(post);
           });
         }
 
-        if (data.length < this.limit) {
-          this.postsAvailable = false;
+        if (data.length < this.$scope.limit) {
+          this.$scope.postsAvailable = false;
         } else {
-          this.postsAvailable = true;
+          this.$scope.postsAvailable = true;
         }
 
-        this.isLoading = this.isLoadingMore ? false : false;
-        this.isLoadingMore = false;
+        this.$scope.isLoading = this.$scope.isLoadingMore ? false : false;
+        this.$scope.isLoadingMore = false;
 
         this.scopeService.safeApply(this.$scope, () => {});
 
@@ -98,12 +107,12 @@ export default class PostsCtrl {
     );
   }
 
-  public switchTab(currentTab: TabStatus) {
-    this.currentTab = currentTab;
+  public switchTab(tab: TabStatus) {
+    this.$scope.currentTab = tab;
   }
 
   public async deletePost(id: number) {
-    this.isDeleting = true;
+    this.$scope.isDeleting = true;
 
     const confirmationResult = await swal({
       title: "Are you sure?",
@@ -117,7 +126,7 @@ export default class PostsCtrl {
       const deleteResult = await this.postService.deletePost(id);
 
       if (deleteResult.status === 200) {
-        this.feeds = this.feeds.filter(f => f.id === id);
+        this.$scope.posts = this.$scope.posts.filter(f => f.id !== id);
         toastr.success("Your post has been deleted");
       } else {
         toastr.error("There was an error while deleting your post")
@@ -126,7 +135,13 @@ export default class PostsCtrl {
       toastr.info("Your post has not been deleted");
     }
 
-    this.isDeleting = false;
+    this.$scope.isDeleting = false;
+
+    this.scopeService.safeApply(this.$scope, () => {});
+  }
+
+  public displayPostBody(html: string): string {
+    return this.postService.displayHTML(html);
   }
 
   private async initTippy() {
@@ -135,10 +150,4 @@ export default class PostsCtrl {
       tippy('.hc-tooltip');
     });
   }
-
-  private displayFeedBody(html: string): string {
-    return this.postService.displayHTML(html);
-  }
-
-  public static $inject = ["$rootScope", "$scope", "$timeout", "PostService", "ScopeService"];
 }
