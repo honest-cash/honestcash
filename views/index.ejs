@@ -20,54 +20,7 @@
 					</p>	
 		</div>
 	</div>
-	 <hr>
-    <div class="row">
-      <div class="col-md-6">
-        <h2>
-				Join waiting list
-        </h2>
-				<form>
-						<div class="form-group">
-								<label>username</label>
-								<input type="text" class="form-control" ng-model="data.username">
-            </div>
-
-						<div class="form-group">
-								<label>email</label>
-								<input type="email" class="form-control" ng-model="data.email">
-            </div>
-            
-            <div class="form-group">
-								<label>password</label>
-                <input type="password" class="form-control" ng-model="data.password">
-                
-                <p class="text-muted">
-                  Disclaimer: Honest takes no responsibility for your account, keys, or wallet. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. Your wallet is encrypted with your account password, so make sure to use a strong password.
-                </p>
-						</div>
-
-						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
-
-						<button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-lg" ng-click="signup(data)">{{isLoading ? "Loading.." : "Register"}}</button>
-			
-						<!-- <button ng-click="fbLogin()" class="btn btn-primary push btn btn-lg"><span class="fa fa-facebook"></span> facebook</button> -->
-				</form>
-
-    	<hr>
-          <p class="pull">by signing up you agree to our <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">terms of of service</a> and <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.</p>
-      </div>
-			
-			<div class="col-md-6">
-        <h4 ng-show="hashtags.length">
-          trending topics
-        </h4>
-        <ul>
-          <li ng-repeat = "hashtag in hashtags">
-						<a target="_self" href="/hashtag/{{hashtag.hashtag}}">{{hashtag.hashtag}} ({{hashtag.count}})</a>
-					</li>
-        </ul>
-      </div>
-    </div>
+	 
     <hr />
 
     <div class="row text-center" style="margin-bottom: 30px;">
@@ -180,40 +133,12 @@
                 </p>
             </div>
 	  </div>
-   
-    <hr />
-    <div class="row text-center" style="margin-bottom: 20px;">
-          <div class="col-xs-12" style="padding-bottom:20px;">
-            <h2>Honest Team</h2>
-          </div>
-					<div class="col-sm-3">	
-							<img src="./img/adrian.jpg" class="img-circle" alt="adrian photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/adrianbarwicki" target="_self">Adrian Barwicki</a>
-							</h5>
-					</div>
-					<div class="col-sm-3">	
-							<img src="./img/ani.png" class="img-circle" alt="ani photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/calisi" target="_self">Ani Calis</a>
-							</h5>
-					</div>
-          <div class="col-sm-3">	
-							<img src="./img/rosco.png" class="img-circle" alt="rosco photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/rkalis" target="_self">Rosco Kalis</a>
-							</h5>
-					</div>
-          <div class="col-sm-3">	
-							<img src="./img/emily.jpg" class="img-circle" alt="emily photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/emrosedallara" target="_self">Emily Rose Dallara</a>
-							</h5>
-					</div>
-	     </div>
-    </div>
- 
-  
+  </div>
 
-  
-
+<ul>
+  <% for (const hashtag of hashtags) { %>
+    <li>
+      <a href="/hashtag/<%- hashtag.hashtag %>"><%- hashtag.count %> stories about <%- hashtag.hashtag %></a>
+    </li>
+  <% } %>
+</ul>

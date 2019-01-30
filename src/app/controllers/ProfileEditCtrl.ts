@@ -1,6 +1,18 @@
 import swal from "sweetalert";
 
+declare var bitbox: any;
+
 export default class ProfileEditCtrl {
+  public static $inject = [
+    "API_URL",
+    "$rootScope",
+    "$scope",
+    "$http",
+    "$location",
+    "ScopeService",
+    "profile"
+  ];
+
   constructor(
     private API_URL,
     private $rootScope,
@@ -17,26 +29,32 @@ export default class ProfileEditCtrl {
     $scope.isSaving = false;
 
     $scope.clickProfilePic = () => {
-      ($('#uploadProfilePicModal').appendTo("body") as any).modal('show');
+      ($("#uploadProfilePicModal").appendTo("body") as any).modal("show");
     };
 
     $scope.submitChanges = async () => {
       $scope.isSaving = true;
 
+      if (bitbox.Address.isLegacyAddress($scope.profile.addressBCH)) {
+        const cashAddress = bitbox.Address.toCashAddress($scope.profile.addressBCH);
+
+        $scope.profile.addressBCH = cashAddress;
+      }
+
       try {
         await this.updateUser({
-          props: {
-            twitter: $scope.profile.twitter,
-            reddit: $scope.profile.reddit
-          },
           addressBCH: $scope.profile.addressBCH,
-          bio: $scope.profile.bio
-        })
+          bio: $scope.profile.bio,
+          props: {
+            reddit: $scope.profile.reddit,
+            twitter: $scope.profile.twitter
+          }
+        });
       } catch (err) {
         if (err.data.code === "WRONG_BCH_ADDRESS") {
           $scope.isSaving = false;
 
-          scopeService.safeApply($scope, () => {});
+          scopeService.safeApply($scope, () => { /** */ });
 
           return swal(err.data.desc);
         }
@@ -48,22 +66,14 @@ export default class ProfileEditCtrl {
     }
   }
 
-  static $inject = [
-    "API_URL",
-    "$rootScope",
-    "$scope",
-    "$http",
-    "$location",
-    "ScopeService",
-    "profile"
-  ];
+  
 
   private updateUser = async (data: { props: any; addressBCH: string; bio: string; }) : Promise<{ status: any; desc: string; code: string; }> => {
     let res = await this.$http.put(`${this.API_URL}/user/${this.$scope.profile.id}`, data);
 
     res = res || {};
 
-    if (res.status === 'ok') {
+    if (res.status === "ok") {
       return res;
     } else {
       throw res;

@@ -1,10 +1,11 @@
 export default class ScopeService {
-  constructor() {}
+  constructor() {/** */}
 
-  public safeApply($scope, fn) {
-    var phase = $scope.$root.$$phase;
-    if (phase == '$apply' || phase == '$digest') {
-      if (fn && typeof fn === 'function') {
+  public safeApply($scope, fn?) {
+    const phase = $scope.$root.$$phase;
+
+    if (phase === "$apply" || phase === "$digest") {
+      if (fn && typeof fn === "function") {
         fn();
       }
     } else {

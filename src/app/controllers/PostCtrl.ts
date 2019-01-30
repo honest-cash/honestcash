@@ -10,6 +10,19 @@ import toastr from "../../core/config/toastr";
 
 declare var QRCode: any;
 export default class PostCtrl {
+  public static $inject = [
+    "$scope",
+    "$rootScope",
+    "$stateParams",
+    "PostService",
+    "ScopeService"
+  ];
+  public isLoading: boolean = true;
+  public post: Post;
+  public upvotes: Upvote[] = [];
+  public responses: Post[] = [];
+  private newResponse: string = "";
+
   constructor(
     private $scope,
     private $rootScope,
@@ -19,12 +32,6 @@ export default class PostCtrl {
   ) {
       this.ngInit();
   }
-
-  public isLoading: boolean = true;
-  public post: Post;
-  public upvotes: Upvote[] = [];
-  public responses: Post[] = [];
-  private newResponse: string = "";
 
   private async ngInit() {
     this.post = await this.postService.getById(
@@ -53,7 +60,7 @@ export default class PostCtrl {
       new QRCode(container, this.post.user.addressBCH);
     }
 
-    this.initTippy();    
+    this.initTippy();
   }
 
   private async createPost() {
@@ -82,12 +89,4 @@ export default class PostCtrl {
   private displayFeedBody(html: string): string {
     return this.postService.displayHTML(html);
   }
-
-  static $inject = [
-    "$scope",
-    "$rootScope",
-    "$stateParams",
-    "PostService",
-    "ScopeService"
-  ]
 }
