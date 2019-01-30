@@ -95,12 +95,20 @@
       </ul>
     </div>
 
+    <style>
+      .list-horizontal > li {
+        height: 30px;
+        float: left;
+        line-height: 30px;
+      }
+    </style>
+
     <div
       ng-if="postCtrl.post.user.addressBCH"
       class="row"
       ng-show="simpleWallet"
     >
-      <ul class="list-unstyled list-inline list">
+      <ul class="list-unstyled list-inline list list-horizontal">
         <li>
           <style>
             .btn-bch-upvote-container {
@@ -305,7 +313,7 @@
         </li>
 
         <li>
-          <small>Share on:</small>
+          <small class="hidden-xs">Share on:</small>
           <a
             ng-href="{{ postCtrl.post.shareURLs.reddit }}"
             target="_blank"
