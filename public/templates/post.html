@@ -104,69 +104,89 @@
         <li>
           <style>
             .btn-bch-upvote {
-              padding: 4px 5px 4px 25px;
-              line-height: 20px;
               position: relative;
-              background: #f7941d;
-              height: 30px;
-              color: #fff;
             }
 
-            .btn-bch-upvote:before {
+            .btn-bch-upvote > button {
+              padding: 4px 5px 4px 20px;
+              line-height: 20px;
+              background: #f7941d;
+              z-index: 0;
+              height: 30px;
+              color: #fff !important;
+              outline: none !important;
+              box-shadow: none !important;
+              min-width: 85px;
+              width: 85px;
+              max-width: 85px;
+              margin-left: 14px;
+              float: left;
+              overflow: hidden;
+            }
+
+            .btn-bch-upvote > .bch-icon {
               content: url('../img/bch-icon.svg');
-              width: 32px;
-              height: 32px;
+              width: 30px;
+              height: 30px;
               float: left;
               position: absolute;
-              top: 50%;
-              -webkit-transform: translateY(-50%);
-              -ms-transform: translateY(-50%);
-              transform: translateY(-50%);
+              z-index: 10;
+            }
+
+            .btn-bch-upvote:hover,
+            .btn-bch-upvote > button:hover {
+              color: #fff !important;
+            }
+
+            .btn-bch-upvote > button > .amount,
+            .btn-bch-upvote > button > .text {
+              position: absolute;
+              top: 4px;
               left: 0;
-              right: 0;
-              margin-left: -16px;
-              text-align: center;
+              margin-left: 15px;
+              width: 68px;
+              padding-left: 4px;
+              padding-right: 4px;
+              transition: all 0.3s ease-in-out;
             }
 
-            .btn-bch-upvote span {
-              min-width: 0.3em;
+            .btn-bch-upvote > button > .text {
               text-transform: uppercase;
-              transition: 0.25s cubic-bezier(0.5, -1, 0.5, 2);
-              transform: translate(0, -20px);
+              font-weight: bold;
             }
 
-            .btn-bch-upvote span:first-of-type {
-              display: inline-block;
+            .btn-bch-upvote > button > .amount {
               opacity: 1;
-            }
-
-            .btn-bch-upvote span:last-of-type {
-              display: none;
-              opacity: 0;
-            }
-
-            .btn-bch-upvote:hover span:first-of-type {
-              display: none;
-              opacity: 0;
-              color: #fff;
               transform: translate(0, 0);
             }
-            .btn-bch-upvote:hover span:last-of-type {
-              display: inline-block;
+
+            .btn-bch-upvote > button > .text {
+              opacity: 0;
+              transform: translate(100%, 0);
+            }
+
+            .btn-bch-upvote:hover > button > .amount {
+              opacity: 0;
+              transform: translate(100%, 0);
+            }
+
+            .btn-bch-upvote:hover > button > .text {
               opacity: 1;
-              color: #fff;
               transform: translate(0, 0);
             }
+
           </style>
-          <button
-            ng-disabled="upvotingPostId === postCtrl.post.id || postCtrl.post.userId === user.id"
-            ng-click="addressClicked(postCtrl.post)"
-            class="btn btn-bch-upvote"
-            data-text="0.002"
-          >
-            <span>0.002</span>
-            <span>UPVOTE</span>
-          </button>
+          <div class="btn-bch-upvote">
+            <span class="bch-icon"></span>
+            <!-- ng-click="addressClicked(postCtrl.post)" -->
+            <button
+              ng-disabled="upvotingPostId === postCtrl.post.id || postCtrl.post.userId === user.id"
+              class="btn btn-bch-upvote"
+              data-hover="UPVOTE"
+            >
+              <span class="amount">0.002</span> <span class="text">Upvote</span>
+            </button>
+          </div>
         </li>
         <!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
         <li
