@@ -201,9 +201,13 @@
         </li>
       </ul>
 
-      <!-- <h2 class="response-title">
+      <!--
+        hidden by the request of users.
+        Removing causes runtime errors.
+      -->
+      <h2 class="response-title" style="display: hidden;">
         <strong>{{response.title}}</strong>
-      </h2> -->
+      </h2>
 
       <article class="site-block response-body" ng-bind-html="postCtrl.displayFeedBody(response.body)"></article>
 
