@@ -41,7 +41,8 @@ export default function state ($stateProvider, $urlRouterProvider) {
 		.state('vicigo.notifs', {
 			url: "/notifs",
 			templateUrl: "/templates/notifs.html",
-      		controller: "notifsCtrl"
+      controller: "notifsCtrl",
+      controllerAs: "notifsCtrl"
 		})
 		.state('vicigo.posts', {
 			url: "/posts",
