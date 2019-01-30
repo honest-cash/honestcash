@@ -1,11 +1,11 @@
-import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
-import swal from "sweetalert";
 
-import PostService from "../../core/services/PostService";
-import ScopeService from "../../core/services/ScopeService";
 import { IGlobalScope } from "../../core/lib/interfaces";
 import { Post } from "../../core/models/models";
+import PostService from "../../core/services/PostService";
+import ScopeService from "../../core/services/ScopeService";
+import swal from "sweetalert";
+import tippy from "tippy.js";
+import 'tippy.js/dist/tippy.css';
 
 enum TabStatus {
   drafts = "drafts",
@@ -22,7 +22,7 @@ interface IScopePostsCtrl extends ng.IScope {
   postsAvailable: boolean;
   currentTab: TabStatus;
 
-  fetchFeeds: () => void;
+  fetchPosts: () => void;
   loadMore: () => void;
   switchTab: () => void;
   displayFeedBody: () => void;
@@ -37,7 +37,7 @@ export default class PostsCtrl {
     private postService: PostService,
     private scopeService: ScopeService
   ) {
-    this.fetchFeeds();
+    this.fetchPosts();
   }
 
   public isLoading: boolean = true;
@@ -53,12 +53,11 @@ export default class PostsCtrl {
     if (!this.$rootScope.activeCalls && this.postsAvailable) {
       this.page += 1;
       this.isLoadingMore = true;
-      this.fetchFeeds();
+      this.fetchPosts();
     }
   }
 
-  public fetchFeeds() {
-    console.log('fetching feed', this.page)
+  public fetchPosts() {
     this.isLoading = this.isLoadingMore ? false : true;
 
     this.postService.getPosts(

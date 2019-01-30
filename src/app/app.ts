@@ -60,7 +60,7 @@ angular.module("hashtag-app", [
 .controller("profileEditController", ProfileEditCtrl)
 .controller("feedsController", FeedsCtrl)
 .controller("draftsController", DraftsCtrl)
-.controller("postsController", PostsCtrl)
+.controller("postsCtrl", PostsCtrl)
 
 .run([ "$rootScope", runs.initBCHWallet ])
 

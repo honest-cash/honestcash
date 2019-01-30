@@ -1,6 +1,12 @@
 import moment from "moment";
 import { Post, Upvote, IFetchPostsArgs } from '../models/models';
 import SocialSharing from '../lib/SocialSharing';
+
+interface IPostRequestResponse {
+  usd: number;
+  bch: number;
+}
+
 export default class PostService {
   constructor (
     private $http,
@@ -55,7 +61,7 @@ export default class PostService {
     return this.processPost(res.data);
   }
 
-  public async deletePost(postId: number): Promise {
+  public async deletePost(postId: number): Promise<IPostRequestResponse> {
     return this.$http.delete(this.API_URL + "/post/" + postId);
   }
 
