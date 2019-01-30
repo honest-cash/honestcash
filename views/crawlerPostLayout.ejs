@@ -22,6 +22,41 @@
         <meta name="twitter:image" content="<%- SEO.ogImage %>" />
         <link rel="icon"  type="image/png" href="/img/favicon.png" />
 
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "Article",
+                "mainEntityOfPage":{
+                    "@type":"WebPage",
+                    "@id":"https://honest.cash/post/<%- post.id %>"
+                },
+                "headline": "<%- post.title %>",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "<%- post.user.imageUrl %>",
+                    "height": 150,
+                    "width": 150
+                },
+                "datePublished": "<%- post.createdAt %>",
+                "dateModified": "<%- post.updatedAt %>",
+                "author": {
+                    "@type": "Person",
+                    "name": "<%- post.user.username %>"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "Honest Cash",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://honest.cash/img/honest-long-logo.png",
+                        "width": 500,
+                        "height": 150
+                    }
+                },
+                "description": "<% for (var index = 0; index < post.userPostHashtags.length; index++ ) { %><%- post.userPostHashtags[index].hashtag %> <% } %>"
+            }
+        </script>
+
         <style>
             article {
                 font-size:20px;
@@ -86,9 +121,6 @@
                                 <ul class="ul-breath list-unstyled list-inline">
                                     <li><a href="/">Home</a></li>
                                     <li><a href="/honest_cash/about-honest-cash">About</a></li>
-                                    <li><a href="/honest-cash-transparency-report-and-warrant-canary-129">Warrant canary</a></li>
-                                    <li><a href="/honest_cash/honest-cash-terms-of-service-124/">Terms</a></li>
-                                    <li><a href="/honest_cash/honestcash-privacy-policy">Privacy</a></li>
                                     <li><a href="/honest_cash/frequently-asked-questions">FAQ</a></li>
                                 </ul>
                             </div>

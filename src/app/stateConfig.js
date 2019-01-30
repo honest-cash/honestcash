@@ -41,16 +41,8 @@ export default function state ($stateProvider, $urlRouterProvider) {
 		.state('vicigo.notifs', {
 			url: "/notifs",
 			templateUrl: "/templates/notifs.html",
-			controller: "notifsController",
-			resolve: {
-				'notifs': [ "$stateParams", "$http", function($stateParams, $http) {
-					return $http.get("/api/notifications?page=1&limit=30").then(function(response) {
-						return response.data;
-					});
-				}]
-			}
+      		controller: "notifsCtrl"
 		})
-	
 		.state('vicigo.posts', {
 			url: "/posts",
 			templateUrl: "/templates/posts.html",

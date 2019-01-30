@@ -1,0 +1,24 @@
+notifications:
+  slack: vqlabs:j71yKGBW4ipmLoWcJuteN83i
+
+cache:
+  directories:
+    - node_modules
+
+addons:
+  sauce_connect: true
+
+matrix:
+  include:
+  - name: "Build"
+    sudo: false
+    os: osx
+    osx_image: xcode10.1
+
+    install:
+    - npm install
+
+    script:
+    - npm run build
+    - npm run transfer-libs
+    - npm run test

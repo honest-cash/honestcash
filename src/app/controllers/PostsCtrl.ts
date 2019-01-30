@@ -140,5 +140,5 @@ export default class PostsCtrl {
     return this.postService.displayHTML(html);
   }
 
-  static $inject = ["$rootScope", "$scope", "$timeout", "PostService", "ScopeService"];
+  public static $inject = ["$rootScope", "$scope", "$timeout", "PostService", "ScopeService"];
 }
