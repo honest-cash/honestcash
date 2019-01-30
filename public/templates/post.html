@@ -10,7 +10,7 @@
 				<div class="panel" ui-sref="vicigo.post({ alias: postCtrl.post.parentPost.alias, username: postCtrl.post.parentPost.user.username })">
 					<div class="panel-body" style="cursor: pointer;">
 						Response to: <b>{{postCtrl.post.parentPost.title}}</b>
-            			<p>by @{{postCtrl.post.parentPost.user.username}}</p>
+            			<p>by <b>@{{postCtrl.post.parentPost.user.username}}</b></p>
 					</div>
 				</div>
 			</div>
@@ -212,7 +212,7 @@
         hidden by the request of users.
         Removing causes runtime errors.
       -->
-      <h2 class="response-title" style="display: hidden;">
+      <h2 class="response-title hidden">
         <strong>{{response.title}}</strong>
       </h2>
 
