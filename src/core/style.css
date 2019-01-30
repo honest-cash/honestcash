@@ -384,3 +384,7 @@ img.lazy {
   margin-top: 8px;
   margin-right: 5px;
 }
+
+.fa-50 i.fa {
+  font-size: 50px;
+}
