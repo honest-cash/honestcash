@@ -38,6 +38,10 @@ class UpvoteButtonController {
     private $scope: IScopeUpvoteButton,
     private $window: ng.IWindowService
   ) {
+    this.ngOnInit();
+  }
+
+  private ngOnInit() {
     this.$scope.amount = angular.isDefined(this.$scope.amount) ? this.$scope.amount : defaultOptions.amount;
     this.$scope.text = angular.isDefined(this.$scope.text) ? this.$scope.text : defaultOptions.text ;
     this.$scope.loadingText = angular.isDefined(this.$scope.loadingText)
@@ -58,7 +62,6 @@ class UpvoteButtonController {
         return "There is a pending upvote in process. Are you sure you want to leave?";
       }
     };
-
   }
 
   private clickPressed(e) {
