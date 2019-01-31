@@ -15,12 +15,16 @@
           <li>
             <strong style="margin-top:15px;">
               <a ui-sref="vicigo.profile({ profileId:feed.user.username })">
-                  <span class="user-follower-count">{{ feed.user.username }}</span>
+                <span class="user-follower-count">{{
+                  feed.user.username
+                }}</span>
               </a>
             </strong>
           </li>
 
-          <li ng-if="feed.parentPostId || feed.feedMetaInfo.type === 'followerUpvote'">
+          <li
+            ng-if="feed.parentPostId || feed.feedMetaInfo.type === 'followerUpvote'"
+          >
             <span style="margin-top:15px;"> • </span>
           </li>
 
@@ -28,12 +32,23 @@
             <span style="margin-top:15px;"> <small>Response</small> </span>
           </li>
 
-          <li ng-if="feed.parentPostId && feed.feedMetaInfo.type === 'followerUpvote'">
+          <li
+            ng-if="feed.parentPostId && feed.feedMetaInfo.type === 'followerUpvote'"
+          >
             <span style="margin-top:15px;"> • </span>
           </li>
 
           <li ng-if="feed.feedMetaInfo.type === 'followerUpvote'">
-            <span style="margin-top:15px;"> <small><a target="_self" href="/profile/{{feed.feedMetaInfo.data.username}}">{{feed.feedMetaInfo.data.username}}</a> upvoted it.</small> </span>
+            <span style="margin-top:15px;">
+              <small
+                ><a
+                  target="_self"
+                  href="/profile/{{ feed.feedMetaInfo.data.username }}"
+                  >{{ feed.feedMetaInfo.data.username }}</a
+                >
+                upvoted it.</small
+              >
+            </span>
           </li>
 
           <li class="feed-date">
@@ -75,9 +90,12 @@
       <div class="row hashtags">
         <div class="col-xs-12">
           <div style="padding-left:8px;padding-right:5px;">
-            <span class="pull-left hashtag-container" ng-repeat="hashtag in feed.userPostHashtags">
-                <i class="fa fa-tag"></i>
-                <a
+            <span
+              class="pull-left hashtag-container"
+              ng-repeat="hashtag in feed.userPostHashtags"
+            >
+              <i class="fa fa-tag"></i>
+              <a
                 class="hashtag"
                 ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })"
                 >{{ ::hashtag.hashtag }}</a
@@ -92,32 +110,39 @@
         style="padding-top: 10px; padding-bottom: 10px;"
       >
         <div class="col-xs-12">
-          <ul class="list-unstyled list-inline list">
-            <li style="width:50px;">
-              <button
-                ng-click="upvote(feed)"
-                class="btn btn-default"
-                ng-disabled="upvotingPostId === feed.id || feed.userId == user.id"
-              >
-                <i class="fa fa-btc"></i> 0.002
-              </button>
+          <ul class="list-unstyled list-inline list list-post-actions">
+            <li>
+              <upvote-button
+                on-click="upvote(feed)"
+                is-upvoting="isUpvoting"
+                is-disabled="upvotingPostId === feed.id || feed.userId == user.id"
+                ring-background-color="'white'"
+              ></upvote-button>
             </li>
-            <li style="width:50px;">
+            <li>
               <small
                 >{{ feed.upvoteCount }} <i class="fa fa-bitcoin"></i
               ></small>
             </li>
-            <li style="width:50px;">
+            <li>
               <small
                 >{{ feed.responseCount }} <i class="fa fa-comment-o"></i
               ></small>
             </li>
-            <li style="width:50px;">
-			        <small>Share on:</small>
-              <a ng-href="{{feed.shareURLs.reddit}}" target="_blank" class="btn btn-default btn-xs">
+            <li>
+              <small>Share on:</small>
+              <a
+                ng-href="{{ feed.shareURLs.reddit }}"
+                target="_blank"
+                class="btn btn-default btn-xs"
+              >
                 <i class="fa fa-reddit"></i>
               </a>
-              <a ng-href="{{feed.shareURLs.twitter}}" target="_blank" class="btn btn-default btn-xs">
+              <a
+                ng-href="{{ feed.shareURLs.twitter }}"
+                target="_blank"
+                class="btn btn-default btn-xs"
+              >
                 <i class="fa fa-twitter"></i>
               </a>
             </li>
