@@ -190,16 +190,25 @@ export default class MainCtrl {
             // replace with sweetalert
             $('#loadWalletModal').modal('show');
 
+            this.$scope.isUpvoting = false;
+            this.scopeService.safeApply(this.$scope, () => {});
+
             return toastr.warning("Insufficient balance on your BCH account.");
           }
 
           if (err.message && err.message.indexOf("has no matching Script") > -1) {
+              this.$scope.isUpvoting = false;
+              this.scopeService.safeApply(this.$scope, () => {});
+
               return toastr.warning("Could not find an unspent bitcoin that is big enough");
           }
 
           this.$scope.upvotingStatus = "error";
 
           console.error(err);
+
+          this.$scope.isUpvoting = false;
+          this.scopeService.safeApply(this.$scope, () => {});
 
           return toastr.warning("Error. Try again later.");
       }

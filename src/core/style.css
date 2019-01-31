@@ -1,3 +1,7 @@
+:root {
+  --body-bg-color: #fafafa;
+}
+
 body {
   width: 100%;
   font-family: 'Helvetica', sans-serif;
@@ -5,7 +9,7 @@ body {
   font-weight: 300;
   /* color: #777; */
   line-height: 1.6;
-  background-color: #fafafa;
+  background-color: var(--body-bg-color);
   padding-top: 70px;
 }
 
@@ -385,6 +389,8 @@ img.lazy {
   margin-right: 5px;
 }
 
-.btn-bch-upvote {
-  
+.list-post-actions > li {
+  height: 30px;
+  float: left;
+  line-height: 30px;
 }
