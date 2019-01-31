@@ -78,15 +78,15 @@ export default function upvoteButton(): ng.IDirective {
     controller: UpvoteButtonController,
     restrict: "E",
     scope: {
-        amount: "=?",
-        backgroundColor: "=?",
-        isDisabled: "<",
-        isUpvoting: "<",
-        loadingText: "=?",
-        onClick: "&",
-        ringBackgroundColor: "=?",
-        text: "=?",
-        textColor: "=?"
+      amount: "=?",
+      backgroundColor: "=?",
+      isDisabled: "<",
+      isUpvoting: "<",
+      loadingText: "=?",
+      onClick: "&",
+      ringBackgroundColor: "=?",
+      text: "=?",
+      textColor: "=?"
     },
     template
   };
