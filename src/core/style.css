@@ -103,7 +103,7 @@ h4 {
 img.lazy {
   width: 100%;
   /*max-height: 400px;*/
-  min-height: 180px;
+  /* min-height: 180px; */ /* this causes scaling problems */
   display: block;
   /* optional way, set loading as background */
   background-image: url('/img/loader-pacman.gif');
@@ -387,6 +387,10 @@ img.lazy {
   border-radius: 4px;
   margin-top: 8px;
   margin-right: 5px;
+}
+
+.fa-50 i.fa {
+  font-size: 50px;
 }
 
 .list-post-actions > li {

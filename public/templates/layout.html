@@ -84,8 +84,13 @@
             </li>
 
             <li class="visible-xs" ng-if="user.id">
-              <a style="margin-top: 5px;" ng-href="/profile/{{user.username}}"" target="_self">
+              <a style="margin-top: 5px;" ng-href="/profile/{{user.username}}" target="_self">
                 my profile
+              </a>
+            </li>
+            <li class="visible-xs" ng-if="user.id">
+              <a ng-href="/posts" target="_self">
+                my posts
               </a>
             </li>
 
@@ -97,19 +102,19 @@
             <hr ng-if="user.id" class="visible-xs" style="margin-top: 5px; margin-bottom: 5px;">
             
             <li class="visible-xs" ng-if="user.id">
-              <a style="margin-top: 5px;" href="/honest_cash/frequently-asked-questions/"" target="_self">
+              <a style="margin-top: 5px;" href="/honest_cash/frequently-asked-questions/" target="_self">
                 help
               </a>
             </li>
 
             <li class="visible-xs" ng-if="user.id">
-              <a style="margin-top: 5px;" href="/honest_cash/honest-cash-terms-of-service-124/"" target="_self">
+              <a style="margin-top: 5px;" href="/honest_cash/honest-cash-terms-of-service-124/" target="_self">
                 terms of service
               </a>
             </li>
 
             <li class="visible-xs" ng-if="user.id">
-              <a style="margin-top: 5px;" href="/honest_cash/honestcash-privacy-policy/"" target="_self">
+              <a style="margin-top: 5px;" href="/honest_cash/honestcash-privacy-policy/" target="_self">
                 privacy policy
               </a>
             </li>

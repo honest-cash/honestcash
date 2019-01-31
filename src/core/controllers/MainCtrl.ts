@@ -123,6 +123,12 @@ export default class MainCtrl {
       
       const postId = post.id;
       const address = post.user.addressBCH;
+
+      if (post.userId == this.$rootScope.user.id) {
+        toastr.error("Upvoting is not possible because you cannot tip your own posts and responses");
+        return;
+      }
+
       const simpleWallet = simpleWalletProvider.get();
       
       this.$scope.upvotingPostId = postId;

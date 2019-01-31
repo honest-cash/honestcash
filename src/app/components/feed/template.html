@@ -75,12 +75,14 @@
       <div class="row hashtags">
         <div class="col-xs-12">
           <div style="padding-left:8px;padding-right:5px;">
-            <a
-              class="pull-left hashtag"
-              ng-repeat="hashtag in feed.userPostHashtags"
-              ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })"
-              >{{ ::hashtag.hashtag }}</a
-            >
+            <span class="pull-left hashtag-container" ng-repeat="hashtag in feed.userPostHashtags">
+                <i class="fa fa-tag"></i>
+                <a
+                class="hashtag"
+                ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })"
+                >{{ ::hashtag.hashtag }}</a
+              >
+            </span>
           </div>
         </div>
       </div>

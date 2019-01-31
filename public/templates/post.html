@@ -30,12 +30,9 @@
 
     <div class="row">
       <ul class="list-unstyled list-inline">
-        <li ng-repeat="hashtag in postCtrl.post.userPostHashtags">
-          <a
-            href="/hashtag/{{ ::hashtag.hashtag }}"
-            target="_self"
-            class="pull-left hashtag"
-          >
+        <li class="pull-left hashtag-container" ng-repeat="hashtag in postCtrl.post.userPostHashtags">
+          <i class="fa fa-tag"></i>
+          <a href="/hashtag/{{ ::hashtag.hashtag }}" target="_self" class="hashtag">
             {{ ::hashtag.hashtag}}
           </a>
         </li>
@@ -381,9 +378,6 @@
     <div>
       <h1>
         <strong>{{postCtrl.post.title}}</strong>
-        <small ng-if="user.id==postCtrl.post.user.id" >
-          <a ng-href="/edit/{{postCtrl.post.id}}"  target="_self">Edit</a>
-        </small>
       </h1>
     </div>
   </header>
