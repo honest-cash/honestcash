@@ -1,0 +1,109 @@
+/*  some of the styles are in style.css
+    because they are duplicated for each directive
+*/
+
+@backgroundColor: #f7941d;
+@textColor: #ffffff;
+@ringBackgroundColor: #fafafa;
+
+.btn-bch-upvote-container > button {
+  background: @backgroundColor;
+  color: @textColor !important;
+}
+
+.btn-bch-upvote-container:hover,
+.btn-bch-upvote-container > button:hover {
+  color: @textColor !important;
+}
+
+.bch-icon-loading {
+  border: 2px solid @backgroundColor;
+}
+
+@-moz-keyframes spinPulse {
+  0% {
+    -moz-transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px @backgroundColor;
+  }
+
+  50% {
+    -moz-transform: rotate(145deg);
+    opacity: 1;
+  }
+
+  100% {
+    -moz-transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes spinoffPulse {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spinPulse {
+  0% {
+    -webkit-transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px @backgroundColor;
+  }
+
+  50% {
+    -webkit-transform: rotate(145deg);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes spinoffPulse {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinPulse {
+  0% {
+    transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px @backgroundColor;
+  }
+
+  50% {
+    transform: rotate(145deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+
+@keyframes spinoffPulse {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.bch-icon-outer-ring-color{fill:@ringBackgroundColor;} /* container background color */
+.bch-icon-inner-ring-color{fill:@backgroundColor;}
+.bch-icon-color{fill:@textColor;}

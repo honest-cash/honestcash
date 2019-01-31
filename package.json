@@ -51,6 +51,7 @@
     "jquery-ui-dist": "^1.12.1",
     "jsonwebtoken": "^5.4.1",
     "keyword-extractor": "0.0.15",
+    "less": "^3.9.0",
     "limiter": "^1.1.0",
     "lzutf8": "^0.5.5",
     "md5": "^2.2.1",
