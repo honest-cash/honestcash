@@ -7,11 +7,11 @@
         <div class="form-group">
                 <ul class="list-inline list-unstyled" style="margin-top: 10px;">
                         <li>Balance: 
-                            <b ng-if="!balanceLoading">
-                                {{addressBalance}} <i class="fa fa-btc"></i> | 
-                                {{addressBalanceInUSD}} <i class="fa fa-usd"></i>
+                            <b ng-if="!walletBalance.isLoading">
+                                {{walletBalance.bch}} <i class="fa fa-btc"></i> | 
+                                {{walletBalance.usd}} <i class="fa fa-usd"></i>
                             </b>
-                            <b ng-if="balanceLoading">Loading balance...</b>
+                            <b ng-if="walletBalance.isLoading">Loading balance...</b>
                         </li>
                 </ul>
                 <ul class="list-inline list-unstyled" style="margin-top: 10px;">
@@ -99,7 +99,7 @@
 
                 <label for="withdrawalAmount">Amount</label>
                 <input type="number" placeholder="How much would you like to transfer" ng-model="withdrawalAmount" class="form-control" aria-describedby="withdrawalAmount">
-                <span><a href="#" ng-click="withdrawalAmount=addressBalance-0.00001">Max amount (with 0.00001 BCH fees limit)</a></span>
+                <span><a href="#" ng-click="withdrawalAmount=walletBalance.bch-0.00001">Max amount (with 0.00001 BCH fees limit)</a></span>
             </div>
 
             <button ng-disabled="!withdrawalAmount || !withdrawalAddressBCH" ng-click="withdraw(withdrawalAmount, withdrawalAddressBCH)" type="submit" class="btn btn-danger btn-lg">Transfer</button>

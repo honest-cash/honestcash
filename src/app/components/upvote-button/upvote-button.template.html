@@ -1,11 +1,10 @@
 <div
   class="btn-bch-upvote-container"
-  ng-class="{'active': isUpvoting, 'disabled': isDisabled}"
-  ng-click="clickPressed($event)"
+  ng-class="{'active': upvoteButtonCtrl.isUpvoting, 'disabled': upvoteButtonCtrl.isDisabled}"
+  ng-click="upvoteButtonCtrl.onClick($event)"
 >
   <span class="bch-icon"
     ><?xml version="1.0" encoding="utf-8"?>
-    <!-- Generator: Adobe Illustrator 22.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
     <svg
       version="1.1"
       id="Layer_1"
@@ -74,9 +73,9 @@
     </svg>
   </span>
   <span class="bch-icon-loading"></span>
-  <button ng-disabled="isUpvoting" class="btn btn-bch-upvote">
-    <span class="amount">{{ amount }}</span>
-    <span class="text">{{ text }}</span>
-    <span class="loading">{{ loadingText }}</span>
+  <button ng-disabled="upvoteButtonCtrl.isUpvoting" class="btn btn-bch-upvote">
+    <span class="bch-upvote-button-text">{{ upvoteButtonCtrl.text }}</span>
+    <span class="bch-upvote-button-amount">{{ upvoteButtonCtrl.amount }}</span>
+    <span class="bch-upvote-button-loading">{{ upvoteButtonCtrl.loadingText }}</span>
   </button>
 </div>

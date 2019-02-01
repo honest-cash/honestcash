@@ -113,9 +113,7 @@
           <ul class="list-unstyled list-inline list list-post-actions">
             <li>
               <upvote-button
-                on-click="upvote(feed)"
-                is-upvoting="isUpvoting"
-                is-disabled="upvotingPostId === feed.id || feed.userId == user.id"
+                post="feed"
               ></upvote-button>
             </li>
             <li>

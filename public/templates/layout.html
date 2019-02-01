@@ -24,10 +24,10 @@
         </button>
         <div ng-if="user.id" id="profile-badge-mobile" class="visible-xs">
             <b style="margin-right: 5px;">{{ user.username }}</b>
-            <b ng-if="balanceLoading" class="text-gray">Loading balance...</b>
-            <span ng-if="!balanceLoading"
-              ><i class="fa fa-btc"></i> {{ addressBalance | number: 3 }} |
-              <i class="fa fa-usd"></i> {{ addressBalanceInUSD }}</span
+            <b ng-if="walletBalance.isLoading" class="text-gray">Loading balance...</b>
+            <span ng-if="!walletBalance.isLoading"
+              ><i class="fa fa-btc"></i> {{ walletBalance.bch | number: 3 }} |
+              <i class="fa fa-usd"></i> {{ walletBalance.usd }}</span
             >
         </div>
         <a href="/" target="_self">
@@ -50,18 +50,18 @@
 
             <!-- <li ng-if="user.id">
               <div class="visible-xs" style="margin-top: 5px; margin-left: 15px; line-height: 25px;">
-                <b ng-if="!balanceLoading">
-                    <i class="fa fa-btc"></i> {{addressBalance}}</br>
-                    <i class="fa fa-usd"></i> {{addressBalanceInUSD}}
+                <b ng-if="!walletBalance.isLoading">
+                    <i class="fa fa-btc"></i> {{walletBalance.bch}}</br>
+                    <i class="fa fa-usd"></i> {{walletBalance.usd}}
                 </b>
-                <b ng-if="balanceLoading">Loading balance...</b>
+                <b ng-if="walletBalance.isLoading">Loading balance...</b>
               </div>
               <div class="hidden-xs" style="margin-top: 5px; line-height: 25px; text-align: right;">
-                  <b ng-if="!balanceLoading">
-                    {{addressBalance}} <i class="fa fa-btc"></i></br>
-                    {{addressBalanceInUSD}} <i class="fa fa-usd"></i>
+                  <b ng-if="!walletBalance.isLoading">
+                    {{walletBalance.bch}} <i class="fa fa-btc"></i></br>
+                    {{walletBalance.usd}} <i class="fa fa-usd"></i>
                   </b>
-                  <b ng-if="balanceLoading">Loading balance...</b>
+                  <b ng-if="walletBalance.isLoading">Loading balance...</b>
                 </div>
             </li> -->
 

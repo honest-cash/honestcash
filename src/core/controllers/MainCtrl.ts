@@ -9,18 +9,9 @@ import * as upvoteDistribution from "../lib/upvoteDistribution";
 import { IGlobalScope } from '../../core/lib/interfaces';
 
 interface IScopeMainCtrl extends ng.IScope {
-  addressBalance: number;
-  addressBalanceInUSD: number;
-  balanceLoading: boolean;
-  upvotingPostId: any;
-  isUpvoting: boolean;
-
-  addressClicked: any;
   makeUncesorable: any;
   mouseEnterAddress: any
   mouseLeaveAddress: any;
-  upvotingStatus: "loading" | "error";
-
   follow: any;
   unfollow: any;
 }
@@ -40,17 +31,15 @@ export default class MainCtrl {
         private postService: PostService,
         private walletService: WalletService
     ) {
-        $scope.addressBalance = 0;
-        $scope.addressBalanceInUSD = 0;
-        $scope.balanceLoading = true;
-        $scope.isUpvoting = false;
 
         $scope.$on('$viewContentLoaded', async () => {
-          const balances = await this.walletService.getAddressBalances();
+          const {bch, usd} = await this.walletService.getAddressBalances();
 
-          $scope.balanceLoading = false;
-          $scope.addressBalance = balances.bch;
-          $scope.addressBalanceInUSD = balances.usd;
+          $rootScope.walletBalance = {
+            bch,
+            usd,
+            isLoading: false
+          }
         });
 
         const mouseEnterAddress = (className, address) => {
@@ -66,7 +55,6 @@ export default class MainCtrl {
             container.innerHTML = "";
         };
 
-        $scope.addressClicked = (post: Post) => this.addressClicked(post);
         $scope.makeUncesorable = (post: Post) => this.makeUncesorable(post);
         
         $scope.mouseEnterAddress = mouseEnterAddress;
@@ -104,147 +92,7 @@ export default class MainCtrl {
         };
     }
 
-    private satoshiToBch = (amountSat: number): string => {
-      return (amountSat / 100000000).toFixed(5);
-    }
 
-    /**
-     * Splits an upvote amount between previous upvotes and saves the upvote reference in Honest database
-     */
-    private async addressClicked(post) {
-      if (!this.$rootScope.user) {
-        return location.href = "/signup";
-      }
-
-      if (!post.user.addressBCH) {
-          toastr.error("Upvoting is not possible because the author does not have a Bitcoin address to receive");
-          return;
-      }
-      
-      const postId = post.id;
-      const address = post.user.addressBCH;
-
-      if (post.userId == this.$rootScope.user.id) {
-        toastr.error("Upvoting is not possible because you cannot tip your own posts and responses");
-        return;
-      }
-
-      const simpleWallet = simpleWalletProvider.get();
-      
-      this.$scope.upvotingPostId = postId;
-      this.$scope.upvotingStatus = "loading";
-      this.$scope.isUpvoting = true;
-
-      // users with connected BCH accounts
-      let tx;
-      let upvotes;
-
-      try {
-        upvotes = (await this.postService.getUpvotes(postId));
-      } catch (err) {
-        toastr.error("Can't connect.");
-
-        return console.error(err);
-      }
-
-      const receivers = upvoteDistribution.determineUpvoteRewards(upvotes, post.user);
-
-      toastr.info("Upvoting...");
-
-      const distributionInfoEl = document.getElementById("distribution-info");
-
-      distributionInfoEl.innerHTML = "";
-
-      for (let receiver of receivers) {
-        const el = document.createElement("div");
-
-        let userHtml;
-
-        if (receiver.user) {
-            userHtml = `<a target="_self" href="/profile/${receiver.user.username}"><img style="border-radius:50%; width: 23px;" src="${receiver.user.imageUrl ? receiver.user.imageUrl : '/img/avatar.png'}" /> ${receiver.user.username}</a> ${post.userId === receiver.user.id ? '(Author)' : ''}`;
-        } else {
-            userHtml = `<img style="width: 23px;" src="/img/avatar.png" /> Anonymous`;
-        }
-
-        el.innerHTML = `${this.satoshiToBch(receiver.amountSat)} BCH -> ${userHtml}`;
-
-        distributionInfoEl.appendChild(el);
-      }
-
-      // distribute only to testnet of owner
-      // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
-      try {
-          receivers.push({
-            opReturn: ["0x4801", postId.toString()]
-          });
-          tx = await simpleWallet.send(receivers);
-      } catch (err) {
-          if (err.message && err.message.indexOf("Insufficient") > -1) {
-            this.$scope.upvotingPostId = null;
-            this.scopeService.safeApply(this.$scope, () => {});
-
-            const addressContainer = document.getElementById("load-wallet-modal-address") as HTMLInputElement;
-            const legacyAddressContainer = document.getElementById("load-wallet-modal-legacy-address") as HTMLInputElement;
-            const qrContainer = document.getElementById("load-wallet-modal-qr") as HTMLDivElement;
-
-            addressContainer.value = simpleWallet.cashAddress;
-            legacyAddressContainer.value = simpleWallet.legacyAddress;
-
-            qrContainer.innerHTML = "";
-            new QRCode(qrContainer, simpleWallet.cashAddress);
-
-            // replace with sweetalert
-            $('#loadWalletModal').modal('show');
-
-            this.$scope.isUpvoting = false;
-            this.scopeService.safeApply(this.$scope, () => {});
-
-            return toastr.warning("Insufficient balance on your BCH account.");
-          }
-
-          if (err.message && err.message.indexOf("has no matching Script") > -1) {
-              this.$scope.isUpvoting = false;
-              this.scopeService.safeApply(this.$scope, () => {});
-
-              return toastr.warning("Could not find an unspent bitcoin that is big enough");
-          }
-
-          this.$scope.upvotingStatus = "error";
-
-          console.error(err);
-
-          this.$scope.isUpvoting = false;
-          this.scopeService.safeApply(this.$scope, () => {});
-
-          return toastr.warning("Error. Try again later.");
-      }
-
-      $('#tipSuccessModal').modal('show');
-
-      const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
-
-      const anchorEl = document.getElementById("bchTippingTransactionUrl") as HTMLAnchorElement;
-
-      console.log(`Upvote transaction: ${url}`);
-
-      anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
-      anchorEl.href = url;
-
-      this.postService.upvote({
-          postId: postId,
-          txId: tx.txid
-      });
-
-      const balances = await this.walletService.getAddressBalances();
-
-      this.$scope.addressBalance = balances.bch
-      this.$scope.addressBalanceInUSD = balances.usd;
-      this.$scope.balanceLoading = false;
-      this.$scope.isUpvoting = false;
-      this.$scope.upvotingPostId = null;
-
-      this.scopeService.safeApply(this.$scope, () => {});
-    }
 
     private byteCount = (s): number => {
       return Number(((encodeURI(s).split(/%..|./).length - 1) / 1024).toFixed(2));
@@ -254,7 +102,7 @@ export default class MainCtrl {
      * Uploads a blog post onto Bitcoin blockchain and saves a refernece in Honest database
      */
     private async makeUncesorable(post: Post) {
-      this.$scope.balanceLoading = true;
+      this.$rootScope.walletBalance.isLoading = true;
 
       const simpleWallet = simpleWalletProvider.get();
       const json = {
@@ -319,9 +167,9 @@ export default class MainCtrl {
 
         const balances = await this.walletService.getAddressBalances();
 
-        this.$scope.addressBalance = balances.bch;
-        this.$scope.addressBalanceInUSD = balances.usd;
-        this.$scope.balanceLoading = false;
+        this.$rootScope.walletBalance = {
+
+        }
       }
     }
 

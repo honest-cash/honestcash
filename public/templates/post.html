@@ -99,9 +99,7 @@
       <ul class="list-unstyled list-inline list list-post-actions">
         <li>
           <upvote-button
-            on-click="addressClicked(postCtrl.post)"
-            is-upvoting="isUpvoting"
-            is-disabled="upvotingPostId === postCtrl.post.id || postCtrl.post.userId === user.id"
+            post="postCtrl.post"
           ></upvote-button>
         </li>
         <!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->

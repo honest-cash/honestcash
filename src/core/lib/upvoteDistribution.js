@@ -29,7 +29,8 @@ const determineUpvoteRewards = (upvotes, author) => {
         receivers.push({
             upvoteId: upvote.id,
             user: upvote.user,
-            address: upvote.user.addressBCH
+            address: upvote.user.addressBCH,
+            amountSat: null
         });
        
         const upvoteIndex = Math.pow(2, payoutIndex) - 1;

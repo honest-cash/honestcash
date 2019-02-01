@@ -34,10 +34,11 @@ export class Post {
   body: string;
   plain: string;
   user: User;
+  userId: number;
   shareURLs: any;
   postTypeId: TPostTypeId;
   parentPostId: number;
   createdAt: string;
   publishedAt: string;
-  userPosts?: Post[]
+  userPosts?: Post[];
 }
