@@ -33,6 +33,7 @@ export class Post {
   alias: string;
   body: string;
   plain: string;
+  userId: number;
   user: User;
   shareURLs: any;
   postTypeId: TPostTypeId;

@@ -8,6 +8,15 @@ export interface ISimpleWallet {
   encrypt: any;
   decrypt: any;
 }
+export interface IGroupedUpvote {
+  userId: number;
+  score: number;
+  user: {
+    imageUrl: string;
+    username: string,
+    addressBCH: string
+  };
+}
 
 export interface IHashtagStat {
   hashtag: string;

@@ -59,11 +59,18 @@
     </div>
     <div class="row">
       <div class="col-xs-12 col-sm-8 pull-left">
-        <span class="text-muted" style="font-size: 12px;"
-          >Published on {{ post.publishedAt }}</span
-        >
+        <span class="text-muted" style="font-size: 12px;">
+          Published on {{ post.publishedAt }}
+        </span>
       </div>
       <div class="col-xs-12 col-sm-4 pull-right text-right">
+        <a
+          class="btn btn-default btn-xs"
+          ng-click="promotePost(post)"
+          target="_blank"
+        >
+          <i class="fa fa-eye"></i>&nbsp;Promote
+        </a>
         <a
           class="btn btn-default btn-xs"
           ui-sref="vicigo.post({ alias: post.alias, username: post.user.username })"

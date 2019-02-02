@@ -15,9 +15,10 @@ interface IScopeFeedsCtrl extends ng.IScope {
   postsAvailable: boolean;
   hashtagFollowed: boolean;
   hashtag: string;
-  feedType: "userfeed" | "top" | "new";
+  feedType: "userfeed" | "top" | "new" | "promoted";
   sortType: "new";
   until: string;
+  promotedOnly: boolean;
   recommendedHashtags: any[];
   recommendedProfiles: any[];
   recommendedUsers: any[];
@@ -102,12 +103,13 @@ export default class FeedsCtrl {
     this.$scope.isLoading = true;
 
     const obj = {
-      hashtag: this.$scope.hashtag,
-      until: this.$scope.until,
-      page: this.$scope.page,
       followerId: undefined,
+      hashtag: this.$scope.hashtag,
+      includeResponses: undefined,
       orderBy: undefined,
-      includeResponses: undefined
+      page: this.$scope.page,
+      promotedOnly: this.$scope.promotedOnly,
+      until: this.$scope.until
     };
 
     if (this.$scope.feedType === "userfeed") {
@@ -116,6 +118,10 @@ export default class FeedsCtrl {
 
     if (this.$scope.feedType === "top") {
       obj.orderBy = "upvoteCount";
+    }
+
+    if (this.$scope.feedType === "promoted") {
+      this.$scope.promotedOnly = true;
     }
 
     const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ?

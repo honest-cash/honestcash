@@ -1,5 +1,6 @@
 import moment from "moment";
 import { dateFormat } from "../../core/config/index";
+import { IGroupedUpvote } from "../lib/interfaces";
 import SocialSharing from "../lib/SocialSharing";
 import { IFetchPostsArgs, Post, Upvote } from "../models/models";
 
@@ -73,6 +74,12 @@ export default class PostService {
     const res = await this.$http.get(this.API_URL + "/post/" + postId + "/upvotes");
 
     return res.data as Upvote[];
+  }
+
+  public async getUpvotesForBoosting(): Promise<IGroupedUpvote[]> {
+    const res = await this.$http.get(this.API_URL + "/upvotes/boosts/next-upvote-distribution");
+
+    return res.data as IGroupedUpvote[];
   }
 
   public async getResponses(postId: number): Promise<Post[]> {

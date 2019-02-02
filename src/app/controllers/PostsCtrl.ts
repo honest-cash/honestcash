@@ -3,7 +3,9 @@ import swal from "sweetalert";
 import tippy from "tippy.js";
 import 'tippy.js/dist/tippy.css';
 import toastr from "../../core/config/toastr";
-import { IGlobalScope } from "../../core/lib/interfaces";
+import { IGlobalScope, IGroupedUpvote } from "../../core/lib/interfaces";
+import * as simpleWalletProvider from "../../core/lib/simpleWalletProvider";
+import { satoshiToBch } from "../../core/lib/upvoteDistribution";
 import { Post } from "../../core/models/models";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
@@ -65,6 +67,139 @@ export default class PostsCtrl {
       this.$scope.isLoadingMore = true;
       this.fetchPosts();
     }
+  }
+ 
+  public async promotePost(post: Post) {
+    /**
+     * Splits an upvote amount between previous upvotes and saves the upvote reference in Honest database
+     */
+    if (!this.$rootScope.user) {
+      return location.href = "/signup";
+    }
+
+    const postId = post.id;
+
+    if (post.userId !== this.$rootScope.user.id) {
+      toastr.error("Boosting is not possible because this is not your own post.");
+
+      return;
+    }
+
+    const simpleWallet = simpleWalletProvider.get();
+
+    // users with connected BCH accounts
+    let tx = {};
+    let upvotes: IGroupedUpvote[];
+
+    try {
+      upvotes = (await this.postService.getUpvotesForBoosting());
+    } catch (err) {
+      toastr.error("Can't connect.");
+
+      return console.error(err);
+    }
+
+    const distributionInfoEl = document.getElementById("distribution-info");
+
+    distributionInfoEl.innerHTML = "";
+
+    const receivers = [];
+
+    for (const receiver of upvotes) {
+      const el = document.createElement("div");
+
+      let userHtml;
+
+      if (receiver.user) {
+        userHtml = `<a target="_self" href="/profile/${receiver.user.username}">
+          <img
+            style="border-radius:50%; width: 23px;"
+            src="${receiver.user.imageUrl ? receiver.user.imageUrl : '/img/avatar.png'}"
+          />
+          ${receiver.user.username}
+        </a>`;
+      } else {
+          userHtml = `<img style="width: 23px;" src="/img/avatar.png" /> Anonymous`;
+      }
+
+      const boostCost = 0.1;
+
+      el.innerHTML = `${String(boostCost / upvotes.length)} BCH -> ${userHtml}`;
+
+      distributionInfoEl.appendChild(el);
+
+      receivers.push({
+        address: receiver.user.addressBCH,
+        amountSat: boostCost / upvotes.length
+      });
+    }
+
+      // distribute only to testnet of owner
+      // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
+    try {
+      receivers.push({
+        opReturn: [ "0x4801", postId.toString()]
+      });
+      // tx = await simpleWallet.send(receivers);
+    } catch (err) {
+      if (err.message && err.message.indexOf("Insufficient") > -1) {
+        this.$scope.upvotingPostId = null;
+        this.scopeService.safeApply(this.$scope, () => {});
+
+        const addressContainer = document.getElementById("load-wallet-modal-address") as HTMLInputElement;
+        const legacyAddressContainer = document.getElementById("load-wallet-modal-legacy-address") as HTMLInputElement;
+        const qrContainer = document.getElementById("load-wallet-modal-qr") as HTMLDivElement;
+
+        addressContainer.value = simpleWallet.cashAddress;
+        legacyAddressContainer.value = simpleWallet.legacyAddress;
+
+        qrContainer.innerHTML = "";
+        new QRCode(qrContainer, simpleWallet.cashAddress);
+
+        // replace with sweetalert
+        $('#loadWalletModal').modal('show');
+
+        this.$scope.isUpvoting = false;
+        this.scopeService.safeApply(this.$scope, () => {});
+
+        return toastr.warning("Insufficient balance on your BCH account.");
+      }
+
+      if (err.message && err.message.indexOf("has no matching Script") > -1) {
+          this.$scope.isUpvoting = false;
+          this.scopeService.safeApply(this.$scope, () => {});
+
+          return toastr.warning("Could not find an unspent bitcoin that is big enough");
+      }
+
+      this.$scope.upvotingStatus = "error";
+
+      console.error(err);
+
+      this.$scope.isUpvoting = false;
+      this.scopeService.safeApply(this.$scope, () => {});
+
+      return toastr.warning("Error. Try again later.");
+    }
+
+    $('#tipSuccessModal').modal('show');
+
+    const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
+
+    const anchorEl = document.getElementById("bchTippingTransactionUrl") as HTMLAnchorElement;
+
+    console.log(`Upvote transaction: ${url}`);
+
+    anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
+    anchorEl.href = url;
+
+    this.postService.upvote({
+        postId: postId,
+        txId: tx.txid,
+        type: "boost"
+    });
+
+    this.scopeService.safeApply(this.$scope);
   }
 
   public fetchPosts() {
