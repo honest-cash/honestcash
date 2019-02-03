@@ -1,13 +1,10 @@
-import * as simpleWalletProvider from '../lib/simpleWalletProvider';
+import { IGlobalScope } from '../../core/lib/interfaces';
 import ScopeService from '../../core/services/ScopeService';
 import WalletService from '../../core/services/WalletService';
-import { IGlobalScope } from '../../core/lib/interfaces';
 
 interface IScopeMainCtrl extends ng.IScope {
   mouseEnterAddress: any;
   mouseLeaveAddress: any;
-  follow: any;
-  unfollow: any;
 }
 
 export default class MainCtrl {
