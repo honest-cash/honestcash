@@ -17,29 +17,7 @@
           <h1 class="text-center-sm">
             <span class="bold">{{ profileCtrl.profile.username }}</span>
             <span class="follow-unfollow" ng-if="profileCtrl.profile.id !== user.id">
-              <button
-                ng-click="follow(profileCtrl.profile.id, profileCtrl.profile)"
-                ng-if="!profileCtrl.profile.alreadyFollowing"
-                class="btn btn-default btn-xs"
-              >
-                FOLLOW
-              </button>
-              <button
-                ng-click="profileCtrl.follow(profileCtrl.profile.id, profileCtrl.profile)"
-                ng-if="!profileCtrl.profile.id"
-                class="btn btn-default btn-xs"
-              >
-                <a href="https://honest.cash/signup">
-                  FOLLOW
-                </a>
-              </button>
-              <button
-                ng-click="unfollow(profileCtrl.profile.id, profileCtrl.profile)"
-                ng-if="profileCtrl.profile.alreadyFollowing"
-                class="btn btn-success btn-xs"
-              >
-                UNFOLLOW
-              </button>
+              <follow-unfollow-button show-follow="true" show-unfollow="true" user="profileCtrl.profile"></follow-unfollow-button>
             </span>
             <span class="edit-profile" ng-if="profileCtrl.profile.id === user.id">
               <a

@@ -73,15 +73,7 @@
               </span>
             </a>
           </strong>
-
-          <button
-            ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing"
-            style="margin-left: 15px;"
-            ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);"
-            class="btn btn-xs btn-default"
-          >
-            Follow
-          </button>
+          <follow-unfollow-button style="margin-left: 15px;" show-follow="true" show-unfollow="false" user="postCtrl.post.user"></follow-unfollow-button>
 
           <br />
 
@@ -103,37 +95,14 @@
           ></upvote-button>
         </li>
         <!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
-        <li
-          ng-show="!postCtrl.post.userPostRefs.length"
-          ng-if="user.id === postCtrl.post.userId"
-          ng-click="makeUncesorable(postCtrl.post)"
-        >
-          <a
-            data-tippy-content="Your story will be saved on blockchain."
-            class="hc-tooltip btn btn-default btn-xs"
-            href="#"
-          >
-            <i class="fa fa-btc"></i
-            ><span class="hidden-xs"> Make it</span> Uncensorable
-          </a>
+        <li>
+          <uncensorable-button
+            post="postCtrl.post"
+          ></uncensorable-button>
         </li>
 
         <li>
-          <small class="hidden-xs">Share on:</small>
-          <a
-            ng-href="{{ postCtrl.post.shareURLs.reddit }}"
-            target="_blank"
-            class="btn btn-default btn-xs"
-          >
-            <i class="fa fa-reddit"></i>
-          </a>
-          <a
-            ng-href="{{ postCtrl.post.shareURLs.twitter }}"
-            target="_blank"
-            class="btn btn-default btn-xs"
-          >
-            <i class="fa fa-twitter"></i>
-          </a>
+          <social-share-buttons post="postCtrl.post"></social-share-buttons>
         </li>
       </ul>
     </div>
@@ -306,19 +275,19 @@
           </button>
         </li>
         <li>
-            <small>{{response.upvoteCount}} <i class="fa fa-bitcoin"></i></small>
+            <span>{{response.upvoteCount}} <i class="fa fa-bitcoin"></i></span>
         </li>
         <li >
-          <small>{{response.responseCount}} <i class="fa fa-comment-o"></i></small>
+          <span>{{response.responseCount}} <i class="fa fa-comment-o"></i></span>
         </li>
         <li>
           <a target="_self" ng-href="/write/response/{{response.id}}">
-            <small>Reply</small>
+            <span>Reply</span>
           </a>
         </li>
         <li>
           <a href="#" ui-sref="vicigo.post({ alias: response.alias || response.id, username: response.user.username })">
-            <small>Read more</small>
+            <span>Read more</span>
           </a>
         </li>
       </ul>
@@ -355,13 +324,7 @@
             </a>
           </strong>
 
-          <button
-            ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing"
-            style="margin-left: 15px;"
-            ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);"
-            class="btn btn-xs btn-default">
-              Follow
-          </button>
+          <follow-unfollow-button style="margin-left: 15px;" show-follow="true" show-unfollow="false" user="postCtrl.post.user"></follow-unfollow-button>
 
           <br />
 

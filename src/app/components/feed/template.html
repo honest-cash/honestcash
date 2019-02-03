@@ -117,31 +117,17 @@
               ></upvote-button>
             </li>
             <li>
-              <small
+              <span
                 >{{ feed.upvoteCount }} <i class="fa fa-bitcoin"></i
-              ></small>
+              ></span>
             </li>
             <li>
-              <small
+              <span
                 >{{ feed.responseCount }} <i class="fa fa-comment-o"></i
-              ></small>
+              ></span>
             </li>
             <li>
-              <small>Share on:</small>
-              <a
-                ng-href="{{ feed.shareURLs.reddit }}"
-                target="_blank"
-                class="btn btn-default btn-xs"
-              >
-                <i class="fa fa-reddit"></i>
-              </a>
-              <a
-                ng-href="{{ feed.shareURLs.twitter }}"
-                target="_blank"
-                class="btn btn-default btn-xs"
-              >
-                <i class="fa fa-twitter"></i>
-              </a>
+              <social-share-buttons post="feed"></social-share-buttons>
             </li>
           </ul>
         </div>

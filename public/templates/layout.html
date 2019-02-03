@@ -120,7 +120,7 @@
             </li>
 
             <li ng-if="user" class="visible-xs" role="menuitem">
-              <a href="#" ng-click="logoutMe()">logout</a>
+              <logout-button></logout-button>
             </li>
 
 
@@ -142,7 +142,7 @@
                     <a ng-if="simpleWallet" ui-sref="wallet.create()">my wallet</a>
                   </li>
                   <li role="menuitem">
-                    <a href="#" ng-click="logoutMe()">logout</a>
+                    <logout-button></logout-button>
                   </li>
                 </ul>
               </div>

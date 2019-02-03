@@ -10,22 +10,22 @@
 .btn-bch-upvote-container > button {
   position: relative;
   padding: 4px 5px 4px 20px;
-  line-height: 20px;
+  line-height: 24px;
   z-index: 0;
-  height: 30px;
+  height: 34px;
   outline: none !important;
   box-shadow: none !important;
   min-width: 115px;
   width: 115px;
   max-width: 115px;
-  margin-left: 14px;
+  margin-left: 18px;
   float: left;
   overflow: hidden;
 }
 
 .btn-bch-upvote-container > .bch-icon {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   float: left;
   position: absolute;
   z-index: 10;
@@ -39,13 +39,13 @@
   display: inline-block;
 }
 
-.btn-bch-upvote-container.active > button > .bch-upvote-button-amount,
-.btn-bch-upvote-container.active > button > .bch-upvote-button-text {
+.btn-bch-upvote-container.active > button > .bch-upvote-button-text,
+.btn-bch-upvote-container.active > button > .bch-upvote-button-amount {
   display: none;
 }
 
-.btn-bch-upvote-container > button > .bch-upvote-button-amount,
-.btn-bch-upvote-container > button > .bch-upvote-button-text {
+.btn-bch-upvote-container > button > .bch-upvote-button-text,
+.btn-bch-upvote-container > button > .bch-upvote-button-amount {
   position: absolute;
   top: 4px;
   left: 0;
@@ -56,52 +56,52 @@
   transition: all 0.3s ease-in-out;
 }
 
-.btn-bch-upvote-container > button > .bch-upvote-button-text,
 .btn-bch-upvote-container > button > .bch-upvote-button-amount,
+.btn-bch-upvote-container > button > .bch-upvote-button-text,
 .btn-bch-upvote-container > button > .bch-upvote-button-loading {
   text-transform: uppercase;
   font-weight: bold;
 }
 
-.btn-bch-upvote-container > button > .bch-upvote-button-text {
+.btn-bch-upvote-container > button > .bch-upvote-button-amount {
   opacity: 1;
   transform: translate(0, 0);
 }
 
-.btn-bch-upvote-container > button > .bch-upvote-button-amount {
-  opacity: 0;
-  transform: translate(100%, 0);
-}
-
-.btn-bch-upvote-container:hover > button > .bch-upvote-button-text {
+.btn-bch-upvote-container > button > .bch-upvote-button-text {
   opacity: 0;
   transform: translate(100%, 0);
 }
 
 .btn-bch-upvote-container:hover > button > .bch-upvote-button-amount {
+  opacity: 0;
+  transform: translate(100%, 0);
+}
+
+.btn-bch-upvote-container:hover > button > .bch-upvote-button-text {
   opacity: 1;
   transform: translate(0, 0);
 }
 
 .btn-bch-upvote-container.active > .bch-icon,
-.btn-bch-upvote-container.active > .bch-icon-bch-upvote-button-loading {
+.btn-bch-upvote-container.active > .bch-icon-loading {
   cursor: not-allowed;
 }
 
-.btn-bch-upvote-container.active > .bch-icon-bch-upvote-button-loading {
+.btn-bch-upvote-container.active > .bch-icon-loading {
   display: initial;
 }
 
-.bch-icon-bch-upvote-button-loading {
+.bch-icon-loading {
   display: none;
   background-color: rgba(0, 0, 0, 0);
   opacity: 0.9;
   border-left: 2px solid rgba(0, 0, 0, 0) !important;
   border-right: 2px solid rgba(0, 0, 0, 0) !important;
   border-radius: 50px;
-  width: 30px;
+  width: 34px;
   z-index: 11;
-  height: 30px;
+  height: 34px;
   position: absolute;
   -moz-animation: spinoffPulse 1s infinite linear;
   -webkit-animation: spinoffPulse 1s infinite linear;
@@ -118,7 +118,7 @@
   color: @textColor !important;
 }
 
-.bch-icon-bch-upvote-button-loading {
+.bch-icon-loading {
   border: 2px solid @backgroundColor;
 }
 

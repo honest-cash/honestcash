@@ -41,4 +41,5 @@ export class Post {
   createdAt: string;
   publishedAt: string;
   userPosts?: Post[];
+  userPostRefs: any;
 }
