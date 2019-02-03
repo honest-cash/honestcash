@@ -11,13 +11,12 @@ class LogoutButtonController {
     '$rootScope',
     '$state',
     'AuthService',
-
   ];
 
   constructor(
     private $rootScope: IGlobalScope,
+    private $state: ng.ui.IStateService,
     private AuthService: AuthService,
-    private $state: ng.ui.IStateService
   ) {
     this.ngOnInit();
   }
@@ -28,7 +27,7 @@ class LogoutButtonController {
     this.logout();
   }
 
-  private logout() {
+  private logout = () => {
     AuthService.logout();
 
     this.$rootScope.user = undefined;
