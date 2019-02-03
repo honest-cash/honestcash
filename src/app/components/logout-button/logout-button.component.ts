@@ -48,6 +48,7 @@ export default function logoutButton(): ng.IDirective {
     controller: LogoutButtonController,
     controllerAs: 'logoutButtonCtrl',
     restrict: 'E',
+    replace: true,
     template
   };
 }
