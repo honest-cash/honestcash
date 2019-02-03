@@ -125,6 +125,7 @@
         load-more="loadMore()"
         is-loading="isLoading"
         on-upvote="(addressClicked)"
+        is-upvoting="isUpvoting"
       >
       </feeds>
     </div>
@@ -167,20 +168,7 @@
               {{ user.bio }}
             </p>
             <br />
-            <button
-              ng-if="!user.alreadyFollowing"
-              ng-click="follow(user.id, user);"
-              class="btn btn-xs btn-default"
-            >
-              Follow
-            </button>
-            <button
-              ng-if="user.alreadyFollowing"
-              ng-click="unfollow(user.id, user);"
-              class="btn btn-xs btn-success"
-            >
-              Following
-            </button>
+            <follow-unfollow-button show-follow="true" show-unfollow="true" user="user"></follow-unfollow-button>
           </div>
         </div>
       </div>

@@ -21,8 +21,7 @@ export default function feeds(): ng.IDirective {
       "isLoading": "=isLoading",
       "feeds": "=feeds",
       "user": "=user",
-      "loadMore": "&loadMore",
-      "upvote": "=onUpvote"
+      "loadMore": "&loadMore"
     },
     template,
     controller: FeedsDirectiveCtrl

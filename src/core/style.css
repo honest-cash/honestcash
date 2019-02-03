@@ -388,3 +388,9 @@ img.lazy {
 .fa-50 i.fa {
   font-size: 50px;
 }
+
+.list-post-actions > li {
+  height: 30px;
+  float: left;
+  line-height: 30px;
+}

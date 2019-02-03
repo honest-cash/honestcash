@@ -33,6 +33,12 @@ export interface IGlobalScope extends ng.IRootScopeService {
     id: number;
     username: string;
   },
+  walletBalance: {
+    bch: number;
+    usd: number;
+    isLoading: boolean;
+  },
   simpleWallet: ISimpleWallet;
   noHeader: boolean;
+  logoutMe: any;
 }

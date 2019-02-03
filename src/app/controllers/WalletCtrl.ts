@@ -21,10 +21,7 @@ interface IScopeWalletCtrl extends ng.IScope {
   legacyAddressBCH: string;
   HdPath: string;
   newHdPath: string;
-  addressBalance: number;
-  balanceLoading: boolean;
   isWithdrawalAddressBCHValid: boolean;
-  addressBalanceInUSD: number;
   canConnectMnemonic: boolean;
 
   withdraw: (withdrawalAmount: number, withdrawalAddressBCH: string) => Promise<any>
@@ -44,6 +41,13 @@ export default class WalletCtrl {
       private scopeService: ScopeService,
       private walletService: WalletService
     ) {
+
+      $rootScope.walletBalance = {
+        bch: 0,
+        usd: 0,
+        isLoading: true
+      };
+
         $scope.mnemonic = "";
         $scope.privateKey = "";
         $scope.addressBCH = "";
@@ -53,9 +57,6 @@ export default class WalletCtrl {
         $scope.connectedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
         $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
         $scope.newHdPath = simpleWalletProvider.defaultHdPath;
-        $scope.addressBalance = 0;
-        $scope.addressBalanceInUSD = 0;
-        $scope.balanceLoading = true;
         $scope.isWithdrawalAddressBCHValid = true;
 
         let simpleWallet, lSimpleWallet;
@@ -113,9 +114,11 @@ export default class WalletCtrl {
           try {
             walletInfo = await wallet.getWalletInfo();
           } catch (err) {
-            $scope.addressBalance = 0;
-
-            this.scopeService.safeApply($scope, () => {});
+            $rootScope.walletBalance = {
+              bch: 0,
+              usd: 0,
+              isLoading: false
+            }
 
             return;
           }
@@ -123,9 +126,12 @@ export default class WalletCtrl {
           const { bch, usd } = await this.walletService.getAddressBalances();
 
           $scope.walletInfo = walletInfo;
-          $scope.addressBalance = bch;
-          $scope.addressBalanceInUSD  = usd;
-          $scope.balanceLoading = false;
+
+          $rootScope.walletBalance = {
+            bch,
+            usd,
+            isLoading: false
+          };
 
           this.scopeService.safeApply($scope, () => {});
         };
