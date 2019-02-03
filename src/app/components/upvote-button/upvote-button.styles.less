@@ -84,9 +84,17 @@
 }
 
 .btn-bch-upvote-container.active > .bch-icon,
-.btn-bch-upvote-container.active > .bch-icon-loading {
+.btn-bch-upvote-container.active > .bch-icon-loading,
+.btn-bch-upvote-container.disabled > .bch-icon,
+.btn-bch-upvote-container.disabled > .bch-icon-loading
+{
   cursor: not-allowed;
 }
+
+.btn-bch-upvote-container.disabled > .btn-bch-upvote {
+  opacity: .65;
+}
+
 
 .btn-bch-upvote-container.active > .bch-icon-loading {
   display: initial;
