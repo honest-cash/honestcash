@@ -1,10 +1,10 @@
 <div class="container-fluid">
 	<div infinite-scroll="loadMore()" infinite-scroll-distance="1">
 		<div class="row">
-			<div ng-show="checkRecoveryBackup()" class="alert alert-warning" role="alert">
-				Please backup your recovery phrase (mnemonic) of your wallet.
+			<div ng-show="user && checkRecoveryBackup()" class="row alert alert-warning" role="alert">
+				Please backup your wallet recovery phrase (mnemonic). The recovery phrase is the only way to recover your funds if you forget your password!
 
-				Once you back up, go to the <a href="/wallet" target="_blank">wallet page, Wallet keys tab</a> to hide this reminder.
+			  Go to the <a href="/wallet" target="_blank">wallet page</a> to backup your recovery phrase.
 			</div>
 			<div class="feed-container" ng-repeat="feed in feeds">
         		<feed user="user" feed="feed"></feed>

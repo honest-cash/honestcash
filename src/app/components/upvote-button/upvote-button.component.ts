@@ -63,7 +63,7 @@ class UpvoteButtonController {
 
     this.post = this.$scope.post;
     this.isUpvoting = defaultOptions.isUpvoting;
-    this.isDisabled = this.post.userId === this.$rootScope.user.id;
+    this.isDisabled = !this.$rootScope.user || this.post.userId === this.$rootScope.user.id;
 
     this.$window.onbeforeunload = event => {
       if (this.isUpvoting) {
