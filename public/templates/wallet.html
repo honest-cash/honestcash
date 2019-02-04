@@ -57,10 +57,17 @@
         </div>
 
         <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-            <div style="margin-top:15px;" class="alert alert-danger" role="alert">
-                    <small class="form-text">
-                      Save your recovery phrase! If you forget your password, recovery phrase is the only way to recover your funds!
-                    </small>
+            <div ng-if="!checkRecoveryBackup()" style="margin-top:15px;" class="alert alert-danger" role="alert">
+                <small class="form-text">
+                    Save your recovery phrase! If you forget your password, recovery phrase is the only way to recover your funds!
+                </small>
+                <br>
+                <a href="#" ng-click="saveRecoveryPhraseBackupProp()">I saved my recovery phrase</a>
+            </div>
+            <div ng-if="checkRecoveryBackup()" style="margin-top:15px;" class="alert alert-success" role="alert">
+                <small class="form-text">
+                    You have confirmed that you saved your recovery phrase. Well done!
+                </small>
             </div>
 
             <div style="margin-top:15px;" class="form-group">

@@ -4,6 +4,7 @@ import generateWallet from '../../core/lib/bitcoinAuthFlow';
 import { AuthService } from '../../auth/AuthService';
 import ScopeService from '../../core/services/ScopeService';
 import WalletService from '../../core/services/WalletService';
+import ProfileService from '../../core/services/ProfileService';
 import { IGlobalScope } from '../../core/lib/interfaces';
 
 declare var SimpleWallet: any;
@@ -34,12 +35,22 @@ interface IScopeWalletCtrl extends ng.IScope {
 }
 
 export default class WalletCtrl {
+  static $inject = [
+    "$scope",
+    "$rootScope",
+    "AuthService",
+    "ScopeService",
+    "WalletService",
+    "ProfileService",
+  ];
+
     constructor(
       private $scope: IScopeWalletCtrl,
       private $rootScope: IGlobalScope,
       private authService: AuthService,
       private scopeService: ScopeService,
-      private walletService: WalletService
+      private walletService: WalletService,
+      private profileService: ProfileService,
     ) {
 
       $rootScope.walletBalance = {
@@ -106,6 +117,28 @@ export default class WalletCtrl {
           } 
 
           $scope.canConnectMnemonic = false;
+        };
+
+        $scope.saveRecoveryPhraseBackupProp = () => {
+          const user = $rootScope.user;
+          this.profileService.upsertUserProp(user.id, 'recoveryBackedUp', 'true', (res) => {
+            if (res) {
+              const recoveryBackedUpProp = $rootScope.user.userProperties.find(p => p.propKey === 'recoveryBackedUp');
+              if (recoveryBackedUpProp) {
+                recoveryBackedUpProp.propValue = true;
+              } else {
+                $rootScope.user.userProperties.push(res);
+              }
+            }
+          })
+        };
+
+        $scope.checkRecoveryBackup = () => {
+          if (this.$rootScope.user && this.$rootScope.user.userProperties && this.$rootScope.user.userProperties.length) {
+            const recoveryBackedUpProp = this.$rootScope.user.userProperties.find(p => p.propKey === "recoveryBackedUp");
+            return !recoveryBackedUpProp || !JSON.parse(recoveryBackedUpProp.propValue) ? false : true;
+          }
+          return false;
         };
 
         const refreshBalance = async (wallet) => {
@@ -349,12 +382,4 @@ export default class WalletCtrl {
         $scope.onDepositClick();
         $scope.disconnect = disconnect;
     }
-
-    static $inject = [
-      "$scope",
-      "$rootScope",
-      "AuthService",
-      "ScopeService",
-      "WalletService"
-    ];
 }
