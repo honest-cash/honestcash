@@ -89,7 +89,7 @@ const renderFeed = async (req, res, next) => {
 		urlQuery += "?hashtag=" + req.params.hashtag;
 	}
 
-	const url = `https://honest.cash/api/feeds${urlQuery}`;
+	const url = `https://honest.cash/api/posts${urlQuery}`;
 	const response = await axios.get(url);
 	const feeds = response.data;
 	const seoData = seo.metaDefault;
@@ -157,7 +157,7 @@ app.get("/profile/:username", async (req, res, next) => {
 			return;
 		}
 
-		feedRes = await axios.get(`https://honest.cash/api/feeds?userId=${profile.id}`);
+		feedRes = await axios.get(`https://honest.cash/api/posts?userId=${profile.id}`);
 		feeds = feedRes.data;
 	} catch (err) {
 		console.error(err);
