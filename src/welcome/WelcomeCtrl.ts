@@ -218,6 +218,8 @@ export default class WelcomeCtrl {
 
     this.$scope.hashtags = hashtags;
 
+    grecaptcha.render('hc-captcha');
+
     this.scopeService.safeApply(this.$scope, () => {});
   }
 
