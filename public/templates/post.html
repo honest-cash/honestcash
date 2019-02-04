@@ -3,29 +3,32 @@
 </div>
 
 <div ng-if="!postCtrl.isLoading">
-	<div class="col-xs-12 visible-xs" style="height:70px;"></div>
-	<div class="col-md-8 col-md-offset-2">
-		<div class="row ng-cloak">
-			<div ng-if="postCtrl.post.parentPost" class="block-center">
-				<div class="panel" ui-sref="vicigo.post({ alias: postCtrl.post.parentPost.alias, username: postCtrl.post.parentPost.user.username })">
-					<div class="panel-body" style="cursor: pointer;">
-						Response to: <b>{{postCtrl.post.parentPost.title}}</b>
-						<p>by @{{postCtrl.post.parentPost.user.username}}</p>
-					</div>
-				</div>
-			</div>
-		</div>
+  <div class="col-xs-12 visible-xs" style="height:70px;"></div>
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row ng-cloak">
+      <div ng-if="postCtrl.post.parentPost" class="block-center">
+        <div
+          class="panel"
+          ui-sref="vicigo.post({ alias: postCtrl.post.parentPost.alias, username: postCtrl.post.parentPost.user.username })"
+        >
+          <div class="panel-body" style="cursor: pointer;">
+            Response to: <b>{{ postCtrl.post.parentPost.title }}</b>
+            <p>by @{{ postCtrl.post.parentPost.user.username }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<div class="row">
-			<div ng-include="'postHeader'"></div>
-		</div>
+    <div class="row"><div ng-include="'postHeader'"></div></div>
 
-		<div class="row post-container">
-			<article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
-		</div>
+    <div class="row post-container">
+      <article
+        class="site-block post-body"
+        ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"
+      ></article>
+    </div>
 
-
-		<div class="row">
+    <div class="row">
       <ul class="list-unstyled list-inline">
         <li class="pull-left hashtag-container" ng-repeat="hashtag in postCtrl.post.userPostHashtags">
           <i class="fa fa-tag"></i>
@@ -39,153 +42,203 @@
     <hr />
 
     <div class="row" style="margin-bottom:15px;">
-        <ul class="list-unstyled list-inline">
-            <!-- AUTHOR IMAGE -->
-            <li>
-              <a ui-sref="vicigo.profile({profileId: postCtrl.post.user.id})">
-                <img ng-if="postCtrl.post.user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{postCtrl.post.user.imageUrl}}" alt="{{postCtrl.post.user.username}}" class="img-circle img-thumbnail-avatar-small">
-                <img ng-if="!postCtrl.post.user.imageUrl" src="/img/avatar.png" alt="{{postCtrl.post.user.username}}" class="img-circle img-thumbnail-avatar-small">
-              </a>
-            </li>
+      <ul class="list-unstyled list-inline">
+        <!-- AUTHOR IMAGE -->
+        <li>
+          <a ui-sref="vicigo.profile({profileId: postCtrl.post.user.id})">
+            <img
+              ng-if="postCtrl.post.user.imageUrl"
+              fallback-src="{{ '/img/avatar.png' }}"
+              ng-src="{{ postCtrl.post.user.imageUrl }}"
+              alt="{{ postCtrl.post.user.username }}"
+              class="img-circle img-thumbnail-avatar-small"
+            />
+            <img
+              ng-if="!postCtrl.post.user.imageUrl"
+              src="/img/avatar.png"
+              alt="{{ postCtrl.post.user.username }}"
+              class="img-circle img-thumbnail-avatar-small"
+            />
+          </a>
+        </li>
 
-            <li style="vertical-align:middle">
-              <strong style="margin-top:50px;">
-                <a href="/profile/{{postCtrl.post.user.username}}" target="_self">
-                  <span data-tippy-content="{{::postCtrl.post.user.followerCount}} followers, {{::postCtrl.post.user.followingCount}} following" class="user-follower-count">
-                      {{::postCtrl.post.user.username}}
-                  </span>
-                </a>
-              </strong>
+        <li style="vertical-align:middle">
+          <strong style="margin-top:50px;">
+            <a href="/profile/{{ postCtrl.post.user.username }}" target="_self">
+              <span
+                data-tippy-content="{{::postCtrl.post.user.followerCount}} followers, {{::postCtrl.post.user.followingCount}} following"
+                class="user-follower-count"
+              >
+                {{::postCtrl.post.user.username}}
+              </span>
+            </a>
+          </strong>
+          <follow-unfollow-button style="margin-left: 15px;" show-follow="true" show-unfollow="false" user="postCtrl.post.user"></follow-unfollow-button>
 
-              <button ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing" style="margin-left: 15px;" ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);" class="btn btn-xs btn-default">
-                  Follow
-              </button>
+          <br />
 
-              <br />
+          <small class="text-muted">
+            <span>{{::postCtrl.post.user.bio}}</span>
+          </small>
+        </li>
+      </ul>
+    </div>
+    <div
+      ng-if="postCtrl.post.user.addressBCH"
+      class="row"
+      ng-show="simpleWallet"
+    >
+      <ul class="list-unstyled list-inline list list-post-actions">
+        <li>
+          <upvote-button
+            post="postCtrl.post"
+          ></upvote-button>
+        </li>
+        <!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
+        <li>
+          <uncensorable-button
+            post="postCtrl.post"
+          ></uncensorable-button>
+        </li>
 
-              <small class="text-muted">
-                <span>{{::postCtrl.post.user.bio}}</span>
-              </small>
-            </li>
-          </ul>
+        <li>
+          <social-share-buttons post="postCtrl.post"></social-share-buttons>
+        </li>
+      </ul>
     </div>
 
-		<div ng-if="postCtrl.post.user.addressBCH" class="row" ng-show="simpleWallet">
-			<ul class="list-unstyled list-inline list">
-				<li>
-					<button ng-disabled="upvotingPostId === postCtrl.post.id || postCtrl.post.userId === user.id" ng-click="addressClicked(postCtrl.post)" class="btn btn-default">
-						<i class="fa fa-btc"></i> 0.002 Upvote
-					</button>
-        </li>
-        	<!--ng-if="!post.userPostRefs.length && user.id === post.userId"-->
-				<li ng-show="!postCtrl.post.userPostRefs.length" ng-if="user.id === postCtrl.post.userId" ng-click="makeUncesorable(postCtrl.post)">
-					<a data-tippy-content="Your story will be saved on blockchain." class="hc-tooltip btn btn-default btn-xs" href="#">
-						<i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> Uncensorable</a>
-					</a>
-        </li>
+    <hr />
 
-				<li>
-          <small>Share on:</small>
-          <a ng-href="{{postCtrl.post.shareURLs.reddit}}" target="_blank" class="btn btn-default btn-xs">
-            <i class="fa fa-reddit"></i>
-          </a>
-          <a ng-href="{{postCtrl.post.shareURLs.twitter}}" target="_blank" class="btn btn-default btn-xs">
-            <i class="fa fa-twitter"></i>
-          </a>
-				</li>
-			
-			</ul>
-		</div>
+    <div class="row" ng-if="!postCtrl.post.user.addressBCH">
+      <div class="block-center">
+        <div class="panel">
+          <div class="panel-body"><b>This author does not accept tips.</b></div>
+        </div>
+      </div>
+    </div>
 
-		<hr />
+    <div class="row" ng-if="postCtrl.post.user.addressBCH">
+      <div class="block-center">
+        <div class="panel" ng-show="!user">
+          <div class="panel-body">
+            <h3>Give a tip to the author</h3>
 
-		<div class="row" ng-if="!postCtrl.post.user.addressBCH">
-			<div class="block-center">
-				<div class="panel">
-					<div class="panel-body">
-						<b>This author does not accept tips.</b>
-					</div>
-				</div>
-			</div>
-		</div>
+            <input
+              disabled="true"
+              ng-model="postCtrl.post.user.addressBCH"
+              class="form-control"
+            />
 
-		<div class="row" ng-if="postCtrl.post.user.addressBCH">
-			<div class="block-center">
-				<div class="panel" ng-show="!user" >
-					<div class="panel-body">
-						<h3>Give a tip to the author</h3>
+            <div
+              style="margin-bottom: 5px; margin-top: 10px;"
+              id="post-tipping-container"
+            ></div>
 
-						<input disabled="true" ng-model="postCtrl.post.user.addressBCH" class="form-control" />
-
-            <div style="margin-bottom: 5px; margin-top: 10px;" id="post-tipping-container"></div>
-
-						<p>
-							You can tip from any Bitcoin Cash wallet but your upvotes will not be recorded and shown here! You need to be logged in for your tips to receive future upvote rewards.
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
+            <p>
+              You can tip from any Bitcoin Cash wallet but your upvotes will not
+              be recorded and shown here! You need to be logged in for your tips
+              to receive future upvote rewards.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div
       class="post-uncensorable row"
-      ng-if="postCtrl.post.userPostRefs.length && postCtrl.post.user.addressBCH"" style="margin-bottom: 20px;"
+      ng-if="postCtrl.post.userPostRefs.length && postCtrl.post.user.addressBCH"
+      style="margin-bottom: 20px;"
     >
-			<h4><i class="fa fa-shield"></i>  <strong>Uncensorable</strong></h4>
+      <h4><i class="fa fa-shield"></i> <strong>Uncensorable</strong></h4>
       <a
-        ng-href="https://bitcoinfiles.com/{{postCtrl.post.userPostRefs[0].extId}}" target="_blank"
+        ng-href="https://bitcoinfiles.com/{{
+          postCtrl.post.userPostRefs[0].extId
+        }}"
+        target="_blank"
       >
-        {{postCtrl.post.userPostRefs[0].extId}}
+        {{ postCtrl.post.userPostRefs[0].extId }}
       </a>
-		</div>
+    </div>
 
-		<div class="row" ng-if="postCtrl.upvotes && postCtrl.post.user.addressBCH">
-			<span><i class="fa fa-btc"></i> <strong>Upvotes ({{postCtrl.upvotes.length}})</strong></span>
+    <div class="row" ng-if="postCtrl.upvotes && postCtrl.post.user.addressBCH">
+      <span
+        ><i class="fa fa-btc"></i>
+        <strong>Upvotes ({{ postCtrl.upvotes.length }})</strong></span
+      >
 
-			<p ng-if="!postCtrl.upvotes.length"><small>No upvotes.</small></p>
+      <p ng-if="!postCtrl.upvotes.length"><small>No upvotes.</small></p>
 
-			<ul class="list-inline list-unstyled">
-				<li ng-repeat="upvote in postCtrl.upvotes" class="post-upvote" style="margin-bottom:5px;">
-          <a ng-href="/profile/{{upvote.user.username}}" target="_self">
-            <img src="{{upvote.user.imageUrl || '/img/avatar.png'}}" class="img-circle img-thumbnail-avatar-smallest" />
+      <ul class="list-inline list-unstyled">
+        <li
+          ng-repeat="upvote in postCtrl.upvotes"
+          class="post-upvote"
+          style="margin-bottom:5px;"
+        >
+          <a ng-href="/profile/{{ upvote.user.username }}" target="_self">
+            <img
+              src="{{ upvote.user.imageUrl || '/img/avatar.png' }}"
+              class="img-circle img-thumbnail-avatar-smallest"
+            />
           </a>
-          <a ng-href="https://explorer.bitcoin.com/bch/tx/{{upvote.txId}}" target="_blank">
-            {{upvote.txId.substring(0, 4)}}...{{upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)}}
+          <a
+            ng-href="https://explorer.bitcoin.com/bch/tx/{{ upvote.txId }}"
+            target="_blank"
+          >
+            {{ upvote.txId.substring(0, 4) }}...{{
+              upvote.txId.substring(upvote.txId.length - 4, upvote.txId.length)
+            }}
           </a>
-				</li>
-			</ul>
-		</div>
+        </li>
+      </ul>
+    </div>
 
-		<div class="row">
-			<span style="margin-bottom: 15px;">
-				<strong>Responses ({{postCtrl.post.responseCount}})</strong>
+    <div class="row">
+      <span style="margin-bottom: 15px;">
+        <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
       </span>
 
       <div class="block-center">
-				<div class="panel">
-					<div class="panel-body" style="cursor: pointer;">
-						<a target="_self" ng-href="{{user.id ? '/write/response/' + postCtrl.post.id : '/signup' }}">
-							<ul style="margin-top: 10px;" class="list-unstyled list-inline">
-								<li>
-									<img ng-if="user.imageUrl" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-small">
-									<img ng-if="!user.imageUrl" src="/img/avatar.png" class="img-circle img-thumbnail-avatar-small">
-								</li>
-								<li>
-									<p>
-										{{ post.userPosts === 0 ? "Be the first to write a response..." : "Write a response..." }}
+        <div class="panel">
+          <div class="panel-body" style="cursor: pointer;">
+            <a
+              target="_self"
+              ng-href="{{
+                user.id ? '/write/response/' + postCtrl.post.id : '/signup'
+              }}"
+            >
+              <ul style="margin-top: 10px;" class="list-unstyled list-inline">
+                <li>
+                  <img
+                    ng-if="user.imageUrl"
+                    ng-src="{{ user.imageUrl }}"
+                    class="img-circle img-thumbnail-avatar-small"
+                  />
+                  <img
+                    ng-if="!user.imageUrl"
+                    src="/img/avatar.png"
+                    class="img-circle img-thumbnail-avatar-small"
+                  />
+                </li>
+                <li>
+                  <p>
+                    {{
+                      post.userPosts === 0
+                        ? 'Be the first to write a response...'
+                        : 'Write a response...'
+                    }}
                   </p>
-								</li>
-							</ul>
-						</a>
-					</div>
-				</div>
-			</div>
+                </li>
+              </ul>
+            </a>
+          </div>
+        </div>
+      </div>
 
-			<div class="block-center" ng-repeat="response in postCtrl.responses">
+      <div class="block-center" ng-repeat="response in postCtrl.responses">
         <div ng-include="'response'"></div>
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="text/ng-template" id="response">
@@ -217,24 +270,24 @@
 
       <ul class="list-inline list-unstyled">
         <li>
-          <button ng-click="addressClicked(response)" class="btn btn-default">
-            <i class="fa fa-btc"></i> 0.002
-          </button>
+            <upvote-button
+            post="response"
+          ></upvote-button>
         </li>
         <li>
-            <small>{{response.upvoteCount}} <i class="fa fa-bitcoin"></i></small>
+            <span>{{response.upvoteCount}} <i class="fa fa-bitcoin"></i></span>
         </li>
         <li >
-          <small>{{response.responseCount}} <i class="fa fa-comment-o"></i></small>
+          <span>{{response.responseCount}} <i class="fa fa-comment-o"></i></span>
         </li>
         <li>
           <a target="_self" ng-href="/write/response/{{response.id}}">
-            <small>Reply</small>
+            <span>Reply</span>
           </a>
         </li>
         <li>
           <a href="#" ui-sref="vicigo.post({ alias: response.alias || response.id, username: response.user.username })">
-            <small>Read more</small>
+            <span>Read more</span>
           </a>
         </li>
       </ul>
@@ -261,7 +314,7 @@
             <img ng-if="!postCtrl.post.user.imageUrl" src="/img/avatar.png" alt="{{postCtrl.post.user.username}}" class="img-circle img-thumbnail-avatar-small">
           </a>
         </li>
-  
+
         <li style="vertical-align:middle">
           <strong style="margin-top:50px;">
             <a href="/profile/{{postCtrl.post.user.username}}" target="_self">
@@ -270,31 +323,22 @@
               </span>
             </a>
           </strong>
-  
-          <button
-            ng-if="user.id !== postCtrl.post.user.id && !postCtrl.post.user.alreadyFollowing"
-            style="margin-left: 15px;"
-            ng-click="follow(postCtrl.post.user.id, postCtrl.post.user);"
-            class="btn btn-xs btn-default">
-              Follow
-          </button>
-  
+
+          <follow-unfollow-button style="margin-left: 15px;" show-follow="true" show-unfollow="false" user="postCtrl.post.user"></follow-unfollow-button>
+
           <br />
-  
+
           <small class="text-muted">
-            <span ng-if="postCtrl.post.publishedAt">{{::postCtrl.post.publishedAt}}</span> 
-            <span ng-if="postCtrl.post.readTime">{{::postCtrl.post.readTime}}</span> 
+            <span ng-if="postCtrl.post.publishedAt">{{::postCtrl.post.publishedAt}}</span>
+            <span ng-if="postCtrl.post.readTime">{{::postCtrl.post.readTime}}</span>
           </small>
         </li>
       </ul>
     </div>
-  
+
     <div>
       <h1>
         <strong>{{postCtrl.post.title}}</strong>
-        <small ng-if="user.id==postCtrl.post.user.id" >
-          <a ng-href="/edit/{{postCtrl.post.id}}"  target="_self">Edit</a>
-        </small>	
       </h1>
     </div>
   </header>

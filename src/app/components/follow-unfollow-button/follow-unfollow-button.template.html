@@ -1,0 +1,14 @@
+<button
+  ng-if="!followUnfollowButtonCtrl.user.alreadyFollowing && followUnfollowButtonCtrl.showFollow && followUnfollowButtonCtrl.isVisible"
+  ng-click="followUnfollowButtonCtrl.onClick('follow');"
+  class="btn btn-xs btn-default"
+>
+  Follow
+</button>
+<button
+  ng-if="followUnfollowButtonCtrl.user.alreadyFollowing && followUnfollowButtonCtrl.showUnfollow && followUnfollowButtonCtrl.isVisible"
+  ng-click="followUnfollowButtonCtrl.onClick('unfollow');"
+  class="btn btn-xs btn-success"
+>
+  Following
+</button>
