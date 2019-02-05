@@ -73,7 +73,12 @@
               </span>
             </a>
           </strong>
-          <follow-unfollow-button style="margin-left: 15px;" show-follow="true" show-unfollow="false" user="postCtrl.post.user"></follow-unfollow-button>
+          <follow-unfollow-button
+            style="margin-left: 15px;"
+            show-follow="postCtrl.post.user.id !== user.id"
+            show-unfollow="false"
+            user="postCtrl.post.user"
+          ></follow-unfollow-button>
 
           <br />
 
@@ -324,7 +329,12 @@
             </a>
           </strong>
 
-          <follow-unfollow-button style="margin-left: 15px;" show-follow="true" show-unfollow="false" user="postCtrl.post.user"></follow-unfollow-button>
+          <follow-unfollow-button
+            style="margin-left: 15px;"
+            show-follow="postCtrl.post.user.id !== user.id"
+            show-unfollow="false"
+            user="postCtrl.post.user"
+          ></follow-unfollow-button>
 
           <br />
 

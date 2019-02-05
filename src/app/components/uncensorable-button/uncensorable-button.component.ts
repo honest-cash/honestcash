@@ -84,7 +84,7 @@ class UncensorableButtonController {
       const simpleWallet = simpleWalletProvider.get();
       const json = {
           title: post.title,
-          body: post.plain,
+          body: post.body,
           author: post.user.username,
       };
 
