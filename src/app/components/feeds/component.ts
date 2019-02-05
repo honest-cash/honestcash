@@ -1,17 +1,17 @@
 import template from './template.html';
 
 class FeedsDirectiveCtrl {
+
+  public static $inject = [
+    "$rootScope",
+    "$scope"
+  ];
+
   constructor(
     private $rootScope,
     private $scope,
   ) {
-    this.$scope.user = this.$rootScope.user;
   }
-
-  static $inject = [
-    "$rootScope",
-    "$scope"
-  ]
 }
 
 export default function feeds(): ng.IDirective {
@@ -21,8 +21,7 @@ export default function feeds(): ng.IDirective {
       "isLoading": "=isLoading",
       "feeds": "=feeds",
       "user": "=user",
-      "loadMore": "&loadMore",
-      "upvote": "=onUpvote"
+      "loadMore": "&loadMore"
     },
     template,
     controller: FeedsDirectiveCtrl

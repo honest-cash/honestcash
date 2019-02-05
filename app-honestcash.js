@@ -12,6 +12,25 @@ const seo = require('./server/seo');
 const axios = require("axios");
 
 const port = process.env.PORT;
+/**
+const showdown = require("showdown");
+const converter = new showdown.Converter();
+
+const convertMarkdownToHtml = (str) => converter.makeHtml(str);
+*/
+const preparePost = (post) => {
+  const nextPost = { ...post };
+
+  /**
+  nextPost.body = convertMarkdownToHtml(nextPost.bodyMD);
+
+  if (nextPost.userPosts && nextPost.userPosts.length) {
+    nextPost.userPosts = nextPost.userPosts.map(preparePost);
+  }
+  */
+
+  return nextPost;
+};
 
 const isBot = (userAgent, push) => {
 	userAgent = userAgent ? userAgent.toLowerCase() : "unknown user-agent";
@@ -89,7 +108,7 @@ const renderFeed = async (req, res, next) => {
 		urlQuery += "?hashtag=" + req.params.hashtag;
 	}
 
-	const url = `https://honest.cash/api/feeds${urlQuery}`;
+	const url = `https://honest.cash/api/posts${urlQuery}`;
 	const response = await axios.get(url);
 	const feeds = response.data;
 	const seoData = seo.metaDefault;
@@ -157,8 +176,8 @@ app.get("/profile/:username", async (req, res, next) => {
 			return;
 		}
 
-		feedRes = await axios.get(`https://honest.cash/api/feeds?userId=${profile.id}`);
-		feeds = feedRes.data;
+		feedRes = await axios.get(`https://honest.cash/api/posts?userId=${profile.id}`);
+		feeds = feedRes.data.map(preparePost);
 	} catch (err) {
 		console.error(err);
 
@@ -189,8 +208,10 @@ app.get("/:username/:alias", async (req, res, next) => {
   const postBaseUrl = "https://honest.cash/api/post";
   const url = `${postBaseUrl}/${req.params.alias}`;
   
-	const post = (await axios.get(url)).data;
-  const responses = (await axios.get(`${postBaseUrl}/${post.id}/responses`)).data;
+	const post = preparePost((await axios.get(url)).data);
+  const responses = (await axios.get(`${postBaseUrl}/${post.id}/responses`)).data
+    .map(preparePost);
+
   const upvotes = (await axios.get(`${postBaseUrl}/${post.id}/upvotes`)).data;
 
 	const seoData = seo.getForPost(post);

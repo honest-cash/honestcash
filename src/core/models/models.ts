@@ -6,7 +6,7 @@ export interface IFetchPostsArgs {
   hashtag?: string;
   page?: number;
   includeResponses?: boolean;
-  status?: "published" | "draft"
+  status?: "published" | "draft";
 }
 
 export interface IFetchFeedsArgs {
@@ -34,10 +34,12 @@ export class Post {
   body: string;
   plain: string;
   user: User;
+  userId: number;
   shareURLs: any;
   postTypeId: TPostTypeId;
   parentPostId: number;
   createdAt: string;
   publishedAt: string;
-  userPosts?: Post[]
+  userPosts?: Post[];
+  userPostRefs: any;
 }

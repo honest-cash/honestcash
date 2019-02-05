@@ -3,8 +3,8 @@ export default function state ($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
 		.state('starter', {
-      templateUrl: "/templates/layout.html",
-      controller: "welcomeCtrl",
+			templateUrl: "/templates/layout.html",
+			controller: "welcomeCtrl",
 		})
 		.state('starter.welcome', {
 			url: "/signup",

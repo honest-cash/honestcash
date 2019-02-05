@@ -1,3 +1,8 @@
+<style>
+  body {
+    padding-top: 0px !important;
+  }
+</style>
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
@@ -5,9 +10,9 @@
 		</div>
 
 		<div class="col-xs-12" style="padding-top:20px;">
-					<h1>
+					<h2>
               A place to publish your best work and discuss freely
-					</h1>
+					</h2>
 					<p>
             The internet should reward quality thinking and be a place for an uncensored discussion. That’s why we’ve created a better home for writers, creators and thinkers. Honest allows you to earn money for your content, connects you to curious, avid readers, it's a place that is free from ads, uncensorable and simple to use, so you can focus on what matters: putting your best work out there to work for you.
           </p>
@@ -23,9 +28,9 @@
 	 <hr>
     <div class="row">
       <div class="col-md-6">
-        <h2>
+        <h3>
 				Join waiting list
-        </h2>
+        </h3>
 				<form>
 						<div class="form-group">
 								<label>username</label>
@@ -46,7 +51,9 @@
                 </p>
 						</div>
 
-						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+            <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+
+            <div id="hc-captcha" style="margin-bottom: 10px; margin-top: 10px;" class="g-recaptcha" data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"></div>
 
 						<button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-lg" ng-click="signup(data)">{{isLoading ? "Loading.." : "Register"}}</button>
 			
@@ -70,42 +77,43 @@
     </div>
     <hr />
 
-    <div class="row text-center" style="margin-bottom: 30px;">
-      <div class="col-xs-12">
-        <h2><strong>Benefits for writers, creators and thinkers</strong></h2>
+    <div class="row text-center fa-50 welcome-columns" style="margin-bottom: 30px;margin-top:50px;">
+      <div class="col-xs-12" style="margin-bottom: 30px;">
+        <h3 class="text-uppercase">Benefits for writers, creators and thinkers</h3>
       </div>
       <div class="col-sm-4">
             <i class="fa fa-heart"></i>
-            <h3 class="text-enter">
-                Write something good
-            </h3>
+            <h4 class="text-enter">
+                <strong>Write something good</strong>
+            </h4>
             <p style="padding-top:20px;">
               Share your thinking about something that matters to you. It can be short or long, serious or funny, reported or opinionated - it’s the quality of your perspective that counts.
             </p>
         </div>
         <div class="col-sm-4">	
             <i class="fa fa-share-alt"></i>
-            <h3 class="text-center">
-              Put your story to work
-            </h3>
+            <h4 class="text-center">
+              <strong>Put your story to work</strong>
+            </h4>
             <p style="padding-top:20px;">
               If you’d like to earn money through your stories, make sure to backup your wallet recovery phrase in your wallet and you're good to go!
             </p>
         </div>
         <div class="col-sm-4">
             <i class="fa fa-terminal"></i>
-            <h3 class="text-center">
-                Get featured
-            </h3>
+            <h4 class="text-center">
+                <strong>Get featured</strong>
+            </h4>
             <p style="padding-top:20px;">
               Our editorial team reviews stories every day. When a story meets our Honest standards, a curator will recommend it to readers interested in relevant topics across Honest.Cash, our app, and email digests.
             </p>
         </div>
+        <div class="col-xs-12 hidden-xs" style="min-height: 20px;"></div>
         <div class="col-sm-4">
             <i class="fa fa-bitcoin"></i>
-            <h3 class="text-center">
-                Get paid instantly
-            </h3>
+            <h4 class="text-center">
+                <strong>Get paid instantly</strong>
+            </h4>
             <p style="padding-top:20px;">
                 The readers can upvote your story and the money is directly deposited to your non-custodial wallet that only you have a control over!
             </p>
@@ -113,9 +121,9 @@
 
         <div class="col-sm-4">
             <i class="fa fa-retweet"></i>
-            <h3 class="text-center">
-              Expand your audience
-            </h3>
+            <h4 class="text-center">
+              <strong>Expand your audience</strong>
+            </h4>
             <p style="padding-top:20px;">
                 Your story doesn’t end here. Keep writing about what you love to build and broaden your readership. We’ll help spread the word, too. Also, your followers are directly notified about your new stories.
             </p>
@@ -123,9 +131,9 @@
 
         <div class="col-sm-4">
             <i class="fa fa-globe"></i>
-            <h3 class="text-center">
-              Make your story live forever
-            </h3>
+            <h4 class="text-center">
+              <strong>Make your story live forever</strong>
+            </h4>
             <p style="padding-top:20px;">
               You can make your content uncensorable so it can never be removed from the internet. You can upload your story onto blockchain and make it accessible to other publishing platforms around the world.
             </p>
@@ -133,84 +141,101 @@
     </div>
 
     <hr />
-    <div class="row text-center" style="margin-bottom: 30px;">
-        <div class="col-xs-12">
-          <h2>You are rewarded by readers, directly!</h2>
+
+    <div class="row text-center fa-50 welcome-columns" style="margin-bottom: 20px;margin-top:50px;">
+        <div class="col-xs-12" style="margin-bottom: 30px;">
+            <h3 class="text-uppercase">Benefits for readers</h3>
         </div>
-
+        <br>
         <div class="col-xs-12">
-            <p>
-              On Honest, you are paid with Bitcoin based on the amount of upvotes that your story receives. The upvotes are distributed directly to you without any intermediary in between. It happens instantly as the reader clicks the upvote button.
-
-              The only thing you need to do is to secure your wallet recovery phrase and write amazing content.
-            </p>
-      </div>
-    </div>
-
-    <div class="row text-center" style="margin-bottom: 20px;">
-        <div class="col-xs-12">
-            <h2><strong>Benefits for readers</strong></h2>
+            <h4><strong>You are rewarded by readers, directly!</strong></h4>
+          </div>
+  
+          <div class="col-xs-12">
+              <p>
+                On Honest, you are paid with Bitcoin based on the amount of upvotes that your story receives. The upvotes are distributed directly to you without any intermediary in between. It happens instantly as the reader clicks the upvote button.
+  
+                The only thing you need to do is to secure your wallet recovery phrase and write amazing content.
+              </p>
         </div>
 			
 					<div class="col-sm-4">	
 							<i class="fa fa-bitcoin"></i>
-							<h3 class="text-center">
-								Earn for upvoting content
-							</h3>
+							<h4 class="text-center">
+								<strong>Earn for upvoting content</strong>
+							</h4>
 							<p style="padding-top:20px;">
 								You can earn Bitcoin Cash by voting on good content early. Each vote costs a little fraction of Bitcoin and the payment goes to earlier voters and the creator. If many people vote on the same content after you, you profit. 
 							</p>
 					</div>
 					<div class="col-sm-4">
 							<i class="fa fa-terminal"></i>
-							<h3 class="text-center">
-                Personalize your experience
-							</h3>
+							<h4 class="text-center">
+                <strong>Personalize your experience</strong>
+							</h4>
 							<p style="padding-top:20px;">
                   Logging in to your Honest account allows us to deliver the most relevant and timely stories directly to you, based on your interests. When you follow users, topics and communities on Honest, you’re customizing the content you receive.
 							</p>
             </div>
             <div class="col-sm-4">
                 <i class="fa fa-comments-o"></i>
-                <h3 class="text-center">
-                  Place for discussion
-                </h3>
+                <h4 class="text-center">
+                  <strong>Place for discussion</strong>
+                </h4>
                 <p style="padding-top:20px;">
                   In order to respect open discussion and debate, Honest allows you to make your content uncensorable. You can upload your story onto blockchain and make it accessible to other publishing platforms around the world.
                 </p>
             </div>
-	  </div>
+	      </div>
+
+     <hr />
+
+          <div class="row text-center" style="margin-bottom: 20px;margin-top:50px;">
+              <div class="col-xs-12" style="padding-bottom:30px;">
+                <h3>WHAT PEOPLE SAY ABOUT HC?</h3>
+              </div>
+              <div class="col-sm-4">	
+                  <img src="./img/twitter-1.png" class="img-responsive" alt="twitter-1 photo">
+              </div>
+              <div class="col-sm-4">	
+                  <img src="./img/twitter-2.png" class="img-responsive" alt="twitter-2 photo">
+              </div>
+              <div class="col-sm-4">	
+                  <img src="./img/twitter-3.png" class="img-responsive" alt="twitter-3 photo">
+              </div>
+	       </div>
    
     <hr />
-    <div class="row text-center" style="margin-bottom: 20px;">
-          <div class="col-xs-12" style="padding-bottom:20px;">
-            <h2>Honest Team</h2>
-          </div>
-					<div class="col-sm-3">	
-							<img src="./img/adrian.jpg" class="img-circle" alt="adrian photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/adrianbarwicki" target="_self">Adrian Barwicki</a>
-							</h5>
-					</div>
-					<div class="col-sm-3">	
-							<img src="./img/ani.png" class="img-circle" alt="ani photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/calisi" target="_self">Ani Calis</a>
-							</h5>
-					</div>
-          <div class="col-sm-3">	
-							<img src="./img/rosco.png" class="img-circle" alt="rosco photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/rkalis" target="_self">Rosco Kalis</a>
-							</h5>
-					</div>
-          <div class="col-sm-3">	
-							<img src="./img/emily.jpg" class="img-circle" alt="emily photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/emrosedallara" target="_self">Emily Rose Dallara</a>
-							</h5>
-					</div>
-	     </div>
+
+        <div class="row text-center" style="margin-bottom: 20px;margin-top:50px;">
+            <div class="col-xs-12" style="padding-bottom:30px;">
+              <h3>HONEST TEAM</h3>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/adrian.jpg" class="img-circle" alt="adrian photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/adrianbarwicki" target="_self">Adrian Barwicki</a>
+                </h5>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/ani.png" class="img-circle" alt="ani photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/calisi" target="_self">Ani Calis</a>
+                </h5>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/rosco.png" class="img-circle" alt="rosco photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/rkalis" target="_self">Rosco Kalis</a>
+                </h5>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/emily.jpg" class="img-circle" alt="emily photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/emrosedallara" target="_self">Emily Rose Dallara</a>
+                </h5>
+            </div>
+	      </div>
     </div>
  
   

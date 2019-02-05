@@ -19,7 +19,7 @@ export const onStateChange = function($rootScope, $state, AuthService) {
 
       if (AuthService.getUserId()) {
         $rootScope.user = {
-          id: AuthService.getUserId()
+          id: AuthService.getUserId(),
         };
       } else {
         if (location.pathname === "/") {
