@@ -89,6 +89,6 @@ export default class PostCtrl {
   }
 
   private displayFeedBody(html: string): string {
-    return this.postService.displayHTML(converter.makeHtml(html));
+    return this.postService.displayHTML(html);
   }
 }

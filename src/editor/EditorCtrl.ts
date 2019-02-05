@@ -1,5 +1,6 @@
 import * as async from "async";
 import MediumEditor from "medium-editor";
+import * as showdown from "showdown";
 import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
@@ -7,12 +8,8 @@ import { AuthService } from "../auth/AuthService";
 import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
 
-const showdown  = require('showdown');
 const converter = new showdown.Converter();
 
-console.log(showdown);
-console.log(converter);
-let currentBody = "";
 export default class EditorCtrl {
     constructor(
       private $scope,
@@ -49,8 +46,7 @@ export default class EditorCtrl {
             postId = locPath[2];
         }
 
-        const saveDraftElement = (element, cb) => {
-          
+        const saveDraftElement = (element, cb?) => {
           const md = converter.makeMd(bodyEditor.serialize().body.value);
 
           const post = {
@@ -159,7 +155,7 @@ export default class EditorCtrl {
 
         const markDownEl = document.querySelector(".markdown");
 
-        const initMediumEditor = (title, body) => {
+        const initMediumEditor = (title, bodyMD: string) => {
             titleEditor = new MediumEditor('#title', {
               buttons: [],
               disableDoubleReturn: true,
@@ -275,10 +271,10 @@ export default class EditorCtrl {
               titleEditor.setContent(title || `RE: ${this.$scope.draft.parentPost.title}`, 0);
             }
 
-            if (body) {
+            if (bodyMD) {
                 document.getElementById("body").setAttribute("data-placeholder", "");
 
-                bodyEditor.setContent(converter.makeHtml(body), 0);
+                bodyEditor.setContent(converter.makeHtml(bodyMD), 0);
             }
             
             bodyEditor.subscribe('editableInput', onContentChangedFactory("body"));
@@ -304,7 +300,7 @@ export default class EditorCtrl {
                 $("#description").tagit("createTag", hashtag.hashtag);
             });
            
-            initMediumEditor($scope.draft.title, $scope.draft.body);
+            initMediumEditor($scope.draft.title, $scope.draft.bodyMD);
 
             $scope.ready = true;
         };

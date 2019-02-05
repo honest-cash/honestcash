@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="row post-container">
-			<article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.bodyMD)"></article>
+			<article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
 		</div>
 
 
@@ -212,7 +212,7 @@
         <strong>{{response.title}}</strong>
       </h2>
 
-      <article class="site-block response-body" ng-bind-html="postCtrl.displayFeedBody(response.bodyMD)"></article>
+      <article class="site-block response-body" ng-bind-html="postCtrl.displayFeedBody(response.body)"></article>
 
       <ul class="list-inline list-unstyled">
         <li>
