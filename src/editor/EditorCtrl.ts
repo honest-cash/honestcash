@@ -1,15 +1,14 @@
 import * as async from "async";
 import MediumEditor from "medium-editor";
 import "medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css";
-import { MeMarkdown } from "medium-editor-markdown/dist/me-markdown.standalone.min";
 import "medium-editor/dist/css/medium-editor.min.css";
 import "medium-editor/dist/css/themes/default.min.css";
 import { AuthService } from "../auth/AuthService";
 import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
 
-var showdown  = require('showdown'),
-    converter = new showdown.Converter();
+const showdown  = require('showdown');
+const converter = new showdown.Converter();
 
 console.log(showdown);
 console.log(converter);
@@ -53,10 +52,9 @@ export default class EditorCtrl {
         const saveDraftElement = (element, cb) => {
           
           const md = converter.makeMd(bodyEditor.serialize().body.value);
-          console.log(md);
 
           const post = {
-            body: md, /** bodyEditor.serialize().body.value */
+            body: md,
             hashtags: $("input#description").val() || "",
             title: document.getElementById("title").innerText
           };
@@ -187,17 +185,7 @@ export default class EditorCtrl {
               anchorPreview: true,
               autoLink: true,
               buttonLabels: 'fontawesome',
-              extensions: {
-                /**
-                markdown: new MeMarkdown({
-                  fence: "```"
-                }, (md) => {
-                  currentBody = md.substring(0, md.length - 1);
-
-                  console.log(currentBody);
-                })
-                */
-              },
+              extensions: {},
               placeholder: {
                 hideOnClick: true,
                 text: $scope.draft.parentPostId ? "Write your comment" : "Tell your story...",
@@ -206,7 +194,7 @@ export default class EditorCtrl {
                 buttons: [ 'bold', 'italic', "unorderedlist", "anchor", 'h2', 'h3', 'pre' ]
               },
               paste: {
-                cleanAttrs: [ "id", 'class', 'style', 'dir' ],
+                cleanAttrs: [ "id", "class", "style" ],
                 cleanPastedHTML: true,
                 cleanReplacements: [],
                 cleanTags: [
@@ -220,7 +208,8 @@ export default class EditorCtrl {
                   'table',
                   'tr',
                   'td',
-                  /**, 'a', 'ul', 'li', 'code', 'pre' */
+                  'code',
+                  /**, 'a', 'ul', 'li', 'code' */
                 ],
                 forcePlainText: true,
                 unwrapTags: []

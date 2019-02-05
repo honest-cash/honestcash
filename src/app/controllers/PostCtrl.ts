@@ -7,6 +7,8 @@ import { Post, Upvote } from "../../core/models/models";
 import {client as clientURL} from '../../core/config/index';
 
 import toastr from "../../core/config/toastr";
+const showdown  = require('showdown');
+const converter = new showdown.Converter();
 
 declare var QRCode: any;
 export default class PostCtrl {
@@ -87,6 +89,6 @@ export default class PostCtrl {
   }
 
   private displayFeedBody(html: string): string {
-    return this.postService.displayHTML(html);
+    return this.postService.displayHTML(converter.makeHtml(html));
   }
 }
