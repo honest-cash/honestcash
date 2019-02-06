@@ -7,6 +7,9 @@ import "medium-editor/dist/css/themes/default.min.css";
 import { AuthService } from "../auth/AuthService";
 import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
+import "../../honest-editor/src/pen.js";
+import "../../honest-editor/src/markdown.js";
+import "../../honest-editor/src/pen.css";
 
 const converter = new showdown.Converter();
 
@@ -301,6 +304,40 @@ export default class EditorCtrl {
             });
            
             initMediumEditor($scope.draft.title, $scope.draft.bodyMD);
+
+            const options = {
+              editor: document.getElementById("honest-editor"), // {DOM Element} [required]
+              class: 'pen', // {String} class of the editor,
+              debug: false, // {Boolean} false by default
+              textarea: '<textarea name="content"></textarea>', // fallback for old browsers
+              list: ['bold', 'italic', 'underline'], // editor menu list
+              linksInNewWindow: true // open hyperlinks in a new windows/tab
+            }
+
+            const honestEditor = new Pen(options);
+
+
+
+            honestEditor.focus();
+
+            // toggle editor mode
+            document.querySelector('#hinted').addEventListener('click', function() {
+              var pen = document.querySelector('.pen')
+          
+              if(pen.classList.contains('hinted')) {
+                pen.classList.remove('hinted');
+                this.classList.add('disabled');
+              } else {
+                pen.classList.add('hinted');
+                this.classList.remove('disabled');
+              }
+            });
+
+            // export content as markdown
+            document.querySelector('#tomd').addEventListener('click', function() {
+              var text = honestEditor.toMd();
+              document.body.innerHTML = '<a href="javascript:location.reload()">&larr;back to editor</a><br><br><pre>' + text + '</pre>';
+            });
 
             $scope.ready = true;
         };
