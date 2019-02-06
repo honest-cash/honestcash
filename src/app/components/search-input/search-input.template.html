@@ -1,0 +1,8 @@
+<form class="form-inline">
+    <div class="form-group">
+      <div class="input-group" ng-class="{'animated-search-input-wrapper': searchInputCtrl.isAnimated}">
+        <input type="text" style="padding: 12px; height: 40px;" class="form-control" ng-class="{'animated-search-input': searchInputCtrl.isAnimated}" placeholder="Search..." ng-model="searchInputCtrl.term">
+        <div class="input-group-addon" ng-click="searchInputCtrl.onClick($event)" style="padding: 12px;">&#128269;</div>
+      </div>
+    </div>
+  </form>

@@ -5,6 +5,7 @@ import logoutButton from './logout-button/logout-button.component';
 import socialShareButtons from './social-share-buttons/social-share-buttons.component';
 import upvoteButton from './upvote-button/upvote-button.component';
 import uncensorableButton from './uncensorable-button/uncensorable-button.component';
+import searchInput from './search-input/search-input.component';
 
 angular
   .module('vqDirectives', ['vqConfig'])
@@ -34,4 +35,5 @@ angular
   .directive('uncensorableButton', uncensorableButton)
   .directive('logoutButton', logoutButton)
   .directive('followUnfollowButton', followUnfollowButton)
-  .directive('socialShareButtons', socialShareButtons);
+  .directive('socialShareButtons', socialShareButtons)
+  .directive('searchInput', searchInput);

@@ -64,8 +64,18 @@
                   <b ng-if="walletBalance.isLoading">Loading balance...</b>
                 </div>
             </li> -->
-
-            <hr ng-if="user.id" class="visible-xs" style="margin-top: 5px; margin-bottom: 5px;">
+            <li ng-if="user.id" style="margin-right: 50px;">
+              <div class="row hidden-xs" style="padding-top: 5px; padding-bottom: 5px;">
+                  <div class="col-xs-8" style="margin-left: 15px;">
+                      <search-input is-animated="true"></search-input>
+                  </div>
+              </div>
+              <div class="row visible-xs" style="padding-top: 5px; padding-bottom: 5px;">
+                  <div class="col-xs-8" style="margin-left: 15px;">
+                      <search-input is-animated="false"></search-input>
+                  </div>
+              </div>
+            </li>
 
             <li ng-if="user.id">
               <a href="/notifs" target="_self">
