@@ -214,8 +214,12 @@ export default class EditorCtrl {
 
             $('#body').mediumInsert({
                 editor: bodyEditor,
+
                 addons: { // (object) Addons configuration
+
+                  embeds: false,
                   images: { // (object) Image addon configuration
+                    
                     autoGrid: 3, // (integer) Min number of images that automatically form a grid
                       captionPlaceholder: '',
                       captions: false, // (boolean) Enable captions
