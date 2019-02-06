@@ -1,0 +1,45 @@
+<div class="block-center" style="max-width:1300px; z-index:99;">
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+      <div ng-if="!searchCtrl.isTermAvailable">
+        <div class="well well-sm row">
+          Please enter a search term below to make a search.
+        </div>
+        <search-input is-animated="false" full-width="true"></search-input>
+      </div>
+      <div
+        style="margin-top: 10px;"
+        class="text-center"
+        ng-if="searchCtrl.isTermAvailable && searchCtrl.isLoading"
+      >
+        <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+      </div>
+      <div
+        ng-if="searchCtrl.isTermAvailable && !searchCtrl.isLoading && searchCtrl.searchResultsAvailable"
+      >
+        <div class="well well-sm row" style="margin-bottom: 20px;">
+          Found ({{ searchCtrl.searchResults.totalPostsCount }}) posts and ({{
+            searchCtrl.searchResults.totalProfilesCount
+          }}) profiles. Listing
+          <strong>({{ searchCtrl.searchResults.postsCount }})</strong> posts and
+          <strong>({{ searchCtrl.searchResults.profilesCount }})</strong>
+          profiles.
+        </div>
+        <feeds
+          feeds="searchCtrl.searchResults.posts"
+          is-loading="searchCtrl.isLoading"
+        >
+        </feeds>
+      </div>
+      <div
+        ng-if="searchCtrl.isTermAvailable && !searchCtrl.isLoading && !searchCtrl.searchResultsAvailable"
+      >
+        <div class="well well-sm row">
+          No results have been found. Please try again with a different search
+          term.
+        </div>
+        <search-input is-animated="false" full-width="true"></search-input>
+      </div>
+    </div>
+  </div>
+</div>

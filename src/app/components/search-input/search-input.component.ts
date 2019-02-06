@@ -1,40 +1,47 @@
 import './search-input.styles.less';
 import template from './search-input.template.html';
 
-import { IGlobalScope } from '../../../core/lib/interfaces';
-
-
 interface IScopeUpvoteButtonCtrl extends ng.IScope {
   isAnimated: boolean;
+  fullWidth: boolean;
+  term: string;
+  onClick: (e) => void;
 }
 
 class SearchInputController {
   public static $inject = [
-    '$rootScope',
     '$scope',
+    '$state',
   ];
 
   constructor(
-    private $rootScope: IGlobalScope,
     private $scope: IScopeUpvoteButtonCtrl,
+    private $state: ng.ui.IStateService,  
   ) {
     this.ngOnInit();
   }
 
   private isAnimated: boolean;
+  private fullWidth: boolean;
+  private term: string;
 
   private ngOnInit() {
 
     this.isAnimated = this.$scope.isAnimated;
+    this.fullWidth = this.$scope.fullWidth;
 
   }
 
   private onClick(e) {
-    this.search();
+    if(!this.term) {
+      return;
+    }
+    this.redirectToSearchPage();
+    this.term = '';
   }
 
-  private async search() {
-
+  private redirectToSearchPage() {
+    this.$state.go('vicigo.search', {term: this.term, page: 1});
   }
 
 
@@ -47,6 +54,7 @@ export default function searchInput(): ng.IDirective {
     restrict: 'E',
     scope: {
       isAnimated: '=',
+      fullWidth: '=',
     },
     replace: true,
     template

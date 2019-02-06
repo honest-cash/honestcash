@@ -44,7 +44,6 @@ export default function feed(): ng.IDirective {
     restrict: 'E',
     scope: {
         "feed": "=",
-        "user": "=",
     },
     template,
     controller: FeedDirectiveCtrl

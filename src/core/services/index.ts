@@ -5,6 +5,7 @@ import PostService from "./PostService";
 import ProfileService from "./ProfileService";
 import RelsService from "./RelsService";
 import ScopeService from "./ScopeService";
+import SearchService from "./SearchService";
 import WalletService from "./WalletService";
 
 angular.module("vqServices", [ "vqConfig" ])
@@ -14,5 +15,6 @@ angular.module("vqServices", [ "vqConfig" ])
 .service("ProfileService", [ "$http", "API_URL", ProfileService ])
 .service("RelsService", [ "$http", "API_URL", RelsService ])
 .service("ScopeService", ScopeService)
+.service("SearchService", SearchService)
 .service("WalletService", WalletService)
 .service("NotifService", NotifService);
