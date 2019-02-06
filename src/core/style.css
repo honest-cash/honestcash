@@ -362,7 +362,7 @@ img.lazy {
   -ms-user-select: none;
   user-select: none;
   background-image: none;
-  border: 1px solid buttonface;
+  border: 1px solid #F0F0F0;
 }
 
 #profile-badge-thumbnail {
@@ -379,7 +379,7 @@ img.lazy {
   position: relative;
   float: right;
   padding: 7px;
-  border: 1px solid buttonface;
+  border: 1px solid #F0F0F0;
   border-radius: 4px;
   margin-top: 8px;
   margin-right: 5px;
