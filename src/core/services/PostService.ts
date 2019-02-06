@@ -3,6 +3,8 @@ import { dateFormat } from "../../core/config/index";
 import SocialSharing from "../lib/SocialSharing";
 import { IFetchPostsArgs, Post, Upvote } from "../models/models";
 
+var sanitizeHtml = require('sanitize-html');
+
 export default class PostService {
   public static $inject = [
     "$http",
@@ -54,7 +56,9 @@ export default class PostService {
   }
 
   public displayHTML(html: string): string {
-    return this.$sce.trustAsHtml(html);
+    var clean = sanitizeHtml(html);
+
+    return this.$sce.trustAsHtml(clean);
   }
 
   public async getById(postId: number): Promise<Post> {
