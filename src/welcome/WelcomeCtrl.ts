@@ -218,6 +218,8 @@ export default class WelcomeCtrl {
 
     this.$scope.hashtags = hashtags;
 
+    grecaptcha.render('hc-captcha');
+
     this.scopeService.safeApply(this.$scope, () => {});
   }
 
@@ -373,6 +375,15 @@ export default class WelcomeCtrl {
       return;
     }
 
+    const captcha = grecaptcha.getResponse();
+
+    if (!captcha || captcha.length === 0) {
+      this.$scope.message = "Please verify captcha by checking the checkbox."
+
+      grecaptcha.reset();
+      return;
+    }
+
     this.$scope.isLoading = true;
 
     const passwordHash = this.AuthService.calculatePasswordHash(data.email, data.password);
@@ -381,7 +392,8 @@ export default class WelcomeCtrl {
       username: data.username,
       password: passwordHash,
       email: data.email,
-      userType: 0
+      userType: 0,
+      captcha
     })
     .then((user) => {
       const User = user;
@@ -393,6 +405,8 @@ export default class WelcomeCtrl {
       this.$state.go("starter.thankyou");
     }, response => {
       this.$scope.isLoading = false;
+
+      grecaptcha.reset();
 
       return this.displayErrorMessage(response.data.code, response.data.desc);
     });

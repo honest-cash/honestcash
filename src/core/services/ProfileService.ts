@@ -61,6 +61,16 @@ export default class ProfileService {
     });
   }
 
+  public upsertUserProp(userId: number, propKey: string, propValue: string, callback) {
+    this.$http.post(this.API_URL + "/user/" + userId + "/property", {
+        propKey,
+        propValue
+      }
+    ).then((response) => {
+      callback(response.data);
+    });
+  }
+
   public fetchProfile(profileId: number, callback) {
     this.$http.get(this.API_URL + "/user/" + profileId)
     .then((response) => {

@@ -1,12 +1,10 @@
 import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
-
-import ScopeService from "../../core/services/ScopeService";
-import PostService from "../../core/services/PostService";
-import { Post, Upvote } from "../../core/models/models";
-import {client as clientURL} from '../../core/config/index';
-
+import "tippy.js/dist/tippy.css";
 import toastr from "../../core/config/toastr";
+import { IGlobalScope } from "../../core/lib/interfaces";
+import { Post, Upvote } from "../../core/models/models";
+import PostService from "../../core/services/PostService";
+import ScopeService from "../../core/services/ScopeService";
 
 declare var QRCode: any;
 export default class PostCtrl {
@@ -25,7 +23,7 @@ export default class PostCtrl {
 
   constructor(
     private $scope,
-    private $rootScope,
+    private $rootScope: IGlobalScope,
     private $stateParams,
     private postService: PostService,
     private scopeService: ScopeService
@@ -50,14 +48,14 @@ export default class PostCtrl {
     this.upvotes = data[0];
     this.responses = data[1];
 
-    this.scopeService.safeApply(this.$scope, () => {});
+    this.scopeService.safeApply(this.$scope);
 
     if (!this.$rootScope.user) {
       const container = document.getElementById("post-tipping-container");
 
       container.innerHTML = "";
 
-      new QRCode(container, this.post.user.addressBCH);
+      (() => new QRCode(container, this.post.user.addressBCH))();
     }
 
     this.initTippy();
@@ -69,8 +67,8 @@ export default class PostCtrl {
     }
 
     const newComment = await this.postService.createPost({
-      parentPostId: this.post.id,
       body: this.newResponse,
+      parentPostId: this.post.id,
       postTypeId: "comment"
     } as any);
 
@@ -78,7 +76,7 @@ export default class PostCtrl {
 
     this.newResponse = "";
 
-    this.scopeService.safeApply(this.$scope, () => {});
+    this.scopeService.safeApply(this.$scope);
   }
 
   private async initTippy() {

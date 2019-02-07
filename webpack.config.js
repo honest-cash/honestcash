@@ -1,38 +1,44 @@
 module.exports = {
     entry: {
-        app: './src/app/app.ts',
-        editor: './src/editor/editor.ts',
-        welcome: './src/welcome/welcome.ts'
+      app: "./src/app/app.ts",
+      editor: "./src/editor/editor.ts",
+      welcome: "./src/welcome/welcome.ts"
     },
-    mode: 'production',
+    mode: "production",
     output: {
-        path: __dirname + "/public/js",
-        filename: '[name].js',
+      path: __dirname + "/public/js",
+      filename: "[name].js",
     },
     module: {
-        rules: [
-            {
-                test: /\.(js|ts)?$/,
-                loader: 'ts-loader',
-                exclude: [ __dirname + '/node_modules/' ],
-                options: {
-                    transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
-                }
+      rules: [
+        {
+            test: /\.(js|ts)?$/,
+            loader: "ts-loader",
+            exclude: [ __dirname + "/node_modules/" ],
+            options: {
+                transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
+            }
+        }, {
+            test: /\.(css|less)?$/, 
+            use: [{
+              loader: 'style-loader' // creates style nodes from JS strings
             }, {
-                test: /\.css$/, 
-                use: [ 'style-loader', 'css-loader' ]
+              loader: 'css-loader' // translates CSS into CommonJS
             }, {
-                test: /\.html$/,
-                use: [ "html-loader" ],
-            }, {
-                test: require.resolve("blueimp-file-upload"),
-                loader: "imports-loader?define=>false"
-              },
-              {
-                test: require.resolve("medium-editor-insert-plugin"),
-                loader: "imports-loader?define=>false"
-              }
-        ]
+              loader: 'less-loader' // compiles Less to CSS
+            }]
+        }, {
+            test: /\.html$/,
+            use: [ "html-loader" ],
+        }, {
+            test: require.resolve("blueimp-file-upload"),
+            loader: "imports-loader?define=>false"
+          },
+          {
+            test: require.resolve("medium-editor-insert-plugin"),
+            loader: "imports-loader?define=>false"
+          }
+      ]
     },
     plugins: [
         /**
@@ -63,6 +69,6 @@ module.exports = {
          */
     ],
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js' ]
+        extensions: [ ".tsx", ".ts", ".js" ]
     }
 };
