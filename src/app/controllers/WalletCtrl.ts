@@ -4,6 +4,7 @@ import generateWallet from '../../core/lib/bitcoinAuthFlow';
 import { AuthService } from '../../auth/AuthService';
 import ScopeService from '../../core/services/ScopeService';
 import WalletService from '../../core/services/WalletService';
+import ProfileService from '../../core/services/ProfileService';
 import { IGlobalScope } from '../../core/lib/interfaces';
 
 declare var SimpleWallet: any;
@@ -21,10 +22,7 @@ interface IScopeWalletCtrl extends ng.IScope {
   legacyAddressBCH: string;
   HdPath: string;
   newHdPath: string;
-  addressBalance: number;
-  balanceLoading: boolean;
   isWithdrawalAddressBCHValid: boolean;
-  addressBalanceInUSD: number;
   canConnectMnemonic: boolean;
 
   withdraw: (withdrawalAmount: number, withdrawalAddressBCH: string) => Promise<any>
@@ -37,13 +35,30 @@ interface IScopeWalletCtrl extends ng.IScope {
 }
 
 export default class WalletCtrl {
+  static $inject = [
+    "$scope",
+    "$rootScope",
+    "AuthService",
+    "ScopeService",
+    "WalletService",
+    "ProfileService",
+  ];
+
     constructor(
       private $scope: IScopeWalletCtrl,
       private $rootScope: IGlobalScope,
       private authService: AuthService,
       private scopeService: ScopeService,
-      private walletService: WalletService
+      private walletService: WalletService,
+      private profileService: ProfileService,
     ) {
+
+      $rootScope.walletBalance = {
+        bch: 0,
+        usd: 0,
+        isLoading: true
+      };
+
         $scope.mnemonic = "";
         $scope.privateKey = "";
         $scope.addressBCH = "";
@@ -53,9 +68,6 @@ export default class WalletCtrl {
         $scope.connectedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
         $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
         $scope.newHdPath = simpleWalletProvider.defaultHdPath;
-        $scope.addressBalance = 0;
-        $scope.addressBalanceInUSD = 0;
-        $scope.balanceLoading = true;
         $scope.isWithdrawalAddressBCHValid = true;
 
         let simpleWallet, lSimpleWallet;
@@ -107,15 +119,39 @@ export default class WalletCtrl {
           $scope.canConnectMnemonic = false;
         };
 
+        $scope.saveRecoveryPhraseBackupProp = () => {
+          const user = $rootScope.user;
+          this.profileService.upsertUserProp(user.id, 'recoveryBackedUp', 'true', (res) => {
+            if (res) {
+              const recoveryBackedUpProp = $rootScope.user.userProperties.find(p => p.propKey === 'recoveryBackedUp');
+              if (recoveryBackedUpProp) {
+                recoveryBackedUpProp.propValue = true;
+              } else {
+                $rootScope.user.userProperties.push(res);
+              }
+            }
+          })
+        };
+
+        $scope.checkRecoveryBackup = () => {
+          if (this.$rootScope.user && this.$rootScope.user.userProperties && this.$rootScope.user.userProperties.length) {
+            const recoveryBackedUpProp = this.$rootScope.user.userProperties.find(p => p.propKey === "recoveryBackedUp");
+            return !recoveryBackedUpProp || !JSON.parse(recoveryBackedUpProp.propValue) ? false : true;
+          }
+          return false;
+        };
+
         const refreshBalance = async (wallet) => {
           let walletInfo;
 
           try {
             walletInfo = await wallet.getWalletInfo();
           } catch (err) {
-            $scope.addressBalance = 0;
-
-            this.scopeService.safeApply($scope, () => {});
+            $rootScope.walletBalance = {
+              bch: 0,
+              usd: 0,
+              isLoading: false
+            }
 
             return;
           }
@@ -123,9 +159,12 @@ export default class WalletCtrl {
           const { bch, usd } = await this.walletService.getAddressBalances();
 
           $scope.walletInfo = walletInfo;
-          $scope.addressBalance = bch;
-          $scope.addressBalanceInUSD  = usd;
-          $scope.balanceLoading = false;
+
+          $rootScope.walletBalance = {
+            bch,
+            usd,
+            isLoading: false
+          };
 
           this.scopeService.safeApply($scope, () => {});
         };
@@ -343,12 +382,4 @@ export default class WalletCtrl {
         $scope.onDepositClick();
         $scope.disconnect = disconnect;
     }
-
-    static $inject = [
-      "$scope",
-      "$rootScope",
-      "AuthService",
-      "ScopeService",
-      "WalletService"
-    ];
 }

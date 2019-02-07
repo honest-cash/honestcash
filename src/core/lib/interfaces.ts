@@ -26,13 +26,25 @@ export class SimpleWalletClass implements ISimpleWallet {
 }
 
 
+export interface IUserProp {
+  propKey: string;
+  propValue: string;
+}
+
 export interface IGlobalScope extends ng.IRootScopeService {
   activeCalls: number;
   user: {
     imageUrl: string;
     id: number;
     username: string;
+    userProperties: IUserProp[]
+  },
+  walletBalance: {
+    bch: number;
+    usd: number;
+    isLoading: boolean;
   },
   simpleWallet: ISimpleWallet;
   noHeader: boolean;
+  logoutMe: any;
 }

@@ -1,0 +1,9 @@
+<button
+  data-tippy-content="Your story will be saved on blockchain."
+  class="hc-tooltip btn btn-default"
+  ng-if="uncensorableButtonCtrl.isVisible"
+  ng-click="uncensorableButtonCtrl.onClick($event)"
+  ng-disabled="uncensorableButtonCtrl.isUncensoring"
+>
+  <i class="fa fa-btc"></i><span class="hidden-xs"> Make it</span> Uncensorable
+</button>

@@ -7,11 +7,11 @@
         <div class="form-group">
                 <ul class="list-inline list-unstyled" style="margin-top: 10px;">
                         <li>Balance: 
-                            <b ng-if="!balanceLoading">
-                                {{addressBalance}} <i class="fa fa-btc"></i> | 
-                                {{addressBalanceInUSD}} <i class="fa fa-usd"></i>
+                            <b ng-if="!walletBalance.isLoading">
+                                {{walletBalance.bch}} <i class="fa fa-btc"></i> | 
+                                {{walletBalance.usd}} <i class="fa fa-usd"></i>
                             </b>
-                            <b ng-if="balanceLoading">Loading balance...</b>
+                            <b ng-if="walletBalance.isLoading">Loading balance...</b>
                         </li>
                 </ul>
                 <ul class="list-inline list-unstyled" style="margin-top: 10px;">
@@ -57,10 +57,17 @@
         </div>
 
         <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-            <div style="margin-top:15px;" class="alert alert-danger" role="alert">
-                    <small class="form-text">
-                      Save your recovery phrase! If you forget your password, recovery phrase is the only way to recover your funds!
-                    </small>
+            <div ng-if="!checkRecoveryBackup()" style="margin-top:15px;" class="alert alert-danger" role="alert">
+                <small class="form-text">
+                    Save your recovery phrase! If you forget your password, recovery phrase is the only way to recover your funds!
+                </small>
+                <br>
+                <a href="#" ng-click="saveRecoveryPhraseBackupProp()">I saved my recovery phrase</a>
+            </div>
+            <div ng-if="checkRecoveryBackup()" style="margin-top:15px;" class="alert alert-success" role="alert">
+                <small class="form-text">
+                    You have confirmed that you saved your recovery phrase. Well done!
+                </small>
             </div>
 
             <div style="margin-top:15px;" class="form-group">
@@ -75,12 +82,8 @@
             </div>
 
             <div>
-                <p>
-                  <a href="https://honest.cash/honest_cash/how-to-import-your-honest-wallet-into-electron-cash-134" target="_blank">
-                    How to import Your Honest wallet into Electron Cash
-                  </a>
-                </p>
-                
+                <div ng-include="'importToOtherWallets'"></div>
+
                 <p>
                 <small class="form-text text-muted">
                     Ownership and control over the private key is the root of user control over all funds associated with the corresponding Bitcoin Cash address. The private key is used to create signatures that are required to spend bitcoins by proving ownership of funds used in a transaction. <b>The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The private key must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.</b>
@@ -92,6 +95,12 @@
         </div>
 
         <div class="tab-pane fade" id="withdrawal" role="tabpanel" aria-labelledby="withdrawal-tab">
+            <div style="margin-top:15px;" >
+              <p>
+                You can withdraw the balance by importing your Honest wallet into other wallets or you can transfer the funds directly using the form below.
+              </p>
+              <div style="margin-top:15px;" ng-include="'importToOtherWallets'"></div>
+            </div>
             <div style="margin-top:15px;" class="form-group">
                 <label for="withrawalAddressBCH">Address</label>
                 <input type="text" placeholder="Enter your Bitcoin Cash address here.." ng-model="withdrawalAddressBCH" class="form-control" aria-describedby="withrawalAddressBCH">
@@ -99,10 +108,10 @@
 
                 <label for="withdrawalAmount">Amount</label>
                 <input type="number" placeholder="How much would you like to transfer" ng-model="withdrawalAmount" class="form-control" aria-describedby="withdrawalAmount">
-                <span><a href="#" ng-click="withdrawalAmount=addressBalance-0.00001">Max amount (with 0.00001 BCH fees limit)</a></span>
+                <span><a href="#" ng-click="withdrawalAmount=walletBalance.bch-0.00001">Max amount (with 0.00001 BCH fees limit)</a></span>
             </div>
 
-            <button ng-disabled="!withdrawalAmount || !withdrawalAddressBCH" ng-click="withdraw(withdrawalAmount, withdrawalAddressBCH)" type="submit" class="btn btn-danger btn-lg">Transfer</button>
+            <button ng-disabled="!withdrawalAmount || !withdrawalAddressBCH" ng-click="withdraw(withdrawalAmount, withdrawalAddressBCH)" type="submit" class="btn btn-danger btn-md">Transfer</button>
             <br />
         </div>
 
@@ -216,3 +225,18 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="importToOtherWallets">
+  <ul>
+    <li>
+      <a href="https://honest.cash/honest_cash/how-to-import-your-honest-wallet-into-bitcoincom-wallet-1690" target="_blank">
+        How to import Your Honest wallet into Bitcoin.Com wallet
+      </a>
+    </li>
+    <li>
+      <a href="https://honest.cash/honest_cash/how-to-import-your-honest-wallet-into-electron-cash-134" target="_blank">
+        How to import Your Honest wallet into Electron Cash
+      </a>
+    </li>
+  </ul>
+</script>

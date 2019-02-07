@@ -22,10 +22,10 @@
   </div>
   <div id="profile-badge-details">
     <b>{{ user.username }}</b> <br />
-    <b ng-if="balanceLoading" class="text-gray">Loading balance...</b>
-    <span ng-if="!balanceLoading"
-      ><i class="fa fa-btc"></i> {{ addressBalance | number: 3 }} |
-      <i class="fa fa-usd"></i> {{ addressBalanceInUSD }}</span
+    <b ng-if="walletBalance.isLoading" class="text-gray">Loading balance...</b>
+    <span ng-if="!walletBalance.isLoading"
+      ><i class="fa fa-btc"></i> {{ walletBalance.bch | number: 3 }} |
+      <i class="fa fa-usd"></i> {{ walletBalance.usd }}</span
     >
   </div>
 </div>
@@ -81,5 +81,5 @@
     </a>
   </li>
   <li role="seperator" class="divider"></li>
-  <li><a href="#" ng-click="logoutMe()">logout</a></li>
+  <li><logout-button></logout-button></li>
 </ul>

@@ -51,7 +51,9 @@
                 </p>
 						</div>
 
-						<div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+            <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+
+            <div id="hc-captcha" style="margin-bottom: 10px; margin-top: 10px;" class="g-recaptcha" data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"></div>
 
 						<button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-lg" ng-click="signup(data)">{{isLoading ? "Loading.." : "Register"}}</button>
 			
@@ -75,9 +77,9 @@
     </div>
     <hr />
 
-    <div class="row text-center fa-50 welcome-columns" style="margin-bottom: 30px;">
-      <div class="col-xs-12" style="margin-bottom: 20px;">
-        <h3 class="text-uppercase"><strong>Benefits for writers, creators and thinkers</strong></h3>
+    <div class="row text-center fa-50 welcome-columns" style="margin-bottom: 30px;margin-top:50px;">
+      <div class="col-xs-12" style="margin-bottom: 30px;">
+        <h3 class="text-uppercase">Benefits for writers, creators and thinkers</h3>
       </div>
       <div class="col-sm-4">
             <i class="fa fa-heart"></i>
@@ -140,9 +142,9 @@
 
     <hr />
 
-    <div class="row text-center fa-50 welcome-columns" style="margin-bottom: 20px;">
-        <div class="col-xs-12" style="margin-bottom: 20px;">
-            <h3 class="text-uppercase"><strong>Benefits for readers</strong></h3>
+    <div class="row text-center fa-50 welcome-columns" style="margin-bottom: 20px;margin-top:50px;">
+        <div class="col-xs-12" style="margin-bottom: 30px;">
+            <h3 class="text-uppercase">Benefits for readers</h3>
         </div>
         <br>
         <div class="col-xs-12">
@@ -184,38 +186,56 @@
                   In order to respect open discussion and debate, Honest allows you to make your content uncensorable. You can upload your story onto blockchain and make it accessible to other publishing platforms around the world.
                 </p>
             </div>
-	  </div>
+	      </div>
+
+     <hr />
+
+          <div class="row text-center" style="margin-bottom: 20px;margin-top:50px;">
+              <div class="col-xs-12" style="padding-bottom:30px;">
+                <h3>WHAT PEOPLE SAY ABOUT HC?</h3>
+              </div>
+              <div class="col-sm-4">	
+                  <img src="./img/twitter-1.png" class="img-responsive" alt="twitter-1 photo">
+              </div>
+              <div class="col-sm-4">	
+                  <img src="./img/twitter-2.png" class="img-responsive" alt="twitter-2 photo">
+              </div>
+              <div class="col-sm-4">	
+                  <img src="./img/twitter-3.png" class="img-responsive" alt="twitter-3 photo">
+              </div>
+	       </div>
    
     <hr />
-    <div class="row text-center" style="margin-bottom: 20px;">
-          <div class="col-xs-12" style="padding-bottom:20px;">
-            <h2>Honest Team</h2>
-          </div>
-					<div class="col-sm-3">	
-							<img src="./img/adrian.jpg" class="img-circle" alt="adrian photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/adrianbarwicki" target="_self">Adrian Barwicki</a>
-							</h5>
-					</div>
-					<div class="col-sm-3">	
-							<img src="./img/ani.png" class="img-circle" alt="ani photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/calisi" target="_self">Ani Calis</a>
-							</h5>
-					</div>
-          <div class="col-sm-3">	
-							<img src="./img/rosco.png" class="img-circle" alt="rosco photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/rkalis" target="_self">Rosco Kalis</a>
-							</h5>
-					</div>
-          <div class="col-sm-3">	
-							<img src="./img/emily.jpg" class="img-circle" alt="emily photo" height="130" width="130">
-							<h5 class="text-center" style="padding-top:10px;">
-								<a href="https://honest.cash/profile/emrosedallara" target="_self">Emily Rose Dallara</a>
-							</h5>
-					</div>
-	     </div>
+
+        <div class="row text-center" style="margin-bottom: 20px;margin-top:50px;">
+            <div class="col-xs-12" style="padding-bottom:30px;">
+              <h3>HONEST TEAM</h3>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/adrian.jpg" class="img-circle" alt="adrian photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/adrianbarwicki" target="_self">Adrian Barwicki</a>
+                </h5>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/ani.png" class="img-circle" alt="ani photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/calisi" target="_self">Ani Calis</a>
+                </h5>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/rosco.png" class="img-circle" alt="rosco photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/rkalis" target="_self">Rosco Kalis</a>
+                </h5>
+            </div>
+            <div class="col-sm-3">	
+                <img src="./img/emily.jpg" class="img-circle" alt="emily photo" height="130" width="130">
+                <h5 class="text-center" style="padding-top:10px;">
+                  <a href="https://honest.cash/profile/emrosedallara" target="_self">Emily Rose Dallara</a>
+                </h5>
+            </div>
+	      </div>
     </div>
  
   

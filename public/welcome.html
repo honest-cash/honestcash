@@ -26,10 +26,11 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://honest.cash/img/honest_social.png" />
     <meta name="google-site-verification" content="FyWFQySzISHgzy0_hfgdzbHCm2WZ4TkXhyo_giXOGNQ" />
-    <link rel="icon" type="image/png" href="/img/favicon.png" />
-
     <meta name="fragment" content="!" />
+    
+    <script src="https://www.google.com/recaptcha/api.js?onload=vcRecapthaApiLoaded&render=explicit&hl=en" async defer></script>
 
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
     <link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
 
@@ -53,5 +54,15 @@
 
     <script type="text/javascript" src="/js/simple-bitcoin-wallet.min.js"></script>
     <script type="text/javascript" src="/js/welcome.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71873199-5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-71873199-5');
+  </script>
   </body>
 </html>

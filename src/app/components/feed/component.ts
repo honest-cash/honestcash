@@ -2,7 +2,7 @@ import tippy from "tippy.js";
 import 'tippy.js/dist/tippy.css';
 
 import template from './template.html';
-import templateStyle from './feed.css';
+import templateStyle from './feed.less';
 
 import PostService from "../../../core/services/PostService";
 
@@ -44,7 +44,6 @@ export default function feed(): ng.IDirective {
     restrict: 'E',
     scope: {
         "feed": "=",
-        "upvote": "=",
         "user": "=",
     },
     template,

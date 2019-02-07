@@ -75,6 +75,7 @@ export class AuthService {
     password: string;
     email: string;
     userType: number;
+    captcha: string;
   }) {
     return this.$q(async (resolve, reject) => {
       this.$http.post(this.apiFactory("SIGNUP"), data)
