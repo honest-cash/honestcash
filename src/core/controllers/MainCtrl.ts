@@ -5,6 +5,7 @@ import WalletService from '../../core/services/WalletService';
 interface IScopeMainCtrl extends ng.IScope {
   mouseEnterAddress: any;
   mouseLeaveAddress: any;
+  checkRecoveryBackup: () => void;
 }
 
 export default class MainCtrl {
@@ -49,5 +50,14 @@ export default class MainCtrl {
     $scope.mouseEnterAddress = mouseEnterAddress;
     $scope.mouseLeaveAddress = mouseLeaveAddress;
 
+    $scope.checkRecoveryBackup = () => {
+      if (this.$rootScope.user && this.$rootScope.user.userProperties && this.$rootScope.user.userProperties.length) {
+        const recoveryBackedUpProp = this.$rootScope.user.userProperties.find(p => p.propKey === "recoveryBackedUp");
+        return !recoveryBackedUpProp || !JSON.parse(recoveryBackedUpProp.propValue) ? true : false;
+      } else if (!this.$rootScope.user.userProperties) {
+        return false;
+      }
+      return true;
+    }
   }
 }

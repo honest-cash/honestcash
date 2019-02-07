@@ -119,6 +119,13 @@
           </a>
         </div>
       </div>
+
+      <div ng-show="user && checkRecoveryBackup()" class="row alert alert-warning" role="alert">
+				Please backup your wallet recovery phrase (mnemonic). The recovery phrase is the only way to recover your funds if you forget your password!
+
+			  Go to the <a href="/wallet" target="_blank">wallet page</a> to backup your recovery phrase.
+			</div>
+
       <feeds
         user="user"
         feeds="feeds"
