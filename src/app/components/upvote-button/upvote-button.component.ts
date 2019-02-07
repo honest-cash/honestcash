@@ -254,6 +254,7 @@ export default function upvoteButton(): ng.IDirective {
       text: '=?',
       post: '='
     },
+    replace: true,
     template
   };
 }

@@ -43,9 +43,9 @@ class FollowUnfollowButtonController {
     ? this.$scope.showUnfollow : defaultOptions.showUnfollow;
 
     this.showFollow = angular.isDefined(this.$scope.showFollow)
-    ? this.$scope.showFollow : !this.$scope.showUnfollow ? true : defaultOptions.showFollow;
-
-    this.isVisible = this.$rootScope.user && !!this.$rootScope.user.id;
+    ? this.$scope.showFollow
+    : !this.$scope.showUnfollow ? true : defaultOptions.showFollow;
+    this.isVisible = this.$rootScope.user && this.$rootScope.user.id !== undefined && this.user.id !== this.$rootScope.user.id;
   }
 
   private onClick(action: "follow" | "unfollow") {
