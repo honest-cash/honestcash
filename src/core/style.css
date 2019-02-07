@@ -1,6 +1,6 @@
 body {
   width: 100%;
-  font-family: 'Helvetica', sans-serif;
+  font-family: "Helvetica", sans-serif;
   font-size: 12px;
   font-weight: 300;
   /* color: #777; */
@@ -30,12 +30,12 @@ a:hover {
 
 h1 {
   font-size: 42px;
-  font-family: 'Helvetica', sans-serif;
+  font-family: "Helvetica", sans-serif;
 }
 
 h2 {
   font-size: 30px;
-  font-family: 'Helvetica', sans-serif;
+  font-family: "Helvetica", sans-serif;
 }
 
 h3 {
@@ -102,7 +102,7 @@ img.lazy {
   /* min-height: 180px; */ /* this causes scaling problems */
   display: block;
   /* optional way, set loading as background */
-  background-image: url('/img/loader-pacman.gif');
+  background-image: url("/img/loader-pacman.gif");
   background-repeat: no-repeat;
   background-position: 50% 50%;
 }
@@ -393,4 +393,77 @@ img.lazy {
   height: 30px;
   float: left;
   line-height: 30px;
+}
+
+.hr-text {
+  line-height: 1em;
+  position: relative;
+  cursor: pointer;
+  outline: 0;
+  border: 0;
+  color: black;
+  text-align: center;
+  height: 1.5em;
+  opacity: 0.5;
+}
+.hr-text:before {
+  content: "";
+  background: linear-gradient(to right, transparent, #818078, transparent);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+}
+.hr-text:after {
+  content: attr(data-content);
+  position: relative;
+  display: inline-block;
+  color: black;
+  padding: 0 0.5em;
+  line-height: 1.5em;
+  color: #000;
+  background-color: #fcfcfa;
+}
+
+#post-toggleable-container .panel-body {
+  padding-bottom: 0px;
+}
+
+#post-toggleable-container .panel-footer {
+  padding-bottom: 0px;
+  text-align: center;
+  border: none;
+  padding-top: 0px;
+  background-color: #fff;
+}
+
+#post-toggleable-container.post-toggled .panel-body {
+  padding-bottom: 15px;
+}
+
+#post-toggleable-container #editor-post-reference {
+  color: #333;
+  max-height: 50vh;
+  overflow-y: hidden;
+  padding-left: 0px;
+  padding-right: 0px;
+  position: relative;
+}
+#post-toggleable-container.post-toggled #editor-post-reference {
+  max-height: 100vh;
+}
+
+#post-toggleable-container:not(.post-toggled) #editor-post-reference:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 20em;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(transparent 0, #fff);
+  border-radius: 2px;
+  z-index: 1;
+  padding-left: 15px;
+  padding-right: 15px;
 }

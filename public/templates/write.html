@@ -2,8 +2,8 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8 col-xs-12" style="min-height:250px;">
-      <div ng-if="draft.parentPost.id" class="block-center">
-        <div class="panel">
+      <div ng-if="draft.parentPost.id" class="block-center row">
+        <div id="post-toggleable-container" class="panel" ng-class="{'post-toggled': isFullPostShown}">
           <div class="panel-body">
             Response to:
             <a
@@ -15,10 +15,13 @@
             >
             <p>by <b>@{{ draft.parentPost.user.username }}</b></p>
             <article
-              style="color: #333"
+              id="editor-post-reference"
               class="site-block post-body"
               ng-bind-html="displayFeedBody(draft.parentPost.body)"
             ></article>
+          </div>
+          <div class="panel-footer">
+              <hr class="hr-text" data-content="{{isFullPostShown ? 'collapse' : 'expand'}}" ng-click="toggleFullPost()">
           </div>
         </div>
       </div>

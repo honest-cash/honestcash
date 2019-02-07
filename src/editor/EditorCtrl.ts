@@ -29,6 +29,8 @@ export default class EditorCtrl {
           body: false,
           title: false
         };
+        $scope.isFullPostShown = false;
+        $scope.toggleFullPost = () => $scope.isFullPostShown = !$scope.isFullPostShown;
 
         let parentPostId;
         let postId;
