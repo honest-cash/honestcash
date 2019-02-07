@@ -1,8 +1,8 @@
 const redirectIfNotLoggedIn = [
-  '$rootScope',
+  "$rootScope",
   $rootScope => {
     if (!$rootScope.user || ($rootScope.user && !$rootScope.user.id)) {
-      location.href = '/login';
+      location.href = "/login";
     }
   }
 ];
@@ -10,84 +10,84 @@ const redirectIfNotLoggedIn = [
 const getFeedState = url => {
   return {
     url,
-    templateUrl: '/templates/feeds.html',
-    controller: 'feedsController'
+    templateUrl: "/templates/feeds.html",
+    controller: "feedsController"
   };
 };
 
 export default function state($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise("/");
 
   $stateProvider
-    .state('wallet', {
+    .state("wallet", {
       abstract: true,
-      controller: 'mainController',
-      templateUrl: '/templates/layout.html'
+      controller: "mainController",
+      templateUrl: "/templates/layout.html"
     })
-    .state('wallet.create', {
-      controller: 'walletController',
-      url: '/wallet',
-      templateUrl: '/templates/wallet.html',
+    .state("wallet.create", {
+      controller: "walletController",
+      url: "/wallet",
+      templateUrl: "/templates/wallet.html",
       resolve: {
         isLoggedIn: redirectIfNotLoggedIn
       }
     });
 
   $stateProvider
-    .state('vicigo', {
+    .state("vicigo", {
       abstract: true,
-      controller: 'mainController',
-      templateUrl: '/templates/layout.html'
+      controller: "mainController",
+      templateUrl: "/templates/layout.html"
     })
     /**
      * START OF Feeds
      */
-    .state('vicigo.feeds', getFeedState('/'))
-    .state('vicigo.feedsNew', getFeedState('/{feedType:new|top}'))
-    .state('vicigo.hashtag', getFeedState('/hashtag/:hashtag'))
+    .state("vicigo.feeds", getFeedState("/"))
+    .state("vicigo.feedsNew", getFeedState("/{feedType:new|top}"))
+    .state("vicigo.hashtag", getFeedState("/hashtag/:hashtag"))
     .state(
-      'vicigo.hashtagFeed',
-      getFeedState('/hashtag/:hashtag/{feedType:new|top}')
+      "vicigo.hashtagFeed",
+      getFeedState("/hashtag/:hashtag/{feedType:new|top}")
     )
 
     /**
      * END OF Feeds
      */
-    .state('vicigo.notifs', {
-      url: '/notifs',
-      templateUrl: '/templates/notifs.html',
-      controller: 'notifsCtrl',
-      controllerAs: 'notifsCtrl',
+    .state("vicigo.notifs", {
+      url: "/notifs",
+      templateUrl: "/templates/notifs.html",
+      controller: "notifsCtrl",
+      controllerAs: "notifsCtrl",
       resolve: {
         isLoggedIn: redirectIfNotLoggedIn
       }
     })
-    .state('vicigo.posts', {
-      url: '/posts',
-      templateUrl: '/templates/posts.html',
-      controller: 'postsCtrl',
+    .state("vicigo.posts", {
+      url: "/posts",
+      templateUrl: "/templates/posts.html",
+      controller: "postsCtrl",
       resolve: {
         isLoggedIn: redirectIfNotLoggedIn
       }
     })
-    .state('vicigo.drafts', {
-      url: '/drafts/',
-      templateUrl: '/templates/drafts.html',
-      controller: 'draftsController',
+    .state("vicigo.drafts", {
+      url: "/drafts/",
+      templateUrl: "/templates/drafts.html",
+      controller: "draftsController",
       resolve: {
         isLoggedIn: redirectIfNotLoggedIn
       }
     })
-    .state('vicigo.profile', {
-      url: '/profile/:profileId',
-      templateUrl: '/templates/profile.html',
-      controller: 'profileController',
-      controllerAs: 'profileCtrl',
+    .state("vicigo.profile", {
+      url: "/profile/:profileId",
+      templateUrl: "/templates/profile.html",
+      controller: "profileController",
+      controllerAs: "profileCtrl",
       resolve: {
         profile: [
-          '$stateParams',
-          '$q',
-          'ProfileService',
+          "$stateParams",
+          "$q",
+          "ProfileService",
           ($stateParams, $q, ProfileService) => {
             var defer = $q.defer();
 
@@ -100,16 +100,16 @@ export default function state($stateProvider, $urlRouterProvider) {
         ]
       }
     })
-    .state('vicigo.profileEdit', {
-      url: '/profile/:profileId/edit',
-      templateUrl: '/templates/profile-edit.html',
-      controller: 'profileEditController',
+    .state("vicigo.profileEdit", {
+      url: "/profile/:profileId/edit",
+      templateUrl: "/templates/profile-edit.html",
+      controller: "profileEditController",
       requireLogin: true,
       resolve: {
         profile: [
-          '$stateParams',
-          '$q',
-          'ProfileService',
+          "$stateParams",
+          "$q",
+          "ProfileService",
           ($stateParams, $q, ProfileService) => {
             var defer = $q.defer();
 
@@ -123,22 +123,22 @@ export default function state($stateProvider, $urlRouterProvider) {
         isLoggedIn: redirectIfNotLoggedIn
       }
     })
-    .state('vicigo.post', {
-      url: '/:username/:alias',
-      templateUrl: '/templates/post.html',
-      controller: 'postController',
-      controllerAs: 'postCtrl'
+    .state("vicigo.post", {
+      url: "/:username/:alias",
+      templateUrl: "/templates/post.html",
+      controller: "postController",
+      controllerAs: "postCtrl"
     })
-    .state('vicigo.postById', {
-      url: '/post/:postId',
-      templateUrl: '/templates/post.html',
-      controller: 'postController',
-      controllerAs: 'postCtrl'
+    .state("vicigo.postById", {
+      url: "/post/:postId",
+      templateUrl: "/templates/post.html",
+      controller: "postController",
+      controllerAs: "postCtrl"
     })
-    .state('vicigo.postByAlias', {
-      url: '/post/:username/:alias',
-      templateUrl: '/templates/post.html',
-      controller: 'postController',
-      controllerAs: 'postCtrl'
+    .state("vicigo.postByAlias", {
+      url: "/post/:username/:alias",
+      templateUrl: "/templates/post.html",
+      controller: "postController",
+      controllerAs: "postCtrl"
     });
 }
