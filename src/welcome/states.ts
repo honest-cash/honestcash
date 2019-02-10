@@ -2,6 +2,13 @@ export default function state ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("/signup");
 
 	$stateProvider
+	.state('newWelcome', {
+		url: "/new-welcome",
+		controller: "welcomeCtrl",
+		templateUrl: "/templates/new-login.html"
+	})
+
+	$stateProvider
 		.state('starter', {
 			templateUrl: "/templates/layout.html",
 			controller: "welcomeCtrl",

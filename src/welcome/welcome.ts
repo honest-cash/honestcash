@@ -1,5 +1,4 @@
 import '../welcome/welcome.css';
-import '../core/style.css';
 import '../core/layout.css';
 
 import angular from "angular";
