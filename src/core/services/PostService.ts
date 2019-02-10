@@ -66,7 +66,7 @@ export default class PostService {
         // and if you do the URL is checked for safety
         img: [ 'src' ],
 
-        iframe: [ 'src', 'width', 'heigth', 'frameborder', 'allowfullscreen' ],
+        iframe: [ 'src', 'allowfullscreen' ],
       },
       // Lots of these won't come up by default because we don't allow them
       selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],

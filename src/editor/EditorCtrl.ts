@@ -179,7 +179,9 @@ export default class EditorCtrl {
 
             bodyEditor = new MediumEditor('#body', {
               anchorPreview: true,
-              autoLink: true,
+
+              // disabled because broken on markdown
+              autoLink: false,
               buttonLabels: 'fontawesome',
               extensions: {},
               placeholder: {
