@@ -1,17 +1,14 @@
 <div class="login-container container">    
     <div class="login-box">
         <div class="col-xs-12">
-          <img style="width:100%; max-width:250px; display:block; margin:auto;" src="/img/honest-long-logo.png" >	
-          <h4 class="text-center text-muted" style="padding-top:10px;">
-            For top authors, thinkers, and emerging storytellers, Honest is place to discuss freely  where you can earn Bitcoin if you create value.
+          <img style="width:100%; max-width:200px; display:block; margin:auto;" src="/img/honest-long-logo.png" >	
+          <h4 class="text-center text-muted" style="padding-top:10px;padding-bottom:15px;">
+             For writers, creatives and thinkers, Honest is a content publishing platform where users can earn Bitcoin by creating value.
           </h4>
         </div>
         <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
         <div class="col-xs-12">   
           <form ng-if="!hideForm" ng-submit="resetCode ? changePassword(data) : forgot ? resetPassword(data) : login(data)">
-            <div class="form-group">
-                <strong>{{resetCode ? "Change password": "Login" }}</strong>
-            </div>
             <div class="form-group">
                 <input type="email" placeholder="Email" class="form-control" ng-model="data.loginemail">
             </div>
