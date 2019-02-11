@@ -115,7 +115,7 @@ class UncensorableButtonController {
           res = await simpleWallet.upload(compressedJson, {
             ext: "json.lzutf8",
             title: `${post.title} by ${post.user.username} | Honest Cash`,
-            extUri: `https://honest.cash/${post.user.username}/${post.alias}`
+            extUri: `https://honest.cash/post/${post.id}`
           });
         } catch (err) {
           $('#uncensoredResultModal').modal('hide');
@@ -156,7 +156,7 @@ class UncensorableButtonController {
         }
         this.isUncensoring = false;
         this.scopeService.safeApply(this.$scope, () => {});
-        
+
       }
     }
 }
