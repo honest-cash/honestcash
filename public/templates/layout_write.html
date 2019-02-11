@@ -1,18 +1,21 @@
-<div style="margin-top:50px;" class="text-center" ng-show='!ready'>
+<div style="margin-top: 100px;" class="text-center" ng-show='!ready'>
+    <img style="max-height: 100px; width: auto;padding: 8px;" class="header-logo" src="/img/honest-logo-2.png" alt="Honest Logo">
+</div>
+<div style="margin-top:10px;" class="text-center" ng-show='!ready'>
     <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
 </div>
 
 <div ng-show='ready'>
 	<div>
 	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
-		<div class="container">
-				<a href="/" target="_self" class="hidden-xs pull-left">
-					<img class="header-logo" src="/img/honest-long-logo.png" alt="Honest Logo">
+		<div class="container-fluid">
+				<a href="/" target="_self" class="pull-left">
+					<img style="max-height: 50px;width: auto; padding: 8px;" class="header-logo" src="/img/honest-logo-2.png" alt="Honest Logo">
 				</a>
 
-				<ul class="list-inline" style="float: right;">
+				<ul class="list-inline" style="margin-bottom: 5px; margin-top: 5px; float: right;">
 					<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
-						<button class="btn-default btn" style="margin:10px;" >
+						<button class="btn-default btn btn-sm" >
 							<strong class="hidden-xs">Ready to publish?</strong>
 							<strong class="visible-xs">Publish</strong>
 						</button>
@@ -24,7 +27,7 @@
 						</button>
 					</li>
 
-					<li style="margin-top: 5px; cursor: pointer;" class="menu-item-profile">
+					<li style="cursor: pointer;" class="menu-item-profile">
 						<a ng-href="/profile/{{user.username}}" target="_self">
 							<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-smallest">
 							<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">

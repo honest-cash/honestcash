@@ -28,14 +28,14 @@
 
       <h2>
         <strong>
-          <div id="title" class="hidden"></div>
+          <div id="title" ng-class="{ 'hidden': draft.parentPostId }"></div>
           <div ng-if="draft.status=='published'" class="badge">Published</div>
         </strong>
       </h2>
 
       <hr />
 
-      <article style="font-size: 21px;" id="body"></article>
+      <article style="font-size: 21px; margin-bottom: 50px;" id="body"></article>
     </div>
   </div>
 </div>

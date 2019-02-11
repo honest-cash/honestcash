@@ -11,10 +11,19 @@ import PostService from "../core/services/PostService";
 const converter = new showdown.Converter();
 
 export default class EditorCtrl {
+    public static $inject = [
+      "$scope",
+      "$http",
+      "$timeout",
+      "PostService",
+      "AuthService",
+      "API_URL"
+    ];
+
     constructor(
       private $scope,
-      private $http,
-      private $timeout,
+      private $http: ng.IHttpService,
+      private $timeout: ng.ITimeoutService,
       private postService: PostService,
       private authService: AuthService,
       private API_URL: string
@@ -82,10 +91,10 @@ export default class EditorCtrl {
             return toastr.error("The story needs to be at least 50 characters.");
           }
 
-          $('#publishModal').modal('show');
+          $("#publishModal").modal("show");
         };
 
-        $scope.publishPost = postId => {
+        $scope.publishPost = (postId: number) => {
           if ($scope.isLoading === true) {
             return toastr.info("Saving...");
           }
@@ -133,67 +142,63 @@ export default class EditorCtrl {
 
                 toastr.success("You have successfully published your story.");
 
-                $('#publishModal').modal('hide');
+                $("#publishModal").modal("hide");
 
                 $timeout(() => {
-                    location.href= `/${publishedPost.user.username}/${publishedPost.alias}/`;
+                    location.href = `/${publishedPost.user.username}/${publishedPost.alias}/`;
                 }, 500);
             });
         };
 
-        const onContentChangedFactory = (element) => () => {
-            if ($scope.draft.status === "published") {
-                return;
-            }
+        const onContentChangedFactory = (element: "title" | "body") => () => {
+          if ($scope.draft.status === "published") {
+            return;
+          }
 
-            if ($scope.Saving.body) {
-                clearTimeout($scope.Saving.body);
-            }
+          if ($scope.Saving[element]) {
+            clearTimeout($scope.Saving[element]);
+          }
 
-            $scope.Saving.body = setTimeout(() => {
-                saveDraftElement(element, () => {
-                    return toastr.success("Draft has been saved.");
-                });
-            }, 3000);
+          $scope.Saving[element] = setTimeout(() => {
+            saveDraftElement(element, () => toastr.success("Draft has been saved."));
+          }, 3000);
         };
 
-        const markDownEl = document.querySelector(".markdown");
-
-        const initMediumEditor = (title, bodyMD: string) => {
-            titleEditor = new MediumEditor('#title', {
+        const initMediumEditor = (title: string, bodyMD: string) => {
+            titleEditor = new MediumEditor("#title", {
               buttons: [],
               disableDoubleReturn: true,
               disableReturn: true,
               paste: {
-                cleanAttrs: [ 'class', 'style' ],
+                cleanAttrs: [ "class", "style" ],
                 cleanPastedHTML: true,
                 cleanReplacements: [],
                 cleanTags: [
-                  'meta', 'dir', 'h1', 'h4', 'h5', 'h6', 'table', 'tr', 'td', 'a', 'ul', 'li', 'code', 'pre'
+                  "meta", "dir", "h1", "h4", "h5", "h6", "table", "tr", "td", "a", "ul", "li", "code", "pre"
                 ],
                 forcePlainText: true,
                 unwrapTags: []
               },
               placeholder: {
                 hideOnClick: true,
-                text: 'Title'
+                text: "Title"
               },
               toolbar: false
             });
 
-            bodyEditor = new MediumEditor('#body', {
+            bodyEditor = new MediumEditor("#body", {
               anchorPreview: true,
 
               // disabled because broken on markdown
               autoLink: false,
-              buttonLabels: 'fontawesome',
+              buttonLabels: "fontawesome",
               extensions: {},
               placeholder: {
                 hideOnClick: true,
                 text: $scope.draft.parentPostId ? "Write your comment" : "Tell your story...",
               },
               toolbar: {
-                buttons: [ 'bold', 'italic', "unorderedlist", "anchor", 'h2', 'h3', 'pre' ]
+                buttons: [ "bold", "italic", "unorderedlist", "anchor", "h2", "h3", "pre" ]
               },
               paste: {
                 cleanAttrs: [ "id", "class", "style" ],
@@ -201,75 +206,72 @@ export default class EditorCtrl {
                 cleanReplacements: [],
                 cleanTags: [
                   "img",
-                  'meta',
+                  "meta",
                   "div",
-                  'h1',
-                  'h4',
-                  'h5',
-                  'h6',
-                  'table',
-                  'tr',
-                  'td',
-                  'code',
-                  /**, 'a', 'ul', 'li', 'code' */
+                  "h1",
+                  "h4",
+                  "h5",
+                  "h6",
+                  "table",
+                  "tr",
+                  "td",
+                  "code"
                 ],
                 forcePlainText: true,
                 unwrapTags: []
               }
             });
 
-            $('#body').mediumInsert({
-                editor: bodyEditor,
-
+            $("#body").mediumInsert({
                 addons: { // (object) Addons configuration
-
                   embeds: false,
                   images: { // (object) Image addon configuration
-                    
                     autoGrid: 3, // (integer) Min number of images that automatically form a grid
-                      captionPlaceholder: '',
+                      captionPlaceholder: "",
                       captions: false, // (boolean) Enable captions
-                      deleteMethod: '',
-                      deleteScript: '', // (string) A relative path to a delete script
+                      deleteMethod: "",
+                      deleteScript: "", // (string) A relative path to a delete script
                       // (object) extra parameters send on the delete ajax request
                       // see http://api.jquery.com/jquery.ajax/
                       fileDeleteOptions: {},
                       formData: {}, // DEPRECATED: Use fileUploadOptions instead
-                      label: '<span class="fa fa-camera"></span>', // (string) A label for an image addon
+                      label: "<span class='fa fa-camera'></span>", // (string) A label for an image addon
                       uploadScript: null, // DEPRECATED: Use fileUploadOptions instead
                       preview: false, // (boolean) Show an image before it is uploaded (only in browsers that support this feature)
                       fileUploadOptions: {
                         // (object) File upload configuration.
                         // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-                        url: API_URL + '/upload/image', // (string) A relative path to an upload script
+                        url: API_URL + "/upload/image", // (string) A relative path to an upload script
                         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
                         headers: {
-                          'x-auth-token': this.authService.getAuthToken()
+                          "x-auth-token": this.authService.getAuthToken()
                         },
                       },
                       actions: { // (object) Actions for an optional second toolbar
-                          remove: { // (object) Remove action configuration
-                              label: '<span class="fa fa-times"></span>', // (string) Label for an action
-                              clicked: function ($el) { // (function) Callback function called when an action is selected
-                                  var $event = $.Event('keydown');
+                        remove: { // (object) Remove action configuration
+                          label: "<span class='fa fa-times'></span>", // (string) Label for an action
+                          // (function) Callback function called when an action is selected
+                          clicked: ($el) => {
+                            var $event = $.Event("keydown");
 
-                                  $event.which = 8;
-                                  $(document).trigger($event);   
-                              }
+                            $event.which = 8;
+                            $(document).trigger($event);
                           }
+                        }
                       },
                       messages: {
-                          acceptFileTypesError: 'This file is not in a supported format: ',
-                          maxFileSizeError: 'This file is too big: '
+                        acceptFileTypesError: "This file is not in a supported format: ",
+                        maxFileSizeError: "This file is too big: "
                       },
-                      uploadCompleted: function ($el, data) {
-                          console.log($el, data);
-                      }, // (function) Callback function called when upload is completed
-                      uploadFailed: function (uploadErrors, data) {
-                          console.log(uploadErrors, data);
-                      } // (function) Callback function called when upload failed
+                      uploadCompleted: ($el, data) => {
+                        console.log($el, data);
+                      },
+                      uploadFailed: (uploadErrors, data) => {
+                        console.log(uploadErrors, data);
+                      } 
                   }
-                }
+                },
+                editor: bodyEditor
             });
 
             if (title) {
@@ -282,22 +284,22 @@ export default class EditorCtrl {
             }
 
             if (bodyMD) {
-                document.getElementById("body").setAttribute("data-placeholder", "");
+              document.getElementById("body").setAttribute("data-placeholder", "");
 
-                bodyEditor.setContent(converter.makeHtml(bodyMD), 0);
+              bodyEditor.setContent(converter.makeHtml(bodyMD), 0);
             }
-            
-            bodyEditor.subscribe('editableInput', onContentChangedFactory("body"));
-            titleEditor.subscribe('editableInput', onContentChangedFactory("title"));
+
+            bodyEditor.subscribe("editableInput", onContentChangedFactory("body"));
+            titleEditor.subscribe("editableInput", onContentChangedFactory("title"));
         };
 
-        const initEditor = postId => {
+        const initEditor = (postId: number) => {
             if (!postId) {
                 alert("Editor cannot be initialized");
             }
 
             $("#description").tagit({
-              afterTagAdded: function(event, ui) {
+              afterTagAdded: (event, ui) => {
                   if ($scope.ready) {
                       saveDraftElement("hashtags");
                   }
@@ -309,33 +311,29 @@ export default class EditorCtrl {
             hashtags.forEach((hashtag) => {
                 $("#description").tagit("createTag", hashtag.hashtag);
             });
-           
+
             initMediumEditor($scope.draft.title, $scope.draft.bodyMD);
 
             $scope.ready = true;
         };
 
-        const loadPostDraft = postId => {
+        const loadPostDraft = (lPostId: number) => {
             let url = API_URL;
 
             url += parentPostId ?
                 `/draft?parentPostId=${parentPostId}` :
-                postId ? `/post/${postId}` : "/draft";
+                lPostId ? `/post/${lPostId}` : "/draft";
 
             $http.get(url)
-            .then(response => {
+            .then((response) => {
                 $scope.draft = response.data;
 
                 initEditor($scope.draft.id);
-            }, err => {
+            }, (err: any) => {
                 console.log(err);
             });
         };
 
         loadPostDraft(postId);
     }
-
-    private titleEl: HTMLElement;
-
-    static $inject = [ "$scope", "$http", "$timeout", "PostService", "AuthService", "API_URL" ];
 }
