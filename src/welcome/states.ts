@@ -3,10 +3,10 @@ export default function state ($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
 	.state('newWelcome', {
-		url: "/new-welcome",
+		url: "/login",
 		controller: "welcomeCtrl",
 		templateUrl: "/templates/new-login.html"
-	})
+	});
 
 	$stateProvider
 		.state('starter', {

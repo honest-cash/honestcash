@@ -237,13 +237,13 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }
 
-// Editor paths
-for (let welcomePath of [ "/signup", "/login" ]) {
+// Signup & Welcome paths
+for (let welcomePath of [ "/signup" ]) {
 	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
 }
 
-// Editor paths
-for (let welcomePath of [ "/new-welcome" ]) {
+// Login paths
+for (let welcomePath of [ "/login" ]) {
 	app.get(welcomePath, (_, res) => res.sendfile("new-welcome.html", { root: __dirname + "/public" }));
 }
 

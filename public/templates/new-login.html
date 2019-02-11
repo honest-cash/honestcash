@@ -1,37 +1,40 @@
 <div class="login-container container">    
-    <div class="login-box">   
-        <img style="width:100%; max-width:250px; display:block; margin:auto;" src="/img/honest-long-logo.png" >	
-        <h5 class="text-center" style="padding-top:10px;">For top authors, thinkers, and emerging storytellers, Honest is a social network where you can earn Bitcoin if you create value.</h5>
+    <div class="login-box">
+        <div class="col-xs-12">
+          <img style="width:100%; max-width:250px; display:block; margin:auto;" src="/img/honest-long-logo.png" >	
+          <h4 class="text-center text-muted" style="padding-top:10px;">
+            For top authors, thinkers, and emerging storytellers, Honest is place to discuss freely  where you can earn Bitcoin if you create value.
+          </h4>
+        </div>
         <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+        <div class="col-xs-12">   
+          <form ng-if="!hideForm" ng-submit="resetCode ? changePassword(data) : forgot ? resetPassword(data) : login(data)">
+            <div class="form-group">
+                <strong>{{resetCode ? "Change password": "Login" }}</strong>
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="Email" class="form-control" ng-model="data.loginemail">
+            </div>
 
-        <form ng-if="!hideForm" ng-submit="resetCode ? changePassword(data) : forgot ? resetPassword(data) : login(data)">
-            <div class="col-xs-12">    
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" ng-model="data.loginemail">
-                </div>
+            <div class="form-group" ng-show="!forgot">
+                <input type="password" placeholder="Password" class="form-control" ng-model="data.loginpassword">
+            </div>
 
-                <div class="form-group" ng-show="!forgot">
-                    <label>Password</label>
-                    <input type="password" class="form-control" ng-model="data.loginpassword">
-                </div>
+            <div class="form-group" ng-show="resetCode && !forgot">
+            <label>Repeat password</label>
+            <input type="password" class="form-control" ng-model="data.loginpasswordreset">
+            </div>
 
-                <div class="form-group" ng-show="resetCode && !forgot">
-                <label>Repeat password</label>
-                <input type="password" class="form-control" ng-model="data.loginpasswordreset">
-                </div>
+            <button style="background-color:black; color: white;margin-bottom:10px;" type="submit" class="btn btn-md" ng-disabled="isLoading">
+              <i ng-show="isLoading" class="fa fa-circle-o-notch fa-spin"></i>
+              {{resetCode ? "Confirm" : forgot ? "Reset" : "Login" }}
+            </button>
 
-                <button style="background-color:black; color: white;margin-bottom:10px;" type="submit" class="btn btn-lg" ng-disabled="isLoading">
-                <i ng-show="isLoading" class="fa fa-circle-o-notch fa-spin"></i>
-                {{resetCode ? "Confirm" : forgot ? "Reset" : "Login" }}
-                </button>
-
-                <h6 class="text-left">Need an account? <a href="/signup" target="_self">Signup</a></h6>
-                <h6 class="text-left" ng-show="!forgot"><a href="#" ng-click="goToForgotPage()">Reset password</a></h6>
-                <h6 class="text-left" ng-show="forgot"><a href="#" ng-click="goToLoginPage()">Login</a></h6>
-           
-           </div>     
-        </form>     
+            <h6 class="text-left">Need an account? <a href="/signup" target="_self">Signup</a></h6>
+            <h6 class="text-left" ng-show="!forgot"><a href="#" ng-click="goToForgotPage()">Reset password</a></h6>
+            <h6 class="text-left" ng-show="forgot"><a href="#" ng-click="goToLoginPage()">Login</a></h6>
+          </form>
+        </div> 
         <div ng-include="'templates/partials/footer.html'"></div>               
     </div>
 
