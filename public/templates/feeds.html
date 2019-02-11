@@ -81,25 +81,25 @@
           </a>
         </li>
       </ul>
-      <small style="font-size: 70%">
+      <div style="margin-top:50px;">
         <a href="https://honest.cash/honest_cash/frequently-asked-questions"
-          >FAQ</a
-        >
-        <a href="https://honest.cash/honest_cash/about-honest-cash">About</a>
-        <a
-          href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
-          >Transparency</a
-        >
-        <a
-          href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/"
-          >Terms</a
-        >
-        <a href="https://honest.cash/honest_cash/honestcash-privacy-policy"
-          >Privacy</a
-        >
-        <br />
-        <span>Honest Cash © 2018</span>
-      </small>
+        >FAQ</a
+      >
+      <a href="https://honest.cash/honest_cash/about-honest-cash">About</a>
+      <a
+        href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
+        >Transparency</a
+      >
+      <a
+        href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/"
+        >Terms</a
+      >
+      <a href="https://honest.cash/honest_cash/honestcash-privacy-policy"
+        >Privacy</a
+      >
+      <br />
+      <span>Honest Cash © 2018</span>
+      </div>
     </div>
   </div>
 
@@ -161,10 +161,12 @@
                 class="img-circle img-thumbnail-avatar-smallest"
               />
 
-              <span data-tippy-content="{{::user.followerCount}} followers, {{::user.followingCount}} following" class="user-follower-count">
-                {{ user.username }}
-              </span
+              <span
+                data-tippy-content="{{::user.followerCount}} followers, {{::user.followingCount}} following"
+                class="user-follower-count"
               >
+                {{ user.username }}
+              </span>
             </a>
             <br />
             <p
@@ -175,7 +177,11 @@
               {{ user.bio }}
             </p>
             <br />
-            <follow-unfollow-button show-follow="true" show-unfollow="true" user="user"></follow-unfollow-button>
+            <follow-unfollow-button
+              show-follow="true"
+              show-unfollow="true"
+              user="user"
+            ></follow-unfollow-button>
           </div>
         </div>
       </div>

@@ -362,7 +362,7 @@ img.lazy {
   -ms-user-select: none;
   user-select: none;
   background-image: none;
-  border: 1px solid buttonface;
+  border: 1px solid #F0F0F0;
 }
 
 #profile-badge-thumbnail {
@@ -379,14 +379,10 @@ img.lazy {
   position: relative;
   float: right;
   padding: 7px;
-  border: 1px solid buttonface;
+  border: 1px solid #F0F0F0;
   border-radius: 4px;
   margin-top: 8px;
   margin-right: 5px;
-}
-
-.fa-50 i.fa {
-  font-size: 50px;
 }
 
 .list-post-actions > li {
@@ -466,4 +462,28 @@ img.lazy {
   z-index: 1;
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.welcome-columns {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.welcome-columns h3 {
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.welcome-columns h3 {
+  margin-top: 20px;
+}
+
+.welcome-columns h4 {
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+.welcome-columns p {
+  margin-bottom: 20px;
 }
