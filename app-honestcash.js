@@ -130,21 +130,22 @@ const renderFeed = async (req, res, next) => {
  * Server rendering for feed
  */
 app.get("/", async (req, res, next) => {
-  const userAgent = req.headers['user-agent'];
+	const userAgent = req.headers['user-agent'];
 	const crawlerView = req.query.crawlerView;
 
 	if (!isBot(userAgent, crawlerView)) {
 		return next();
-  }
+	}
 
-  const hashtags = (await axios.get(`https://honest.cash/api/hashtag?limit=50`)).data;
+	const hashtags = (await axios.get(`https://honest.cash/api/hashtag?limit=50`)).data;
 
-  res.render('index.ejs', {
-    SEO: seo.metaDefault,
-    layout: 'crawlerLayout',
-    hashtags
-  })
+	res.render('index.ejs', {
+		SEO: seo.metaDefault,
+		layout: 'crawlerLayout',
+		hashtags
+	});
 });
+
 app.get("/top", renderFeed);
 app.get("/new", renderFeed);
 app.get("/hashtag/:hashtag", renderFeed);
@@ -236,9 +237,14 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }
 
-// Editor paths
-for (let welcomePath of [ "/signup", "/login" ]) {
+// Signup & Welcome paths
+for (let welcomePath of [ "/signup" ]) {
 	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
+}
+
+// Login paths
+for (let welcomePath of [ "/login" ]) {
+	app.get(welcomePath, (_, res) => res.sendfile("new-welcome.html", { root: __dirname + "/public" }));
 }
 
 // Welcome paths
