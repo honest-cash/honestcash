@@ -32,6 +32,7 @@ export class Post {
   title: string;
   alias: string;
   body: string;
+  bodyMD: string;
   plain: string;
   user: User;
   userId: number;

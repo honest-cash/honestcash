@@ -1,15 +1,15 @@
 import * as lzutf8 from "lzutf8";
 
-import './uncensorable-button.styles.less';
-import template from './uncensorable-button.template.html';
+import "./uncensorable-button.styles.less";
+import template from "./uncensorable-button.template.html";
 
-import { IGlobalScope } from '../../../core/lib/interfaces';
-import { Post } from '../../../core/models/models';
-import WalletService from '../../../core/services/WalletService';
-import PostService from '../../../core/services/PostService';
-import ScopeService from '../../../core/services/ScopeService';
+import { IGlobalScope } from "../../../core/lib/interfaces";
+import { Post } from "../../../core/models/models";
+import WalletService from "../../../core/services/WalletService";
+import PostService from "../../../core/services/PostService";
+import ScopeService from "../../../core/services/ScopeService";
 
-import * as simpleWalletProvider from '../../../core/lib/simpleWalletProvider';
+import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
 
 declare const toastr;
 
@@ -19,12 +19,12 @@ interface IScopeUncensorableButtonCtrl extends ng.IScope {
 
 class UncensorableButtonController {
   public static $inject = [
-    '$rootScope',
-    '$scope',
-    '$window',
-    'PostService',
-    'WalletService',
-    'ScopeService',
+    "$rootScope",
+    "$scope",
+    "$window",
+    "PostService",
+    "WalletService",
+    "ScopeService",
   ];
 
   private isUncensoring: boolean;
@@ -55,7 +55,7 @@ class UncensorableButtonController {
       if (this.isUncensoring) {
         event.preventDefault();
 
-        return 'There is a pending uncensoring in process. Are you sure you want to leave?';
+        return "There is a pending uncensoring in process. Are you sure you want to leave?";
       }
     };
   }
@@ -83,9 +83,9 @@ class UncensorableButtonController {
 
       const simpleWallet = simpleWalletProvider.get();
       const json = {
-          title: post.title,
-          body: post.body,
-          author: post.user.username,
+        author: post.user.username,
+        body: post.bodyMD,
+        title: post.title
       };
 
       const compressedJson = lzutf8.compress(JSON.stringify(json), {
@@ -96,11 +96,11 @@ class UncensorableButtonController {
 
       if (this.byteCount(compressedJson) > 5) {
         this.isUncensoring = false;
-        this.scopeService.safeApply(this.$scope, () => {});
+        this.scopeService.safeApply(this.$scope);
         return toastr.warning("The story is too long! We are working on it!");
       }
 
-      $('#uncensoredResultModal').modal({
+      $("#uncensoredResultModal").modal({
         // backdrop: "static"
       });
 
@@ -114,11 +114,11 @@ class UncensorableButtonController {
         try {
           res = await simpleWallet.upload(compressedJson, {
             ext: "json.lzutf8",
-            title: `${post.title} by ${post.user.username} | Honest Cash`,
-            extUri: `https://honest.cash/post/${post.id}`
+            extUri: `https://honest.cash/post/${post.id}`,
+            title: `${post.title} by ${post.user.username} | Honest Cash`
           });
         } catch (err) {
-          $('#uncensoredResultModal').modal('hide');
+          $("#uncensoredResultModal").modal("hide");
 
           this.isUncensoring = false;
           this.scopeService.safeApply(this.$scope, () => {});
@@ -143,8 +143,8 @@ class UncensorableButtonController {
         inputEl.value = fileId;
 
         this.postService.createRef({
-            postId: post.id,
-            extId: fileId
+            extId: fileId,
+            postId: post.id
         });
 
         const {bch, usd} = await this.walletService.getAddressBalances();
@@ -153,7 +153,7 @@ class UncensorableButtonController {
           bch,
           usd,
           isLoading: false
-        }
+        };
         this.isUncensoring = false;
         this.scopeService.safeApply(this.$scope, () => {});
 
@@ -164,13 +164,13 @@ class UncensorableButtonController {
 export default function uncensorableButton(): ng.IDirective {
   return {
     controller: UncensorableButtonController,
-    controllerAs: 'uncensorableButtonCtrl',
-    restrict: 'E',
+    controllerAs: "uncensorableButtonCtrl",
+    restrict: "E",
     scope: {
-      amount: '=?',
-      loadingText: '=?',
-      text: '=?',
-      post: '='
+      amount: "=?",
+      loadingText: "=?",
+      text: "=?",
+      post: "="
     },
     template
   };
