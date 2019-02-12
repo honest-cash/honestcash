@@ -31,7 +31,8 @@ matrix:
     before_deploy:
     - npm prune --production
     - du -d 1 -h
-    - zip -r deployments/honestcash-prod.zip public node_modules server views app-honestcash.js package.json .env appspec.yml
+    - mkdir deployments
+    - zip -r deployments/honestcash-prod.zip public node_modules server views app-honestcash.js package.json .env appspec.yml scripts
 
     deploy:
       on:

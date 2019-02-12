@@ -5,5 +5,5 @@ files:
     destination: /home/ubuntu/deployments
 hooks:
   BeforeInstall:
-    - location: deployments/deploy
+    - location: scripts/before_install
       timeout: 300

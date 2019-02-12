@@ -1,5 +1,0 @@
-#!/bin/sh
-
-unzip honestcash-prod.zip honestcash
-
-
