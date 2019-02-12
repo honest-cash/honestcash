@@ -8,12 +8,17 @@ cache:
 addons:
   sauce_connect: true
 
+dist: trusty
+
+language: node_js
+
+node_js:
+  - 9
+
 matrix:
   include:
-  - name: "Build"
+  - name: "honestcash"
     sudo: false
-    os: osx
-    osx_image: xcode10.1
 
     install:
     - npm install
@@ -22,3 +27,23 @@ matrix:
     - npm run build
     - npm run transfer-libs
     - npm run test
+
+    before_deploy:
+    - npm prune --production
+    - du -d 1 -h
+    - mkdir deployments
+    - zip -r deployments/honestcash-prod.zip public node_modules server views app-honestcash.js package.json .env
+
+    deploy:
+      on:
+        branch: "master"
+      provider: s3
+      # You can refer to environment variables from Travis repo settings!
+      access_key_id: $AWS_ACCESS_KEY_ID
+      secret_access_key: $AWS_SECRET_ACCESS_KEY
+      # Name of the S3 bucket to which your site should be uploaded.
+      bucket: codedeploy-honestcash
+      # Prevent Travis from deleting your built site so it can be uploaded.
+      skip_cleanup: true
+      # Path to a directory containing your built site.
+      local_dir: deployments

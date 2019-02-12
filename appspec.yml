@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /honestcash-prod.zip
+    destination: /home/ubuntu/deployments
+hooks:
+  BeforeInstall:
+    - location: deployments/deploy
+      timeout: 300
