@@ -112,10 +112,12 @@ class UncensorableButtonController {
         let res;
 
         try {
+          const postTitle = post.title.length > 75 ? post.title.slice(0, 75) + "..." : post.title;
+
           res = await simpleWallet.upload(compressedJson, {
             ext: "json.lzutf8",
             extUri: `https://honest.cash/post/${post.id}`,
-            title: `${post.title} by ${post.user.username} | Honest Cash`
+            title: `${postTitle} by ${post.user.username} | Honest Cash`
           });
         } catch (err) {
           $("#uncensoredResultModal").modal("hide");
