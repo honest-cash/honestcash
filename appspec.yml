@@ -1,8 +1,8 @@
 version: 0.0
 os: linux
 files:
-  - source: /honestcash-prod.zip
-    destination: /home/ubuntu/deployments
+  - source: /
+    destination: /home/ubuntu/deployments/honestcash
 hooks:
   BeforeInstall:
     - location: scripts/before_install
