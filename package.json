@@ -2,7 +2,7 @@
   "name": "honestcash",
   "version": "0.0.1",
   "description": "Front-end for https://honest.cash",
-  "main": "app-honestcash.js",
+  "main": "app.js",
   "dependencies": {
     "@types/angular": "^1.6.53",
     "@types/angular-ui-router": "^1.1.40",
