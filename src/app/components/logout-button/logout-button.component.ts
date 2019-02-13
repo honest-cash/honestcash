@@ -35,9 +35,7 @@ class LogoutButtonController {
 
     simpleWalletProvider.clean();
 
-    this.$state.go('vicigo.feeds');
-
-    location.reload();
+    window.location.href = '/login';
   };
 
 }
