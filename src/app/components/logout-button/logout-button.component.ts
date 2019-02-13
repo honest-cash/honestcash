@@ -1,6 +1,8 @@
 import './logout-button.styles.less';
 import template from './logout-button.template.html';
 
+import { client as clientURL } from '../../../core/config/index';
+
 import { AuthService } from '../../../auth/AuthService';
 import { IGlobalScope } from '../../../core/lib/interfaces';
 
@@ -35,9 +37,7 @@ class LogoutButtonController {
 
     simpleWalletProvider.clean();
 
-    this.$state.go('vicigo.feeds');
-
-    location.reload();
+    window.location.href = `${clientURL}/login`;
   };
 
 }
