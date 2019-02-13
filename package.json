@@ -103,7 +103,7 @@
     "webpack-cli": "^3.1.2"
   },
   "scripts": {
-    "start": "node app-honestcash",
+    "start": "node app",
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js && cp ./node_modules/simple-bitcoin-wallet/dist/bitboxlight.min.js ./public/js/bitboxlight.min.js",
     "test": "node ./node_modules/jasmine/bin/jasmine.js"
@@ -112,7 +112,7 @@
     "type": "git",
     "url": "git+https://github.com/honest-cash/honestcash"
   },
-  "author": "Adrian Barwicki (adrianbarwicki@gmail.com)",
-  "license": "MIT",
-  "homepage": "https://github.com/vq-labs/honestcash#readme"
+  "author": "Adrian Barwicki (adrian@adrianbarwicki.com)",
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/honest-cash/honestcash#readme"
 }
