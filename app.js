@@ -238,7 +238,7 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 }
 
 // About page
-for (let welcomePath of [ "about" ]) {
+for (let welcomePath of [ "/about" ]) {
 	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
 }
 

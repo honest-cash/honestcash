@@ -7,12 +7,16 @@
                       For writers, creatives and thinkers, Honest is a content publishing platform where users can earn Bitcoin by creating value.
                   </h4>
 
-                  <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+                  <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
               </div>
           </div>
           <div class="row">
             <div class="col-xs-6">
-                <div ng-include="'signup'"></div>
+                <button style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
+                  Continue with Email
+                </button>
+
+                <div ng-if="welcomeCtrl.showEmailSignup" ng-include="'signup'"></div>
             </div>
 
             <div class="col-xs-6">
@@ -25,71 +29,74 @@
     </div>
 </div>
   
-  <script type="text/ng-template" id="login">
-    <strong>{{resetCode ? "Change password": "Login" }}</strong>
-    <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+<script type="text/ng-template" id="login">
+  <strong>{{welcomeCtrl.resetCode ? "Change password": "Login" }}</strong>
+  <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
 
-    <form ng-if="!hideForm" ng-submit="resetCode ? changePassword(data) : forgot ? resetPassword(data) : login(data)">
-        <div class="form-group">
-            <input type="email" placeholder="Email" class="form-control" ng-model="data.loginemail">
-        </div>
+  <form
+    ng-if="!welcomeCtrl.hideForm"
+    ng-submit="welcomeCtrl.resetCode ? welcomeCtrl.changePassword(data) : welcomeCtrl.forgot ? welcomeCtrl.resetPassword(data) : welcomeCtrl.login(data)"
+  >
+      <div class="form-group">
+          <input type="email" placeholder="Email" class="form-control" ng-model="welcomeCtrl.data.loginemail">
+      </div>
 
-        <div class="form-group" ng-show="!forgot">
-            <input type="password" placeholder="Password" class="form-control" ng-model="data.loginpassword">
-        </div>
+      <div class="form-group" ng-show="!welcomeCtrl.forgot">
+          <input type="password" placeholder="Password" class="form-control" ng-model="welcomeCtrl.data.loginpassword">
+      </div>
 
-        <div class="form-group" ng-show="resetCode && !forgot">
-        <label>Repeat password</label>
-        <input type="password" class="form-control" ng-model="data.loginpasswordreset">
-        </div>
+      <div class="form-group" ng-show="welcomeCtrl.resetCode && !welcomeCtrl.forgot">
+      <label>Repeat password</label>
+      <input type="password" class="form-control" ng-model="welcomeCtrl.data.loginpasswordreset">
+      </div>
 
-        <button style="background-color:black; color: white;" type="submit" class="btn btn-md" ng-disabled="isLoading">
-        <i ng-show="isLoading" class="fa fa-circle-o-notch fa-spin"></i>
-        {{resetCode ? "Confirm" : forgot ? "Reset" : "Login" }}
-        </button>
-        <a href="#" style="margin-left: 10px;" ng-click="forgot ? goToLoginPage() : goToForgotPage()">{{ forgot ? "Login" : "Reset password" }}</a>
-    </form>
+      <button style="background-color:black; color: white;" type="submit" class="btn btn-md" ng-disabled="welcomeCtrl.isLoading">
+      <i ng-show="isLoading" class="fa fa-circle-o-notch fa-spin"></i>
+      {{ welcomeCtrl.resetCode ? "Confirm" : welcomeCtrl.forgot ? "Reset" : "Login" }}
+      </button>
+      <a href="#" style="margin-left: 10px;" ng-click="welcomeCtrl.forgot ? welcomeCtrl.goToLoginPage() : welcomeCtrl.goToForgotPage()">{{ welcomeCtrl.forgot ? "Login" : "Reset password" }}</a>
+  </form>
 
-    <hr />
-  </script>
+  <hr />
+</script>
 
-  <script type="text/ng-template" id="signup">
-    <form>
-        <div class="form-group">
-            <label>username</label>
-            <input type="text" class="form-control" ng-model="data.username">
-        </div>
+<script type="text/ng-template" id="signup">
+  <form>
+      <div class="form-group">
+          <label>username</label>
+          <input type="text" class="form-control" ng-model="welcomeCtrl.data.username">
+      </div>
 
-        <div class="form-group">
-            <label>email</label>
-            <input type="email" class="form-control" ng-model="data.email">
-        </div>
+      <div class="form-group">
+          <label>email</label>
+          <input type="email" class="form-control" ng-model="welcomeCtrl.data.email">
+      </div>
 
-        <div class="form-group">
-            <label>password</label>
-            <input type="password" class="form-control" ng-model="data.password">
+      <div class="form-group">
+          <label>password</label>
+          <input type="password" class="form-control" ng-model="welcomeCtrl.data.password">
 
-            <p class="text-muted">
-              Disclaimer: Honest takes no responsibility for your account, keys, or wallet. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. Your wallet is encrypted with your account password, so make sure to use a strong password.
-            </p>
-        </div>
+          <p class="text-muted">
+            Disclaimer: Honest takes no responsibility for your account, keys, or wallet. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. Your wallet is encrypted with your account password, so make sure to use a strong password.
+          </p>
+      </div>
 
-        <div ng-if="message" class="alert alert-warning" role="alert">{{message}}</div>
+      <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
 
-        <div id="hc-captcha" style="margin-bottom: 10px; margin-top: 10px;" class="g-recaptcha" data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"></div>
+      <div id="hc-captcha" style="margin-bottom: 10px; margin-top: 10px;" class="g-recaptcha" data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"></div>
 
-        <hr>
-      
-        <p>
-          By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.
-        </p>
-
-        <button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-md" ng-click="signup(data)">
-          {{isLoading ? "Loading.." : "Sign Up"}}
-        </button>
       <hr />
+    
+      <p>
+        By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.
+      </p>
 
-        <!-- <button ng-click="fbLogin()" class="btn btn-primary push btn btn-lg"><span class="fa fa-facebook"></span> facebook</button> -->
-    </form>
-  </script>
+      <button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-md" ng-click="signup(data)">
+        {{isLoading ? "Loading.." : "Sign Up"}}
+      </button>
+
+      <a href="#" ng-click="welcomeCtrl.showEmailSignup=false;" style="margin-left: 10px;">Cancel</a>
+      <hr />
+  </form>
+</script>
 
