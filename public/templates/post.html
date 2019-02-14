@@ -86,7 +86,7 @@
       </ul>
     </div>
     <div
-      ng-if="postCtrl.post.user.addressBCH"
+      ng-if="postCtrl.post.user.addressBCH && postCtrl.post.status !== 'archived'"
       class="row"
       ng-show="simpleWallet"
     >
@@ -111,7 +111,7 @@
 
     <hr />
 
-    <div class="row" ng-if="!postCtrl.post.user.addressBCH">
+    <div class="row" ng-if="!postCtrl.post.user.addressBCH && postCtrl.post.status !== 'archived'">
       <div class="block-center">
         <div class="panel">
           <div class="panel-body"><b>This author does not accept tips.</b></div>
@@ -119,7 +119,7 @@
       </div>
     </div>
 
-    <div class="row" ng-if="postCtrl.post.user.addressBCH">
+    <div class="row" ng-if="postCtrl.post.user.addressBCH && postCtrl.post.status !== 'archived'">
       <div class="block-center">
         <div class="panel" ng-show="!user">
           <div class="panel-body">
@@ -148,7 +148,7 @@
 
     <div
       class="post-uncensorable row"
-      ng-if="postCtrl.post.userPostRefs.length && postCtrl.post.user.addressBCH"
+      ng-if="postCtrl.post.userPostRefs.length && postCtrl.post.user.addressBCH && postCtrl.post.status !== 'archived'"
       style="margin-bottom: 20px;"
     >
       <h4><i class="fa fa-shield"></i> <strong>Uncensorable</strong></h4>
@@ -199,7 +199,7 @@
         <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
       </span>
 
-      <div class="block-center">
+      <div class="block-center" ng-if="postCtrl.post.status !== 'archived'">
         <div class="panel">
           <div class="panel-body" style="cursor: pointer;">
             <a
@@ -275,7 +275,7 @@
       <article class="site-block response-body" ng-bind-html="postCtrl.displayFeedBody(response.body)"></article>
 
       <ul class="list-inline list-unstyled list-post-actions">
-        <li>
+        <li ng-if="postCtrl.post.status !== 'archived'">
             <upvote-button
             post="response"
           ></upvote-button>
@@ -286,7 +286,7 @@
         <li >
           <span>{{response.responseCount}} <i class="fa fa-comment-o"></i></span>
         </li>
-        <li>
+        <li ng-if="postCtrl.post.status !== 'archived'">
           <a target="_self" ng-href="/write/response/{{response.id}}">
             <span>Reply</span>
           </a>
