@@ -10,23 +10,27 @@
               </div>
           </div>
           <div class="row">
-            <div class="col-xs-6">
+            <div class="col-sm-6">
+                <a href="/login" style="background-color:black; color: white;" ng-click="welcomeCtrl.signupWith('email')" class="visible-xs btn btn-primary push btn btn-md btn-block ">
+                    Login
+                </a>
+
                 <button style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
                   Continue with Email
                 </button>
 
-                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
-                    Continue with Badger
+                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('badger')" class="hidden-xs btn btn-primary push btn btn-md btn-block ">
+                  Continue with Badger
                 </button>
 
-                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
+                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('twitter')" class="hidden-xs btn btn-primary push btn btn-md btn-block ">
                     Continue with Twitter
                 </button>
 
                 <div ng-if="welcomeCtrl.showEmailSignup" ng-include="'signup'"></div>
             </div>
 
-            <div class="col-xs-6">
+            <div class="col-sm-6 hidden-xs">
                 <div ng-include="'login'"></div>
             </div> 
           </div>
@@ -63,7 +67,7 @@
       </p>
 
       <button style="background-color:black; color: white;" type="submit" class="btn btn-md" ng-disabled="welcomeCtrl.isLoading">
-      <i ng-show="isLoading" class="fa fa-circle-o-notch fa-spin"></i>
+      <i ng-show="welcomeCtrl.isLoading" class="fa fa-circle-o-notch fa-spin"></i>
       {{ welcomeCtrl.resetCode ? "Confirm" : welcomeCtrl.forgot ? "Reset" : "Login" }}
       </button>
       <a href="#" style="margin-left: 10px;" ng-click="welcomeCtrl.forgot ? welcomeCtrl.goToLoginPage() : welcomeCtrl.goToForgotPage()">{{ welcomeCtrl.forgot ? "Login" : "Forgot Password?" }}</a>
@@ -104,8 +108,8 @@
         By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.
       </p>
 
-      <button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-md" ng-click="signup(welcomeCtrl.data)">
-        {{isLoading ? "Loading.." : "Sign Up"}}
+      <button style="background-color: black; color: white;" ng-disabled="welcomeCtrl.isLoading" type="submit" class="btn btn-default btn-md" ng-click="welcomeCtrl.signup(welcomeCtrl.data)">
+        {{welcomeCtrl.isLoading ? "Loading.." : "Sign Up"}}
       </button>
 
       <a href="#" ng-click="welcomeCtrl.showEmailSignup=false;" style="margin-left: 10px;">Cancel</a>

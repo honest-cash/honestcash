@@ -91,13 +91,13 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       data.loginpassword
     );
 
-    let authData;
+    let authData: { wallet: ISimpleWallet };
 
     try {
-        authData = await this.authService.login({
-          email: data.loginemail,
-          password: passwordHash
-        });
+      authData = await this.authService.login({
+        email: data.loginemail,
+        password: passwordHash
+      });
     } catch (response) {
       this.isLoading = false;
 
@@ -111,11 +111,11 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     if (authData.wallet) {
       mnemonicEncrypted = authData.wallet.mnemonicEncrypted;
     } else {
-      const simpleWallet: ISimpleWallet = new SimpleWallet();
+      const sbw: ISimpleWallet = new SimpleWallet();
 
-      simpleWallet.mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, data.loginpassword);
+      sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, data.loginpassword);
 
-      mnemonicEncrypted = simpleWallet.mnemonicEncrypted;
+      mnemonicEncrypted = sbw.mnemonicEncrypted;
 
       await this.authService.setWallet({
         mnemonicEncrypted
@@ -125,10 +125,10 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
         await this.profileService.updateUser(
           authData.user.id,
           "addressBCH",
-          simpleWallet.address
+          sbw.address
         );
       } else {
-        await this.setAddressForTips(authData.user.id, simpleWallet.address);
+        await this.setAddressForTips(authData.user.id, sbw.address);
       }
     }
 
@@ -211,9 +211,9 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       await this.authService.changePassword({
         code: this.resetCode,
         email: data.loginemail,
+        mnemonicEncrypted: simpleWallet.mnemonicEncrypted,
         newPassword: passwordHash,
-        repeatNewPassword: passwordHash,
-        mnemonicEncrypted: simpleWallet.mnemonicEncrypted
+        repeatNewPassword: passwordHash
       });
     } catch (err) {
       this.isLoading = false;
@@ -295,21 +295,19 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     const passwordHash = this.authService.calculatePasswordHash(data.email, data.password);
 
     this.authService.signup({
-      username: data.username,
-      password: passwordHash,
+      captcha,
       email: data.email,
-      userType: 0,
-      captcha
+      password: passwordHash,
+      username: data.username,
+      userType: 0
     })
-    .then((user) => {
-      const User = user;
-
+    .then((user: any) => {
       this.isLoading = false;
 
       // $rootScope.user = user.user;
 
-      this.$state.go("starter.thankyou");
-    }, response => {
+      location.href = "/thank-you";
+    }, (response: { data: { code: string; desc: string; }}) => {
       this.isLoading = false;
 
       grecaptcha.reset();

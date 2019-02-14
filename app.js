@@ -243,7 +243,7 @@ for (let welcomePath of [ "/about" ]) {
 }
 
 // Login paths
-for (let welcomePath of [ "/login", "/signup" ]) {
+for (let welcomePath of [ "/login", "/signup", "/thank-you" ]) {
 	app.get(welcomePath, (_, res) => res.sendfile("new-welcome.html", { root: __dirname + "/public" }));
 }
 
