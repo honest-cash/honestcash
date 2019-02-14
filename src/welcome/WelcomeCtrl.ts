@@ -58,6 +58,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   public hideForm = false;
   public message: string;
   public showEmailSignup = false;
+  public data: ILoginForm | ISignupForm;
 
   private resetCode: string;
   private isCaptchaRendered = false;
@@ -95,7 +96,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     try {
         authData = await this.authService.login({
           email: data.loginemail,
-          password: passwordHash,
+          password: passwordHash
         });
     } catch (response) {
       this.isLoading = false;

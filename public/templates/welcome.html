@@ -7,14 +7,20 @@
                   <h4 class="text-center text-muted" style="padding-top:10px;padding-bottom:15px;">
                       For writers, creatives and thinkers, Honest is a content publishing platform where users can earn Bitcoin by creating value.
                   </h4>
-
-                  <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
               </div>
           </div>
           <div class="row">
             <div class="col-xs-6">
                 <button style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
                   Continue with Email
+                </button>
+
+                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
+                    Continue with Badger
+                </button>
+
+                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
+                    Continue with Twitter
                 </button>
 
                 <div ng-if="welcomeCtrl.showEmailSignup" ng-include="'signup'"></div>
@@ -33,12 +39,12 @@
 
   
 <script type="text/ng-template" id="login">
-  <strong>{{welcomeCtrl.resetCode ? "Change password": "Login" }}</strong>
+  <strong>{{welcomeCtrl.resetCode ? "Change password": welcomeCtrl.forgot ? "Forgot Password?" : "Login" }}</strong>
   <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
 
   <form
     ng-if="!welcomeCtrl.hideForm"
-    ng-submit="welcomeCtrl.resetCode ? welcomeCtrl.changePassword(data) : welcomeCtrl.forgot ? welcomeCtrl.resetPassword(data) : welcomeCtrl.login(data)"
+    ng-submit="welcomeCtrl.resetCode ? welcomeCtrl.changePassword(welcomeCtrl.data) : welcomeCtrl.forgot ? welcomeCtrl.resetPassword(welcomeCtrl.data) : welcomeCtrl.login(welcomeCtrl.data)"
   >
       <div class="form-group">
           <input type="email" placeholder="Email" class="form-control" ng-model="welcomeCtrl.data.loginemail">
@@ -49,15 +55,18 @@
       </div>
 
       <div class="form-group" ng-show="welcomeCtrl.resetCode && !welcomeCtrl.forgot">
-      <label>Repeat password</label>
-      <input type="password" class="form-control" ng-model="welcomeCtrl.data.loginpasswordreset">
+        <input type="password" placeholder="Password" class="form-control" ng-model="welcomeCtrl.data.loginpasswordreset">
       </div>
+
+      <p>
+        Ensure that the website is <code><strong>https</strong>://honest.cash</code> with a valid security certificate. Your email and password is used to decrypt your wallet and get access to your bitcoin.
+      </p>
 
       <button style="background-color:black; color: white;" type="submit" class="btn btn-md" ng-disabled="welcomeCtrl.isLoading">
       <i ng-show="isLoading" class="fa fa-circle-o-notch fa-spin"></i>
       {{ welcomeCtrl.resetCode ? "Confirm" : welcomeCtrl.forgot ? "Reset" : "Login" }}
       </button>
-      <a href="#" style="margin-left: 10px;" ng-click="welcomeCtrl.forgot ? welcomeCtrl.goToLoginPage() : welcomeCtrl.goToForgotPage()">{{ welcomeCtrl.forgot ? "Login" : "Reset password" }}</a>
+      <a href="#" style="margin-left: 10px;" ng-click="welcomeCtrl.forgot ? welcomeCtrl.goToLoginPage() : welcomeCtrl.goToForgotPage()">{{ welcomeCtrl.forgot ? "Login" : "Forgot Password?" }}</a>
   </form>
 
   <hr />
@@ -78,10 +87,6 @@
       <div class="form-group">
           <label>password</label>
           <input type="password" class="form-control" ng-model="welcomeCtrl.data.password">
-
-          <p class="text-muted">
-            Disclaimer: Honest takes no responsibility for your account, keys, or wallet. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. Your wallet is encrypted with your account password, so make sure to use a strong password.
-          </p>
       </div>
 
       <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
@@ -89,17 +94,21 @@
       <div id="hc-captcha" style="margin-bottom: 10px; margin-top: 10px;" class="g-recaptcha" data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"></div>
 
       <hr />
-    
+
+      <p>
+        Bitcoin wallet will be generated and encrypted with your email and password. Please make sure to use a strong password.
+        In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. If you forget your email/password or do not save your recovery phrase you can lose access to your funds forever!
+      </p>
+
       <p>
         By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.
       </p>
 
-      <button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-md" ng-click="signup(data)">
+      <button style="background-color: black; color: white;" ng-disabled="isLoading" type="submit" class="btn btn-default btn-md" ng-click="signup(welcomeCtrl.data)">
         {{isLoading ? "Loading.." : "Sign Up"}}
       </button>
 
       <a href="#" ng-click="welcomeCtrl.showEmailSignup=false;" style="margin-left: 10px;">Cancel</a>
-      <hr />
   </form>
 </script>
 
