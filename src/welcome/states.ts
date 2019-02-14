@@ -1,28 +1,30 @@
 export default function state ($stateProvider, $urlRouterProvider) {
-	$urlRouterProvider.otherwise("/signup");
+  $urlRouterProvider.otherwise("/signup");
 
-	$stateProvider
-	.state('newWelcome', {
-		url: "/login",
-		controller: "welcomeCtrl",
-		templateUrl: "/templates/new-login.html"
-	});
+  $stateProvider
+  .state("login", {
+    controller: "welcomeCtrl",
+    url: "/login?code",
+    templateUrl: "/templates/new-login.html"
+  })
+  .state("signup", {
+    controller: "welcomeCtrl",
+    url: "/signup",
+    templateUrl: "/templates/welcome.html"
+  })
+  .state("thankyou", {
+    controller: "welcomeCtrl",
+    url: "/thank-you",
+    templateUrl: "/templates/thankyou.html"
+  });
 
-	$stateProvider
-		.state('starter', {
-			templateUrl: "/templates/layout.html",
-			controller: "welcomeCtrl",
-		})
-		.state('starter.welcome', {
-			url: "/signup",
-			templateUrl: "/templates/welcome.html"
-		})
-		.state('starter.thankyou', {
-			url: "/thank-you",
-			templateUrl: "/templates/thankyou.html"
-		})
-		.state('starter.login', {
-			url: "/login?code",
-			templateUrl: "/templates/login.html"
-    });
+  $stateProvider
+  .state("starter", {
+    templateUrl: "/templates/layout.html",
+    controller: "welcomeCtrl"
+  })
+  .state("starter.about", {
+    url: "/about",
+    templateUrl: "/templates/about.html"
+  });
 };

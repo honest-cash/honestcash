@@ -2,13 +2,13 @@ import md5 from "md5";
 import swal from "sweetalert";
 import generateWallet from "../core/lib/bitcoinAuthFlow";
 import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
-import { AuthService } from "../auth/AuthService";
-import HashtagService from "../core/services/HashtagService";
+import { AuthService } from "../auth/authService";
 import { IGlobalScope, IHashtagStat, ISimpleWallet } from "../core/lib/interfaces";
 import ScopeService from '../core/services/ScopeService';
 import ProfileService from '../core/services/ProfileService';
 
 declare var SimpleWallet: any;
+declare var grecaptcha: { render: (domId: string) => void };
 
 interface ILoginForm {
   loginemail: string;
@@ -20,7 +20,6 @@ interface ISignupForm {
   email: string;
   password: string;
 }
-
 interface IScopeWelcomeCtrl extends ng.IScope {
   forgot: boolean;
   isLoading: boolean;
@@ -40,15 +39,24 @@ interface IScopeWelcomeCtrl extends ng.IScope {
 }
 
 export default class WelcomeCtrl {
+  public static $inject = [
+    "$rootScope",
+    "$scope",
+    "$location",
+    "$state",
+    "AuthService",
+    "ProfileService",
+    "ScopeService"
+  ];
+
   constructor(
     private $rootScope: IGlobalScope,
     private $scope: IScopeWelcomeCtrl,
     private $location: ng.ILocationService,
     private $state,
-    private AuthService: AuthService,
+    private authService: AuthService,
     private profileService: ProfileService,
     private scopeService: ScopeService,
-    private hashtagService: HashtagService
   ) {
     this.ngInit();
 
@@ -84,7 +92,7 @@ export default class WelcomeCtrl {
     this.$scope.login = async (data: ILoginForm) => {
       this.$scope.isLoading = true;
 
-      const passwordHash = AuthService.calculatePasswordHash(
+      const passwordHash = authService.calculatePasswordHash(
         data.loginemail,
         data.loginpassword
       );
@@ -93,7 +101,7 @@ export default class WelcomeCtrl {
 
       try {
         try {
-          authData = await AuthService.login({
+          authData = await authService.login({
             email: data.loginemail,
             password: passwordHash,
           });
@@ -104,13 +112,13 @@ export default class WelcomeCtrl {
 
            It has been implemented on 4th Jan 2019. Let's wait 2 months to allow users to replace the hashes at subsequent logins!
           */ 
-          authData = await AuthService.login({
+          authData = await authService.login({
             email: data.loginemail,
             password: md5(data.loginpassword),
           });
 
           // change the password
-          await AuthService.setPassword({
+          await authService.setPassword({
             password: passwordHash
           });
           /**
@@ -136,7 +144,7 @@ export default class WelcomeCtrl {
 
         mnemonicEncrypted = simpleWallet.mnemonicEncrypted;
 
-        await AuthService.setWallet({
+        await authService.setWallet({
           mnemonicEncrypted
         });
 
@@ -173,7 +181,7 @@ export default class WelcomeCtrl {
       $scope.isLoading = true;
 
       try {
-        await AuthService.resetPassword({
+        await authService.resetPassword({
           email: data.loginemail
         });
 
@@ -193,18 +201,6 @@ export default class WelcomeCtrl {
     $scope.signup = (data: ISignupForm) => this.signup(data);
   }
 
-
-  static $inject = [
-    "$rootScope",
-    "$scope",
-    "$location",
-    "$state",
-    "AuthService",
-    "ProfileService",
-    "ScopeService",
-    "HashtagService"
-  ];
-
   private async ngInit() {
     this.$scope.message = "";
     this.$rootScope.noHeader = true;
@@ -213,25 +209,31 @@ export default class WelcomeCtrl {
     this.$scope.resetCode = this.$location.search().code;
     this.$scope.welcome = true;
     this.$scope.noHeader = true;
-
-    const hashtags = await this.hashtagService.getTopHashtags();
-
-    this.$scope.hashtags = hashtags;
-
-    grecaptcha.render('hc-captcha');
+    this.isCaptchaRendered = false;
 
     this.scopeService.safeApply(this.$scope, () => {});
+
+    this.renderCaptcha();
+  }
+
+  private renderCaptcha() {
+    try {
+      grecaptcha.render("hc-captcha");
+    } catch (err) {
+      setTimeout(() => this.renderCaptcha(), 1000);
+    }
   }
 
   private checkUserName(username: string): boolean {
-    var pattern = new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/); //unacceptable chars
+     // unacceptable chars
+    const pattern = new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/);
 
     if (pattern.test(username)) {
       return false;
     }
 
     return true; // good user input
-  };
+  }
 
   private displayErrorMessage(code: string, desc?): void {
     if (desc) {
@@ -296,13 +298,13 @@ export default class WelcomeCtrl {
       return;
     }
 
-    const passwordHash = this.AuthService.calculatePasswordHash(
+    const passwordHash = this.authService.calculatePasswordHash(
       data.loginemail,
       data.loginpassword
     );
 
     try {
-      await this.AuthService.changePassword({
+      await this.authService.changePassword({
         code: this.$scope.resetCode,
         email: data.loginemail,
         newPassword: passwordHash,
@@ -386,9 +388,9 @@ export default class WelcomeCtrl {
 
     this.$scope.isLoading = true;
 
-    const passwordHash = this.AuthService.calculatePasswordHash(data.email, data.password);
+    const passwordHash = this.authService.calculatePasswordHash(data.email, data.password);
 
-    this.AuthService.signup({
+    this.authService.signup({
       username: data.username,
       password: passwordHash,
       email: data.email,
