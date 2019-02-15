@@ -2,7 +2,7 @@
   <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
 </div>
 
-<div ng-if="!postCtrl.isLoading" style="padding-bottom: 80px;">
+<div ng-if="!postCtrl.isLoading">
 	<div class="col-xs-12 visible-xs" style="height:70px;"></div>
 	<div class="col-md-8 col-md-offset-2">
 		<div class="row ng-cloak">
@@ -242,6 +242,12 @@
     </div>
   </div>
 </div>
+<!--
+  the below visible-xs is for the call to action
+  so that the page ends further down
+-->
+<div class="visible-xs" style="min-height: 200px;"></div>
+<div class="visible-sm" style="min-height: 80px;"></div>
 
 <script type="text/ng-template" id="response">
   <div class="panel">
