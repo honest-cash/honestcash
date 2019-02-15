@@ -40,6 +40,7 @@ export class Post {
   postTypeId: TPostTypeId;
   parentPostId: number;
   createdAt: string;
+  createdAtRaw: string;
   publishedAt: string;
   userPosts?: Post[];
   userPostRefs: any;
