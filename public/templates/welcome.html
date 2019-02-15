@@ -12,19 +12,19 @@
           <div class="row">
             <div class="col-sm-6">
                 <a href="/login" style="background-color:black; color: white;" ng-click="welcomeCtrl.signupWith('email')" class="visible-xs btn btn-primary push btn btn-md btn-block ">
-                    Login
+                  Login
                 </a>
 
                 <button style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
-                  Continue with Email
+                  Sign Up with Email
                 </button>
 
                 <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('badger')" class="hidden-xs btn btn-primary push btn btn-md btn-block ">
-                  Continue with Badger
+                  Sign Up with Badger
                 </button>
 
                 <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('twitter')" class="hidden-xs btn btn-primary push btn btn-md btn-block ">
-                    Continue with Twitter
+                  Sign Up with Twitter
                 </button>
 
                 <div ng-if="welcomeCtrl.showEmailSignup" ng-include="'signup'"></div>
