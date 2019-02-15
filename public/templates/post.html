@@ -242,6 +242,12 @@
     </div>
   </div>
 </div>
+<!--
+  the below visible-xs is for the call to action
+  so that the page ends further down
+-->
+<div class="visible-xs" style="min-height: 200px;"></div>
+<div class="visible-sm" style="min-height: 80px;"></div>
 
 <script type="text/ng-template" id="response">
   <div class="panel">
@@ -354,3 +360,5 @@
     </div>
   </header>
 </script>
+
+<bottom-call-to-action-bar ng-if="!user.id" post="postCtrl.post"></bottom-call-to-action-bar>
