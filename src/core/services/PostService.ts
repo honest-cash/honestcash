@@ -3,7 +3,7 @@ import { dateFormat } from "../../core/config/index";
 import SocialSharing from "../lib/SocialSharing";
 import { IFetchPostsArgs, Post, Upvote } from "../models/models";
 
-var sanitizeHtml = require('sanitize-html');
+var sanitizeHtml = require("sanitize-html");
 
 export default class PostService {
   public static $inject = [
@@ -56,24 +56,24 @@ export default class PostService {
   }
 
   public displayHTML(html: string): string {
-    var clean = sanitizeHtml(html, {
-      allowedTags: [ 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
-        'nl', 'li', 'b',  'strong', 'img' ,'em', 'strike', 'code', 'hr', 'br', 'pre', 'iframe' ],
+    const clean = sanitizeHtml(html, {
+      allowedTags: [ "h2", "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
+        "nl", "li", "b",  "strong", "img" ,"em", "strike", "code", "hr", "br", "pre", "iframe" ],
       allowedAttributes: {
-        a: [ 'href', 'name', 'target' ],
-        // We don't currently allow img itself by default, but this
+        a: [ "href", "name", "target" ],
+        // We don"t currently allow img itself by default, but this
         // would make sense if we did. You could add srcset here,
         // and if you do the URL is checked for safety
-        img: [ 'src' ],
+        img: [ "src" ],
 
-        iframe: [ 'src', 'allowfullscreen' ],
+        iframe: [ "src", "allowfullscreen" ],
       },
-      // Lots of these won't come up by default because we don't allow them
-      selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],
+      // Lots of these won"t come up by default because we don"t allow them
+      selfClosing: [ "img", "br", "hr", "area", "base", "basefont", "input", "link", "meta" ],
       // URL schemes we permit
-      allowedSchemes: [ 'http', 'https' ],
+      allowedSchemes: [ "http", "https" ],
       allowedSchemesByTag: {},
-      allowedSchemesAppliedToAttributes: [ 'href', 'src', 'cite' ],
+      allowedSchemesAppliedToAttributes: [ "href", "src", "cite" ],
       allowProtocolRelative: true
     });
 

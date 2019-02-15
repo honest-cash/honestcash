@@ -73,15 +73,15 @@ export default class PostCtrl {
       } else if (order === "comments") {
         compareFn = (a, b) => b.responseCount - a.responseCount;
       }
-      
+
       this.responseSortOrder = order;
     } else {
       this.responseSortOrder = "chronological";
-      compareFn = (a, b) => Number(new Date(b.createdAtRaw)) - Number(new Date(a.createdAtRaw))
+      compareFn = (a, b) => Number(new Date(b.createdAtRaw)) - Number(new Date(a.createdAtRaw));
     }
-    
+
     this.responses = this.responses.sort(compareFn);
-    this.scopeService.safeApply(this.$scope, () => {});
+    this.scopeService.safeApply(this.$scope);
   }
 
   private async createPost() {
