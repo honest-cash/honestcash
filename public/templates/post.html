@@ -199,7 +199,10 @@
           <span style="float: left;">
               <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
             </span>
-            <span style="float: right;">sort by # of <a href="#" ng-click="postCtrl.sortResponses('upvotes')">upvotes</a> / <a href="#" ng-click="postCtrl.sortResponses('comments')">comments</a> </span>
+            <span style="float: right;">sort by # of
+              <a href="#" ng-click="postCtrl.sortResponses('upvotes')" ng-class="{'bold': postCtrl.responseSortOrder === 'upvotes'}">upvotes</a> /
+              <a href="#" ng-click="postCtrl.sortResponses('comments')" ng-class="{'bold': postCtrl.responseSortOrder === 'comments'}">comments</a>
+            </span>
       </div>
 
       <div style="margin-top: 30px;" class="block-center">
