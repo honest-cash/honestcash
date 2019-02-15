@@ -19,6 +19,7 @@ export default class PostCtrl {
   public post: Post;
   public upvotes: Upvote[] = [];
   public responses: Post[] = [];
+  public responseSortOrder: string = "chronological";
   private newResponse: string = "";
 
   constructor(
@@ -59,6 +60,28 @@ export default class PostCtrl {
     }
 
     this.initTippy();
+  }
+
+  private sortResponses(order: "upvotes" | "comments") {
+    let compareFn;
+    if (
+      (order === "upvotes" && this.responseSortOrder !== "upvotes") ||
+      (order === "comments" && this.responseSortOrder !== "comments")
+    ) {
+      if (order === "upvotes") {
+        compareFn = (a, b) => b.upvoteCount - a.upvoteCount;
+      } else if (order === "comments") {
+        compareFn = (a, b) => b.responseCount - a.responseCount;
+      }
+      
+      this.responseSortOrder = order;
+    } else {
+      this.responseSortOrder = "chronological";
+      compareFn = (a, b) => Number(new Date(b.createdAtRaw)) - Number(new Date(a.createdAtRaw))
+    }
+    
+    this.responses = this.responses.sort(compareFn);
+    this.scopeService.safeApply(this.$scope, () => {});
   }
 
   private async createPost() {

@@ -168,9 +168,9 @@
         <strong>Upvotes ({{ postCtrl.upvotes.length }})</strong></span
       >
 
-      <p ng-if="!postCtrl.upvotes.length"><small>No upvotes.</small></p>
+      <p style="margin-top: 15px;" ng-if="!postCtrl.upvotes.length"><small>No upvotes.</small></p>
 
-      <ul class="list-inline list-unstyled">
+      <ul style="margin-top: 15px;" class="list-inline list-unstyled">
         <li
           ng-repeat="upvote in postCtrl.upvotes"
           class="post-upvote"
@@ -195,11 +195,17 @@
     </div>
 
     <div class="row">
-      <span style="margin-bottom: 15px;">
-        <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
-      </span>
+      <div>
+          <span style="float: left;">
+              <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
+            </span>
+            <span style="float: right;">sort by # of
+              <a href="#" ng-click="postCtrl.sortResponses('upvotes')" ng-class="{'bold': postCtrl.responseSortOrder === 'upvotes'}">upvotes</a> /
+              <a href="#" ng-click="postCtrl.sortResponses('comments')" ng-class="{'bold': postCtrl.responseSortOrder === 'comments'}">comments</a>
+            </span>
+      </div>
 
-      <div class="block-center">
+      <div style="margin-top: 30px;" class="block-center">
         <div class="panel">
           <div class="panel-body" style="cursor: pointer;">
             <a
