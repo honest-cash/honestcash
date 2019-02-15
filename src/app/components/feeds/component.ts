@@ -9,7 +9,7 @@ class FeedsDirectiveCtrl {
 
   constructor(
     private $rootScope,
-    private $scope,
+    private $scope
   ) {
   }
 }

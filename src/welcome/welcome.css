@@ -8,19 +8,39 @@ html {
 
 .login-container {
   margin-top: 30px;
-  max-width: 650px;
-  display:block;
+  margin-bottom: 30px;
+  max-width: 652px;
+  display: block;
 }
 
 .login-box {
+  max-width: 650px;
+  position: relative;
+  padding: 20px;
   background: #ffffff;
   border: 1px solid #e2e2e2;
   box-shadow: 0 0 5px #888;
   border-radius: 4px;
-  padding-top: 20px;
-  margin-left:10px;
   bottom: initial;
   overflow-x: hidden;
+}
+
+.overlay{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    .overlay-content {
+        height: 100%;
+        overflow: scroll;
+    }
+}
+
+.background-content{
+    height: 100%;
+    overflow: auto;
 }
 
 body {
