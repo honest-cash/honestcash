@@ -16,6 +16,7 @@ interface IScopeFeedsCtrl extends ng.IScope {
   hashtagFollowed: boolean;
   hashtag: string;
   feedType: "userfeed" | "top" | "new";
+  feedScope: "today" | "this-month" | "last-month" | "ever";
   sortType: "new";
   until: string;
   recommendedHashtags: any[];
@@ -59,6 +60,7 @@ export default class FeedsCtrl {
     this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
     this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
+    this.$scope.feedScope = $stateParams.feedScope || "ever";
 
     this.$scope.sortType = "new";
     this.$scope.recommendedHashtags = [];
