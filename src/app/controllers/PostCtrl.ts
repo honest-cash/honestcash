@@ -79,10 +79,6 @@ export default class PostCtrl {
       this.responseSortOrder = "chronological";
       compareFn = (a, b) => Number(new Date(b.createdAtRaw)) - Number(new Date(a.createdAtRaw))
     }
-
-    this.responses.map((r, i) => {
-      console.log(i, r.createdAtRaw, r.createdAt, r.user.username);
-    })
     
     this.responses = this.responses.sort(compareFn);
     this.scopeService.safeApply(this.$scope, () => {});
