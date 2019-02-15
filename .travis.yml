@@ -32,7 +32,7 @@ matrix:
     - npm prune --production
     - du -d 1 -h
     - mkdir deployments
-    - zip -r deployments/honestcash-prod.zip public node_modules server views app.js package.json .env appspec.yml scripts
+    - zip -r deployments/honestcash-prod.zip public node_modules server views app.js package.json .env appspec.yml scripts -q
 
     deploy:
       on:
