@@ -42,16 +42,20 @@ class SimpleLedgerProtocolDetailsController {
         this.addressSLP = conversionResult.slpAddress;
         this.bitcoinComService.getSLPAddressBalance(this.addressSLP)
         .then(balanceResult => {
-          const firstTransaction = balanceResult[0];
-          const balance: number = parseInt(firstTransaction.balance);
-          this.balanceSLP = `${Math.round(balance / 1000)}K`;
-          this.isVisible = true;
+          if (balanceResult.length) {
+            const firstTransaction = balanceResult[0];
+            const balance: number = parseInt(firstTransaction.balance);
+            if (balance > 0) {
+              this.balanceSLP = `${Math.round(balance / 1000)}K`;
+              this.isVisible = true;
 
-          this.scopeService.safeApply(this.$scope);
+              this.scopeService.safeApply(this.$scope);
 
-          tippy(".hc-tokens-badge", {
-            content: `Proud owner of ${this.balanceSLP} Honest Tokens`
-          });
+              tippy(".hc-tokens-badge", {
+                content: `Proud owner of ${this.balanceSLP} Honest Tokens`
+              });
+            }
+          }
 
         });
       });
