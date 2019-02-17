@@ -234,7 +234,12 @@ app.get("/:username/:alias", async (req, res, next) => {
 
 // Editor paths
 for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPostId" ]) {
-	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
+	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
+}
+
+// Markdown Editor paths
+for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown//write/response/:parentPostId" ]) {
+	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
 }
 
 // About page
