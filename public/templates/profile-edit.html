@@ -19,9 +19,18 @@
 						<label for="bchAddress">BCH address</label>
             <input type="text" class="form-control" id="bchAddress" ng-model="profile.addressBCH">
             <small>
-              This is the address for receiving Bitcoin from upvotes. It can be different from the wallet that is connected to your account!
+              This is the address for receiving Bitcoin from upvotes. It can be different from the wallet that is connected to your account! If you change it, be sure to also control the keys of this wallet.
             </small>
 					</div>
+
+          <div class="form-group">
+						<label for="slpAddress">Token address (SLP)</label>
+            <input type="text" class="form-control" id="slpAddress" ng-model="profile.addressSLP">
+            <small>
+              This is the address for receiving Honest tokens ($HCT) to your account. To create one, download Badger wallet.
+            </small>
+					</div>
+
 					<div class="form-group">
 						<label for="reddit">Reddit username</label>
 						<input type="text" class="form-control" id="reddit" ng-model="profile.reddit">

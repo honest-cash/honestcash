@@ -37,8 +37,8 @@
               <i style="cursor:pointer;" ng-mouseenter="mouseEnterAddress('profile-bch-qr-code', profileCtrl.profile.addressBCH)"
               ng-mouseleave="mouseLeaveAddress('profile-bch-qr-code')" class="fa fa-qrcode" aria-hidden="true"></i>
             </span>
-            <br ng-if="profileCtrl.profile.addressBCH">
-            <span ng-if="profileCtrl.profile.addressBCH">
+            <br ng-if="profileCtrl.profile.addressSLP" />
+            <span ng-if="profileCtrl.profile.addressSLP">
               <simple-ledger-protocol-details profile="profileCtrl.profile"></simple-ledger-protocol-details>
             </span>
           </div>
