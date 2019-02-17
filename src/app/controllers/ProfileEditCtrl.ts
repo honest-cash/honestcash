@@ -41,11 +41,23 @@ export default class ProfileEditCtrl {
         $scope.profile.addressBCH = cashAddress;
       }
 
+      if (
+        $scope.profile.addressSLP &&
+        $scope.profile.addressSLP.indexOf("simpleledger:") === -1
+      ) {
+        $scope.isSaving = false;
+
+        scopeService.safeApply($scope);
+
+        return swal("Your SLP address is not correct!");
+      }
+
       try {
         await this.updateUser({
           addressBCH: $scope.profile.addressBCH,
           bio: $scope.profile.bio,
           props: {
+            addressSLP: $scope.profile.addressSLP,
             reddit: $scope.profile.reddit,
             twitter: $scope.profile.twitter
           }
@@ -63,12 +75,12 @@ export default class ProfileEditCtrl {
       this.$location.path(`/profile/${profile.username}`);
 
       scopeService.safeApply($scope, () => {});
-    }
+    };
   }
 
-  
-
-  private updateUser = async (data: { props: any; addressBCH: string; bio: string; }) : Promise<{ status: any; desc: string; code: string; }> => {
+  private updateUser = async (
+    data: { props: any; addressBCH: string; bio: string; }
+  ): Promise<{ status: any; desc: string; code: string; }> => {
     let res = await this.$http.put(`${this.API_URL}/user/${this.$scope.profile.id}`, data);
 
     res = res || {};
@@ -78,6 +90,5 @@ export default class ProfileEditCtrl {
     } else {
       throw res;
     }
-  };
+  }
 }
-

@@ -1,8 +1,31 @@
-import PostService from '../../core/services/PostService';
-import FeedService from '../../core/services/FeedService';
-import ScopeService from '../../core/services/ScopeService';
+import FeedService from "../../core/services/FeedService";
+import PostService from "../../core/services/PostService";
+import ScopeService from "../../core/services/ScopeService";
 
 export default class ProfileCtrl {
+    public static $inject = [
+      "$rootScope",
+      "$state",
+      "$scope",
+      "$location",
+      "FeedService",
+      "RelsService",
+      "PostService",
+      "ScopeService",
+      "profile"
+    ];
+
+    public profileId: string = this.profile.id;
+    public page: number = 1;
+    public feeds: any[] = [];
+    public postsAll: any[] = [];
+    public followGuys: any[] = [];
+    public showProfileTab: "feeds" | "following" | "followers" | "responses" = "feeds";
+    public limit: number = 10;
+    public postsAvailable: boolean = true;
+    public isLoading: boolean = true;
+    public followsProfileAlready: boolean = false;
+
     constructor(
       private $rootScope,
       private $state,
@@ -16,17 +39,6 @@ export default class ProfileCtrl {
     ) {
       this.fetchFeeds({});
     }
-
-    public profileId: string = this.profile.id;
-    public page: number = 1;
-    public feeds: any[] = [];
-    public postsAll: any[] = [];
-    public followGuys: any[] = [];
-    public showProfileTab: "feeds" | "following" | "followers" | "responses" = "feeds";
-    public limit: number = 10;
-    public postsAvailable: boolean = true;
-    public isLoading: boolean = true;
-    public followsProfileAlready: boolean = false;
 
     public fetchFeeds(params) {
       this.isLoading = true;
@@ -65,61 +77,50 @@ export default class ProfileCtrl {
       });
   }
 
-    public showFeeds(tab) {
-      this.showProfileTab = "feeds";
+  public showFeeds(tab) {
+    this.showProfileTab = "feeds";
 
-      this.feeds = this.postsAll.filter(_ => !_.parentPostId);
+    this.feeds = this.postsAll.filter(_ => !_.parentPostId);
 
-      this.scopeService.safeApply(this.$scope, () => {});
-    }
+    this.scopeService.safeApply(this.$scope, () => {});
+  }
 
-    public showResponses(): void {
-      this.showProfileTab = "responses";
+  public showResponses(): void {
+    this.showProfileTab = "responses";
 
-      this.feeds = this.postsAll.filter(_ => _.parentPostId);
+    this.feeds = this.postsAll.filter(_ => _.parentPostId);
 
-      this.scopeService.safeApply(this.$scope, () => {});
-    }
+    this.scopeService.safeApply(this.$scope, () => {});
+  }
 
-    public showFollowers = (tab) => {
-      this.followGuys = [];
+  public showFollowers = (tab) => {
+    this.followGuys = [];
 
-      this.showProfileTab = "followers";
+    this.showProfileTab = "followers";
 
-      this.RelsService.showFollowers(this.profile.id, (rFollowers) => {
-        this.followGuys = rFollowers;
+    this.RelsService.showFollowers(this.profile.id, (rFollowers) => {
+      this.followGuys = rFollowers;
+    });
+  }
+
+  public showFollowing = (tab) => {
+    this.followGuys = [];
+
+    this.showProfileTab = "following";
+
+    this.RelsService.showFollowing(this.profile.id, (rFollowing) => {
+      this.followGuys = rFollowing;
+    });
+  }
+
+  public loadMore(): void {
+    console.log("load more triggerred");
+
+    if (!this.$rootScope.activeCalls && this.postsAvailable) {
+      this.page = this.page + 1;
+      this.fetchFeeds({
+        page: this.page
       });
     }
-
-    public showFollowing = (tab) => {
-      this.followGuys = [];
-
-      this.showProfileTab = "following";
-
-      this.RelsService.showFollowing(this.profile.id, (rFollowing) => {
-        this.followGuys = rFollowing;
-      });
-    }
-
-    public loadMore(): void {
-      console.log("load more triggerred")
-      if (!this.$rootScope.activeCalls && this.postsAvailable) {
-        this.page = this.page + 1;
-        this.fetchFeeds({
-          page: this.page
-        });
-      }
-    }
-
-    static $inject = [
-      "$rootScope",
-      "$state",
-      "$scope",
-      "$location",
-      "FeedService",
-      "RelsService",
-      "PostService",
-      "ScopeService",
-      "profile"
-  ]
+  }
 }
