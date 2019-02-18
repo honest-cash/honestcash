@@ -12,32 +12,37 @@ export class AuthService {
   public isAuthenticated: boolean = false;
   public authToken: string;
   public authUserId: number;
+  public authUserEmail: string;
 
   public LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
   public LOCAL_USER_ID_KEY = 'HC_USER_ID';
+  public LOCAL_USER_EMAIL_KEY = 'HC_USER_EMAIL';
   public LOCAL_USER = 'HC_CASH_USER';
 
-  public useCredentials(token: string, userId: number) {
+  public useCredentials(token: string, userId: number, email: string) {
     this.isAuthenticated = true;
     this.authToken = token;
     this.authUserId = userId;
+    this.authUserEmail = email;
     this.$http.defaults.headers.common['X-Auth-Token'] = token;
   }
 
   public loadUserCredentials(): void {
     const token = this.$window.localStorage.getItem(this.LOCAL_TOKEN_KEY);
     const userId = this.$window.localStorage.getItem(this.LOCAL_USER_ID_KEY);
+    const email = this.$window.localStorage.getItem(this.LOCAL_USER_EMAIL_KEY);
 
     if (token) {
-      this.useCredentials(token, userId);
+      this.useCredentials(token, userId, email);
     }
   }
 
-  public storeUserCredentials(token: string, userId: number): void {
-    this.$window.localStorage.setItem(this.LOCAL_USER_ID_KEY, userId);
+  public storeUserCredentials(token: string, userId: number, email: string): void {
     this.$window.localStorage.setItem(this.LOCAL_TOKEN_KEY, token);
+    this.$window.localStorage.setItem(this.LOCAL_USER_ID_KEY, userId);
+    this.$window.localStorage.setItem(this.LOCAL_USER_EMAIL_KEY, email);
 
-    this.useCredentials(token, userId);
+    this.useCredentials(token, userId, email);
   }
 
   public destroyUserCredentials(): void {
@@ -47,13 +52,14 @@ export class AuthService {
     this.$http.defaults.headers.common['X-Auth-Token'] = undefined;
     this.$window.localStorage.removeItem(this.LOCAL_TOKEN_KEY);
     this.$window.localStorage.removeItem(this.LOCAL_USER_ID_KEY);
+    this.$window.localStorage.removeItem(this.LOCAL_USER_EMAIL_KEY);
   }
 
   public login(data: { email: string, password: string }) {
     return this.$q((resolve, reject) => {
       this.$http.post(this.apiFactory("LOGIN"), data)
       .then((res) => {
-        this.storeUserCredentials(res.data.token, res.data.user.id);
+        this.storeUserCredentials(res.data.token, res.data.user.id, data.email);
 
         resolve(res.data);
       }, reject);
