@@ -5,7 +5,7 @@ const DEV_CLIENT = "http://localhost:3010";
 
 const PRODUCTION_CLIENT = "https://honest.cash";
 
-export const api = `${PRODUCTION_CLIENT}/api`;
+export const api = `${DEV}/api`;
 export const client = PRODUCTION_CLIENT;
 
 angular.module("vqConfig", []).constant("API_URL", api);
