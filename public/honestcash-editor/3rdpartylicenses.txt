@@ -403,6 +403,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
+@ngx-translate/core
+MIT
+
 @angular/animations
 MIT
 
@@ -410,9 +413,6 @@ ngx-chips
 MIT
 
 ng2-material-dropdown
-MIT
-
-@ngx-translate/core
 MIT
 
 @angular/service-worker
