@@ -238,7 +238,7 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 }
 
 // Markdown Editor paths
-for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown//write/response/:parentPostId" ]) {
+for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown/write/response/:parentPostId" ]) {
 	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
 }
 
