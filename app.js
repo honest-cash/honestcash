@@ -234,7 +234,7 @@ app.get("/:username/:alias", async (req, res, next) => {
 
 // Editor paths
 for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPostId" ]) {
-	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
+	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }
 
 // Markdown Editor paths
