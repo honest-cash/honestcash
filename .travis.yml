@@ -32,26 +32,18 @@ matrix:
     - npm prune --production
     - du -d 1 -h
     - mkdir deployments
-    on:
-      branch: "master"
-        - zip -r deployments/honestcash-prod.zip public node_modules server views app.js package.json .env appspec.yml scripts -q
-    on:
-      branch: "dev"
-        - zip -r deployments/honestcash-dev.zip public node_modules server views app.js package.json .env appspec.yml scripts -q
+    - zip -r deployments/honestcash-prod.zip public node_modules server views app.js package.json .env appspec.yml scripts -q
 
     deploy:
       on:
-        branches:
-          only:
-            - master
-            - dev
-              provider: s3
-              # You can refer to environment variables from Travis repo settings!
-              access_key_id: $AWS_ACCESS_KEY_ID
-              secret_access_key: $AWS_SECRET_ACCESS_KEY
-              # Name of the S3 bucket to which your site should be uploaded.
-              bucket: codedeploy-honestcash
-              # Prevent Travis from deleting your built site so it can be uploaded.
-              skip_cleanup: true
-              # Path to a directory containing your built site.
-              local_dir: deployments
+        branch: "master"
+      provider: s3
+      # You can refer to environment variables from Travis repo settings!
+      access_key_id: $AWS_ACCESS_KEY_ID
+      secret_access_key: $AWS_SECRET_ACCESS_KEY
+      # Name of the S3 bucket to which your site should be uploaded.
+      bucket: codedeploy-honestcash
+      # Prevent Travis from deleting your built site so it can be uploaded.
+      skip_cleanup: true
+      # Path to a directory containing your built site.
+      local_dir: deployments
