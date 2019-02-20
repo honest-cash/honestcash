@@ -9,7 +9,7 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main.ced8b3ee26dd8b22782e.js",
+        "/main.5cc5e363f0becdc5ec0a.js",
         "/polyfills.0e60013d71f51b5cabf9.js",
         "/runtime.849ff8fc68af6da81777.js",
         "/styles.f9920ee985ae9b1a8494.css"
@@ -30,8 +30,8 @@
   "hashTable": {
     "/assets/ngx-rocket-logo.png": "0ac53fd27406fe5a36e68285315fb0012e54058e",
     "/favicon.ico": "b65083d46bbf63692d5d2cdd69622e6d7ecae317",
-    "/index.html": "a16c08ad6e34af06005f1dc1dc35d879db52a64e",
-    "/main.ced8b3ee26dd8b22782e.js": "a5df006d3514df9d5f9fb40a4eaa890fb90820fd",
+    "/index.html": "de064530b32cebb3ef710058ba051339706a1177",
+    "/main.5cc5e363f0becdc5ec0a.js": "e5850925632c525ec23c18d69b26c93ff56d4a58",
     "/polyfills.0e60013d71f51b5cabf9.js": "6946e10a03311677a01490b8e91741668e64e17e",
     "/runtime.849ff8fc68af6da81777.js": "c1f243a8b94be656e44cf5215bd978cc7bcf531a",
     "/styles.f9920ee985ae9b1a8494.css": "06f56bf2786092c066744665904eb43e0e9b8c14"
