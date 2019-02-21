@@ -6,6 +6,7 @@ import socialShareButtons from './social-share-buttons/social-share-buttons.comp
 import upvoteButton from './upvote-button/upvote-button.component';
 import uncensorableButton from './uncensorable-button/uncensorable-button.component';
 import bottomCallToActionBar from './bottom-call-to-action-bar/bottom-call-to-action-bar.component';
+import simpleLedgerProtocolDetails from './simple-ledger-protocol-details/simple-ledger-protocol-details.component';
 
 angular
   .module('vqDirectives', ['vqConfig'])
@@ -36,4 +37,5 @@ angular
   .directive('logoutButton', logoutButton)
   .directive('followUnfollowButton', followUnfollowButton)
   .directive('bottomCallToActionBar', bottomCallToActionBar)
+  .directive('simpleLedgerProtocolDetails', simpleLedgerProtocolDetails)
   .directive('socialShareButtons', socialShareButtons);

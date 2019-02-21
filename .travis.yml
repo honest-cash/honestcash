@@ -32,11 +32,12 @@ matrix:
     - npm prune --production
     - du -d 1 -h
     - mkdir deployments
-    - zip -r deployments/honestcash-prod.zip public node_modules server views app.js package.json .env appspec.yml scripts -q
+    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then zip -r deployments/honestcash-prod.zip public node_modules server views app.js package.json .env appspec.yml scripts -q; fi
+    - if [[ "$TRAVIS_BRANCH" == "dev" ]]; then zip -r deployments/honestcash-dev.zip public node_modules server views app.js package.json .env appspec.yml scripts -q; fi 
 
+    # The deployment process is triggered for both master and dev
     deploy:
-      on:
-        branch: "master"
+      branches: [ "master", "dev" ]
       provider: s3
       # You can refer to environment variables from Travis repo settings!
       access_key_id: $AWS_ACCESS_KEY_ID

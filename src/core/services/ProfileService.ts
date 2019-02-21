@@ -1,3 +1,20 @@
+interface IUserProp {
+  propValue: string;
+  propKey: string;
+}
+
+interface IProfile {
+  id: number;
+  username: string;
+  addressBCH: string;
+  userProperties: IUserProp[];
+}
+
+interface IUIProfile extends IProfile {
+  twitter: string;
+  reddit: string;
+  addressSLP: string;
+}
 export default class ProfileService {
   public static $inject = [
     "$http",
@@ -74,19 +91,27 @@ export default class ProfileService {
   public fetchProfile(profileId: number, callback) {
     this.$http.get(this.API_URL + "/user/" + profileId)
     .then((response) => {
-      const profile = this.addSocialMediaToProfile(response.data);
+      const profile = this.extendWithProps(response.data as IProfile);
 
       callback(profile);
     });
   }
 
-  private addSocialMediaToProfile(profile) {
-    const twitterProp = profile.userProperties.find(prop => prop.propKey === "twitter");
-    const redditProp = profile.userProperties.find(prop => prop.propKey === "reddit");
+  private getProp(userProperties: IUserProp[], propKey: string): string | null {
+    const userProp = userProperties
+      .find((prop) => prop.propKey === propKey);
 
-    profile.twitter = twitterProp ? twitterProp.propValue : null;
-    profile.reddit = redditProp ? redditProp.propValue : null;
+    return userProp ? userProp.propValue : null;
+  }
 
-    return profile;
+  private extendWithProps(profile: IProfile): IUIProfile {
+    const extendedProfile: IUIProfile = {
+      ...profile,
+      addressSLP: this.getProp(profile.userProperties, "addressSLP"),
+      reddit: this.getProp(profile.userProperties, "reddit"),
+      twitter: this.getProp(profile.userProperties, "twitter")
+    };
+
+    return extendedProfile;
   }
 }
