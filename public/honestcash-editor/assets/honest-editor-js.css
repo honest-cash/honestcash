@@ -2626,8 +2626,7 @@ textarea {
 .button[disabled]:active,
 .button[disabled]:focus,
 .button[disabled]:hover {
-  opacity: 0.33;
-  background-color: transparent;
+  opacity: 0.66;
   cursor: not-allowed;
 }
 .button--resolve {
