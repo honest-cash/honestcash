@@ -23,6 +23,7 @@ html {
   border-radius: 4px;
   bottom: initial;
   overflow-x: hidden;
+  opacity: 0.9;
 }
 
 .overlay{
