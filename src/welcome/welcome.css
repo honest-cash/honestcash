@@ -73,6 +73,9 @@ a {
     width: 100%;
     height: 100%;
     position:fixed;
+    background-image: url('/img/artwork-login.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 a:hover {
@@ -467,4 +470,10 @@ img.lazy {
 
 .welcome-columns p {
   margin-bottom: 20px;
+}
+
+.buy-art-btn{
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
 }
