@@ -74,7 +74,8 @@ h4 {
 }
 
 .post-body, .response-body {
-  overflow-wrap: break-word;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
 }
 
 .response-body {
@@ -83,4 +84,5 @@ h4 {
 
 .post-uncensorable {
 	overflow-wrap: break-word;
+	word-wrap: break-word;
 }
