@@ -474,6 +474,16 @@ img.lazy {
 
 .buy-art-btn{
     position: absolute;
-    right: 20px;
-    bottom: 10px;
+    right: 30px;
+    bottom: 20px;
 }
+
+.artist-name{
+  font-size:14px;
+  font-weight: bold;
+  font-style: italic; 
+  text-decoration: underline;
+  color: #000000;
+  right: 30px;
+  position: absolute;
+ } 
