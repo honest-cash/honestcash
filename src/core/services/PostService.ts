@@ -119,9 +119,11 @@ export default class PostService {
 
   private processPost(post: Post): Post {
     post.createdAtRaw = post.createdAt;
+    post.shareURLs = SocialSharing.getFeedShareURLs(post);
+    post.createdAtFormatted = moment(post.publishedAt).utc().format(dateFormat);
+    post.publishedAtFormatted = moment(post.publishedAt).utc().format(dateFormat);
     post.createdAt = moment(post.createdAt).utc().format(dateFormat);
     post.publishedAt = moment(post.publishedAt).utc().format(dateFormat);
-    post.shareURLs = SocialSharing.getFeedShareURLs(post);
 
     if (post.userPosts) {
       post.userPosts.forEach((userPost) => {

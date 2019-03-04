@@ -1,6 +1,7 @@
 import moment from "moment";
 import SocialSharing from '../lib/SocialSharing';
 import { IFetchFeedsArgs } from '../models/models';
+import { dateFormat } from "../config/index";
 
 export default class FeedService {
     constructor (
@@ -23,8 +24,10 @@ export default class FeedService {
 
           for (let feed of feeds) {
             feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
-            feed.createdAtFormatted = moment(feed.createdAt).format("MMM Do YY");
-            feed.publishedAtFormatted = moment(feed.publishedAt).format("MMM Do YY");
+            feed.createdAtFormatted = moment(feed.createdAt).utc().format(dateFormat);
+            feed.publishedAtFormatted = moment(feed.publishedAt).utc().format(dateFormat);
+            feed.createdAt = moment(feed.createdAt).utc().format(dateFormat);
+            feed.publishedAt = moment(feed.publishedAt).utc().format(dateFormat);
           }
 
           callback(feeds);
