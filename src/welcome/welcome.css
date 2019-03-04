@@ -8,19 +8,40 @@ html {
 
 .login-container {
   margin-top: 30px;
-  max-width: 650px;
-  display:block;
+  margin-bottom: 30px;
+  max-width: 652px;
+  display: block;
 }
 
 .login-box {
+  max-width: 650px;
+  position: relative;
+  padding: 20px;
   background: #ffffff;
   border: 1px solid #e2e2e2;
   box-shadow: 0 0 5px #888;
   border-radius: 4px;
-  padding-top: 20px;
-  margin-left:10px;
   bottom: initial;
   overflow-x: hidden;
+  opacity: 0.9;
+}
+
+.overlay{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    .overlay-content {
+        height: 100%;
+        overflow: scroll;
+    }
+}
+
+.background-content{
+    height: 100%;
+    overflow: auto;
 }
 
 body {
@@ -52,6 +73,9 @@ a {
     width: 100%;
     height: 100%;
     position:fixed;
+    background-image: url('/img/artwork-login.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 a:hover {
@@ -446,4 +470,10 @@ img.lazy {
 
 .welcome-columns p {
   margin-bottom: 20px;
+}
+
+.buy-art-btn{
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
 }

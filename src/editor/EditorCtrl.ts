@@ -43,18 +43,17 @@ export default class EditorCtrl {
 
         let parentPostId;
         let postId;
+        let editingMode = "write";
         const locPath = location.pathname.split("/");
 
         if (locPath[1] === "write" && locPath[2] === "response") {
-            parentPostId = locPath[3]
-        }
-
-        if (locPath[1] === "write" && locPath[2] === "response") {
-            parentPostId = locPath[3]
+            parentPostId = locPath[3];
+            editingMode = "response";
         }
 
         if (locPath[1] === "edit") {
             postId = locPath[2];
+            editingMode = "edit";
         }
 
         const saveDraftElement = (element, cb?) => {
@@ -148,6 +147,16 @@ export default class EditorCtrl {
                     location.href = `/${publishedPost.user.username}/${publishedPost.alias}/`;
                 }, 500);
             });
+        };
+
+        $scope.switchEditor = () => {
+          if (editingMode === "write") {
+            window.location.href = `/markdown/write`;
+          } else if (editingMode === "edit"){
+            window.location.href = `/markdown/edit/${postId}`;
+          } else if (editingMode === "response") {
+            window.location.href = `/markdown/write/response/${parentPostId}`;
+          }
         };
 
         const onContentChangedFactory = (element: "title" | "body") => () => {
