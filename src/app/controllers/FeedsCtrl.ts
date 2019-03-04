@@ -16,7 +16,7 @@ interface IScopeFeedsCtrl extends ng.IScope {
   hashtagFollowed: boolean;
   hashtag: string;
   feedType: "userfeed" | "top" | "new";
-  feedScope: "today" | "this-month" | "last-month" | "ever";
+  feedScope: "last-month" | "all-time";
   sortType: "new";
   until: string;
   recommendedHashtags: any[];
@@ -60,7 +60,7 @@ export default class FeedsCtrl {
     this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
     this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
-    this.$scope.feedScope = $stateParams.feedScope || "ever";
+    this.$scope.feedScope = $stateParams.feedScope || "last-month";
 
     this.$scope.sortType = "new";
     this.$scope.recommendedHashtags = [];
@@ -106,6 +106,7 @@ export default class FeedsCtrl {
     const obj = {
       hashtag: this.$scope.hashtag,
       until: this.$scope.until,
+      feedScope: undefined,
       page: this.$scope.page,
       followerId: undefined,
       orderBy: undefined,
@@ -118,6 +119,10 @@ export default class FeedsCtrl {
 
     if (this.$scope.feedType === "top") {
       obj.orderBy = "upvoteCount";
+    }
+    
+    if (this.$scope.feedType === "top" && this.$scope.feedScope === "last-month") {
+      obj.feedScope = "last-month";
     }
 
     const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ?
