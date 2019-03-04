@@ -132,7 +132,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       }
     }
 
-    simpleWalletProvider.initWallet(
+    simpleWalletProvider.loadWallet(
       mnemonicEncrypted,
       data.loginpassword
     );

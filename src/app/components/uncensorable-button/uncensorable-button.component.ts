@@ -129,7 +129,7 @@ class UncensorableButtonController {
               return toastr.warning("The story is too long! We are working on it!");
           }
 
-          return toastr.warning(err.message);
+          return toastr.warning("Ensure that you have some BCH balance in your wallet to make the story uncensorable");
         }
 
         document.getElementById("uncensoredResultLoading").style.display = "none";

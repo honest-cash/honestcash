@@ -88,9 +88,5 @@ export const initProfileUpload = function(API_URL, AuthService) {
 };
 
 export const initBCHWallet = function($rootScope) {
-	let simpleWallet = simpleWalletProvider.initWallet();
-
-	$rootScope.simpleWallet = {
-		address: simpleWallet.address
-	};
+	$rootScope.simpleWallet = simpleWalletProvider.loadWallet();
 };
