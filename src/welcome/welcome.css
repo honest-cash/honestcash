@@ -7,7 +7,7 @@ html {
 }
 
 .login-container {
-  margin-top: 30px;
+  margin-top: 50px;
   margin-bottom: 30px;
   max-width: 652px;
   display: block;
@@ -473,15 +473,14 @@ img.lazy {
 }
 
 .buy-art-btn{
+    right: 10px;
+    top: 10px;
     position: absolute;
-    right: 30px;
-    top: 50px;
 }
 
 .artist-name{
   font-size:14px;
   font-weight: bold;
   color: #000000;
-  right: 30px;
-  position: absolute;
+  padding-right: 10px; 
  } 
