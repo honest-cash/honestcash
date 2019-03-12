@@ -1,8 +1,15 @@
 import { IHttpService, IQService, IWindowService } from "angular";
 import { SHA3 } from "sha3";
+import * as logger from "../core/lib/logger";
+import { User } from "../core/models/models";
 
 export class AuthService {
-  public static $inject = [ "$window", "$http", "$q", "apiFactory" ];
+  public static $inject = [
+    "$window",
+    "$http",
+    "$q",
+    "apiFactory"
+  ];
 
   public username: string = "";
   public isAuthenticated: boolean = false;
@@ -56,7 +63,7 @@ export class AuthService {
 
   public login(data: { email: string, password: string }) {
     return this.$q((resolve, reject) => {
-      this.$http.post(this.apiFactory("LOGIN"), data)
+      this.$http.post<{ token: string; user: User}>(this.apiFactory("LOGIN"), data)
       .then((res) => {
         this.storeUserCredentials(res.data.token, res.data.user.id);
 
@@ -100,7 +107,7 @@ export class AuthService {
     this.destroyUserCredentials();
 
     this.$http.post(this.apiFactory("LOGOUT"), {}).then((data) => {
-      console.log("Tokens destroyed.");
+      logger.log("Tokens destroyed.");
     });
   }
 

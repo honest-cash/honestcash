@@ -6,7 +6,7 @@ angular.module("vqAuth", [])
 
 .constant("API_URL", "localhost:3010")
 
-.factory('AuthInterceptor', [ "$rootScope", "$q", function($rootScope, $q) {
+.factory("AuthInterceptor", [ "$rootScope", "$q", function($rootScope, $q) {
 	if ($rootScope.activeCalls == undefined) {
 		$rootScope.activeCalls = 0;
 	}
