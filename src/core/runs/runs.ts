@@ -32,8 +32,12 @@ export const onStateChange = function ($rootScope, $state, AuthService) {
 
       $rootScope.user = user || null;
 
-      if ((!user || user.status !== 11) && location.pathname === "/") {
-        location.href = "/signup";
+      if (!user && location.pathname === "/") {
+        return location.href = "/signup";
+      }
+
+      if (user.status !== "11" && user.status !== "10" && location.pathname === "/") {
+        return location.href = "/thank-you";
       }
     }
 
