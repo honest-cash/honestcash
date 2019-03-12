@@ -2,7 +2,6 @@ import { IHttpService, IQService, IWindowService } from "angular";
 import { SHA3 } from "sha3";
 import * as logger from "../core/lib/logger";
 import { User } from "../core/models/models";
-
 export class AuthService {
   public static $inject = [
     "$window",
@@ -61,15 +60,12 @@ export class AuthService {
     this.$window.localStorage.removeItem(this.LOCAL_USER_ID_KEY);
   }
 
-  public login(data: { email: string, password: string }) {
-    return this.$q((resolve, reject) => {
-      this.$http.post<{ token: string; user: User}>(this.apiFactory("LOGIN"), data)
-      .then((res) => {
-        this.storeUserCredentials(res.data.token, res.data.user.id);
+  public async login(data: { email: string, password: string }) {
+      const res = await this.$http.post<{ token: string; user: User; wallet: any }>(this.apiFactory("LOGIN"), data);
 
-        resolve(res.data);
-      }, reject);
-    });
+      this.storeUserCredentials(res.data.token, res.data.user.id);
+
+      return res.data;
   }
 
   public passwordCheck(data: { password: string }) {
@@ -82,40 +78,36 @@ export class AuthService {
     });
   }
 
-  public signup(data: {
+  public async signup(data: {
     username: string;
     password: string;
     email: string;
     userType: number;
     captcha: string;
   }) {
-    return this.$q(async (resolve, reject) => {
-      this.$http.post<{ token: string; user: any; }>(this.apiFactory("SIGNUP"), data)
-      .then((response) => {
-        this.storeUserCredentials(response.data.token, response.data.user.id);
+      const response = await this.$http.post<{ token: string; user: any; }>(this.apiFactory("SIGNUP"), data);
+      const authData = response.data;
 
-        resolve(response.data);
-      }, reject);
-    });
+      this.storeUserCredentials(authData.token, authData.user.id);
+
+      return authData;
   }
 
-  public validate() {
+  public async validate() {
     return this.$http.get(this.apiFactory("VALIDATE"));
   }
 
-  public logout() {
+  public async logout() {
     this.destroyUserCredentials();
 
-    this.$http.post(this.apiFactory("LOGOUT"), {}).then((data) => {
-      logger.log("Tokens destroyed.");
-    });
+    return this.$http.post(this.apiFactory("LOGOUT"), {});
   }
 
-  public resetPassword(data: { email: string }) {
+  public async resetPassword(data: { email: string }) {
     return this.$http.post(this.apiFactory("RESET"), data);
   }
 
-  public changePassword(data: {
+  public async changePassword(data: {
     email: string;
     code: string,
     newPassword: string,
@@ -125,11 +117,11 @@ export class AuthService {
     return this.$http.post(this.apiFactory("CHANGE_PASSWORD"), data);
   }
 
-  public setPassword(data: { password: string }) {
+  public async setPassword(data: { password: string }) {
     return this.$http.post(this.apiFactory("SET_PASSWORD"), data);
   }
 
-  public setWallet(data: { mnemonicEncrypted: string }) {
+  public async setWallet(data: { mnemonicEncrypted: string }) {
     return this.$http.post(this.apiFactory("SET_WALLET"), data);
   }
 

@@ -91,7 +91,11 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       data.loginpassword
     );
 
-    let authData: { wallet: ISimpleWallet };
+    let authData: {
+      token: string;
+      user: User;
+      wallet: any;
+    };
 
     try {
       authData = await this.authService.login({
@@ -106,7 +110,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     this.isLoading = false;
 
-    let mnemonicEncrypted;
+    let mnemonicEncrypted: string;
 
     if (authData.wallet) {
       mnemonicEncrypted = authData.wallet.mnemonicEncrypted;
@@ -312,21 +316,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       return this.displayErrorMessage(response.data.code, response.data.desc);
     }
 
-    const sbw: ISimpleWallet = new SimpleWallet();
-
-    sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, data.password);
-
-    const mnemonicEncrypted = sbw.mnemonicEncrypted;
-
-    await this.authService.setWallet({
-      mnemonicEncrypted
-    });
-
-    await this.profileService.updateUser(
-      authData.user.id,
-      "addressBCH",
-      sbw.address
-    );
+    await this.setupWalletForUser(authData.user.id, data.password);
 
     this.isLoading = false;
 
@@ -365,6 +355,31 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     this.noHeader = true;
 
     this.scopeService.safeApply(this.$scope);
+  }
+
+  private async setupWalletForUser(userId: number, password: string): Promise<ISimpleWallet> {
+    const sbw: ISimpleWallet = new SimpleWallet();
+
+    sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, password);
+
+    const mnemonicEncrypted = sbw.mnemonicEncrypted;
+
+    await this.authService.setWallet({
+      mnemonicEncrypted
+    });
+
+    await this.profileService.updateUser(
+      userId,
+      "addressBCH",
+      sbw.address
+    );
+
+    simpleWalletProvider.loadWallet(
+      mnemonicEncrypted,
+      password
+    );
+
+    return sbw;
   }
 
   private renderCaptcha() {

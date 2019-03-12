@@ -477,3 +477,8 @@ img.lazy {
     right: 20px;
     bottom: 10px;
 }
+
+.btn-honest {
+  background-color:black;
+  color: white;
+}
