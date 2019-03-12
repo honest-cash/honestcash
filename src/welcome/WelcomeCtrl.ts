@@ -91,7 +91,11 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       data.loginpassword
     );
 
-    let authData: { wallet: ISimpleWallet };
+    let authData: {
+      token: string;
+      user: User;
+      wallet: any;
+    };
 
     try {
       authData = await this.authService.login({
@@ -106,7 +110,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     this.isLoading = false;
 
-    let mnemonicEncrypted;
+    let mnemonicEncrypted: string;
 
     if (authData.wallet) {
       mnemonicEncrypted = authData.wallet.mnemonicEncrypted;
@@ -294,26 +298,31 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     const passwordHash = this.authService.calculatePasswordHash(data.email, data.password);
 
-    this.authService.signup({
-      captcha,
-      email: data.email,
-      password: passwordHash,
-      username: data.username,
-      userType: 0
-    })
-    .then((user: any) => {
-      this.isLoading = false;
+    let authData: any;
 
-      // $rootScope.user = user.user;
-
-      location.href = "/thank-you";
-    }, (response: { data: { code: string; desc: string; }}) => {
+    try {
+      authData = await this.authService.signup({
+        captcha,
+        email: data.email,
+        password: passwordHash,
+        username: data.username,
+        userType: 0
+      });
+    } catch (response) {
       this.isLoading = false;
 
       grecaptcha.reset();
 
       return this.displayErrorMessage(response.data.code, response.data.desc);
-    });
+    }
+
+    await this.setupWalletForUser(authData.user.id, data.password);
+
+    this.isLoading = false;
+
+    this.$rootScope.user = authData.user;
+
+    location.href = "/thank-you";
   }
 
   private setAddressForTips = async (userId: string, bchAddress: string) => {
@@ -323,7 +332,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       type: "warning",
       buttons: {
         cancel: true,
-        confirm: true,
+        confirm: true
       }
     });
 
@@ -346,6 +355,31 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     this.noHeader = true;
 
     this.scopeService.safeApply(this.$scope);
+  }
+
+  private async setupWalletForUser(userId: number, password: string): Promise<ISimpleWallet> {
+    const sbw: ISimpleWallet = new SimpleWallet();
+
+    sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, password);
+
+    const mnemonicEncrypted = sbw.mnemonicEncrypted;
+
+    await this.authService.setWallet({
+      mnemonicEncrypted
+    });
+
+    await this.profileService.updateUser(
+      userId,
+      "addressBCH",
+      sbw.address
+    );
+
+    simpleWalletProvider.loadWallet(
+      mnemonicEncrypted,
+      password
+    );
+
+    return sbw;
   }
 
   private renderCaptcha() {
