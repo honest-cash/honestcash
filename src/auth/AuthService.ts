@@ -1,32 +1,37 @@
+import { IHttpService, IQService, IWindowService } from "angular";
 import { SHA3 } from "sha3";
-export class AuthService {
-  constructor(
-    private $window,
-    private $http,
-    private $q,
-    private apiFactory
-  ) {}
 
-  public getUserId = () => this.authUserId;
-  public username: string = '';
+export class AuthService {
+  public static $inject = [ "$window", "$http", "$q", "apiFactory" ];
+
+  public username: string = "";
   public isAuthenticated: boolean = false;
   public authToken: string;
   public authUserId: number;
 
-  public LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
-  public LOCAL_USER_ID_KEY = 'HC_USER_ID';
-  public LOCAL_USER = 'HC_CASH_USER';
+  public LOCAL_TOKEN_KEY = "HC_USER_TOKEN";
+  public LOCAL_USER_ID_KEY = "HC_USER_ID";
+  public LOCAL_USER = "HC_CASH_USER";
+
+  constructor(
+    private $window: IWindowService,
+    private $http: IHttpService,
+    private $q: IQService,
+    private apiFactory
+  ) {}
+
+  public getUserId = () => this.authUserId;
 
   public useCredentials(token: string, userId: number) {
     this.isAuthenticated = true;
     this.authToken = token;
     this.authUserId = userId;
-    this.$http.defaults.headers.common['X-Auth-Token'] = token;
+    this.$http.defaults.headers.common["X-Auth-Token"] = token;
   }
 
   public loadUserCredentials(): void {
     const token = this.$window.localStorage.getItem(this.LOCAL_TOKEN_KEY);
-    const userId = this.$window.localStorage.getItem(this.LOCAL_USER_ID_KEY);
+    const userId = Number(this.$window.localStorage.getItem(this.LOCAL_USER_ID_KEY));
 
     if (token) {
       this.useCredentials(token, userId);
@@ -44,7 +49,7 @@ export class AuthService {
     this.authToken = undefined;
     this.authUserId = undefined;
     this.isAuthenticated = false;
-    this.$http.defaults.headers.common['X-Auth-Token'] = undefined;
+    this.$http.defaults.headers.common["X-Auth-Token"] = undefined;
     this.$window.localStorage.removeItem(this.LOCAL_TOKEN_KEY);
     this.$window.localStorage.removeItem(this.LOCAL_USER_ID_KEY);
   }
@@ -78,24 +83,24 @@ export class AuthService {
     captcha: string;
   }) {
     return this.$q(async (resolve, reject) => {
-      this.$http.post(this.apiFactory("SIGNUP"), data)
-      .then(response => {
-        // this.storeUserCredentials(response.data.token, response.data.user.id);
+      this.$http.post<{ token: string; user: any; }>(this.apiFactory("SIGNUP"), data)
+      .then((response) => {
+        this.storeUserCredentials(response.data.token, response.data.user.id);
 
         resolve(response.data);
       }, reject);
     });
   }
 
-  public validate(callback) {
-    return this.$http.get(this.apiFactory("VALIDATE"))
+  public validate() {
+    return this.$http.get(this.apiFactory("VALIDATE"));
   }
 
   public logout() {
     this.destroyUserCredentials();
 
-    this.$http.post(this.apiFactory("LOGOUT")).then((data) => {
-      console.log("Tokens destroyed.")
+    this.$http.post(this.apiFactory("LOGOUT"), {}).then((data) => {
+      console.log("Tokens destroyed.");
     });
   }
 
@@ -122,7 +127,7 @@ export class AuthService {
   }
 
   public async getEmails(): Promise<string[]> {
-    const res = await this.$http.get(this.apiFactory("GET_EMAILS"));
+    const res = await this.$http.get<string[]>(this.apiFactory("GET_EMAILS"));
 
     return res.data;
   }
@@ -143,10 +148,8 @@ export class AuthService {
 
   public calculateSHA3Hash(message: string): string {
     const hash = new SHA3(512);
-    const passwordHash = hash.update(message).digest('hex');
+    const passwordHash = hash.update(message).digest("hex");
 
     return passwordHash;
   }
-
-  static $inject = [ "$window", "$http", "$q", "apiFactory" ];
 }

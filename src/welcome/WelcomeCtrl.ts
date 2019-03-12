@@ -294,26 +294,45 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     const passwordHash = this.authService.calculatePasswordHash(data.email, data.password);
 
-    this.authService.signup({
-      captcha,
-      email: data.email,
-      password: passwordHash,
-      username: data.username,
-      userType: 0
-    })
-    .then((user: any) => {
-      this.isLoading = false;
+    let authData: any;
 
-      // $rootScope.user = user.user;
-
-      location.href = "/thank-you";
-    }, (response: { data: { code: string; desc: string; }}) => {
+    try {
+      authData = await this.authService.signup({
+        captcha,
+        email: data.email,
+        password: passwordHash,
+        username: data.username,
+        userType: 0
+      });
+    } catch (response) {
       this.isLoading = false;
 
       grecaptcha.reset();
 
       return this.displayErrorMessage(response.data.code, response.data.desc);
+    }
+
+    const sbw: ISimpleWallet = new SimpleWallet();
+
+    sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, data.password);
+
+    const mnemonicEncrypted = sbw.mnemonicEncrypted;
+
+    await this.authService.setWallet({
+      mnemonicEncrypted
     });
+
+    await this.profileService.updateUser(
+      authData.user.id,
+      "addressBCH",
+      sbw.address
+    );
+
+    this.isLoading = false;
+
+    this.$rootScope.user = authData.user;
+
+    location.href = "/thank-you";
   }
 
   private setAddressForTips = async (userId: string, bchAddress: string) => {
@@ -323,7 +342,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       type: "warning",
       buttons: {
         cancel: true,
-        confirm: true,
+        confirm: true
       }
     });
 
