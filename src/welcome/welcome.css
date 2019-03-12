@@ -473,8 +473,12 @@ img.lazy {
 }
 
 .buy-art-btn{
-    right: 10px;
-    top: 10px;
     position: absolute;
+    right: 20px;
+    bottom: 10px;
 }
 
+.btn-honest {
+  background-color:black;
+  color: white;
+}
