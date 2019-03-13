@@ -62,15 +62,15 @@
 		<div class="row post-container">
       <article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
       <article class="site-block post-body post-paid-section" ng-if="postCtrl.post.hasPaidSection">
-          <div style="width: 100%; text-align: center;">
-              <p><i class="fa fa-lock fa-4x"></i></p>
-              <p><strong>The content in this area is locked by the author.</strong></p>
-              <p>Unlocking will cost you <strong>{{postCtrl.post.paidSectionCost}}</strong> BCH.</p>
-              <p><unlock-button
-                style="margin: 0 auto;"
-                post="postCtrl.post"
-              ></unlock-button></p>
-          </div>
+        <div style="width: 100%; text-align: center;" ng-if="!postCtrl.post.hasBeenPaidFor">
+            <p><i class="fa fa-lock fa-4x"></i></p>
+            <p><strong>The content in this area is locked by the author.</strong></p>
+            <p>Unlocking will cost you <strong>{{postCtrl.post.paidSectionCost}}</strong> BCH.</p>
+            <p><unlock-button
+              style="margin: 0 auto;"
+              post="postCtrl.post"
+            ></unlock-button></p>
+        </div>
           
         <div class="post-paid-section-icons" ng-if="postCtrl.post.hasBeenPaidFor">
           <div class="post-paid-section-icon left">
