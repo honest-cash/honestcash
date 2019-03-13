@@ -2,35 +2,37 @@ import moment from "moment";
 import SocialSharing from '../lib/SocialSharing';
 import { IFetchFeedsArgs } from '../models/models';
 import { dateFormat } from "../config/index";
+import { IHttpService } from "angular";
 
 export default class FeedService {
-    constructor (
-      private $http,
-      private API_URL) {}
+  public static $inject = [
+    "$http", "API_URL"
+  ]
 
-    static $inject = [
-      "$http", "API_URL"
-    ]
+  constructor(
+    private $http: IHttpService,
+    private API_URL: strig
+  ) {}
 
-    public fetchFeeds(query: IFetchFeedsArgs, callback) {
-      query.until = query.until || new Date().toISOString();
+  
 
-      this.$http({
-          url: this.API_URL + "/feeds",
-          method: "GET",
-          params: query
-      }).then((response) => {
-          let feeds = response.data;
+  public fetchFeeds(query: IFetchFeedsArgs, callback) {
+    query.until = query.until || new Date().toISOString();
 
-          for (let feed of feeds) {
-            feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
-            feed.createdAtFormatted = moment(feed.createdAt).utc().format(dateFormat);
-            feed.publishedAtFormatted = moment(feed.publishedAt).utc().format(dateFormat);
-            feed.createdAt = moment(feed.createdAt).utc().format(dateFormat);
-            feed.publishedAt = moment(feed.publishedAt).utc().format(dateFormat);
-          }
+    this.$http<any[]>({
+        url: this.API_URL + "/feeds",
+        method: "GET",
+        params: query
+    }).then((response) => {
+        const feeds = response.data;
 
-          callback(feeds);
-      });
-    }
+        for (const feed of feeds) {
+          feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
+          feed.createdAtFormatted = moment(feed.createdAt).utc().format(dateFormat);
+          feed.publishedAtFormatted = moment(feed.publishedAt).utc().format(dateFormat);
+        }
+
+        callback(feeds);
+    });
+  }
 }
