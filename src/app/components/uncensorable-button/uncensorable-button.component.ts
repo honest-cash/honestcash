@@ -44,8 +44,8 @@ class UncensorableButtonController {
 
   private ngOnInit() {
     this.post = this.$scope.post;
-    this.isUncensoring = false;;
-    this.isVisible = !this.post.userPostRefs.length && (
+    this.isUncensoring = false;
+    this.isVisible = this.post.userPostRefs && !this.post.userPostRefs.length && (
       this.$rootScope.user && this.$rootScope.user.id && (
         this.$rootScope.user.id === this.post.userId
       )
