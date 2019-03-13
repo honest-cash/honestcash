@@ -1,7 +1,7 @@
 import moment from "moment";
 import { dateFormat } from "../../core/config/index";
 import SocialSharing from "../lib/SocialSharing";
-import { IFetchPostsArgs, Post, Upvote } from "../models/models";
+import { IFetchPostsArgs, Post, Upvote, Unlock } from "../models/models";
 
 var sanitizeHtml = require("sanitize-html");
 
@@ -35,6 +35,13 @@ export default class PostService {
     return this.$http.post(this.API_URL + "/post/" + upvote.postId + "/upvote", {
       postId: upvote.postId,
       txId: upvote.txId
+    });
+  }
+
+  public unlock(unlock) {
+    return this.$http.post(this.API_URL + "/post/" + unlock.postId + "/unlock", {
+      postId: unlock.postId,
+      txId: unlock.txId
     });
   }
 
@@ -104,6 +111,12 @@ export default class PostService {
 
     return (res.data as Post[]).map((post) => this.processPost(post));
   }
+
+  public async getUnlocks(postId: number): Promise<Unlock[]> {
+    const res = await this.$http.get(this.API_URL + "/post/" + postId + "/unlocks");
+
+    return res.data as Unlock[];
+  }  
 
   public getPosts(query: IFetchPostsArgs, callback: (posts: Post[]) => void) {
     this.$http({

@@ -20,9 +20,72 @@
 			<div ng-include="'postHeader'"></div>
 		</div>
 
+    <style>      
+      .post-body.post-paid-section {
+        background-color: white;
+        border: 1px solid transparent;
+        padding: 10px;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .post-body.post-paid-section > .post-paid-section-icons {
+        margin-bottom: 15px;
+      }
+      .post-body.post-paid-section > .post-paid-section-icons > .post-paid-section-icon.left {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+      .post-body.post-paid-section > .post-paid-section-icons > .post-paid-section-icon.right {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      .post-body.post-paid-section > .post-paid-section-icons > .post-paid-section-unlock-text {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        width: 80%;
+        text-align: center;
+      }
+      .post-body.post-paid-section > .post-paid-section-body {
+        
+        padding: 10px;
+      }
+    </style>
+
 		<div class="row post-container">
-			<article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
-		</div>
+      <article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
+      <article class="site-block post-body post-paid-section" ng-if="postCtrl.post.hasPaidSection">
+          <div style="width: 100%; text-align: center;">
+              <p><i class="fa fa-lock fa-4x"></i></p>
+              <p><strong>The content in this area is locked by the author.</strong></p>
+              <p>Unlocking will cost you <strong>{{postCtrl.post.paidSectionCost}}</strong> BCH.</p>
+              <p><unlock-button
+                style="margin: 0 auto;"
+                post="postCtrl.post"
+              ></unlock-button></p>
+          </div>
+          
+        <div class="post-paid-section-icons" ng-if="postCtrl.post.hasBeenPaidFor">
+          <div class="post-paid-section-icon left">
+            <i class="fa fa-unlock"></i>
+          </div>
+          <div class="post-paid-section-unlock-text">
+            The content in this area is paid for therefore is unlocked.
+          </div>
+          <div class="post-paid-section-icon right">
+            <i class="fa fa-unlock"></i>
+          </div>
+        </div>
+        <div class="post-paid-section-body" ng-if="postCtrl.post.hasBeenPaidFor" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.paidBody)"></div>
+      </article>
+    </div>
 
 
 		<div class="row">
@@ -161,6 +224,38 @@
         {{ postCtrl.post.userPostRefs[0].extId }}
       </a>
     </div>
+
+    <div class="row" ng-if="postCtrl.unlocks && postCtrl.post.user.addressBCH">
+        <span
+          ><i class="fa fa-unlock"></i>
+          <strong>Unlocks ({{ postCtrl.unlocks.length }})</strong></span
+        >
+  
+        <p style="margin-top: 15px;" ng-if="!postCtrl.unlocks.length"><small>No unlocks.</small></p>
+  
+        <ul style="margin-top: 15px;" class="list-inline list-unstyled">
+          <li
+            ng-repeat="unlock in postCtrl.unlocks"
+            class="post-upvote"
+            style="margin-bottom:5px;"
+          >
+            <a ng-href="/profile/{{ unlock.user.username }}" target="_self">
+              <img
+                src="{{ unlock.user.imageUrl || '/img/avatar.png' }}"
+                class="img-circle img-thumbnail-avatar-smallest"
+              />
+            </a>
+            <a
+              ng-href="https://explorer.bitcoin.com/bch/tx/{{ unlock.txId }}"
+              target="_blank"
+            >
+              {{ unlock.txId.substring(0, 4) }}...{{
+                unlock.txId.substring(unlock.txId.length - 4, unlock.txId.length)
+              }}
+            </a>
+          </li>
+        </ul>
+      </div>
 
     <div class="row" ng-if="postCtrl.upvotes && postCtrl.post.user.addressBCH">
       <span

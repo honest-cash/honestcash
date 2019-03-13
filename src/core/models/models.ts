@@ -29,6 +29,13 @@ export class Upvote {
   public user: User;
 }
 
+export class Unlock {
+  public txId: string;
+  public userPostId: number;
+  public userId: number;
+  public user: User;
+}
+
 export class Post {
   id: number;
   title: string;
@@ -48,4 +55,7 @@ export class Post {
   userPostRefs: any;
   createdAtFormatted: string;
   publishedAtFormatted: string;
+  hasPaidSection?: boolean;
+  paidSectionCost?: number;
+  hasBeenPaidFor?: boolean;
 }
