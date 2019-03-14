@@ -7,7 +7,7 @@
       <strong style="font-size: 30px;"
         >Your
         <span ng-if="currentTab === 'drafts'">drafts</span>
-        <span ng-if="currentTab === 'published'">published</span>
+        <span ng-if="currentTab === 'published'">published stories</span>
       </strong>
     </div>
   </div>
@@ -100,6 +100,7 @@
                   <i class="fa fa-eye"></i>&nbsp;View
                 </a>
                 <a
+                  ng-if="post.status !== 'archived'"
                   class="btn btn-default btn-xs"
                   ng-href="/edit/{{ post.id }}"
                   target="_blank"
