@@ -14,6 +14,16 @@
 				</a>
 
 				<ul class="list-inline" style="margin-bottom: 5px; margin-top: 5px; float: right;">
+					<li style="margin-right: 20px;">
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<i class="fa fa-cogs"></i>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							  <li><a href="#" ng-click="switchEditor()">Markdown Editor (BETA)</a></li>
+							</ul>
+						</div>
+					</li>
 					<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
 						<button class="btn-default btn btn-sm" >
 							<strong class="hidden-xs">Ready to publish?</strong>

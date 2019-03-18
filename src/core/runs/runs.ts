@@ -1,8 +1,8 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 
-export const onStateChange = function($rootScope, $state, AuthService) {
-  $rootScope.$on('$stateChangeStart', async (event, next, nextParams, fromState) => {
-    if (next.name == "starter.welcome") {
+export const onStateChange = function ($rootScope, $state, AuthService) {
+  $rootScope.$on("$stateChangeStart", async (event, next, nextParams, fromState) => {
+    if (next.name === "starter.welcome") {
         $rootScope.welcome = true;
     } else {
         $rootScope.welcome = false;
@@ -19,7 +19,7 @@ export const onStateChange = function($rootScope, $state, AuthService) {
 
       if (AuthService.getUserId()) {
         $rootScope.user = {
-          id: AuthService.getUserId(),
+          id: AuthService.getUserId()
         };
       } else {
         if (location.pathname === "/") {
@@ -27,22 +27,22 @@ export const onStateChange = function($rootScope, $state, AuthService) {
         }
       }
 
-      AuthService.validate()
-      .then(res => {
-        const user = res.data;
+      const response = await AuthService.validate();
+      const user = response.data;
 
-        $rootScope.user = user;
-      }, () => {
-        $rootScope.user = null;
+      $rootScope.user = user || null;
 
-        if (location.pathname === "/") {
-          location.href = "/signup";
-        }
-      });
+      if (!user && location.pathname === "/") {
+        return location.href = "/signup";
+      }
+
+      if (user.status !== "11" && user.status !== "10" && location.pathname === "/") {
+        return location.href = "/thank-you";
+      }
     }
 
-    if (next.name == 'vicigo.profileEdit') {
-      if (!$rootScope.user || $rootScope.user.username != nextParams.profileId) {
+    if (next.name === "vicigo.profileEdit") {
+      if (!$rootScope.user || $rootScope.user.username !== nextParams.profileId) {
         location.href = `/profile/${nextParams.profileId}`;
       }
     }
@@ -83,14 +83,10 @@ export const initProfileUpload = function(API_URL, AuthService) {
 
 		$("#imageUploadProgress").addClass("hidden");
 		$("#profilePicDropzone").removeClass("hidden");
-		$('#uploadProfilePicModal').modal('hide');
+		$("#uploadProfilePicModal").modal("hide");
 	});
 };
 
 export const initBCHWallet = function($rootScope) {
-	let simpleWallet = simpleWalletProvider.initWallet();
-
-	$rootScope.simpleWallet = {
-		address: simpleWallet.address
-	};
+	$rootScope.simpleWallet = simpleWalletProvider.loadWallet();
 };

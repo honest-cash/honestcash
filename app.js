@@ -237,13 +237,18 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }
 
-// Signup & Welcome paths
-for (let welcomePath of [ "/signup" ]) {
+// Markdown Editor paths
+for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown/write/response/:parentPostId" ]) {
+	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
+}
+
+// About page
+for (let welcomePath of [ "/about" ]) {
 	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
 }
 
 // Login paths
-for (let welcomePath of [ "/login" ]) {
+for (let welcomePath of [ "/login", "/signup", "/thank-you" ]) {
 	app.get(welcomePath, (_, res) => res.sendfile("new-welcome.html", { root: __dirname + "/public" }));
 }
 

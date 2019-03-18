@@ -16,6 +16,7 @@ interface IScopeFeedsCtrl extends ng.IScope {
   hashtagFollowed: boolean;
   hashtag: string;
   feedType: "userfeed" | "top" | "new";
+  feedScope: "last-month" | "all-time";
   sortType: "new";
   until: string;
   recommendedHashtags: any[];
@@ -32,6 +33,7 @@ export default class FeedsCtrl {
     "$rootScope",
     "$scope",
     "$stateParams",
+    "$location",
     "$timeout",
     "FeedService",
     "PostService",
@@ -44,6 +46,7 @@ export default class FeedsCtrl {
     private $rootScope: IGlobalScope,
     private $scope: IScopeFeedsCtrl,
     private $stateParams,
+    private $location,
     private $timeout: ng.ITimeoutService,
     private feedService: FeedService,
     private postService: PostService,
@@ -59,6 +62,7 @@ export default class FeedsCtrl {
     this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
     this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
+    this.$scope.feedScope = this.$location.search()['feedScope'] || "last-month";
 
     this.$scope.sortType = "new";
     this.$scope.recommendedHashtags = [];
@@ -84,6 +88,16 @@ export default class FeedsCtrl {
     this.$scope.loadMore = () => this.loadMore();
 
     this.fetchFeeds();
+
+
+    this.$rootScope.$on('$locationChangeSuccess', (event) => {
+      if(this.$location.search()['feedScope']) {
+        this.$scope.feedScope = this.$location.search()['feedScope'];
+        this.scopeService.safeApply($scope, () => {});
+        this.fetchFeeds(true);
+      }
+    });
+
   }
 
   protected loadMore() {
@@ -98,12 +112,13 @@ export default class FeedsCtrl {
     }
   }
 
-  protected fetchFeeds() {
+  protected fetchFeeds(reload = false) {
     this.$scope.isLoading = true;
 
     const obj = {
       hashtag: this.$scope.hashtag,
       until: this.$scope.until,
+      feedScope: undefined,
       page: this.$scope.page,
       followerId: undefined,
       orderBy: undefined,
@@ -116,6 +131,14 @@ export default class FeedsCtrl {
 
     if (this.$scope.feedType === "top") {
       obj.orderBy = "upvoteCount";
+    }
+
+    if (this.$scope.feedType === "top" && this.$scope.feedScope === "last-month") {
+      obj.feedScope = "last-month";
+    }
+
+    if (reload) {
+      this.$scope.feeds = [];
     }
 
     const fetchFn = (obj, cb) => this.$scope.feedType === "userfeed" ?

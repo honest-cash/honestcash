@@ -15,7 +15,7 @@
 
     <li ng-class="{ 'bold': feedType === 'top' }">
       <a
-        ng-href="{{ hashtag ? '/hashtag/' + hashtag : '' }}/top"
+        ng-href="{{ hashtag ? '/hashtag/' + hashtag : '' }}/top?feedScope=last-month"
         target="_self"
       >
         top
@@ -29,6 +29,20 @@
         latest
       </a>
     </li>
+    <li style="float: right;" ng-if="feedType === 'top'">
+        <a
+        ng-href="/{{feedType}}?feedScope=last-month"
+          ng-class="{ 'bold': feedScope === 'last-month' }"
+        >
+          last month
+        </a> · 
+        <a
+        ng-href="/{{feedType}}?feedScope=all-time"
+          ng-class="{ 'bold': feedScope === 'all-time' }"
+        >
+          all time
+        </a>
+      </li>
   </ul>
 </div>
 
@@ -107,8 +121,8 @@
     <div class="block-center">
       <div ng-if="!feeds.length && !isLoading" class="panel">
         <div class="panel-body">
-          <h1>No content yet.</h1>
-          <p>Be the first to create it!</p>
+          <h1>Follow others to see something here.</h1>
+          <p>... or write a story yourself!</p>
 
           <a
             class="btn btn-default btn-lg"

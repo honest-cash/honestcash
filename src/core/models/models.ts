@@ -15,18 +15,20 @@ export interface IFetchFeedsArgs {
 }
 
 export class User {
-  id: number;
-  username: string;
-  imageUrl: string;
-  addressBCH: string;
+  public id: number;
+  public username: string;
+  public imageUrl: string;
+  public addressBCH: string;
+  public addressSLP: string;
 }
 
 export class Upvote {
-  txId: string;
-  userPostId: number;
-  userId: number;
-  user: User;
+  public txId: string;
+  public userPostId: number;
+  public userId: number;
+  public user: User;
 }
+
 export class Post {
   id: number;
   title: string;
@@ -40,7 +42,10 @@ export class Post {
   postTypeId: TPostTypeId;
   parentPostId: number;
   createdAt: string;
+  createdAtRaw: string;
   publishedAt: string;
   userPosts?: Post[];
   userPostRefs: any;
+  createdAtFormatted: string;
+  publishedAtFormatted: string;
 }

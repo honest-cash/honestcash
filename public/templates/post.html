@@ -168,9 +168,9 @@
         <strong>Upvotes ({{ postCtrl.upvotes.length }})</strong></span
       >
 
-      <p ng-if="!postCtrl.upvotes.length"><small>No upvotes.</small></p>
+      <p style="margin-top: 15px;" ng-if="!postCtrl.upvotes.length"><small>No upvotes.</small></p>
 
-      <ul class="list-inline list-unstyled">
+      <ul style="margin-top: 15px;" class="list-inline list-unstyled">
         <li
           ng-repeat="upvote in postCtrl.upvotes"
           class="post-upvote"
@@ -195,9 +195,15 @@
     </div>
 
     <div class="row">
-      <span style="margin-bottom: 15px;">
-        <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
-      </span>
+      <div>
+          <span style="float: left;">
+              <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
+            </span>
+            <span style="float: right;">sort by
+              <a href="#" ng-click="postCtrl.sortResponses('upvoteCount')" ng-class="{'bold': postCtrl.responseSortOrder === 'upvoteCount'}"># of upvotes</a> /
+              <a href="#" ng-click="postCtrl.sortResponses('createdAtRaw')" ng-class="{'bold': postCtrl.responseSortOrder === 'createdAtRaw'}">chronologically</a>
+            </span>
+      </div>
 
       <div class="block-center" ng-if="postCtrl.post.status !== 'archived'">
         <div class="panel">
@@ -236,12 +242,18 @@
         </div>
       </div>
 
-      <div class="block-center" ng-repeat="response in postCtrl.responses">
+      <div class="block-center" ng-repeat="response in postCtrl.responses | orderBy: postCtrl.responseSortOrder:true">
         <div ng-include="'response'"></div>
       </div>
     </div>
   </div>
 </div>
+<!--
+  the below visible-xs is for the call to action
+  so that the page ends further down
+-->
+<div class="visible-xs" style="min-height: 200px;"></div>
+<div class="visible-sm" style="min-height: 80px;"></div>
 
 <script type="text/ng-template" id="response">
   <div class="panel">
@@ -354,3 +366,5 @@
     </div>
   </header>
 </script>
+
+<bottom-call-to-action-bar ng-if="!user.id" post="postCtrl.post"></bottom-call-to-action-bar>
