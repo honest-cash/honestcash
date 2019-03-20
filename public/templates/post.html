@@ -225,7 +225,7 @@
       </a>
     </div>
 
-    <div class="row" ng-if="postCtrl.unlocks && postCtrl.post.user.addressBCH">
+    <div class="row" ng-if="postCtrl.unlocks && postCtrl.post.hasPaidSection && postCtrl.post.user.addressBCH">
         <span
           ><i class="fa fa-unlock"></i>
           <strong>Unlocks ({{ postCtrl.unlocks.length }})</strong></span

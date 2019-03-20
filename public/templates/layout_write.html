@@ -1,94 +1,301 @@
 <div style="margin-top: 100px;" class="text-center" ng-show='!ready'>
-    <img style="max-height: 100px; width: auto;padding: 8px;" class="header-logo" src="/img/honest-logo-2.png" alt="Honest Logo">
+	<img style="max-height: 100px; width: auto;padding: 8px;" class="header-logo" src="/img/honest-logo-2.png"
+		alt="Honest Logo">
 </div>
 <div style="margin-top:10px;" class="text-center" ng-show='!ready'>
-    <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+	<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
 </div>
 
 <div ng-show='ready'>
 	<div>
-	<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader" >
-		<div class="container-fluid">
+		<div class="navbar navbar-fixed-top navbar-default" ng-if="!welcome&&!noHeader">
+			<div class="container-fluid">
 				<a href="/" target="_self" class="pull-left">
-					<img style="max-height: 50px;width: auto; padding: 8px;" class="header-logo" src="/img/honest-logo-2.png" alt="Honest Logo">
+					<img style="max-height: 50px;width: auto; padding: 8px;" class="header-logo" src="/img/honest-logo-2.png"
+						alt="Honest Logo">
 				</a>
 
 				<ul class="list-inline" style="margin-bottom: 5px; margin-top: 5px; float: right;">
 					<li style="margin-right: 20px;">
 						<div class="dropdown">
-							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							<i class="fa fa-cogs"></i>
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="true">
+								<i class="fa fa-cogs"></i>
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							  <li><a href="#" ng-click="switchEditor()">Markdown Editor (BETA)</a></li>
+								<li><a href="#" ng-click="switchEditor()">Markdown Editor (BETA)</a></li>
 							</ul>
 						</div>
 					</li>
 					<li ng-if="draft.status === 'draft'" ng-click="readyToPublish(draft.id)">
-						<button class="btn-default btn btn-sm" >
+						<button class="btn-default btn btn-sm">
 							<strong class="hidden-xs">Ready to publish?</strong>
 							<strong class="visible-xs">Publish</strong>
 						</button>
 					</li>
 
 					<li ng-if="draft.status === 'published'" ng-click="readyToPublish(draft.id)">
-						<button class="btn-default btn" style="margin:10px;" >
+						<button class="btn-default btn" style="margin:10px;">
 							<strong>Save</strong>
 						</button>
 					</li>
 
 					<li style="cursor: pointer;" class="menu-item-profile">
 						<a ng-href="/profile/{{user.username}}" target="_self">
-							<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}" class="img-circle img-thumbnail-avatar-smallest">
-							<img ng-if="!user.imageUrl" src="/img/avatar.png"  alt="profile pic" class="img-circle img-thumbnail-avatar-smallest">
+							<img ng-if="user.imageUrl" fallback-src="{{'/img/avatar.png'}}" ng-src="{{user.imageUrl}}"
+								class="img-circle img-thumbnail-avatar-smallest">
+							<img ng-if="!user.imageUrl" src="/img/avatar.png" alt="profile pic"
+								class="img-circle img-thumbnail-avatar-smallest">
 						</a>
 					</li>
 				</ul>
+			</div>
+		</div>
+
+		<div style="min-height:440px;">
+			<div class="visible-xs" style="height:50px;"></div>
+			<div style="height:40px;"></div>
+			<div ui-view autoscroll="true"></div>
 		</div>
 	</div>
 
-	<div style="min-height:440px;">
-		<div class="visible-xs" style="height:50px;"></div>
-		<div style="height:40px;"></div>
-		<div ui-view autoscroll="true"></div>
-	</div>
-</div>
-
-<!-- PUBLISH MODAL -->
-<div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><b>Prepare your story for readers</h4>
-			</div>
-
-			<div class="modal-body">
-		
-        <p>Add or change topics so readers know what your story is about.</p>
-				
-				<div class="form-group">
-					<form>
-						<input id="description" name="tags" placeholder="Enter up to 5 hashtags" />
-					</form>
+	<!-- PUBLISH MODAL -->
+	<div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="tipModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel"><b>Prepare your story for readers</h4>
 				</div>
 
-				<div class="form-group">
-          <small>
-            <ul>
-              <li>You can edit the story after publishing.</li>
-              <li class="hidden">An email will be sent to your followers.</li>
-            </ul>
-          </small>
-				</div>
-			</div>
+				<div class="modal-body">
 
-			<div class="modal-footer">
-				<button ng-disabled="isLoading" ng-click="publishPost(draft.id)" type="button" class="btn btn-default btn-lg btn-block">
-					{{isLoading ? "Saving..." : draft.status === "published" ? "Save" : "Publish" }}
-				</button>
+					<p>Add or change topics so readers know what your story is about.</p>
+
+					<div class="form-group">
+						<form>
+							<input id="description" name="tags" placeholder="Enter up to 5 hashtags" />
+						</form>
+					</div>
+
+					<hr>
+
+					<div class="form-group">
+						<form>
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="hasPaidSection"> <strong>I have a paid section in my story</strong>
+								</label>
+							</div>
+						</form>
+					</div>
+					<div class="form-group" ng-if="hasPaidSection">
+						<form class="form-inline">
+							<div class="form-group">
+								<label for="exampleInputName2">Cost in BCH:</label>
+								<input type="text" class="form-control" id="exampleInputName2" placeholder="Amount in BCH"
+									ng-model="paidSectionCost">
+							</div>
+						</form>
+					</div>
+					<style>
+						.opacity-0 {
+							opacity: 0;
+						}
+
+						.br-1 {
+							border-right-width: 1px;
+							border-right-style: solid;
+						}
+
+						.br-grey {
+							border-right-color: #c5c5c5;
+						}
+
+						.bb-1 {
+							border-bottom-width: 1px;
+							border-bottom-style: solid;
+						}
+
+						.bb-grey {
+							border-bottom-color: #c5c5c5;
+						}
+
+						.bt-1 {
+							border-top-width: 1px;
+							border-top-style: solid;
+						}
+
+						.bt-grey {
+							border-top-color: #c5c5c5;
+						}
+
+						.bl-1 {
+							border-left-width: 1px;
+							border-left-style: solid;
+						}
+
+						.bl-grey {
+							border-left-color: #c5c5c5;
+						}
+
+						.b-collapse {
+							border-collapse: collapse;
+						}
+
+						.flex {
+							display: flex;
+						}
+
+						.flex-wrap {
+							flex-wrap: wrap;
+						}
+
+						.flex-vertical-center {
+							align-items: center;
+							justify-content: center;
+						}
+						.flex-vertical-end {
+							align-items: flex-end;
+						}
+
+						.f-normal {
+							font-weight: initial;
+						}
+
+						.h-100 {
+							height: 100%;
+						}
+
+						.post-paid-section-preview-wrapper {
+							border: 1px solid #c5c5c5;
+							border-radius: 3px;
+							padding: 0px;
+						}
+
+						.post-paid-section-preview-paid-section,
+						.post-paid-section-preview-free-section {
+							font-weight: initial;
+							padding: 0px 15px;
+						}
+
+						.post-paid-section-preview-paid-section {
+							min-height: 150px;
+							background-color: #ededed;
+						}
+
+						.post-paid-section-preview-free-section {}
+
+						.post-paid-section-arrows {
+							margin-left: 15px;
+							margin-right: -15px;
+							min-height: 150px;
+							padding: 0 20px;
+						}
+
+						.post-paid-section-arrows>.post-paid-section-up-arrow,
+						.post-paid-section-arrows>.post-paid-section-down-arrow {
+							transition: font-size 0.2s;
+						}
+
+						.post-paid-section-arrows>.post-paid-section-up-arrow {
+							position: absolute;
+							top: 0;
+						}
+
+						.post-paid-section-arrows>.post-paid-section-up-arrow:hover,
+						.post-paid-section-arrows>.post-paid-section-down-arrow:hover {
+							font-size: 16px;
+						}
+
+						.post-paid-section-arrows>.post-paid-section-down-arrow {
+							position: absolute;
+							bottom: 0;
+						}
+
+						.post-paid-section-linebreak {
+							position: absolute;
+							top: 42%;
+							left: 23px;
+						}
+
+						.post-paid-section-preview-wrapper p {
+							margin-bottom: 0px;
+						}
+					</style>
+					<div ng-if="hasPaidSection">
+						<p><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
+						<p><small><i class="f-normal">Click the arrows to navigate between paragraph breaks</i></small></p>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-10 post-paid-section-preview-wrapper">
+									<div class="post-paid-section-preview-free-section">
+										<div class="row flex flex-wrap">
+											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center">
+												<strong>Last Free Sentence</strong>
+											</div>
+											<div class="col-xs-10">
+												<article class="h-100 flex flex-vertical-end" ng-bind-html="trustAsHtml(freeBodyCut)"></article>
+											</div>
+										</div>
+									</div>
+									<div class="post-paid-section-preview-paid-section">
+										<div class="row flex flex-wrap">
+											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center" ng-class="{'bb-1': paidSectionLinebreak === paidSectionLinebreakEnd - 3, 'bb-grey': paidSectionLinebreak === paidSectionLinebreakEnd - 3}">
+												<strong>First Paid Sentence</strong>
+											</div>
+											<div class="col-xs-10">
+												<article ng-bind-html="trustAsHtml(paidBodyCut)"></article>
+											</div>
+										</div>
+										<div class="row flex flex-wrap" ng-if="paidSectionLinebreak !== paidSectionLinebreakEnd - 3">
+											<div class="col-xs-2 br-1 br-grey"></div>
+											<div class="col-xs-10 bt-1 bt-grey bb-1 bb-grey">
+												<p class="text-center"><strong>...</strong></p>
+											</div>
+										</div>
+										<div class="row flex flex-wrap">
+											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center">
+												<strong>Last Paid Sentence</strong>
+											</div>
+											<div class="col-xs-10">
+												<article ng-bind-html="trustAsHtml(paidBodyCutEnd)"></article>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-2 text-center post-paid-section-arrows">
+									<div class="post-paid-section-up-arrow" ng-click="switchLinebreak('decrement')"
+										ng-if="paidSectionLinebreak !== 0">
+										<i class="fa fa-chevron-up"></i>
+									</div>
+									<div class="post-paid-section-linebreak">{{paidSectionLinebreakText}}</div>
+									<div class="post-paid-section-down-arrow" ng-click="switchLinebreak('increment')"
+										ng-if="paidSectionLinebreak !== paidSectionLinebreakEnd - 3">
+										<i class="fa fa-chevron-down"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="form-group">
+						<small>
+							<ul>
+								<li>You can edit the story after publishing.</li>
+								<li class="hidden">An email will be sent to your followers.</li>
+							</ul>
+						</small>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button ng-disabled="isLoading" ng-click="publishPost(draft.id)" type="button"
+						class="btn btn-default btn-lg btn-block">
+						{{isLoading ? "Saving..." : draft.status === "published" ? "Save" : "Publish" }}
+					</button>
+				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 </div>
 <!-- PUBLISH MODAL -->
