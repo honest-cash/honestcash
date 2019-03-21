@@ -7,6 +7,7 @@ import "medium-editor/dist/css/themes/default.min.css";
 import { AuthService } from "../auth/AuthService";
 import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
+import EditorService from "./services/EditorService";
 
 const converter = new showdown.Converter();
 
@@ -18,6 +19,7 @@ export default class EditorCtrl {
       "$timeout",
       "PostService",
       "AuthService",
+      "EditorService",
       "API_URL"
     ];
 
@@ -28,6 +30,7 @@ export default class EditorCtrl {
       private $timeout: ng.ITimeoutService,
       private postService: PostService,
       private authService: AuthService,
+      private editorService: EditorService,
       private API_URL: string
     ) {
         let titleEditor;
@@ -49,177 +52,10 @@ export default class EditorCtrl {
           return $sce.trustAsHtml(html);
         }
 
-        const truncateText = (str, reverse?) => {
-          const [length, ending] = [100, "..."];
-
-          if (str.length > length) {
-            if (!reverse) {
-              return str.substring(0, length - ending.length) + ending;
-            } else {
-              return ending + str.substring(str.length - length, str.length);
-            }
-          } else {
-            return str;
-          }
-        };
-
-        const stringHasString = (string, find) => {
-          return string.indexOf(find) !== -1;
-        }
-        
-        const getFixedBody = (externalHtml?) => {
-          // converting from html to md to html cleans the body
-          const bodyMarkdown = converter.makeMd(externalHtml ? externalHtml : bodyEditor.serialize().body.value);
-          const bodyHtml = converter.makeHtml(bodyMarkdown);
-
-          let $bodyHtml = $(bodyHtml);
-          // get only the dom elements
-          let _elements = $bodyHtml.filter((e) => {
-            return $bodyHtml[e].nodeName !== "#text" && $bodyHtml[e].nodeName !== "#comment"
-          });
-
-          // to convert mediumeditor default div wrappers to showdown converted syntax
-          // showdown only has p tags
-          // to the below is to replace those elements
-          const replaceContents = [];
-          // the html is to replace the body in the editor
-          let _fixedBody = '';
-
-          _elements = _elements.map(i => {
-            const elem = _elements[i];
-            const $elem = $(elem);
-            // find regular divs and remove them
-            // get the content of the div and its previous sibling
-            // so that it is inserted at correct place
-            if (elem.nodeName === "DIV" && !stringHasString(elem.className, "medium-insert-images")) {
-              const previous = $elem.prev();
-              const content = $elem;
-              replaceContents.push([content, previous]);
-              $elem.remove();
-              return null;
-            }
-            // find divs that are inserted by the mediumeditor mediuminsert plugin
-            // with showdown converted syntax
-            // showdown only has img inside a p tag
-            // we rewrap the div with p tag here
-            if (elem.nodeName === "DIV" && stringHasString(elem.className, "medium-insert-images")) {
-              const content = $elem;
-              const img = getOuterHtml($(content).find('img'));
-              const imgWrapped = `<p>${img}</p>`;
-              return $(imgWrapped);
-            }
-            // kind of trim the body of all unneccessary br tags
-            // the honestcash-editor has auto delete feature for more than one new lines
-            // we simulate the same by removing all the br tags because p and header tags
-            // already provide the margins and paddings
-            if (elem.childElementCount === 1 && elem.lastElementChild.nodeName === "BR") {
-              $elem.remove();
-              return null;
-            }
-            // we form our last new html
-            _fixedBody += getOuterHtml(elem);
-            return elem;
-          });
-
-          replaceContents.forEach(contentTuple => {
-            $(contentTuple[0]).insertAfter($(contentTuple[1]));
-          });
-
-          // elements and html is returned as tuple
-          return [_elements, _fixedBody];
-        }
-
         const setPaidSectionLinebreakEnd = () => {
           if (!$scope.paidSectionLinebreakEnd) {
             $scope.paidSectionLinebreakEnd = elements.length;
           }
-        }
-
-        const getContextElement = (n: "first" | "after" | "last") => {
-          switch (n) {
-            case "first":
-              return elements.eq($scope.paidSectionLinebreak);
-            case "after":
-              return elements.eq($scope.paidSectionLinebreak + 1);
-            case "last":
-              return elements.eq($scope.paidSectionLinebreakEnd - 1);
-            default:
-              break;
-          }
-        }
-
-        const getOuterHtml = (element) => {
-          return $(element).prop("outerHTML");
-        }
-
-        const getLinebreakParagraph = (n?: "first" | "after" | "last", trim?) => {
-
-          setPaidSectionLinebreakEnd();
-
-          let paragraph = '';
-          let reverse = false;
-
-          switch (n) {
-            case "first":
-              paragraph = getOuterHtml(getContextElement("first"));
-              reverse = true;
-              break;
-            case "after":
-              paragraph = getOuterHtml(getContextElement("after"));
-              break;
-            case "last":
-              paragraph = getOuterHtml(getContextElement("last"));
-              break;
-            default:
-              break;
-          }
-
-          if (trim) {
-            const $paragraph = $(paragraph);
-            // disable trim for images
-            if (!$paragraph.find('img').length) {
-              // disable trim for lists
-              if ($paragraph.prop("nodeName") !== "UL" && $paragraph.prop("nodeName") !== "OL") {
-                // get last html element from the paragraph to shorten it
-                // the text inside the element will not be truncated
-                const children = $paragraph.children();
-                const childrenLength = children.length;
-  
-                if (childrenLength) {
-                  let lastChild = children[$paragraph.prop("childElementCount") - 1];
-                  // we remove the br if it is the last element
-                  // so that Last Free Sentence is not blank
-                  if ($(lastChild).prop("nodeName") === "BR") {
-                    $(lastChild).remove();
-                    lastChild = children[$paragraph.prop("childElementCount") - 1];
-                  }
-                  
-                  paragraph = getOuterHtml(lastChild);
-                } else {
-                  // if no html tag is existent in the paragraph, shorten the text
-                  paragraph = truncateText($paragraph.text(), reverse);
-                }
-              }
-            }
-          }
-          return paragraph;
-        }
-
-        const getCutBody = (type: "free" | "paid" | "paidEnd") => {
-          if (type === "free") {
-            return getLinebreakParagraph("first", true);
-          } else if (type === "paid"){
-            return getLinebreakParagraph("after");
-          } else if (type === "paidEnd") {
-            return getLinebreakParagraph("last");
-          }
-        }
-
-        const refreshBodies = (externalHtml?) => {
-          [elements, fixedBody] = getFixedBody(externalHtml);
-          $scope.freeBodyCut = getCutBody("free");
-          $scope.paidBodyCut = getCutBody("paid");
-          $scope.paidBodyCutEnd = getCutBody("paidEnd");
         }
 
         const resetPaidSectionSettings = () => {
@@ -261,6 +97,13 @@ export default class EditorCtrl {
           }
         };
 
+        const refreshBodies = (externalHtml?) => {
+          [elements, fixedBody] = this.editorService.getFixedBody(bodyEditor, externalHtml);
+          $scope.freeBodyCut = this.editorService.getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+          $scope.paidBodyCut = this.editorService.getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+          $scope.paidBodyCutEnd = this.editorService.getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+        }
+
         let parentPostId;
         let postId;
         let editingMode = "write";
@@ -277,7 +120,8 @@ export default class EditorCtrl {
         }
 
         const saveDraftElement = (element, cb?) => {
-          const md = converter.makeMd(bodyEditor.serialize().body.value);
+          refreshBodies();
+          const md = this.editorService.getFixedBody(bodyEditor);
 
           const post = {
             body: md,
@@ -310,7 +154,6 @@ export default class EditorCtrl {
             return toastr.error("The story needs to be at least 50 characters.");
           }
 
-          resetPaidSectionSettings();
           refreshBodies();
           bodyEditor.setContent(fixedBody, 0);
 
@@ -520,6 +363,7 @@ export default class EditorCtrl {
               document.getElementById("body").setAttribute("data-placeholder", "");
               const html = converter.makeHtml(bodyMD);
               refreshBodies(html);
+              resetPaidSectionSettings();
               bodyEditor.setContent(fixedBody, 0);
             }
 
