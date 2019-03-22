@@ -5,3 +5,6 @@ scripts/user_posts.json
 public/js/app.js
 public/js/editor.js
 public/js/welcome.js
+public/js/app.js.map
+public/js/editor.js.map
+public/js/welcome.js.map
