@@ -91,146 +91,23 @@
 					<div class="form-group" ng-if="hasPaidSection">
 						<form class="form-inline">
 							<div class="form-group">
-								<label for="exampleInputName2">Cost in BCH:</label>
-								<input type="text" class="form-control" id="exampleInputName2" placeholder="Amount in BCH"
-									ng-model="paidSectionCost">
+								<label for="paidSectionCost">Cost in BCH:</label>
+								<input type="number" step="0.001" min="0" class="form-control" id="paidSectionCost" placeholder="Amount in BCH"
+									ng-model="paidSectionCost" ng-change="setPaidSectionCost($event)" ng-class="{'b-red b-2': publishTouched && paidSectionCost === 0}">
+							</div>
+							<div ng-if="publishTouched && paidSectionCost === 0" class="form-group">
+								<div class="alert alert-danger">
+									Cost is required.
+								</div>
 							</div>
 						</form>
 					</div>
-					<style>
-						.opacity-0 {
-							opacity: 0;
-						}
-
-						.mb-0 {
-							margin-bottom: 0px;
-						}
-
-						.br-1 {
-							border-right-width: 1px;
-							border-right-style: solid;
-						}
-
-						.br-grey {
-							border-right-color: #c5c5c5;
-						}
-
-						.bb-1 {
-							border-bottom-width: 1px;
-							border-bottom-style: solid;
-						}
-
-						.bb-grey {
-							border-bottom-color: #c5c5c5;
-						}
-
-						.bt-1 {
-							border-top-width: 1px;
-							border-top-style: solid;
-						}
-
-						.bt-grey {
-							border-top-color: #c5c5c5;
-						}
-
-						.bl-1 {
-							border-left-width: 1px;
-							border-left-style: solid;
-						}
-
-						.bl-grey {
-							border-left-color: #c5c5c5;
-						}
-
-						.b-collapse {
-							border-collapse: collapse;
-						}
-
-						.flex {
-							display: flex;
-						}
-
-						.flex-wrap {
-							flex-wrap: wrap;
-						}
-
-						.flex-vertical-center {
-							align-items: center;
-							justify-content: center;
-						}
-						.flex-vertical-end {
-							align-items: flex-end;
-						}
-
-						.f-normal {
-							font-weight: initial;
-						}
-
-						.h-100 {
-							height: 100%;
-						}
-
-						.post-paid-section-preview-wrapper {
-							border: 1px solid #c5c5c5;
-							border-radius: 3px;
-							padding: 0px;
-						}
-
-						.post-paid-section-preview-paid-section,
-						.post-paid-section-preview-free-section {
-							font-weight: initial;
-							padding: 0px 15px;
-						}
-
-						.post-paid-section-preview-paid-section {
-							background-color: #ededed;
-						}
-
-						.post-paid-section-preview-free-section {}
-
-						.post-paid-section-arrows {
-							margin-left: 15px;
-							margin-right: -15px;
-							min-height: 150px;
-							padding: 0 20px;
-						}
-
-						.post-paid-section-arrows>.post-paid-section-up-arrow,
-						.post-paid-section-arrows>.post-paid-section-down-arrow {
-							transition: font-size 0.2s;
-						}
-
-						.post-paid-section-arrows>.post-paid-section-up-arrow {
-							position: absolute;
-							top: 0;
-						}
-
-						.post-paid-section-arrows>.post-paid-section-up-arrow:hover,
-						.post-paid-section-arrows>.post-paid-section-down-arrow:hover {
-							font-size: 16px;
-						}
-
-						.post-paid-section-arrows>.post-paid-section-down-arrow {
-							position: absolute;
-							bottom: 0;
-						}
-
-						.post-paid-section-linebreak {
-							position: absolute;
-							top: 42%;
-							left: 23px;
-						}
-
-						.post-paid-section-preview-wrapper p {
-							margin-bottom: 0px;
-						}
-					</style>
 					<div ng-if="hasPaidSection">
 						<p class="mb-0"><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
 						<p><small><i class="f-normal">Click the arrows to navigate between paragraph breaks</i></small></p>
 						<div class="row">
 							<div class="col-xs-12">
-								<div class="col-xs-10 post-paid-section-preview-wrapper">
+								<div class="col-xs-10 post-paid-section-preview-wrapper" ng-class="{'b-red b-2': publishTouched && !paidSectionLineBreakTouched}">
 									<div class="post-paid-section-preview-free-section">
 										<div class="row flex flex-wrap">
 											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center">

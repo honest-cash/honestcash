@@ -45,7 +45,10 @@ export default class EditorCtrl {
           title: false
         };
         $scope.isFullPostShown = false;
-        $scope.hasPaidSection = true;
+        $scope.hasPaidSection = false;
+        $scope.publishTouched = false;
+        $scope.paidSectionLineBreakTouched = false;
+        $scope.paidSectionCost = 0;
         $scope.toggleFullPost = () => $scope.isFullPostShown = !$scope.isFullPostShown;
 
         $scope.trustAsHtml = function(html) {
@@ -65,17 +68,14 @@ export default class EditorCtrl {
         }
 
         const adjustPaidSectionLinebreak = (action: "increment" | "decrement") => {
-          switch (action) {
-            case "increment":
-              $scope.paidSectionLinebreak += 1;
-              $scope.paidSectionLinebreakText += 1;
-              break;
-            case "decrement":
-              $scope.paidSectionLinebreak -= 1;
-              $scope.paidSectionLinebreakText -= 1;
-            default:
-              break;
+          if (action === "increment") {
+            $scope.paidSectionLinebreak += 1;
+            $scope.paidSectionLinebreakText += 1;
+          } else if (action === "decrement") {
+            $scope.paidSectionLinebreak -= 1;
+            $scope.paidSectionLinebreakText -= 1;
           }
+          $scope.paidSectionLineBreakTouched = true;
         }
 
         $scope.switchLinebreak = (action: "increment" | "decrement") => {
@@ -96,6 +96,10 @@ export default class EditorCtrl {
               break;
           }
         };
+
+        $scope.setPaidSectionCost = () => {
+          $scope.paidSectionCost = document.getElementById("paidSectionCost").valueAsNumber;
+        }
 
         const refreshBodies = (externalHtml?) => {
           [elements, fixedBody] = this.editorService.getFixedBody(bodyEditor, externalHtml);
@@ -121,18 +125,27 @@ export default class EditorCtrl {
 
         const saveDraftElement = (element, cb?) => {
           refreshBodies();
-          const md = this.editorService.getFixedBody(bodyEditor);
+          const md = converter.makeMd(this.editorService.getFixedBody(bodyEditor)[1]);
 
           const post = {
             body: md,
             hashtags: $("input#description").val() || "",
-            title: document.getElementById("title").innerText
+            title: document.getElementById("title").innerText,
+            hasPaidSection: $scope.hasPaidSection,
+            paidSectionLinebreak: $scope.paidSectionLinebreak,
+            paidSectionCost: $scope.paidSectionCost
           };
 
           if (!post.body && !post.title && !post.hashtags) {
               $scope.saving = null;
 
               return cb && cb();
+          }
+
+          if (element === "paidSection" && post.hasPaidSection && $scope.paidSectionLineBreakTouched && post.paidSectionCost === 0) {
+            $scope.saving = null;
+
+            return cb && cb();
           }
 
           $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
@@ -161,6 +174,11 @@ export default class EditorCtrl {
         };
 
         $scope.publishPost = (postId: number) => {
+          if ($scope.hasPaidSection && !$scope.paidSectionLineBreakTouched) {
+            $scope.publishTouched = true;
+            return;
+          }
+
           if ($scope.isLoading === true) {
             return toastr.info("Saving...");
           }
@@ -174,7 +192,8 @@ export default class EditorCtrl {
                 async.parallel([
                   (cb) => saveDraftElement("title", cb),
                   (cb) => saveDraftElement("body", cb),
-                  (cb) => saveDraftElement("hashtags", cb)
+                  (cb) => saveDraftElement("hashtags", cb),
+                  (cb) => saveDraftElement("paidSection", cb),
                 ], cb);
               },
               (cb) => {
