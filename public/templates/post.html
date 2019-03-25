@@ -32,18 +32,6 @@
               post="postCtrl.post"
             ></unlock-button></p>
         </div>
-          
-        <div class="post-paid-section-icons" ng-if="postCtrl.post.hasBeenPaidFor">
-          <div class="post-paid-section-icon left">
-            <i class="fa fa-unlock"></i>
-          </div>
-          <div class="post-paid-section-unlock-text">
-            The content in this area is paid for therefore is unlocked.
-          </div>
-          <div class="post-paid-section-icon right">
-            <i class="fa fa-unlock"></i>
-          </div>
-        </div>
         <div class="post-paid-section-body" ng-if="postCtrl.post.hasBeenPaidFor" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.paidBody)"></div>
       </article>
     </div>
@@ -417,7 +405,12 @@
 
     <div>
       <h1>
-        <strong>{{postCtrl.post.title}}</strong>
+        <strong>
+          <span class="hc-tooltip" ng-if="postCtrl.post.user.id !== user.id && !postCtrl.post.hasBeenPaidFor" data-tippy-content="Unlocking this story will cost you {{postCtrl.post.paidSectionCost}} BCH"><i class="fa fa-lock"></i>&nbsp;</span>
+          <span class="hc-tooltip" ng-if="postCtrl.post.user.id !== user.id && postCtrl.post.hasBeenPaidFor" data-tippy-content="You have unlocked this story"><i class="fa fa-unlock"></i>&nbsp;</span>
+          {{postCtrl.post.title}}
+        </strong>&nbsp;
+        <small ng-if="postCtrl.post.user.id === user.id" style="cursor: pointer;" ng-click="postCtrl.editPost()"><i class="fa fa-edit"></i>&nbsp;Edit</small>
       </h1>
     </div>
   </header>

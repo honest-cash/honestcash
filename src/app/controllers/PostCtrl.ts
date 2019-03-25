@@ -88,6 +88,10 @@ export default class PostCtrl {
     this.scopeService.safeApply(this.$scope);
   }
 
+  private async editPost() {
+    window.location.href = `/edit/${this.post.id}`;
+  }
+
   private async initTippy() {
     tippy(".hc-tooltip");
     tippy(".user-follower-count");
