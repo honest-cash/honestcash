@@ -18,10 +18,6 @@ export default class PostService {
     private API_URL
   ) {}
 
-  public removePost(postId) {
-    return this.$http.delete(this.API_URL + "/post/" + postId);
-  }
-
   public publishPic(postId, params, callback) {
     this.$http.put(this.API_URL + "/post/image/publish", {
       postId,
@@ -58,8 +54,8 @@ export default class PostService {
     return this.processPost(res.data as Post);
   }
 
-  public async deletePost(postId: number) {
-    return this.$http.delete(this.API_URL + "/post/" + postId);
+  public async archivePost(post: Post) {
+    return this.$http.put(this.API_URL + "/post/" + post.id + "/archive", post);
   }
 
   public displayHTML(html: string): string {

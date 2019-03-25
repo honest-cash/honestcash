@@ -1,6 +1,6 @@
 
 
-declare var toastr: { error: any; warning: any; info: any; options: any; };
+declare var toastr: { error: any; success: any; warning: any; info: any; options: any; };
 
 toastr.options.positionClass = "toast-bottom-right";
 

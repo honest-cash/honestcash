@@ -16,8 +16,10 @@ enum TabStatus {
 interface IScopePostsCtrl extends ng.IScope {
   isLoading: boolean;
   isLoadingMore: boolean;
-  isDeleting: boolean;
+  isArchiving: boolean;
   posts: Post[];
+  comments: Post[];
+  drafts: Post[];
   page: number;
   limit: number;
   postsAvailable: boolean;
@@ -28,7 +30,7 @@ interface IScopePostsCtrl extends ng.IScope {
   loadMore: () => void;
   switchTab: (tab: TabStatus) => void;
   displayPostBody: (html: string) => string;
-  deletePost: (id: number) => void;
+  archivePost: (post: Post) => void;
 }
 
 export default class PostsCtrl {
@@ -45,13 +47,15 @@ export default class PostsCtrl {
   ) {
     this.$scope.isLoading = true;
     this.$scope.isLoadingMore = false;
-    this.$scope.isDeleting = false;
+    this.$scope.isArchiving = false;
     this.$scope.posts = [];
+    this.$scope.comments = [];
+    this.$scope.drafts = [];
     this.$scope.page = 1;
     this.$scope.limit = 20;
     this.$scope.postsAvailable = true;
     this.$scope.currentTab = TabStatus.published;
-    this.$scope.deletePost = (id: number) => this.deletePost(id);
+    this.$scope.archivePost = (post: Post) => this.archivePost(post);
     this.$scope.switchTab = (tab: TabStatus) => this.switchTab(tab);
     this.$scope.displayPostBody = (html: string) => this.displayPostBody(html);
     this.$scope.loadMore = () => this.loadMore();
@@ -83,15 +87,22 @@ export default class PostsCtrl {
           return;
         }
 
+        const posts = data.filter(d => !d.parentPostId);
+        const comments = data.filter(d => !d.parentPostId);
+
         if (this.$scope.page === 0) {
-          this.$scope.posts = data;
+          this.$scope.posts = posts;
+          this.$scope.comments = comments;
         } else {
-          data.forEach(post => {
+          posts.forEach(post => {
             this.$scope.posts.push(post);
+          });
+          comments.forEach(comment => {
+            this.$scope.comments.push(comment);
           });
         }
 
-        if (data.length < this.$scope.limit) {
+        if (posts.length < this.$scope.limit) {
           this.$scope.postsAvailable = false;
         } else {
           this.$scope.postsAvailable = true;
@@ -111,31 +122,35 @@ export default class PostsCtrl {
     this.$scope.currentTab = tab;
   }
 
-  public async deletePost(id: number) {
-    this.$scope.isDeleting = true;
+  public async archivePost(post: Post) {
+    this.$scope.isArchiving = true;
 
     const confirmationResult = await swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this post!",
+      text: `
+        Archived posts will still be reachable by direct links however the body of the post will be hidden with [archived].
+        
+        The upvotes and the comments will still be visible however users will not be able to upvote or comment on your post/comments anymore.
+      `,
       icon: "warning",
       buttons: true,
       dangerMode: true,
     });
 
     if (confirmationResult) {
-      const deleteResult = await this.postService.deletePost(id);
+      const archiveResult = await this.postService.archivePost(post);
 
-      if (deleteResult.status === 200) {
-        this.$scope.posts = this.$scope.posts.filter(f => f.id !== id);
-        toastr.success("Your post has been deleted");
+      if (archiveResult.status === 200) {
+        this.$scope.posts = this.$scope.posts.filter(f => f.id !== post.id);
+        toastr.success("Your post has been archived");
       } else {
-        toastr.error("There was an error while deleting your post")
+        toastr.error("There was an error while archiving your post");
       }
     } else {
-      toastr.info("Your post has not been deleted");
+      toastr.info("Your post has not been archived");
     }
 
-    this.$scope.isDeleting = false;
+    this.$scope.isArchiving = false;
 
     this.scopeService.safeApply(this.$scope, () => {});
   }
