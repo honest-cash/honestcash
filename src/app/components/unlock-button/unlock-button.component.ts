@@ -139,7 +139,7 @@ class UnlockButtonController {
       tx = await simpleWallet.send([
           author,
           {
-            opReturn: ['0x4801', postId.toString()]
+            opReturn: ['0x4802', postId.toString()]
           }
       ]);
     } catch (err) {
@@ -162,7 +162,7 @@ class UnlockButtonController {
 
         // replace with sweetalert
         $('#loadWalletModal').modal('show');
-        
+
         this.isUnlocking = false;
         this.scopeService.safeApply(this.$scope, () => {});
 
@@ -186,7 +186,7 @@ class UnlockButtonController {
       return toastr.warning('Error. Try again later.');
     }
 
-    
+
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
     const anchorEl = document.getElementById(
       'bchUnlockingTransactionUrl'
