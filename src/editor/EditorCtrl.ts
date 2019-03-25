@@ -7,29 +7,35 @@ import "medium-editor/dist/css/themes/default.min.css";
 import { AuthService } from "../auth/AuthService";
 import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
+import EditorService from "./services/EditorService";
 
 const converter = new showdown.Converter();
 
 export default class EditorCtrl {
     public static $inject = [
       "$scope",
+      "$sce",
       "$http",
       "$timeout",
       "PostService",
       "AuthService",
+      "EditorService",
       "API_URL"
     ];
 
     constructor(
       private $scope,
+      private $sce,
       private $http: ng.IHttpService,
       private $timeout: ng.ITimeoutService,
       private postService: PostService,
       private authService: AuthService,
+      private editorService: EditorService,
       private API_URL: string
     ) {
         let titleEditor;
         let bodyEditor;
+        let elements, fixedBody;
 
         $scope.isLoading = false;
         $scope.draft = {};
@@ -39,7 +45,68 @@ export default class EditorCtrl {
           title: false
         };
         $scope.isFullPostShown = false;
+        $scope.hasPaidSection = false;
+        $scope.publishTouched = false;
+        $scope.paidSectionLineBreakTouched = false;
+        $scope.paidSectionCost = 0;
         $scope.toggleFullPost = () => $scope.isFullPostShown = !$scope.isFullPostShown;
+
+        $scope.trustAsHtml = function(html) {
+          return $sce.trustAsHtml(html);
+        }
+
+        const setPaidSectionLinebreakEnd = () => {
+          if (!$scope.paidSectionLinebreakEnd) {
+            $scope.paidSectionLinebreakEnd = elements.length;
+          }
+        }
+
+        const resetPaidSectionSettings = () => {
+          $scope.paidSectionLinebreak = 0;
+          $scope.paidSectionLinebreakText = 1;
+          setPaidSectionLinebreakEnd();
+        }
+
+        const adjustPaidSectionLinebreak = (action: "increment" | "decrement") => {
+          if (action === "increment") {
+            $scope.paidSectionLinebreak += 1;
+            $scope.paidSectionLinebreakText += 1;
+          } else if (action === "decrement") {
+            $scope.paidSectionLinebreak -= 1;
+            $scope.paidSectionLinebreakText -= 1;
+          }
+          $scope.paidSectionLineBreakTouched = true;
+        }
+
+        $scope.switchLinebreak = (action: "increment" | "decrement") => {
+          switch (action) {
+            case ("increment"):
+              if ($scope.paidSectionLinebreak < $scope.paidSectionLinebreakEnd) {
+                adjustPaidSectionLinebreak(action);
+                refreshBodies();
+              }
+              break;
+            case ("decrement"):
+              if ($scope.paidSectionLinebreak > 0) {
+                adjustPaidSectionLinebreak(action);
+                refreshBodies();
+              }
+              break;
+            default:
+              break;
+          }
+        };
+
+        $scope.setPaidSectionCost = () => {
+          $scope.paidSectionCost = document.getElementById("paidSectionCost").valueAsNumber;
+        }
+
+        const refreshBodies = (externalHtml?) => {
+          [elements, fixedBody] = this.editorService.getFixedBody(bodyEditor, externalHtml);
+          $scope.freeBodyCut = this.editorService.getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+          $scope.paidBodyCut = this.editorService.getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+          $scope.paidBodyCutEnd = this.editorService.getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+        }
 
         let parentPostId;
         let postId;
@@ -57,18 +124,28 @@ export default class EditorCtrl {
         }
 
         const saveDraftElement = (element, cb?) => {
-          const md = converter.makeMd(bodyEditor.serialize().body.value);
+          refreshBodies();
+          const md = converter.makeMd(this.editorService.getFixedBody(bodyEditor)[1]);
 
           const post = {
             body: md,
             hashtags: $("input#description").val() || "",
-            title: document.getElementById("title").innerText
+            title: document.getElementById("title").innerText,
+            hasPaidSection: $scope.hasPaidSection,
+            paidSectionLinebreak: $scope.paidSectionLinebreak,
+            paidSectionCost: $scope.paidSectionCost
           };
 
           if (!post.body && !post.title && !post.hashtags) {
               $scope.saving = null;
 
               return cb && cb();
+          }
+
+          if (element === "paidSection" && post.hasPaidSection && $scope.paidSectionLineBreakTouched && post.paidSectionCost === 0) {
+            $scope.saving = null;
+
+            return cb && cb();
           }
 
           $http.put(API_URL + "/draft/" + $scope.draft.id + "/" + element, post)
@@ -90,10 +167,18 @@ export default class EditorCtrl {
             return toastr.error("The story needs to be at least 50 characters.");
           }
 
+          refreshBodies();
+          bodyEditor.setContent(fixedBody, 0);
+
           $("#publishModal").modal("show");
         };
 
         $scope.publishPost = (postId: number) => {
+          if ($scope.hasPaidSection && !$scope.paidSectionLineBreakTouched) {
+            $scope.publishTouched = true;
+            return;
+          }
+
           if ($scope.isLoading === true) {
             return toastr.info("Saving...");
           }
@@ -107,7 +192,8 @@ export default class EditorCtrl {
                 async.parallel([
                   (cb) => saveDraftElement("title", cb),
                   (cb) => saveDraftElement("body", cb),
-                  (cb) => saveDraftElement("hashtags", cb)
+                  (cb) => saveDraftElement("hashtags", cb),
+                  (cb) => saveDraftElement("paidSection", cb),
                 ], cb);
               },
               (cb) => {
@@ -294,8 +380,10 @@ export default class EditorCtrl {
 
             if (bodyMD) {
               document.getElementById("body").setAttribute("data-placeholder", "");
-
-              bodyEditor.setContent(converter.makeHtml(bodyMD), 0);
+              const html = converter.makeHtml(bodyMD);
+              refreshBodies(html);
+              resetPaidSectionSettings();
+              bodyEditor.setContent(fixedBody, 0);
             }
 
             bodyEditor.subscribe("editableInput", onContentChangedFactory("body"));

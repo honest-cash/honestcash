@@ -2,7 +2,7 @@ import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import toastr from "../../core/config/toastr";
 import { IGlobalScope } from "../../core/lib/interfaces";
-import { Post, Upvote } from "../../core/models/models";
+import { Post, Upvote, Unlock } from "../../core/models/models";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
 
@@ -19,6 +19,7 @@ export default class PostCtrl {
   public post: Post;
   public upvotes: Upvote[] = [];
   public responses: Post[] = [];
+  public unlocks: Unlock[] = [];
   public responseSortOrder: string = "createdAtRaw";
   private newResponse: string = "";
 
@@ -43,11 +44,13 @@ export default class PostCtrl {
 
     const data = await Promise.all([
       this.postService.getUpvotes(this.post.id),
-      this.postService.getResponses(this.post.id)
+      this.postService.getResponses(this.post.id),
+      this.postService.getUnlocks(this.post.id),
     ]);
 
     this.upvotes = data[0];
     this.responses = data[1];
+    this.unlocks = data[2];
 
     this.scopeService.safeApply(this.$scope);
 
@@ -83,6 +86,10 @@ export default class PostCtrl {
     this.newResponse = "";
 
     this.scopeService.safeApply(this.$scope);
+  }
+
+  private async editPost() {
+    window.location.href = `/edit/${this.post.id}`;
   }
 
   private async initTippy() {

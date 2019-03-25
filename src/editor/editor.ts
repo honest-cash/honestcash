@@ -13,6 +13,7 @@ import '../auth/AuthModule';
 import { AuthService } from '../auth/AuthService';
 import PostService from '../core/services/PostService';
 import '../core/config';
+import './services';
 
 declare var angular: any;
 interface IGlobalScope {
@@ -27,7 +28,8 @@ angular.module("editor-app", [
 	uiRouter,
 	  'ui.bootstrap',
     "vqAuth",
-    "vqConfig"
+    "vqConfig",
+    "vqServices"
 ])
 
 .config([ "$locationProvider", "$urlMatcherFactoryProvider", routingConfig ])
