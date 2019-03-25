@@ -10,7 +10,13 @@ import ScopeService from "../../core/services/ScopeService";
 
 enum TabStatus {
   drafts = "drafts",
-  published = "published"
+  published = "published",
+  archived = "archived"
+}
+
+enum SubTabStatus {
+  posts = "posts",
+  comments = "comments"
 }
 
 interface IScopePostsCtrl extends ng.IScope {
@@ -18,12 +24,14 @@ interface IScopePostsCtrl extends ng.IScope {
   isLoadingMore: boolean;
   isArchiving: boolean;
   posts: Post[];
-  comments: Post[];
+  responses: Post[];
   drafts: Post[];
   page: number;
   limit: number;
   postsAvailable: boolean;
+  showTabs: boolean;
   currentTab: TabStatus;
+  currentSubTab: SubTabStatus;
   this: any;
 
   fetchPosts: () => void;
@@ -31,6 +39,7 @@ interface IScopePostsCtrl extends ng.IScope {
   switchTab: (tab: TabStatus) => void;
   displayPostBody: (html: string) => string;
   archivePost: (post: Post) => void;
+  getTabCount: (tab: TabStatus) => number;
 }
 
 export default class PostsCtrl {
@@ -49,16 +58,19 @@ export default class PostsCtrl {
     this.$scope.isLoadingMore = false;
     this.$scope.isArchiving = false;
     this.$scope.posts = [];
-    this.$scope.comments = [];
+    this.$scope.responses = [];
     this.$scope.drafts = [];
     this.$scope.page = 1;
     this.$scope.limit = 20;
     this.$scope.postsAvailable = true;
     this.$scope.currentTab = TabStatus.published;
+    this.$scope.currentSubTab = SubTabStatus.posts;
+    this.$scope.showTabs = false;
     this.$scope.archivePost = (post: Post) => this.archivePost(post);
     this.$scope.switchTab = (tab: TabStatus) => this.switchTab(tab);
     this.$scope.displayPostBody = (html: string) => this.displayPostBody(html);
     this.$scope.loadMore = () => this.loadMore();
+    this.$scope.getTabCount = (tab: TabStatus) => this.getTabCount(tab);
 
     this.fetchPosts();
   }
@@ -88,17 +100,12 @@ export default class PostsCtrl {
         }
 
         const posts = data.filter(d => !d.parentPostId);
-        const comments = data.filter(d => !d.parentPostId);
 
         if (this.$scope.page === 0) {
           this.$scope.posts = posts;
-          this.$scope.comments = comments;
         } else {
           posts.forEach(post => {
             this.$scope.posts.push(post);
-          });
-          comments.forEach(comment => {
-            this.$scope.comments.push(comment);
           });
         }
 
@@ -111,6 +118,8 @@ export default class PostsCtrl {
         this.$scope.isLoading = this.$scope.isLoadingMore ? false : false;
         this.$scope.isLoadingMore = false;
 
+        this.$scope.showTabs = true;
+
         this.scopeService.safeApply(this.$scope, () => {});
 
         this.initTippy();
@@ -122,6 +131,10 @@ export default class PostsCtrl {
     this.$scope.currentTab = tab;
   }
 
+  public switchSubTab(tab: SubTabStatus) {
+    this.$scope.currentSubTab = tab;
+  }
+
   public async archivePost(post: Post) {
     this.$scope.isArchiving = true;
 
@@ -130,7 +143,7 @@ export default class PostsCtrl {
       text: `
         Archived posts will still be reachable by direct links however the body of the post will be hidden with [archived].
         
-        The upvotes and the comments will still be visible however users will not be able to upvote or comment on your post/comments anymore.
+        The upvotes and the responses will still be visible however users will not be able to upvote or comment on your post/responses anymore.
       `,
       icon: "warning",
       buttons: true,
@@ -157,6 +170,34 @@ export default class PostsCtrl {
 
   public displayPostBody(html: string): string {
     return this.postService.displayHTML(html);
+  }
+
+  public getTabCount(tab: TabStatus): number {
+    console.log('posts', this.$scope.posts);
+    switch (tab) {
+      case "drafts":
+          return this.$scope.posts.filter(d => d.status === "draft").length;
+      case "published":
+        return this.$scope.posts.filter(d => d.status === "published").length;
+      case "archived":
+        return this.$scope.posts.filter(d => d.status === "archived").length;
+      case "posts":
+        if (this.$scope.currentTab === "drafts") {
+          return this.$scope.posts.filter(d => d.status === "draft" && !d.parentPostId).length;
+        } else if (this.$scope.currentTab === "published") {
+          return this.$scope.posts.filter(d => d.status === "published" && !d.parentPostId).length;
+        } else if (this.$scope.currentTab === "archived") {
+          return this.$scope.posts.filter(d => d.status === "archived" && !d.parentPostId).length;
+        }
+      case "responses":
+        if (this.$scope.currentTab === "drafts") {
+          return this.$scope.posts.filter(d => d.status === "draft" && d.parentPostId).length;
+        } else if (this.$scope.currentTab === "published") {
+          return this.$scope.posts.filter(d => d.status === "published" && d.parentPostId).length;
+        } else if (this.$scope.currentTab === "archived") {
+          return this.$scope.posts.filter(d => d.status === "archived" && d.parentPostId).length;
+        }
+    }
   }
 
   private async initTippy() {

@@ -46,6 +46,7 @@ export class Post {
   user: User;
   userId: number;
   shareURLs: any;
+  status: "draft" | "published" | "archived";
   postTypeId: TPostTypeId;
   parentPostId: number;
   createdAt: string;

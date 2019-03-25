@@ -22,7 +22,7 @@
     
 		<div class="row post-container">
       <article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
-      <article class="site-block post-body post-paid-section" ng-if="postCtrl.post.hasPaidSection">
+      <article class="site-block post-body post-paid-section" ng-if="postCtrl.post.hasPaidSection && postCtrl.post.user.id !== user.id">
         <div style="width: 100%; text-align: center;" ng-if="!postCtrl.post.hasBeenPaidFor">
             <p><i class="fa fa-lock fa-4x"></i></p>
             <p><strong>The content in this area is locked by the author.</strong></p>
@@ -32,7 +32,7 @@
               post="postCtrl.post"
             ></unlock-button></p>
         </div>
-        <div class="post-paid-section-body" ng-if="postCtrl.post.hasBeenPaidFor" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.paidBody)"></div>
+        <div class="post-paid-section-body" ng-if="postCtrl.post.hasBeenPaidFor && postCtrl.post.user.id !== user.id" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.paidBody)"></div>
       </article>
     </div>
 
