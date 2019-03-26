@@ -16,7 +16,7 @@ enum TabStatus {
 
 enum SubTabStatus {
   posts = "posts",
-  comments = "comments"
+  responses = "responses"
 }
 
 interface IScopePostsCtrl extends ng.IScope {
@@ -33,13 +33,16 @@ interface IScopePostsCtrl extends ng.IScope {
   currentTab: TabStatus;
   currentSubTab: SubTabStatus;
   this: any;
+  filteredPosts: Post[];
 
   fetchPosts: () => void;
+  filterPosts: () => Post[];
   loadMore: () => void;
   switchTab: (tab: TabStatus) => void;
+  switchSubTab: (tab: SubTabStatus) => void;
   displayPostBody: (html: string) => string;
   archivePost: (post: Post) => void;
-  getTabCount: (tab: TabStatus) => number;
+  getTabCount: (tab?: TabStatus, subtab?: SubTabStatus) => number;
 }
 
 export default class PostsCtrl {
@@ -68,9 +71,12 @@ export default class PostsCtrl {
     this.$scope.showTabs = false;
     this.$scope.archivePost = (post: Post) => this.archivePost(post);
     this.$scope.switchTab = (tab: TabStatus) => this.switchTab(tab);
+    this.$scope.switchSubTab = (tab: SubTabStatus) => this.switchSubTab(tab);
     this.$scope.displayPostBody = (html: string) => this.displayPostBody(html);
     this.$scope.loadMore = () => this.loadMore();
-    this.$scope.getTabCount = (tab: TabStatus) => this.getTabCount(tab);
+    this.$scope.getTabCount = (tab?: TabStatus, subtab?: SubTabStatus) => this.getTabCount(tab, subtab);
+    this.$scope.filterPosts = () => this.filterPosts();
+    this.$scope.filteredPosts = [];
 
     this.fetchPosts();
   }
@@ -93,13 +99,11 @@ export default class PostsCtrl {
         page: this.$scope.page,
         status: "published",
         userId: this.$rootScope.user.id
-      }, (data) => {
+      }, (posts) => {
 
-        if (!data) {
+        if (!posts) {
           return;
         }
-
-        const posts = data.filter(d => !d.parentPostId);
 
         if (this.$scope.page === 0) {
           this.$scope.posts = posts;
@@ -108,6 +112,7 @@ export default class PostsCtrl {
             this.$scope.posts.push(post);
           });
         }
+        this.filterPosts();
 
         if (posts.length < this.$scope.limit) {
           this.$scope.postsAvailable = false;
@@ -127,12 +132,97 @@ export default class PostsCtrl {
     );
   }
 
+  public filterPosts(tab?: TabStatus, subtab?: SubTabStatus): Post[] {
+    const _tab = tab || this.$scope.currentTab;
+    const _subtab = subtab || this.$scope.currentSubTab;
+
+    switch (_tab) {
+      case "drafts":
+        if (!subtab) {
+          if (_subtab === "posts") {
+            if (tab || subtab) {
+              return this.$scope.posts.filter(d => d.status === "draft" && !d.parentPostId);
+            } else {
+              this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "draft" && !d.parentPostId);
+              return;
+            }
+          } else if (_subtab === "responses") {
+            if (tab || subtab) {
+              return this.$scope.posts.filter(d => d.status === "draft" && d.parentPostId);
+            } else {
+              this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "draft" && d.parentPostId);
+              return;
+            }
+          }
+        } else {
+          return this.$scope.posts.filter(d => d.status === "draft");
+        }
+        if (tab || subtab) {
+          return this.$scope.posts.filter(d => d.status === "draft");
+        } else {
+          this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "draft");
+        }
+      case "published":
+        if (!subtab) {
+          if (_subtab === "posts") {
+            if (tab || subtab) {
+              return this.$scope.posts.filter(d => d.status === "published" && !d.parentPostId);
+            } else {
+              this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "published" && !d.parentPostId);
+              return;
+            }
+          } else if (_subtab === "responses") {
+            if (tab || subtab) {
+              return this.$scope.posts.filter(d => d.status === "published" && d.parentPostId);
+            } else {
+              this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "published" && d.parentPostId);
+              return;
+            }
+          }
+        } else {
+          return this.$scope.posts.filter(d => d.status === "published");
+        }
+        if (tab || subtab) {
+          return this.$scope.posts.filter(d => d.status === "published");
+        } else {
+          this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "published");
+        }
+      case "archived":
+        if (!subtab) {
+          if (_subtab === "posts") {
+            if (tab || subtab) {
+              return this.$scope.posts.filter(d => d.status === "archived" && !d.parentPostId);
+            } else {
+              this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "archived" && !d.parentPostId);
+              return;
+            }
+          } else if (_subtab === "responses") {
+            if (tab || subtab) {
+              return this.$scope.posts.filter(d => d.status === "archived" && d.parentPostId);
+            } else {
+              this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "archived" && d.parentPostId);
+              return;
+            }
+          }
+        } else {
+          return this.$scope.posts.filter(d => d.status === "archived");
+        }
+        if (tab || subtab) {
+          return this.$scope.posts.filter(d => d.status === "archived");
+        } else {
+          this.$scope.filteredPosts = this.$scope.posts.filter(d => d.status === "archived");
+        }
+    }
+  }
+
   public switchTab(tab: TabStatus) {
     this.$scope.currentTab = tab;
+    this.filterPosts();
   }
 
   public switchSubTab(tab: SubTabStatus) {
     this.$scope.currentSubTab = tab;
+    this.filterPosts();
   }
 
   public async archivePost(post: Post) {
@@ -172,32 +262,8 @@ export default class PostsCtrl {
     return this.postService.displayHTML(html);
   }
 
-  public getTabCount(tab: TabStatus): number {
-    console.log('posts', this.$scope.posts);
-    switch (tab) {
-      case "drafts":
-          return this.$scope.posts.filter(d => d.status === "draft").length;
-      case "published":
-        return this.$scope.posts.filter(d => d.status === "published").length;
-      case "archived":
-        return this.$scope.posts.filter(d => d.status === "archived").length;
-      case "posts":
-        if (this.$scope.currentTab === "drafts") {
-          return this.$scope.posts.filter(d => d.status === "draft" && !d.parentPostId).length;
-        } else if (this.$scope.currentTab === "published") {
-          return this.$scope.posts.filter(d => d.status === "published" && !d.parentPostId).length;
-        } else if (this.$scope.currentTab === "archived") {
-          return this.$scope.posts.filter(d => d.status === "archived" && !d.parentPostId).length;
-        }
-      case "responses":
-        if (this.$scope.currentTab === "drafts") {
-          return this.$scope.posts.filter(d => d.status === "draft" && d.parentPostId).length;
-        } else if (this.$scope.currentTab === "published") {
-          return this.$scope.posts.filter(d => d.status === "published" && d.parentPostId).length;
-        } else if (this.$scope.currentTab === "archived") {
-          return this.$scope.posts.filter(d => d.status === "archived" && d.parentPostId).length;
-        }
-    }
+  public getTabCount(tab: TabStatus, subtab?: SubTabStatus): number {
+    return this.filterPosts(tab, subtab).length;
   }
 
   private async initTippy() {

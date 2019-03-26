@@ -61,20 +61,20 @@
             <div class="col-xs-12" style="margin-bottom: 20px;">
               <ul class="nav nav-tabs text-center" style="border-bottom: 0px;">
                 <li
-                  ng-class="{ 'bold': currentTab === 'posts' }"
+                  ng-class="{ 'bold': currentSubTab === 'posts' }"
                   class="showProfileTab"
-                  ng-click="switchTab('posts')"
+                  ng-click="switchSubTab('posts')"
                 >
-                  <a href="#" class="showProfileTab"> Posts ({{ getTabCount('posts')}}) </a>
+                  <a href="#" class="showProfileTab"> Posts ({{ getTabCount(currentTab, 'posts')}}) </a>
                 </li>
         
                 <li
-                  ng-class="{ 'bold': currentTab === 'responses' }"
+                  ng-class="{ 'bold': currentSubTab === 'responses' }"
                   class="showProfileTab"
-                  ng-click="switchTab('responses')"
+                  ng-click="switchSubTab('responses')"
                 >
                   <a href="#" class="showProfileTab">
-                    Responses ({{ getTabCount('responses') }})
+                    Responses ({{ getTabCount(currentTab, 'responses') }})
                   </a>
                 </li>
               </ul>
@@ -82,7 +82,7 @@
           </div>
       <div class="row">
         <div class="col-xs-12">
-          <div ng-if="filterPosts(currentTab).length" class="col-xs-12 text-center">
+          <div ng-if="!filteredPosts.length" class="col-xs-12 text-center">
             <h2>Write your first post!</h2>
             <a href="/write" target="_self">
               <button class="btn-default btn" style="margin:10px;">
@@ -91,9 +91,9 @@
             </a>
           </div>
           <div
-            ng-if="filterPosts(currentTab).length"
+            ng-if="filteredPosts.length"
             class="post-feed-body"
-            ng-repeat="post in filterPosts(currentTab)"
+            ng-repeat="post in filteredPosts"
             style="padding: 10px; margin-bottom: 10px;"
           >
             <div class="row">
