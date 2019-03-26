@@ -57,9 +57,11 @@ export default class PostCtrl {
     if (!this.$rootScope.user) {
       const container = document.getElementById("post-tipping-container");
 
-      container.innerHTML = "";
+      if (container) {
+        container.innerHTML = "";
 
-      (() => new QRCode(container, this.post.user.addressBCH))();
+        (() => new QRCode(container, this.post.user.addressBCH))();
+      }
     }
 
     this.initTippy();

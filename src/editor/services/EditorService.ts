@@ -4,16 +4,12 @@ const converter = new showdown.Converter();
 
 export default class EditorService {
 
-  public static $inject = [
-    "$http"
-  ];
+  public static $inject = [];
 
   private elements: JQuery<any>;
   private fixedBody: string;
 
-  constructor(
-    private $http: ng.IHttpService
-  ) {
+  constructor() {
     this.ngOnInit();
   }
 
