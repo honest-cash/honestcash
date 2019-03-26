@@ -62,7 +62,7 @@ export default class FeedsCtrl {
     this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
     this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
-    this.$scope.feedScope = this.$location.search()['feedScope'] || "last-month";
+    this.$scope.feedScope = this.$scope.hashtag ? "all-time" : this.$location.search()['feedScope'] || "last-month";
 
     this.$scope.sortType = "new";
     this.$scope.recommendedHashtags = [];

@@ -45,10 +45,10 @@ export default function state($stateProvider, $urlRouterProvider) {
     .state("vicigo.feeds", getFeedState("/"))
     .state("vicigo.feedsNew", getFeedState("/{feedType:new|top}"))
     .state("vicigo.feedsNewScoped", getFeedState("/{feedType:new|top}?feedScope={last-month|all-time}"))
-    .state("vicigo.hashtag", getFeedState("/hashtag/:hashtag"))
+    .state("vicigo.hashtag", getFeedState("/hashtag/:hashtag?feedScope={all-time}"))
     .state(
       "vicigo.hashtagFeed",
-      getFeedState("/hashtag/:hashtag/{feedType:new|top}")
+      getFeedState("/hashtag/:hashtag/{feedType:new|top}?feedScope={all-time}")
     )
 
     /**
