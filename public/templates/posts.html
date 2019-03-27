@@ -30,7 +30,7 @@
           class="showProfileTab"
           ng-click="switchTab('drafts')"
         >
-          <a href="#" class="showProfileTab"> Drafts ({{ getTabCount('drafts') }}) </a>
+          <a href="#" class="showProfileTab"> Drafts </a>
         </li>
 
         <li
@@ -39,7 +39,7 @@
           ng-click="switchTab('published')"
         >
           <a href="#" class="showProfileTab">
-            Published ({{ getTabCount('published') }})
+            Published
           </a>
         </li>
 
@@ -49,7 +49,17 @@
           ng-click="switchTab('archived')"
         >
           <a href="#" class="showProfileTab">
-            Archived ({{ getTabCount('archived') }})
+            Archived
+          </a>
+        </li>
+
+        <li
+          ng-class="{ 'bold': currentTab === 'locked' }"
+          class="showProfileTab"
+          ng-click="switchTab('locked')"
+        >
+          <a href="#" class="showProfileTab">
+            Locked
           </a>
         </li>
       </ul>
@@ -65,16 +75,17 @@
                   class="showProfileTab"
                   ng-click="switchSubTab('posts')"
                 >
-                  <a href="#" class="showProfileTab"> Posts ({{ getTabCount(currentTab, 'posts')}}) </a>
+                  <a href="#" class="showProfileTab"> Posts </a>
                 </li>
         
                 <li
+                  ng-if="currentSubTab !== 'unlocked' || currentSubTab !== 'locked'"
                   ng-class="{ 'bold': currentSubTab === 'responses' }"
                   class="showProfileTab"
                   ng-click="switchSubTab('responses')"
                 >
                   <a href="#" class="showProfileTab">
-                    Responses ({{ getTabCount(currentTab, 'responses') }})
+                    Responses
                   </a>
                 </li>
               </ul>

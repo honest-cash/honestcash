@@ -1,12 +1,12 @@
 export type TPostTypeId = "comment" | "article" | "response";
 
 export interface IFetchPostsArgs {
-  orderBy?: "upvoteCount" | "publishedAt";
+  orderBy?: "upvoteCount" | "unlockCount" | "publishedAt";
   userId?: number;
   hashtag?: string;
   page?: number;
   includeResponses?: boolean;
-  status?: "published" | "draft";
+  status?: "published" | "draft" | "archived" | "locked" | "unlocked";
 }
 
 export interface IFetchFeedsArgs {

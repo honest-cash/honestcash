@@ -114,7 +114,13 @@ export default class PostService {
     return res.data as Unlock[];
   }  
 
-  public getPosts(query: IFetchPostsArgs, callback: (posts: Post[]) => void) {
+  public async getUserUnlocks(userId?: number): Promise<Unlock[]> {
+    const res = await this.$http.get(`${this.API_URL}/posts/unlocks${userId ? "?userId=" + userId : ""}`);
+
+    return res.data as Unlock[];
+  }  
+
+  public getPosts(query: IFetchPostsArgs, callback?: (posts: Post[]) => void): Promise<Post[]> | void {
     this.$http({
       method: "GET",
       params: query,
@@ -122,7 +128,11 @@ export default class PostService {
     }).then((response) => {
       const feeds = (response.data as Post[]).map((post) => this.processPost(post));
 
-      callback(feeds);
+      callback && callback(feeds);
+
+      return new Promise((resolve, reject) => {
+        resolve(feeds);
+      })
     });
   }
 
