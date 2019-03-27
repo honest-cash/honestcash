@@ -1,97 +1,63 @@
-<div style="margin-top: 50px;" class="text-center" ng-if="isLoading">
-  <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
-</div>
-<div ng-if="!isLoading">
+<div>
   <div class="row" style="margin-bottom: 30px;">
     <div class="col-xs-12">
-      <strong style="font-size: 30px;"
-        >Your
-        <span ng-if="currentTab === 'drafts' || currentTab === 'posts' || currentTab === 'responses'">
-          <span ng-if="currentTab === 'posts'">story </span>
-          <span ng-if="currentTab === 'responses'">response </span>  
-          drafts
-        </span>
-        <span ng-if="currentTab === 'published' || currentTab === 'posts' || currentTab === 'responses'">published 
-          <span ng-if="currentTab === 'posts'">stories</span>
-          <span ng-if="currentTab === 'responses'">responses</span>
-        </span>
-        <span ng-if="currentTab === 'archived' || currentTab === 'posts' || currentTab === 'responses'">archived
-          <span ng-if="currentTab === 'posts'">stories</span>
-          <span ng-if="currentTab === 'responses'">responses</span>
-        </span>
-      </strong>
+      <strong style="font-size: 30px;">{{getHeaderText()}}</strong>
     </div>
   </div>
-  <div ng-if="showTabs" class="row">
+  <div class="row">
     <div class="col-xs-12">
       <ul class="nav nav-tabs text-center">
-        <li
-          ng-class="{ 'bold': currentTab === 'drafts' }"
-          class="showProfileTab"
-          ng-click="switchTab('drafts')"
-        >
+        <li ng-class="{ 'bold': currentTab === 'drafts' }" class="showProfileTab" ng-click="switchTab('drafts')">
           <a href="#" class="showProfileTab"> Drafts </a>
         </li>
 
-        <li
-          ng-class="{ 'bold': currentTab === 'published' }"
-          class="showProfileTab"
-          ng-click="switchTab('published')"
-        >
+        <li ng-class="{ 'bold': currentTab === 'published' }" class="showProfileTab" ng-click="switchTab('published')">
           <a href="#" class="showProfileTab">
             Published
           </a>
         </li>
 
-        <li
-          ng-class="{ 'bold': currentTab === 'archived' }"
-          class="showProfileTab"
-          ng-click="switchTab('archived')"
-        >
+        <li ng-class="{ 'bold': currentTab === 'archived' }" class="showProfileTab" ng-click="switchTab('archived')">
           <a href="#" class="showProfileTab">
             Archived
           </a>
         </li>
 
-        <li
-          ng-class="{ 'bold': currentTab === 'locked' }"
-          class="showProfileTab"
-          ng-click="switchTab('locked')"
-        >
+        <li ng-class="{ 'bold': currentTab === 'locked' }" class="showProfileTab" ng-click="switchTab('locked')">
           <a href="#" class="showProfileTab">
             Locked
+          </a>
+        </li>
+
+        <li ng-class="{ 'bold': currentTab === 'unlocked' }" class="showProfileTab" ng-click="switchTab('unlocked')">
+          <a href="#" class="showProfileTab">
+            Unlocked
           </a>
         </li>
       </ul>
     </div>
   </div>
-  <div ng-if="showTabs" class="row">
+  <div class="row">
     <div class="col-xs-12">
-        <div class="row">
-            <div class="col-xs-12" style="margin-bottom: 20px;">
-              <ul class="nav nav-tabs text-center" style="border-bottom: 0px;">
-                <li
-                  ng-class="{ 'bold': currentSubTab === 'posts' }"
-                  class="showProfileTab"
-                  ng-click="switchSubTab('posts')"
-                >
-                  <a href="#" class="showProfileTab"> Posts </a>
-                </li>
-        
-                <li
-                  ng-if="currentSubTab !== 'unlocked' || currentSubTab !== 'locked'"
-                  ng-class="{ 'bold': currentSubTab === 'responses' }"
-                  class="showProfileTab"
-                  ng-click="switchSubTab('responses')"
-                >
-                  <a href="#" class="showProfileTab">
-                    Responses
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
       <div class="row">
+        <div class="col-xs-12" style="margin-bottom: 20px;">
+          <ul class="nav nav-tabs text-center" style="border-bottom: 0px;">
+            <li ng-class="{ 'bold': currentSubTab === 'posts' }" class="showProfileTab"
+              ng-click="switchSubTab('posts')">
+              <a href="#" class="showProfileTab"> Posts </a>
+            </li>
+
+            <li ng-if="currentTab !== 'unlocked' && currentTab !== 'locked'"
+              ng-class="{ 'bold': currentSubTab === 'responses' }" class="showProfileTab"
+              ng-click="switchSubTab('responses')">
+              <a href="#" class="showProfileTab">
+                Responses
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row" ng-if="!isLoading">
         <div class="col-xs-12">
           <div ng-if="!filteredPosts.length" class="col-xs-12 text-center">
             <h2>Write your first post!</h2>
@@ -101,12 +67,8 @@
               </button>
             </a>
           </div>
-          <div
-            ng-if="filteredPosts.length"
-            class="post-feed-body"
-            ng-repeat="post in filteredPosts"
-            style="padding: 10px; margin-bottom: 10px;"
-          >
+          <div ng-if="filteredPosts.length" class="post-feed-body" ng-repeat="post in filteredPosts"
+            style="padding: 10px; margin-bottom: 10px;">
             <div class="row">
               <div class="col-xs-12">
                 <h3>
@@ -119,48 +81,33 @@
             </div>
             <div class="row">
               <div class="col-xs-12 col-sm-8 pull-left">
-                <span class="text-muted" style="font-size: 12px;"
-                  >Published on {{ post.publishedAt }}</span
-                >
+                <span class="text-muted" style="font-size: 12px;">Published on {{ post.publishedAt }}</span>
               </div>
               <div class="col-xs-12 col-sm-4 pull-right text-right">
-                <a
-                  class="btn btn-default btn-xs"
-                  ui-sref="vicigo.post({ alias: post.alias, username: post.user.username })"
-                  target="_blank"
-                >
+                <a class="btn btn-default btn-xs"
+                  ui-sref="vicigo.post({ alias: post.alias, username: post.user.username })" target="_blank">
                   <i class="fa fa-eye"></i>&nbsp;View
                 </a>
-                <a
-                  ng-if="post.status !== 'archived'"
-                  class="btn btn-default btn-xs"
-                  ng-href="/edit/{{ post.id }}"
-                  target="_blank"
-                >
+                <a ng-if="post.status !== 'archived'" class="btn btn-default btn-xs" ng-href="/edit/{{ post.id }}"
+                  target="_blank">
                   <i class="fa fa-eraser"></i>&nbsp;Edit
                 </a>
-                <button
-                  ng-if="post.status !== 'archived'"
-                  class="btn btn-default btn-xs"
-                  ng-disabled="isArchiving"
-                  ng-click="archivePost(post)"
-                >
+                <button ng-if="post.status !== 'archived'" class="btn btn-default btn-xs" ng-disabled="isArchiving"
+                  ng-click="archivePost(post)">
                   <i class="fa fa-archive"></i>&nbsp;Archive
                 </button>
               </div>
             </div>
           </div>
-          <button
-            ng-disabled="isLoadingMore"
-            ng-if="postsAvailable"
-            class="btn btn-default btn-block"
-            style="margin-top: 20px;margin-bottom: 50px;"
-            ng-click="loadMore()"
-          >
+          <button ng-disabled="isLoadingMore" ng-if="postsAvailable[currentTab][currentSubTab]" class="btn btn-default btn-block"
+            style="margin-top: 20px;margin-bottom: 50px;" ng-click="loadMore()">
             Load more...
           </button>
           <div ng-if="!postsAvailable" style="margin-bottom: 50px;"></div>
         </div>
+      </div>
+      <div style="margin-top: 50px;" class="row text-center" ng-if="isLoading">
+        <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
       </div>
     </div>
   </div>
