@@ -130,7 +130,15 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
 }
 
 .mb-0 {
-  margin-bottom: 0px;
+  margin-bottom: 0px !important; 
+}
+
+.mb-1 {
+  margin-bottom: 10px !important; 
+}
+
+.mb-2 {
+  margin-bottom: 20px !important; 
 }
 
 .br-1 {
@@ -213,6 +221,8 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   border: 1px solid #c5c5c5;
   border-radius: 3px;
   padding: 0px;
+  max-height: 300px;
+  overflow: auto;
 }
 
 .post-paid-section-preview-paid-section,
@@ -262,4 +272,9 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
 
 .post-paid-section-preview-wrapper p {
   margin-bottom: 0px;
+}
+
+input:invalid {
+  outline: 0px;
+  box-shadow: none;
 }

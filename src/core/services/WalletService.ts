@@ -1,6 +1,6 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
 
-interface IWalletBalance {
+export interface ICurrencyConversion {
   usd: number;
   bch: number;
 }
@@ -10,7 +10,7 @@ export default class WalletService {
     "$http"
   ];
 
-  private walletBalance: IWalletBalance;
+  private walletBalance: ICurrencyConversion;
 
   private bchUSDRate: number;
   private walletInfo: {
@@ -24,13 +24,13 @@ export default class WalletService {
     this.startRefreshing();
   }
 
-  public async updateBalances(): Promise<IWalletBalance> {
+  public async updateBalances(): Promise<ICurrencyConversion> {
     const bch = await this.getMyWalletBalance();
     const walletBalance = await this.convertBCHtoUSD(bch.totalBalance);
     return walletBalance;
   }
 
-  public async getAddressBalances(): Promise<IWalletBalance> {
+  public async getAddressBalances(): Promise<ICurrencyConversion> {
     if (!this.walletBalance) {
       this.walletBalance = await this.updateBalances();
     }
@@ -44,7 +44,7 @@ export default class WalletService {
     }, 30 * 1000);
   }
 
-  private async convertBCHtoUSD(bchBalance: number): Promise<IWalletBalance> {
+  public async convertBCHtoUSD(bch: number): Promise<ICurrencyConversion> {
     if (!this.bchUSDRate) {
       const res = await this.$http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
 
@@ -52,8 +52,22 @@ export default class WalletService {
     }
 
     return {
-      bch: bchBalance,
-      usd: Number((this.bchUSDRate * bchBalance).toFixed(2))
+      bch: bch,
+      usd: Number((this.bchUSDRate * bch).toFixed(2))
+    };
+  }
+
+
+  public async convertUSDtoBCH(usd: number): Promise<ICurrencyConversion> {
+    if (!this.bchUSDRate) {
+      const res = await this.$http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
+
+      this.bchUSDRate = Number((res.data as { data: { rates: { USD: number }}}).data.rates.USD);
+    }
+
+    return {
+      usd,
+      bch: Number((1/this.bchUSDRate * usd).toFixed(4))
     };
   }
 

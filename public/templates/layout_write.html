@@ -69,8 +69,8 @@
 
 				<div class="modal-body">
 
-					<p>Add or change topics so readers know what your story is about.</p>
-
+					<p>Add or change tags so readers know what your story is about.</p>
+					<small><i>Tags are seperated by a space.</i></small>
 					<div class="form-group">
 						<form>
 							<input id="description" name="tags" placeholder="Enter up to 5 hashtags" />
@@ -79,30 +79,31 @@
 
 					<hr>
 
-					<div class="form-group">
+					<div class="form-group m-0">
 						<form>
-							<div class="checkbox">
+							<div class="checkbox m-0">
 								<label>
-									<input type="checkbox" ng-model="hasPaidSection"> <strong>I have a paid section in my story</strong>
+									<input type="checkbox" ng-checked="hasPaidSection" ng-click="togglePaidSection()"> <strong>I have a paid section in my story</strong>
 								</label>
 							</div>
 						</form>
 					</div>
-					<div class="form-group" ng-if="hasPaidSection">
-						<form class="form-inline">
-							<div class="form-group">
-								<label for="paidSectionCost">Cost in BCH:</label>
-								<input type="number" step="0.001" min="0" class="form-control" id="paidSectionCost" placeholder="Amount in BCH"
-									ng-model="paidSectionCost" ng-change="setPaidSectionCost($event)" ng-class="{'b-red b-2': publishTouched && paidSectionCost === 0}">
-							</div>
-							<div ng-if="publishTouched && paidSectionCost === 0" class="form-group">
-								<div class="alert alert-danger">
-									Cost is required.
+					<div ng-if="hasPaidSection" class="mb-2">
+							<small class="f-normal mb-1"><i>Choose how much readers pay in order to read your paid section. <a href="">Learn more.</a></i></small>
+							<div class="row">
+								<div class="col-xs-12 col-md-6">
+									<small for="paidSectionCostInBCH">Cost in BCH:</small>
+									<input type="number" step="0.001" min="0" id="paidSectionCostInBCH"
+										ng-model="paidSectionCostInBCH" ng-change="setPaidSectionCost('bch')" ng-class="{'b-red b-2': publishTouched && paidSectionCostInBCH === 0}">
+								</div>
+								<div class="col-xs-12 col-md-6" ng-if="showPaidSectionCostInUSD">
+									<small for="paidSectionCostInUSD">Cost in USD:</small>
+									<input type="number" step="0.1" min="0" id="paidSectionCostInUSD"
+										ng-model="paidSectionCostInUSD" ng-change="setPaidSectionCost('usd')" ng-class="{'b-red b-2': publishTouched && paidSectionCostInUSD === 0}">
 								</div>
 							</div>
-						</form>
 					</div>
-					<div ng-if="hasPaidSection">
+					<!-- <div ng-if="hasPaidSection">
 						<p class="mb-0"><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
 						<p><small><i class="f-normal">Click the arrows to navigate between paragraph breaks</i></small></p>
 						<div class="row">
@@ -141,6 +142,30 @@
 												<article ng-bind-html="trustAsHtml(paidBodyCutEnd)"></article>
 											</div>
 										</div>
+									</div>
+								</div>
+								<div class="col-xs-2 text-center post-paid-section-arrows">
+									<div class="post-paid-section-up-arrow" ng-click="switchLinebreak('decrement')"
+										ng-if="paidSectionLinebreak !== 0">
+										<i class="fa fa-chevron-up"></i>
+									</div>
+									<div class="post-paid-section-linebreak">{{paidSectionLinebreakText}}</div>
+									<div class="post-paid-section-down-arrow" ng-click="switchLinebreak('increment')"
+										ng-if="paidSectionLinebreak !== paidSectionLinebreakEnd - 3">
+										<i class="fa fa-chevron-down"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> -->
+					<div ng-if="hasPaidSection">
+						<p class="mb-0"><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
+						<small class="f-normal" ng-class="{'c-red': publishTouched && !paidSectionLineBreakTouched}"><i>Choose where your paid section starts by moving the up and down arrows. The red line indicates where the free section ends and the paid section starts.</i></small>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-10 post-paid-section-preview-wrapper" ng-class="{'b-red b-2': publishTouched && !paidSectionLineBreakTouched}">
+									<div class="post-paid-section-preview-paid-section">
+										<article ng-bind-html="trustAsHtml(fixedBody)"></article>
 									</div>
 								</div>
 								<div class="col-xs-2 text-center post-paid-section-arrows">

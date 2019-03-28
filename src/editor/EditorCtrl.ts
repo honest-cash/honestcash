@@ -1,3 +1,6 @@
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+
 import * as async from "async";
 import MediumEditor from "medium-editor";
 import * as showdown from "showdown";
@@ -8,6 +11,7 @@ import { AuthService } from "../auth/AuthService";
 import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
 import EditorService from "./services/EditorService";
+import WalletService, { ICurrencyConversion } from "../core/services/WalletService";
 
 const converter = new showdown.Converter();
 
@@ -20,8 +24,11 @@ export default class EditorCtrl {
       "PostService",
       "AuthService",
       "EditorService",
+      "WalletService",
       "API_URL"
     ];
+
+    private currencies: ICurrencyConversion;
 
     constructor(
       private $scope,
@@ -31,6 +38,7 @@ export default class EditorCtrl {
       private postService: PostService,
       private authService: AuthService,
       private editorService: EditorService,
+      private walletService: WalletService,
       private API_URL: string
     ) {
         let titleEditor;
@@ -48,10 +56,12 @@ export default class EditorCtrl {
         $scope.hasPaidSection = false;
         $scope.publishTouched = false;
         $scope.paidSectionLineBreakTouched = false;
-        $scope.paidSectionCost = 0;
+        $scope.paidSectionCostInBCH = 0;
+        $scope.paidSectionCostInUSD = 0;
+        $scope.showPaidSectionCostInUSD = false;
         $scope.toggleFullPost = () => $scope.isFullPostShown = !$scope.isFullPostShown;
 
-        $scope.trustAsHtml = function(html) {
+        $scope.trustAsHtml = (html) => {
           return $sce.trustAsHtml(html);
         }
 
@@ -97,12 +107,46 @@ export default class EditorCtrl {
           }
         };
 
-        $scope.setPaidSectionCost = () => {
-          $scope.paidSectionCost = document.getElementById("paidSectionCost").valueAsNumber;
+        $scope.setPaidSectionCost = (currency) => {
+          let cost;
+          if (currency === 'bch') {
+            // bug in mozilla or angular itself that ng-model does not update when clicking arrows in input number
+            cost = document.getElementById("paidSectionCostInBCH").valueAsNumber || 0;
+            this.walletService.convertBCHtoUSD(cost).then(({bch, usd}: ICurrencyConversion) => {
+              $scope.$apply(function () {
+                document.getElementById("paidSectionCostInUSD").value = usd;
+                $scope.paidSectionCostInUSD = usd;
+              });
+            });
+          } else if (currency === 'usd') {
+            // bug in mozilla or angular itself that ng-model does not update when clicking arrows in input number
+            cost = document.getElementById("paidSectionCostInUSD").valueAsNumber || 0;
+            this.walletService.convertUSDtoBCH(cost).then(({bch, usd}: ICurrencyConversion) => {
+              $scope.$apply(function () {
+                document.getElementById("paidSectionCostInBCH").value = bch;
+                $scope.paidSectionCostInBCH = bch;
+              });
+            });
+          }
+
+        }
+
+        $scope.togglePaidSection = () => {
+          $scope.hasPaidSection = !$scope.hasPaidSection;
+
+          if (!this.currencies) {
+            this.walletService.convertBCHtoUSD(1).then((currencies: ICurrencyConversion) => {
+              this.currencies = currencies;
+              $scope.$apply(function () {
+                $scope.showPaidSectionCostInUSD = true;
+              });
+            });
+          }
         }
 
         const refreshBodies = (externalHtml?) => {
           [elements, fixedBody] = this.editorService.getFixedBody(bodyEditor, externalHtml);
+          $scope.fixedBody = fixedBody;
           $scope.freeBodyCut = this.editorService.getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
           $scope.paidBodyCut = this.editorService.getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
           $scope.paidBodyCutEnd = this.editorService.getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
@@ -411,6 +455,7 @@ export default class EditorCtrl {
 
             initMediumEditor($scope.draft.title, $scope.draft.bodyMD);
 
+            this.initTippy();
             $scope.ready = true;
         };
 
@@ -424,7 +469,6 @@ export default class EditorCtrl {
             $http.get(url)
             .then((response) => {
                 $scope.draft = response.data;
-
                 initEditor($scope.draft.id);
             }, (err: any) => {
                 console.log(err);
@@ -432,5 +476,9 @@ export default class EditorCtrl {
         };
 
         loadPostDraft(postId);
+    }
+
+    private async initTippy() {
+      tippy(".hc-tooltip");
     }
 }

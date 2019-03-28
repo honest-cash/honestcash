@@ -443,3 +443,7 @@ img.lazy {
   width: 100%;
   text-align: center;
 }
+
+.m-0 {
+  margin: 0;
+}
