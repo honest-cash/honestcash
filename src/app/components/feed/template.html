@@ -80,7 +80,7 @@
 
         <div class="feed-body">
           <article ng-if="feed.plain" class="feed-article">
-            {{feed.plain | limitTo: 100}}{{feed.plain.length > 100 ? '' : '...'}}
+            {{feed.plain | limitTo: 100}}{{feed.plain.length > 100 ? '...' : ''}}
           </article>
         </div>
       </div>
