@@ -141,6 +141,10 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   margin-bottom: 20px !important; 
 }
 
+.mt-2 {
+  margin-top: 20px !important; 
+}
+
 .br-1 {
   border-right-width: 1px;
   border-right-style: solid;
@@ -155,8 +159,21 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   border-bottom-style: solid;
 }
 
+.bb-2 {
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+}
+
+.bb-dashed {
+  border-bottom-style: dashed;
+}
+
 .bb-grey {
   border-bottom-color: #c5c5c5;
+}
+
+.bb-red {
+  border-bottom-color: red;
 }
 
 .bt-1 {
@@ -221,47 +238,53 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   border: 1px solid #c5c5c5;
   border-radius: 3px;
   padding: 0px;
-  max-height: 300px;
-  overflow: auto;
 }
 
 .post-paid-section-preview-paid-section,
 .post-paid-section-preview-free-section {
   font-weight: initial;
-  padding: 0px 15px;
 }
 
 .post-paid-section-preview-paid-section {
   background-color: #ededed;
+  max-height: 300px;
+  overflow: auto;
 }
 
-.post-paid-section-preview-free-section {}
+.post-paid-section-preview-paid-section > * {
+  padding: 0px 15px;
+}
+
+/* hide scrollbars */
+.post-paid-section-preview-paid-section {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+.post-paid-section-preview-paid-section::-webkit-scrollbar { /* WebKit */
+  width: 0;
+  height: 0;
+}
+/* hide scrollbars end*/
 
 .post-paid-section-arrows {
-  margin-left: 15px;
-  margin-right: -15px;
-  min-height: 150px;
+  height: 100%;
   padding: 0 20px;
 }
 
 .post-paid-section-arrows>.post-paid-section-up-arrow,
 .post-paid-section-arrows>.post-paid-section-down-arrow {
   transition: font-size 0.2s;
+  cursor: pointer;
 }
 
 .post-paid-section-arrows>.post-paid-section-up-arrow {
-  position: absolute;
-  top: 0;
+  align-self: end;
 }
 
 .post-paid-section-arrows>.post-paid-section-up-arrow:hover,
 .post-paid-section-arrows>.post-paid-section-down-arrow:hover {
   font-size: 16px;
-}
-
-.post-paid-section-arrows>.post-paid-section-down-arrow {
-  position: absolute;
-  bottom: 0;
 }
 
 .post-paid-section-linebreak {
@@ -272,6 +295,11 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
 
 .post-paid-section-preview-wrapper p {
   margin-bottom: 0px;
+}
+
+.linebreak-switch-disabled {
+  color: grey;
+  cursor: not-allowed !important;
 }
 
 input:invalid {

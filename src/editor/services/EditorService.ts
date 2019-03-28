@@ -68,6 +68,9 @@ export default class EditorService {
         $elem.remove();
         return null;
       }
+
+      $elem.attr("id", `snap-section-${i}`);
+
       // we form our last new html
       _fixedBody += this.getOuterHtml(_elements[i]);
       return $elem;

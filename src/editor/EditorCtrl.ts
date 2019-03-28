@@ -1,5 +1,6 @@
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
+import PanelSnap from 'panelsnap';
 
 import * as async from "async";
 import MediumEditor from "medium-editor";
@@ -88,18 +89,52 @@ export default class EditorCtrl {
           $scope.paidSectionLineBreakTouched = true;
         }
 
+        const scrollToLinebreak = (action, toTop?: boolean) => {
+          const $container = $('.post-paid-section-preview-paid-section');
+          const $scrollTo = $(`.post-paid-section-preview-paid-section > #snap-section-${$scope.paidSectionLinebreak}`);
+
+          if (!toTop) {
+            $container.animate({
+              scrollTop: $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
+            });​
+
+            let $sibling;
+
+            if (action === "increment") {
+              $sibling = $scrollTo.prev();
+            } else if (action === "decrement") {
+              $sibling = $scrollTo.next();
+            }
+            if ($sibling) {
+              $sibling.removeClass("bb-2 bb-dashed bb-red");
+            }
+            $scrollTo.addClass("bb-2 bb-dashed bb-red");
+          } else {
+
+            // timeout is required
+            setTimeout(() => {
+              $container.scrollTop(0);
+              const $scrollTo = $(`.post-paid-section-preview-paid-section > #snap-section-0`);
+              $scrollTo.addClass("bb-2 bb-dashed bb-red");
+            }, 0);
+
+          }
+        }
+
         $scope.switchLinebreak = (action: "increment" | "decrement") => {
           switch (action) {
             case ("increment"):
               if ($scope.paidSectionLinebreak < $scope.paidSectionLinebreakEnd) {
                 adjustPaidSectionLinebreak(action);
                 refreshBodies();
+                scrollToLinebreak(action);
               }
               break;
             case ("decrement"):
               if ($scope.paidSectionLinebreak > 0) {
                 adjustPaidSectionLinebreak(action);
                 refreshBodies();
+                scrollToLinebreak(action);
               }
               break;
             default:
@@ -141,6 +176,10 @@ export default class EditorCtrl {
                 $scope.showPaidSectionCostInUSD = true;
               });
             });
+          }
+
+          if ($scope.hasPaidSection) {
+            scrollToLinebreak(undefined, true);
           }
         }
 
@@ -213,7 +252,7 @@ export default class EditorCtrl {
 
           refreshBodies();
           bodyEditor.setContent(fixedBody, 0);
-
+          
           $("#publishModal").modal("show");
         };
 
