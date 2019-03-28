@@ -1,7 +1,7 @@
 <div
-  class="btn-bch-upvote-container"
-  ng-class="{'active': upvoteButtonCtrl.isUpvoting, 'disabled': upvoteButtonCtrl.isDisabled}"
-  ng-click="upvoteButtonCtrl.onClick($event)"
+  class="btn-bch-unlock-container"
+  ng-class="{'active': unlockButtonCtrl.isUnlocking, 'disabled': unlockButtonCtrl.isDisabled}"
+  ng-click="unlockButtonCtrl.onClick($event)"
 >
   <span class="bch-icon"
     ><?xml version="1.0" encoding="utf-8"?>
@@ -73,9 +73,9 @@
     </svg>
   </span>
   <span class="bch-icon-loading"></span>
-  <button ng-disabled="upvoteButtonCtrl.isUpvoting || upvoteButtonCtrl.isDisabled" class="btn btn-bch-upvote">
-    <span class="bch-upvote-button-amount">{{ upvoteButtonCtrl.amount }}</span>
-    <span class="bch-upvote-button-text">{{ upvoteButtonCtrl.text }}</span>
-    <span class="bch-upvote-button-loading">{{ upvoteButtonCtrl.loadingText }}</span>
+  <button ng-disabled="unlockButtonCtrl.isUnlocking || unlockButtonCtrl.isDisabled" class="btn btn-bch-unlock">
+    <span class="bch-unlock-button-amount">{{ unlockButtonCtrl.text }}</span>
+    <span class="bch-unlock-button-text">{{ unlockButtonCtrl.hoverText }}</span>
+    <span class="bch-unlock-button-loading">{{ unlockButtonCtrl.loadingText }}</span>
   </button>
 </div>

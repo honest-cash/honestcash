@@ -22,16 +22,17 @@
     </div>
 
     <div class="row post-container">
-      <article class="site-block post-body" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
-      <article class="site-block post-body" ng-if="postCtrl.post.hasPaidSection && postCtrl.post.user.id !== user.id">
+      <article class="site-block post-body" ng-class="{'fade-end': postCtrl.post.hasPaidSection && postCtrl.post.user.id !== user.id}" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
+      <article class="site-block post-body post-paid-section-locked-wrapper" ng-if="postCtrl.post.hasPaidSection && postCtrl.post.user.id !== user.id">
         <div class="post-paid-section-locked"
           ng-if="!postCtrl.post.hasBeenPaidFor && postCtrl.post.status !== 'archived'">
-          <p><i class="fa fa-lock fa-4x"></i></p>
-          <p><strong>The content in this area is locked by the author.</strong></p>
-          <p>Unlocking will cost you <strong>{{postCtrl.post.paidSectionCost}}</strong> BCH.</p>
-          <p>
-            <unlock-button style="margin: 0 auto;" post="postCtrl.post"></unlock-button>
-          </p>
+          <div class="post-paid-section-locked-inner">
+              <p class="text-uppercase"><strong>CONTINUE READING & SUPPORT {{postCtrl.post.user.username}}</strong></p>
+            <p><small>Honest gives creators the opportunity to generate income from their work. By clicking on the button below, you'll be empowering  <strong>{{postCtrl.post.user.username}}</strong> to create more content and help HonestCash.</small></p>
+            <p>
+              <unlock-button style="margin: 0 auto;" post="postCtrl.post"></unlock-button>
+            </p>
+          </div>
         </div>
       </article>
     </div>
@@ -40,7 +41,6 @@
     <div class="row" ng-if="postCtrl.post.status !== 'archived'">
       <ul class="list-unstyled list-inline">
         <li class="pull-left hashtag-container" ng-repeat="hashtag in postCtrl.post.userPostHashtags">
-          <i class="fa fa-tag"></i>
           <a href="/hashtag/{{ ::hashtag.hashtag }}" target="_self" class="hashtag">
             {{ ::hashtag.hashtag}}
           </a>
@@ -350,6 +350,9 @@
           <span class="hc-tooltip" ng-if="user && user.id && (postCtrl.post.hasBeenPaidFor || postCtrl.post.user.id === user.id) && postCtrl.post.status === 'archived'"
             data-tippy-content="This story is now archived however you still have access to the original post"
           ><i class="fa fa-archive"></i></span>
+          <span class="hc-tooltip" ng-if="user && user.id && (postCtrl.post.hasBeenPaidFor || postCtrl.post.user.id === user.id) && postCtrl.post.status !== 'archived'"
+            data-tippy-content="This story has a paid section however you have access to the post"
+          ><i class="fa fa-unlock"></i></span>
           <span class="hc-tooltip" ng-if="(!user || (!postCtrl.post.hasBeenPaidFor && postCtrl.post.user.id !== user.id)) && postCtrl.post.status === 'archived'"
           data-tippy-content="This story is archived"
         ><i class="fa fa-archive"></i></span>

@@ -37,6 +37,7 @@ class UnlockButtonController {
 
   private amount: number;
   private text: string;
+  private hoverText: string;
   private loadingText: string;
   private isUnlocking: boolean;
   private isDisabled: boolean;
@@ -54,10 +55,9 @@ class UnlockButtonController {
   }
 
   private ngOnInit() {
-    this.text = angular.isDefined(this.text) ? this.text : defaultOptions.text;
-    this.loadingText = angular.isDefined(this.loadingText)
-      ? this.loadingText
-      : defaultOptions.loadingText;
+    this.text = `GET ACCESS FOR ${this.$scope.post.paidSectionCost} BCH`;
+    this.hoverText = `UNLOCK NOW`
+    this.loadingText = `UNLOCKING...`;
 
     this.post = this.$scope.post;
     this.amount = this.$scope.post.paidSectionCost;
@@ -135,7 +135,7 @@ class UnlockButtonController {
 
     toastr.info('Unlocking...');
 
-    try {
+    /* try {
       tx = await simpleWallet.send([
           author,
           {
@@ -184,7 +184,7 @@ class UnlockButtonController {
       this.scopeService.safeApply(this.$scope, () => {});
 
       return toastr.warning('Error. Try again later.');
-    }
+  } */
 
 
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
@@ -224,11 +224,9 @@ class UnlockButtonController {
 export default function upvoteButton(): ng.IDirective {
   return {
     controller: UnlockButtonController,
-    controllerAs: 'upvoteButtonCtrl',
+    controllerAs: 'unlockButtonCtrl',
     restrict: 'E',
     scope: {
-      loadingText: '=?',
-      text: '=?',
       post: '='
     },
     replace: true,
