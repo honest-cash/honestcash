@@ -195,6 +195,12 @@ export default class EditorCtrl {
         let postId;
         let editingMode = "write";
         const locPath = location.pathname.split("/");
+        const locQuery = location.search;
+        const isFreshDraft = locQuery.indexOf("new=true") !== -1;
+
+        if (isFreshDraft) {
+          editingMode = "writeFresh";
+        }
 
         if (locPath[1] === "write" && locPath[2] === "response") {
             parentPostId = locPath[3];
@@ -321,6 +327,8 @@ export default class EditorCtrl {
         $scope.switchEditor = () => {
           if (editingMode === "write") {
             window.location.href = `/markdown/write`;
+          } else if (editingMode === "writeFresh") {
+            window.location.href = `/markdown/write?new=true`
           } else if (editingMode === "edit"){
             window.location.href = `/markdown/edit/${postId}`;
           } else if (editingMode === "response") {
@@ -514,7 +522,23 @@ export default class EditorCtrl {
             });
         };
 
-        loadPostDraft(postId);
+        const loadNewPostDraft = () => {
+          let url = API_URL + "/draft";
+
+          $http.post(url, {})
+          .then((response) => {
+              $scope.draft = response.data;
+              initEditor($scope.draft.id);
+          }, (err: any) => {
+              console.log(err);
+          });
+        };
+
+        if (editingMode === "writeFresh") {
+          loadNewPostDraft();
+        } else {
+          loadPostDraft(postId);
+        }        
     }
 
     private async initTippy() {

@@ -108,6 +108,7 @@ interface IScopePostsCtrl extends ng.IScope {
   displayPostBody: (html: string) => string;
   archivePost: (post: Post) => void;
   getHeaderText: () => string;
+  goToEditor: () => void;
 }
 
 export default class PostsCtrl {
@@ -211,6 +212,7 @@ export default class PostsCtrl {
     this.$scope.loadMore = () => this.loadMore();
     this.$scope.filterPosts = () => this.filterPosts();
     this.$scope.getHeaderText = () => this.getHeaderText();
+    this.$scope.goToEditor = () => this.goToEditor();
     this.$scope.filteredPosts = [];
 
     this.fetchPosts();
@@ -220,11 +222,11 @@ export default class PostsCtrl {
     if (!this.$rootScope.activeCalls && this.$scope.postsAvailable[this.$scope.currentTab][this.$scope.currentSubTab]) {
       this.$scope.page[this.$scope.currentTab][this.$scope.currentSubTab] += 1;
       this.$scope.isLoadingMore = true;
-      this.fetchPosts();
+      this.fetchPosts(true);
     }
   }
 
-  public async fetchPosts() {
+  public async fetchPosts(loadingMore?: boolean) {
     this.$scope.isLoading = this.$scope.isLoadingMore ? false : true;
 
     const getFetchPostsArgs = (tab?: TabStatus, subtab?: SubTabStatus):IFetchPostsArgs  => {
@@ -245,7 +247,7 @@ export default class PostsCtrl {
     }
 
     const query = queries[this.$scope.currentTab];
-    query((posts) => {
+    const finalizePosts = (posts) => {
 
       let _posts = posts;
 
@@ -254,9 +256,7 @@ export default class PostsCtrl {
       }
 
       if (this.$scope.page[this.$scope.currentTab][this.$scope.currentSubTab] === 0) {
-        this.posts = {
-          [this.$scope.currentTab]: _posts
-        }
+        this.posts[this.$scope.currentTab] = _posts;
       } else {
         this.posts[this.$scope.currentTab] = [...this.posts[this.$scope.currentTab], ..._posts];
       }
@@ -275,7 +275,13 @@ export default class PostsCtrl {
 
       this.scopeService.safeApply(this.$scope, () => {});
 
-    });
+    }
+    
+    if (this.posts[this.$scope.currentTab].length > 0 && !loadingMore) {
+      finalizePosts(this.posts[this.$scope.currentTab]);
+    } else {
+      query(finalizePosts);
+    }
     
   }
 
@@ -320,7 +326,7 @@ export default class PostsCtrl {
   }
 
   public switchTab(tab: TabStatus) {
-    if (this.$scope.isLoading) {
+    if (this.$scope.isLoading || this.$scope.isLoadingMore) {
       return;
     }
 
@@ -330,12 +336,16 @@ export default class PostsCtrl {
   }
 
   public switchSubTab(tab: SubTabStatus) {
-    if (this.$scope.isLoading) {
+    if (this.$scope.isLoading || this.$scope.isLoadingMore) {
       return;
     }
     this.$scope.currentSubTab = tab;
     this.fetchPosts();
     this.initTippy();
+  }
+
+  public goToEditor() {
+    window.location.href = "/write?new=true";
   }
 
   public getHeaderText() {
