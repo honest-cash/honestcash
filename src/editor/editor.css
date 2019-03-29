@@ -255,6 +255,11 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   padding: 0px 15px;
 }
 
+.post-paid-section-preview-paid-section > ul,
+.post-paid-section-preview-paid-section > ul > li {
+  list-style-position: inside;
+}
+
 /* hide scrollbars */
 .post-paid-section-preview-paid-section {
   overflow-y: scroll;
@@ -272,8 +277,25 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   padding: 0 20px;
 }
 
+.post-paid-section-arrows-mobile {
+  margin-top: 20px;
+  padding: 0px;
+  border: 1px solid #c5c5c5;
+  border-radius: 3px;
+}
+
+.post-paid-section-arrows-mobile>.post-paid-section-up-arrow,
+.post-paid-section-arrows-mobile>.post-paid-section-down-arrow {
+  float: left;
+  width: 50%;
+  background-color: #ededed;
+  padding: 10px 0px;
+}
+
 .post-paid-section-arrows>.post-paid-section-up-arrow,
-.post-paid-section-arrows>.post-paid-section-down-arrow {
+.post-paid-section-arrows>.post-paid-section-down-arrow,
+.post-paid-section-arrows-mobile>.post-paid-section-up-arrow,
+.post-paid-section-arrows-mobile>.post-paid-section-down-arrow {
   transition: font-size 0.2s;
   cursor: pointer;
 }
