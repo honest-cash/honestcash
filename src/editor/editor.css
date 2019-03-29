@@ -114,9 +114,25 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   font-size: 15px;
   margin: 0 0 10px !important;
 }
+
+ul, ul > li, li, .medium-editor-element > ul, .medium-editor-element > ul > li, .medium-editor-element > li {
+  font-size: 15px;
+  margin: 0 0 10px !important;
+}
+
+ol, ol > li, li, .medium-editor-element > ol, .medium-editor-element > ol > li, .medium-editor-element > li {
+  font-size: 15px;
+  margin: 0 0 10px !important;
+}
+
 .modal-body,
 .modal-body > p,
-.medium-editor-element > p {
+.medium-editor-element > p,
+.medium-editor-element > ul,
+.medium-editor-element > ul > li,
+.medium-editor-element > ol,
+.medium-editor-element > ol > li,
+.medium-editor-element > li {
   font-size: 15px;
 }
 
