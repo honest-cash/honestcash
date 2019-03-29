@@ -47,12 +47,17 @@
               <a href="#" class="showProfileTab"> Posts </a>
             </li>
 
-            <li ng-if="currentTab !== 'unlocked' && currentTab !== 'locked'"
+            <li ng-if="currentTab !== 'unlocked' && currentTab !== 'locked' && currentTab !== 'archived'"
               ng-class="{ 'bold': currentSubTab === 'responses' }" class="showProfileTab"
               ng-click="switchSubTab('responses')">
               <a href="#" class="showProfileTab">
                 Responses
               </a>
+            </li>
+
+            <li ng-if="currentTab === 'drafts' && currentSubTab === 'posts'"
+              style="float: right;">
+              <button style="margin-top: 10px;" class="btn btn-sm btn-success" class="hc-tooltip" data-tippy-content="New Draft"><i class="fa fa-plus"></i></button>
             </li>
           </ul>
         </div>
@@ -74,25 +79,28 @@
                 <h3>
                   <strong> {{ post.title }} </strong>
                 </h3>
-                <article ng-if="post.body" style="font-size: 14px;">
-                  {{ displayPostBody(post.body) }}
+                <article ng-if="post.plain" style="font-size: 14px;">
+                  {{post.plain | limitTo: 100}}{{post.plain.length > 100 ? '...' : ''}}
                 </article>
               </div>
             </div>
             <div class="row">
-              <div class="col-xs-12 col-sm-8 pull-left">
-                <span class="text-muted" style="font-size: 12px;">Published on {{ post.publishedAt }}</span>
+              <div class="col-xs-12 col-sm-9 pull-left">
+                <span ng-if="post.status === 'draft'" class="text-muted" style="font-size: 12px;">Last saved on {{ post.updatedAtFormatted }}</span><span ng-if="post.status === 'draft' && post.parentPost" class="text-muted" style="font-size: 12px;"> · Response to <a href="/{{post.parentPost.user.username}}/{{post.parentPost.alias}}" target="_blank">{{ post.parentPost.title }}</a> by {{post.parentPost.user.username}}</span>
+                <span ng-if="post.status === 'published' && currentTab !== 'unlocked'" class="text-muted" style="font-size: 12px;">Published on {{ post.publishedAtFormatted }}<span ng-if="currentSubTab === 'responses'"> · Response to <a href="/{{post.parentPost.user.username}}/{{post.parentPost.alias}}" target="_blank">{{ post.parentPost.title }}</a> by {{post.parentPost.user.username}}</span> </span>
+                <span ng-if="post.status === 'archived'" class="text-muted" style="font-size: 12px;">Archived on {{ post.archivedAtFormatted }}</span>
+                <span ng-if="currentTab === 'unlocked'" class="text-muted" style="font-size: 12px;">Published on {{ post.publishedAtFormatted }} · Unlocked on {{ post.unlockedAtFormatted }}</span>
               </div>
-              <div class="col-xs-12 col-sm-4 pull-right text-right">
+              <div class="col-xs-12 col-sm-3 pull-right text-right">
                 <a class="btn btn-default btn-xs"
                   ui-sref="vicigo.post({ alias: post.alias, username: post.user.username })" target="_blank">
                   <i class="fa fa-eye"></i>&nbsp;View
                 </a>
-                <a ng-if="post.status !== 'archived'" class="btn btn-default btn-xs" ng-href="/edit/{{ post.id }}"
+                <a ng-if="post.status !== 'archived' && post.user.id === user.id" class="btn btn-default btn-xs" ng-href="/edit/{{ post.id }}"
                   target="_blank">
                   <i class="fa fa-eraser"></i>&nbsp;Edit
                 </a>
-                <button ng-if="post.status !== 'archived'" class="btn btn-default btn-xs" ng-disabled="isArchiving"
+                <button ng-if="post.status !== 'archived' && !post.parentPostId && currentTab !== 'unlocked'" class="btn btn-default btn-xs" ng-disabled="isArchiving"
                   ng-click="archivePost(post)">
                   <i class="fa fa-archive"></i>&nbsp;Archive
                 </button>

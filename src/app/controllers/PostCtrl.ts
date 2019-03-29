@@ -20,7 +20,7 @@ export default class PostCtrl {
   public upvotes: Upvote[] = [];
   public responses: Post[] = [];
   public unlocks: Unlock[] = [];
-  public responseSortOrder: string = "createdAtRaw";
+  public responseSortOrder: string = "createdAt";
   private newResponse: string = "";
 
   constructor(
@@ -67,7 +67,7 @@ export default class PostCtrl {
     this.initTippy();
   }
 
-  private sortResponses(order: "upvoteCount" | "createdAtRaw") {  
+  private sortResponses(order: "upvoteCount" | "createdAt") {  
     this.responseSortOrder = order;
     this.scopeService.safeApply(this.$scope);
   }

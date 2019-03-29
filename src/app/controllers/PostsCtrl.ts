@@ -237,8 +237,8 @@ export default class PostsCtrl {
     };
 
     const queries = {
-      drafts: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "draft"}, cb),
-      published: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "published"}, cb),
+      drafts: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, status: "draft"}, cb),
+      published: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, status: "published"}, cb),
       archived: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "archived"}, cb),
       locked: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "locked"}, cb),
       unlocked: (cb) => this.postService.getUserUnlocks(undefined, cb)
@@ -320,17 +320,22 @@ export default class PostsCtrl {
   }
 
   public switchTab(tab: TabStatus) {
-    this.$scope.currentTab = tab;
-    if (tab === TabStatus.locked || tab === TabStatus.unlocked) {
-      this.switchSubTab(SubTabStatus.posts);
-    } else {
-      this.fetchPosts();
+    if (this.$scope.isLoading) {
+      return;
     }
+
+    this.$scope.currentTab = tab;
+    this.switchSubTab(SubTabStatus.posts);
+    this.fetchPosts();
   }
 
   public switchSubTab(tab: SubTabStatus) {
+    if (this.$scope.isLoading) {
+      return;
+    }
     this.$scope.currentSubTab = tab;
     this.fetchPosts();
+    this.initTippy();
   }
 
   public getHeaderText() {

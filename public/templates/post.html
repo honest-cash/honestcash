@@ -193,8 +193,8 @@
         <span style="float: right;">sort by
           <a href="#" ng-click="postCtrl.sortResponses('upvoteCount')"
             ng-class="{'bold': postCtrl.responseSortOrder === 'upvoteCount'}"># of upvotes</a> /
-          <a href="#" ng-click="postCtrl.sortResponses('createdAtRaw')"
-            ng-class="{'bold': postCtrl.responseSortOrder === 'createdAtRaw'}">chronologically</a>
+          <a href="#" ng-click="postCtrl.sortResponses('createdAt')"
+            ng-class="{'bold': postCtrl.responseSortOrder === 'createdAt'}">chronologically</a>
         </span>
       </div>
 
@@ -335,7 +335,7 @@
           <br />
 
           <small class="text-muted">
-            <span ng-if="postCtrl.post.publishedAt">{{::postCtrl.post.publishedAt}}</span>
+            <span ng-if="postCtrl.post.publishedAt">{{::postCtrl.post.publishedAtFormatted}}</span>
             <span ng-if="postCtrl.post.readTime">{{::postCtrl.post.readTime}}</span>
           </small>
         </li>
