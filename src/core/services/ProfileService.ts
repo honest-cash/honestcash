@@ -97,6 +97,11 @@ export default class ProfileService {
     });
   }
 
+  public async checkIfHasPremiumPosts(userId: number, callback) {
+    const res = await this.$http.get(this.API_URL + "/user/" + userId + "/has-premium-stories");
+    callback(res.data);
+  }
+
   private getProp(userProperties: IUserProp[], propKey: string): string | null {
     const userProp = userProperties
       .find((prop) => prop.propKey === propKey);

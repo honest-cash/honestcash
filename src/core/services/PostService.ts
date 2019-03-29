@@ -120,7 +120,7 @@ export default class PostService {
       const unlocks = (response.data as Unlock[]).map(this.processUnlock);
       callback(unlocks);
     });
-  }  
+  }
 
   public getPosts(query: IFetchPostsArgs, callback: (posts: Post[]) => void): void {
     this.$http({

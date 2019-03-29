@@ -80,13 +80,13 @@
   </div>
 </div>
 
-<div class="container-fluid">
+<div ng-if="!profileCtrl.isLoading" class="container-fluid">
   <div class="row">
     <div ng-include="'profileNav'"></div>
   </div>
 </div>
 
-<div class="container">
+<div ng-if="!profileCtrl.isLoading" class="container">
   <div style="min-height:350px;">
     <div
       ng-if="profileCtrl.showProfileTab === 'feeds' && !profileCtrl.feeds.length && user.id == profileCtrl.profile.id"
@@ -112,12 +112,12 @@
       </h2>
     </div>
 
-    <div ng-if="profileCtrl.showProfileTab=='feeds' || profileCtrl.showProfileTab=='responses'">
+    <div ng-if="profileCtrl.showProfileTab=='feeds' || profileCtrl.showProfileTab=='responses' || profileCtrl.showProfileTab=='premiumPosts'">
       <feeds
         user="user"
         feeds="profileCtrl.feeds"
         load-more="profileCtrl.loadMore()"
-        is-loading="profileCtrl.isLoading"
+        is-loading="profileCtrl.isLoadingFeed"
         on-upvote="addressClicked"
         is-upvoting="isUpvoting"
       >
@@ -192,6 +192,16 @@
       >
         <a href="#" class="showProfileTab">
           <small>Stories</small>
+        </a>
+      </li>
+      <li
+        ng-if="profileCtrl.hasPremiumPosts"
+        ng-class="{ 'bold': profileCtrl.showProfileTab === 'premiumPosts' }"
+        class="showProfileTab"
+        ng-click="profileCtrl.showPremiumPosts()"
+      >
+        <a href="#" class="showProfileTab">
+          <small>Premium Stories</small>
         </a>
       </li>
 
