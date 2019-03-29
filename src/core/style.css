@@ -478,3 +478,9 @@ article.fade-end:after {
 .m-0 {
   margin: 0;
 }
+
+ul.tagit li {
+  display: block;
+  float: left;
+  margin: 2px 5px 2px 0 !important;
+}
