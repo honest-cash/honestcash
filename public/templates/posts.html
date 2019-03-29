@@ -39,7 +39,7 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <div class="row">
+      <div ng-if="currentTab === 'drafts' || currentTab === 'published'" class="row">
         <div class="col-xs-12" style="margin-bottom: 20px;">
           <ul class="nav nav-tabs text-center" style="border-bottom: 0px;">
             <li ng-class="{ 'bold': currentSubTab === 'posts' }" class="showProfileTab"
@@ -65,12 +65,25 @@
       <div class="row" ng-if="!isLoading">
         <div class="col-xs-12">
           <div ng-if="!filteredPosts.length" class="col-xs-12 text-center">
-            <h2>Write your first post!</h2>
-            <a href="/write" target="_self">
-              <button class="btn-default btn" style="margin:10px;">
-                <strong>Create draft</strong>
-              </button>
-            </a>
+            <div style="margin-top: 50px;" ng-if="(currentTab === 'published' || currentTab === 'drafts') && currentSubTab === 'posts'">
+                <h2>Start writing now and join HonestCash community!</h2>
+                <a href="/write" target="_self">
+                  <button class="btn btn-success btn-sm" style="margin:10px;">
+                    <strong>Write a story</strong>
+                  </button>
+                </a>
+            </div>
+            <div style="margin-top: 50px;" ng-if="(currentTab === 'published' || currentTab === 'drafts') && currentSubTab === 'responses'">
+                <h2>You have not responded to any stories yet.</h2>
+                <a href="/" target="_self">
+                  <button class="btn btn-primary btn-sm" style="margin:10px;">
+                    <strong>Explore stories</strong>
+                  </button>
+                </a>
+            </div>
+            <div style="margin-top: 50px;" ng-if="currentTab === 'archived' || currentTab === 'locked' || currentTab === 'unlocked'">
+              <h2>There are no {{currentTab}} {{currentSubTab}} found.</h2>
+            </div>
           </div>
           <div ng-if="filteredPosts.length" class="post-feed-body" ng-repeat="post in filteredPosts"
             style="padding: 10px; margin-bottom: 10px;">
