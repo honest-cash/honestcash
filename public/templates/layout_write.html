@@ -103,61 +103,6 @@
 								</div>
 							</div>
 					</div>
-					<!-- <div ng-if="hasPaidSection">
-						<p class="mb-0"><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
-						<p><small><i class="f-normal">Click the arrows to navigate between paragraph breaks</i></small></p>
-						<div class="row">
-							<div class="col-xs-12">
-								<div class="col-xs-10 post-paid-section-preview-wrapper" ng-class="{'b-red b-2': publishTouched && !paidSectionLineBreakTouched}">
-									<div class="post-paid-section-preview-free-section">
-										<div class="row flex flex-wrap">
-											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center">
-												<strong>Last Free Sentence</strong>
-											</div>
-											<div class="col-xs-10">
-												<article class="h-100 flex flex-vertical-end" ng-bind-html="trustAsHtml(freeBodyCut)"></article>
-											</div>
-										</div>
-									</div>
-									<div class="post-paid-section-preview-paid-section">
-										<div class="row flex flex-wrap">
-											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center" ng-class="{'bb-1': paidSectionLinebreak === paidSectionLinebreakEnd - 3, 'bb-grey': paidSectionLinebreak === paidSectionLinebreakEnd - 3}">
-												<strong>First Paid Sentence</strong>
-											</div>
-											<div class="col-xs-10">
-												<article ng-bind-html="trustAsHtml(paidBodyCut)"></article>
-											</div>
-										</div>
-										<div class="row flex flex-wrap" ng-if="paidSectionLinebreak !== paidSectionLinebreakEnd - 3">
-											<div class="col-xs-2 br-1 br-grey"></div>
-											<div class="col-xs-10 bt-1 bt-grey bb-1 bb-grey">
-												<p class="text-center"><strong>...</strong></p>
-											</div>
-										</div>
-										<div class="row flex flex-wrap">
-											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center">
-												<strong>Last Paid Sentence</strong>
-											</div>
-											<div class="col-xs-10">
-												<article ng-bind-html="trustAsHtml(paidBodyCutEnd)"></article>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xs-2 text-center post-paid-section-arrows">
-									<div class="post-paid-section-up-arrow" ng-click="switchLinebreak('decrement')"
-										ng-if="paidSectionLinebreak !== 0">
-										<i class="fa fa-chevron-up"></i>
-									</div>
-									<div class="post-paid-section-linebreak">{{paidSectionLinebreakText}}</div>
-									<div class="post-paid-section-down-arrow" ng-click="switchLinebreak('increment')"
-										ng-if="paidSectionLinebreak !== paidSectionLinebreakEnd - 3">
-										<i class="fa fa-chevron-down"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> -->
 					<div ng-if="hasPaidSection">
 						<p class="mb-0"><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
 						<small class="f-normal" ng-class="{'c-red': publishTouched && !paidSectionLineBreakTouched}"><i>Choose where your paid section starts by moving the up and down arrows. The red line indicates where the free section ends and the paid section starts.</i></small>
