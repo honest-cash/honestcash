@@ -132,7 +132,7 @@
     </div>
 
     <div class="post-uncensorable row"
-      ng-if="postCtrl.post.userPostRefs.length && postCtrl.post.user.addressBCH && postCtrl.post.status !== 'archived'"
+      ng-if="postCtrl.post.userPostRefs.length && postCtrl.post.user.addressBCH && (postCtrl.post.status !== 'archived' || (postCtrl.post.status == 'archived' && postCtrl.post.userId === user.id))"
       style="margin-bottom: 20px;">
       <h4><i class="fa fa-shield"></i> <strong>Uncensorable</strong></h4>
       <a ng-href="https://bitcoinfiles.com/{{
@@ -143,7 +143,7 @@
     </div>
 
     <div class="row"
-      ng-if="postCtrl.unlocks && postCtrl.post.hasPaidSection && postCtrl.post.user.addressBCH && postCtrl.post.status !== 'archived'">
+      ng-if="postCtrl.unlocks && postCtrl.post.hasPaidSection && postCtrl.post.user.addressBCH && (postCtrl.post.status !== 'archived' || (postCtrl.post.status === 'archived' && postCtrl.post.user.id === user.id))">
       <span><i class="fa fa-unlock"></i>
         <strong>Unlocks ({{ postCtrl.unlocks.length }})</strong></span>
 
@@ -164,7 +164,7 @@
       </ul>
     </div>
 
-    <div class="row" ng-if="postCtrl.upvotes && postCtrl.post.user.addressBCH && postCtrl.post.status !== 'archived'">
+    <div class="row" ng-if="postCtrl.upvotes && postCtrl.post.user.addressBCH && (postCtrl.post.status !== 'archived' || (postCtrl.post.status === 'archived' && postCtrl.post.user.id === user.id))">
       <span><i class="fa fa-btc"></i>
         <strong>Upvotes ({{ postCtrl.upvotes.length }})</strong></span>
 
@@ -185,7 +185,7 @@
       </ul>
     </div>
 
-    <div class="row" ng-if="postCtrl.post.status !== 'archived'">
+    <div class="row" ng-if="postCtrl.post.status !== 'archived' || (postCtrl.post.status === 'archived' && postCtrl.post.user.id === user.id)">
       <div>
         <span style="float: left;">
           <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
@@ -201,7 +201,7 @@
       <div class="block-center">
         <div class="panel">
           <div class="panel-body" style="cursor: pointer;">
-            <a target="_self" ng-href="{{
+            <a ng-if="postCtrl.post.status !== 'archived'" target="_self" ng-href="{{
                 user.id ? '/write/response/' + postCtrl.post.id : '/signup'
               }}">
               <ul style="margin-top: 10px;" class="list-unstyled list-inline">
@@ -221,6 +221,7 @@
                 </li>
               </ul>
             </a>
+            <p style="margin-top: 15px;" ng-if="!postCtrl.responses.length && postCtrl.post.status === 'archived'"><small>No responses.</small></p>
           </div>
         </div>
       </div>
