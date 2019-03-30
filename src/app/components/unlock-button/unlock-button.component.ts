@@ -135,7 +135,7 @@ class UnlockButtonController {
 
     toastr.info('Unlocking...');
 
-    /* try {
+    try {
       tx = await simpleWallet.send([
           author,
           {
@@ -184,7 +184,7 @@ class UnlockButtonController {
       this.scopeService.safeApply(this.$scope, () => {});
 
       return toastr.warning('Error. Try again later.');
-  } */
+  }
 
 
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
