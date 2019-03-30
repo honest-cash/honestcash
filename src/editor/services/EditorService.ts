@@ -53,20 +53,10 @@ export default class EditorService {
         return null;
       }
 
-      return $elem;
-    });
-
-    // remap to add attr id with fixed indexes
-    // if done in the first map function
-    // indexes are wrong
-    $bodyHtml = $bodyHtml.map(i => {
-      const $elem = $($bodyHtml[i]);
-      $elem.attr("id", `snap-section-${i}`);
       // we form our last new html
       _fixedBody += this.getOuterHtml($bodyHtml[i]);
       return $elem;
-    })
-    console.log('old editor', $bodyHtml.length)
+    });
 
     // elements and html is returned as tuple
     this.elements = $bodyHtml;
