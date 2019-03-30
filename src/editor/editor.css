@@ -95,7 +95,7 @@ h3, .h3, .medium-editor-element > h3, .medium-editor-element > .h3 {
   margin: 5px 0px 5px 0px;
 }
 
-h4, .h4, .medium-editor-element > h4, .medium-editor-element > .h1 {
+h4, .h4, .medium-editor-element > h4, .medium-editor-element > .h4 {
   font-size: 16px;
   margin: 5px 0px 5px 0px;
 }
@@ -115,6 +115,11 @@ p, .p, .medium-editor-element > p, .medium-editor-element > .p, .medium-editor-e
   margin: 0 0 10px !important;
 }
 
+span, .span, .medium-editor-element > span, .medium-editor-element > .span {
+  font-size: 15px;
+  margin: 0 0 10px !important;
+}
+
 ul, ul > li, li, .medium-editor-element > ul, .medium-editor-element > ul > li, .medium-editor-element > li {
   font-size: 15px;
   margin: 0 0 10px !important;
@@ -127,7 +132,9 @@ ol, ol > li, li, .medium-editor-element > ol, .medium-editor-element > ol > li, 
 
 .modal-body,
 .modal-body > p,
+.modal-body > span,
 .medium-editor-element > p,
+.medium-editor-element > span,
 .medium-editor-element > ul,
 .medium-editor-element > ul > li,
 .medium-editor-element > ol,
