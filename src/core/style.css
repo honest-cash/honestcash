@@ -484,3 +484,7 @@ ul.tagit li {
   float: left;
   margin: 2px 5px 2px 0 !important;
 }
+
+blockquote {
+  font-size: 15px;
+}

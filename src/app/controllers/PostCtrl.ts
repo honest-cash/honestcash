@@ -64,6 +64,8 @@ export default class PostCtrl {
       }
     }
 
+    console.log('post length', $(this.post.body).length)
+
     this.initTippy();
   }
 

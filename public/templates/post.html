@@ -38,7 +38,7 @@
     </div>
 
 
-    <div class="row" ng-if="postCtrl.post.status !== 'archived'">
+    <div class="row" style="margin-top: 15px;" ng-if="postCtrl.post.status !== 'archived'">
       <ul class="list-unstyled list-inline">
         <li class="pull-left hashtag-container" ng-repeat="hashtag in postCtrl.post.userPostHashtags">
           <a href="/hashtag/{{ ::hashtag.hashtag }}" target="_self" class="hashtag">

@@ -60,7 +60,7 @@ export default class PostService {
 
   public displayHTML(html: string): string {
     const clean = sanitizeHtml(html, {
-      allowedTags: [ "h2", "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
+      allowedTags: [ "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
         "nl", "li", "b",  "strong", "img" ,"em", "strike", "code", "hr", "br", "pre", "iframe" ],
       allowedAttributes: {
         a: [ "href", "name", "target" ],

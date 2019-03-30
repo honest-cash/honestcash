@@ -122,12 +122,45 @@ span, .span, .medium-editor-element > span, .medium-editor-element > .span {
 
 ul, ul > li, li, .medium-editor-element > ul, .medium-editor-element > ul > li, .medium-editor-element > li {
   font-size: 15px;
-  margin: 0 0 10px !important;
 }
 
 ol, ol > li, li, .medium-editor-element > ol, .medium-editor-element > ol > li, .medium-editor-element > li {
   font-size: 15px;
+}
+
+.editor ul,
+.editor ul li,
+.editor li,
+.preview ul,
+.preview ul li,
+.preview li {
+  font-size: 15px;
   margin: 0 0 10px !important;
+}
+
+.editor ol,
+.editor ol li,
+.editor li,
+.preview ol,
+.preview ol li,
+.preview li {
+  font-size: 15px;
+  margin: 0 0 10px !important;
+}
+
+.editor pre,
+.preview pre,
+.post-paid-section-preview-paid-section pre {
+  font-size: 15px;
+  margin: 0 10px 10px 10px !important;
+}
+
+.post-paid-section-preview-paid-section pre {
+  font-size: 13px;
+}
+
+.post-paid-section-preview-paid-section li > p {
+  display: initial
 }
 
 .modal-body,
@@ -269,9 +302,9 @@ ol, ol > li, li, .medium-editor-element > ol, .medium-editor-element > ol > li, 
 }
 
 .post-paid-section-preview-paid-section {
-  background-color: #ededed;
   max-height: 300px;
   overflow: auto;
+  width: 100%;
 }
 
 .post-paid-section-preview-paid-section > * {
@@ -279,8 +312,15 @@ ol, ol > li, li, .medium-editor-element > ol, .medium-editor-element > ol > li, 
 }
 
 .post-paid-section-preview-paid-section > ul,
-.post-paid-section-preview-paid-section > ul > li {
+.post-paid-section-preview-paid-section > ul > li,
+.post-paid-section-preview-paid-section > ol,
+.post-paid-section-preview-paid-section > ol > li {
   list-style-position: inside;
+  padding-left: 20px;
+}
+
+.post-paid-section-preview-paid-section > blockquote {
+  margin-left: 15px;
 }
 
 /* hide scrollbars */
