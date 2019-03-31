@@ -84,7 +84,7 @@ class UpvoteButtonController {
 
   private satoshiToBch = (amountSat: number): string => {
     return (amountSat / 100000000).toFixed(5);
-  };
+  }
 
   /**
    * Splits an upvote amount between previous upvotes and saves the upvote reference in Honest database

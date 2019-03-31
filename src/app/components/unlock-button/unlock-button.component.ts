@@ -56,7 +56,7 @@ class UnlockButtonController {
 
   private ngOnInit() {
     this.text = `GET ACCESS FOR ${this.$scope.post.paidSectionCost} BCH`;
-    this.hoverText = `UNLOCK NOW`
+    this.hoverText = `UNLOCK NOW`;
     this.loadingText = `UNLOCKING...`;
 
     this.post = this.$scope.post;
@@ -92,10 +92,6 @@ class UnlockButtonController {
     }
   }
 
-  private satoshiToBch = (amountSat: number): string => {
-    return (amountSat / 100000000).toFixed(5);
-  };
-
   /**
    * Unlocks a section in the post and saves a transaction reference in Honest database
    */
@@ -123,21 +119,30 @@ class UnlockButtonController {
     const simpleWallet = simpleWalletProvider.get();
     this.isUnlocking = true;
 
-    this.scopeService.safeApply(this.$scope, () => {});
+    this.scopeService.safeApply(this.$scope);
 
     let tx;
-    const author = {
-      upvoteId: null,
-      user: this.post.user,
-      amountSat: this.post.paidSectionCost,
-      address: this.post.user.addressBCH
+
+    const HONEST_CASH_PAYWALL_SHARE = 0.2;
+    const honestCashShare = this.post.paidSectionCost * HONEST_CASH_PAYWALL_SHARE;
+    const authorShare = this.post.paidSectionCost - honestCashShare;
+
+    const receiverAuthor = {
+      address: this.post.user.addressBCH,
+      amountSat: authorShare
+    };
+
+    const receiverHonestCash = {
+      address: "bitcoincash:qrk9kquyydvqn60apxuxnh5jk80p0nkmquwvw9ea95",
+      amountSat: honestCashShare
     };
 
     toastr.info('Unlocking...');
 
     try {
       tx = await simpleWallet.send([
-          author,
+          receiverAuthor,
+          receiverHonestCash,
           {
             opReturn: ['0x4802', postId.toString()]
           }
