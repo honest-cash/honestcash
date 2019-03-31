@@ -162,7 +162,7 @@ export default class EditorCtrl {
           $scope.draft.hasPaidSection = !$scope.draft.hasPaidSection;
           if ($scope.draft.hasPaidSection) {
             if ($scope.draft.paidSectionLinebreak === null) {
-              $scope.draft.paidSectionLinebreak = 20;
+              $scope.draft.paidSectionLinebreak = 1;
             }
             checkForCurrencyConversion();
             const linebreak = $scope.draft.paidSectionLinebreak !== null ? $scope.draft.paidSectionLinebreak : 0;
