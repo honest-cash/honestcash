@@ -1,139 +1,88 @@
 import FeedService from "../../core/services/FeedService";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
-import ProfileService from "../../core/services/ProfileService";
 
 export default class ProfileCtrl {
-  public static $inject = [
-    "$rootScope",
-    "$state",
-    "$scope",
-    "$location",
-    "FeedService",
-    "RelsService",
-    "PostService",
-    "ScopeService",
-    "ProfileService",
-    "profile"
-  ];
+    public static $inject = [
+      "$rootScope",
+      "$state",
+      "$scope",
+      "$location",
+      "FeedService",
+      "RelsService",
+      "PostService",
+      "ScopeService",
+      "profile"
+    ];
 
-  public profileId: string = this.profile.id;
-  public page: number = 1;
-  public premiumPage: number = 1;
-  public feeds: any[] = [];
-  public premiumFeeds: any[] = [];
-  public postsAll: any[] = [];
-  public followGuys: any[] = [];
-  public showProfileTab: "feeds" | "premiumPosts" | "following" | "followers" | "responses" = "feeds";
-  public limit: number = 10;
-  public postsAvailable: boolean = true;
-  public isLoading: boolean = true;
-  public isLoadingFeeds: boolean = true;
-  public followsProfileAlready: boolean = false;
-  public hasPremiumPosts: boolean = false;
+    public profileId: string = this.profile.id;
+    public page: number = 1;
+    public feeds: any[] = [];
+    public postsAll: any[] = [];
+    public followGuys: any[] = [];
+    public showProfileTab: "feeds" | "following" | "followers" | "responses" = "feeds";
+    public limit: number = 10;
+    public postsAvailable: boolean = true;
+    public isLoading: boolean = true;
+    public followsProfileAlready: boolean = false;
 
-  constructor(
-    private $rootScope,
-    private $state,
-    private $scope,
-    private $location,
-    private feedService: FeedService,
-    private RelsService,
-    private postService: PostService,
-    private scopeService: ScopeService,
-    private profileService: ProfileService,
-    private profile
-  ) {
-    this.checkIfUserHasPremiumPosts();
-    this.fetchFeeds({});
+    constructor(
+      private $rootScope,
+      private $state,
+      private $scope,
+      private $location,
+      private feedService: FeedService,
+      private RelsService,
+      private postService: PostService,
+      private scopeService: ScopeService,
+      private profile
+    ) {
+      this.fetchFeeds({});
+    }
+
+    public fetchFeeds(params) {
+      this.isLoading = true;
+      params = params ? params : {};
+
+      this.showProfileTab = "feeds";
+
+      this.postService.getPosts({
+        includeResponses: true,
+        status: "published",
+        orderBy: "publishedAt",
+        page: params.page ? params.page : this.page,
+        userId: this.profile.id
+      }, data => {
+        if (!data) {
+            return;
+        }
+
+        if (params.page === 0) {
+          this.postsAll = data;
+        } else {
+          data.forEach((feed) => {
+            this.postsAll.push(feed);
+          });
+        }
+
+        if (data.length < this.limit) {
+          this.postsAvailable = false;
+        } else {
+          this.postsAvailable = true;
+        }
+
+        this.isLoading = false;
+
+        this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ? !_.parentPostId : _.parentPostId);
+      });
   }
 
-  public fetchFeeds(params) {
-    this.isLoadingFeeds = true;
-    params = params ? params : {};
-
-    this.showProfileTab = "feeds";
-
-    this.postService.getPosts({
-      includeResponses: true,
-      status: "published",
-      orderBy: "publishedAt",
-      page: params.page ? params.page : this.page,
-      userId: this.profile.id
-    }, data => {
-      if (!data) {
-        return;
-      }
-
-      if (params.page === 0) {
-        this.postsAll = data;
-      } else {
-        data.forEach((feed) => {
-          this.postsAll.push(feed);
-        });
-      }
-
-      if (data.length < this.limit) {
-        this.postsAvailable = false;
-      } else {
-        this.postsAvailable = true;
-      }
-
-      this.isLoadingFeeds = false;
-
-      this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ? !_.parentPostId : _.parentPostId);
-    });
-  }
-
-  public checkIfUserHasPremiumPosts() {
-    this.profileService.checkIfHasPremiumPosts(this.profile.id, (has) => {
-      this.hasPremiumPosts = has;
-      this.isLoading = false;
-    });
-  }
-
-  public showFeeds() {
+  public showFeeds(tab) {
     this.showProfileTab = "feeds";
 
     this.feeds = this.postsAll.filter(_ => !_.parentPostId);
 
-    this.scopeService.safeApply(this.$scope, () => { });
-  }
-
-  public showPremiumPosts() {
-    this.showProfileTab = "premiumPosts";
-
-    this.postService.getPosts({
-      includeResponses: false,
-      status: "locked",
-      orderBy: "publishedAt",
-      page: this.premiumPage,
-      userId: this.profile.id
-    }, data => {
-      if (!data) {
-        return;
-      }
-
-      if (this.premiumPage === 0) {
-        this.premiumFeeds = data;
-      } else {
-        data.forEach((feed) => {
-          this.premiumFeeds.push(feed);
-        });
-      }
-
-      if (data.length < this.limit) {
-        this.postsAvailable = false;
-      } else {
-        this.postsAvailable = true;
-      }
-
-      this.isLoadingFeeds = false;
-
-      this.feeds = this.premiumFeeds;
-      this.scopeService.safeApply(this.$scope, () => { });
-    });
-
+    this.scopeService.safeApply(this.$scope, () => {});
   }
 
   public showResponses(): void {
@@ -141,10 +90,10 @@ export default class ProfileCtrl {
 
     this.feeds = this.postsAll.filter(_ => _.parentPostId);
 
-    this.scopeService.safeApply(this.$scope, () => { });
+    this.scopeService.safeApply(this.$scope, () => {});
   }
 
-  public showFollowers = () => {
+  public showFollowers = (tab) => {
     this.followGuys = [];
 
     this.showProfileTab = "followers";
@@ -154,7 +103,7 @@ export default class ProfileCtrl {
     });
   }
 
-  public showFollowing = () => {
+  public showFollowing = (tab) => {
     this.followGuys = [];
 
     this.showProfileTab = "following";
@@ -168,15 +117,10 @@ export default class ProfileCtrl {
     console.log("load more triggerred");
 
     if (!this.$rootScope.activeCalls && this.postsAvailable) {
-      if (this.showProfileTab === "premiumPosts") {
-        this.premiumPage = this.premiumPage + 1;
-        this.showPremiumPosts();
-      } else {
-        this.page = this.page + 1;
-        this.fetchFeeds({
-          page: this.page
-        });
-      }
+      this.page = this.page + 1;
+      this.fetchFeeds({
+        page: this.page
+      });
     }
   }
 }

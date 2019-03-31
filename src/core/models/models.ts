@@ -8,7 +8,6 @@ export interface IFetchPostsArgs {
   includeResponses?: boolean;
   includeParentPost?: boolean;
   status?: "published" | "draft" | "archived" | "locked" | "unlocked";
-  not: number[];
   isResponse?: boolean;
 }
 

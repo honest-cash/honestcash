@@ -9,7 +9,7 @@
           id="profilePic"
           fallback-src="{{ '/img/avatar.png' }}"
           class="img-circle img-thumbnail-avatar-normal image-center"
-          ng-src="{{ profileCtrl.profile.imageUrl || '/img/avatar.png' }}"
+          ng-src="{{ profileCtrl.profile.imageUrl || '/img/avatar.png' }}"
         />
       </div>
       <div class="pull-left col-xs-12 col-sm-9 col-md-10">
@@ -80,16 +80,16 @@
   </div>
 </div>
 
-<div ng-if="!profileCtrl.isLoading" class="container-fluid">
+<div class="container-fluid">
   <div class="row">
     <div ng-include="'profileNav'"></div>
   </div>
 </div>
 
-<div ng-if="!profileCtrl.isLoading" class="container">
+<div class="container">
   <div style="min-height:350px;">
     <div
-      ng-if="profileCtrl.showProfileTab === 'feeds' && !profileCtrl.feeds.length && user.id == profileCtrl.profile.id"
+      ng-if="!isLoading && profileCtrl.showProfileTab === 'feeds' && !profileCtrl.feeds.length && user.id == profileCtrl.profile.id"
       class="text-center"
     >
       <h2>Write your first post!</h2>
@@ -112,12 +112,12 @@
       </h2>
     </div>
 
-    <div ng-if="profileCtrl.showProfileTab=='feeds' || profileCtrl.showProfileTab=='responses' || profileCtrl.showProfileTab=='premiumPosts'">
+    <div ng-if="profileCtrl.showProfileTab=='feeds' || profileCtrl.showProfileTab=='responses'">
       <feeds
         user="user"
         feeds="profileCtrl.feeds"
         load-more="profileCtrl.loadMore()"
-        is-loading="profileCtrl.isLoadingFeed"
+        is-loading="profileCtrl.isLoading"
         on-upvote="addressClicked"
         is-upvoting="isUpvoting"
       >
@@ -181,7 +181,6 @@
   </div>
 </div>
 
-
 <script type="text/ng-template" id="profileNav">
   <div class="hc-profile-nav">
     <ul class="width640 nav nav-tabs text-center">
@@ -192,16 +191,6 @@
       >
         <a href="#" class="showProfileTab">
           <small>Stories</small>
-        </a>
-      </li>
-      <li
-        ng-if="profileCtrl.hasPremiumPosts"
-        ng-class="{ 'bold': profileCtrl.showProfileTab === 'premiumPosts' }"
-        class="showProfileTab"
-        ng-click="profileCtrl.showPremiumPosts()"
-      >
-        <a href="#" class="showProfileTab">
-          <small>Premium Stories</small>
         </a>
       </li>
 
