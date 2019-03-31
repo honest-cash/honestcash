@@ -1,6 +1,9 @@
 import * as showdown from "showdown";
 
-const converter = new showdown.Converter();
+const converter = new showdown.Converter({
+  simpleLineBreaks: true,
+  noHeaderId: true,
+});
 
 export default class EditorService {
 
@@ -22,65 +25,43 @@ export default class EditorService {
 
   public getFixedBody = (editor, externalHtml?) => {
     // converting from html to md to html cleans the body
-    const bodyMarkdown = converter.makeMd(externalHtml ? externalHtml : editor.serialize().body.value);
-    const bodyHtml = converter.makeHtml(bodyMarkdown);
+    const bodyHtml = externalHtml ? externalHtml : editor.serialize().body.value;
 
     let $bodyHtml = $(bodyHtml);
-    // get only the dom elements
-    let _elements = $bodyHtml.filter((e) => {
-      return $bodyHtml[e].nodeName !== "#text" && $bodyHtml[e].nodeName !== "#comment"
-    });
 
-    // to convert mediumeditor default div wrappers to showdown converted syntax
-    // showdown only has p tags
-    // to the below is to replace those elements
-    const replaceContents = [];
     // the html is to replace the body in the editor
     let _fixedBody = '';
 
-    _elements = _elements.map(i => {
-      const $elem = $(_elements[i]);
-      // find regular divs and remove them
-      // get the content of the div and its previous sibling
-      // so that it is inserted at correct place
-      if ($elem.prop("nodeName") === "DIV" && !this.stringIncludes($elem.prop("className"), "medium-insert-images")) {
-        const previous = $elem.prev();
-        const content = $elem;
-        replaceContents.push([content, previous]);
-        $elem.remove();
-        return null;
-      }
+    $bodyHtml = $bodyHtml.map(i => {
+      const _elem = $bodyHtml[i];
+      const $elem = $($bodyHtml[i]);
+
       // find divs that are inserted by the mediumeditor mediuminsert plugin
       // with showdown converted syntax
       // showdown only has img inside a p tag
       // we rewrap the div with p tag here
-      if ($elem.prop("nodeName") === "DIV" && this.stringIncludes($elem.prop("className"), "medium-insert-images")) {
+       if ($elem.prop("nodeName") === "DIV" && this.stringIncludes($elem.prop("className"), "medium-insert-images")) {
         const content = $elem;
         const img = this.getOuterHtml($(content).find('img'));
         const imgWrapped = `<p>${img}</p>`;
         return $(imgWrapped);
       }
-      // kind of trim the body of all unneccessary br tags
-      // the honestcash-editor has auto delete feature for more than one new lines
-      // we simulate the same by removing all the br tags because p and header tags
-      // already provide the margins and paddings
-      if ($elem.prop("childElementCount") === 1 && $($elem.prop("lastElementChild")).prop("nodeName") === "BR") {
-        $elem.remove();
+
+      // remove non dom elements from the result html
+      if (this.stringIncludes(_elem.nodeName, "#text") || this.stringIncludes(_elem.nodeName, "#comment")) {
+        // return null to remove the element
         return null;
       }
+
       // we form our last new html
-      _fixedBody += this.getOuterHtml(_elements[i]);
+      _fixedBody += this.getOuterHtml($bodyHtml[i]);
       return $elem;
     });
 
-    replaceContents.forEach(contentTuple => {
-      $(contentTuple[0]).insertAfter($(contentTuple[1]));
-    });
-
     // elements and html is returned as tuple
-    this.elements = _elements;
+    this.elements = $bodyHtml;
     this.fixedBody = _fixedBody;
-    return [_elements, _fixedBody];
+    return [$bodyHtml, _fixedBody];
   }
 
   public getContextElement = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {

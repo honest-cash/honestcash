@@ -23,11 +23,12 @@ export default class FeedService {
           let feeds = response.data;
 
           for (let feed of feeds) {
-            feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
             feed.createdAtFormatted = moment(feed.createdAt).utc().format(dateFormat);
+            feed.updatedAtFormatted = moment(feed.updatedAt).utc().format(dateFormat);
             feed.publishedAtFormatted = moment(feed.publishedAt).utc().format(dateFormat);
-            feed.createdAt = moment(feed.createdAt).utc().format(dateFormat);
-            feed.publishedAt = moment(feed.publishedAt).utc().format(dateFormat);
+            feed.archivedAtFormatted = moment(feed.deletedAt).utc().format(dateFormat);
+            
+            feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
           }
 
           callback(feeds);

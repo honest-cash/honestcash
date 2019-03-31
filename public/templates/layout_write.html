@@ -69,8 +69,8 @@
 
 				<div class="modal-body">
 
-					<p>Add or change topics so readers know what your story is about.</p>
-
+					<p class="mb-0">Add or change tags so readers know what your story is about.</p>
+					<p><small class="f-normal"><i>Tags are seperated by a space.</i></small></p>
 					<div class="form-group">
 						<form>
 							<input id="description" name="tags" placeholder="Enter up to 5 hashtags" />
@@ -79,78 +79,55 @@
 
 					<hr>
 
-					<div class="form-group">
+					<div class="form-group m-0">
 						<form>
-							<div class="checkbox">
+							<div class="checkbox m-0">
 								<label>
-									<input type="checkbox" ng-model="hasPaidSection"> <strong>I have a paid section in my story</strong>
+									<input type="checkbox" ng-checked="draft.hasPaidSection" ng-click="togglePaidSection()"> <strong>I have a paid section in my story</strong>
 								</label>
 							</div>
 						</form>
 					</div>
-					<div class="form-group" ng-if="hasPaidSection">
-						<form class="form-inline">
-							<div class="form-group">
-								<label for="paidSectionCost">Cost in BCH:</label>
-								<input type="number" step="0.001" min="0" class="form-control" id="paidSectionCost" placeholder="Amount in BCH"
-									ng-model="paidSectionCost" ng-change="setPaidSectionCost($event)" ng-class="{'b-red b-2': publishTouched && paidSectionCost === 0}">
-							</div>
-							<div ng-if="publishTouched && paidSectionCost === 0" class="form-group">
-								<div class="alert alert-danger">
-									Cost is required.
+					<div ng-if="draft.hasPaidSection" class="mb-2">
+							<p><small class="f-normal mb-1"><i>Choose how much readers pay in order to read your paid section. <a href="">Learn more.</a></i></small></p>
+							<div class="row">
+								<div class="col-xs-12 col-md-6">
+									<small for="paidSectionCostInBCH">Cost in BCH:</small>
+									<input type="number" step="0.001" min="0" id="paidSectionCostInBCH"
+										ng-model="draft.paidSectionCost" ng-change="setPaidSectionCost('bch')" ng-class="{'b-red b-2': publishTouched && paidSectionCostInBCH === 0}">
+								</div>
+								<div class="col-xs-12 col-md-6" ng-if="showPaidSectionCostInUSD">
+									<small for="paidSectionCostInUSD">Cost in USD:</small>
+									<input type="number" step="0.1" min="0" id="paidSectionCostInUSD"
+										ng-model="paidSectionCostInUSD" ng-change="setPaidSectionCost('usd')" ng-class="{'b-red b-2': publishTouched && paidSectionCostInUSD === 0}">
 								</div>
 							</div>
-						</form>
 					</div>
-					<div ng-if="hasPaidSection">
+					<div ng-if="draft.hasPaidSection">
 						<p class="mb-0"><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
-						<p><small><i class="f-normal">Click the arrows to navigate between paragraph breaks</i></small></p>
-						<div class="row">
+						<small class="f-normal" ng-class="{'c-red': publishTouched && !paidSectionLineBreakTouched}"><i>Choose where your paid section starts by moving the up and down arrows. The red line indicates where the free section ends and the paid section starts.</i></small>
+						<div class="row flex flex-wrap mt-2">
 							<div class="col-xs-12">
-								<div class="col-xs-10 post-paid-section-preview-wrapper" ng-class="{'b-red b-2': publishTouched && !paidSectionLineBreakTouched}">
-									<div class="post-paid-section-preview-free-section">
-										<div class="row flex flex-wrap">
-											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center">
-												<strong>Last Free Sentence</strong>
-											</div>
-											<div class="col-xs-10">
-												<article class="h-100 flex flex-vertical-end" ng-bind-html="trustAsHtml(freeBodyCut)"></article>
-											</div>
-										</div>
-									</div>
-									<div class="post-paid-section-preview-paid-section">
-										<div class="row flex flex-wrap">
-											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center" ng-class="{'bb-1': paidSectionLinebreak === paidSectionLinebreakEnd - 3, 'bb-grey': paidSectionLinebreak === paidSectionLinebreakEnd - 3}">
-												<strong>First Paid Sentence</strong>
-											</div>
-											<div class="col-xs-10">
-												<article ng-bind-html="trustAsHtml(paidBodyCut)"></article>
-											</div>
-										</div>
-										<div class="row flex flex-wrap" ng-if="paidSectionLinebreak !== paidSectionLinebreakEnd - 3">
-											<div class="col-xs-2 br-1 br-grey"></div>
-											<div class="col-xs-10 bt-1 bt-grey bb-1 bb-grey">
-												<p class="text-center"><strong>...</strong></p>
-											</div>
-										</div>
-										<div class="row flex flex-wrap">
-											<div class="col-xs-2 br-1 br-grey flex flex-vertical-center">
-												<strong>Last Paid Sentence</strong>
-											</div>
-											<div class="col-xs-10">
-												<article ng-bind-html="trustAsHtml(paidBodyCutEnd)"></article>
-											</div>
-										</div>
-									</div>
+								<div class="col-xs-12 col-sm-11 post-paid-section-preview-wrapper flex" ng-class="{'b-red b-2': publishTouched && !paidSectionLineBreakTouched}">
+									<article class="post-paid-section-preview-paid-section" ng-bind-html="trustAsHtml(fixedBody)"></article>
 								</div>
-								<div class="col-xs-2 text-center post-paid-section-arrows">
+								<div class="col-xs-12 hidden-xs col-sm-1 text-center post-paid-section-arrows flex flex-wrap">
 									<div class="post-paid-section-up-arrow" ng-click="switchLinebreak('decrement')"
-										ng-if="paidSectionLinebreak !== 0">
+										ng-class="{'linebreak-switch-disabled': draft.paidSectionLinebreak === 1}">
 										<i class="fa fa-chevron-up"></i>
 									</div>
-									<div class="post-paid-section-linebreak">{{paidSectionLinebreakText}}</div>
 									<div class="post-paid-section-down-arrow" ng-click="switchLinebreak('increment')"
-										ng-if="paidSectionLinebreak !== paidSectionLinebreakEnd - 3">
+										ng-class="{'linebreak-switch-disabled': draft.paidSectionLinebreak === paidSectionLinebreakEnd - 1}">
+										<i class="fa fa-chevron-down"></i>
+									</div>
+								</div>
+								<div class="col-xs-12 visible-xs text-center post-paid-section-arrows-mobile">
+									<div class="post-paid-section-up-arrow" ng-click="switchLinebreak('decrement')"
+										ng-class="{'linebreak-switch-disabled': draft.paidSectionLinebreak === 1}">
+										<i class="fa fa-chevron-up"></i>
+									</div>
+									<div class="post-paid-section-down-arrow" ng-click="switchLinebreak('increment')"
+										ng-class="{'linebreak-switch-disabled': draft.paidSectionLinebreak === paidSectionLinebreakEnd - 1}">
 										<i class="fa fa-chevron-down"></i>
 									</div>
 								</div>
@@ -161,7 +138,8 @@
 					<div class="form-group">
 						<small>
 							<ul>
-								<li>You can edit the story after publishing.</li>
+								<li><small>You can only add maximum of 6 tags to your story</small></li>
+								<li><small>You can edit the story after publishing.</small></li>
 								<li class="hidden">An email will be sent to your followers.</li>
 							</ul>
 						</small>

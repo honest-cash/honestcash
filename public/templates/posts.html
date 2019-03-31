@@ -4,33 +4,19 @@
 <div ng-if="!isLoading">
   <div class="row" style="margin-bottom: 30px;">
     <div class="col-xs-12">
-      <strong style="font-size: 30px;"
-        >Your
-        <span ng-if="currentTab === 'drafts' || currentTab === 'posts' || currentTab === 'responses'">
-          <span ng-if="currentTab === 'posts'">story </span>
-          <span ng-if="currentTab === 'responses'">response </span>  
-          drafts
-        </span>
-        <span ng-if="currentTab === 'published' || currentTab === 'posts' || currentTab === 'responses'">published 
-          <span ng-if="currentTab === 'posts'">stories</span>
-          <span ng-if="currentTab === 'responses'">responses</span>
-        </span>
-        <span ng-if="currentTab === 'archived' || currentTab === 'posts' || currentTab === 'responses'">archived
-          <span ng-if="currentTab === 'posts'">stories</span>
-          <span ng-if="currentTab === 'responses'">responses</span>
-        </span>
-      </strong>
+      <strong style="font-size: 30px;">Your posts</strong>
     </div>
   </div>
-  <div ng-if="showTabs" class="row">
-    <div class="col-xs-12">
+  <div class="row">
+    <div class="col-xs-12" style="margin-bottom: 20px;">
       <ul class="nav nav-tabs text-center">
         <li
           ng-class="{ 'bold': currentTab === 'drafts' }"
-          class="showProfileTab"
+          class="hidden showProfileTab disabled hc-tooltip"
           ng-click="switchTab('drafts')"
+          data-tippy-content="This section is still under development."
         >
-          <a href="#" class="showProfileTab"> Drafts ({{ getTabCount('drafts') }}) </a>
+          <a href="#" class="showProfileTab" ng-disabled="true"> Drafts </a>
         </li>
 
         <li
@@ -39,118 +25,77 @@
           ng-click="switchTab('published')"
         >
           <a href="#" class="showProfileTab">
-            Published ({{ getTabCount('published') }})
-          </a>
-        </li>
-
-        <li
-          ng-class="{ 'bold': currentTab === 'archived' }"
-          class="showProfileTab"
-          ng-click="switchTab('archived')"
-        >
-          <a href="#" class="showProfileTab">
-            Archived ({{ getTabCount('archived') }})
+            Published ({{ posts.length }})
           </a>
         </li>
       </ul>
     </div>
   </div>
-  <div ng-if="showTabs" class="row">
-    <div class="col-xs-12">
-        <div class="row">
-            <div class="col-xs-12" style="margin-bottom: 20px;">
-              <ul class="nav nav-tabs text-center" style="border-bottom: 0px;">
-                <li
-                  ng-class="{ 'bold': currentTab === 'posts' }"
-                  class="showProfileTab"
-                  ng-click="switchTab('posts')"
-                >
-                  <a href="#" class="showProfileTab"> Posts ({{ getTabCount('posts')}}) </a>
-                </li>
-        
-                <li
-                  ng-class="{ 'bold': currentTab === 'responses' }"
-                  class="showProfileTab"
-                  ng-click="switchTab('responses')"
-                >
-                  <a href="#" class="showProfileTab">
-                    Responses ({{ getTabCount('responses') }})
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <div ng-if="filterPosts(currentTab).length" class="col-xs-12 text-center">
-            <h2>Write your first post!</h2>
-            <a href="/write" target="_self">
-              <button class="btn-default btn" style="margin:10px;">
-                <strong>Create draft</strong>
-              </button>
-            </a>
-          </div>
-          <div
-            ng-if="filterPosts(currentTab).length"
-            class="post-feed-body"
-            ng-repeat="post in filterPosts(currentTab)"
-            style="padding: 10px; margin-bottom: 10px;"
-          >
-            <div class="row">
-              <div class="col-xs-12">
-                <h3>
-                  <strong> {{ post.title }} </strong>
-                </h3>
-                <article ng-if="post.body" style="font-size: 14px;">
-                  {{ displayPostBody(post.body) }}
-                </article>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-12 col-sm-8 pull-left">
-                <span class="text-muted" style="font-size: 12px;"
-                  >Published on {{ post.publishedAt }}</span
-                >
-              </div>
-              <div class="col-xs-12 col-sm-4 pull-right text-right">
-                <a
-                  class="btn btn-default btn-xs"
-                  ui-sref="vicigo.post({ alias: post.alias, username: post.user.username })"
-                  target="_blank"
-                >
-                  <i class="fa fa-eye"></i>&nbsp;View
-                </a>
-                <a
-                  ng-if="post.status !== 'archived'"
-                  class="btn btn-default btn-xs"
-                  ng-href="/edit/{{ post.id }}"
-                  target="_blank"
-                >
-                  <i class="fa fa-eraser"></i>&nbsp;Edit
-                </a>
-                <button
-                  ng-if="post.status !== 'archived'"
-                  class="btn btn-default btn-xs"
-                  ng-disabled="isArchiving"
-                  ng-click="archivePost(post)"
-                >
-                  <i class="fa fa-archive"></i>&nbsp;Archive
-                </button>
-              </div>
-            </div>
-          </div>
-          <button
-            ng-disabled="isLoadingMore"
-            ng-if="postsAvailable"
-            class="btn btn-default btn-block"
-            style="margin-top: 20px;margin-bottom: 50px;"
-            ng-click="loadMore()"
-          >
-            Load more...
-          </button>
-          <div ng-if="!postsAvailable" style="margin-bottom: 50px;"></div>
-        </div>
+  <div
+  ng-if="currentTab === 'published' && !posts.length"
+  class="text-center"
+>
+  <h2>Write your first post!</h2>
+  <a href="/write" target="_self">
+    <button class="btn-default btn" style="margin:10px;">
+      <strong>Create draft</strong>
+    </button>
+  </a>
+</div>
+  <div
+    class="post-feed-body"
+    ng-repeat="post in posts"
+    style="padding: 10px; margin-bottom: 10px;"
+  >
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>
+          <strong> {{ post.title }} </strong>
+        </h3>
+        <article ng-if="post.body" style="font-size: 14px;">
+          {{ displayPostBody(post.plain) }}
+        </article>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 pull-left">
+        <span class="text-muted" style="font-size: 12px;">
+          Published on {{ post.publishedAtFormatted }}
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-4 pull-right text-right">
+        <a
+          class="btn btn-default btn-xs"
+          ui-sref="vicigo.post({ alias: post.alias, username: post.user.username })"
+          target="_blank"
+        >
+          <i class="fa fa-eye"></i>&nbsp;View
+        </a>
+        <a
+          class="btn btn-default btn-xs"
+          ng-href="/edit/{{ post.id }}"
+          target="_blank"
+        >
+          <i class="fa fa-eraser"></i>&nbsp;Edit
+        </a>
+        <button
+          class="hidden btn btn-default btn-xs"
+          ng-disabled="isDeleting"
+          ng-click="deletePost(post.id)"
+        >
+          <i class="fa fa-trash"></i>&nbsp;Delete
+        </button>
       </div>
     </div>
   </div>
+  <button
+    ng-disabled="isLoadingMore"
+    ng-if="postsAvailable"
+    class="btn btn-default btn-block"
+    style="margin-top: 20px;margin-bottom: 50px;"
+    ng-click="loadMore()"
+  >
+    Load more...
+  </button>
+  <div ng-if="!postsAvailable" style="margin-bottom: 50px;"></div>
 </div>

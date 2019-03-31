@@ -10,36 +10,25 @@ import ScopeService from "../../core/services/ScopeService";
 
 enum TabStatus {
   drafts = "drafts",
-  published = "published",
-  archived = "archived"
-}
-
-enum SubTabStatus {
-  posts = "posts",
-  comments = "comments"
+  published = "published"
 }
 
 interface IScopePostsCtrl extends ng.IScope {
   isLoading: boolean;
   isLoadingMore: boolean;
-  isArchiving: boolean;
+  isDeleting: boolean;
   posts: Post[];
-  responses: Post[];
-  drafts: Post[];
   page: number;
   limit: number;
   postsAvailable: boolean;
-  showTabs: boolean;
   currentTab: TabStatus;
-  currentSubTab: SubTabStatus;
   this: any;
 
   fetchPosts: () => void;
   loadMore: () => void;
   switchTab: (tab: TabStatus) => void;
   displayPostBody: (html: string) => string;
-  archivePost: (post: Post) => void;
-  getTabCount: (tab: TabStatus) => number;
+  deletePost: (id: number) => void;
 }
 
 export default class PostsCtrl {
@@ -56,21 +45,16 @@ export default class PostsCtrl {
   ) {
     this.$scope.isLoading = true;
     this.$scope.isLoadingMore = false;
-    this.$scope.isArchiving = false;
+    this.$scope.isDeleting = false;
     this.$scope.posts = [];
-    this.$scope.responses = [];
-    this.$scope.drafts = [];
     this.$scope.page = 1;
     this.$scope.limit = 20;
     this.$scope.postsAvailable = true;
     this.$scope.currentTab = TabStatus.published;
-    this.$scope.currentSubTab = SubTabStatus.posts;
-    this.$scope.showTabs = false;
-    this.$scope.archivePost = (post: Post) => this.archivePost(post);
+    this.$scope.deletePost = (id: number) => this.deletePost(id);
     this.$scope.switchTab = (tab: TabStatus) => this.switchTab(tab);
     this.$scope.displayPostBody = (html: string) => this.displayPostBody(html);
     this.$scope.loadMore = () => this.loadMore();
-    this.$scope.getTabCount = (tab: TabStatus) => this.getTabCount(tab);
 
     this.fetchPosts();
   }
@@ -99,17 +83,15 @@ export default class PostsCtrl {
           return;
         }
 
-        const posts = data.filter(d => !d.parentPostId);
-
         if (this.$scope.page === 0) {
-          this.$scope.posts = posts;
+          this.$scope.posts = data;
         } else {
-          posts.forEach(post => {
+          data.forEach(post => {
             this.$scope.posts.push(post);
           });
         }
 
-        if (posts.length < this.$scope.limit) {
+        if (data.length < this.$scope.limit) {
           this.$scope.postsAvailable = false;
         } else {
           this.$scope.postsAvailable = true;
@@ -117,8 +99,6 @@ export default class PostsCtrl {
 
         this.$scope.isLoading = this.$scope.isLoadingMore ? false : false;
         this.$scope.isLoadingMore = false;
-
-        this.$scope.showTabs = true;
 
         this.scopeService.safeApply(this.$scope, () => {});
 
@@ -131,73 +111,41 @@ export default class PostsCtrl {
     this.$scope.currentTab = tab;
   }
 
-  public switchSubTab(tab: SubTabStatus) {
-    this.$scope.currentSubTab = tab;
-  }
-
-  public async archivePost(post: Post) {
-    this.$scope.isArchiving = true;
+  public async deletePost(id: number) {
+    this.$scope.isDeleting = true;
 
     const confirmationResult = await swal({
       title: "Are you sure?",
-      text: `
-        Archived posts will still be reachable by direct links however the body of the post will be hidden with [archived].
-        
-        The upvotes and the responses will still be visible however users will not be able to upvote or comment on your post/responses anymore.
-      `,
+      text: "Once deleted, you will not be able to recover this post!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     });
 
     if (confirmationResult) {
-      const archiveResult = await this.postService.archivePost(post);
+      const deleteResult = await this.postService.deletePost(id);
 
-      if (archiveResult.status === 200) {
-        this.$scope.posts = this.$scope.posts.filter(f => f.id !== post.id);
-        toastr.success("Your post has been archived");
+      if (deleteResult.status === 200) {
+        this.$scope.posts = this.$scope.posts.filter(f => f.id !== id);
+        toastr.success("Your post has been deleted");
       } else {
-        toastr.error("There was an error while archiving your post");
+        toastr.error("There was an error while deleting your post")
       }
     } else {
-      toastr.info("Your post has not been archived");
+      toastr.info("Your post has not been deleted");
     }
 
-    this.$scope.isArchiving = false;
+    this.$scope.isDeleting = false;
 
-    this.scopeService.safeApply(this.$scope, () => {});
+    this.scopeService.safeApply(this.$scope);
   }
 
   public displayPostBody(html: string): string {
-    return this.postService.displayHTML(html);
-  }
-
-  public getTabCount(tab: TabStatus): number {
-    console.log('posts', this.$scope.posts);
-    switch (tab) {
-      case "drafts":
-          return this.$scope.posts.filter(d => d.status === "draft").length;
-      case "published":
-        return this.$scope.posts.filter(d => d.status === "published").length;
-      case "archived":
-        return this.$scope.posts.filter(d => d.status === "archived").length;
-      case "posts":
-        if (this.$scope.currentTab === "drafts") {
-          return this.$scope.posts.filter(d => d.status === "draft" && !d.parentPostId).length;
-        } else if (this.$scope.currentTab === "published") {
-          return this.$scope.posts.filter(d => d.status === "published" && !d.parentPostId).length;
-        } else if (this.$scope.currentTab === "archived") {
-          return this.$scope.posts.filter(d => d.status === "archived" && !d.parentPostId).length;
-        }
-      case "responses":
-        if (this.$scope.currentTab === "drafts") {
-          return this.$scope.posts.filter(d => d.status === "draft" && d.parentPostId).length;
-        } else if (this.$scope.currentTab === "published") {
-          return this.$scope.posts.filter(d => d.status === "published" && d.parentPostId).length;
-        } else if (this.$scope.currentTab === "archived") {
-          return this.$scope.posts.filter(d => d.status === "archived" && d.parentPostId).length;
-        }
+    if (html.length > 400) {
+      html = html.substring(0, 400) + "...";
     }
+
+    return this.postService.displayHTML(html);
   }
 
   private async initTippy() {
