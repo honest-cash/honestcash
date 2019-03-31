@@ -26,7 +26,7 @@ export default class FeedService {
             feed.createdAtFormatted = moment(feed.createdAt).utc().format(dateFormat);
             feed.updatedAtFormatted = moment(feed.updatedAt).utc().format(dateFormat);
             feed.publishedAtFormatted = moment(feed.publishedAt).utc().format(dateFormat);
-            feed.archivedAtFormatted = moment(feed.archivedAt).utc().format(dateFormat);
+            feed.archivedAtFormatted = moment(feed.deletedAt).utc().format(dateFormat);
             
             feed.shareURLs = SocialSharing.getFeedShareURLs(feed);
           }

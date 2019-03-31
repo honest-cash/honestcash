@@ -8,6 +8,8 @@ export interface IFetchPostsArgs {
   includeResponses?: boolean;
   includeParentPost?: boolean;
   status?: "published" | "draft" | "archived" | "locked" | "unlocked";
+  not: number[];
+  isResponse?: boolean;
 }
 
 export interface IFetchFeedsArgs {
@@ -60,10 +62,11 @@ export class Post {
   publishedAt: string;
   publishedAtFormatted: string;
   deletedAt: string;
-  deletedAtFormatted: string;
+  archivedAtFormatted: string;
   userPosts?: Post[];
   userPostRefs: any;
   hasPaidSection?: boolean;
   paidSectionCost?: number;
   hasBeenPaidFor?: boolean;
+  isOwner?: boolean;
 }

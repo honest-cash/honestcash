@@ -142,7 +142,7 @@ export default class PostService {
     post.createdAtFormatted = moment(post.createdAt).utc().format(dateFormat);
     post.updatedAtFormatted = moment(post.updatedAt).utc().format(dateFormat);
     post.publishedAtFormatted = moment(post.publishedAt).utc().format(dateFormat);
-    post.deletedAtFormatted = moment(post.deletedAt).utc().format(dateFormat);
+    post.archivedAtFormatted = moment(post.deletedAt).utc().format(dateFormat);
 
     post.shareURLs = SocialSharing.getFeedShareURLs(post);
 

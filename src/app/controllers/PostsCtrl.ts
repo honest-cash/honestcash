@@ -7,6 +7,7 @@ import { IGlobalScope } from "../../core/lib/interfaces";
 import { Post, IFetchPostsArgs } from "../../core/models/models";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
+import ProfileService from "../../core/services/ProfileService";
 
 enum TabStatus {
   drafts = "drafts",
@@ -111,9 +112,13 @@ interface IScopePostsCtrl extends ng.IScope {
   goToEditor: () => void;
 }
 
+const arrayPluck = (array: any[], key) => {
+  return array.map(o => o[key])
+}
+
 export default class PostsCtrl {
   public static $inject = [
-    "$rootScope", "$scope", "$timeout", "PostService", "ScopeService"
+    "$rootScope", "$scope", "$timeout", "PostService", "ScopeService", "ProfileService"
   ];
 
   private posts;
@@ -123,15 +128,9 @@ export default class PostsCtrl {
     private $scope: IScopePostsCtrl,
     private $timeout: ng.ITimeoutService,
     private postService: PostService,
-    private scopeService: ScopeService
+    private scopeService: ScopeService,
+    private profileService: ProfileService
   ) {
-    this.posts = {
-      drafts: [],
-      published: [],
-      archived: [],
-      locked: [],
-      unlocked: []
-    }
     this.$scope.isLoading = true;
     this.$scope.isLoadingMore = false;
     this.$scope.isArchiving = false;
@@ -234,31 +233,45 @@ export default class PostsCtrl {
         includeResponses: false,
         orderBy: "publishedAt",
         page: this.$scope.page[tab || this.$scope.currentTab][subtab || this.$scope.currentSubTab],
-        userId: this.$rootScope.user.id
+        userId: this.$rootScope.user.id,
+        not: arrayPluck(this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab], "id")
       }
     };
 
     const queries = {
-      drafts: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, status: "draft"}, cb),
-      published: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, status: "published"}, cb),
-      archived: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "archived"}, cb),
-      locked: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "locked"}, cb),
-      unlocked: (cb) => this.postService.getUserUnlocks(undefined, cb)
+      [TabStatus.drafts]: {
+        [SubTabStatus.posts]: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, status: "draft"}, cb),
+        [SubTabStatus.responses]: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, isResponse: true, status: "draft"}, cb)
+      },
+      [TabStatus.published]: {
+        [SubTabStatus.posts]: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, status: "published"}, cb),
+        [SubTabStatus.responses]: (cb) => this.postService.getPosts({...getFetchPostsArgs(), includeParentPost: true, isResponse: true, status: "published"}, cb)
+      },
+      [TabStatus.archived]: {
+        [SubTabStatus.posts]: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "archived"}, cb)
+      },
+      [TabStatus.locked]: {
+        [SubTabStatus.posts]: (cb) => this.postService.getPosts({...getFetchPostsArgs(), status: "locked"}, cb)
+      },
+      [TabStatus.unlocked]: {
+        [SubTabStatus.posts]: (cb) => this.postService.getUserUnlocks(undefined, cb)
+      }
     }
 
-    const query = queries[this.$scope.currentTab];
+    const query = queries[this.$scope.currentTab][this.$scope.currentSubTab];
     const finalizePosts = (posts) => {
 
       let _posts = posts;
 
+      // unlock type needs to be transformed into a post type
       if (this.$scope.currentTab === TabStatus.unlocked) {
         _posts = posts.map((post => post.userPost));
       }
 
       if (this.$scope.page[this.$scope.currentTab][this.$scope.currentSubTab] === 0) {
-        this.posts[this.$scope.currentTab] = _posts;
+        this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab] = _posts;
       } else {
-        this.posts[this.$scope.currentTab] = [...this.posts[this.$scope.currentTab], ..._posts];
+        this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab] = [...this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab], ..._posts];
       }
       this.scopeService.safeApply(this.$scope, () => {});
 
@@ -269,19 +282,21 @@ export default class PostsCtrl {
       this.$scope.isLoading = this.$scope.isLoadingMore ? false : false;
       this.$scope.isLoadingMore = false;
 
-      if (Object.keys(this.posts).length === 1) {
+      if (Object.keys(this.$scope.posts).length === 1) {
         this.initTippy();
       }
-
+      
       this.scopeService.safeApply(this.$scope, () => {});
 
     }
     
-    if (this.posts[this.$scope.currentTab].length > 0 && !loadingMore) {
-      finalizePosts(this.posts[this.$scope.currentTab]);
+    if (this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab].length > 0 && !loadingMore) {
+      finalizePosts(this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab]);
     } else {
       query(finalizePosts);
     }
+
+    this.setPostsAvailable();
     
   }
 
@@ -289,10 +304,14 @@ export default class PostsCtrl {
     tab = tab || this.$scope.currentTab;
     subtab = subtab || this.$scope.currentSubTab;
 
-    if (this.$scope.filteredPosts.length < this.$scope.limit) {
-      this.$scope.postsAvailable[tab][subtab] = false;
-    } else {
-      this.$scope.postsAvailable[tab][subtab] = true;
+    if (this.$rootScope.user) {
+      this.profileService.checkIfHasMorePosts(this.$rootScope.user.id, arrayPluck(this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab], "id"), (has) => {
+        if (has) {
+          this.$scope.postsAvailable[tab][subtab] = true;
+        } else {
+          this.$scope.postsAvailable[tab][subtab] = false;
+        }
+      });
     }
   }
 
@@ -305,7 +324,7 @@ export default class PostsCtrl {
       [TabStatus.published]: (d) => d.status === "published" && d.paidSectionLinebreak === null,
       [TabStatus.archived]: (d) => d.status === "archived" && d.paidSectionLinebreak === null,
       [TabStatus.locked]: (d) => d.status === "published" && d.paidSectionLinebreak !== null,
-      [TabStatus.unlocked]: (d) => { return {...d}; },
+      [TabStatus.unlocked]: (d) => d,
       [SubTabStatus.posts]: (d) => !d.parentPostId,
       [SubTabStatus.responses]: (d) => d.parentPostId,
     }
@@ -320,7 +339,7 @@ export default class PostsCtrl {
       condition = (d) => conditions[tab](d) && conditions[subtab](d);
     }
     
-    this.$scope.filteredPosts = fn(this.posts[tab], condition);
+    this.$scope.filteredPosts = fn(this.$scope.posts[tab][subtab], condition);
    
     this.setPostsAvailable();
   }
@@ -380,10 +399,10 @@ export default class PostsCtrl {
       const archiveResult = await this.postService.archivePost(post);
 
       if (archiveResult.status === 200) {
-        const _post = this.posts[this.$scope.currentTab].find(p => p.id);
+        const _post = this.posts[this.$scope.currentTab][this.$scope.currentSubTab].find(p => p.id);
 
-        this.posts[this.$scope.currentTab] = this.posts[this.$scope.currentTab].filter(f => f.id !== post.id);
-        this.posts[TabStatus.archived].push(_post);
+        this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab] = this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab].filter(f => f.id !== post.id);
+        this.$scope.posts[TabStatus.archived][SubTabStatus.posts].push(_post);
         this.filterPosts();
         toastr.success("Your post has been archived");
       } else {
@@ -398,7 +417,10 @@ export default class PostsCtrl {
     this.scopeService.safeApply(this.$scope, () => {});
   }
 
-  public displayPostBody(html: string): string {
+  public displayPostBody(html: string) : string {
+    if (html.length > 400) {
+      html = html.substring(0, 400) + "...";
+    }
     return this.postService.displayHTML(html);
   }
 

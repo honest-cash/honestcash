@@ -102,6 +102,11 @@ export default class ProfileService {
     callback(res.data);
   }
 
+  public async checkIfHasMorePosts(userId: number, not: number[], callback) {
+    const res = await this.$http.post(this.API_URL + "/user/" + userId + "/has-more-stories", { not });
+    callback(res.data);
+  }
+
   private getProp(userProperties: IUserProp[], propKey: string): string | null {
     const userProp = userProperties
       .find((prop) => prop.propKey === propKey);

@@ -85,16 +85,15 @@
               <h2>There are no {{currentTab}} {{currentSubTab}} found.</h2>
             </div>
           </div>
+          {{filteredPosts.length}}
           <div ng-if="filteredPosts.length" class="post-feed-body" ng-repeat="post in filteredPosts"
             style="padding: 10px; margin-bottom: 10px;">
             <div class="row">
               <div class="col-xs-12">
                 <h3>
-                  <strong> {{ post.title }} </strong>
+                  <strong> {{ post.title || "No title" }} </strong>
                 </h3>
-                <article ng-if="post.plain" style="font-size: 14px;">
-                  {{post.plain | limitTo: 100}}{{post.plain.length > 100 ? '...' : ''}}
-                </article>
+                <article style="font-size: 14px;" ng-bind-html="displayPostBody(post.plain || 'Nothing has been written yet!')"></article>
               </div>
             </div>
             <div class="row">
@@ -102,7 +101,7 @@
                 <span ng-if="post.status === 'draft'" class="text-muted" style="font-size: 12px;">Last saved on {{ post.updatedAtFormatted }}</span><span ng-if="post.status === 'draft' && post.parentPost" class="text-muted" style="font-size: 12px;"> · Response to <a href="/{{post.parentPost.user.username}}/{{post.parentPost.alias}}" target="_blank">{{ post.parentPost.title }}</a> by {{post.parentPost.user.username}}</span>
                 <span ng-if="post.status === 'published' && currentTab !== 'unlocked'" class="text-muted" style="font-size: 12px;">Published on {{ post.publishedAtFormatted }}<span ng-if="currentSubTab === 'responses'"> · Response to <a href="/{{post.parentPost.user.username}}/{{post.parentPost.alias}}" target="_blank">{{ post.parentPost.title }}</a> by {{post.parentPost.user.username}}</span> </span>
                 <span ng-if="post.status === 'archived'" class="text-muted" style="font-size: 12px;">Archived on {{ post.archivedAtFormatted }}</span>
-                <span ng-if="currentTab === 'unlocked'" class="text-muted" style="font-size: 12px;">Published on {{ post.publishedAtFormatted }} · Unlocked on {{ post.unlockedAtFormatted }}</span>
+                <span ng-if="currentTab === 'unlocked'" class="text-muted" style="font-size: 12px;"><span ng-if="post.status === 'archived'"> · </span>  Published on {{ post.publishedAtFormatted }} · Unlocked on {{ post.unlockedAtFormatted }}</span>
               </div>
               <div class="col-xs-12 col-sm-3 pull-right text-right">
                 <a class="btn btn-default btn-xs"

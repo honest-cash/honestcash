@@ -22,7 +22,7 @@
     </div>
 
     <div class="row post-container">
-      <article class="site-block post-body" ng-class="{'fade-end': postCtrl.post.hasPaidSection && postCtrl.post.user.id !== user.id}" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
+      <article class="site-block post-body" ng-class="{'fade-end': postCtrl.post.hasPaidSection && postCtrl.post.user.id !== user.id && !postCtrl.post.hasBeenPaidFor}" ng-bind-html="postCtrl.displayFeedBody(postCtrl.post.body)"></article>
       <article class="site-block post-body post-paid-section-locked-wrapper" ng-if="postCtrl.post.hasPaidSection && postCtrl.post.user.id !== user.id">
         <div class="post-paid-section-locked"
           ng-if="!postCtrl.post.hasBeenPaidFor && postCtrl.post.status !== 'archived'">
@@ -186,21 +186,20 @@
     </div>
 
     <div class="row" ng-if="postCtrl.post.status !== 'archived' || (postCtrl.post.status === 'archived' && postCtrl.post.user.id === user.id)">
-      <div>
-        <span style="float: left;">
-          <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
-        </span>
-        <span style="float: right;">sort by
-          <a href="#" ng-click="postCtrl.sortResponses('upvoteCount')"
-            ng-class="{'bold': postCtrl.responseSortOrder === 'upvoteCount'}"># of upvotes</a> /
-          <a href="#" ng-click="postCtrl.sortResponses('createdAt')"
-            ng-class="{'bold': postCtrl.responseSortOrder === 'createdAt'}">chronologically</a>
-        </span>
-      </div>
-
       <div class="block-center">
         <div class="panel">
           <div class="panel-body" style="cursor: pointer;">
+            <div style="height: 22px;">
+              <span style="float: left;">
+                <strong>Responses ({{ postCtrl.post.responseCount }})</strong>
+              </span>
+              <span style="float: right;">sort by
+                <a href="#" ng-click="postCtrl.sortResponses('upvoteCount')"
+                  ng-class="{'bold': postCtrl.responseSortOrder === 'upvoteCount'}"># of upvotes</a> /
+                <a href="#" ng-click="postCtrl.sortResponses('createdAt')"
+                  ng-class="{'bold': postCtrl.responseSortOrder === 'createdAt'}">chronologically</a>
+              </span>
+            </div>
             <a ng-if="postCtrl.post.status !== 'archived'" target="_self" ng-href="{{
                 user.id ? '/write/response/' + postCtrl.post.id : '/signup'
               }}">
@@ -346,20 +345,13 @@
     <div>
       <h1>
         <strong>
-          <span class="hc-tooltip" ng-if="postCtrl.post.user.id !== user.id && !postCtrl.post.hasBeenPaidFor && postCtrl.post.status !== 'archived'" data-tippy-content="Unlocking this story will cost you {{postCtrl.post.paidSectionCost}} BCH"><i class="fa fa-lock"></i>&nbsp;</span>
-          <span class="hc-tooltip" ng-if="postCtrl.post.user.id !== user.id && postCtrl.post.hasBeenPaidFor && postCtrl.post.status !== 'archived'" data-tippy-content="You have unlocked this story"><i class="fa fa-unlock"></i>&nbsp;</span>
-          <span class="hc-tooltip" ng-if="user && user.id && (postCtrl.post.hasBeenPaidFor || postCtrl.post.user.id === user.id) && postCtrl.post.status === 'archived'"
-            data-tippy-content="This story is now archived however you still have access to the original post"
-          ><i class="fa fa-archive"></i></span>
-          <span class="hc-tooltip" ng-if="user && user.id && (postCtrl.post.hasBeenPaidFor || postCtrl.post.user.id === user.id) && postCtrl.post.status !== 'archived'"
-            data-tippy-content="This story has a paid section however you have access to the post"
-          ><i class="fa fa-unlock"></i></span>
-          <span class="hc-tooltip" ng-if="(!user || (!postCtrl.post.hasBeenPaidFor && postCtrl.post.user.id !== user.id)) && postCtrl.post.status === 'archived'"
-          data-tippy-content="This story is archived"
-        ><i class="fa fa-archive"></i></span>
-          {{postCtrl.post.title}}
-        </strong>&nbsp;
-        <small ng-if="postCtrl.post.user.id === user.id && postCtrl.post.status !== 'archived'" style="cursor: pointer;" ng-click="postCtrl.editPost()"><i class="fa fa-edit"></i>&nbsp;Edit</small>
+          <span class="hc-tooltip"
+            ng-if="postCtrl.shouldShowIcon"
+            data-tippy-content="{{postCtrl.postTooltip}}"><i
+                class="fa {{postCtrl.iconToShow}}"></i>&nbsp;</span>
+          {{postCtrl.post.title}}&nbsp;
+        </strong>
+        <small ng-if="postCtrl.post.isOwner && postCtrl.post.status !== 'archived'" style="cursor: pointer;" ng-click="postCtrl.editPost()"><i class="fa fa-edit"></i>&nbsp;Edit</small>
       </h1>
     </div>
   </header>

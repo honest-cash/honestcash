@@ -18,7 +18,12 @@ class FeedDirectiveCtrl {
       return this.$sce.trustAsResourceUrl(src);
     };
 
-    this.$scope.displayFeedBody = (html: string) => this.postService.displayHTML(html);
+    this.$scope.displayFeedBody = (html: string) => {
+      if (html.length > 400) {
+        html = html.substring(0, 400) + "...";
+      }
+      return this.postService.displayHTML(html);
+    };
 
     this.initTippy();
   }

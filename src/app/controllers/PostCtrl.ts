@@ -21,6 +21,9 @@ export default class PostCtrl {
   public responses: Post[] = [];
   public unlocks: Unlock[] = [];
   public responseSortOrder: string = "createdAt";
+  public shouldShowIcon: boolean = false;
+  public iconToShow: string = "";
+  public postTooltip: string = "";
   private newResponse: string = "";
 
   constructor(
@@ -33,10 +36,44 @@ export default class PostCtrl {
       this.ngInit();
   }
 
+  public getPostTooltip() {
+
+  }
+
   private async ngInit() {
     this.post = await this.postService.getById(
       this.$stateParams.alias
     );
+
+    this.post.isOwner = this.$rootScope.user ? this.post.user.id === this.$rootScope.user.id : false;
+
+    // show archived or locked/unlocked icon
+    if (this.post.status === "archived") {
+      this.shouldShowIcon = true;
+      if (this.post.hasPaidSection && (this.post.hasBeenPaidFor || this.post.isOwner)) {
+        this.postTooltip = `This story is now archived however you still have access to the original post`;
+        this.iconToShow = "fa-unlock";
+      } else {
+        this.postTooltip = `This story is archived`;
+        this.iconToShow = "fa-archive";
+      }
+      this.scopeService.safeApply(this.$scope);
+    } else if (this.post.hasPaidSection) {
+      this.shouldShowIcon = true;
+      if (!this.post.isOwner) {
+        if (this.post.hasBeenPaidFor) {
+          this.postTooltip = `You have unlocked this story`;
+          this.iconToShow = "fa-unlock";
+        } else {
+          this.postTooltip = `Unlocking this story will cost you ${this.post.paidSectionCost} BCH`
+          this.iconToShow = "fa-lock";
+        }
+      } else {
+        this.postTooltip = `This story has a paid section however you have access to the post`;
+        this.iconToShow = "fa-unlock";
+      }
+      this.scopeService.safeApply(this.$scope);
+    }
 
     this.isLoading = false;
 
