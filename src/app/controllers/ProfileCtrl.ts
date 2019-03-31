@@ -55,7 +55,6 @@ export default class ProfileCtrl {
     this.showProfileTab = "feeds";
 
     this.postService.getPosts({
-      includeResponses: true,
       status: "published",
       orderBy: "publishedAt",
       page: params.page ? params.page : this.page,
@@ -104,7 +103,7 @@ export default class ProfileCtrl {
     this.showProfileTab = "premiumPosts";
 
     this.postService.getPosts({
-      includeResponses: false,
+      only: "posts",
       status: "locked",
       orderBy: "publishedAt",
       page: this.premiumPage,

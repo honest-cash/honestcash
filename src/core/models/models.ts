@@ -5,11 +5,10 @@ export interface IFetchPostsArgs {
   userId?: number;
   hashtag?: string;
   page?: number;
-  includeResponses?: boolean;
   includeParentPost?: boolean;
   status?: "published" | "draft" | "archived" | "locked" | "unlocked";
   not: number[];
-  isResponse?: boolean;
+  only?: "posts" | "responses";
 }
 
 export interface IFetchFeedsArgs {

@@ -102,8 +102,8 @@ export default class ProfileService {
     callback(res.data);
   }
 
-  public async checkIfHasMorePosts(userId: number, not: number[], callback) {
-    const res = await this.$http.post(this.API_URL + "/user/" + userId + "/has-more-stories", { not });
+  public async checkIfHasMorePosts(userId: number, not: number[], status: string, only: string, callback) {
+    const res = await this.$http.post(this.API_URL + "/user/" + userId + "/has-more-stories", { not, status, only });
     callback(res.data);
   }
 

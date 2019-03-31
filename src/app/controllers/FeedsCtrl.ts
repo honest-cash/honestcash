@@ -122,7 +122,7 @@ export default class FeedsCtrl {
       page: this.$scope.page,
       followerId: undefined,
       orderBy: undefined,
-      includeResponses: undefined
+      only: "posts"
     };
 
     if (this.$scope.feedType === "userfeed") {
