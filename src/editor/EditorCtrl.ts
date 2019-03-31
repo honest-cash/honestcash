@@ -47,7 +47,7 @@ export default class EditorCtrl {
     ) {
         let titleEditor;
         let bodyEditor;
-        let elements, fixedBody;
+        let fixedBody;
 
         $scope.isLoading = false;
         $scope.draft = {};
@@ -70,7 +70,7 @@ export default class EditorCtrl {
         }
 
         const setPaidSectionLinebreakEnd = () => {
-          $scope.paidSectionLinebreakEnd = elements.length;
+          $scope.paidSectionLinebreakEnd = $(fixedBody).length;
         }
 
         const adjustPaidSectionLinebreak = (action: "increment" | "decrement") => {
@@ -183,7 +183,7 @@ export default class EditorCtrl {
         }
 
         const refreshBodies = (externalHtml?) => {
-          [elements, fixedBody] = this.editorService.getFixedBody(bodyEditor, externalHtml);
+          fixedBody = this.editorService.getFixedBody(bodyEditor, externalHtml);
           $scope.fixedBody = fixedBody;
           $scope.freeBodyCut = this.editorService.getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
           $scope.paidBodyCut = this.editorService.getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
