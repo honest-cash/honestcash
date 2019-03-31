@@ -70,9 +70,7 @@ export default class EditorCtrl {
         }
 
         const setPaidSectionLinebreakEnd = () => {
-          if (!$scope.paidSectionLinebreakEnd) {
-            $scope.paidSectionLinebreakEnd = elements.length;
-          }
+          $scope.paidSectionLinebreakEnd = elements.length;
         }
 
         const adjustPaidSectionLinebreak = (action: "increment" | "decrement") => {
@@ -86,9 +84,9 @@ export default class EditorCtrl {
 
         const scrollToLinebreak = (action, toLinebreak?: number) => {
           const $container = $('.post-paid-section-preview-paid-section');
-          const $scrollTo = $(`.post-paid-section-preview-paid-section`).eq($scope.draft.paidSectionLinebreak);
+          const $scrollTo = $container.children().eq($scope.draft.paidSectionLinebreak - 1);
 
-          if (!toLinebreak) {
+          if (toLinebreak === null || toLinebreak === undefined) {
             $container.animate({
               scrollTop: $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
             });​
@@ -107,7 +105,7 @@ export default class EditorCtrl {
           } else {
             // timeout is required
             setTimeout(() => {
-              const $scrollTo = $(`.post-paid-section-preview-paid-section`).eq(toLinebreak);
+              const $scrollTo = $container.children().eq(toLinebreak - 1);
               $container.scrollTop($scrollTo.offset().top - $container.offset().top + $container.scrollTop());
               $scrollTo.addClass("bb-2 bb-dashed bb-red");
             }, 0);
@@ -118,7 +116,7 @@ export default class EditorCtrl {
         $scope.switchLinebreak = (action: "increment" | "decrement") => {
           switch (action) {
             case ("increment"):
-              if ($scope.draft.paidSectionLinebreak < $scope.paidSectionLinebreakEnd) {
+              if ($scope.draft.paidSectionLinebreak < $scope.paidSectionLinebreakEnd - 1) {
                 adjustPaidSectionLinebreak(action);
                 refreshBodies();
                 scrollToLinebreak(action);
@@ -163,13 +161,25 @@ export default class EditorCtrl {
         $scope.togglePaidSection = () => {
           $scope.draft.hasPaidSection = !$scope.draft.hasPaidSection;
           if ($scope.draft.hasPaidSection) {
+            if ($scope.draft.paidSectionLinebreak === null) {
+              $scope.draft.paidSectionLinebreak = 20;
+            }
+            checkForCurrencyConversion();
+            const linebreak = $scope.draft.paidSectionLinebreak !== null ? $scope.draft.paidSectionLinebreak : 0;
             setTimeout(() => {
-              $scope.setPaidSectionCost('bch');
+              scrollToLinebreak(undefined, linebreak);
             }, 0);
-            scrollToLinebreak(undefined, $scope.draft.paidSectionLinebreak || 1);
-          } else {
-            scrollToLinebreak(undefined, 0);
           }
+        }
+
+        const checkForCurrencyConversion = () => {
+          this.walletService.convertBCHtoUSD($scope.draft.paidSectionCost).then((currencies: ICurrencyConversion) => {
+            $scope.$apply(function () {
+              $scope.showPaidSectionCostInUSD = true;
+              $scope.paidSectionCostInUSD = currencies.usd;
+              $scope.setPaidSectionCost('bch');
+            });
+          });
         }
 
         const refreshBodies = (externalHtml?) => {
@@ -178,6 +188,7 @@ export default class EditorCtrl {
           $scope.freeBodyCut = this.editorService.getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
           $scope.paidBodyCut = this.editorService.getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
           $scope.paidBodyCutEnd = this.editorService.getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+          setPaidSectionLinebreakEnd();
         }
 
         let parentPostId;
@@ -246,18 +257,15 @@ export default class EditorCtrl {
           }
 
           refreshBodies();
+          setPaidSectionLinebreakEnd();
           bodyEditor.setContent(fixedBody, 0);
           
           $("#publishModal").modal("show");
+
           if ($scope.draft.hasPaidSection && $scope.draft.paidSectionLinebreak) {
-            this.walletService.convertBCHtoUSD($scope.draft.paidSectionCost).then((currencies: ICurrencyConversion) => {
-              $scope.$apply(function () {
-                $scope.showPaidSectionCostInUSD = true;
-                $scope.paidSectionCostInUSD = currencies.usd;
-                $scope.setPaidSectionCost('bch');
-                scrollToLinebreak(undefined, $scope.draft.paidSectionLinebreak);
-              });
-            });
+            checkForCurrencyConversion();
+            const linebreak = $scope.draft.paidSectionLinebreak !== null ? $scope.draft.paidSectionLinebreak : 0;
+            scrollToLinebreak(undefined, linebreak);
           }
         };
 
