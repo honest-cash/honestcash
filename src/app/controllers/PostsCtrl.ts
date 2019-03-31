@@ -269,9 +269,7 @@ export default class PostsCtrl {
     subtab = subtab || this.$scope.currentSubTab;
 
     if (this.$rootScope.user) {
-      console.log(this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab].length);
       this.profileService.checkIfHasMorePosts(this.$rootScope.user.id, arrayPluck(this.$scope.posts[this.$scope.currentTab][this.$scope.currentSubTab], "id"), this.$scope.currentTab, this.$scope.currentSubTab, (has) => {
-        console.log('has', has);
         if (has) {
           this.$scope.postsAvailable[tab][subtab] = true;
         } else {

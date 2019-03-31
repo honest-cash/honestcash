@@ -86,7 +86,7 @@ export default class EditorCtrl {
 
         const scrollToLinebreak = (action, toLinebreak?: number) => {
           const $container = $('.post-paid-section-preview-paid-section');
-          const $scrollTo = $(`.post-paid-section-preview-paid-section > *:nth-child(${$scope.draft.paidSectionLinebreak})`);
+          const $scrollTo = $(`.post-paid-section-preview-paid-section`).eq($scope.draft.paidSectionLinebreak);
 
           if (!toLinebreak) {
             $container.animate({
@@ -107,7 +107,7 @@ export default class EditorCtrl {
           } else {
             // timeout is required
             setTimeout(() => {
-              const $scrollTo = $(`.post-paid-section-preview-paid-section > *:nth-child(${toLinebreak})`);
+              const $scrollTo = $(`.post-paid-section-preview-paid-section`).eq(toLinebreak);
               $container.scrollTop($scrollTo.offset().top - $container.offset().top + $container.scrollTop());
               $scrollTo.addClass("bb-2 bb-dashed bb-red");
             }, 0);
@@ -161,8 +161,12 @@ export default class EditorCtrl {
         }
 
         $scope.togglePaidSection = () => {
+          $scope.draft.hasPaidSection = !$scope.draft.hasPaidSection;
           if ($scope.draft.hasPaidSection) {
-            scrollToLinebreak(undefined, $scope.draft.paidSectionLinebreak);
+            setTimeout(() => {
+              $scope.setPaidSectionCost('bch');
+            }, 0);
+            scrollToLinebreak(undefined, $scope.draft.paidSectionLinebreak || 1);
           } else {
             scrollToLinebreak(undefined, 0);
           }
