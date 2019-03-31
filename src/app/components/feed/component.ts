@@ -19,9 +19,6 @@ class FeedDirectiveCtrl {
     };
 
     this.$scope.displayFeedBody = (html: string) => {
-      if (html.length > 400) {
-        html = html.substring(0, 400) + "...";
-      }
       return this.postService.displayHTML(html);
     };
 
