@@ -1,24 +1,24 @@
 import swal from "sweetalert";
 
-import './unlock-button.styles.less';
-import template from './unlock-button.template.html';
+import "./unlock-button.styles.less";
+import template from "./unlock-button.template.html";
 
-import { IGlobalScope } from '../../../core/lib/interfaces';
-import { Post } from '../../../core/models/models';
-import WalletService from '../../../core/services/WalletService';
-import PostService from '../../../core/services/PostService';
-import ScopeService from '../../../core/services/ScopeService';
+import { IGlobalScope } from "../../../core/lib/interfaces";
+import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
+import { Post } from "../../../core/models/models";
+import PostService from "../../../core/services/PostService";
+import ScopeService from "../../../core/services/ScopeService";
+import WalletService from "../../../core/services/WalletService";
 
-import * as simpleWalletProvider from '../../../core/lib/simpleWalletProvider';
-import * as upvoteDistribution from '../../../core/lib/upvoteDistribution';
-
-declare const angular, toastr, QRCode;
+declare const toastr;
+declare const QRCode;
+declare const bitbox;
 
 const defaultOptions = {
   isDisabled: false,
   isUnlocking: false,
-  loadingText: 'Unlocking...',
-  text: 'Unlock'
+  loadingText: "Unlocking...",
+  text: "Unlock"
 };
 
 interface IScopeUnlockButtonCtrl extends ng.IScope {
@@ -27,12 +27,12 @@ interface IScopeUnlockButtonCtrl extends ng.IScope {
 
 class UnlockButtonController {
   public static $inject = [
-    '$rootScope',
-    '$scope',
-    '$window',
-    'PostService',
-    'WalletService',
-    'ScopeService',
+    "$rootScope",
+    "$scope",
+    "$window",
+    "PostService",
+    "WalletService",
+    "ScopeService"
   ];
 
   private amount: number;
@@ -68,7 +68,7 @@ class UnlockButtonController {
       if (this.isUnlocking) {
         event.preventDefault();
 
-        return 'There is a pending transaction in process. Are you sure you want to leave?';
+        return "There is a pending transaction in process. Are you sure you want to leave?";
       }
     };
   }
@@ -97,12 +97,12 @@ class UnlockButtonController {
    */
   private async unlock() {
     if (!this.$rootScope.user) {
-      return (location.href = '/signup');
+      return (location.href = "/signup");
     }
 
     if (!this.post.user.addressBCH) {
       toastr.error(
-        'Unlocking is not possible because the author does not have a Bitcoin address to receive'
+        "Unlocking is not possible because the author does not have a Bitcoin address to receive"
       );
       return;
     }
@@ -111,7 +111,7 @@ class UnlockButtonController {
 
     if (this.post.userId == this.$rootScope.user.id) {
       toastr.error(
-        'Unlocking is not possible because you cannot unlock your own posts and responses'
+        "Unlocking is not possible because you cannot unlock your own posts and responses"
       );
       return;
     }
@@ -124,8 +124,9 @@ class UnlockButtonController {
     let tx;
 
     const HONEST_CASH_PAYWALL_SHARE = 0.2;
-    const honestCashShare = this.post.paidSectionCost * HONEST_CASH_PAYWALL_SHARE;
-    const authorShare = this.post.paidSectionCost - honestCashShare;
+    const paidSectionCostInSatoshis = bitbox.BitcoinCash.toSatoshi(this.post.paidSectionCost);
+    const honestCashShare = paidSectionCostInSatoshis * HONEST_CASH_PAYWALL_SHARE;
+    const authorShare = paidSectionCostInSatoshis - honestCashShare;
 
     const receiverAuthor = {
       address: this.post.user.addressBCH,
@@ -137,75 +138,73 @@ class UnlockButtonController {
       amountSat: honestCashShare
     };
 
-    toastr.info('Unlocking...');
+    toastr.info("Unlocking...");
 
     try {
       tx = await simpleWallet.send([
           receiverAuthor,
           receiverHonestCash,
           {
-            opReturn: ['0x4802', postId.toString()]
+            opReturn: ["0x4802", postId.toString()]
           }
       ]);
     } catch (err) {
-      if (err.message && err.message.indexOf('Insufficient') > -1) {
+      if (err.message && err.message.indexOf("Insufficient") > -1) {
         const addressContainer = document.getElementById(
-          'load-wallet-modal-address'
+          "load-wallet-modal-address"
         ) as HTMLInputElement;
         const legacyAddressContainer = document.getElementById(
-          'load-wallet-modal-legacy-address'
+          "load-wallet-modal-legacy-address"
         ) as HTMLInputElement;
         const qrContainer = document.getElementById(
-          'load-wallet-modal-qr'
+          "load-wallet-modal-qr"
         ) as HTMLDivElement;
 
         addressContainer.value = simpleWallet.cashAddress;
         legacyAddressContainer.value = simpleWallet.legacyAddress;
 
-        qrContainer.innerHTML = '';
+        qrContainer.innerHTML = "";
+
         new QRCode(qrContainer, simpleWallet.cashAddress);
 
         // replace with sweetalert
-        $('#loadWalletModal').modal('show');
+        $("#loadWalletModal").modal("show");
 
         this.isUnlocking = false;
-        this.scopeService.safeApply(this.$scope, () => {});
+        this.scopeService.safeApply(this.$scope);
 
-        return toastr.warning('Insufficient balance on your BCH account.');
+        return toastr.warning("Insufficient balance on your BCH account.");
       }
 
-      if (err.message && err.message.indexOf('has no matching Script') > -1) {
+      if (err.message && err.message.indexOf("has no matching Script") > -1) {
         this.isUnlocking = false;
-        this.scopeService.safeApply(this.$scope, () => {});
+        this.scopeService.safeApply(this.$scope);
 
         return toastr.warning(
-          'Could not find an unspent bitcoin that is big enough'
+          "Could not find an unspent bitcoin that is big enough"
         );
       }
 
-      console.error(err);
-
       this.isUnlocking = false;
-      this.scopeService.safeApply(this.$scope, () => {});
+      this.scopeService.safeApply(this.$scope);
 
-      return toastr.warning('Error. Try again later.');
+      return toastr.warning("Error. Try again later.");
   }
-
 
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
     const anchorEl = document.getElementById(
-      'bchUnlockingTransactionUrl'
+      "bchUnlockingTransactionUrl"
     ) as HTMLAnchorElement;
     anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
     anchorEl.href = url;
 
     const amountEl = document.getElementById(
-      'unlockSuccessModalAmount'
+      "unlockSuccessModalAmount"
     ) as HTMLAnchorElement;
     amountEl.innerHTML = this.post.paidSectionCost.toString();
 
 
-    $('#unlockSuccessModal').modal('show');
+    $("#unlockSuccessModal").modal("show");
 
     console.log(`Unlock transaction: ${url}`);
 
@@ -229,10 +228,10 @@ class UnlockButtonController {
 export default function upvoteButton(): ng.IDirective {
   return {
     controller: UnlockButtonController,
-    controllerAs: 'unlockButtonCtrl',
-    restrict: 'E',
+    controllerAs: "unlockButtonCtrl",
+    restrict: "E",
     scope: {
-      post: '='
+      post: "="
     },
     replace: true,
     template
