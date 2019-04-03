@@ -13,6 +13,7 @@ import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
 import EditorService from "./services/EditorService";
 import WalletService, { ICurrencyConversion } from "../core/services/WalletService";
+import ScopeService from "../core/services/ScopeService";
 
 const converter = new showdown.Converter({
   simpleLineBreaks: true,
@@ -29,6 +30,7 @@ export default class EditorCtrl {
       "AuthService",
       "EditorService",
       "WalletService",
+      "ScopeService",
       "API_URL"
     ];
 
@@ -43,6 +45,7 @@ export default class EditorCtrl {
       private authService: AuthService,
       private editorService: EditorService,
       private walletService: WalletService,
+      private scopeService: ScopeService,
       private API_URL: string
     ) {
         let titleEditor;
@@ -134,26 +137,22 @@ export default class EditorCtrl {
           }
         };
 
-        $scope.setPaidSectionCost = (currency) => {
+        $scope.setPaidSectionCost = async (currency) => {
           let cost;
           if (currency === 'bch') {
             // bug in mozilla or angular itself that ng-model does not update when clicking arrows in input number
             cost = (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber || 0;
-            this.walletService.convertBCHtoUSD(cost).then(({bch, usd}: ICurrencyConversion) => {
-              $scope.$apply(function () {
-                (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber = usd;
-                $scope.paidSectionCostInUSD = usd;
-              });
-            });
+            const {usd} = await this.walletService.convertBCHtoUSD(cost);
+            (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber = usd;
+            $scope.paidSectionCostInUSD = usd;
+            this.scopeService.safeApply($scope);
           } else if (currency === 'usd') {
             // bug in mozilla or angular itself that ng-model does not update when clicking arrows in input number
             cost = (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber || 0;
-            this.walletService.convertUSDtoBCH(cost).then(({bch, usd}: ICurrencyConversion) => {
-              $scope.$apply(function () {
-                (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber = bch;
-                $scope.draft.paidSectionCost = bch;
-              });
-            });
+            const {bch} = await this.walletService.convertUSDtoBCH(cost);
+            (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber = bch;
+            $scope.draft.paidSectionCost = bch;
+            this.scopeService.safeApply($scope);
           }
         }
 
