@@ -13,6 +13,7 @@ import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
 import EditorService from "./services/EditorService";
 import WalletService, { ICurrencyConversion } from "../core/services/WalletService";
+import ScopeService from "../core/services/ScopeService";
 
 const converter = new showdown.Converter({
   simpleLineBreaks: true,
@@ -29,6 +30,7 @@ export default class EditorCtrl {
       "AuthService",
       "EditorService",
       "WalletService",
+      "ScopeService",
       "API_URL"
     ];
 
@@ -43,11 +45,12 @@ export default class EditorCtrl {
       private authService: AuthService,
       private editorService: EditorService,
       private walletService: WalletService,
+      private scopeService: ScopeService,
       private API_URL: string
     ) {
         let titleEditor;
         let bodyEditor;
-        let elements, fixedBody;
+        let fixedBody;
 
         $scope.isLoading = false;
         $scope.draft = {};
@@ -70,9 +73,7 @@ export default class EditorCtrl {
         }
 
         const setPaidSectionLinebreakEnd = () => {
-          if (!$scope.paidSectionLinebreakEnd) {
-            $scope.paidSectionLinebreakEnd = elements.length;
-          }
+          $scope.paidSectionLinebreakEnd = $(fixedBody).length;
         }
 
         const adjustPaidSectionLinebreak = (action: "increment" | "decrement") => {
@@ -86,9 +87,9 @@ export default class EditorCtrl {
 
         const scrollToLinebreak = (action, toLinebreak?: number) => {
           const $container = $('.post-paid-section-preview-paid-section');
-          const $scrollTo = $(`.post-paid-section-preview-paid-section > *:nth-child(${$scope.draft.paidSectionLinebreak})`);
+          const $scrollTo = $container.children().eq($scope.draft.paidSectionLinebreak - 1);
 
-          if (!toLinebreak) {
+          if (toLinebreak === null || toLinebreak === undefined) {
             $container.animate({
               scrollTop: $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
             });​
@@ -107,7 +108,7 @@ export default class EditorCtrl {
           } else {
             // timeout is required
             setTimeout(() => {
-              const $scrollTo = $(`.post-paid-section-preview-paid-section > *:nth-child(${toLinebreak})`);
+              const $scrollTo = $container.children().eq(toLinebreak - 1);
               $container.scrollTop($scrollTo.offset().top - $container.offset().top + $container.scrollTop());
               $scrollTo.addClass("bb-2 bb-dashed bb-red");
             }, 0);
@@ -118,7 +119,7 @@ export default class EditorCtrl {
         $scope.switchLinebreak = (action: "increment" | "decrement") => {
           switch (action) {
             case ("increment"):
-              if ($scope.draft.paidSectionLinebreak < $scope.paidSectionLinebreakEnd) {
+              if ($scope.draft.paidSectionLinebreak < $scope.paidSectionLinebreakEnd - 1) {
                 adjustPaidSectionLinebreak(action);
                 refreshBodies();
                 scrollToLinebreak(action);
@@ -136,44 +137,56 @@ export default class EditorCtrl {
           }
         };
 
-        $scope.setPaidSectionCost = (currency) => {
+        $scope.setPaidSectionCost = async (currency) => {
           let cost;
           if (currency === 'bch') {
             // bug in mozilla or angular itself that ng-model does not update when clicking arrows in input number
             cost = (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber || 0;
-            this.walletService.convertBCHtoUSD(cost).then(({bch, usd}: ICurrencyConversion) => {
-              $scope.$apply(function () {
-                (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber = usd;
-                $scope.paidSectionCostInUSD = usd;
-              });
-            });
+            const {usd} = await this.walletService.convertBCHtoUSD(cost);
+            (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber = usd;
+            $scope.paidSectionCostInUSD = usd;
+            this.scopeService.safeApply($scope);
           } else if (currency === 'usd') {
             // bug in mozilla or angular itself that ng-model does not update when clicking arrows in input number
             cost = (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber || 0;
-            this.walletService.convertUSDtoBCH(cost).then(({bch, usd}: ICurrencyConversion) => {
-              $scope.$apply(function () {
-                (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber = bch;
-                $scope.draft.paidSectionCost = bch;
-              });
-            });
+            const {bch} = await this.walletService.convertUSDtoBCH(cost);
+            (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber = bch;
+            $scope.draft.paidSectionCost = bch;
+            this.scopeService.safeApply($scope);
           }
-
         }
 
         $scope.togglePaidSection = () => {
+          $scope.draft.hasPaidSection = !$scope.draft.hasPaidSection;
           if ($scope.draft.hasPaidSection) {
-            scrollToLinebreak(undefined, $scope.draft.paidSectionLinebreak);
-          } else {
-            scrollToLinebreak(undefined, 0);
+            if ($scope.draft.paidSectionLinebreak === null) {
+              $scope.draft.paidSectionLinebreak = 1;
+            }
+            checkForCurrencyConversion();
+            const linebreak = $scope.draft.paidSectionLinebreak !== null ? $scope.draft.paidSectionLinebreak : 0;
+            setTimeout(() => {
+              scrollToLinebreak(undefined, linebreak);
+            }, 0);
           }
         }
 
+        const checkForCurrencyConversion = () => {
+          this.walletService.convertBCHtoUSD($scope.draft.paidSectionCost).then((currencies: ICurrencyConversion) => {
+            $scope.$apply(function () {
+              $scope.showPaidSectionCostInUSD = true;
+              $scope.paidSectionCostInUSD = currencies.usd;
+              $scope.setPaidSectionCost('bch');
+            });
+          });
+        }
+
         const refreshBodies = (externalHtml?) => {
-          [elements, fixedBody] = this.editorService.getFixedBody(bodyEditor, externalHtml);
+          fixedBody = this.editorService.getFixedBody(bodyEditor, externalHtml);
           $scope.fixedBody = fixedBody;
           $scope.freeBodyCut = this.editorService.getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
           $scope.paidBodyCut = this.editorService.getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
           $scope.paidBodyCutEnd = this.editorService.getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+          setPaidSectionLinebreakEnd();
         }
 
         let parentPostId;
@@ -199,15 +212,15 @@ export default class EditorCtrl {
 
         const saveDraftElement = (element, cb?) => {
           refreshBodies();
-          const md = converter.makeMd(this.editorService.getFixedBody(bodyEditor)[1]);
+          const md = converter.makeMd(this.editorService.getFixedBody(bodyEditor));
 
           const post = {
             body: md,
             hashtags: $("input#description").val() || "",
             title: document.getElementById("title").innerText,
-            hasPaidSection: $scope.hasPaidSection,
-            paidSectionLinebreak: $scope.paidSectionLinebreak,
-            paidSectionCost: $scope.paidSectionCost
+            hasPaidSection: $scope.draft.hasPaidSection,
+            paidSectionLinebreak: $scope.draft.paidSectionLinebreak,
+            paidSectionCost: $scope.draft.paidSectionCost
           };
 
           if (!post.body && !post.title && !post.hashtags) {
@@ -245,15 +258,11 @@ export default class EditorCtrl {
           bodyEditor.setContent(fixedBody, 0);
           
           $("#publishModal").modal("show");
+
           if ($scope.draft.hasPaidSection && $scope.draft.paidSectionLinebreak) {
-            this.walletService.convertBCHtoUSD($scope.draft.paidSectionCost).then((currencies: ICurrencyConversion) => {
-              $scope.$apply(function () {
-                $scope.showPaidSectionCostInUSD = true;
-                $scope.paidSectionCostInUSD = currencies.usd;
-                $scope.setPaidSectionCost('bch');
-                scrollToLinebreak(undefined, $scope.draft.paidSectionLinebreak);
-              });
-            });
+            checkForCurrencyConversion();
+            const linebreak = $scope.draft.paidSectionLinebreak !== null ? $scope.draft.paidSectionLinebreak : 0;
+            scrollToLinebreak(undefined, linebreak);
           }
         };
 

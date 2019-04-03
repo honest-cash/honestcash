@@ -26,13 +26,12 @@ export default class EditorService {
   public getFixedBody = (editor, externalHtml?) => {
     // converting from html to md to html cleans the body
     const bodyHtml = externalHtml ? externalHtml : editor.serialize().body.value;
-
-    let $bodyHtml = $(bodyHtml);
+    const $bodyHtml = $(bodyHtml);
 
     // the html is to replace the body in the editor
     let _fixedBody = '';
 
-    $bodyHtml = $bodyHtml.map(i => {
+    $bodyHtml.map(i => {
       const _elem = $bodyHtml[i];
       const $elem = $($bodyHtml[i]);
 
@@ -40,28 +39,27 @@ export default class EditorService {
       // with showdown converted syntax
       // showdown only has img inside a p tag
       // we rewrap the div with p tag here
+
        if ($elem.prop("nodeName") === "DIV" && this.stringIncludes($elem.prop("className"), "medium-insert-images")) {
         const content = $elem;
         const img = this.getOuterHtml($(content).find('img'));
         const imgWrapped = `<p>${img}</p>`;
-        return $(imgWrapped);
+        _fixedBody += imgWrapped;
+      } else if (_elem.nodeName === "P" && $elem.prop("childNodes").length === 1) {
+        //check for tags that only has br tags in it
+        if ($elem.children().first().prop("nodeName") !== "BR") {
+          _fixedBody += this.getOuterHtml($elem);
+        }
+      } else if (!this.stringIncludes(_elem.nodeName, "#text") && !this.stringIncludes(_elem.nodeName, "#comment")){
+        // we form our last new html
+        _fixedBody += this.getOuterHtml($elem);
       }
 
-      // remove non dom elements from the result html
-      if (this.stringIncludes(_elem.nodeName, "#text") || this.stringIncludes(_elem.nodeName, "#comment")) {
-        // return null to remove the element
-        return null;
-      }
-
-      // we form our last new html
-      _fixedBody += this.getOuterHtml($bodyHtml[i]);
-      return $elem;
     });
 
     // elements and html is returned as tuple
-    this.elements = $bodyHtml;
     this.fixedBody = _fixedBody;
-    return [$bodyHtml, _fixedBody];
+    return _fixedBody;
   }
 
   public getContextElement = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {
