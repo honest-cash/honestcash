@@ -9,7 +9,7 @@
           id="profilePic"
           fallback-src="{{ '/img/avatar.png' }}"
           class="img-circle img-thumbnail-avatar-normal image-center"
-          ng-src="{{ profileCtrl.profile.imageUrl || '/img/avatar.png' }}"
+          ng-src="{{ profileCtrl.profile.imageUrl || '/img/avatar.png' }}"
         />
       </div>
       <div class="pull-left col-xs-12 col-sm-9 col-md-10">
@@ -89,7 +89,7 @@
 <div class="container">
   <div style="min-height:350px;">
     <div
-      ng-if="profileCtrl.showProfileTab === 'feeds' && !profileCtrl.feeds.length && user.id == profileCtrl.profile.id"
+      ng-if="!isLoading && profileCtrl.showProfileTab === 'feeds' && !profileCtrl.feeds.length && user.id == profileCtrl.profile.id"
       class="text-center"
     >
       <h2>Write your first post!</h2>
@@ -180,7 +180,6 @@
     </div>
   </div>
 </div>
-
 
 <script type="text/ng-template" id="profileNav">
   <div class="hc-profile-nav">

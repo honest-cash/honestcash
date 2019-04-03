@@ -137,10 +137,14 @@ export default class PostsCtrl {
 
     this.$scope.isDeleting = false;
 
-    this.scopeService.safeApply(this.$scope, () => {});
+    this.scopeService.safeApply(this.$scope);
   }
 
   public displayPostBody(html: string): string {
+    if (html.length > 400) {
+      html = html.substring(0, 400) + "...";
+    }
+
     return this.postService.displayHTML(html);
   }
 

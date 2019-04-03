@@ -1,5 +1,7 @@
-import './upvote-button.styles.less';
-import template from './upvote-button.template.html';
+import swal from "sweetalert";
+
+import './unlock-button.styles.less';
+import template from './unlock-button.template.html';
 
 import { IGlobalScope } from '../../../core/lib/interfaces';
 import { Post } from '../../../core/models/models';
@@ -13,18 +15,17 @@ import * as upvoteDistribution from '../../../core/lib/upvoteDistribution';
 declare const angular, toastr, QRCode;
 
 const defaultOptions = {
-  amount: 0.002,
   isDisabled: false,
-  isUpvoting: false,
-  loadingText: 'Upvoting...',
-  text: 'Upvote'
+  isUnlocking: false,
+  loadingText: 'Unlocking...',
+  text: 'Unlock'
 };
 
-interface IScopeUpvoteButtonCtrl extends ng.IScope {
+interface IScopeUnlockButtonCtrl extends ng.IScope {
   post: Post;
 }
 
-class UpvoteButtonController {
+class UnlockButtonController {
   public static $inject = [
     '$rootScope',
     '$scope',
@@ -36,14 +37,15 @@ class UpvoteButtonController {
 
   private amount: number;
   private text: string;
+  private hoverText: string;
   private loadingText: string;
-  private isUpvoting: boolean;
+  private isUnlocking: boolean;
   private isDisabled: boolean;
   private post: Post;
 
   constructor(
     private $rootScope: IGlobalScope,
-    private $scope: IScopeUpvoteButtonCtrl,
+    private $scope: IScopeUnlockButtonCtrl,
     private $window: ng.IWindowService,
     private postService: PostService,
     private walletService: WalletService,
@@ -53,50 +55,54 @@ class UpvoteButtonController {
   }
 
   private ngOnInit() {
-    this.amount = angular.isDefined(this.amount)
-      ? this.amount
-      : defaultOptions.amount;
-    this.text = angular.isDefined(this.text) ? this.text : defaultOptions.text;
-    this.loadingText = angular.isDefined(this.loadingText)
-      ? this.loadingText
-      : defaultOptions.loadingText;
+    this.text = `GET ACCESS FOR ${this.$scope.post.paidSectionCost} BCH`;
+    this.hoverText = `UNLOCK NOW`;
+    this.loadingText = `UNLOCKING...`;
 
     this.post = this.$scope.post;
-    this.isUpvoting = defaultOptions.isUpvoting;
+    this.amount = this.$scope.post.paidSectionCost;
+    this.isUnlocking = defaultOptions.isUnlocking;
     this.isDisabled = !this.$rootScope.user || this.post.userId === this.$rootScope.user.id;
 
     this.$window.onbeforeunload = event => {
-      if (this.isUpvoting) {
+      if (this.isUnlocking) {
         event.preventDefault();
 
-        return 'There is a pending upvote in process. Are you sure you want to leave?';
+        return 'There is a pending transaction in process. Are you sure you want to leave?';
       }
     };
   }
 
-  private onClick(e) {
-    if (this.isUpvoting || this.isDisabled) {
+  private async onClick(e) {
+    if (this.isUnlocking || this.isDisabled) {
       e.stopPropagation();
       return;
     }
-    this.upvote();
-  }
 
-  private satoshiToBch = (amountSat: number): string => {
-    return (amountSat / 100000000).toFixed(5);
+    const confirmationResult = await swal({
+      title: "Confirm your purchase",
+      text: `You will be unlocking the full version of this story for ${this.post.paidSectionCost} BCH. Are you sure?`,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    });
+
+    if (confirmationResult) {
+      this.unlock();
+    }
   }
 
   /**
-   * Splits an upvote amount between previous upvotes and saves the upvote reference in Honest database
+   * Unlocks a section in the post and saves a transaction reference in Honest database
    */
-  private async upvote() {
+  private async unlock() {
     if (!this.$rootScope.user) {
       return (location.href = '/signup');
     }
 
     if (!this.post.user.addressBCH) {
       toastr.error(
-        'Upvoting is not possible because the author does not have a Bitcoin address to receive'
+        'Unlocking is not possible because the author does not have a Bitcoin address to receive'
       );
       return;
     }
@@ -105,70 +111,42 @@ class UpvoteButtonController {
 
     if (this.post.userId == this.$rootScope.user.id) {
       toastr.error(
-        'Upvoting is not possible because you cannot tip your own posts and responses'
+        'Unlocking is not possible because you cannot unlock your own posts and responses'
       );
       return;
     }
 
     const simpleWallet = simpleWalletProvider.get();
-    this.isUpvoting = true;
+    this.isUnlocking = true;
 
-    this.scopeService.safeApply(this.$scope, () => {});
+    this.scopeService.safeApply(this.$scope);
 
-    // users with connected BCH accounts
     let tx;
-    let upvotes;
+
+    const HONEST_CASH_PAYWALL_SHARE = 0.2;
+    const honestCashShare = this.post.paidSectionCost * HONEST_CASH_PAYWALL_SHARE;
+    const authorShare = this.post.paidSectionCost - honestCashShare;
+
+    const receiverAuthor = {
+      address: this.post.user.addressBCH,
+      amountSat: authorShare
+    };
+
+    const receiverHonestCash = {
+      address: "bitcoincash:qrk9kquyydvqn60apxuxnh5jk80p0nkmquwvw9ea95",
+      amountSat: honestCashShare
+    };
+
+    toastr.info('Unlocking...');
 
     try {
-      upvotes = await this.postService.getUpvotes(postId);
-    } catch (err) {
-      toastr.error("Can't connect.");
-
-      return console.error(err);
-    }
-
-    const receivers = upvoteDistribution.determineUpvoteRewards(
-      upvotes,
-      this.post.user
-    );
-
-    toastr.info('Upvoting...');
-
-    const distributionInfoEl = document.getElementById('distribution-info');
-
-    distributionInfoEl.innerHTML = '';
-
-    for (let receiver of receivers) {
-      const el = document.createElement('div');
-
-      let userHtml;
-
-      if (receiver.user) {
-        userHtml = `<a target="_self" href="/profile/${
-          receiver.user.username
-        }"><img style="border-radius:50%; width: 23px;" src="${
-          receiver.user.imageUrl ? receiver.user.imageUrl : '/img/avatar.png'
-        }" /> ${receiver.user.username}</a> ${
-          this.post.userId === receiver.user.id ? '(Author)' : ''
-        }`;
-      } else {
-        userHtml = `<img style="width: 23px;" src="/img/avatar.png" /> Anonymous`;
-      }
-
-      el.innerHTML = `${this.satoshiToBch(
-        receiver.amountSat
-      )} BCH -> ${userHtml}`;
-
-      distributionInfoEl.appendChild(el);
-    }
-
-    // distribute only to testnet of owner
-    // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
-    try {
-      receivers.push({
-        opReturn: ['0x4801', postId.toString()]
-      });
-      tx = await simpleWallet.send(receivers);
+      tx = await simpleWallet.send([
+          receiverAuthor,
+          receiverHonestCash,
+          {
+            opReturn: ['0x4802', postId.toString()]
+          }
+      ]);
     } catch (err) {
       if (err.message && err.message.indexOf('Insufficient') > -1) {
         const addressContainer = document.getElementById(
@@ -190,14 +168,14 @@ class UpvoteButtonController {
         // replace with sweetalert
         $('#loadWalletModal').modal('show');
 
-        this.isUpvoting = false;
+        this.isUnlocking = false;
         this.scopeService.safeApply(this.$scope, () => {});
 
         return toastr.warning('Insufficient balance on your BCH account.');
       }
 
       if (err.message && err.message.indexOf('has no matching Script') > -1) {
-        this.isUpvoting = false;
+        this.isUnlocking = false;
         this.scopeService.safeApply(this.$scope, () => {});
 
         return toastr.warning(
@@ -207,26 +185,31 @@ class UpvoteButtonController {
 
       console.error(err);
 
-      this.isUpvoting = false;
+      this.isUnlocking = false;
       this.scopeService.safeApply(this.$scope, () => {});
 
       return toastr.warning('Error. Try again later.');
-    }
+  }
 
-    $('#tipSuccessModal').modal('show');
 
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
-
     const anchorEl = document.getElementById(
-      'bchTippingTransactionUrl'
+      'bchUnlockingTransactionUrl'
     ) as HTMLAnchorElement;
-
-    console.log(`Upvote transaction: ${url}`);
-
     anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
     anchorEl.href = url;
 
-    this.postService.upvote({
+    const amountEl = document.getElementById(
+      'unlockSuccessModalAmount'
+    ) as HTMLAnchorElement;
+    amountEl.innerHTML = this.post.paidSectionCost.toString();
+
+
+    $('#unlockSuccessModal').modal('show');
+
+    console.log(`Unlock transaction: ${url}`);
+
+    this.postService.unlock({
       postId: postId,
       txId: tx.txid
     });
@@ -238,20 +221,17 @@ class UpvoteButtonController {
       usd,
       isLoading: false
     };
-    this.isUpvoting = false;
+    this.isUnlocking = false;
     this.scopeService.safeApply(this.$scope, () => {});
   }
 }
 
 export default function upvoteButton(): ng.IDirective {
   return {
-    controller: UpvoteButtonController,
-    controllerAs: 'upvoteButtonCtrl',
+    controller: UnlockButtonController,
+    controllerAs: 'unlockButtonCtrl',
     restrict: 'E',
     scope: {
-      amount: '=?',
-      loadingText: '=?',
-      text: '=?',
       post: '='
     },
     replace: true,

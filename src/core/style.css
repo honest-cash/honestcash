@@ -311,8 +311,10 @@ img.lazy {
 }
 
 .hashtag {
-  color: #444;
+  color: #000;
+  background-color: #F0F0F0;
   font-weight: bold;
+  padding: 10px;
   font-size: 12px;
   cursor: pointer;
 }
@@ -428,4 +430,61 @@ img.lazy {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.form-control {
+  font-size: 12px;
+}
+
+.post-paid-section-locked-wrapper {
+  margin-bottom: 20px;
+}
+
+.post-paid-section-locked {
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.post-paid-section-locked-inner {
+  width: 70%;
+  margin: 0 auto;
+}
+
+article.fade-end {
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+
+article.fade-end:after {
+  position: absolute;
+  bottom: 0;  
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: linear-gradient(to top,
+    rgba(250,250,250, 1) 20%, 
+    rgba(255,255,255, 0) 80%
+  );
+  pointer-events: none; /* so the text is still selectable */
+}
+
+.m-0 {
+  margin: 0;
+}
+
+ul.tagit li {
+  display: block;
+  float: left;
+  margin: 2px 5px 2px 0 !important;
+}
+
+blockquote {
+  font-size: 15px;
 }

@@ -1,7 +1,7 @@
 import moment from "moment";
 import { dateFormat } from "../../core/config/index";
 import SocialSharing from "../lib/SocialSharing";
-import { IFetchPostsArgs, Post, Upvote } from "../models/models";
+import { IFetchPostsArgs, Post, Upvote, Unlock } from "../models/models";
 
 var sanitizeHtml = require("sanitize-html");
 
@@ -17,10 +17,6 @@ export default class PostService {
     private $sce,
     private API_URL
   ) {}
-
-  public removePost(postId) {
-    return this.$http.delete(this.API_URL + "/post/" + postId);
-  }
 
   public publishPic(postId, params, callback) {
     this.$http.put(this.API_URL + "/post/image/publish", {
@@ -38,6 +34,13 @@ export default class PostService {
     });
   }
 
+  public unlock(unlock) {
+    return this.$http.post(this.API_URL + "/post/" + unlock.postId + "/unlock", {
+      postId: unlock.postId,
+      txId: unlock.txId
+    });
+  }
+
   public createRef(ref) {
       return this.$http.post(this.API_URL + "/post/" + ref.postId + "/ref", {
           extId: ref.extId,
@@ -51,13 +54,13 @@ export default class PostService {
     return this.processPost(res.data as Post);
   }
 
-  public async deletePost(postId: number) {
-    return this.$http.delete(this.API_URL + "/post/" + postId);
+  public async archivePost(post: Post) {
+    return this.$http.put(this.API_URL + "/post/" + post.id + "/archive", post);
   }
 
   public displayHTML(html: string): string {
     const clean = sanitizeHtml(html, {
-      allowedTags: [ "h2", "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
+      allowedTags: [ "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
         "nl", "li", "b",  "strong", "img" ,"em", "strike", "code", "hr", "br", "pre", "iframe" ],
       allowedAttributes: {
         a: [ "href", "name", "target" ],
@@ -105,25 +108,43 @@ export default class PostService {
     return (res.data as Post[]).map((post) => this.processPost(post));
   }
 
-  public getPosts(query: IFetchPostsArgs, callback: (posts: Post[]) => void) {
+  public async getUnlocks(postId: number): Promise<Unlock[]> {
+    const res = await this.$http.get(this.API_URL + "/post/" + postId + "/unlocks");
+
+    return res.data as Unlock[];
+  }  
+
+  public getUserUnlocks(userId?: number, callback?): void {
+    this.$http.get(`${this.API_URL}/posts/unlocks${userId ? "?userId=" + userId : ""}`)
+    .then((response) => {
+      const unlocks = (response.data as Unlock[]).map(this.processUnlock);
+      callback(unlocks);
+    });
+  }
+
+  public getPosts(query: IFetchPostsArgs, callback: (posts: Post[]) => void): void {
     this.$http({
       method: "GET",
       params: query,
       url: this.API_URL + "/posts"
     }).then((response) => {
-      const feeds = (response.data as Post[]).map((post) => this.processPost(post));
+      const feeds = (response.data as Post[]).map(this.processPost);
 
       callback(feeds);
     });
   }
 
+  public formatDate(date: string): string {
+    return moment(date).utc().format(dateFormat);
+  }
+
   private processPost(post: Post): Post {
-    post.createdAtRaw = post.createdAt;
-    post.shareURLs = SocialSharing.getFeedShareURLs(post);
-    post.createdAtFormatted = moment(post.publishedAt).utc().format(dateFormat);
+    post.createdAtFormatted = moment(post.createdAt).utc().format(dateFormat);
+    post.updatedAtFormatted = moment(post.updatedAt).utc().format(dateFormat);
     post.publishedAtFormatted = moment(post.publishedAt).utc().format(dateFormat);
-    post.createdAt = moment(post.createdAt).utc().format(dateFormat);
-    post.publishedAt = moment(post.publishedAt).utc().format(dateFormat);
+    post.archivedAtFormatted = moment(post.deletedAt).utc().format(dateFormat);
+
+    post.shareURLs = SocialSharing.getFeedShareURLs(post);
 
     if (post.userPosts) {
       post.userPosts.forEach((userPost) => {
@@ -132,5 +153,15 @@ export default class PostService {
     }
 
     return post;
+  }
+
+  private processUnlock = (unlock: Unlock): Unlock => {
+    unlock.createdAtFormatted = moment(unlock.createdAt).utc().format(dateFormat);
+    if (unlock.userPost) {
+      unlock.userPost = this.processPost(unlock.userPost);
+      (unlock.userPost as any).unlockedAtFormatted = this.formatDate(unlock.createdAt);
+    }
+    
+    return unlock;
   }
 }

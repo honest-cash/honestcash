@@ -4,6 +4,7 @@ import followUnfollowButton from './follow-unfollow-button/follow-unfollow-butto
 import logoutButton from './logout-button/logout-button.component';
 import socialShareButtons from './social-share-buttons/social-share-buttons.component';
 import upvoteButton from './upvote-button/upvote-button.component';
+import unlockButton from './unlock-button/unlock-button.component';
 import uncensorableButton from './uncensorable-button/uncensorable-button.component';
 import bottomCallToActionBar from './bottom-call-to-action-bar/bottom-call-to-action-bar.component';
 import simpleLedgerProtocolDetails from './simple-ledger-protocol-details/simple-ledger-protocol-details.component';
@@ -33,6 +34,7 @@ angular
   .directive('feed', feed)
   .directive('feeds', feeds)
   .directive('upvoteButton', upvoteButton)
+  .directive('unlockButton', unlockButton)
   .directive('uncensorableButton', uncensorableButton)
   .directive('logoutButton', logoutButton)
   .directive('followUnfollowButton', followUnfollowButton)

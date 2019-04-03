@@ -18,7 +18,9 @@ class FeedDirectiveCtrl {
       return this.$sce.trustAsResourceUrl(src);
     };
 
-    this.$scope.displayFeedBody = (html: string) => this.postService.displayHTML(html);
+    this.$scope.displayFeedBody = (html: string) => {
+      return this.postService.displayHTML(html);
+    };
 
     this.initTippy();
   }
@@ -27,6 +29,7 @@ class FeedDirectiveCtrl {
     /**
      * data-tippy-content is not used in the HTML because angular cannot interpolate the followerCount
     */
+    tippy(".hc-tooltip");
     tippy(".user-follower-count", {
       content: `${this.$scope.feed.user.followerCount} followers, ${this.$scope.feed.user.followingCount} following`
     });

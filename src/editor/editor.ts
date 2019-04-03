@@ -12,7 +12,10 @@ import stateConfig from './states';
 import '../auth/AuthModule';
 import { AuthService } from '../auth/AuthService';
 import PostService from '../core/services/PostService';
+import WalletService from '../core/services/WalletService';
+import ScopeService from '../core/services/ScopeService';
 import '../core/config';
+import './services';
 
 declare var angular: any;
 interface IGlobalScope {
@@ -27,13 +30,16 @@ angular.module("editor-app", [
 	uiRouter,
 	  'ui.bootstrap',
     "vqAuth",
-    "vqConfig"
+    "vqConfig",
+    "vqServices"
 ])
 
 .config([ "$locationProvider", "$urlMatcherFactoryProvider", routingConfig ])
 .config([ "$httpProvider", httpConfig ])
 .config([ "$stateProvider", "$urlRouterProvider", stateConfig ])
 .service("PostService", PostService)
+.service("WalletService", WalletService)
+.service("ScopeService", ScopeService)
 .controller("EditorCtrl", EditorCtrl)
 
 .run([ "$rootScope", "AuthService", async ($rootScope: IGlobalScope, AuthService: AuthService) => {

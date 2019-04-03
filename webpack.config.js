@@ -1,14 +1,17 @@
+require('dotenv').config();
+
 module.exports = {
     entry: {
       app: "./src/app/app.ts",
       editor: "./src/editor/editor.ts",
       welcome: "./src/welcome/welcome.ts"
     },
-    mode: "production",
+    mode: process.env.MODE || "production",
     output: {
       path: __dirname + "/public/js",
       filename: "[name].js",
     },
+    devtool: process.env.MODE === "development" ? "source-map" : "",
     module: {
       rules: [
         {

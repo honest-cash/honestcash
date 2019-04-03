@@ -79,22 +79,19 @@
         </div>
 
         <div class="feed-body">
-          <p ng-if="feed.body" class="feed-article">
-            {{ displayFeedBody(feed.body) }}
-          </p>
+          <article ng-if="feed.body" class="feed-article" ng-bind-html="displayFeedBody(feed.body)"></article>
         </div>
       </div>
     </a>
 
     <div class="feed-footer">
-      <div class="row hashtags">
+      <div class="row hashtags" ng-if="feed.userPostHashtags.length">
         <div class="col-xs-12">
           <div style="padding-left:8px;padding-right:5px;">
             <span
               class="pull-left hashtag-container"
               ng-repeat="hashtag in feed.userPostHashtags"
             >
-              <i class="fa fa-tag"></i>
               <a
                 class="hashtag"
                 ui-sref="vicigo.hashtag({ hashtag : hashtag.hashtag })"
@@ -129,6 +126,8 @@
             <li>
               <social-share-buttons post="feed"></social-share-buttons>
             </li>
+            <li ng-if="feed.hasPaidSection && !feed.hasBeenPaidFor" class="hc-tooltip" data-tippy-content="This story has a pay to unlock section." style="float: right; margin-right: 10px;"><i class="fa fa-2x fa-lock"></i></li>
+            <li ng-if="feed.hasPaidSection && feed.hasBeenPaidFor" class="hc-tooltip" data-tippy-content="This story has a paid section however you have access to the post." style="float: right; margin-right: 10px;"><i class="fa fa-2x fa-unlock"></i></li>
           </ul>
         </div>
       </div>
