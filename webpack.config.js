@@ -36,11 +36,20 @@ module.exports = {
         }, {
             test: require.resolve("blueimp-file-upload"),
             loader: "imports-loader?define=>false"
-          },
-          {
+        },
+        {
             test: require.resolve("medium-editor-insert-plugin"),
             loader: "imports-loader?define=>false"
-          }
+        }, {
+          test: /\.ts$/,
+          enforce: 'pre',
+          use: [
+            {
+                loader: 'tslint-loader',
+                options: { /* Loader options go here */ }
+            }
+          ]
+        }
       ]
     },
     plugins: [

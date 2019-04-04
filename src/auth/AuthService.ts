@@ -1,13 +1,12 @@
 import { IHttpService, IQService, IWindowService } from "angular";
 import { SHA3 } from "sha3";
-import * as logger from "../core/lib/logger";
 import { User } from "../core/models/models";
 export class AuthService {
   public static $inject = [
     "$window",
     "$http",
     "$q",
-    "apiFactory"
+    "apiFactory",
   ];
 
   public username: string = "";
@@ -23,7 +22,7 @@ export class AuthService {
     private $window: IWindowService,
     private $http: IHttpService,
     private $q: IQService,
-    private apiFactory
+    private apiFactory,
   ) {}
 
   public getUserId = () => this.authUserId;
@@ -61,11 +60,13 @@ export class AuthService {
   }
 
   public async login(data: { email: string, password: string }) {
-      const res = await this.$http.post<{ token: string; user: User; wallet: any }>(this.apiFactory("LOGIN"), data);
+    const res = await this.$http.post<{
+      token: string; user: User; wallet: any
+    }>(this.apiFactory("LOGIN"), data);
 
-      this.storeUserCredentials(res.data.token, res.data.user.id);
+    this.storeUserCredentials(res.data.token, res.data.user.id);
 
-      return res.data;
+    return res.data;
   }
 
   public passwordCheck(data: { password: string }) {
@@ -74,7 +75,7 @@ export class AuthService {
       .post(this.apiFactory("PASSWORD_CHECK"), data)
       .then((res) => {
         resolve(res.data);
-      }, reject);
+      },    reject);
     });
   }
 
@@ -85,12 +86,12 @@ export class AuthService {
     userType: number;
     captcha: string;
   }) {
-      const response = await this.$http.post<{ token: string; user: any; }>(this.apiFactory("SIGNUP"), data);
-      const authData = response.data;
+    const response = await this.$http.post<{ token: string; user: any; }>(this.apiFactory("SIGNUP"), data);
+    const authData = response.data;
 
-      this.storeUserCredentials(authData.token, authData.user.id);
+    this.storeUserCredentials(authData.token, authData.user.id);
 
-      return authData;
+    return authData;
   }
 
   public async validate() {
@@ -137,7 +138,7 @@ export class AuthService {
 
   public calculatePasswordHash(email: string, password: string): string {
     return this.calculateSHA3Hash(
-      this.determineMessageForHashing(email, password)
+      this.determineMessageForHashing(email, password),
     );
   }
 
