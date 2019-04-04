@@ -1,6 +1,7 @@
 require('dotenv').config();
 const webpack = require('webpack');
 const path = require('path');
+const glob = require('glob');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -9,10 +10,11 @@ module.exports = {
       app: "./src/app/app.ts",
       editor: "./src/editor/editor.ts",
       welcome: "./src/welcome/welcome.ts",
+      public: glob.sync("./public/libraries/**/*.js")
     },
     mode: process.env.MODE || "production",
     output: {
-      path: path.resolve(__dirname, 'public/js'),
+      path: path.resolve(__dirname, 'public'),
       filename: "[name].[contenthash].js",
     },
     optimization: {
@@ -75,6 +77,24 @@ module.exports = {
     },
     plugins: [
       new CleanWebpackPlugin(),
+      new HtmlWebpackPlugin({
+        template: './public/webpack-templates/editor.html',
+        filename: 'editor.html',
+        hash: true,
+        excludeChunks: ['app', 'welcome']
+      }),
+      new HtmlWebpackPlugin({
+        template: './public/webpack-templates/welcome.html',
+        filename: 'welcome.html',
+        hash: true,
+        excludeChunks: ['app', 'editor']
+      }),
+      new HtmlWebpackPlugin({
+        template: './public/webpack-templates/app.html',
+        filename: 'app.html',
+        hash: true,
+        excludeChunks: ['editor', 'welcome']
+      }),
       new webpack.HashedModuleIdsPlugin(),
         /**
         new Uglify({
