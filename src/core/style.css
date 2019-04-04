@@ -456,24 +456,31 @@ img.lazy {
   margin: 0 auto;
 }
 
-article.fade-end {
-  display: block;
-  overflow: hidden;
-  position: relative;
-}
-
-article.fade-end:after {
-  position: absolute;
-  bottom: 0;  
-  height: 100%;
-  width: 100%;
-  content: "";
-  background: linear-gradient(to top,
-    rgba(250,250,250, 1) 20%, 
-    rgba(255,255,255, 0) 80%
+.fadeout {
+  position: relative; 
+  bottom: -2px;
+  height: 4em;
+  background: -webkit-linear-gradient(
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+  ); 
+  background-image: -moz-linear-gradient(
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
   );
-  pointer-events: none; /* so the text is still selectable */
-}
+  background-image: -o-linear-gradient(
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+  );
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+  );
+  background-image: -ms-linear-gradient(
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+  );
+} 
 
 .m-0 {
   margin: 0;
