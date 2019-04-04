@@ -10,11 +10,14 @@ module.exports = {
       app: "./src/app/app.ts",
       editor: "./src/editor/editor.ts",
       welcome: "./src/welcome/welcome.ts",
-      public: glob.sync("./public/libraries/**/*.js")
+      appBundle: glob.sync("./public/libraries/app/**/*.js"),
+      editorBundle: glob.sync("./public/libraries/editor/**/*.js"),
+      appEditorBundle: glob.sync("./public/libraries/app-editor/**/*.js"),
+      appWelcomeBundle: glob.sync("./public/libraries/app-welcome/**/*.js"),
     },
     mode: process.env.MODE || "production",
     output: {
-      path: path.resolve(__dirname, 'public'),
+      path: path.resolve(__dirname, 'dist'),
       filename: "[name].[contenthash].js",
     },
     optimization: {
@@ -26,9 +29,24 @@ module.exports = {
             name: 'vendors',
             chunks: 'all'
           },
-          public: {
-            test: /[\\/]public[\\/]libraries[\\/]/,
-            name: 'libraries',
+          appBundle: {
+            test: /[\\/]public[\\/]libraries[\\/]app[\\/]/,
+            name: 'app-bundle',
+            chunks: 'all'
+          },
+          editorBundle: {
+            test: /[\\/]public[\\/]libraries[\\/]editor[\\/]/,
+            name: 'editor-bundle',
+            chunks: 'all'
+          },
+          appEditorBundle: {
+            test: /[\\/]public[\\/]libraries[\\/]app-editor[\\/]/,
+            name: 'app-editor-bundle',
+            chunks: 'all'
+          },
+          appWelcomeBundle: {
+            test: /[\\/]public[\\/]libraries[\\/]app-welcome[\\/]/,
+            name: 'app-welcome-bundle',
             chunks: 'all'
           }
         }
@@ -81,19 +99,19 @@ module.exports = {
         template: './public/webpack-templates/editor.html',
         filename: 'editor.html',
         hash: true,
-        excludeChunks: ['app', 'welcome']
+        excludeChunks: ['appBundle', 'appWelcomeBundle']
       }),
       new HtmlWebpackPlugin({
         template: './public/webpack-templates/welcome.html',
         filename: 'welcome.html',
         hash: true,
-        excludeChunks: ['app', 'editor']
+        excludeChunks: ['appBundle', 'appEditorBundle', 'editorBundle']
       }),
       new HtmlWebpackPlugin({
         template: './public/webpack-templates/app.html',
         filename: 'app.html',
         hash: true,
-        excludeChunks: ['editor', 'welcome']
+        excludeChunks: ['editorBundle']
       }),
       new webpack.HashedModuleIdsPlugin(),
         /**
