@@ -1,15 +1,36 @@
 require('dotenv').config();
+const webpack = require('webpack');
+const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
       app: "./src/app/app.ts",
       editor: "./src/editor/editor.ts",
-      welcome: "./src/welcome/welcome.ts"
+      welcome: "./src/welcome/welcome.ts",
     },
     mode: process.env.MODE || "production",
     output: {
-      path: __dirname + "/public/js",
-      filename: "[name].js",
+      path: path.resolve(__dirname, 'public/js'),
+      filename: "[name].[contenthash].js",
+    },
+    optimization: {
+      runtimeChunk: 'single',
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all'
+          },
+          public: {
+            test: /[\\/]public[\\/]libraries[\\/]/,
+            name: 'libraries',
+            chunks: 'all'
+          }
+        }
+      }
     },
     devtool: process.env.MODE === "development" ? "source-map" : "",
     module: {
@@ -53,6 +74,8 @@ module.exports = {
       ]
     },
     plugins: [
+      new CleanWebpackPlugin(),
+      new webpack.HashedModuleIdsPlugin(),
         /**
         new Uglify({
             uglifyOptions: {
