@@ -130,7 +130,7 @@
           <hr />
 
           <!-- AUTHOR REFERENCES -->
-          <div class="pull-left width321">
+          <div class="pull-left col-xs-10">
             <!-- AUTHOR IMAGE -->
             <a ui-sref="vicigo.profile({ profileId:followGuy.username })">
               <img
@@ -156,24 +156,8 @@
             <!-- END AUTHOR TITLE -->
           </div>
 
-          <div class="following-follow" ng-if="profileCtrl.profile.id !== user.id">
-            <button
-              ng-if="!followGuy.alreadyFollowing && followGuy.id !== user.id"
-              style="margin-top: 5px;"
-              ng-click="follow(followGuy.id, followGuy);"
-              class="pull-right btn btn-default btn-xs"
-            >
-              Follow
-            </button>
-
-            <button
-              ng-if="followGuy.alreadyFollowing"
-              style="margin-top: 5px;"
-              ng-click="unfollow(followGuy.id, followGuy);"
-              class="pull-right btn btn-success btn-xs"
-            >
-              Unfollow
-            </button>
+          <div class="col-xs-2" ng-if="profileCtrl.profile.id !== user.id">
+            <follow-unfollow-button show-follow="true" show-unfollow="true" user="followGuy" following="profileCtrl.following"></follow-unfollow-button>
           </div>
         </div>
       </div>
