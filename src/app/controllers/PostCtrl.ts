@@ -1,4 +1,4 @@
-import tippy from "tippy.js";
+import tippyJs from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import toastr from "../../core/config/toastr";
 import { IGlobalScope } from "../../core/lib/interfaces";
@@ -13,7 +13,7 @@ export default class PostCtrl {
     "$rootScope",
     "$stateParams",
     "PostService",
-    "ScopeService"
+    "ScopeService",
   ];
   public isLoading: boolean = true;
   public post: Post;
@@ -31,18 +31,14 @@ export default class PostCtrl {
     private $rootScope: IGlobalScope,
     private $stateParams,
     private postService: PostService,
-    private scopeService: ScopeService
+    private scopeService: ScopeService,
   ) {
-      this.ngInit();
-  }
-
-  public getPostTooltip() {
-
+    this.ngInit();
   }
 
   private async ngInit() {
     this.post = await this.postService.getById(
-      this.$stateParams.alias
+      this.$stateParams.alias,
     );
 
     this.post.isOwner = this.$rootScope.user ? this.post.user.id === this.$rootScope.user.id : false;
@@ -65,7 +61,7 @@ export default class PostCtrl {
           this.postTooltip = `You have unlocked this story`;
           this.iconToShow = "fa-unlock";
         } else {
-          this.postTooltip = `Unlocking this story will cost you ${this.post.paidSectionCost} BCH`
+          this.postTooltip = `Unlocking this story will cost you ${this.post.paidSectionCost} BCH`;
           this.iconToShow = "fa-lock";
         }
       } else {
@@ -104,20 +100,20 @@ export default class PostCtrl {
     this.initTippy();
   }
 
-  private sortResponses(order: "upvoteCount" | "createdAt") {  
+  private sortResponses(order: "upvoteCount" | "createdAt") {
     this.responseSortOrder = order;
     this.scopeService.safeApply(this.$scope);
   }
 
   private async createPost() {
     if (!this.newResponse || this.newResponse.length < 10) {
-      return toastr.error("Comments need to be at least 10 characters.")
+      return toastr.error("Comments need to be at least 10 characters.");
     }
 
     const newComment = await this.postService.createPost({
       body: this.newResponse,
       parentPostId: this.post.id,
-      postTypeId: "comment"
+      postTypeId: "comment",
     } as any);
 
     this.responses.push(newComment);
@@ -132,8 +128,8 @@ export default class PostCtrl {
   }
 
   private async initTippy() {
-    tippy(".hc-tooltip");
-    tippy(".user-follower-count");
+    tippyJs(".hc-tooltip");
+    tippyJs(".user-follower-count");
   }
 
   private displayFeedBody(html: string): string {

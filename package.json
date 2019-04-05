@@ -90,13 +90,18 @@
     "html-loader": "^0.4.5",
     "imports-loader": "^0.8.0",
     "jasmine": "^3.3.1",
+    "jshint": "^2.10.2",
     "less-loader": "^4.1.0",
     "mocha": "^5.2.0",
     "ng-annotate-loader": "^0.6.1",
     "ng-annotate-webpack-plugin": "^0.3.0",
+    "pre-commit": "^1.2.2",
     "style-loader": "^0.14.1",
     "ts-loader": "^5.3.0",
-    "typescript": "^3.1.6",
+    "tslint": "^5.15.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-loader": "^3.5.4",
+    "typescript": "^3.4.1",
     "uglify-es-webpack-plugin": "^0.10.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.26.0",
@@ -104,9 +109,11 @@
   },
   "scripts": {
     "start": "node app",
+    "watch": "node ./node_modules/webpack/bin/webpack.js --watch",
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js && cp ./node_modules/simple-bitcoin-wallet/dist/bitboxlight.min.js ./public/js/bitboxlight.min.js",
-    "test": "node ./node_modules/jasmine/bin/jasmine.js"
+    "test": "node ./node_modules/jasmine/bin/jasmine.js",
+    "lint": "./node_modules/tslint/bin/tslint --project ./tslint.json"
   },
   "repository": {
     "type": "git",
@@ -114,5 +121,6 @@
   },
   "author": "Adrian Barwicki (adrian@adrianbarwicki.com)",
   "license": "Apache 2.0",
-  "homepage": "https://github.com/honest-cash/honestcash#readme"
+  "homepage": "https://github.com/honest-cash/honestcash#readme",
+  "pre-commit": []
 }

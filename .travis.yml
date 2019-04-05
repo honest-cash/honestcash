@@ -25,6 +25,8 @@ matrix:
 
     script:
     - npm run build
+    # enable it once all the linting errors are fixed:
+    # - npm run lint
     - npm run transfer-libs
     - npm run test
 
