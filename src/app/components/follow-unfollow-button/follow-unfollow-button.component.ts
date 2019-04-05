@@ -9,7 +9,7 @@ interface IFollowUnfollowButtonController extends ng.IScope {
   user: any;
   showFollow: boolean;
   showUnfollow: boolean;
-  following: number[] | string[];
+  following: number[];
 }
 
 const defaultOptions = {
