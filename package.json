@@ -127,7 +127,5 @@
   "author": "Adrian Barwicki (adrian@adrianbarwicki.com)",
   "license": "Apache 2.0",
   "homepage": "https://github.com/honest-cash/honestcash#readme",
-  "pre-commit": [
-    "lint"
-  ]
+  "pre-commit": []
 }
