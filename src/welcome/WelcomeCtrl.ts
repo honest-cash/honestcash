@@ -1,6 +1,6 @@
-import swal from "sweetalert";
+import sweetalert from "sweetalert";
 import { AuthService } from "../auth/authService";
-import generateWallet from "../core/lib/bitcoinAuthFlow";
+import bitcoinAuthFlow from "../core/lib/bitcoinAuthFlow";
 import { IGlobalScope, ISimpleWallet } from "../core/lib/interfaces";
 import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
 import ProfileService from "../core/services/ProfileService";
@@ -31,12 +31,14 @@ interface IWelcomeCtrl {
   noHeader: boolean;
   welcome: boolean;
   showEmailSignup: boolean;
+  mode: "welcome" | "signup" | "login";
 
   signupWith: (method: "email" | "facebook" | "twitter" | "badger") => void;
   goToForgotPage: () => void;
   goToLoginPage: () => void;
   login: (data: ILoginForm) => void;
   signup: (data: ISignupForm) => void;
+  switchMode: (mode: "signup" | "login") => void;
   changePassword: (data: ILoginForm) => Promise<void>;
   resetPassword: (data: ILoginForm) => Promise<void>;
 }
@@ -48,7 +50,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     "$state",
     "AuthService",
     "ProfileService",
-    "ScopeService"
+    "ScopeService",
   ];
 
   public isLoading = false;
@@ -59,6 +61,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   public message: string;
   public showEmailSignup = false;
   public data: ILoginForm | ISignupForm;
+  public mode: "welcome" | "login" | "signup";
 
   private resetCode: string;
   private isCaptchaRendered = false;
@@ -75,6 +78,10 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     this.ngInit();
   }
 
+  public switchMode = (mode: "welcome" | "signup" | "login") => {
+    this.mode = mode;
+  }
+
   public goToForgotPage = () => {
     this.forgot = true;
   }
@@ -88,7 +95,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     const passwordHash = this.authService.calculatePasswordHash(
       data.loginemail,
-      data.loginpassword
+      data.loginpassword,
     );
 
     let authData: {
@@ -100,7 +107,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     try {
       authData = await this.authService.login({
         email: data.loginemail,
-        password: passwordHash
+        password: passwordHash,
       });
     } catch (response) {
       this.isLoading = false;
@@ -122,14 +129,14 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       mnemonicEncrypted = sbw.mnemonicEncrypted;
 
       await this.authService.setWallet({
-        mnemonicEncrypted
+        mnemonicEncrypted,
       });
 
       if (!authData.user.addressBCH) {
         await this.profileService.updateUser(
           authData.user.id,
           "addressBCH",
-          sbw.address
+          sbw.address,
         );
       } else {
         await this.setAddressForTips(authData.user.id, sbw.address);
@@ -138,7 +145,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     simpleWalletProvider.loadWallet(
       mnemonicEncrypted,
-      data.loginpassword
+      data.loginpassword,
     );
 
     const simpleWallet = simpleWalletProvider.get();
@@ -157,7 +164,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     try {
       await this.authService.resetPassword({
-        email: data.loginemail
+        email: data.loginemail,
       });
 
       this.hideForm = true;
@@ -168,7 +175,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       this.isLoading = false;
 
       return this.displayErrorMessage(
-        typeof err.data === "string" ? err.data : err.data.code
+        typeof err.data === "string" ? err.data : err.data.code,
       );
     }
   }
@@ -196,7 +203,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     try {
       simpleWallet = await generateWallet({
-        password: data.loginpassword
+        password: data.loginpassword,
       });
     } catch (err) {
       await swal("Your link is invalid!");
@@ -208,7 +215,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     const passwordHash = this.authService.calculatePasswordHash(
       data.loginemail,
-      data.loginpassword
+      data.loginpassword,
     );
 
     try {
@@ -217,13 +224,13 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
         email: data.loginemail,
         mnemonicEncrypted: simpleWallet.mnemonicEncrypted,
         newPassword: passwordHash,
-        repeatNewPassword: passwordHash
+        repeatNewPassword: passwordHash,
       });
     } catch (err) {
       this.isLoading = false;
 
       return this.displayErrorMessage(
-        typeof err.data === "string" ? err.data : err.data.code
+        typeof err.data === "string" ? err.data : err.data.code,
       );
     }
 
@@ -288,7 +295,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     const captcha = grecaptcha.getResponse();
 
     if (!captcha || captcha.length === 0) {
-      this.message = "Please verify captcha by checking the checkbox."
+      this.message = "Please verify captcha by checking the checkbox.";
 
       grecaptcha.reset();
       return;
@@ -306,7 +313,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
         email: data.email,
         password: passwordHash,
         username: data.username,
-        userType: 0
+        userType: 0,
       });
     } catch (response) {
       this.isLoading = false;
@@ -332,15 +339,15 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       type: "warning",
       buttons: {
         cancel: true,
-        confirm: true
-      }
+        confirm: true,
+      },
     });
 
     if (hasConfirmed) {
       await this.profileService.updateUser(
         Number(userId),
         "addressBCH",
-        bchAddress
+        bchAddress,
       );
     }
   }
@@ -350,6 +357,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     this.$rootScope.noHeader = true;
     this.isLoading = false;
     this.forgot = false;
+    this.mode = "welcome";
     this.resetCode = this.$location.search().code;
     this.welcome = true;
     this.noHeader = true;
@@ -365,18 +373,18 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     const mnemonicEncrypted = sbw.mnemonicEncrypted;
 
     await this.authService.setWallet({
-      mnemonicEncrypted
+      mnemonicEncrypted,
     });
 
     await this.profileService.updateUser(
       userId,
       "addressBCH",
-      sbw.address
+      sbw.address,
     );
 
     simpleWalletProvider.loadWallet(
       mnemonicEncrypted,
-      password
+      password,
     );
 
     return sbw;

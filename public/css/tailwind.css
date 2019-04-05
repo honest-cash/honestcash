@@ -64,3 +64,8 @@
   * @import "utilities/background-patterns";
   * @import "utilities/skew-transforms";
   */
+
+  ::placeholder {
+    opacity: 1;
+    color: #000;
+  }

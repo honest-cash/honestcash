@@ -5662,6 +5662,26 @@
   * @import "utilities/skew-transforms";
   */
 
+::-webkit-input-placeholder {
+  opacity: 1;
+  color: #000;
+}
+
+:-ms-input-placeholder {
+  opacity: 1;
+  color: #000;
+}
+
+::-ms-input-placeholder {
+  opacity: 1;
+  color: #000;
+}
+
+::placeholder {
+  opacity: 1;
+  color: #000;
+}
+
 @media (min-width: 1px) and (max-width: 480px) {
   .xs\:list-reset {
     list-style: none;

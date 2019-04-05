@@ -6,23 +6,7 @@
           <img class="w-auto h-32" src="/img/honest-long-logo.png" alt="Honest Logo">
         </div>
       </div>
-      <div class="flex flex-col flex-wrap w-full items-center justify-center" style="height: 90vh;">
-        <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 xl:pb-8 lg:pb-8 md:pb-8 sm:pb-8 xs:pb-8">
-          <h2 class="w-full text-white font-bold text-center text-5xl">
-            Designed for writers, creatives and thinkers.
-            <br />
-            Powered by Bitcoin.
-          </h2>
-          <br />
-          <p class="w-full text-white text-center text-3xl">Honest is reinventing how ideas are shared</p>
-        </div>
-        <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 xl:pt-0 lg:pt-0 md:pt-0 sm:pt-0 xs:pt-0">
-          <div class="flex flex-wrap xxxl:w-1/5 xxl:w-1/4 xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 xs:w-full items-center">
-              <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-white border-2 border-white border-solid font-bold text-black uppercase rounded-lg">Get Started</button>
-              <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-6">Sign In</button>
-              <a class="w-full mx-12 px-16 lg:px-8 sm:px-8 font-bold text-center text-white hover:text-white uppercase mt-4 cursor-pointer">Buy Featured Art</a>
-          </div>
-        </div>
+      <div class="flex flex-col flex-wrap w-full items-center justify-center" style="height: 90vh;" ng-include="welcomeCtrl.mode">
       </div>
       <div class="flex w-full items-end justify-start" style="height: 5vh;">
           <div class="flex flex-wrap w-full h-full items-end justify-start xs:text-center xxxl:p-32 xxl:px-32 xl:px-32 lg:px-16 md:px-8 sm:px-4 xs:px-2">
@@ -35,58 +19,46 @@
           </div>
       </div>
     </div>
-
-   <!-- <div class="buy-art-btn hidden-xs">  
-        <a href="https://cryptopop.threadless.com/designs/supper-at-the-bitcoin-moonbase/home" class="btn btn-md notification-badge-button" style="background-color:black; color: white; padding:8px;">
-            Buy This Art
-        </a> 
-    </div>  -->
-  
-    <!-- <div class="login-container container">   
-        <div class="login-box">
-          <div class="row">
-              <div class="col-xs-12">
-                  <img style="width:100%; max-width:200px; display:block; margin:auto;" src="/img/honest-long-logo.png" >	
-                  <h4 class="text-center text-muted " style="padding-top:10px;padding-bottom:15px;">
-                      For writers, creatives and thinkers, Honest is a content publishing platform where users can earn Bitcoin by creating value.
-                  </h4>
-              </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-                <a href="/login" style="background-color:black; color: white;" ng-click="welcomeCtrl.signupWith('email')" class="visible-xs btn btn-primary push btn btn-md btn-block ">
-                  Login
-                </a>
-
-                <button style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('email')" class="btn btn-primary push btn btn-md btn-block ">
-                  Sign Up with Email
-                </button>
-
-                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('badger')" class="hidden hidden-xs btn btn-primary push btn btn-md btn-block ">
-                  Sign Up with Badger
-                </button>
-
-                <button disabled style="background-color:black; color: white;" ng-if="!welcomeCtrl.showEmailSignup" ng-click="welcomeCtrl.signupWith('twitter')" class="hidden hidden-xs btn btn-primary push btn btn-md btn-block ">
-                  Sign Up with Twitter
-                </button>
-
-                <div ng-if="welcomeCtrl.showEmailSignup" ng-include="'signup'"></div>
-            </div>
-
-            <div class="col-sm-6 hidden-xs">
-                <div ng-include="'login'"></div>
-            </div> 
-          </div>
-          <div class="row">
-              <div ng-include="'templates/partials/footer.html'"></div>            
-          </div>
-        </div>
-    </div> -->
 </div>
 
   
+<script type="text/ng-template" id="welcome">
+  <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 pb-8">
+      <h2 class="w-full text-white font-bold text-center text-5xl">
+        Designed for writers, creatives and thinkers.
+        <br />
+        Powered by Bitcoin.
+      </h2>
+      <br />
+      <p class="w-full text-white text-center text-3xl">Honest is reinventing how ideas are shared</p>
+    </div>
+    <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 xl:pt-0 lg:pt-0 md:pt-0 sm:pt-0 xs:pt-0">
+      <div class="flex flex-wrap xxxl:w-1/5 xxl:w-1/4 xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 xs:w-full items-center">
+          <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-white border-2 border-white border-solid font-bold text-black uppercase rounded-lg" ng-click="welcomeCtrl.switchMode('signup')">Get Started</button>
+          <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-6" ng-click="welcomeCtrl.switchMode('login')">Sign In</button>
+          <a href="https://cryptopop.threadless.com/designs/supper-at-the-bitcoin-moonbase/home" target="_blan" class="w-full mx-12 px-16 lg:px-8 sm:px-8 font-bold text-center text-white hover:text-white uppercase mt-4 cursor-pointer">Buy Featured Art</a>
+      </div>
+    </div>
+</script>
+  
 <script type="text/ng-template" id="login">
-  <strong>{{welcomeCtrl.resetCode ? "Change password": welcomeCtrl.forgot ? "Forgot Password?" : "Login" }}</strong>
+  <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 pb-8">
+      <h2 class="w-full text-white font-bold text-center text-5xl">
+        loginDesigned for writers, creatives and thinkers.
+        <br />
+        Powered by Bitcoin.
+      </h2>
+      <br />
+      <p class="w-full text-white text-center text-3xl">Honest is reinventing how ideas are shared</p>
+    </div>
+    <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 xl:pt-0 lg:pt-0 md:pt-0 sm:pt-0 xs:pt-0">
+      <div class="flex flex-wrap xxxl:w-1/5 xxl:w-1/4 xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 xs:w-full items-center">
+          <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-white border-2 border-white border-solid font-bold text-black uppercase rounded-lg" ng-click="welcomeCtrl.switchMode('signup')">Get Started</button>
+          <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-6" ng-click="welcomeCtrl.switchMode('login')">Sign In</button>
+          <a href="https://cryptopop.threadless.com/designs/supper-at-the-bitcoin-moonbase/home" target="_blan" class="w-full mx-12 px-16 lg:px-8 sm:px-8 font-bold text-center text-white hover:text-white uppercase mt-4 cursor-pointer">Buy Featured Art</a>
+      </div>
+    </div>
+  <!-- <strong>{{welcomeCtrl.resetCode ? "Change password": welcomeCtrl.forgot ? "Forgot Password?" : "Login" }}</strong>
   <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
 
   <form
@@ -116,47 +88,28 @@
       <a href="#" style="margin-left: 10px;" ng-click="welcomeCtrl.forgot ? welcomeCtrl.goToLoginPage() : welcomeCtrl.goToForgotPage()">{{ welcomeCtrl.forgot ? "Login" : "Forgot Password?" }}</a>
   </form>
 
-  <hr />
+  <hr /> -->
 </script>
 
 <script type="text/ng-template" id="signup">
-  <form>
-      <div class="form-group">
-          <label>username</label>
-          <input type="text" class="form-control" ng-model="welcomeCtrl.data.username">
+  <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 pb-8">
+      <h2 class="w-full text-white font-bold text-center text-4xl">
+          What are you waiting for? Get started now.
+        </h2>
+        <br />
+        <p class="w-full text-white text-center text-3xl">Enter your details below</p>
       </div>
-
-      <div class="form-group">
-          <label>email</label>
-          <input type="email" class="form-control" ng-model="welcomeCtrl.data.email">
+      <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 xl:pt-0 lg:pt-0 md:pt-0 sm:pt-0 xs:pt-0">
+        <div class="flex flex-wrap xxxl:w-1/5 xxl:w-1/4 xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 xs:w-full items-center">
+          <input class="w-full mx-12 px-4 py-4 bg-white border-2 border-white border-solid font-bold text-black rounded-lg opacity-75" type="text" placeholder="Username" ng-model="welcomeCtrl.data.username">
+          <input class="w-full mx-12 px-4 py-4 bg-white border-2 border-white border-solid font-bold text-black rounded-lg mt-4 opacity-75" type="email" placeholder="E-mail" ng-model="welcomeCtrl.data.email">
+          <input class="w-full mx-12 px-4 py-4 bg-white border-2 border-white border-solid font-bold text-black rounded-lg mt-4 opacity-75" type="password" placeholder="Password" ng-model="welcomeCtrl.data.password">
+          <div id="hc-captcha" class="g-recaptcha w-full mx-12 px-4 py-4 border-2 border-white border-solid rounded-lg my-4 opacity-75" data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"></div>
+          
+          <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-6 opacity-75">{{welcomeCtrl.isLoading ? "Please Wait..." : "Get Started"}}</button>
+          <p class="w-full mx-12 px-16 lg:px-8 sm:px-8 text-center text-white hover:text-white mt-8 cursor-pointer">Already have an account? <a href="/login" class="font-bold text-white hover:text-white underline" target="_blank">Sign In</a></p>
+        </div>
       </div>
-
-      <div class="form-group">
-          <label>password</label>
-          <input type="password" class="form-control" ng-model="welcomeCtrl.data.password">
-      </div>
-
-      <div ng-if="welcomeCtrl.message" class="alert alert-warning" role="alert">{{welcomeCtrl.message}}</div>
-
-      <div id="hc-captcha" style="margin-bottom: 10px; margin-top: 10px;" class="g-recaptcha" data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"></div>
-
-      <hr />
-
-      <p>
-        Bitcoin wallet will be generated and encrypted with your email and password. Please make sure to use a strong password.
-        In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. If you forget your email/password or do not save your recovery phrase you can lose access to your funds forever!
-      </p>
-
-      <p>
-        By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.
-      </p>
-
-      <button style="background-color: black; color: white;" ng-disabled="welcomeCtrl.isLoading" type="submit" class="btn btn-default btn-md" ng-click="welcomeCtrl.signup(welcomeCtrl.data)">
-        {{welcomeCtrl.isLoading ? "Loading.." : "Sign Up"}}
-      </button>
-
-      <a href="#" ng-click="welcomeCtrl.showEmailSignup=false;" style="margin-left: 10px;">Cancel</a>
-  </form>
 </script>
 
 
