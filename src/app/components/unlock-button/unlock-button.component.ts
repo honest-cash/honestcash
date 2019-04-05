@@ -1,7 +1,7 @@
-import swal from "sweetalert";
+import sweetalert from "sweetalert";
 
 import "./unlock-button.styles.less";
-import template from "./unlock-button.template.html";
+import unlockButtonTemplateHtml from "./unlock-button.template.html";
 
 import { IGlobalScope } from "../../../core/lib/interfaces";
 import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
@@ -18,7 +18,7 @@ const defaultOptions = {
   isDisabled: false,
   isUnlocking: false,
   loadingText: "Unlocking...",
-  text: "Unlock"
+  text: "Unlock",
 };
 
 interface IScopeUnlockButtonCtrl extends ng.IScope {
@@ -32,7 +32,7 @@ class UnlockButtonController {
     "$window",
     "PostService",
     "WalletService",
-    "ScopeService"
+    "ScopeService",
   ];
 
   private amount: number;
@@ -79,7 +79,7 @@ class UnlockButtonController {
       return;
     }
 
-    const confirmationResult = await swal({
+    const confirmationResult = await sweetalert({
       title: "Confirm your purchase",
       text: `You will be unlocking the full version of this story for ${this.post.paidSectionCost} BCH. Are you sure?`,
       icon: "warning",
@@ -102,7 +102,7 @@ class UnlockButtonController {
 
     if (!this.post.user.addressBCH) {
       toastr.error(
-        "Unlocking is not possible because the author does not have a Bitcoin address to receive"
+        "Unlocking is not possible because the author does not have a Bitcoin address to receive",
       );
       return;
     }
@@ -111,7 +111,7 @@ class UnlockButtonController {
 
     if (this.post.userId == this.$rootScope.user.id) {
       toastr.error(
-        "Unlocking is not possible because you cannot unlock your own posts and responses"
+        "Unlocking is not possible because you cannot unlock your own posts and responses",
       );
       return;
     }
@@ -130,34 +130,34 @@ class UnlockButtonController {
 
     const receiverAuthor = {
       address: this.post.user.addressBCH,
-      amountSat: authorShare
+      amountSat: authorShare,
     };
 
     const receiverHonestCash = {
       address: "bitcoincash:qrk9kquyydvqn60apxuxnh5jk80p0nkmquwvw9ea95",
-      amountSat: honestCashShare
+      amountSat: honestCashShare,
     };
 
     toastr.info("Unlocking...");
 
     try {
       tx = await simpleWallet.send([
-          receiverAuthor,
-          receiverHonestCash,
-          {
-            opReturn: ["0x4802", postId.toString()]
-          }
+        receiverAuthor,
+        receiverHonestCash,
+        {
+          opReturn: ["0x4802", postId.toString()],
+        },
       ]);
     } catch (err) {
       if (err.message && err.message.indexOf("Insufficient") > -1) {
         const addressContainer = document.getElementById(
-          "load-wallet-modal-address"
+          "load-wallet-modal-address",
         ) as HTMLInputElement;
         const legacyAddressContainer = document.getElementById(
-          "load-wallet-modal-legacy-address"
+          "load-wallet-modal-legacy-address",
         ) as HTMLInputElement;
         const qrContainer = document.getElementById(
-          "load-wallet-modal-qr"
+          "load-wallet-modal-qr",
         ) as HTMLDivElement;
 
         addressContainer.value = simpleWallet.cashAddress;
@@ -181,7 +181,7 @@ class UnlockButtonController {
         this.scopeService.safeApply(this.$scope);
 
         return toastr.warning(
-          "Could not find an unspent bitcoin that is big enough"
+          "Could not find an unspent bitcoin that is big enough",
         );
       }
 
@@ -189,28 +189,27 @@ class UnlockButtonController {
       this.scopeService.safeApply(this.$scope);
 
       return toastr.warning("Error. Try again later.");
-  }
+    }
 
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
     const anchorEl = document.getElementById(
-      "bchUnlockingTransactionUrl"
+      "bchUnlockingTransactionUrl",
     ) as HTMLAnchorElement;
     anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
     anchorEl.href = url;
 
     const amountEl = document.getElementById(
-      "unlockSuccessModalAmount"
+      "unlockSuccessModalAmount",
     ) as HTMLAnchorElement;
     amountEl.innerHTML = this.post.paidSectionCost.toString();
-
 
     $("#unlockSuccessModal").modal("show");
 
     console.log(`Unlock transaction: ${url}`);
 
-    this.postService.unlock({
-      postId: postId,
-      txId: tx.txid
+    await this.postService.unlock({
+      postId,
+      txId: tx.txid,
     });
 
     const { bch, usd } = await this.walletService.getAddressBalances();
@@ -218,22 +217,24 @@ class UnlockButtonController {
     this.$rootScope.walletBalance = {
       bch,
       usd,
-      isLoading: false
+      isLoading: false,
     };
     this.isUnlocking = false;
     this.scopeService.safeApply(this.$scope, () => {});
+
+    location.reload();
   }
 }
 
-export default function upvoteButton(): ng.IDirective {
+export default function unlockButton(): ng.IDirective {
   return {
     controller: UnlockButtonController,
     controllerAs: "unlockButtonCtrl",
     restrict: "E",
     scope: {
-      post: "="
+      post: "=",
     },
     replace: true,
-    template
+    template: unlockButtonTemplateHtml,
   };
 }
