@@ -82,6 +82,7 @@
     "ui-router": "^1.0.0-alpha.3"
   },
   "devDependencies": {
+    "autoprefixer": "^9.5.0",
     "css-loader": "^0.27.3",
     "gulp": "^4.0.0",
     "gulp-minify": "0.0.15",
@@ -95,8 +96,10 @@
     "mocha": "^5.2.0",
     "ng-annotate-loader": "^0.6.1",
     "ng-annotate-webpack-plugin": "^0.3.0",
+    "postcss-cli": "^6.1.2",
     "pre-commit": "^1.2.2",
     "style-loader": "^0.14.1",
+    "tailwindcss": "^0.7.4",
     "ts-loader": "^5.3.0",
     "tslint": "^5.15.0",
     "tslint-config-airbnb": "^5.11.1",
@@ -109,7 +112,10 @@
   },
   "scripts": {
     "start": "node app",
-    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "build:css": "postcss public/css/tailwind.css -o public/css/tailwind.min.css",
+    "watch:css": "postcss public/css/tailwind.css -o public/css/tailwind.min.css -w",
+    "build": "npm run build:css &node ./node_modules/webpack/bin/webpack.js",
+    "watch": "npm run watch:css & node ./node_modules/webpack/bin/webpack.js --watch",
     "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js && cp ./node_modules/simple-bitcoin-wallet/dist/bitboxlight.min.js ./public/js/bitboxlight.min.js",
     "test": "node ./node_modules/jasmine/bin/jasmine.js",
     "lint": "./node_modules/tslint/bin/tslint --project ./tslint.json"
