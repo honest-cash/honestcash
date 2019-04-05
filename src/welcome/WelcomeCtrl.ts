@@ -1,10 +1,11 @@
 import sweetalert from "sweetalert";
-import { AuthService } from "../auth/authService";
+import { AuthService } from "../auth/AuthService";
 import bitcoinAuthFlow from "../core/lib/bitcoinAuthFlow";
 import { IGlobalScope, ISimpleWallet } from "../core/lib/interfaces";
 import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
 import ProfileService from "../core/services/ProfileService";
 import ScopeService from "../core/services/ScopeService";
+import { User } from "../core/models/models";
 
 declare var SimpleWallet: any;
 declare var grecaptcha: {
@@ -13,34 +14,32 @@ declare var grecaptcha: {
   reset: any;
 };
 
-interface ILoginForm {
-  loginemail: string;
-  loginpassword: string;
-  loginpasswordreset?: string;
-}
-interface ISignupForm {
+interface IWelcomeForms {
   username: string;
   email: string;
   password: string;
+  repeatPassword: string;
 }
 interface IWelcomeCtrl {
-  forgot: boolean;
   isLoading: boolean;
   hideForm: boolean;
-  message: string;
   noHeader: boolean;
   welcome: boolean;
   showEmailSignup: boolean;
-  mode: "welcome" | "signup" | "login";
+  mode: "welcome" | "signup" | "login" | "reset-password" | "thank-you";
+  errors: {
+    username?: string;
+    email?: string;
+    password?: string;
+    captcha?: string;
+    general?: string;
+  };
 
-  signupWith: (method: "email" | "facebook" | "twitter" | "badger") => void;
-  goToForgotPage: () => void;
-  goToLoginPage: () => void;
-  login: (data: ILoginForm) => void;
-  signup: (data: ISignupForm) => void;
-  switchMode: (mode: "signup" | "login") => void;
-  changePassword: (data: ILoginForm) => Promise<void>;
-  resetPassword: (data: ILoginForm) => Promise<void>;
+  switchMode: (mode: "signup" | "login" | "reset-password" | "thank-you") => void;
+  login: () => void;
+  signup: () => void;
+  changePassword: () => Promise<void>;
+  resetPassword: () => Promise<void>;
 }
 export default class WelcomeCtrl implements IWelcomeCtrl {
   public static $inject = [
@@ -60,8 +59,15 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   public hideForm = false;
   public message: string;
   public showEmailSignup = false;
-  public data: ILoginForm | ISignupForm;
-  public mode: "welcome" | "login" | "signup";
+  public data: IWelcomeForms;
+  public errors: {
+    username: string;
+    email: string;
+    password: string;
+    captcha: string;
+    general: string;
+  };
+  public mode: "welcome" | "login" | "signup" | "reset-password" | "thank-you";
 
   private resetCode: string;
   private isCaptchaRendered = false;
@@ -78,24 +84,22 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     this.ngInit();
   }
 
-  public switchMode = (mode: "welcome" | "signup" | "login") => {
+  public switchMode = (mode: "welcome" | "signup" | "login" | "reset-password" | "thank-you") => {
     this.mode = mode;
+    if (mode === "signup") {
+      this.renderCaptcha();
+      this.scopeService.safeApply(this.$scope);
+    }
   }
 
-  public goToForgotPage = () => {
-    this.forgot = true;
-  }
-
-  public goToLoginPage = () => {
-    this.forgot = false;
-  }
-
-  public login = async (data: ILoginForm) => {
+  public login = async () => {
     this.isLoading = true;
+    const data = this.data;
+    this.resetErrors();
 
     const passwordHash = this.authService.calculatePasswordHash(
-      data.loginemail,
-      data.loginpassword,
+      data.email,
+      data.password,
     );
 
     let authData: {
@@ -106,7 +110,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     try {
       authData = await this.authService.login({
-        email: data.loginemail,
+        email: data.email,
         password: passwordHash,
       });
     } catch (response) {
@@ -124,7 +128,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     } else {
       const sbw: ISimpleWallet = new SimpleWallet();
 
-      sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, data.loginpassword);
+      sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, data.password);
 
       mnemonicEncrypted = sbw.mnemonicEncrypted;
 
@@ -145,7 +149,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     simpleWalletProvider.loadWallet(
       mnemonicEncrypted,
-      data.loginpassword,
+      data.password,
     );
 
     const simpleWallet = simpleWalletProvider.get();
@@ -159,16 +163,18 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     location.href = "/";
   }
 
-  public resetPassword = async (data: ILoginForm) => {
+  public resetPassword = async () => {
     this.isLoading = true;
+    const data = this.data;
+    this.resetErrors();
 
     try {
       await this.authService.resetPassword({
-        email: data.loginemail,
+        email: data.email,
       });
 
       this.hideForm = true;
-      this.message = "Check your e-mail inbox.";
+      this.errors.general = "Check your e-mail inbox.";
       this.isLoading = false;
       this.scopeService.safeApply(this.$scope);
     } catch (err) {
@@ -180,20 +186,12 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     }
   }
 
-  public signupWith(signupMethod: "email") {
-    if (signupMethod === "email") {
-      this.showEmailSignup = true;
+  public async changePassword() {
+    const data = this.data;
+    this.resetErrors();
 
-      this.renderCaptcha();
-    }
-
-    this.scopeService.safeApply(this.$scope);
-  }
-
-  public async changePassword(data: ILoginForm) {
-    if (data.loginpassword !== data.loginpasswordreset) {
-      this.message = "Passwords do not match!";
-
+    if (data.password !== data.repeatPassword) {
+      this.errors.password = "Passwords do not match!";
       return;
     }
 
@@ -202,11 +200,11 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     let simpleWallet;
 
     try {
-      simpleWallet = await generateWallet({
-        password: data.loginpassword,
+      simpleWallet = await bitcoinAuthFlow({
+        password: data.password,
       });
     } catch (err) {
-      await swal("Your link is invalid!");
+      await sweetalert("Your link is invalid!");
 
       location.href = "/login";
 
@@ -214,14 +212,14 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     }
 
     const passwordHash = this.authService.calculatePasswordHash(
-      data.loginemail,
-      data.loginpassword,
+      data.email,
+      data.password,
     );
 
     try {
       await this.authService.changePassword({
         code: this.resetCode,
-        email: data.loginemail,
+        email: data.email,
         mnemonicEncrypted: simpleWallet.mnemonicEncrypted,
         newPassword: passwordHash,
         repeatNewPassword: passwordHash,
@@ -234,68 +232,69 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       );
     }
 
-    this.message = "Your password has been reset and a new wallet has been generated. You can now log-in.";
+    this.errors.general = "Your password has been reset and a new wallet has been generated. You can now log-in.";
 
-    data.loginemail = undefined;
-    data.loginpassword = undefined;
-    data.loginpasswordreset = undefined;
+    data.email = undefined;
+    data.password = undefined;
+    data.repeatPassword = undefined;
 
     this.resetCode = undefined;
-    this.forgot = false;
     this.isLoading = false;
 
     this.scopeService.safeApply(this.$scope);
   }
 
-  public async signup(data: ISignupForm) {
+  public async signup() {
+    const data = this.data;
+    this.resetErrors();
+
     if (!data) {
-      return alert("Username is required.");
+      this.errors.username = "Username is required.";
+      this.errors.email = "E-mail is required.";
+      this.errors.password = "Password is required.";
+      this.errors.captcha = "Please verify captcha by checking the checkbox.";
+      return;
     }
 
     if (!data.username) {
-      return alert("Username is required.");
+      this.errors.username = "Username is required.";
+      return;
     }
 
     if (!this.checkUserName(data.username)) {
-      this.message = "Username: please only use standard alphanumerics";
-
+      this.errors.username = "Username: please only use standard alphanumerics";
       return;
     }
 
     if (data.username.length > 25) {
-      this.message = "Username cannot have more than 25 characters";
-
+      this.errors.username = "Username cannot have more than 25 characters";
       return;
     }
 
     if (data.username.length < 3) {
-      this.message = "Username should be at least 3 characters";
-
+      this.errors.username = "Username should be at least 3 characters";
       return;
     }
 
     if (!data.email) {
-      this.message = "Email is required..";
-
+      this.errors.email = "E-mail is required.";
       return;
     }
 
     if (!data.password) {
-      this.message = "Password is required..";
-
+      this.errors.password = "Password is required.";
       return;
     }
 
     if (data.password.length < 8) {
-      this.message = "Password must have at least 8 characters.";
-
+      this.errors.password = "Password must have at least 8 characters.";
       return;
     }
 
     const captcha = grecaptcha.getResponse();
 
     if (!captcha || captcha.length === 0) {
-      this.message = "Please verify captcha by checking the checkbox.";
+      this.errors.captcha = "Please verify captcha by checking the checkbox.";
 
       grecaptcha.reset();
       return;
@@ -332,8 +331,8 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     location.href = "/thank-you";
   }
 
-  private setAddressForTips = async (userId: string, bchAddress: string) => {
-    const hasConfirmed = await swal({
+  private setAddressForTips = async (userId: string | number, bchAddress: string) => {
+    const hasConfirmed = await sweetalert({
       title: "Receiving tips",
       text: `Would you like to also receive tips to the same wallet? You can always change it in your profile.`,
       type: "warning",
@@ -352,12 +351,25 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     }
   }
 
+  private resetErrors = () => {
+    this.errors.username = "";
+    this.errors.email = "";
+    this.errors.password = "";
+    this.errors.captcha = "";
+    this.errors.general = "";
+  }
+
   private async ngInit() {
-    this.message = "";
     this.$rootScope.noHeader = true;
     this.isLoading = false;
-    this.forgot = false;
     this.mode = "welcome";
+    this.errors = {
+      username: "",
+      email: "",
+      password: "",
+      captcha: "",
+      general: "",
+    };
     this.resetCode = this.$location.search().code;
     this.welcome = true;
     this.noHeader = true;
@@ -417,39 +429,42 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
   private displayErrorMessage(code: string, desc?): void {
     if (desc) {
-      this.message = desc;
+      this.errors.general = desc;
     } else if (code) {
       switch (code) {
         case "NOT_ACTIVATED":
-          this.message = "The access the the platform is currently limited. " +
+          this.errors.general = "The access the the platform is currently limited. " +
             "Your account has not been activated. Tweet to @Honest_Cash for a personal invitation.";
           break;
         case "EMAIL_EXISTS":
-          this.message = "E-Mail already exists";
+          this.errors.email = "E-mail already exists!";
           break;
         case "EMAIL_WRONGLY_FORMATTED":
-          this.message = "E-Mail wrongly formatted!";
+          this.errors.email = "E-mail wrongly formatted!";
           break;
         case "WRONG_PASSWORD":
-          this.message = "Incorrect email address and / or password.";
+          this.errors.username = "Incorrect email address and / or password.";
+          this.errors.password = "Incorrect email address and / or password.";
           break;
         case "NO_USER_FOUND":
-          this.message = "Incorrect email address and / or password.";
+          this.errors.username = "Incorrect email address and / or password.";
+          this.errors.password = "Incorrect email address and / or password.";
           break;
         case "LOG_IN_WITH_FACEBOOK":
           this.message = "Log in with Facebook";
           break;
         case "EMAIL_NOT_FOUND":
-          this.message = "Incorrect email address and / or password.";
+          this.errors.username = "Incorrect email address and / or password.";
+          this.errors.password = "Incorrect email address and / or password.";
           break;
         case "PASSWORDS_DO_NOT_MATCH":
-          this.message = "Passwords do not match!";
+          this.errors.password = "Passwords do not match!";
           break;
         case "WRONG_RESET_CODE":
-          this.message = "Could not reset the password. Is the reset link and e-mail valid?";
+          this.errors.general = "Could not reset the password. Is the reset link and e-mail valid?";
           break;
         default:
-          this.message = "Login error. Try again...";
+          this.errors.general = "Login error. Try again...";
       }
     }
 
