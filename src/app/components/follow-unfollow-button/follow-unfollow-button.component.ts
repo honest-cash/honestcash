@@ -1,7 +1,7 @@
-import './follow-unfollow-button.styles.less';
-import template from './follow-unfollow-button.template.html';
+import "./follow-unfollow-button.styles.less";
+import followUnfollowButtonTemplateHtml from "./follow-unfollow-button.template.html";
 
-import { IGlobalScope } from '../../../core/lib/interfaces';
+import { IGlobalScope } from "../../../core/lib/interfaces";
 
 declare const angular;
 
@@ -14,13 +14,13 @@ interface IFollowUnfollowButtonController extends ng.IScope {
 const defaultOptions = {
   showFollow: false,
   showUnfollow: false,
-}
+};
 
 class FollowUnfollowButtonController {
   public static $inject = [
-    '$rootScope',
-    '$scope',
-    'RelsService',
+    "$rootScope",
+    "$scope",
+    "RelsService",
   ];
 
   constructor(
@@ -53,11 +53,11 @@ class FollowUnfollowButtonController {
       case "follow":
         this.follow();
         break;
-    
+
       case "unfollow":
         this.unfollow();
         break;
-    
+
       default:
         break;
     }
@@ -66,8 +66,10 @@ class FollowUnfollowButtonController {
   private follow = () => {
     this.user.alreadyFollowing = !this.user.alreadyFollowing;
 
-    this.RelsService.followProfile(this.user.id);
-  };
+    if (this.isVisible) {
+      this.RelsService.followProfile(this.user.id);
+    }
+  }
 
   private unfollow = () => {
     if (this.user) {
@@ -75,20 +77,20 @@ class FollowUnfollowButtonController {
     }
 
     this.RelsService.unfollowProfile(this.user.id);
-  };
+  }
 
 }
 
 export default function followUnfollowButton(): ng.IDirective {
   return {
     controller: FollowUnfollowButtonController,
-    controllerAs: 'followUnfollowButtonCtrl',
-    restrict: 'E',
+    controllerAs: "followUnfollowButtonCtrl",
+    restrict: "E",
     scope: {
-      "showFollow": "=",
-      "showUnfollow": "=",
-      "user": "=",
+      showFollow: "=",
+      showUnfollow: "=",
+      user: "=",
     },
-    template
+    template: followUnfollowButtonTemplateHtml,
   };
 }
