@@ -9,12 +9,13 @@ interface IFollowUnfollowButtonController extends ng.IScope {
   user: any;
   showFollow: boolean;
   showUnfollow: boolean;
-  following: [];
+  following: number[] | string[];
 }
 
 const defaultOptions = {
   showFollow: false,
   showUnfollow: false,
+  following: [],
 };
 
 class FollowUnfollowButtonController {
@@ -75,7 +76,6 @@ class FollowUnfollowButtonController {
 
   private follow = () => {
     this.user.alreadyFollowing = !this.user.alreadyFollowing;
-
 
     if (this.isVisible) {
       this.RelsService.followProfile(this.user.id);
