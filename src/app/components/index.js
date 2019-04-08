@@ -1,5 +1,5 @@
 import feed from './feed/feed.component';
-import feeds from './feeds/component';
+import feeds from './feeds/feeds.component';
 import followUnfollowButton from './follow-unfollow-button/follow-unfollow-button.component';
 import logoutButton from './logout-button/logout-button.component';
 import socialShareButtons from './social-share-buttons/social-share-buttons.component';
