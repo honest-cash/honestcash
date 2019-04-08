@@ -45,7 +45,7 @@ export class AuthService {
 
   public storeUserCredentials(token: string, userId: number): void {
     this.$window.localStorage.setItem(this.LOCAL_TOKEN_KEY, token);
-    this.$window.localStorage.setItem(this.LOCAL_USER_ID_KEY, userId);
+    this.$window.localStorage.setItem(this.LOCAL_USER_ID_KEY, userId.toString());
 
     this.useCredentials(token, userId);
   }

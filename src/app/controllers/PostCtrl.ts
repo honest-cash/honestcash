@@ -12,8 +12,8 @@ export default class PostCtrl {
     "$scope",
     "$rootScope",
     "$stateParams",
-    "PostService",
-    "ScopeService",
+    "postService",
+    "scopeService",
   ];
   public isLoading: boolean = true;
   public post: Post;
@@ -41,13 +41,16 @@ export default class PostCtrl {
       this.$stateParams.alias,
     );
 
-    this.post.isOwner = this.$rootScope.user ? this.post.user.id === this.$rootScope.user.id : false;
+    this.post.isOwner = this.$rootScope.user ?
+      this.post.user.id === this.$rootScope.user.id :
+      false;
 
     // show archived or locked/unlocked icon
     if (this.post.status === "archived") {
       this.shouldShowIcon = true;
       if (this.post.hasPaidSection && (this.post.hasBeenPaidFor || this.post.isOwner)) {
-        this.postTooltip = `This story is now archived however you still have access to the original post`;
+        this.postTooltip = `This story is now archived however` +
+        `you still have access to the original post`;
         this.iconToShow = "fa-unlock";
       } else {
         this.postTooltip = `This story is archived`;

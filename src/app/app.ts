@@ -66,6 +66,6 @@ angular.module("hashtag-app", [
 
 .run(["$rootScope", runs.initBCHWallet])
 
-.run(["$rootScope", "$state", "AuthService", runs.onStateChange])
+.run(["$rootScope", "$state", "authService", runs.onStateChange])
 
-.run(["API_URL", "AuthService", runs.initProfileUpload]);
+.run(["API_URL", "authService", runs.initProfileUpload]);

@@ -1,11 +1,12 @@
-import swal from "sweetalert";
+import sweetalert from "sweetalert";
 import * as simpleWalletProvider from "../../core/lib/simpleWalletProvider";
-import generateWallet from '../../core/lib/bitcoinAuthFlow';
-import { AuthService } from '../../auth/AuthService';
-import ScopeService from '../../core/services/ScopeService';
-import WalletService from '../../core/services/WalletService';
-import ProfileService from '../../core/services/ProfileService';
-import { IGlobalScope } from '../../core/lib/interfaces';
+import bitcoinAuthFlow from "../../core/lib/bitcoinAuthFlow";
+import { AuthService } from "../../auth/AuthService";
+import ScopeService from "../../core/services/ScopeService";
+import WalletService from "../../core/services/WalletService";
+import ProfileService from "../../core/services/ProfileService";
+import { IGlobalScope } from "../../core/lib/interfaces";
+import UserPropsService from "../../core/services/UserPropsService";
 
 declare var SimpleWallet: any;
 declare var bitbox: any;
@@ -25,13 +26,15 @@ interface IScopeWalletCtrl extends ng.IScope {
   isWithdrawalAddressBCHValid: boolean;
   canConnectMnemonic: boolean;
 
-  withdraw: (withdrawalAmount: number, withdrawalAddressBCH: string) => Promise<any>
+  withdraw: (withdrawalAmount: number, withdrawalAddressBCH: string) => Promise<any>;
   onMnemonicChange: (mnemonic: string) => void;
   generate: () => void;
   connect: (privateKey: string, HdPath: string) => void;
   importNewWallet: (newMnemonic, HdPath) => Promise<any>;
   onDepositClick: () => void;
   disconnect: () => void;
+  saveRecoveryPhraseBackupProp: () => void;
+  checkRecoveryBackup: () => void;
 }
 
 export default class WalletCtrl {
@@ -44,342 +47,346 @@ export default class WalletCtrl {
     "ProfileService",
   ];
 
-    constructor(
+  constructor(
       private $scope: IScopeWalletCtrl,
       private $rootScope: IGlobalScope,
       private authService: AuthService,
       private scopeService: ScopeService,
       private walletService: WalletService,
       private profileService: ProfileService,
+      private userPropsService: UserPropsService,
     ) {
 
+    $rootScope.walletBalance = {
+      bch: 0,
+      usd: 0,
+      isLoading: true,
+    };
+
+    $scope.mnemonic = "";
+    $scope.privateKey = "";
+    $scope.addressBCH = "";
+    $scope.showAdancedOptions = false;
+    $scope.walletInfo = {};
+    $scope.connectedPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
+    $scope.connectedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
+    $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
+    $scope.newHdPath = simpleWalletProvider.defaultHdPath;
+    $scope.isWithdrawalAddressBCHValid = true;
+
+    let simpleWallet;
+    let lSimpleWallet;
+
+    const checkPassword = async ():
+      Promise<{ password?: string; aborted: boolean; isValid: boolean }> => {
+      const password = await sweetalert({
+        buttons: {
+          cancel: true,
+          confirm: true,
+        },
+        content: {
+          element: "input",
+          attributes: {
+            placeholder: "Enter your password.",
+            type: "password",
+          },
+        },
+      });
+
+      if (!password) {
+        return { isValid: false, aborted: true };
+      }
+
+      const emails = await this.authService.getEmails();
+
+      const data = await this.authService.passwordCheck({
+        password: this.authService.calculatePasswordHash(emails[0], password),
+      });
+
+      if (!data.isValid) {
+        await sweetalert({
+          type: "error",
+          title: "Wrong password!",
+        });
+
+        return { isValid: false, aborted: false };
+      }
+
+      return { password, isValid: true, aborted: false };
+    };
+
+    $scope.onMnemonicChange = (newMnemonic) => {
+      if (newMnemonic && newMnemonic.split(" ").length > 10) {
+        $scope.canConnectMnemonic = true;
+
+        return;
+      }
+
+      $scope.canConnectMnemonic = false;
+    };
+
+    $scope.saveRecoveryPhraseBackupProp = () => {
+      const user = $rootScope.user;
+      this.profileService.upsertUserProp(user.id, "recoveryBackedUp", "true", (res) => {
+        if (res) {
+          const recoveryBackedUpProp = $rootScope.user.userProperties.find(
+            p => p.propKey === "recoveryBackedUp",
+          );
+          if (recoveryBackedUpProp) {
+            recoveryBackedUpProp.propValue = "true";
+          } else {
+            $rootScope.user.userProperties.push(res);
+          }
+        }
+      });
+    };
+
+    $scope.checkRecoveryBackup = () => {
+      return this.userPropsService.checkRecoveryBackup();
+    };
+
+    const refreshBalance = async (wallet) => {
+      let walletInfo;
+
+      try {
+        walletInfo = await wallet.getWalletInfo();
+      } catch (err) {
+        $rootScope.walletBalance = {
+          bch: 0,
+          usd: 0,
+          isLoading: false,
+        };
+
+        return;
+      }
+
+      const { bch, usd } = await this.walletService.getAddressBalances();
+
+      $scope.walletInfo = walletInfo;
+
       $rootScope.walletBalance = {
-        bch: 0,
-        usd: 0,
-        isLoading: true
+        bch,
+        usd,
+        isLoading: false,
       };
 
-        $scope.mnemonic = "";
-        $scope.privateKey = "";
-        $scope.addressBCH = "";
-        $scope.showAdancedOptions = false;
-        $scope.walletInfo = {};
-        $scope.connectedPrivateKey = localStorage.getItem("HC_BCH_PRIVATE_KEY");
-        $scope.connectedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
-        $scope.HdPath = localStorage.getItem("HC_BCH_HD_PATH") || simpleWalletProvider.defaultHdPath;
-        $scope.newHdPath = simpleWalletProvider.defaultHdPath;
-        $scope.isWithdrawalAddressBCHValid = true;
+      this.scopeService.safeApply($scope, () => {});
+    };
 
-        let simpleWallet, lSimpleWallet;
+    if ($scope.connectedMnemonic) {
+      simpleWallet = new SimpleWallet($scope.connectedMnemonic, {
+        HdPath: $scope.HdPath,
+      });
 
-        const checkPassword = async (): Promise<{ password?: string; aborted: boolean; isValid: boolean }> => {
-          const password = await swal({
-            buttons: {
-              cancel: true,
-              confirm: true,
-            },
-            content: {
-              element: "input",
-              attributes: {
-                placeholder: "Enter your password.",
-                type: "password",
-              },
-            },
-          });
+      simpleWalletProvider.set(simpleWallet);
 
-          if (!password) {
-            return { isValid: false, aborted: true };
-          }
+      $scope.mnemonic = simpleWallet.mnemonic;
+      $scope.privateKey = simpleWallet.privateKey;
+      $scope.addressBCH = simpleWallet.address;
+      $scope.legacyAddressBCH = simpleWallet.legacyAddress;
 
-          const emails = await this.authService.getEmails();
+      refreshBalance(simpleWallet);
+    }
 
-          const data = await this.authService.passwordCheck({
-            password: this.authService.calculatePasswordHash(emails[0], password)
-          });
+    $scope.generate = () => {
+      lSimpleWallet = new SimpleWallet(undefined, {
+        HdPath: $scope.HdPath,
+      });
 
-          if (!data.isValid) {
-            await swal({
-              type: 'error',
-              title: 'Wrong password!',
-            });
+      $scope.mnemonic = lSimpleWallet.mnemonic;
+      $scope.privateKey = lSimpleWallet.privateKey;
+      $scope.addressBCH = lSimpleWallet.address;
+      $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
+    };
 
-            return { isValid: false, aborted: false };
-          }
+    $scope.withdraw = async (withdrawalAmount, withdrawalAddressBCH) => {
+      const simpleWallet = simpleWalletProvider.get();
 
-          return { password, isValid: true, aborted: false };
-        };
+      const result = await bitbox.Util.validateAddress(withdrawalAddressBCH);
 
-        $scope.onMnemonicChange = (newMnemonic) => {
-          if (newMnemonic && newMnemonic.split(" ").length > 10) {
-              $scope.canConnectMnemonic = true;
+      if (!result.isvalid) {
+        await sweetalert({
+          type: "error",
+          title: "Oops...",
+          text: `The address ${withdrawalAddressBCH} is not a valid Bitcoin Cash address!`,
+        });
 
-              return;
-          } 
+        return;
+      }
 
-          $scope.canConnectMnemonic = false;
-        };
+      if (withdrawalAmount < 0.0005) {
+        await sweetalert({
+          type: "error",
+          title: "Dust...",
+          text: `The amount ${withdrawalAmount} is too small!`,
+        });
 
-        $scope.saveRecoveryPhraseBackupProp = () => {
-          const user = $rootScope.user;
-          this.profileService.upsertUserProp(user.id, 'recoveryBackedUp', 'true', (res) => {
-            if (res) {
-              const recoveryBackedUpProp = $rootScope.user.userProperties.find(p => p.propKey === 'recoveryBackedUp');
-              if (recoveryBackedUpProp) {
-                recoveryBackedUpProp.propValue = true;
-              } else {
-                $rootScope.user.userProperties.push(res);
-              }
-            }
-          })
-        };
+        return;
+      }
 
-        $scope.checkRecoveryBackup = () => {
-          if (this.$rootScope.user && this.$rootScope.user.userProperties && this.$rootScope.user.userProperties.length) {
-            const recoveryBackedUpProp = this.$rootScope.user.userProperties.find(p => p.propKey === "recoveryBackedUp");
-            return !recoveryBackedUpProp || !JSON.parse(recoveryBackedUpProp.propValue) ? false : true;
-          }
-          return false;
-        };
+      const hasConfirmed = await sweetalert({
+        title: "Are you sure?",
+        text: `${withdrawalAmount} BCH will be transferred to ${withdrawalAddressBCH}`,
+        type: "warning",
+        buttons: {
+          cancel: true,
+          confirm: true,
+        },
+      });
 
-        const refreshBalance = async (wallet) => {
-          let walletInfo;
+      if (!hasConfirmed) {
+        return;
+      }
 
-          try {
-            walletInfo = await wallet.getWalletInfo();
-          } catch (err) {
-            $rootScope.walletBalance = {
-              bch: 0,
-              usd: 0,
-              isLoading: false
-            }
+      const { isValid } = await checkPassword();
 
-            return;
-          }
-          
-          const { bch, usd } = await this.walletService.getAddressBalances();
+      if (!isValid) {
+        return;
+      }
 
-          $scope.walletInfo = walletInfo;
+      let txid;
 
-          $rootScope.walletBalance = {
-            bch,
-            usd,
-            isLoading: false
-          };
+      console.log(`Paying out ${withdrawalAmount} BCH.`);
 
-          this.scopeService.safeApply($scope, () => {});
-        };
+      try {
+        const res = await simpleWallet.send([
+          {
+            address: withdrawalAddressBCH,
+            amountSat: bitbox.BitcoinCash.toSatoshi(withdrawalAmount),
+          },
+        ]);
 
-        if ($scope.connectedMnemonic) {
-          simpleWallet = new SimpleWallet($scope.connectedMnemonic, {
-              HdPath: $scope.HdPath
-          });
+        txid = res.txid;
+      } catch (err) {
+        console.error(err);
 
-          simpleWalletProvider.set(simpleWallet);
+        return sweetalert({
+          type: "error",
+          title: "Cound not send",
+          text: err.message,
+        });
+      }
 
-          $scope.mnemonic = simpleWallet.mnemonic;
-          $scope.privateKey = simpleWallet.privateKey;
-          $scope.addressBCH = simpleWallet.address;
-          $scope.legacyAddressBCH = simpleWallet.legacyAddress;
+      await sweetalert({
+        type: "success",
+        title: "Transferred!",
+        text: `${withdrawalAmount} BCH has been trasferred to ${withdrawalAddressBCH}`,
+        footer: `<a target="_blank" href="https://explorer.bitcoin.com/bch/tx/${txid}">` +
+          `Receipt ${txid.substring(0, 5)}..${txid.substring(txid.length - 5, txid.length)}</a>`,
+      });
 
-          refreshBalance(simpleWallet);
-        }
+      refreshBalance(simpleWallet);
+    };
 
-        $scope.generate = () => {
-          lSimpleWallet = new SimpleWallet(undefined, {
-              HdPath: $scope.HdPath
-          });
+    $scope.connect = (privateKey, HdPath) => {
+      if (!lSimpleWallet) {
+        lSimpleWallet = new SimpleWallet(privateKey, {
+          HdPath,
+        });
 
-          $scope.mnemonic = lSimpleWallet.mnemonic;
-          $scope.privateKey = lSimpleWallet.privateKey;
-          $scope.addressBCH = lSimpleWallet.address;
-          $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
-        }
+        $scope.privateKey = lSimpleWallet.privateKey;
+      }
 
-        $scope.withdraw = async (withdrawalAmount, withdrawalAddressBCH) => {
-          const simpleWallet = simpleWalletProvider.get();
+      $scope.connectedPrivateKey = lSimpleWallet.privateKey;
+      $scope.connectedMnemonic = lSimpleWallet.mnemonic;
 
-          const result = await bitbox.Util.validateAddress(withdrawalAddressBCH);
+      $scope.HdPath = lSimpleWallet.HdPath;
+      $scope.mnemonic = lSimpleWallet.mnemonic;
+      $scope.privateKey = lSimpleWallet.privateKey;
+      $scope.addressBCH = lSimpleWallet.address;
+      $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
 
-          if (!result.isvalid) {
-              await swal({
-                type: 'error',
-                title: 'Oops...',
-                text: `The address ${withdrawalAddressBCH} is not a valid Bitcoin Cash address!`,
-              });
+      this.$rootScope.simpleWallet = {
+        address: lSimpleWallet.address as string,
+        mnemonic: lSimpleWallet.mnemonic as string,
+        privateKey: lSimpleWallet.privateKey as string,
+      } as any;
 
-              return;
-          }
+      simpleWalletProvider.saveLocally(lSimpleWallet);
+      simpleWalletProvider.set(lSimpleWallet);
 
-          if (withdrawalAmount < 0.0005) {
-              await swal({
-                type: 'error',
-                title: 'Dust...',
-                text: `The amount ${withdrawalAmount} is too small!`,
-              });
+      refreshBalance(lSimpleWallet);
+    };
 
-              return;
-          }
+    $scope.importNewWallet = async (newMnemonic: string, HdPath: string) => {
+      const result = await sweetalert({
+        type: "warning",
+        title: "Are you sure?",
+        text: `You will not be able to recover the previous wallet without the recovery phrase!`,
+        buttons: {
+          cancel: true,
+          confirm: true,
+        },
+      });
 
-          const hasConfirmed = await swal({
-              title: 'Are you sure?',
-              text: `${withdrawalAmount} BCH will be transferred to ${withdrawalAddressBCH}`,
-              type: 'warning',
-              buttons: {
-                cancel: true,
-                confirm: true,
-              },
-          })
+      if (!result) {
+        return;
+      }
 
-          if (!hasConfirmed) {
-              return;
-          }
+      const { password, isValid } = await checkPassword();
 
-          const { isValid } = await checkPassword();
+      if (!isValid) {
+        return;
+      }
 
-          if (!isValid) {
-            return;
-          }
+      const simpleWallet = new SimpleWallet(newMnemonic);
 
-          let txid;
+      const mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, password);
 
-          console.log(`Paying out ${withdrawalAmount} BCH.`)
-
-          try {
-              const res = await simpleWallet.send([
-                {
-                  address: withdrawalAddressBCH,
-                  amountSat: bitbox.BitcoinCash.toSatoshi(withdrawalAmount)
-                }
-              ]);
-
-              txid = res.txid;
-          } catch (err) {
-            console.error(err);
-
-            return swal({
-                type: "error",
-                title: "Cound not send",
-                text: err.message,
-            });
-          }
-
-          await swal({
-              type: 'success',
-              title: 'Transferred!',
-              text: `${withdrawalAmount} BCH has been trasferred to ${withdrawalAddressBCH}`,
-              footer: `<a target="_blank" href="https://explorer.bitcoin.com/bch/tx/${txid}">Receipt ${txid.substring(0,5)}..${txid.substring(txid.length - 5, txid.length)}</a>`
-          })
-
-          refreshBalance(simpleWallet);
-        };
-
-        $scope.connect = (privateKey, HdPath) => {
-            if (!lSimpleWallet) {
-                lSimpleWallet = new SimpleWallet(privateKey, {
-                    HdPath: HdPath
-                });
-
-                $scope.privateKey = lSimpleWallet.privateKey;
-            }
-
-            $scope.connectedPrivateKey = lSimpleWallet.privateKey;
-            $scope.connectedMnemonic = lSimpleWallet.mnemonic;
-
-            $scope.HdPath = lSimpleWallet.HdPath;
-            $scope.mnemonic = lSimpleWallet.mnemonic;
-            $scope.privateKey = lSimpleWallet.privateKey;
-            $scope.addressBCH = lSimpleWallet.address;
-            $scope.legacyAddressBCH = lSimpleWallet.legacyAddress;
-
-            this.$rootScope.simpleWallet = {
-                address: lSimpleWallet.address as string,
-                mnemonic: lSimpleWallet.mnemonic as string,
-                privateKey: lSimpleWallet.privateKey as string
-            } as any;
-
-            simpleWalletProvider.saveLocally(lSimpleWallet);
-            simpleWalletProvider.set(lSimpleWallet);
-
-            refreshBalance(lSimpleWallet);
-        };
-
-        $scope.importNewWallet = async (newMnemonic: string, HdPath: string) => {
-          const result = await swal({
-            type: 'warning',
-            title: 'Are you sure?',
-            text: `You will not be able to recover the previous wallet without the recovery phrase!`,
-            buttons: {
-              cancel: true,
-              confirm: true,
-            }
-          });
-
-          if (!result) {
-            return;
-          }
-
-          const { password, isValid } = await checkPassword();
-
-          if (!isValid) {
-            return;
-          }
-
-          let simpleWallet = new SimpleWallet(newMnemonic);
-
-          const mnemonicEncrypted = SimpleWallet.encrypt(simpleWallet.mnemonic, password);
-
-          this.authService
+      this.authService
           .setWallet({ mnemonicEncrypted })
           .then(() => {
             $scope.connect(newMnemonic, HdPath);
 
             location.reload();
           });
-        };
+    };
 
-        const disconnect = async () => {
-            const result = await swal({
-                type: 'warning',
-                buttons: {
-                  cancel: true,
-                  confirm: true,
-                },
-                title: 'Are you sure?',
-                text: `You will not be able to recover the previous wallet without the recovery phrase!`,
-            })
+    const disconnect = async () => {
+      const result = await sweetalert({
+        type: "warning",
+        buttons: {
+          cancel: true,
+          confirm: true,
+        },
+        title: "Are you sure?",
+        text: `You will not be able to recover the previous wallet without the recovery phrase!`,
+      });
 
-            if (!result) {
-              return;
-            }
+      if (!result) {
+        return;
+      }
 
-            const { password, isValid } = await checkPassword();
+      const { password, isValid } = await checkPassword();
 
-            if (!isValid) {
-              return;
-            }
+      if (!isValid) {
+        return;
+      }
 
-            const simpleWallet = await generateWallet({ password });
+      const simpleWallet = await bitcoinAuthFlow({ password });
 
-            this.authService
+      this.authService
             .setWallet({ mnemonicEncrypted: simpleWallet.mnemonicEncrypted })
             .then(() => {
               $scope.connect(simpleWallet.mnemonic, simpleWallet.HdPath);
 
               location.reload();
             });
-        };
+    };
 
-        $scope.onDepositClick = () => {
-            setTimeout(() => {
-                const container = document.getElementsByClassName("deposit-address-qr")[0];
+    $scope.onDepositClick = () => {
+      setTimeout(
+        () => {
+          const container = document.getElementsByClassName("deposit-address-qr")[0];
 
-                container.innerHTML = "";
+          container.innerHTML = "";
 
-                new QRCode(container, simpleWalletProvider.get().address);
-            }, 50);
-        };
+          new QRCode(container, simpleWalletProvider.get().address);
+        },
+        50);
+    };
 
-        $scope.onDepositClick();
-        $scope.disconnect = disconnect;
-    }
+    $scope.onDepositClick();
+    $scope.disconnect = disconnect;
+  }
 }

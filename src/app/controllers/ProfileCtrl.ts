@@ -1,4 +1,3 @@
-import FeedService from "../../core/services/FeedService";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
 import RelsService from "../../core/services/RelsService";
@@ -6,13 +5,10 @@ import RelsService from "../../core/services/RelsService";
 export default class ProfileCtrl {
   public static $inject = [
     "$rootScope",
-    "$state",
     "$scope",
-    "$location",
-    "FeedService",
     "relsService",
-    "PostService",
-    "ScopeService",
+    "postService",
+    "scopeService",
     "profile",
   ];
 
@@ -30,10 +26,7 @@ export default class ProfileCtrl {
 
   constructor(
       private $rootScope,
-      private $state,
       private $scope,
-      private $location,
-      private feedService: FeedService,
       private relsService: RelsService,
       private postService: PostService,
       private scopeService: ScopeService,
@@ -61,7 +54,8 @@ export default class ProfileCtrl {
       orderBy: "publishedAt",
       page: params.page ? params.page : this.page,
       userId: this.profile.id,
-    },                        data => {
+    },
+                              (data) => {
       if (!data) {
         return;
       }
@@ -82,11 +76,14 @@ export default class ProfileCtrl {
 
       this.isLoading = false;
 
-      this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ? !_.parentPostId : _.parentPostId);
+      this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ?
+        !_.parentPostId :
+        _.parentPostId,
+      );
     });
   }
 
-  public showFeeds(tab) {
+  public showFeeds() {
     this.showProfileTab = "feeds";
 
     this.feeds = this.postsAll.filter(_ => !_.parentPostId);
@@ -102,7 +99,7 @@ export default class ProfileCtrl {
     this.scopeService.safeApply(this.$scope, () => {});
   }
 
-  public showFollowers = (tab) => {
+  public showFollowers = () => {
     this.followGuys = [];
 
     this.showProfileTab = "followers";
@@ -112,7 +109,7 @@ export default class ProfileCtrl {
     });
   }
 
-  public showFollowing = (tab) => {
+  public showFollowing = () => {
     this.followGuys = [];
 
     this.showProfileTab = "following";

@@ -1,4 +1,4 @@
-import swal from "sweetalert";
+import sweetalert from "sweetalert";
 
 declare var bitbox: any;
 
@@ -9,8 +9,8 @@ export default class ProfileEditCtrl {
     "$scope",
     "$http",
     "$location",
-    "ScopeService",
-    "profile"
+    "scopeService",
+    "profile",
   ];
 
   constructor(
@@ -20,7 +20,7 @@ export default class ProfileEditCtrl {
     private $http,
     private $location,
     private scopeService,
-    private profile
+    private profile,
   ) {
     $scope.profile = profile;
 
@@ -49,7 +49,7 @@ export default class ProfileEditCtrl {
 
         scopeService.safeApply($scope);
 
-        return swal("Your SLP address is not correct!");
+        return sweetalert("Your SLP address is not correct!");
       }
 
       try {
@@ -59,8 +59,8 @@ export default class ProfileEditCtrl {
           props: {
             addressSLP: $scope.profile.addressSLP,
             reddit: $scope.profile.reddit,
-            twitter: $scope.profile.twitter
-          }
+            twitter: $scope.profile.twitter,
+          },
         });
       } catch (err) {
         if (err.data.code === "WRONG_BCH_ADDRESS") {
@@ -68,7 +68,7 @@ export default class ProfileEditCtrl {
 
           scopeService.safeApply($scope, () => { /** */ });
 
-          return swal(err.data.desc);
+          return sweetalert(err.data.desc);
         }
       }
 
@@ -79,7 +79,7 @@ export default class ProfileEditCtrl {
   }
 
   private updateUser = async (
-    data: { props: any; addressBCH: string; bio: string; }
+    data: { props: any; addressBCH: string; bio: string; },
   ): Promise<{ status: any; desc: string; code: string; }> => {
     let res = await this.$http.put(`${this.API_URL}/user/${this.$scope.profile.id}`, data);
 
@@ -87,8 +87,8 @@ export default class ProfileEditCtrl {
 
     if (res.status === "ok") {
       return res;
-    } else {
-      throw res;
     }
+    throw res;
+
   }
 }

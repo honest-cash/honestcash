@@ -25,7 +25,6 @@ export class SimpleWalletClass implements ISimpleWallet {
   decrypt: any;
 }
 
-
 export interface IUserProp {
   propKey: string;
   propValue: string;
@@ -38,12 +37,12 @@ export interface IGlobalScope extends ng.IRootScopeService {
     id: number;
     username: string;
     userProperties: IUserProp[]
-  },
+  };
   walletBalance: {
     bch: number;
     usd: number;
     isLoading: boolean;
-  },
+  };
   simpleWallet: ISimpleWallet;
   noHeader: boolean;
   logoutMe: any;

@@ -6,9 +6,9 @@ import ScopeService from "../../core/services/ScopeService";
 export default class NotifsCtrl {
   public static $inject = [
     "$scope",
-    "NotifService",
-    "ScopeService",
-    "PostService"
+    "notifService",
+    "scopeService",
+    "postService",
   ];
 
   private isLoading: boolean = true;
@@ -20,7 +20,7 @@ export default class NotifsCtrl {
     private $scope: ng.IScope,
     private notifService: NotifService,
     private scopeService: ScopeService,
-    private postService: PostService
+    private postService: PostService,
   ) {
     this.ngInit();
   }
@@ -43,7 +43,7 @@ export default class NotifsCtrl {
     this.isLoading = true;
 
     const nextNotifs = await this.notifService.getNotifs({
-      page: this.page
+      page: this.page,
     });
 
     this.notifs = this.notifs.concat(nextNotifs);
