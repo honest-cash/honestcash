@@ -32,7 +32,8 @@ class FeedDirectiveCtrl {
     */
     tippyJs(".hc-tooltip");
     tippyJs(".user-follower-count", {
-      content:`${this.$scope.feed.user.followerCount} followers, ${this.$scope.feed.user.followingCount} following`,
+      content: `${this.$scope.feed.user.followerCount} followers,` +
+      `${this.$scope.feed.user.followingCount} following`,
     });
   }
 
