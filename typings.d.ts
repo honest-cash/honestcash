@@ -6,6 +6,7 @@ declare module "tippy.js";
 declare module "qrcode";
 declare module "ng-infinite-scroll";
 declare module "lzutf8";
+declare module "sweetalert";
 
 declare module "*.less";
 declare module "*.html";

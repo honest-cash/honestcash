@@ -2,6 +2,7 @@ import sweetalert from "sweetalert";
 
 import "./unlock-button.styles.less";
 import unlockButtonTemplateHtml from "./unlock-button.template.html";
+import qrcode from "qrcode";
 
 import { IGlobalScope } from "../../../core/lib/interfaces";
 import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
@@ -9,9 +10,9 @@ import { Post } from "../../../core/models/models";
 import PostService from "../../../core/services/PostService";
 import ScopeService from "../../../core/services/ScopeService";
 import WalletService from "../../../core/services/WalletService";
+import { IModalElement } from "../../../core/lib/dependency-interfaces";
 
 declare const toastr;
-declare const QRCode;
 declare const bitbox;
 
 const defaultOptions = {
@@ -30,9 +31,9 @@ class UnlockButtonController {
     "$rootScope",
     "$scope",
     "$window",
-    "PostService",
-    "WalletService",
-    "ScopeService",
+    "postService",
+    "walletService",
+    "scopeService",
   ];
 
   private amount: number;
@@ -81,7 +82,8 @@ class UnlockButtonController {
 
     const confirmationResult = await sweetalert({
       title: "Confirm your purchase",
-      text: `You will be unlocking the full version of this story for ${this.post.paidSectionCost} BCH. Are you sure?`,
+      text: `You will be unlocking the full version of this story` +
+        ` for ${this.post.paidSectionCost} BCH. Are you sure?`,
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -165,10 +167,10 @@ class UnlockButtonController {
 
         qrContainer.innerHTML = "";
 
-        new QRCode(qrContainer, simpleWallet.cashAddress);
+        new qrcode(qrContainer, simpleWallet.cashAddress);
 
         // replace with sweetalert
-        $("#loadWalletModal").modal("show");
+        ($("#loadWalletModal") as IModalElement).modal("show");
 
         this.isUnlocking = false;
         this.scopeService.safeApply(this.$scope);
@@ -203,7 +205,7 @@ class UnlockButtonController {
     ) as HTMLAnchorElement;
     amountEl.innerHTML = this.post.paidSectionCost.toString();
 
-    $("#unlockSuccessModal").modal("show");
+    ($("#unlockSuccessModal") as IModalElement).modal("show");
 
     console.log(`Unlock transaction: ${url}`);
 
