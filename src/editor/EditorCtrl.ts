@@ -14,7 +14,6 @@ import WalletService, { ICurrencyConversion } from "../core/services/WalletServi
 import ScopeService from "../core/services/ScopeService";
 
 declare let MediumEditor;
-declare let tippy;
 
 interface IModalElement extends JQuery<HTMLElement> {
   modal: (action?: string) => void;
@@ -668,6 +667,6 @@ export default class EditorCtrl {
   }
 
   private async initTippy() {
-    tippy(".hc-tooltip");
+    tippyJs(".hc-tooltip");
   }
 }
