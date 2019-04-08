@@ -1,10 +1,3 @@
-import * as showdown from "showdown";
-
-const converter = new showdown.Converter({
-  simpleLineBreaks: true,
-  noHeaderId: true,
-});
-
 export default class EditorService {
 
   public static $inject = [];
@@ -29,7 +22,7 @@ export default class EditorService {
     const $bodyHtml = $(bodyHtml);
 
     // the html is to replace the body in the editor
-    let _fixedBody = '';
+    let fixedBody = "";
 
     $bodyHtml.map(i => {
       const _elem = $bodyHtml[i];
@@ -40,26 +33,32 @@ export default class EditorService {
       // showdown only has img inside a p tag
       // we rewrap the div with p tag here
 
-       if ($elem.prop("nodeName") === "DIV" && this.stringIncludes($elem.prop("className"), "medium-insert-images")) {
+      if (
+        $elem.prop("nodeName") === "DIV" &&
+        this.stringIncludes($elem.prop("className"), "medium-insert-images")
+      ) {
         const content = $elem;
-        const img = this.getOuterHtml($(content).find('img'));
+        const img = this.getOuterHtml($(content).find("img"));
         const imgWrapped = `<p>${img}</p>`;
-        _fixedBody += imgWrapped;
+        fixedBody += imgWrapped;
       } else if (_elem.nodeName === "P" && $elem.prop("childNodes").length === 1) {
-        //check for tags that only has br tags in it
+        // check for tags that only has br tags in it
         if ($elem.children().first().prop("nodeName") !== "BR") {
-          _fixedBody += this.getOuterHtml($elem);
+          fixedBody += this.getOuterHtml($elem);
         }
-      } else if (!this.stringIncludes(_elem.nodeName, "#text") && !this.stringIncludes(_elem.nodeName, "#comment")){
+      } else if (
+        !this.stringIncludes(_elem.nodeName, "#text") &&
+        !this.stringIncludes(_elem.nodeName, "#comment")
+      ) {
         // we form our last new html
-        _fixedBody += this.getOuterHtml($elem);
+        fixedBody += this.getOuterHtml($elem);
       }
 
     });
 
     // elements and html is returned as tuple
-    this.fixedBody = _fixedBody;
-    return _fixedBody;
+    this.fixedBody = fixedBody;
+    return fixedBody;
   }
 
   public getContextElement = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {
