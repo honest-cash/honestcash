@@ -18,21 +18,21 @@ interface IUIProfile extends IProfile {
 export default class ProfileService {
   public static $inject = [
     "$http",
-    "API_URL"
+    "API_URL",
   ];
 
   private recommendedProfiles;
 
   constructor(
     private $http: ng.IHttpService,
-    private API_URL
+    private API_URL,
   ) {}
 
   public fetchProfileStatus(query, callback) {
     this.$http({
-      url: this.API_URL + "/user/status",
+      url: `${this.API_URL}/user/status`,
       method: "GET",
-      params: {}
+      params: {},
     }).then((response) => {
       callback(response.data);
     });
@@ -44,9 +44,9 @@ export default class ProfileService {
     }
 
     this.$http({
-      method: "GET",
       params,
-      url: this.API_URL + "/user/" + profileId + "/recommended-profiles"
+      method: "GET",
+      url: `${this.API_URL}/user/${profileId}/recommended-profiles`,
     }).then((response) => {
       this.recommendedProfiles = response.data;
 
@@ -68,28 +68,28 @@ export default class ProfileService {
     props[propKey] = propValue;
 
     this.$http({
-      url: this.API_URL + "/user/" + userId,
+      url: `${this.API_URL}/user/${userId}`,
       method: "PUT",
       params: {
-        props
-      }
+        props,
+      },
     }).then((response) => {
       callback(response.data);
     });
   }
 
   public upsertUserProp(userId: number, propKey: string, propValue: string, callback) {
-    this.$http.post(this.API_URL + "/user/" + userId + "/property", {
-        propKey,
-        propValue
-      }
+    this.$http.post(`${this.API_URL}/user/${userId}/property`, {
+      propKey,
+      propValue,
+    },
     ).then((response) => {
       callback(response.data);
     });
   }
 
   public fetchProfile(profileId: number, callback) {
-    this.$http.get(this.API_URL + "/user/" + profileId)
+    this.$http.get(`${this.API_URL}/user/${profileId}`)
     .then((response) => {
       const profile = this.extendWithProps(response.data as IProfile);
 
@@ -109,7 +109,7 @@ export default class ProfileService {
       ...profile,
       addressSLP: this.getProp(profile.userProperties, "addressSLP"),
       reddit: this.getProp(profile.userProperties, "reddit"),
-      twitter: this.getProp(profile.userProperties, "twitter")
+      twitter: this.getProp(profile.userProperties, "twitter"),
     };
 
     return extendedProfile;
