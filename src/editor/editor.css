@@ -181,6 +181,15 @@ ol, ol > li, li, .medium-editor-element > ol, .medium-editor-element > ol > li, 
   margin-bottom: 0px;
 }
 
+.bold {
+  font-weight: bold;
+}
+
+span.disabled {
+  color: grey;
+  font-style: italic;
+}
+
 .opacity-0 {
   opacity: 0;
 }

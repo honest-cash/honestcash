@@ -81,9 +81,10 @@
 
 					<div class="form-group m-0">
 						<form>
-							<div class="checkbox m-0">
+							<div class="checkbox m-0" ng-class="{'disabled': hasOnlyOneSection}">
 								<label>
-									<input type="checkbox" ng-checked="draft.hasPaidSection" ng-click="togglePaidSection()"> <strong>I have a paid section in my story</strong>
+									<input type="checkbox" ng-checked="draft.hasPaidSection" ng-disabled="hasOnlyOneSection" ng-click="togglePaidSection()" ng-class="{'disabled': hasOnlyOneSection}"> <span ng-class="{'bold': !hasOnlyOneSection, 'disabled': hasOnlyOneSection}">I have a paid section in my story</span>
+									<strong ng-if="hasOnlyOneSection" style="color: red;">&nbsp;<i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please split your story into two sections</strong>
 								</label>
 							</div>
 						</form>

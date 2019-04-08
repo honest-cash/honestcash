@@ -115,6 +115,7 @@ export default class EditorCtrl {
       title: false,
     };
     $scope.isFullPostShown = false;
+    $scope.hasOnlyOneSection = false;
     $scope.hasPaidSection = false;
     $scope.publishTouched = false;
     $scope.paidSectionLineBreakTouched = false;
@@ -265,6 +266,9 @@ export default class EditorCtrl {
 
     const refreshBodies = (externalHtml?) => {
       fixedBody = this.editorService.getFixedBody(bodyEditor, externalHtml);
+      $scope.hasOnlyOneSection = $(fixedBody).length === 0 || $(fixedBody).length === 1 ?
+        true :
+        false;
       $scope.fixedBody = fixedBody;
       $scope.freeBodyCut = this.editorService
         .getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
