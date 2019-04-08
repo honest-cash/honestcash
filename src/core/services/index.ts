@@ -6,15 +6,15 @@ import ProfileService from "./ProfileService";
 import RelsService from "./RelsService";
 import ScopeService from "./ScopeService";
 import WalletService from "./WalletService";
-import BitcoinComService from './BitcoinComService';
+import BitcoinComService from "./BitcoinComService";
 
-angular.module("vqServices", [ "vqConfig" ])
-.service("HashtagService", HashtagService)
-.service("PostService", PostService)
-.service("FeedService", FeedService)
-.service("ProfileService", [ "$http", "API_URL", ProfileService ])
-.service("RelsService", [ "$http", "API_URL", RelsService ])
-.service("ScopeService", ScopeService)
-.service("WalletService", WalletService)
-.service("BitcoinComService", BitcoinComService)
-.service("NotifService", NotifService);
+angular.module("vqServices", ["vqConfig"])
+.service("hashtagService", HashtagService)
+.service("postService", PostService)
+.service("feedService", FeedService)
+.service("profileService", ["$http", "API_URL", ProfileService])
+.service("relsService", ["$http", "API_URL", RelsService])
+.service("scopeService", ScopeService)
+.service("walletService", WalletService)
+.service("bitcoinComService", BitcoinComService)
+.service("notifService", NotifService);

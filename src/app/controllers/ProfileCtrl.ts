@@ -1,6 +1,7 @@
 import FeedService from "../../core/services/FeedService";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
+import RelsService from "../../core/services/RelsService";
 
 export default class ProfileCtrl {
   public static $inject = [
@@ -9,7 +10,7 @@ export default class ProfileCtrl {
     "$scope",
     "$location",
     "FeedService",
-    "RelsService",
+    "relsService",
     "PostService",
     "ScopeService",
     "profile",
@@ -33,7 +34,7 @@ export default class ProfileCtrl {
       private $scope,
       private $location,
       private feedService: FeedService,
-      private RelsService,
+      private relsService: RelsService,
       private postService: PostService,
       private scopeService: ScopeService,
       private profile,
@@ -41,7 +42,7 @@ export default class ProfileCtrl {
     this.fetchFeeds({});
 
     if (this.$rootScope.user) {
-      this.RelsService.showFollowing(this.$rootScope.user.id, (following) => {
+      this.relsService.showFollowing(this.$rootScope.user.id, (following) => {
         this.following = following.map(followingPerson => followingPerson.id);
         this.scopeService.safeApply(this.$scope, () => {});
       });
@@ -106,7 +107,7 @@ export default class ProfileCtrl {
 
     this.showProfileTab = "followers";
 
-    this.RelsService.showFollowers(this.profile.id, (rFollowers) => {
+    this.relsService.showFollowers(this.profile.id, (rFollowers) => {
       this.followGuys = rFollowers;
     });
   }
@@ -116,7 +117,7 @@ export default class ProfileCtrl {
 
     this.showProfileTab = "following";
 
-    this.RelsService.showFollowing(this.profile.id, (rFollowing) => {
+    this.relsService.showFollowing(this.profile.id, (rFollowing) => {
       this.followGuys = rFollowing;
     });
   }
