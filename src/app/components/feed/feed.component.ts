@@ -1,8 +1,8 @@
-import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
+import tippyJs from "tippy.js";
+import "tippy.js/dist/tippy.css";
 
-import template from './template.html';
-import templateStyle from './feed.less';
+import feedTemplateHtml from "./feed.template.html";
+import feedStylesLess from "./feed.styles.less";
 
 import PostService from "../../../core/services/PostService";
 
@@ -12,7 +12,7 @@ class FeedDirectiveCtrl {
     private $sce,
     private postService: PostService,
   ) {
-    this.$scope.styles = templateStyle;
+    this.$scope.styles = feedStylesLess;
 
     this.$scope.trustSrc = (src) => {
       return this.$sce.trustAsResourceUrl(src);
@@ -27,11 +27,12 @@ class FeedDirectiveCtrl {
 
   private async initTippy() {
     /**
-     * data-tippy-content is not used in the HTML because angular cannot interpolate the followerCount
+     * data-tippy-content is not used in the HTML because
+     * angular cannot interpolate the followerCount
     */
-    tippy(".hc-tooltip");
-    tippy(".user-follower-count", {
-      content: `${this.$scope.feed.user.followerCount} followers, ${this.$scope.feed.user.followingCount} following`
+    tippyJs(".hc-tooltip");
+    tippyJs(".user-follower-count", {
+      content:`${this.$scope.feed.user.followerCount} followers, ${this.$scope.feed.user.followingCount} following`,
     });
   }
 
@@ -39,17 +40,17 @@ class FeedDirectiveCtrl {
     "$scope",
     "$sce",
     "PostService",
-  ]
+  ];
 }
 
 export default function feed(): ng.IDirective {
   return {
-    restrict: 'E',
+    restrict: "E",
     scope: {
-        "feed": "=",
-        "user": "=",
+      feed: "=",
+      user: "=",
     },
-    template,
-    controller: FeedDirectiveCtrl
+    template: feedTemplateHtml,
+    controller: FeedDirectiveCtrl,
   };
-};
+}
