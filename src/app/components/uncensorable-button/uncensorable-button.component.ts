@@ -10,7 +10,7 @@ import PostService from "../../../core/services/PostService";
 import ScopeService from "../../../core/services/ScopeService";
 
 import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
-import { IModalElement, IMediumInsertPlugin, ITagIt } from "../../../core/lib/dependency-interfaces";
+import { IModalElement } from "../../../core/lib/dependency-interfaces";
 
 declare const toastr;
 

@@ -107,7 +107,7 @@ class UpvoteButtonController {
 
     const postId = this.post.id;
 
-    if (this.post.userId == this.$rootScope.user.id) {
+    if (this.post.userId === this.$rootScope.user.id) {
       toastr.error(
         "Upvoting is not possible because you cannot tip your own posts and responses",
       );

@@ -65,7 +65,7 @@ class UnlockButtonController {
     this.isUnlocking = defaultOptions.isUnlocking;
     this.isDisabled = !this.$rootScope.user || this.post.userId === this.$rootScope.user.id;
 
-    this.$window.onbeforeunload = event => {
+    this.$window.onbeforeunload = (event) => {
       if (this.isUnlocking) {
         event.preventDefault();
 
@@ -111,7 +111,7 @@ class UnlockButtonController {
 
     const postId = this.post.id;
 
-    if (this.post.userId == this.$rootScope.user.id) {
+    if (this.post.userId === this.$rootScope.user.id) {
       toastr.error(
         "Unlocking is not possible because you cannot unlock your own posts and responses",
       );

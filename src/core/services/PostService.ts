@@ -97,7 +97,7 @@ export default class PostService {
   }
 
   public async getUpvotes(postId: number): Promise<Upvote[]> {
-    const res = await this.$http.get(this.API_URL + "/post/" + postId + "/upvotes");
+    const res = await this.$http.get(`${this.API_URL}/post/${postId}/upvotes`);
 
     return res.data as Upvote[];
   }
@@ -105,7 +105,7 @@ export default class PostService {
   public async getResponses(postId: number): Promise<Post[]> {
     const res = await this.$http.get(`${this.API_URL}/post/${postId}/responses`);
 
-    return (res.data as Post[]).map((post) => this.processPost(post));
+    return (res.data as Post[]).map(post => this.processPost(post));
   }
 
   public async getUnlocks(postId: number): Promise<Unlock[]> {
@@ -147,9 +147,7 @@ export default class PostService {
     post.shareURLs = SocialSharing.getFeedShareURLs(post);
 
     if (post.userPosts) {
-      post.userPosts.forEach((userPost) => {
-        userPost = this.processPost(userPost);
-      });
+      post.userPosts = post.userPosts.map(userPost => this.processPost(userPost));
     }
 
     return post;

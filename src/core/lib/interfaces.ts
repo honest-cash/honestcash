@@ -19,6 +19,7 @@ export class SimpleWalletClass implements ISimpleWallet {
   mnemonic: string;
   mnemonicEncrypted: string;
   privateKey: string;
+  // tslint:disable-next-line
   HdPath: string;
 
   encrypt: any;
@@ -36,7 +37,7 @@ export interface IGlobalScope extends ng.IRootScopeService {
     imageUrl: string;
     id: number;
     username: string;
-    userProperties: IUserProp[]
+    userProperties: IUserProp[];
   };
   walletBalance: {
     bch: number;

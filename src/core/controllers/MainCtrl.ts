@@ -46,7 +46,7 @@ export default class MainCtrl {
       new qrcode(container, address);
     };
 
-    const mouseLeaveAddress = className => {
+    const mouseLeaveAddress = (className) => {
       const container = document.getElementsByClassName(className)[0];
       container.innerHTML = "";
     };

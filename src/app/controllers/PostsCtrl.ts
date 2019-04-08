@@ -85,7 +85,7 @@ export default class PostsCtrl {
         if (this.$scope.page === 0) {
           this.$scope.posts = data;
         } else {
-          data.forEach(post => {
+          data.forEach((post) => {
             this.$scope.posts.push(post);
           });
         }
@@ -110,41 +110,13 @@ export default class PostsCtrl {
     this.$scope.currentTab = tab;
   }
 
-  public async deletePost(id: number) {
-    this.$scope.isDeleting = true;
-
-    const confirmationResult = await sweetalert({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this post!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    });
-
-    if (confirmationResult) {
-      const deleteResult = await this.postService.deletePost(id);
-
-      if (deleteResult.status === 200) {
-        this.$scope.posts = this.$scope.posts.filter(f => f.id !== id);
-        toastr.success("Your post has been deleted");
-      } else {
-        toastr.error("There was an error while deleting your post");
-      }
-    } else {
-      toastr.info("Your post has not been deleted");
-    }
-
-    this.$scope.isDeleting = false;
-
-    this.scopeService.safeApply(this.$scope);
-  }
-
   public displayPostBody(html: string): string {
-    if (html.length > 400) {
-      html = html.substring(0, 400) + "...";
+    let truncatedHtml = html;
+    if (truncatedHtml.length > 400) {
+      truncatedHtml = `${truncatedHtml.substring(0, 400)}...`;
     }
 
-    return this.postService.displayHTML(html);
+    return this.postService.displayHTML(truncatedHtml);
   }
 
   private async initTippy() {

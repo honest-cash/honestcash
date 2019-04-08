@@ -24,8 +24,8 @@ export default class EditorService {
     // the html is to replace the body in the editor
     let fixedBody = "";
 
-    $bodyHtml.map(i => {
-      const _elem = $bodyHtml[i];
+    $bodyHtml.map((i) => {
+      const elem = $bodyHtml[i];
       const $elem = $($bodyHtml[i]);
 
       // find divs that are inserted by the mediumeditor mediuminsert plugin
@@ -41,14 +41,14 @@ export default class EditorService {
         const img = this.getOuterHtml($(content).find("img"));
         const imgWrapped = `<p>${img}</p>`;
         fixedBody += imgWrapped;
-      } else if (_elem.nodeName === "P" && $elem.prop("childNodes").length === 1) {
+      } else if (elem.nodeName === "P" && $elem.prop("childNodes").length === 1) {
         // check for tags that only has br tags in it
         if ($elem.children().first().prop("nodeName") !== "BR") {
           fixedBody += this.getOuterHtml($elem);
         }
       } else if (
-        !this.stringIncludes(_elem.nodeName, "#text") &&
-        !this.stringIncludes(_elem.nodeName, "#comment")
+        !this.stringIncludes(elem.nodeName, "#text") &&
+        !this.stringIncludes(elem.nodeName, "#comment")
       ) {
         // we form our last new html
         fixedBody += this.getOuterHtml($elem);
@@ -75,10 +75,8 @@ export default class EditorService {
   }
 
   public getOuterHtml = (element) => {
-    if (element[0]) {
-      element = element[0];
-    }
-    return $(element).prop("outerHTML");
+    const child = element[0] ? element[0] : element;
+    return $(child).prop("outerHTML");
   }
 
   public getSectionHtml = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {

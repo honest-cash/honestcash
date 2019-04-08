@@ -99,7 +99,7 @@ export default class ProfileService {
 
   private getProp(userProperties: IUserProp[], propKey: string): string | null {
     const userProp = userProperties
-      .find((prop) => prop.propKey === propKey);
+      .find(prop => prop.propKey === propKey);
 
     return userProp ? userProp.propValue : null;
   }

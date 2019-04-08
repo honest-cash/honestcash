@@ -30,7 +30,7 @@ angular.module("vqAuth", [])
     responseError: (response) => {
       $rootScope.activeCalls -= 1;
 
-      if (response.status == 401) {
+      if (response.status === 401) {
         $rootScope.$broadcast("notAuthenticated");
       }
 
