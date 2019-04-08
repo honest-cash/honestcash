@@ -1,6 +1,6 @@
-import './bottom-call-to-action-bar.styles.less';
-import template from './bottom-call-to-action-bar.template.html';
-import { Post } from '../../../core/models/models';
+import "./bottom-call-to-action-bar.styles.less";
+import bottomCallToActionBarTemplateHtml from "./bottom-call-to-action-bar.template.html";
+import { Post } from "../../../core/models/models";
 
 interface IBottomCallToActionBarControllerScope {
   post: Post;
@@ -8,11 +8,11 @@ interface IBottomCallToActionBarControllerScope {
 }
 
 class BottomCallToActionBarController {
-  public static $inject = ['$scope'];
+  public static $inject = ["$scope"];
   public post: Post;
 
   constructor(
-    private $scope: IBottomCallToActionBarControllerScope
+    private $scope: IBottomCallToActionBarControllerScope,
   ) {
     this.ngOnInit();
   }
@@ -23,7 +23,7 @@ class BottomCallToActionBarController {
   }
 
   private onClick() {
-    window.location.href = '/signup';
+    window.location.href = "/signup";
   }
 
 }
@@ -31,12 +31,12 @@ class BottomCallToActionBarController {
 export default function bottomCallToActionBar(): ng.IDirective {
   return {
     controller: BottomCallToActionBarController,
-    controllerAs: 'bottomCallToActionBarCtrl',
-    restrict: 'E',
+    controllerAs: "bottomCallToActionBarCtrl",
+    restrict: "E",
     scope: {
-      post: '='
+      post: "=",
     },
     replace: true,
-    template
+    template: bottomCallToActionBarTemplateHtml,
   };
 }
