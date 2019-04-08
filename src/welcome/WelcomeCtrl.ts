@@ -1,10 +1,11 @@
-import swal from "sweetalert";
-import { AuthService } from "../auth/authService";
-import generateWallet from "../core/lib/bitcoinAuthFlow";
+import sweetalert from "sweetalert";
+import { AuthService } from "../auth/AuthService";
+import bitcoinAuthFlow from "../core/lib/bitcoinAuthFlow";
 import { IGlobalScope, ISimpleWallet } from "../core/lib/interfaces";
 import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
 import ProfileService from "../core/services/ProfileService";
 import ScopeService from "../core/services/ScopeService";
+import { User } from "../core/models/models";
 
 declare var SimpleWallet: any;
 declare var grecaptcha: {
@@ -45,10 +46,9 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     "$rootScope",
     "$scope",
     "$location",
-    "$state",
-    "AuthService",
-    "ProfileService",
-    "ScopeService"
+    "authService",
+    "profileService",
+    "scopeService",
   ];
 
   public isLoading = false;
@@ -67,7 +67,6 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     private $rootScope: IGlobalScope,
     private $scope: ng.IScope,
     private $location: ng.ILocationService,
-    private $state,
     private authService: AuthService,
     private profileService: ProfileService,
     private scopeService: ScopeService,
@@ -88,7 +87,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     const passwordHash = this.authService.calculatePasswordHash(
       data.loginemail,
-      data.loginpassword
+      data.loginpassword,
     );
 
     let authData: {
@@ -100,7 +99,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     try {
       authData = await this.authService.login({
         email: data.loginemail,
-        password: passwordHash
+        password: passwordHash,
       });
     } catch (response) {
       this.isLoading = false;
@@ -122,29 +121,29 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       mnemonicEncrypted = sbw.mnemonicEncrypted;
 
       await this.authService.setWallet({
-        mnemonicEncrypted
+        mnemonicEncrypted,
       });
 
       if (!authData.user.addressBCH) {
         await this.profileService.updateUser(
           authData.user.id,
           "addressBCH",
-          sbw.address
+          sbw.address,
         );
       } else {
-        await this.setAddressForTips(authData.user.id, sbw.address);
+        await this.setAddressForTips(authData.user.id.toString(), sbw.address);
       }
     }
 
     simpleWalletProvider.loadWallet(
       mnemonicEncrypted,
-      data.loginpassword
+      data.loginpassword,
     );
 
     const simpleWallet = simpleWalletProvider.get();
 
     if (authData.wallet && !authData.user.addressBCH) {
-      await this.setAddressForTips(authData.user.id, simpleWallet.address);
+      await this.setAddressForTips(authData.user.id.toString(), simpleWallet.address);
     }
 
     this.$rootScope.user = authData.user;
@@ -157,7 +156,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     try {
       await this.authService.resetPassword({
-        email: data.loginemail
+        email: data.loginemail,
       });
 
       this.hideForm = true;
@@ -168,7 +167,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       this.isLoading = false;
 
       return this.displayErrorMessage(
-        typeof err.data === "string" ? err.data : err.data.code
+        typeof err.data === "string" ? err.data : err.data.code,
       );
     }
   }
@@ -195,11 +194,11 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     let simpleWallet;
 
     try {
-      simpleWallet = await generateWallet({
-        password: data.loginpassword
+      simpleWallet = await bitcoinAuthFlow({
+        password: data.loginpassword,
       });
     } catch (err) {
-      await swal("Your link is invalid!");
+      await sweetalert("Your link is invalid!");
 
       location.href = "/login";
 
@@ -208,7 +207,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     const passwordHash = this.authService.calculatePasswordHash(
       data.loginemail,
-      data.loginpassword
+      data.loginpassword,
     );
 
     try {
@@ -217,17 +216,18 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
         email: data.loginemail,
         mnemonicEncrypted: simpleWallet.mnemonicEncrypted,
         newPassword: passwordHash,
-        repeatNewPassword: passwordHash
+        repeatNewPassword: passwordHash,
       });
     } catch (err) {
       this.isLoading = false;
 
       return this.displayErrorMessage(
-        typeof err.data === "string" ? err.data : err.data.code
+        typeof err.data === "string" ? err.data : err.data.code,
       );
     }
 
-    this.message = "Your password has been reset and a new wallet has been generated. You can now log-in.";
+    this.message = `Your password has been reset and a new wallet` +
+      `has been generated. You can now log-in.`;
 
     data.loginemail = undefined;
     data.loginpassword = undefined;
@@ -288,7 +288,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     const captcha = grecaptcha.getResponse();
 
     if (!captcha || captcha.length === 0) {
-      this.message = "Please verify captcha by checking the checkbox."
+      this.message = "Please verify captcha by checking the checkbox.";
 
       grecaptcha.reset();
       return;
@@ -306,7 +306,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
         email: data.email,
         password: passwordHash,
         username: data.username,
-        userType: 0
+        userType: 0,
       });
     } catch (response) {
       this.isLoading = false;
@@ -326,21 +326,22 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   }
 
   private setAddressForTips = async (userId: string, bchAddress: string) => {
-    const hasConfirmed = await swal({
+    const hasConfirmed = await sweetalert({
       title: "Receiving tips",
-      text: `Would you like to also receive tips to the same wallet? You can always change it in your profile.`,
+      text: `Would you like to also receive tips to the same wallet?` +
+      ` You can always change it in your profile.`,
       type: "warning",
       buttons: {
         cancel: true,
-        confirm: true
-      }
+        confirm: true,
+      },
     });
 
     if (hasConfirmed) {
       await this.profileService.updateUser(
         Number(userId),
         "addressBCH",
-        bchAddress
+        bchAddress,
       );
     }
   }
@@ -365,18 +366,18 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     const mnemonicEncrypted = sbw.mnemonicEncrypted;
 
     await this.authService.setWallet({
-      mnemonicEncrypted
+      mnemonicEncrypted,
     });
 
     await this.profileService.updateUser(
       userId,
       "addressBCH",
-      sbw.address
+      sbw.address,
     );
 
     simpleWalletProvider.loadWallet(
       mnemonicEncrypted,
-      password
+      password,
     );
 
     return sbw;
