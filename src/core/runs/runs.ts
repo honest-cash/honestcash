@@ -1,25 +1,29 @@
 import * as simpleWalletProvider from "../lib/simpleWalletProvider";
+import { AuthService } from "../../auth/AuthService";
+import { IModalElement } from "../lib/dependency-interfaces";
 
-export const onStateChange = function ($rootScope, $state, AuthService) {
+declare const Dropzone;
+
+export const onStateChange = function ($rootScope, $state, authService: AuthService) {
   $rootScope.$on("$stateChangeStart", async (event, next, nextParams, fromState) => {
     if (next.name === "starter.welcome") {
-        $rootScope.welcome = true;
+      $rootScope.welcome = true;
     } else {
-        $rootScope.welcome = false;
+      $rootScope.welcome = false;
     }
 
     if (next.name.indexOf("starter.") > -1) {
-        $rootScope.noHeader = true;
+      $rootScope.noHeader = true;
     } else {
-        $rootScope.noHeader = false;
+      $rootScope.noHeader = false;
     }
 
     if (!$rootScope.user) {
-      AuthService.loadUserCredentials();
+      authService.loadUserCredentials();
 
-      if (AuthService.getUserId()) {
+      if (authService.getUserId()) {
         $rootScope.user = {
-          id: AuthService.getUserId()
+          id: authService.getUserId(),
         };
       } else {
         if (location.pathname === "/") {
@@ -27,7 +31,7 @@ export const onStateChange = function ($rootScope, $state, AuthService) {
         }
       }
 
-      const response = await AuthService.validate();
+      const response = await authService.validate();
       const user = response.data;
 
       $rootScope.user = user || null;
@@ -49,44 +53,44 @@ export const onStateChange = function ($rootScope, $state, AuthService) {
   });
 };
 
-export const initProfileUpload = function(API_URL, AuthService) {
-	const changeProgress = (progress) => {
-		document.getElementById("imageUploadProgressBar").setAttribute("aria-valuenow", progress);
-		document.getElementById("imageUploadProgressBar").style.width = progress + "%";
-	};
+export const initProfileUpload = function (API_URL, authService: AuthService) {
+  const changeProgress = (progress) => {
+    document.getElementById("imageUploadProgressBar").setAttribute("aria-valuenow", progress);
+    document.getElementById("imageUploadProgressBar").style.width = `${progress}%`;
+  };
 
-	new Dropzone("#profilePicDropzone", {
-		paramName: "files[]",
-		url: `${API_URL}/upload/image?isProfileAvatar=true`,
-		maxFiles: 10,
-		maxfilesexceeded: (file) => {
-			this.removeAllFiles();
-			this.addFile(file);
-		},
-		thumbnailWidth: null
-	})
-	.on("addedfile", () => {
-		$("#profilePicDropzone").addClass("hidden");
-	})
-	.on("sending", (_, xhr) => {
-		changeProgress(0);
-		xhr.setRequestHeader("X-Auth-Token", AuthService.getAuthToken());
-		$("#imageUploadProgress").removeClass("hidden");
-	})
-	.on("uploadprogress", (_, progress) => {
-		changeProgress(progress);
-	})
-	.on("success", (_, response) => {
-		changeProgress(100);
+  new Dropzone("#profilePicDropzone", {
+    paramName: "files[]",
+    url: `${API_URL}/upload/image?isProfileAvatar=true`,
+    maxFiles: 10,
+    maxfilesexceeded: (file) => {
+      this.removeAllFiles();
+      this.addFile(file);
+    },
+    thumbnailWidth: null,
+  })
+  .on("addedfile", () => {
+    $("#profilePicDropzone").addClass("hidden");
+  })
+  .on("sending", (_, xhr) => {
+    changeProgress(0);
+    xhr.setRequestHeader("X-Auth-Token", authService.getAuthToken());
+    $("#imageUploadProgress").removeClass("hidden");
+  })
+  .on("uploadprogress", (_, progress) => {
+    changeProgress(progress);
+  })
+  .on("success", (_, response) => {
+    changeProgress(100);
 
-		document.getElementById("profilePic").src = response.files[0].url;
+    (document.getElementById("profilePic") as HTMLImageElement).src = response.files[0].url;
 
-		$("#imageUploadProgress").addClass("hidden");
-		$("#profilePicDropzone").removeClass("hidden");
-		$("#uploadProfilePicModal").modal("hide");
-	});
+    $("#imageUploadProgress").addClass("hidden");
+    $("#profilePicDropzone").removeClass("hidden");
+    ($("#uploadProfilePicModal") as IModalElement).modal("hide");
+  });
 };
 
-export const initBCHWallet = function($rootScope) {
-	$rootScope.simpleWallet = simpleWalletProvider.loadWallet();
+export const initBCHWallet = function ($rootScope) {
+  $rootScope.simpleWallet = simpleWalletProvider.loadWallet();
 };
