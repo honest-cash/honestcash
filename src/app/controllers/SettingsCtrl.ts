@@ -9,7 +9,7 @@ import ProfileService from "../../core/services/ProfileService";
 import ScopeService from "../../core/services/ScopeService";
 
 enum TabStatus {
-  subscription = "subscription",
+  notifications = "notifications",
 }
 
 interface IScopeSettingsCtrl extends ng.IScope {
@@ -22,12 +22,21 @@ interface IScopeSettingsCtrl extends ng.IScope {
     },
   };
 
-  updateSetting(setting: "followingNewStory" | "weeklyDigest"): void;
+  updateSetting(setting: "UnsubscribedFollowingNewStory" | "UnsubscribedWeeklyDigest"): void;
 }
+
+const USER_PROP_MAP = {
+  weeklyDigest: "UnsubscribedWeeklyDigest",
+  followingNewStory: "UnsubscribedFollowingNewStory",
+};
 
 export default class SettingsCtrl {
   public static $inject = [
-    "$rootScope", "$scope", "$timeout", "ProfileService", "ScopeService",
+    "$rootScope",
+    "$scope",
+    "$timeout",
+    "ProfileService",
+    "ScopeService",
   ];
 
   constructor(
@@ -38,7 +47,7 @@ export default class SettingsCtrl {
     private scopeService: ScopeService,
   ) {
 
-    this.$scope.currentTab = TabStatus.subscription;
+    this.$scope.currentTab = TabStatus.notifications;
     this.$scope.isLoading = true;
     this.$scope.settings = {
       email: {
@@ -50,35 +59,26 @@ export default class SettingsCtrl {
 
     this.profileService.fetchProfile($rootScope.user.id, (user) => {
       if (user.userProperties.length > 0) {
-        this.$scope.settings.email.followingNewStory = JSON.parse(
-          user
-            .userProperties
-            .find(userProp => userProp.propKey === "followingNewStory")
-            .propValue,
-          );
+        // the opposite as we want to show that the users are subscribed!
+        this.$scope.settings.email = {
+          followingNewStory: !this.profileService
+            .isUserPropSet(user, USER_PROP_MAP["followingNewStory"]),
+          weeklyDigest: !this.profileService.isUserPropSet(user, USER_PROP_MAP["weeklyDigest"]),
+        };
 
-        this.$scope.settings.email.weeklyDigest = JSON.parse(
-            user
-              .userProperties
-              .find(userProp => userProp.propKey === "weeklyDigest")
-              .propValue,
-            );
         this.$scope.isLoading = false;
         this.scopeService.safeApply(this.$scope);
       }
     });
-
   }
 
-  public updateSetting = (setting: "followingNewStory" | "weeklyDigest") => {
-    this
-      .profileService
-      .upsertUserProp(
-        this.$rootScope.user.id,
-        setting,
-        String(this.$scope.settings.email[setting]),
-        () => {},
+  public updateSetting = (
+    setting: "weeklyDigest" | "followingNewStory",
+  ) => {
+    this.profileService.updateUserProp(
+      this.$rootScope.user.id,
+      USER_PROP_MAP[setting],
+      !this.$scope.settings.email[setting] ? "1" : "0",
     );
   }
-
 }

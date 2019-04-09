@@ -1,5 +1,5 @@
 <div>
-  <div class="row" style="margin-bottom: 30px;">
+  <div class="row" style="margin-top: 50px; margin-bottom: 30px;">
     <div class="col-xs-12">
       <strong style="font-size: 30px;">Settings</strong>
     </div>
@@ -8,11 +8,11 @@
     <div class="col-xs-12" style="margin-bottom: 20px;">
       <ul class="nav nav-tabs text-center">
         <li
-          ng-class="{ 'bold': currentTab === 'subscription' }"
+          ng-class="{ 'bold': currentTab === 'notifications' }"
           class="showProfileTab"
-          ng-click="switchTab('subscription')"
+          ng-click="switchTab('notifications')"
         >
-          <a href="#" class="showProfileTab">Subscription</a>
+          <a href="#" class="showProfileTab">Notifications</a>
         </li>
       </ul>
     </div>
@@ -24,12 +24,12 @@
     <div class="col-xs-12">
       <div class="checkbox">
         <label>
-          <input type="checkbox" ng-model="settings.email.followingNewStory" ng-checked="settings.email.followingNewStory" ng-change="updateSetting('followingNewStory')"> Subscribe to e-mails when someone you follow posts a new story
+          <input type="checkbox" ng-model="settings.email.followingNewStory" ng-checked="settings.email.followingNewStory" ng-change="updateSetting('followingNewStory')"> New posts from your followers
         </label>
       </div>
       <div class="checkbox">
         <label>
-          <input type="checkbox" ng-model="settings.email.weeklyDigest" ng-checked="settings.email.weeklyDigest" ng-change="updateSetting('weeklyDigest')"> Subscribe to weekly digest e-mails
+          <input type="checkbox" ng-model="settings.email.weeklyDigest" ng-checked="settings.email.weeklyDigest" ng-change="updateSetting('weeklyDigest')"> Weekly digest e-mails
         </label>
       </div>
     </div>
