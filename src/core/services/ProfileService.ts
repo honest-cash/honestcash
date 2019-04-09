@@ -62,20 +62,14 @@ export default class ProfileService {
     return this.$http.put(`${this.API_URL}/user/${userId}`, data);
   }
 
-  public updateUserProp(userId: number, propKey: string, propValue: string, callback) {
+  public async updateUserProp(userId: number, propKey: string, propValue: string): Promise<IUser> {
     const props = {};
 
     props[propKey] = propValue;
 
-    this.$http({
-      url: this.API_URL + "/user/" + userId,
-      method: "PUT",
-      params: {
-        props
-      }
-    }).then((response) => {
-      callback(response.data);
-    });
+    const result = await this.updateUser<IUser>(userId, "props", props);
+
+    return result.data;
   }
 
   public upsertUserProp(userId: number, propKey: string, propValue: string, callback) {
@@ -97,12 +91,15 @@ export default class ProfileService {
     });
   }
 
-  private getProp(userProperties: IUserProp[], propKey: string): string | null {
+  public getProp(userProperties: IUserProp[], propKey: string): string | null {
     const userProp = userProperties
       .find((prop) => prop.propKey === propKey);
 
     return userProp ? userProp.propValue : null;
   }
+
+  public isUserPropSet = (user: IUser, propKey: string) =>
+    this.getProp(user.userProperties, propKey) === "1"
 
   private extendWithProps(profile: IProfile): IUIProfile {
     const extendedProfile: IUIProfile = {
