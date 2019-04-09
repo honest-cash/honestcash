@@ -115,6 +115,7 @@ export default class EditorCtrl {
       title: false,
     };
     $scope.isFullPostShown = false;
+    $scope.paidSectionEnabled = false;
     $scope.hasPaidSection = false;
     $scope.publishTouched = false;
     $scope.paidSectionLineBreakTouched = false;
@@ -144,6 +145,10 @@ export default class EditorCtrl {
         $scope.draft.paidSectionLinebreak -= 1;
       }
       $scope.paidSectionLineBreakTouched = true;
+    };
+
+    const checkIfPaidSectionShouldBeEnabled = () => {
+      $scope.paidSectionEnabled = $scope.draft.parentPostId ? false : true;
     };
 
     const scrollToLinebreak = (action, toLinebreak?: number) => {
@@ -642,6 +647,7 @@ export default class EditorCtrl {
       $http.get(url)
             .then((response) => {
               $scope.draft = response.data;
+              checkIfPaidSectionShouldBeEnabled();
               resetPaidSectionCostIfNull();
               initEditor($scope.draft.id);
             },    (err: any) => {

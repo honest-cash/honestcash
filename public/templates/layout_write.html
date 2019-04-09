@@ -79,7 +79,7 @@
 
 					<hr>
 
-					<div class="form-group m-0">
+					<div ng-if="paidSectionEnabled" class="form-group m-0">
 						<form>
 							<div class="checkbox m-0">
 								<label>
@@ -88,7 +88,7 @@
 							</div>
 						</form>
 					</div>
-					<div ng-if="draft.hasPaidSection" class="mb-2">
+					<div ng-if="paidSectionEnabled && draft.hasPaidSection" class="mb-2">
 							<p><small class="f-normal mb-1"><i>Choose how much readers pay in order to read your paid section. <a href="">Learn more.</a></i></small></p>
 							<div class="row">
 								<div class="col-xs-12 col-md-6">
@@ -103,7 +103,7 @@
 								</div>
 							</div>
 					</div>
-					<div ng-if="draft.hasPaidSection">
+					<div ng-if="paidSectionEnabled && draft.hasPaidSection">
 						<p class="mb-0"><strong>Select a paragraph break to split your story into free and paid sections</strong></p>
 						<small class="f-normal" ng-class="{'c-red': publishTouched && !paidSectionLineBreakTouched}"><i>Choose where your paid section starts by moving the up and down arrows. The red line indicates where the free section ends and the paid section starts.</i></small>
 						<div class="row flex flex-wrap mt-2">
@@ -134,7 +134,7 @@
 							</div>
 						</div>
 					</div>
-					<hr>
+					<hr ng-if="paidSectionEnabled">
 					<div class="form-group">
 						<small>
 							<ul>
