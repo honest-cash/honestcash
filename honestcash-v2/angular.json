@@ -5,7 +5,7 @@
   "projects": {
     "honestcash-v2": {
       "root": "",
-      "sourceRoot": "v2",
+      "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
       "schematics": {
@@ -18,16 +18,16 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/honestcash-v2",
-            "index": "v2/index.html",
-            "main": "v2/main.ts",
-            "polyfills": "v2/polyfills.ts",
-            "tsConfig": "v2/tsconfig.app.json",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
             "assets": [
-              "v2/favicon.ico",
-              "v2/assets"
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
-              "v2/styles.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -35,8 +35,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "v2/environments/environment.ts",
-                  "with": "v2/environments/environment.prod.ts"
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
