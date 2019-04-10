@@ -84,7 +84,7 @@ class UnlockButtonController {
       text: `You will be unlocking the full version of this story for ${this.post.paidSectionCost} BCH. Are you sure?`,
       icon: "warning",
       buttons: true,
-      dangerMode: true,
+      dangerMode: false,
     });
 
     if (confirmationResult) {
