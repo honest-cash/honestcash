@@ -57,7 +57,6 @@ export default class EditorService {
 
     });
 
-    // elements and html is returned as tuple
     this.fixedBody = _fixedBody.replace(new RegExp("<!-- -->", "g"), "");
     return this.fixedBody;
   }

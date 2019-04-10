@@ -266,7 +266,7 @@ export default class EditorCtrl {
 
     const refreshBodies = (externalHtml?) => {
       fixedBody = this.editorService.getFixedBody(bodyEditor, externalHtml);
-      $scope.hasOnlyOneSection = $(fixedBody).length === 0 || $(fixedBody).length === 1 ?
+      $scope.hasOnlyOneSection = $(fixedBody).length < 2 ?
         true :
         false;
       $scope.fixedBody = fixedBody;
