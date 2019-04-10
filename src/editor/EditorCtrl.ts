@@ -62,6 +62,7 @@ export default class EditorCtrl {
       title: false,
     };
     $scope.isFullPostShown = false;
+    $scope.paidSectionEnabled = false;
     $scope.hasPaidSection = false;
     $scope.publishTouched = false;
     $scope.paidSectionLineBreakTouched = false;
@@ -227,11 +228,6 @@ export default class EditorCtrl {
     let editingMode = "write";
     const locPath = location.pathname.split("/");
     const locQuery = location.search;
-    const isFreshDraft = locQuery.indexOf("new=true") !== -1;
-
-    if (isFreshDraft) {
-      editingMode = "writeFresh";
-    }
 
     if (locPath[1] === "write" && locPath[2] === "response") {
       parentPostId = locPath[3];
@@ -373,8 +369,6 @@ export default class EditorCtrl {
     $scope.switchEditor = () => {
       if (editingMode === "write") {
         window.location.href = `/markdown/write`;
-      } else if (editingMode === "writeFresh") {
-        window.location.href = `/markdown/write?new=true`;
       } else if (editingMode === "edit") {
         window.location.href = `/markdown/edit/${postId}`;
       } else if (editingMode === "response") {
@@ -589,6 +583,9 @@ export default class EditorCtrl {
       $http.get(url)
             .then((response) => {
               $scope.draft = response.data;
+
+              $scope.paidSectionEnabled = $scope.draft.parentPostId ? false : true;
+
               resetPaidSectionCostIfNull();
               initEditor($scope.draft.id);
             },    (err: any) => {
@@ -596,22 +593,8 @@ export default class EditorCtrl {
             });
     };
 
-    const loadNewPostDraft = () => {
-      $http.post(`${API_URL}/draft`, {})
-          .then((response) => {
-            $scope.draft = response.data;
-            resetPaidSectionCostIfNull();
-            initEditor($scope.draft.id);
-          },    (err: any) => {
-            console.log(err);
-          });
-    };
+    loadPostDraft(postId);
 
-    if (editingMode === "writeFresh") {
-      loadNewPostDraft();
-    } else {
-      loadPostDraft(postId);
-    }
   }
 
   private async initTippy() {

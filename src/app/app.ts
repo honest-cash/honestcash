@@ -4,7 +4,7 @@ import "./styles/profile.css";
 import "./styles/post.css";
 import "./styles/feed.css";
 
-// import angular from "angular";
+import angular from 'angular';
 import angularUiRouter from "angular-ui-router";
 import ngInfiniteScroll from  "ng-infinite-scroll";
 import ProfileCtrl from "./controllers/ProfileCtrl";
@@ -13,6 +13,7 @@ import FeedsCtrl from "./controllers/FeedsCtrl";
 import PostsCtrl from "./controllers/PostsCtrl";
 import DraftsCtrl from "./controllers/DraftsCtrl";
 import NotifsCtrl from "./controllers/NotifsCtrl";
+import SettingsCtrl from "./controllers/SettingsCtrl";
 import routing from "../core/config/routing";
 import http from "../core/config/http";
 import stateConfig from "./stateConfig";
@@ -62,6 +63,7 @@ angular.module("hashtag-app", [
 .controller("feedsController", FeedsCtrl)
 .controller("draftsController", DraftsCtrl)
 .controller("postsCtrl", PostsCtrl)
+.controller("settingsCtrl", SettingsCtrl)
 .controller("notifsCtrl", NotifsCtrl)
 
 .run(["$rootScope", runs.initBCHWallet])

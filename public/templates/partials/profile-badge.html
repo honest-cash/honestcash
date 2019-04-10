@@ -49,6 +49,14 @@
     </a>
   </li>
   <li>
+    <a
+      ng-href="/settings"
+      target="_self"
+    >
+      settings
+    </a>
+  </li>
+  <li>
     <a ng-if="!simpleWallet" ui-sref="wallet.create()">connect wallet</a>
     <a ng-if="simpleWallet" ui-sref="wallet.create()">my wallet</a>
   </li>

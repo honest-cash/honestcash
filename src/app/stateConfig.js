@@ -63,6 +63,14 @@ export default function state($stateProvider, $urlRouterProvider) {
         isLoggedIn: redirectIfNotLoggedIn
       }
     })
+    .state("vicigo.settings", {
+      url: "/settings",
+      templateUrl: "/templates/settings.html",
+      controller: "settingsCtrl",
+      resolve: {
+        isLoggedIn: redirectIfNotLoggedIn
+      }
+    })
     .state("vicigo.posts", {
       url: "/posts",
       templateUrl: "/templates/posts.html",
