@@ -93,6 +93,11 @@
                 my posts
               </a>
             </li>
+            <li class="visible-xs" ng-if="user.id">
+              <a ng-href="/settings" target="_self">
+                settings
+              </a>
+            </li>
 
             <li class="visible-xs" ng-if="user.id" role="menuitem">
               <a ng-if="!simpleWallet" ui-sref="wallet.create()">connect wallet</a>
