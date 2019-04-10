@@ -203,9 +203,15 @@ export default class EditorCtrl {
     };
 
     $scope.setPaidSectionCost = async (currency) => {
+      const inputBCH = (<HTMLInputElement>document.getElementById("paidSectionCostInBCH"));
+      const inputUSD = (<HTMLInputElement>document.getElementById("paidSectionCostInUSD"));
       let cost = currency === "bch" ?
-        (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber :
-        (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber;
+        inputBCH ?
+          inputBCH.valueAsNumber :
+          0 :
+        inputUSD ?
+          inputUSD.valueAsNumber :
+          0;
       if (currency === "bch") {
         if (cost > DEFAULT_PAID_SECTION_COST_MAX) {
           cost = 1;
@@ -213,7 +219,7 @@ export default class EditorCtrl {
         }
         const { usd } = await this.walletService.convertBCHtoUSD(cost);
         // the following line is due to bug in firefox
-        (<HTMLInputElement>document.getElementById("paidSectionCostInUSD")).valueAsNumber = usd;
+        inputUSD.valueAsNumber = usd;
         $scope.draft.paidSectionCost = cost;
         $scope.paidSectionCostInUSD = usd;
         this.scopeService.safeApply($scope);
@@ -221,12 +227,12 @@ export default class EditorCtrl {
         const { bch } = await this.walletService.convertUSDtoBCH(cost);
         if (bch > DEFAULT_PAID_SECTION_COST_MAX) {
           $scope.draft.paidSectionCost = 1;
-          (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber = 1;
+          inputBCH.valueAsNumber = 1;
           this.scopeService.safeApply($scope);
           return $scope.setPaidSectionCost("bch");
         }
         // the following line is due to bug in firefox
-        (<HTMLInputElement>document.getElementById("paidSectionCostInBCH")).valueAsNumber = bch;
+        inputBCH.valueAsNumber = bch;
         $scope.paidSectionCostInUSD = cost;
         $scope.draft.paidSectionCost = bch;
       }
@@ -646,6 +652,8 @@ export default class EditorCtrl {
       $http.get(url)
             .then((response) => {
               $scope.draft = response.data;
+              $scope.draft.hasPaidSection = $scope.draft.paidSectionCost &&
+                $scope.draft.paidSectionLinebreak;
               resetPaidSectionCostIfNull();
               initEditor($scope.draft.id);
             },    (err: any) => {
@@ -672,6 +680,6 @@ export default class EditorCtrl {
   }
 
   private async initTippy() {
-    tippy(".hc-tooltip");
+    tippyJs(".hc-tooltip");
   }
 }
