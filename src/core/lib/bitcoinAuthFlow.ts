@@ -44,7 +44,7 @@ const generateWallet = async (data: IGenerateWalletArgs): Promise<ISimpleWallet>
 
   if (repeatMnemonic !== simpleWallet.mnemonic) {
     await sweetalert({
-      type: "errpr",
+      type: "error",
       title: "Wrong",
       text: "Try again!",
     });
