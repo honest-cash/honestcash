@@ -1,0 +1,68 @@
+<div class="overlay background-content overlay-content">
+  <div class="container">
+    <div class="header">
+      <div class="wrapper">
+        <img class="logo" src="/img/honest-long-logo.png" alt="Honest Logo">
+      </div>
+    </div>
+    <div class="body">
+      <div class="header">
+        <h2 class="title">
+          Sign in to Honest.
+        </h2>
+        <br />
+        <p class="description">Enter your details below</p>
+      </div>
+      <div
+        class="form-wrapper">
+        <div class="form">
+          <input
+            type="text" placeholder="Username" ng-model="welcomeCtrl.data.username">
+          <i class="w-full mx-12text-md opacity-75 font-bold text-red"
+            ng-if="welcomeCtrl.errors.username !== ''">{{welcomeCtrl.errors.username}}</i>
+          <input
+            type="password" placeholder="Password" ng-model="welcomeCtrl.data.password">
+          <i class="w-full mx-12 text-md opacity-75 font-bold text-red"
+            ng-if="welcomeCtrl.errors.password !== ''">{{welcomeCtrl.errors.password}}</i>
+          <p class="forgot-password"><span
+              ng-click="welcomeCtrl.switchMode('reset-password')"
+              class="link">Forgot your
+              password?</span></p>
+
+          <div
+            class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid mx-12 rounded-lg opacity-75"
+            ng-if="welcomeCtrl.errors.general !== ''">
+            <p class="w-full mx-12 text-md opacity-75 mt-4 font-bold text-red">{{welcomeCtrl.errors.general}}</p>
+          </div>
+          <button
+            class="submit-button"
+            ng-disabled="welcomeCtrl.isLoading"
+            ng-click="welcomeCtrl.signup()">{{welcomeCtrl.isLoading ? "Please Wait..." : "Sign In"}}</button>
+          <p class="sign-up">
+            Don't have
+            an account? <a ng-click="welcomeCtrl.switchMode('signup')"
+              class="link" target="_blank">Sign up</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div
+        class="wrapper">
+        <a href="/about"
+          >About</a>
+        <a href="https://honest.cash/honest_cash/frequently-asked-questions"
+          >FAQ</a>
+        <a href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
+          >Transparency</a>
+        <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124"
+          >Terms</a>
+        <a href="https://honest.cash/honest_cash/honestcash-privacy-policy"
+          >Privacy</a>
+        <span
+          class="rights"
+          >&copy;
+          2019 Honest.cash</span>
+      </div>
+    </div>
+  </div>
+</div>

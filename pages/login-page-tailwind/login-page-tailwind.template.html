@@ -1,0 +1,44 @@
+<div class="overlay background-content overlay-content">
+  <link href="/css/tailwind.min.css" media="all" rel="stylesheet" type="text/css" />
+  <div class="h-screen w-screen flex flex-wrap text-white">
+    <div class="flex w-full" style="height: 5vh;">
+      <div class="flex w-full h-full xxxl:p-32 xxl:p-32 xl:p-32  lg:p-16 md:p-8 sm:p-4 xs:p-2">
+        <img class="w-auto h-32" src="/img/honest-long-logo.png" alt="Honest Logo">
+      </div>
+    </div>
+    <div class="flex flex-col flex-wrap w-full items-center justify-center" style="height: 90vh;">
+      <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 pb-8">
+        <h2 class="w-full text-white font-bold text-center text-4xl">
+            Sign in to Honest.
+          </h2>
+          <br />
+          <p class="w-full text-white text-center text-3xl">Enter your details below</p>
+        </div>
+        <div class="flex w-full flex-wrap w-full items-center justify-center xl:p-32 lg:p-16 md:p-8 sm:p-4 xs:p-2 xl:pt-0 lg:pt-0 md:pt-0 sm:pt-0 xs:pt-0">
+          <div class="flex flex-wrap xxxl:w-1/5 xxl:w-1/4 xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 xs:w-full items-center">
+            <input class="w-full mx-12 p-4 bg-white border-2 border-white border-solid font-bold text-black rounded-lg opacity-75" type="text" placeholder="Username" ng-model="welcomeCtrl.data.username">
+            <i class="w-full mx-12text-md opacity-75 font-bold text-red" ng-if="welcomeCtrl.errors.username !== ''">{{welcomeCtrl.errors.username}}</i>
+            <input class="w-full mx-12 p-4 bg-white border-2 border-white border-solid font-bold text-black rounded-lg mt-4 opacity-75" type="password" placeholder="Password" ng-model="welcomeCtrl.data.password">
+            <i class="w-full mx-12 text-md opacity-75 font-bold text-red" ng-if="welcomeCtrl.errors.password !== ''">{{welcomeCtrl.errors.password}}</i>
+            <p class="w-full mx-12 text-md font-bold text-white text-right"><span ng-click="welcomeCtrl.switchMode('reset-password')" class="font-bold text-white hover:text-white underline cursor-pointer" target="_blank">Forgot your password?</span></p>
+    
+            <div class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid mx-12 rounded-lg opacity-75" ng-if="welcomeCtrl.errors.general !== ''">
+              <p class="w-full mx-12 text-md opacity-75 mt-4 font-bold text-red">{{welcomeCtrl.errors.general}}</p>
+            </div>
+            <button class="w-full mx-12 px-24 lg:px-16 sm:px-16 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-6 opacity-75"  ng-disabled="welcomeCtrl.isLoading" ng-click="welcomeCtrl.signup()">{{welcomeCtrl.isLoading ? "Please Wait..." : "Sign In"}}</button>
+            <p class="w-full mx-12 px-16 lg:px-8 sm:px-8 text-center text-white hover:text-white mt-8 cursor-pointer">Don't have an account? <a ng-click="welcomeCtrl.switchMode('signup')" class="font-bold text-white hover:text-white underline" target="_blank">Sign up</a></p>
+          </div>
+        </div>
+    </div>
+    <div class="flex w-full items-end justify-start" style="height: 5vh;">
+        <div class="flex flex-wrap w-full h-full items-end justify-start xs:text-center xxxl:p-32 xxl:px-32 xl:px-32 lg:px-16 md:px-8 sm:px-4 xs:px-2">
+          <a href="/about" class="inline-block xs:block xs:w-full text-white hover:text-white no-underline hover:underline font-semibold">About</a>
+          <a href="https://honest.cash/honest_cash/frequently-asked-questions" class="inline-block xs:block xs:w-full ml-10 xs:ml-0 xs:mt-4 text-white hover:text-white no-underline hover:underline font-semibold">FAQ</a>
+          <a href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129" class="inline-block xs:block xs:w-full ml-10 xs:ml-0 xs:mt-4 text-white hover:text-white no-underline hover:underline font-semibold">Transparency</a>
+          <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" class="inline-block xs:block xs:w-full ml-10 xs:ml-0 xs:mt-4 text-white hover:text-white no-underline hover:underline font-semibold">Terms</a>
+          <a href="https://honest.cash/honest_cash/honestcash-privacy-policy" class="inline-block xs:block xs:w-full ml-10 xs:ml-0 xs:mt-4 text-white hover:text-white no-underline hover:underline font-semibold">Privacy</a>
+          <span class="inline-block xs:block xs:w-full ml-10 xs:ml-0 xs:mt-4 xs:mb-4 text-white hover:text-white font-semibold">&copy; 2019 Honest.cash</span>
+        </div>
+    </div>
+  </div>
+</div>

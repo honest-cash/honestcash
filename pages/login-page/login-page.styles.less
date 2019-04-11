@@ -1,0 +1,197 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+
+  & > .header {
+    width: 100%;
+    display: flex;
+    height: 5vh;
+
+    & > .wrapper {
+      display: flex;
+      padding: 8rem;
+      width: 100%;
+      height: 100%;
+
+      & > .logo {
+        width: auto;
+        height: 8rem;
+        max-width: 100%;
+        border: 0px;
+      }
+    }
+  }
+
+  & > .body {
+    height: 90vh;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    display: flex;
+
+    & > .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+
+      & > .title {
+        width: 100%;
+        color: #fff;
+        font-size: 2.25rem;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      & > p.description {
+        width: 100%;
+        color: #fff;
+        font-size: 1.875rem;
+        text-align: center;
+        margin: .25rem;
+      }
+    }
+
+    & > .form-wrapper {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+
+      & > .form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        width: 20%;
+        /* todo responsive media queries */
+
+        & > input {
+          width: 100%;
+          color: #22292f;
+          padding: 1rem;
+          opacity: .75;
+          margin-left: 3rem;
+          margin-right: 3rem;
+          font-weight: 700;
+          margin-top: .50rem;
+          margin-bottom: .50rem;
+          border-width: 2px;
+          border-style: solid;
+          border-radius: .5rem;
+          border-color: #fff;
+          background-color: #fff;
+        }
+
+        & > .forgot-password {
+          width: 100%;
+          color: #fff;
+          text-align: right;
+          margin-left: 3rem;
+          margin-right: 3rem;
+          font-weight: 700;
+          margin-top: .25rem;
+          margin-bottom: .25rem;
+        }
+
+        & > .submit-button {
+          width: 100%;
+          text-transform: uppercase;
+          color: #fff;
+          padding-left: 6rem;
+          padding-right: 6rem;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
+          opacity: 0.75;
+          margin-top: 1.5rem;
+          margin-left: 3rem;
+          margin-right: 3rem;
+          font-weight: 700;
+          border-width: 2px;
+          border-style: solid;
+          border-radius: .5rem;
+          border-color: #fff;
+          background-color: transparent;
+        }
+
+        & > .sign-up {
+          width: 100%;
+          color: #fff;
+          text-align: center;
+          padding-left: 4rem;
+          padding-right: 4rem;
+          margin-top: 2rem;
+          margin-left: 3rem;
+          margin-right: 3rem;
+          cursor: pointer;
+
+          & > a {
+            text-decoration: underline;
+            color: #fff;
+            font-weight: 700;
+            background-color: transparent;
+          }
+
+          & > a:hover {
+            text-decoration: none;
+          }
+
+        }
+      }
+    }
+  }
+
+  & > .footer {
+    height: 5vh;
+    width: 100%;
+    justify-content: start;
+    align-items: flex-end;
+    display: flex;
+
+    & > .wrapper {
+      padding: 8rem;
+      width: 100%;
+      height: 100%;
+      justify-content: flex-start;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      display: flex;
+
+      & > a:first-of-type {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 600;
+        display: inline-block;
+        background-color: transparent;
+      }
+
+      & > a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 600;
+        display: inline-block;
+        background-color: transparent;
+        margin-left: 2.5rem; 
+      }
+
+      & > a:hover {
+        text-decoration: underline;
+      }
+
+      & > .rights {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 600;
+        display: inline-block;
+        background-color: transparent;
+        margin-left: 2.5rem; 
+      }
+    }
+  }
+}
