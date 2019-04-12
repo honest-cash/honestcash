@@ -1,4 +1,3 @@
-import { IHttpService, IQService, IWindowService } from "angular";
 import { SHA3 } from "sha3";
 import { User } from "../core/models/models";
 export class AuthService {
@@ -19,9 +18,9 @@ export class AuthService {
   public LOCAL_USER = "HC_CASH_USER";
 
   constructor(
-    private $window: IWindowService,
-    private $http: IHttpService,
-    private $q: IQService,
+    private $window: ng.IWindowService,
+    private $http: ng.IHttpService,
+    private $q: ng.IQService,
     private apiFactory,
   ) {}
 
@@ -136,22 +135,5 @@ export class AuthService {
 
   public getAuthToken = () => {
     return this.authToken;
-  }
-
-  public calculatePasswordHash(email: string, password: string): string {
-    return this.calculateSHA3Hash(
-      this.determineMessageForHashing(email, password),
-    );
-  }
-
-  public determineMessageForHashing(salt: string, password: string): string {
-    return `${salt}:${password}`;
-  }
-
-  public calculateSHA3Hash(message: string): string {
-    const hash = new SHA3(512);
-    const passwordHash = hash.update(message).digest("hex");
-
-    return passwordHash;
   }
 }

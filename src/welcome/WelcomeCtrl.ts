@@ -6,6 +6,7 @@ import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
 import ProfileService from "../core/services/ProfileService";
 import ScopeService from "../core/services/ScopeService";
 import { User } from "../core/models/models";
+import { calculatePasswordHash } from "../core/lib/crypto";
 
 declare var SimpleWallet: any;
 declare var grecaptcha: {
@@ -85,7 +86,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   public login = async (data: ILoginForm) => {
     this.isLoading = true;
 
-    const passwordHash = this.authService.calculatePasswordHash(
+    const passwordHash = calculatePasswordHash(
       data.loginemail,
       data.loginpassword,
     );
@@ -205,7 +206,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       return;
     }
 
-    const passwordHash = this.authService.calculatePasswordHash(
+    const passwordHash = calculatePasswordHash(
       data.loginemail,
       data.loginpassword,
     );
@@ -296,7 +297,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     this.isLoading = true;
 
-    const passwordHash = this.authService.calculatePasswordHash(data.email, data.password);
+    const passwordHash = calculatePasswordHash(data.email, data.password);
 
     let authData: any;
 
