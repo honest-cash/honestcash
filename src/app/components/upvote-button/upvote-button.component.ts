@@ -1,23 +1,26 @@
-import './upvote-button.styles.less';
-import template from './upvote-button.template.html';
+import "./upvote-button.styles.less";
+import upvoteButtonTemplateHtml from "./upvote-button.template.html";
 
-import { IGlobalScope } from '../../../core/lib/interfaces';
-import { Post } from '../../../core/models/models';
-import WalletService from '../../../core/services/WalletService';
-import PostService from '../../../core/services/PostService';
-import ScopeService from '../../../core/services/ScopeService';
+import { IGlobalScope } from "../../../core/lib/interfaces";
+import { Post } from "../../../core/models/models";
+import WalletService from "../../../core/services/WalletService";
+import PostService from "../../../core/services/PostService";
+import ScopeService from "../../../core/services/ScopeService";
 
-import * as simpleWalletProvider from '../../../core/lib/simpleWalletProvider';
-import * as upvoteDistribution from '../../../core/lib/upvoteDistribution';
+import qrcode from "qrcode";
 
-declare const angular, toastr, QRCode;
+import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
+import * as upvoteDistribution from "../../../core/lib/upvoteDistribution";
+import { IModalElement } from "../../../core/lib/dependency-interfaces";
+
+declare const toastr;
 
 const defaultOptions = {
   amount: 0.002,
   isDisabled: false,
   isUpvoting: false,
-  loadingText: 'Upvoting...',
-  text: 'Upvote'
+  loadingText: "Upvoting...",
+  text: "Upvote",
 };
 
 interface IScopeUpvoteButtonCtrl extends ng.IScope {
@@ -26,12 +29,12 @@ interface IScopeUpvoteButtonCtrl extends ng.IScope {
 
 class UpvoteButtonController {
   public static $inject = [
-    '$rootScope',
-    '$scope',
-    '$window',
-    'PostService',
-    'WalletService',
-    'ScopeService',
+    "$rootScope",
+    "$scope",
+    "$window",
+    "postService",
+    "walletService",
+    "scopeService",
   ];
 
   private amount: number;
@@ -53,11 +56,11 @@ class UpvoteButtonController {
   }
 
   private ngOnInit() {
-    this.amount = angular.isDefined(this.amount)
+    this.amount = this.amount
       ? this.amount
       : defaultOptions.amount;
-    this.text = angular.isDefined(this.text) ? this.text : defaultOptions.text;
-    this.loadingText = angular.isDefined(this.loadingText)
+    this.text = this.text ? this.text : defaultOptions.text;
+    this.loadingText = this.loadingText
       ? this.loadingText
       : defaultOptions.loadingText;
 
@@ -65,11 +68,11 @@ class UpvoteButtonController {
     this.isUpvoting = defaultOptions.isUpvoting;
     this.isDisabled = !this.$rootScope.user || this.post.userId === this.$rootScope.user.id;
 
-    this.$window.onbeforeunload = event => {
+    this.$window.onbeforeunload = (event) => {
       if (this.isUpvoting) {
         event.preventDefault();
 
-        return 'There is a pending upvote in process. Are you sure you want to leave?';
+        return "There is a pending upvote in process. Are you sure you want to leave?";
       }
     };
   }
@@ -87,25 +90,26 @@ class UpvoteButtonController {
   }
 
   /**
-   * Splits an upvote amount between previous upvotes and saves the upvote reference in Honest database
+   * Splits an upvote amount between previous upvotes
+   * and saves the upvote reference in Honest database
    */
   private async upvote() {
     if (!this.$rootScope.user) {
-      return (location.href = '/signup');
+      return (location.href = "/signup");
     }
 
     if (!this.post.user.addressBCH) {
       toastr.error(
-        'Upvoting is not possible because the author does not have a Bitcoin address to receive'
+        "Upvoting is not possible because the author does not have a Bitcoin address to receive",
       );
       return;
     }
 
     const postId = this.post.id;
 
-    if (this.post.userId == this.$rootScope.user.id) {
+    if (this.post.userId === this.$rootScope.user.id) {
       toastr.error(
-        'Upvoting is not possible because you cannot tip your own posts and responses'
+        "Upvoting is not possible because you cannot tip your own posts and responses",
       );
       return;
     }
@@ -129,17 +133,17 @@ class UpvoteButtonController {
 
     const receivers = upvoteDistribution.determineUpvoteRewards(
       upvotes,
-      this.post.user
+      this.post.user,
     );
 
-    toastr.info('Upvoting...');
+    toastr.info("Upvoting...");
 
-    const distributionInfoEl = document.getElementById('distribution-info');
+    const distributionInfoEl = document.getElementById("distribution-info");
 
-    distributionInfoEl.innerHTML = '';
+    distributionInfoEl.innerHTML = "";
 
-    for (let receiver of receivers) {
-      const el = document.createElement('div');
+    for (const receiver of receivers) {
+      const el = document.createElement("div");
 
       let userHtml;
 
@@ -147,16 +151,16 @@ class UpvoteButtonController {
         userHtml = `<a target="_self" href="/profile/${
           receiver.user.username
         }"><img style="border-radius:50%; width: 23px;" src="${
-          receiver.user.imageUrl ? receiver.user.imageUrl : '/img/avatar.png'
+          receiver.user.imageUrl ? receiver.user.imageUrl : "/img/avatar.png"
         }" /> ${receiver.user.username}</a> ${
-          this.post.userId === receiver.user.id ? '(Author)' : ''
+          this.post.userId === receiver.user.id ? "(Author)" : ""
         }`;
       } else {
         userHtml = `<img style="width: 23px;" src="/img/avatar.png" /> Anonymous`;
       }
 
       el.innerHTML = `${this.satoshiToBch(
-        receiver.amountSat
+        receiver.amountSat,
       )} BCH -> ${userHtml}`;
 
       distributionInfoEl.appendChild(el);
@@ -166,42 +170,42 @@ class UpvoteButtonController {
     // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
     try {
       receivers.push({
-        opReturn: ['0x4801', postId.toString()]
+        opReturn: ["0x4801", postId.toString()],
       });
       tx = await simpleWallet.send(receivers);
     } catch (err) {
-      if (err.message && err.message.indexOf('Insufficient') > -1) {
+      if (err.message && err.message.indexOf("Insufficient") > -1) {
         const addressContainer = document.getElementById(
-          'load-wallet-modal-address'
+          "load-wallet-modal-address",
         ) as HTMLInputElement;
         const legacyAddressContainer = document.getElementById(
-          'load-wallet-modal-legacy-address'
+          "load-wallet-modal-legacy-address",
         ) as HTMLInputElement;
         const qrContainer = document.getElementById(
-          'load-wallet-modal-qr'
+          "load-wallet-modal-qr",
         ) as HTMLDivElement;
 
         addressContainer.value = simpleWallet.cashAddress;
         legacyAddressContainer.value = simpleWallet.legacyAddress;
 
-        qrContainer.innerHTML = '';
-        new QRCode(qrContainer, simpleWallet.cashAddress);
+        qrContainer.innerHTML = "";
+        new qrcode(qrContainer, simpleWallet.cashAddress);
 
         // replace with sweetalert
-        $('#loadWalletModal').modal('show');
+        ($("#loadWalletModal") as IModalElement).modal("show");
 
         this.isUpvoting = false;
         this.scopeService.safeApply(this.$scope, () => {});
 
-        return toastr.warning('Insufficient balance on your BCH account.');
+        return toastr.warning("Insufficient balance on your BCH account.");
       }
 
-      if (err.message && err.message.indexOf('has no matching Script') > -1) {
+      if (err.message && err.message.indexOf("has no matching Script") > -1) {
         this.isUpvoting = false;
         this.scopeService.safeApply(this.$scope, () => {});
 
         return toastr.warning(
-          'Could not find an unspent bitcoin that is big enough'
+          "Could not find an unspent bitcoin that is big enough",
         );
       }
 
@@ -210,15 +214,15 @@ class UpvoteButtonController {
       this.isUpvoting = false;
       this.scopeService.safeApply(this.$scope, () => {});
 
-      return toastr.warning('Error. Try again later.');
+      return toastr.warning("Error. Try again later.");
     }
 
-    $('#tipSuccessModal').modal('show');
+    ($("#tipSuccessModal") as IModalElement).modal("show");
 
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
     const anchorEl = document.getElementById(
-      'bchTippingTransactionUrl'
+      "bchTippingTransactionUrl",
     ) as HTMLAnchorElement;
 
     console.log(`Upvote transaction: ${url}`);
@@ -227,8 +231,8 @@ class UpvoteButtonController {
     anchorEl.href = url;
 
     this.postService.upvote({
-      postId: postId,
-      txId: tx.txid
+      postId,
+      txId: tx.txid,
     });
 
     const { bch, usd } = await this.walletService.getAddressBalances();
@@ -236,7 +240,7 @@ class UpvoteButtonController {
     this.$rootScope.walletBalance = {
       bch,
       usd,
-      isLoading: false
+      isLoading: false,
     };
     this.isUpvoting = false;
     this.scopeService.safeApply(this.$scope, () => {});
@@ -246,15 +250,15 @@ class UpvoteButtonController {
 export default function upvoteButton(): ng.IDirective {
   return {
     controller: UpvoteButtonController,
-    controllerAs: 'upvoteButtonCtrl',
-    restrict: 'E',
+    controllerAs: "upvoteButtonCtrl",
+    restrict: "E",
     scope: {
-      amount: '=?',
-      loadingText: '=?',
-      text: '=?',
-      post: '='
+      amount: "=?",
+      loadingText: "=?",
+      text: "=?",
+      post: "=",
     },
     replace: true,
-    template
+    template: upvoteButtonTemplateHtml,
   };
 }

@@ -1,10 +1,3 @@
-import * as showdown from "showdown";
-
-const converter = new showdown.Converter({
-  simpleLineBreaks: true,
-  noHeaderId: true,
-});
-
 export default class EditorService {
 
   public static $inject = [];
@@ -29,10 +22,10 @@ export default class EditorService {
     const $bodyHtml = $(bodyHtml);
 
     // the html is to replace the body in the editor
-    let _fixedBody = '';
+    let fixedBody = "";
 
-    $bodyHtml.map(i => {
-      const _elem = $bodyHtml[i];
+    $bodyHtml.map((i) => {
+      const elem = $bodyHtml[i];
       const $elem = $($bodyHtml[i]);
 
       // find divs that are inserted by the mediumeditor mediuminsert plugin
@@ -40,26 +33,32 @@ export default class EditorService {
       // showdown only has img inside a p tag
       // we rewrap the div with p tag here
 
-       if ($elem.prop("nodeName") === "DIV" && this.stringIncludes($elem.prop("className"), "medium-insert-images")) {
+      if (
+        $elem.prop("nodeName") === "DIV" &&
+        this.stringIncludes($elem.prop("className"), "medium-insert-images")
+      ) {
         const content = $elem;
-        const img = this.getOuterHtml($(content).find('img'));
+        const img = this.getOuterHtml($(content).find("img"));
         const imgWrapped = `<p>${img}</p>`;
-        _fixedBody += imgWrapped;
-      } else if (_elem.nodeName === "P" && $elem.prop("childNodes").length === 1) {
-        //check for tags that only has br tags in it
+        fixedBody += imgWrapped;
+      } else if (elem.nodeName === "P" && $elem.prop("childNodes").length === 1) {
+        // check for tags that only has br tags in it
         if ($elem.children().first().prop("nodeName") !== "BR") {
-          _fixedBody += this.getOuterHtml($elem);
+          fixedBody += this.getOuterHtml($elem);
         }
-      } else if (!this.stringIncludes(_elem.nodeName, "#text") && !this.stringIncludes(_elem.nodeName, "#comment")){
+      } else if (
+        !this.stringIncludes(elem.nodeName, "#text") &&
+        !this.stringIncludes(elem.nodeName, "#comment")
+      ) {
         // we form our last new html
-        _fixedBody += this.getOuterHtml($elem);
+        fixedBody += this.getOuterHtml($elem);
       }
 
     });
 
     // elements and html is returned as tuple
-    this.fixedBody = _fixedBody;
-    return _fixedBody;
+    this.fixedBody = fixedBody;
+    return fixedBody;
   }
 
   public getContextElement = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {
@@ -76,10 +75,8 @@ export default class EditorService {
   }
 
   public getOuterHtml = (element) => {
-    if (element[0]) {
-      element = element[0];
-    }
-    return $(element).prop("outerHTML");
+    const child = element[0] ? element[0] : element;
+    return $(child).prop("outerHTML");
   }
 
   public getSectionHtml = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {

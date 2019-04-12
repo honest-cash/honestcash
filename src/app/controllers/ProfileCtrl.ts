@@ -1,17 +1,14 @@
-import FeedService from "../../core/services/FeedService";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
+import RelsService from "../../core/services/RelsService";
 
 export default class ProfileCtrl {
   public static $inject = [
     "$rootScope",
-    "$state",
     "$scope",
-    "$location",
-    "FeedService",
-    "RelsService",
-    "PostService",
-    "ScopeService",
+    "relsService",
+    "postService",
+    "scopeService",
     "profile",
   ];
 
@@ -29,11 +26,8 @@ export default class ProfileCtrl {
 
   constructor(
       private $rootScope,
-      private $state,
       private $scope,
-      private $location,
-      private feedService: FeedService,
-      private RelsService,
+      private relsService: RelsService,
       private postService: PostService,
       private scopeService: ScopeService,
       private profile,
@@ -41,7 +35,7 @@ export default class ProfileCtrl {
     this.fetchFeeds({});
 
     if (this.$rootScope.user) {
-      this.RelsService.showFollowing(this.$rootScope.user.id, (following) => {
+      this.relsService.showFollowing(this.$rootScope.user.id, (following) => {
         this.following = following.map(followingPerson => followingPerson.id);
         this.scopeService.safeApply(this.$scope, () => {});
       });
@@ -50,42 +44,48 @@ export default class ProfileCtrl {
 
   public fetchFeeds(params) {
     this.isLoading = true;
-    params = params ? params : {};
+    const parameters = params || {};
 
     this.showProfileTab = "feeds";
 
-    this.postService.getPosts({
-      includeResponses: true,
-      status: "published",
-      orderBy: "publishedAt",
-      page: params.page ? params.page : this.page,
-      userId: this.profile.id,
-    },                        data => {
-      if (!data) {
-        return;
-      }
+    this.postService.getPosts(
+      {
+        includeResponses: true,
+        status: "published",
+        orderBy: "publishedAt",
+        page: parameters.page ? parameters.page : this.page,
+        userId: this.profile.id,
+      },
+      (data) => {
+        if (!data) {
+          return;
+        }
 
-      if (params.page === 0) {
-        this.postsAll = data;
-      } else {
-        data.forEach((feed) => {
-          this.postsAll.push(feed);
-        });
-      }
+        if (parameters.page === 0) {
+          this.postsAll = data;
+        } else {
+          data.forEach((feed) => {
+            this.postsAll.push(feed);
+          });
+        }
 
-      if (data.length < this.limit) {
-        this.postsAvailable = false;
-      } else {
-        this.postsAvailable = true;
-      }
+        if (data.length < this.limit) {
+          this.postsAvailable = false;
+        } else {
+          this.postsAvailable = true;
+        }
 
-      this.isLoading = false;
+        this.isLoading = false;
 
-      this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ? !_.parentPostId : _.parentPostId);
-    });
+        this.feeds = this.postsAll.filter(_ => this.showProfileTab === "feeds" ?
+          !_.parentPostId :
+           _.parentPostId,
+        );
+      },
+    );
   }
 
-  public showFeeds(tab) {
+  public showFeeds() {
     this.showProfileTab = "feeds";
 
     this.feeds = this.postsAll.filter(_ => !_.parentPostId);
@@ -101,22 +101,22 @@ export default class ProfileCtrl {
     this.scopeService.safeApply(this.$scope, () => {});
   }
 
-  public showFollowers = (tab) => {
+  public showFollowers = () => {
     this.followGuys = [];
 
     this.showProfileTab = "followers";
 
-    this.RelsService.showFollowers(this.profile.id, (rFollowers) => {
+    this.relsService.showFollowers(this.profile.id, (rFollowers) => {
       this.followGuys = rFollowers;
     });
   }
 
-  public showFollowing = (tab) => {
+  public showFollowing = () => {
     this.followGuys = [];
 
     this.showProfileTab = "following";
 
-    this.RelsService.showFollowing(this.profile.id, (rFollowing) => {
+    this.relsService.showFollowing(this.profile.id, (rFollowing) => {
       this.followGuys = rFollowing;
     });
   }

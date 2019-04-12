@@ -1,6 +1,8 @@
-import { IGlobalScope } from '../../core/lib/interfaces';
-import ScopeService from '../../core/services/ScopeService';
-import WalletService from '../../core/services/WalletService';
+import { IGlobalScope } from "../../core/lib/interfaces";
+import ScopeService from "../../core/services/ScopeService";
+import WalletService from "../../core/services/WalletService";
+import qrcode from "qrcode";
+import UserPropsService from "../services/UserPropsService";
 
 interface IScopeMainCtrl extends ng.IScope {
   mouseEnterAddress: any;
@@ -10,11 +12,12 @@ interface IScopeMainCtrl extends ng.IScope {
 
 export default class MainCtrl {
   public static $inject = [
-    '$rootScope',
-    '$scope',
-    '$state',
-    'ScopeService',
-    'WalletService'
+    "$rootScope",
+    "$scope",
+    "$state",
+    "scopeService",
+    "walletService",
+    "userPropsService",
   ];
 
   constructor(
@@ -22,42 +25,37 @@ export default class MainCtrl {
     private $scope: IScopeMainCtrl,
     private $state: ng.ui.IStateService,
     private scopeService: ScopeService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private userPropsService: UserPropsService,
   ) {
-    $scope.$on('$viewContentLoaded', async () => {
+    $scope.$on("$viewContentLoaded", async () => {
       const { bch, usd } = await this.walletService.getAddressBalances();
 
       $rootScope.walletBalance = {
         bch,
         usd,
-        isLoading: false
+        isLoading: false,
       };
     });
 
     const mouseEnterAddress = (className, address) => {
       const container = document.getElementsByClassName(className)[0];
 
-      container.innerHTML = '';
+      container.innerHTML = "";
 
-      new QRCode(container, address);
+      new qrcode(container, address);
     };
 
-    const mouseLeaveAddress = className => {
+    const mouseLeaveAddress = (className) => {
       const container = document.getElementsByClassName(className)[0];
-      container.innerHTML = '';
+      container.innerHTML = "";
     };
 
     $scope.mouseEnterAddress = mouseEnterAddress;
     $scope.mouseLeaveAddress = mouseLeaveAddress;
 
     $scope.checkRecoveryBackup = () => {
-      if (this.$rootScope.user && this.$rootScope.user.userProperties && this.$rootScope.user.userProperties.length) {
-        const recoveryBackedUpProp = this.$rootScope.user.userProperties.find(p => p.propKey === "recoveryBackedUp");
-        return !recoveryBackedUpProp || !JSON.parse(recoveryBackedUpProp.propValue) ? true : false;
-      } else if (!this.$rootScope.user.userProperties) {
-        return false;
-      }
-      return true;
-    }
+      return this.userPropsService.checkRecoveryBackup();
+    };
   }
 }

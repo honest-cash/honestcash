@@ -7,7 +7,7 @@ let wallet = null;
 export const defaultHdPath = "m/44'/0'/0'/0/0";
 
 export const set = (lWallet: ISimpleWallet) => {
-    wallet = lWallet;
+  wallet = lWallet;
 };
 
 export const clean = () => {
@@ -24,20 +24,22 @@ export const saveLocally = (simpleWallet: ISimpleWallet) => {
 };
 
 export const loadWallet = (mnemonic?: string, password?: string) => {
+  // tslint:disable-next-line
   let HdPath;
+  let providedMnemonic;
 
   if (!mnemonic) {
-    mnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
+    providedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
     HdPath = localStorage.getItem("HC_BCH_HD_PATH") || defaultHdPath;
   }
 
-  if (!mnemonic) {
+  if (!providedMnemonic) {
     return;
   }
 
-  const simpleWallet: ISimpleWallet = new SimpleWallet(mnemonic, {
+  const simpleWallet: ISimpleWallet = new SimpleWallet(providedMnemonic, {
     HdPath,
-    password
+    password,
   });
 
   saveLocally(simpleWallet);
@@ -48,5 +50,5 @@ export const loadWallet = (mnemonic?: string, password?: string) => {
 };
 
 export const get = () => {
-    return wallet;
+  return wallet;
 };

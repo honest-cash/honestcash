@@ -30,7 +30,7 @@ const determineUpvoteRewards = (upvotes, author) => {
             upvoteId: upvote.id,
             user: upvote.user,
             address: upvote.user.addressBCH,
-            amountSat: null
+            amountSat: null,
         });
        
         const upvoteIndex = Math.pow(2, payoutIndex) - 1;

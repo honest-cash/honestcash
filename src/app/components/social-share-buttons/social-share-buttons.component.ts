@@ -1,6 +1,6 @@
-import './social-share-buttons.styles.less';
-import template from './social-share-buttons.template.html';
-import {Post} from '../../../core/models/models'
+import "./social-share-buttons.styles.less";
+import socialShareButtonsTemplateHtml from "./social-share-buttons.template.html";
+import { Post } from "../../../core/models/models";
 
 interface IScopeSocialShareButtonsCtrl extends ng.IScope {
   post: Post;
@@ -8,11 +8,11 @@ interface IScopeSocialShareButtonsCtrl extends ng.IScope {
 
 class SocialShareButtonsController {
   public static $inject = [
-    "$scope"
+    "$scope",
   ];
 
   constructor(
-    private $scope: IScopeSocialShareButtonsCtrl
+    private $scope: IScopeSocialShareButtonsCtrl,
   ) {
     this.ngOnInit();
   }
@@ -28,11 +28,11 @@ class SocialShareButtonsController {
 export default function socialSharesButton(): ng.IDirective {
   return {
     controller: SocialShareButtonsController,
-    controllerAs: 'socialShareButtonsCtrl',
-    restrict: 'E',
+    controllerAs: "socialShareButtonsCtrl",
+    restrict: "E",
     scope: {
-      "post": "=",
+      post: "=",
     },
-    template
+    template: socialShareButtonsTemplateHtml,
   };
 }

@@ -1,7 +1,7 @@
 
-import swal from "sweetalert";
-import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
+import sweetalert from "sweetalert";
+import tippyJs from "tippy.js";
+import "tippy.js/dist/tippy.css";
 import toastr from "../../core/config/toastr";
 import { IGlobalScope } from "../../core/lib/interfaces";
 import { Post } from "../../core/models/models";
@@ -10,7 +10,7 @@ import ScopeService from "../../core/services/ScopeService";
 
 enum TabStatus {
   drafts = "drafts",
-  published = "published"
+  published = "published",
 }
 
 interface IScopePostsCtrl extends ng.IScope {
@@ -33,7 +33,7 @@ interface IScopePostsCtrl extends ng.IScope {
 
 export default class PostsCtrl {
   public static $inject = [
-    "$rootScope", "$scope", "$timeout", "PostService", "ScopeService"
+    "$rootScope", "$scope", "$timeout", "postService", "scopeService",
   ];
 
   constructor(
@@ -41,7 +41,7 @@ export default class PostsCtrl {
     private $scope: IScopePostsCtrl,
     private $timeout: ng.ITimeoutService,
     private postService: PostService,
-    private scopeService: ScopeService
+    private scopeService: ScopeService,
   ) {
     this.$scope.isLoading = true;
     this.$scope.isLoadingMore = false;
@@ -51,7 +51,6 @@ export default class PostsCtrl {
     this.$scope.limit = 20;
     this.$scope.postsAvailable = true;
     this.$scope.currentTab = TabStatus.published;
-    this.$scope.deletePost = (id: number) => this.deletePost(id);
     this.$scope.switchTab = (tab: TabStatus) => this.switchTab(tab);
     this.$scope.displayPostBody = (html: string) => this.displayPostBody(html);
     this.$scope.loadMore = () => this.loadMore();
@@ -76,9 +75,9 @@ export default class PostsCtrl {
         orderBy: "publishedAt",
         page: this.$scope.page,
         status: "published",
-        userId: this.$rootScope.user.id
-      }, (data) => {
-
+        userId: this.$rootScope.user.id,
+      },
+      (data) => {
         if (!data) {
           return;
         }
@@ -86,7 +85,7 @@ export default class PostsCtrl {
         if (this.$scope.page === 0) {
           this.$scope.posts = data;
         } else {
-          data.forEach(post => {
+          data.forEach((post) => {
             this.$scope.posts.push(post);
           });
         }
@@ -103,7 +102,7 @@ export default class PostsCtrl {
         this.scopeService.safeApply(this.$scope, () => {});
 
         this.initTippy();
-      }
+      },
     );
   }
 
@@ -111,47 +110,19 @@ export default class PostsCtrl {
     this.$scope.currentTab = tab;
   }
 
-  public async deletePost(id: number) {
-    this.$scope.isDeleting = true;
-
-    const confirmationResult = await swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this post!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    });
-
-    if (confirmationResult) {
-      const deleteResult = await this.postService.deletePost(id);
-
-      if (deleteResult.status === 200) {
-        this.$scope.posts = this.$scope.posts.filter(f => f.id !== id);
-        toastr.success("Your post has been deleted");
-      } else {
-        toastr.error("There was an error while deleting your post")
-      }
-    } else {
-      toastr.info("Your post has not been deleted");
-    }
-
-    this.$scope.isDeleting = false;
-
-    this.scopeService.safeApply(this.$scope);
-  }
-
   public displayPostBody(html: string): string {
-    if (html.length > 400) {
-      html = html.substring(0, 400) + "...";
+    let truncatedHtml = html;
+    if (truncatedHtml.length > 400) {
+      truncatedHtml = `${truncatedHtml.substring(0, 400)}...`;
     }
 
-    return this.postService.displayHTML(html);
+    return this.postService.displayHTML(truncatedHtml);
   }
 
   private async initTippy() {
-    //Timeout is somehow required
+    // Timeout is somehow required
     this.$timeout(() => {
-      tippy('.hc-tooltip');
+      tippyJs(".hc-tooltip");
     });
   }
 }

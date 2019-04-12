@@ -4,7 +4,7 @@ import "./styles/profile.css";
 import "./styles/post.css";
 import "./styles/feed.css";
 
-// import angular from 'angular';
+import angular from 'angular';
 import angularUiRouter from "angular-ui-router";
 import ngInfiniteScroll from  "ng-infinite-scroll";
 import ProfileCtrl from "./controllers/ProfileCtrl";
@@ -13,6 +13,7 @@ import FeedsCtrl from "./controllers/FeedsCtrl";
 import PostsCtrl from "./controllers/PostsCtrl";
 import DraftsCtrl from "./controllers/DraftsCtrl";
 import NotifsCtrl from "./controllers/NotifsCtrl";
+import SettingsCtrl from "./controllers/SettingsCtrl";
 import routing from "../core/config/routing";
 import http from "../core/config/http";
 import stateConfig from "./stateConfig";
@@ -29,7 +30,6 @@ import "../core/services";
 import "./components";
 
 import "../core/config/toastr";
-import SettingsCtrl from "./controllers/SettingsCtrl";
 
 angular.module("hashtag-app", [
   angularUiRouter,
@@ -49,9 +49,9 @@ angular.module("hashtag-app", [
 
 .controller("appController", [
   "$scope",
-  "AuthService",
-  function ($scope, AuthService: AuthService) {
-	  $scope.AUTH_TOKEN = AuthService.getAuthToken();
+  "authService",
+  ($scope, authService: AuthService) => {
+    $scope.AUTH_TOKEN = authService.getAuthToken();
   },
 ])
 
@@ -68,6 +68,6 @@ angular.module("hashtag-app", [
 
 .run(["$rootScope", runs.initBCHWallet])
 
-.run(["$rootScope", "$state", "AuthService", runs.onStateChange])
+.run(["$rootScope", "$state", "authService", runs.onStateChange])
 
-.run(["API_URL", "AuthService", runs.initProfileUpload]);
+.run(["API_URL", "authService", runs.initProfileUpload]);

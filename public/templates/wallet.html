@@ -78,7 +78,7 @@
             <div style="margin-top:15px;" class="form-group">
                 <label for="exampleInputEmail1">Private Key (WIF)</label>
                 <input readonly ng-model="privateKey" class="form-control" aria-describedby="emailHelp" />
-                <small>Derivation path: {{HdPath}}</small>
+                <small>Derivation path: {{hdPath}}</small>
             </div>
 
             <div>
@@ -204,7 +204,7 @@
                   <small class="form-text text-muted">The following derivation path will be used: m/44'/0'/0'/0/0 for generating the keypair.</small>
                 </div>
 
-                <button ng-if="canConnectMnemonic" ng-click="connect(mnemonic, HdPath)" type="submit" class="btn btn-primary btn-lg">Connect</button>
+                <button ng-if="canConnectMnemonic" ng-click="connect(mnemonic, hdPath)" type="submit" class="btn btn-primary btn-lg">Connect</button>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <p style="margin-top: 15px;">Upvote content and receive tips using the private key of your existing Bitcoin Cash account.</p>
@@ -220,7 +220,7 @@
                     <small class="form-text text-muted">Your keys will never leave your browser.</small>
                 </div>
 
-                <button ng-if="privateKey" ng-click="connect(privateKey, HdPath)" type="submit" class="btn btn-primary">Connect</button>
+                <button ng-if="privateKey" ng-click="connect(privateKey, hdPath)" type="submit" class="btn btn-primary">Connect</button>
             </div>
         </div>
     </div>

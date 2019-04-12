@@ -1,4 +1,4 @@
-import tippy from "tippy.js";
+import tippyJs from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import { IGlobalScope } from "../../core/lib/interfaces";
 import FeedService from "../../core/services/FeedService";
@@ -35,11 +35,11 @@ export default class FeedsCtrl {
     "$stateParams",
     "$location",
     "$timeout",
-    "FeedService",
-    "PostService",
-    "HashtagService",
-    "ProfileService",
-    "ScopeService"
+    "feedService",
+    "postService",
+    "hashtagService",
+    "profileService",
+    "scopeService",
   ];
 
   constructor(
@@ -52,7 +52,7 @@ export default class FeedsCtrl {
     private postService: PostService,
     private hashtagService: HashtagService,
     private profileService: ProfileService,
-    private scopeService: ScopeService
+    private scopeService: ScopeService,
   ) {
     this.$scope.isLoading = true;
     this.$scope.feeds = [];
@@ -61,8 +61,13 @@ export default class FeedsCtrl {
     this.$scope.postsAvailable = true;
     this.$scope.hashtagFollowed = false;
     this.$scope.hashtag = $stateParams.hashtag;
-    this.$scope.feedType = $stateParams.feedType || (this.$scope.hashtag ? $stateParams.feedType || "top" : "userfeed");
-    this.$scope.feedScope = this.$scope.hashtag ? "all-time" : this.$location.search()['feedScope'] || "last-month";
+    this.$scope.feedType = $stateParams.feedType ||
+      (this.$scope.hashtag ?
+        $stateParams.feedType || "top" :
+        "userfeed");
+    this.$scope.feedScope = this.$scope.hashtag ?
+      "all-time" :
+      this.$location.search()["feedScope"] || "last-month";
 
     this.$scope.sortType = "new";
     this.$scope.recommendedHashtags = [];
@@ -89,10 +94,9 @@ export default class FeedsCtrl {
 
     this.fetchFeeds();
 
-
-    this.$rootScope.$on('$locationChangeSuccess', (event) => {
-      if(this.$location.search()['feedScope']) {
-        this.$scope.feedScope = this.$location.search()['feedScope'];
+    this.$rootScope.$on("$locationChangeSuccess", (event) => {
+      if (this.$location.search()["feedScope"]) {
+        this.$scope.feedScope = this.$location.search()["feedScope"];
         this.scopeService.safeApply($scope, () => {});
         this.fetchFeeds(true);
       }
@@ -122,7 +126,7 @@ export default class FeedsCtrl {
       page: this.$scope.page,
       followerId: undefined,
       orderBy: undefined,
-      includeResponses: undefined
+      includeResponses: undefined,
     };
 
     if (this.$scope.feedType === "userfeed") {
@@ -167,7 +171,7 @@ export default class FeedsCtrl {
   private async initTippy() {
     // Timeout is somehow required
     this.$timeout(() => {
-      tippy(".user-follower-count");
+      tippyJs(".user-follower-count");
     });
   }
 }

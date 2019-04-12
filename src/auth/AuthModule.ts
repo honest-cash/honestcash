@@ -30,7 +30,7 @@ angular.module("vqAuth", [])
     responseError: (response) => {
       $rootScope.activeCalls -= 1;
 
-      if (response.status == 401) {
+      if (response.status === 401) {
         $rootScope.$broadcast("notAuthenticated");
       }
 
@@ -58,7 +58,7 @@ angular.module("vqAuth", [])
   };
 }])
 
-.service("AuthService", ["$window", "$http", "$q", "apiFactory", AuthService])
-.run(["AuthService", function (authService: AuthService) {
+.service("authService", ["$window", "$http", "$q", "apiFactory", AuthService])
+.run(["authService", function (authService: AuthService) {
   authService.loadUserCredentials();
 }]);

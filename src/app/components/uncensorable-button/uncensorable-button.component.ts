@@ -1,7 +1,7 @@
 import * as lzutf8 from "lzutf8";
 
 import "./uncensorable-button.styles.less";
-import template from "./uncensorable-button.template.html";
+import uncensorableButtonTemplateHtml from "./uncensorable-button.template.html";
 
 import { IGlobalScope } from "../../../core/lib/interfaces";
 import { Post } from "../../../core/models/models";
@@ -10,6 +10,7 @@ import PostService from "../../../core/services/PostService";
 import ScopeService from "../../../core/services/ScopeService";
 
 import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
+import { IModalElement } from "../../../core/lib/dependency-interfaces";
 
 declare const toastr;
 
@@ -22,9 +23,9 @@ class UncensorableButtonController {
     "$rootScope",
     "$scope",
     "$window",
-    "PostService",
-    "WalletService",
-    "ScopeService",
+    "postService",
+    "walletService",
+    "scopeService",
   ];
 
   private isUncensoring: boolean;
@@ -51,7 +52,7 @@ class UncensorableButtonController {
       )
     );
 
-    this.$window.onbeforeunload = event => {
+    this.$window.onbeforeunload = (event) => {
       if (this.isUncensoring) {
         event.preventDefault();
 
@@ -75,92 +76,95 @@ class UncensorableButtonController {
     /**
      * Uploads a blog post onto Bitcoin blockchain and saves a refernece in Honest database
      */
-    private async uncensor() {
-      this.isUncensoring = true;
-      this.scopeService.safeApply(this.$scope, () => {});
+  private async uncensor() {
+    this.isUncensoring = true;
+    this.scopeService.safeApply(this.$scope, () => {});
 
-      const post = this.post;
+    const post = this.post;
 
-      const simpleWallet = simpleWalletProvider.get();
-      const json = {
-        author: post.user.username,
-        body: post.bodyMD,
-        title: post.title
-      };
+    const simpleWallet = simpleWalletProvider.get();
+    const json = {
+      author: post.user.username,
+      body: post.bodyMD,
+      title: post.title,
+    };
 
-      const compressedJson = lzutf8.compress(JSON.stringify(json), {
-        outputEncoding: "Base64"
-      });
+    const compressedJson = lzutf8.compress(JSON.stringify(json), {
+      outputEncoding: "Base64",
+    });
 
-      console.log("Base64 Story: " + compressedJson);
+    console.log(`Base64 Story: ${compressedJson}`);
 
-      if (this.byteCount(compressedJson) > 5) {
-        this.isUncensoring = false;
-        this.scopeService.safeApply(this.$scope);
-        return toastr.warning("The story is too long! We are working on it!");
-      }
+    if (this.byteCount(compressedJson) > 5) {
+      this.isUncensoring = false;
+      this.scopeService.safeApply(this.$scope);
+      return toastr.warning("The story is too long! We are working on it!");
+    }
 
-      $("#uncensoredResultModal").modal({
+    ($("#uncensoredResultModal") as IModalElement).modal({
         // backdrop: "static"
-      });
+    });
 
-      document.getElementById("uncensoredResultLoading").style.display = "block";
-      document.getElementById("uncensoredResultSuccess").style.display = "none";
+    document.getElementById("uncensoredResultLoading").style.display = "block";
+    document.getElementById("uncensoredResultSuccess").style.display = "none";
 
       // users with connected BCH accounts
-      if (simpleWallet) {
-        let res;
+    if (simpleWallet) {
+      let res;
 
-        try {
-          const postTitle = post.title.length > 75 ? post.title.slice(0, 75) + "..." : post.title;
+      try {
+        const postTitle = post.title.length > 75 ? `${post.title.slice(0, 75)}...` : post.title;
 
-          res = await simpleWallet.upload(compressedJson, {
-            ext: "json.lzutf8",
-            extUri: `https://honest.cash/post/${post.id}`,
-            title: `${postTitle} by ${post.user.username} | Honest Cash`
-          });
-        } catch (err) {
-          $("#uncensoredResultModal").modal("hide");
-
-          this.isUncensoring = false;
-          this.scopeService.safeApply(this.$scope, () => {});
-
-          if (err.message.indexOf("mempool") > -1) {
-              return toastr.warning("The story is too long! We are working on it!");
-          }
-
-          return toastr.warning("Ensure that you have some BCH balance in your wallet to make the story uncensorable");
-        }
-
-        document.getElementById("uncensoredResultLoading").style.display = "none";
-        document.getElementById("uncensoredResultSuccess").style.display = "block";
-
-        const fileId = res.fileId;
-
-        console.log(res);
-        console.log("Story saved for all times on BCH: " + fileId);
-
-        const inputEl = document.getElementById("bitcoinFileId") as HTMLInputElement;
-
-        inputEl.value = fileId;
-
-        this.postService.createRef({
-            extId: fileId,
-            postId: post.id
+        res = await simpleWallet.upload(compressedJson, {
+          ext: "json.lzutf8",
+          extUri: `https://honest.cash/post/${post.id}`,
+          title: `${postTitle} by ${post.user.username} | Honest Cash`,
         });
+      } catch (err) {
+        ($("#uncensoredResultModal") as IModalElement).modal("hide");
 
-        const {bch, usd} = await this.walletService.getAddressBalances();
-
-        this.$rootScope.walletBalance = {
-          bch,
-          usd,
-          isLoading: false
-        };
         this.isUncensoring = false;
         this.scopeService.safeApply(this.$scope, () => {});
 
+        if (err.message.indexOf("mempool") > -1) {
+          return toastr.warning("The story is too long! We are working on it!");
+        }
+
+        return toastr.warning(
+          `Ensure that you have some BCH balance` +
+          `in your wallet to make the story uncensorable`,
+          );
       }
+
+      document.getElementById("uncensoredResultLoading").style.display = "none";
+      document.getElementById("uncensoredResultSuccess").style.display = "block";
+
+      const fileId = res.fileId;
+
+      console.log(res);
+      console.log(`Story saved for all times on BCH: ${fileId}`);
+
+      const inputEl = document.getElementById("bitcoinFileId") as HTMLInputElement;
+
+      inputEl.value = fileId;
+
+      this.postService.createRef({
+        extId: fileId,
+        postId: post.id,
+      });
+
+      const { bch, usd } = await this.walletService.getAddressBalances();
+
+      this.$rootScope.walletBalance = {
+        bch,
+        usd,
+        isLoading: false,
+      };
+      this.isUncensoring = false;
+      this.scopeService.safeApply(this.$scope, () => {});
+
     }
+  }
 }
 
 export default function uncensorableButton(): ng.IDirective {
@@ -172,8 +176,8 @@ export default function uncensorableButton(): ng.IDirective {
       amount: "=?",
       loadingText: "=?",
       text: "=?",
-      post: "="
+      post: "=",
     },
-    template
+    template: uncensorableButtonTemplateHtml,
   };
 }

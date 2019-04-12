@@ -12,60 +12,7 @@ import PostService from "../core/services/PostService";
 import EditorService from "./services/EditorService";
 import WalletService, { ICurrencyConversion } from "../core/services/WalletService";
 import ScopeService from "../core/services/ScopeService";
-
-declare let MediumEditor;
-declare let tippy;
-
-interface IModalElement extends JQuery<HTMLElement> {
-  modal: (action?: string) => void;
-}
-
-interface IMediumInsertPlugin extends JQuery<HTMLElement> {
-  mediumInsert: (options: {
-    addons: {
-      embeds: boolean;
-      images: {
-        autoGrid: number;
-        captionPlaceholder: string;
-        captions: boolean;
-        deleteMethod: string | Function | null;
-        deleteScript: string | Function | null;
-        fileDeleteOptions: any;
-        formData: any;
-        label: string;
-        uploadScript: string | Function | null;
-        preview: boolean;
-        fileUploadOptions: {
-          url: string;
-          acceptFileTypes: RegExp;
-          headers: any;
-        },
-        actions: {
-          remove: {
-            label: string;
-            clicked: (el: JQuery<HTMLElement>) => void;
-          },
-        },
-        messages: {
-          acceptFileTypesError: string;
-          maxFileSizeError: string;
-        },
-        uploadCompleted: (el: JQuery<HTMLElement>, data: any) => void;
-        uploadFailed: (el: JQuery<HTMLElement>, data: any) => void;
-      },
-    },
-    editor?: any;
-  }) => void;
-}
-
-interface ITagIt extends JQuery<HTMLElement> {
-  tagit: (
-    options: {
-      tagLimit: number;
-      afterTagAdded: (event: Event, ui: any) => void;
-    } | "createTag",
-    hashtag?: string) => void;
-}
+import { IModalElement, IMediumInsertPlugin, ITagIt } from "../core/lib/dependency-interfaces";
 
 const converter = new showdown.Converter({
   simpleLineBreaks: true,
@@ -81,11 +28,11 @@ export default class EditorCtrl {
     "$sce",
     "$http",
     "$timeout",
-    "PostService",
-    "AuthService",
-    "EditorService",
-    "WalletService",
-    "ScopeService",
+    "postService",
+    "authService",
+    "editorService",
+    "walletService",
+    "scopeService",
     "API_URL",
   ];
 
@@ -444,7 +391,7 @@ export default class EditorCtrl {
     };
 
     const initMediumEditor = (title: string, bodyMD: string) => {
-      titleEditor = new MediumEditor("#title", {
+      titleEditor = new mediumEditor("#title", {
         buttons: [],
         disableDoubleReturn: true,
         disableReturn: true,
@@ -478,7 +425,7 @@ export default class EditorCtrl {
         toolbar: false,
       });
 
-      bodyEditor = new MediumEditor("#body", {
+      bodyEditor = new mediumEditor("#body", {
         anchorPreview: true,
 
         // disabled because broken on markdown
@@ -651,6 +598,6 @@ export default class EditorCtrl {
   }
 
   private async initTippy() {
-    tippy(".hc-tooltip");
+    tippyJs(".hc-tooltip");
   }
 }
