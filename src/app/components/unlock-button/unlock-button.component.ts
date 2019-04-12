@@ -86,7 +86,7 @@ class UnlockButtonController {
         ` for ${this.post.paidSectionCost} BCH. Are you sure?`,
       icon: "warning",
       buttons: true,
-      dangerMode: true,
+      dangerMode: false,
     });
 
     if (confirmationResult) {
