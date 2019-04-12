@@ -33,7 +33,7 @@ interface IScopePostsCtrl extends ng.IScope {
 
 export default class PostsCtrl {
   public static $inject = [
-    "$rootScope", "$scope", "$timeout", "postService", "scopeService",
+    "$rootScope", "$scope", "$timeout", "PostService", "ScopeService",
   ];
 
   constructor(

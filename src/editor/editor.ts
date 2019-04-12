@@ -1,4 +1,3 @@
-// import angular from 'angular';
 import angularUiRouter from "angular-ui-router";
 
 import "../core/style.css";
@@ -37,9 +36,9 @@ angular.module("editor-app", [
 .config(["$locationProvider", "$urlMatcherFactoryProvider", routing])
 .config(["$httpProvider", http])
 .config(["$stateProvider", "$urlRouterProvider", states])
-.service("postService", PostService)
-.service("walletService", WalletService)
-.service("scopeService", ScopeService)
+.service("PostService", PostService)
+.service("WalletService", WalletService)
+.service("ScopeService", ScopeService)
 .controller("EditorCtrl", EditorCtrl)
 
 .run(["$rootScope", "authService", async ($rootScope: IGlobalScope, authService: AuthService) => {

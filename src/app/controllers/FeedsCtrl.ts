@@ -35,11 +35,11 @@ export default class FeedsCtrl {
     "$stateParams",
     "$location",
     "$timeout",
-    "feedService",
-    "postService",
+    "FeedService",
+    "PostService",
     "hashtagService",
-    "profileService",
-    "scopeService",
+    "ProfileService",
+    "ScopeService",
   ];
 
   constructor(

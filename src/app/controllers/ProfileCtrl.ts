@@ -6,9 +6,9 @@ export default class ProfileCtrl {
   public static $inject = [
     "$rootScope",
     "$scope",
-    "relsService",
-    "postService",
-    "scopeService",
+    "RelsService",
+    "PostService",
+    "ScopeService",
     "profile",
   ];
 

@@ -6,9 +6,9 @@ import ScopeService from "../../core/services/ScopeService";
 export default class NotifsCtrl {
   public static $inject = [
     "$scope",
-    "notifService",
-    "scopeService",
-    "postService",
+    "NotifService",
+    "ScopeService",
+    "PostService",
   ];
 
   private isLoading: boolean = true;

@@ -48,8 +48,8 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     "$scope",
     "$location",
     "authService",
-    "profileService",
-    "scopeService",
+    "ProfileService",
+    "ScopeService",
   ];
 
   public isLoading = false;

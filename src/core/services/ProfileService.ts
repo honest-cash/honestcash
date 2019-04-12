@@ -1,3 +1,5 @@
+import { User } from "../models/models";
+
 interface IUserProp {
   propValue: string;
   propKey: string;
@@ -54,7 +56,7 @@ export default class ProfileService {
     });
   }
 
-  public updateUser(userId: number, fieldName: string, fieldValue: string) {
+  public updateUser(userId: number, fieldName: string, fieldValue: any) {
     const data = {};
 
     data[fieldName] = fieldValue;
@@ -62,14 +64,14 @@ export default class ProfileService {
     return this.$http.put(`${this.API_URL}/user/${userId}`, data);
   }
 
-  public async updateUserProp(userId: number, propKey: string, propValue: string): Promise<IUser> {
+  public async updateUserProp(userId: number, propKey: string, propValue: string): Promise<User> {
     const props = {};
 
     props[propKey] = propValue;
 
-    const result = await this.updateUser<IUser>(userId, "props", props);
+    const result = await this.updateUser(userId, "props", props);
 
-    return result.data;
+    return result.data as User;
   }
 
   public upsertUserProp(userId: number, propKey: string, propValue: string, callback) {
@@ -98,7 +100,7 @@ export default class ProfileService {
     return userProp ? userProp.propValue : null;
   }
 
-  public isUserPropSet = (user: IUser, propKey: string) =>
+  public isUserPropSet = (user: User, propKey: string) =>
     this.getProp(user.userProperties, propKey) === "1"
 
   private extendWithProps(profile: IProfile): IUIProfile {

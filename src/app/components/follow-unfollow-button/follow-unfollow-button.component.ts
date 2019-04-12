@@ -4,8 +4,6 @@ import followUnfollowButtonTemplateHtml from "./follow-unfollow-button.template.
 import { IGlobalScope } from "../../../core/lib/interfaces";
 import RelsService from "../../../core/services/RelsService";
 
-declare const angular;
-
 interface IFollowUnfollowButtonController extends ng.IScope {
   user: any;
   showFollow: boolean;
@@ -23,7 +21,7 @@ class FollowUnfollowButtonController {
   public static $inject = [
     "$rootScope",
     "$scope",
-    "relsService",
+    "RelsService",
   ];
 
   constructor(
@@ -43,14 +41,14 @@ class FollowUnfollowButtonController {
   private ngOnInit() {
     this.user = this.$scope.user;
 
-    this.following = angular.isDefined(this.$scope.following)
+    this.following = this.$scope.following
     ? this.$scope.following : defaultOptions.following;
 
-    this.showUnfollow = angular.isDefined(this.$scope.showUnfollow)
+    this.showUnfollow = this.$scope.showUnfollow
     ? this.$scope.showUnfollow && this.checkAlreadyFollowing(this.user.id)
     : !this.$scope.showFollow ? true : defaultOptions.showUnfollow;
 
-    this.showFollow = angular.isDefined(this.$scope.showFollow)
+    this.showFollow = this.$scope.showFollow
     ? this.$scope.showFollow && !this.checkAlreadyFollowing(this.user.id)
     : !this.$scope.showUnfollow ? true : defaultOptions.showFollow;
     this.isVisible = this.$rootScope.user &&

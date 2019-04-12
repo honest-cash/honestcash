@@ -12,8 +12,8 @@ export default class PostCtrl {
     "$scope",
     "$rootScope",
     "$stateParams",
-    "postService",
-    "scopeService",
+    "PostService",
+    "ScopeService",
   ];
   public isLoading: boolean = true;
   public post: Post;

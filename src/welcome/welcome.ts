@@ -15,7 +15,7 @@ import "../welcome/welcome.css";
 import "../core/layout.css";
 
 angular.module("vqServices", ["vqConfig"])
-  .service("ProfileService", ["$http", "API_URL", ProfileService])
+  .service("ProfileService", ProfileService)
   .service("ScopeService", ScopeService);
 
 angular.module("welcome-app", [

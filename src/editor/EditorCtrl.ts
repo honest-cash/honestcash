@@ -28,11 +28,11 @@ export default class EditorCtrl {
     "$sce",
     "$http",
     "$timeout",
-    "postService",
+    "PostService",
     "authService",
     "editorService",
-    "walletService",
-    "scopeService",
+    "WalletService",
+    "ScopeService",
     "API_URL",
   ];
 

@@ -23,9 +23,9 @@ class UncensorableButtonController {
     "$rootScope",
     "$scope",
     "$window",
-    "postService",
-    "walletService",
-    "scopeService",
+    "PostService",
+    "WalletService",
+    "ScopeService",
   ];
 
   private isUncensoring: boolean;

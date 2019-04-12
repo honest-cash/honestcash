@@ -15,9 +15,9 @@ export default class MainCtrl {
     "$rootScope",
     "$scope",
     "$state",
-    "scopeService",
-    "walletService",
-    "userPropsService",
+    "ScopeService",
+    "WalletService",
+    "UserPropsService",
   ];
 
   constructor(

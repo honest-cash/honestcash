@@ -32,9 +32,9 @@ class UpvoteButtonController {
     "$rootScope",
     "$scope",
     "$window",
-    "postService",
-    "walletService",
-    "scopeService",
+    "PostService",
+    "WalletService",
+    "ScopeService",
   ];
 
   private amount: number;

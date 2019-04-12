@@ -18,8 +18,8 @@ interface ISimpleLedgerProtocolDetailsScope extends ng.IScope{
 class SimpleLedgerProtocolDetailsController {
   public static $inject = [
     "$scope",
-    "bitcoinComService",
-    "scopeService",
+    "BitcoinComService",
+    "ScopeService",
   ];
 
   public addressBCH: string;
