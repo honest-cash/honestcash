@@ -6,7 +6,7 @@ export default function state($stateProvider, $urlRouterProvider) {
     controller: "welcomeCtrl",
     controllerAs: "welcomeCtrl",
     url: "/login?code",
-    templateUrl: "/templates/new-login.html",
+    templateUrl: "/templates/login.html",
   })
   .state("signup", {
     controller: "welcomeCtrl",
