@@ -10,7 +10,7 @@ class LogoutButtonController {
   public static $inject = [
     "$rootScope",
     "$state",
-    "authService",
+    "AuthService",
   ];
 
   constructor(

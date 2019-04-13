@@ -1,5 +1,5 @@
-import { env } from "../config/index";
+import { environment } from "../../environments/environment";
 
-export const log = env !== "production" ? console.log : (_) => {};
+export const log = !environment.production ? console.log : (_) => {};
 
-export const error = env !== "production" ? console.error : (_) => {};
+export const error = !environment.production ? console.error : (_) => {};

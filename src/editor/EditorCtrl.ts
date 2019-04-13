@@ -29,7 +29,7 @@ export default class EditorCtrl {
     "$http",
     "$timeout",
     "PostService",
-    "authService",
+    "AuthService",
     "editorService",
     "WalletService",
     "ScopeService",

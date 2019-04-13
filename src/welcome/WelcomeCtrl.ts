@@ -48,7 +48,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     "$rootScope",
     "$scope",
     "$location",
-    "authService",
+    "AuthService",
     "ProfileService",
     "ScopeService",
   ];
@@ -100,7 +100,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
     try {
       logger.log(
-        `Logging in with email ${data.loginemail} and password hash ${data.passwordHash}.`,
+        `Logging in with email ${data.loginemail} and password hash ${passwordHash}.`,
       );
 
       authData = await this.authService.login({
@@ -123,8 +123,17 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     let mnemonicEncrypted: string;
 
     if (authData.wallet) {
+      logger.log(
+        "Wallet is set for the user",
+        authData.wallet,
+      );
+
       mnemonicEncrypted = authData.wallet.mnemonicEncrypted;
     } else {
+      logger.log(
+        "Wallet is not defined for the user. Setting it up",
+      );
+
       const sbw: ISimpleWallet = new SimpleWallet();
 
       sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, data.loginpassword);

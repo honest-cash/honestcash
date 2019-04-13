@@ -50,7 +50,7 @@ angular.module("hashtag-app", [
 
 .controller("appController", [
   "$scope",
-  "authService",
+  "AuthService",
   ($scope, authService: AuthService) => {
     $scope.AUTH_TOKEN = authService.getAuthToken();
   },
@@ -69,6 +69,6 @@ angular.module("hashtag-app", [
 
 .run(["$rootScope", runs.initBCHWallet])
 
-.run(["$rootScope", "$state", "authService", runs.onStateChange])
+.run(["$rootScope", "$state", "AuthService", runs.onStateChange])
 
-.run(["API_URL", "authService", runs.initProfileUpload]);
+.run(["API_URL", "AuthService", runs.initProfileUpload]);

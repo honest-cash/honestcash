@@ -41,7 +41,7 @@ angular.module("editor-app", [
 .service("ScopeService", ScopeService)
 .controller("EditorCtrl", EditorCtrl)
 
-.run(["$rootScope", "authService", async ($rootScope: IGlobalScope, authService: AuthService) => {
+.run(["$rootScope", "AuthService", async ($rootScope: IGlobalScope, authService: AuthService) => {
   let res;
 
   try {

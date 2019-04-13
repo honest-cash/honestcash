@@ -1,4 +1,6 @@
 import { AuthService } from "./AuthService";
+import * as simpleWalletProvider from "../core/lib/simpleWalletProvider";
+import { IGlobalScope } from "../core/lib/interfaces";
 
 declare var angular: any;
 
@@ -6,38 +8,39 @@ angular.module("vqAuth", [])
 
 .constant("API_URL", "localhost:3010")
 
-.factory("AuthInterceptor", ["$rootScope", "$q", function ($rootScope, $q) {
-  if ($rootScope.activeCalls === undefined) {
-    $rootScope.activeCalls = 0;
-  }
+.factory("AuthInterceptor", [
+  "$rootScope", "$q", function ($rootScope: IGlobalScope, $q: ng.IQService): ng.IHttpInterceptor {
+    if ($rootScope.activeCalls === undefined) {
+      $rootScope.activeCalls = 0;
+    }
 
-  return {
-    request: (config) => {
-      $rootScope.activeCalls += 1;
+    return {
+      request: (config) => {
+        $rootScope.activeCalls += 1;
 
-      return config;
-    },
-    requestError: (rejection) => {
-      $rootScope.activeCalls -= 1;
+        return config;
+      },
+      requestError: (rejection) => {
+        $rootScope.activeCalls -= 1;
 
-      return $q.reject(rejection);
-    },
-    response: (response) => {
-      $rootScope.activeCalls -= 1;
+        return $q.reject(rejection);
+      },
+      response: (response) => {
+        $rootScope.activeCalls -= 1;
 
-      return response;
-    },
-    responseError: (response) => {
-      $rootScope.activeCalls -= 1;
+        return response;
+      },
+      responseError: (response) => {
+        $rootScope.activeCalls -= 1;
 
-      if (response.status === 401) {
-        $rootScope.$broadcast("notAuthenticated");
-      }
+        if (response.status === 401) {
+          $rootScope.$broadcast("notAuthenticated");
+        }
 
-      return $q.reject(response);
-    },
-  };
-}])
+        return $q.reject(response);
+      },
+    };
+  }])
 
 .constant("API", {
   LOGIN: "/login",
@@ -58,7 +61,15 @@ angular.module("vqAuth", [])
   };
 }])
 
-.service("authService", ["$window", "$http", "$q", "apiFactory", AuthService])
-.run(["authService", function (authService: AuthService) {
+.service("AuthService", AuthService)
+.run(["AuthService", "$rootScope", function (
+  authService: AuthService,
+  $rootScope: ng.IRootScopeService,
+) {
   authService.loadUserCredentials();
+
+  $rootScope.$on("notAuthenticated", () => {
+    authService.destroyUserCredentials();
+    simpleWalletProvider.clean();
+  });
 }]);
