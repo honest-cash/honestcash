@@ -165,10 +165,23 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       }
     }
 
-    simpleWalletProvider.loadWallet(
-      mnemonicEncrypted,
-      data.loginpassword,
-    );
+    try {
+      simpleWalletProvider.loadWallet(
+        mnemonicEncrypted,
+        data.loginpassword,
+      );
+    } catch (err) {
+      this.isLoading = false;
+
+      await sweetalert(
+        "Could not initialize your wallet. Please recreate your wallet by resetting your password.",
+      );
+
+      this.authService.destroyUserCredentials();
+      this.scopeService.safeApply(this.$scope);
+
+      return;
+    }
 
     const simpleWallet = simpleWalletProvider.get();
 
@@ -213,24 +226,10 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   }
 
   public async changePassword(data: ILoginForm) {
+    logger.log(data);
+
     if (data.loginpassword !== data.loginpasswordreset) {
       this.message = "Passwords do not match!";
-
-      return;
-    }
-
-    this.isLoading = true;
-
-    let simpleWallet;
-
-    try {
-      simpleWallet = await bitcoinAuthFlow({
-        password: data.loginpassword,
-      });
-    } catch (err) {
-      await sweetalert("Your link is invalid!");
-
-      location.href = "/login";
 
       return;
     }
@@ -239,6 +238,14 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       data.loginemail,
       data.loginpassword,
     );
+
+    logger.log(`Calculated password hash is: ${passwordHash}`);
+
+    this.isLoading = true;
+
+    const simpleWallet = await bitcoinAuthFlow({
+      password: data.loginpassword,
+    });
 
     try {
       await this.authService.changePassword({
