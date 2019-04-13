@@ -7,6 +7,7 @@ import ProfileService from "../core/services/ProfileService";
 import ScopeService from "../core/services/ScopeService";
 import { User } from "../core/models/models";
 import { calculatePasswordHash } from "../core/lib/crypto";
+import * as logger from "../core/lib/logger";
 
 declare var SimpleWallet: any;
 declare var grecaptcha: {
@@ -98,6 +99,10 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     };
 
     try {
+      logger.log(
+        `Logging in with email ${data.loginemail} and password hash ${data.passwordHash}.`,
+      );
+
       authData = await this.authService.login({
         email: data.loginemail,
         password: passwordHash,
@@ -107,6 +112,11 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
       return this.displayErrorMessage(response.data.code, response.data.desc);
     }
+
+    logger.log(
+      "Returned authData:",
+      authData,
+    );
 
     this.isLoading = false;
 
@@ -121,9 +131,19 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
       mnemonicEncrypted = sbw.mnemonicEncrypted;
 
+      logger.log(
+        "Setting new wallet with the encrypted mnemonic",
+        mnemonicEncrypted,
+      );
+
       await this.authService.setWallet({
         mnemonicEncrypted,
       });
+
+      logger.log(
+        "Updating user BCH address",
+        mnemonicEncrypted,
+      );
 
       if (!authData.user.addressBCH) {
         await this.profileService.updateUser(

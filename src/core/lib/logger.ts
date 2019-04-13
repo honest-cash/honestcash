@@ -1,3 +1,5 @@
-export const log = console.log;
+import { env } from "../config/index";
 
-export const error = console.error;
+export const log = env !== "production" ? console.log : (_) => {};
+
+export const error = env !== "production" ? console.error : (_) => {};
