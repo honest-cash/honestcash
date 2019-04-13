@@ -1,75 +1,49 @@
-<div
-  class="flex w-full flex-wrap w-full items-center justify-center mb-8"
->
-  <h2 class="w-full text-white font-bold text-center text-3xl mb-2">
-    Sign in to Honest.
-  </h2>
-  <br />
-  <p class="w-full text-white text-center text-xl">
-    Enter your details below
-  </p>
-</div>
-<div
-  class="flex w-1/6 flex-wrap mx-auto items-center justify-center"
->
-  <div
-    class="flex flex-wrap text-center w-full items-center"
-  >
-    <input
-      class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75 mb-4"
-      type="text"
-      placeholder="Username"
-      ng-model="data.username"
-    />
-    <!-- <i
-      class="w-full text-md opacity-75 font-bold text-red"
-      *ngIf="errors.username !== ''"
-      >{{ errors.username }}</i
-    > -->
-    <input
-      class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75 mb-2"
-      type="password"
-      placeholder="Password"
-      ng-model="data.password"
-    />
-    <!-- <i
-      class="w-full text-md opacity-75 font-bold text-red"
-      *ngIf="errors.password !== ''"
-      >{{ errors.password }}</i
-    > -->
-    <p class="w-full text-sm font-bold text-white text-right mb-2">
-      <span
-        [routerLink]="['/reset-password']"
-        class="font-bold text-white hover:text-white underline cursor-pointer"
-        >Forgot your password?</span
-      >
-    </p>
+<app-welcome-heading
+  title="Sign in to Honest."
+  description="Enter your details below"
+></app-welcome-heading>
+<app-welcome-form>
+  <input
+    applyTransparentInputClass
+    class="mb-4"
+    type="text"
+    placeholder="Username"
+    ng-model="data.username"
+  />
+  <!-- <i
+class="w-full text-md opacity-75 font-bold text-red"
+*ngIf="errors.username !== ''"
+>{{ errors.username }}</i
+> -->
+  <input
+    applyTransparentInputClass
+    class="mb-2"
+    type="password"
+    placeholder="Password"
+    ng-model="data.password"
+  />
+  <!-- <i
+class="w-full text-md opacity-75 font-bold text-red"
+*ngIf="errors.password !== ''"
+>{{ errors.password }}</i
+> -->
+  <app-welcome-form-link-right to="reset-password" anchor="Forgot your password?"></app-welcome-form-link-right>
 
-    <!-- <div
-      class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
-      *ngIf="errors.general !== ''"
-    >
-      <p class="w-full text-md opacity-75 mt-4 font-bold text-red">
-        {{ errors.general }}
-      </p>
-    </div> -->
-    <button
-      class="w-full px-24 lg:px-16 sm:px-16 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-2 opacity-75"
-      ng-disabled="isLoading"
-      ng-click="signup()"
-    >
-      <!-- {{ isLoading ? 'Please Wait...' : 'Sign In' }} -->
-      Sign In
-    </button>
-    <p
-      class="w-full text-center text-white hover:text-white mt-4"
-    >
-      Don't have an account?
-      <a
-        [routerLink]="['/signup']"
-        class="font-bold text-white hover:text-white underline cursor-pointer"
-        >Sign up</a
-      >
-    </p>
-  </div>
-</div>
+  <!-- <div
+class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
+*ngIf="errors.general !== ''"
+>
+<p class="w-full text-md opacity-75 mt-4 font-bold text-red">
+  {{ errors.general }}
+</p>
+</div> -->
+  <button
+    applyTransparentButtonClass
+    [disabled]="isLoading"
+    (click)="onSubmit()"
+  >
+    <!-- {{ isLoading ? 'Please Wait...' : 'Sign In' }} -->
+    Sign In
+  </button>
+  <app-welcome-form-footer to="signup" text="Don't have an account?" anchor="Sign Up"></app-welcome-form-footer>
+</app-welcome-form>
