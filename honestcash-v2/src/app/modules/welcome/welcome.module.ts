@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { LandingComponent } from './pages/landing/landing.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { WelcomeComponent } from './welcome.component';
@@ -8,15 +9,16 @@ const routes: Routes = [{
     path: '',
     component: WelcomeComponent,
     children: [
-      { path: 'login', pathMatch: 'full', component: LandingComponent },
-      { path: 'signup', pathMatch: 'full', component: LandingComponent }
+      { path: 'login', pathMatch: 'full', component: LoginComponent },
+      { path: 'signup', pathMatch: 'full', component: SignupComponent }
     ]
   }
 ];
 
 @NgModule({
   declarations: [
-    LandingComponent,
+    LoginComponent,
+    SignupComponent,
     WelcomeComponent,
   ],
   imports: [
