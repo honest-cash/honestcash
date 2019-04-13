@@ -1,41 +1,89 @@
-<div class="row">
-  <div class="col-md-4">
-    <h1>Sign up</h1>
-    <hr><br>
-    <div *ngIf="errorMessage">
-      <div class="alert alert-danger" role="alert">
-        {{errorMessage}}
-      </div>
-    </div>
-    <form (ngSubmit)="onSubmit()" ngNativeValidate>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          [(ngModel)]="user.email"
-          name="email"
-          type="email"
-          required
-          class="form-control"
-          id="email"
-          placeholder="enter your email">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          [(ngModel)]="user.password"
-          name="password"
-          type="password"
-          required
-          class="form-control"
-          id="password"
-          placeholder="enter a password">
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-      <a [routerLink]="['/']" class="btn btn-success">Cancel</a>
-    </form>
-    <p>
-      <span>Already have an account?&nbsp;</span>
-      <a [routerLink]="['/login']">Log in!</a>
+<div
+  class="flex w-full flex-wrap w-full items-center justify-center mb-8"
+>
+  <h2 class="w-full text-white font-bold text-center text-3xl mb-2">
+    What are you waiting for? Get started now.
+  </h2>
+  <br />
+  <p class="w-full text-white text-center text-xl">
+    Enter your details below
+  </p>
+</div>
+<div
+  class="flex w-1/6 flex-wrap mx-auto items-center justify-center"
+>
+  <div
+    class="flex flex-wrap text-center w-full items-center"
+  >
+    <input
+      class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75 mb-4"
+      type="text"
+      placeholder="Username"
+      ng-model="welcomeCtrl.data.username"
+    />
+    <!-- <i
+      class="w-fulltext-md opacity-75 font-bold text-red"
+      *ngIf="welcomeCtrl.errors.username !== ''"
+      >{{ welcomeCtrl.errors.username }}</i
+    > -->
+    <input
+      class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75 mb-4"
+      type="email"
+      placeholder="E-mail"
+      ng-model="welcomeCtrl.data.email"
+    />
+    <!-- <i
+      class="w-full text-md opacity-75 font-bold text-red"
+      *ngIf="welcomeCtrl.errors.email !== ''"
+      >{{ welcomeCtrl.errors.email }}</i
+    > -->
+    <input
+      class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75 mb-4"
+      type="password"
+      placeholder="Password"
+      ng-model="welcomeCtrl.data.password"
+    />
+    <!-- <i
+      class="w-full text-md opacity-75 font-bold text-red"
+      *ngIf="welcomeCtrl.errors.password !== ''"
+      >{{ welcomeCtrl.errors.password }}</i
+    > -->
+    <div
+      id="hc-captcha"
+      class="g-recaptcha w-full p-4 my-4 opacity-75"
+      data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
+    ></div>
+    <!-- <i
+      class="w-full text-md opacity-75 -mt-12 font-bold text-red"
+      *ngIf="welcomeCtrl.errors.captcha !== ''"
+      >{{ welcomeCtrl.errors.captcha }}</i
+    > -->
+
+    <!-- <div
+      class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
+      *ngIf="welcomeCtrl.errors.general !== ''"
+    >
+      <p class="w-full text-md opacity-75 mt-4 font-bold text-red">
+        {{ welcomeCtrl.errors.general }}
+      </p>
+    </div> -->
+    <button
+      class="w-full px-24 lg:px-16 sm:px-16 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-6 opacity-75"
+      ng-disabled="welcomeCtrl.isLoading"
+      ng-click="welcomeCtrl.signup()"
+    >
+      <!-- {{ welcomeCtrl.isLoading ? 'Please Wait...' : 'Get Started' }} -->
+      Get Started
+    </button>
+    <p
+      class="w-full text-center text-white hover:text-white mt-4"
+    >
+      Already have an account?
+      <a
+        [routerLink]="['/login']"
+        class="font-bold text-white hover:text-white underline cursor-pointer"
+        >Sign In</a
+      >
     </p>
   </div>
 </div>

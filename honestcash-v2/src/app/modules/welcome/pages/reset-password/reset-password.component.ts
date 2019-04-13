@@ -8,11 +8,11 @@ import { SignUp } from '@store/auth/auth.actions';
 
 
 @Component({
-  selector: 'app-welcome-page-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  selector: 'app-welcome-page-reset-password',
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit {
   @HostBinding('class') class = 'w-full items-center justify-center';
   @HostBinding('style.height') height = '65vh';
 

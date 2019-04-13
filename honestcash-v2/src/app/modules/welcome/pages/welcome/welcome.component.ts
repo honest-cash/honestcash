@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -11,6 +11,8 @@ import { LogOut } from '@store/auth/auth.actions';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
+  @HostBinding('class') class = 'w-full items-center justify-center';
+  @HostBinding('style.height') height = '65vh';
 
   getState: Observable<any>;
   isAuthenticated: false;

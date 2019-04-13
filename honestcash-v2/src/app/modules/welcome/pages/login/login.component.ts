@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -13,6 +13,9 @@ import { LogIn } from '@store/auth/auth.actions';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  @HostBinding('class') class = 'w-full items-center justify-center';
+  @HostBinding('style.height') height = '65vh';
+
 
   user: User = new User();
   getState: Observable<any>;
