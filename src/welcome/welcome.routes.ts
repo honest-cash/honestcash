@@ -1,7 +1,8 @@
-import welcomeHtml from "./welcome.html";
-import thankyouHtml from "./thankyou.html";
-import loginHtml from "./login.html";
-import aboutHtml from "./about.html";
+import welcomeHtml from "./landing/welcome.html";
+import thankyouHtml from "./thankyou/thankyou.html";
+import loginHtml from "./login/login.html";
+import aboutHtml from "./about/about.html";
+import appComponentHtml from "../app.component.html";
 
 export default function state($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise("/signup");
@@ -27,7 +28,7 @@ export default function state($stateProvider, $urlRouterProvider) {
 
   $stateProvider
   .state("starter", {
-    templateUrl: "/templates/layout.html",
+    template: appComponentHtml,
     controller: "welcomeCtrl",
   })
   .state("starter.about", {

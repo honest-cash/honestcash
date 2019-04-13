@@ -1,5 +1,4 @@
 import "../core/style.css";
-import "../core/layout.css";
 import "./styles/profile.css";
 import "./styles/post.css";
 import "./styles/feed.css";

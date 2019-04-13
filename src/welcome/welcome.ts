@@ -1,7 +1,7 @@
 import angular from "angular";
 import angularUiRouter from "angular-ui-router";
-import states from "./states";
-import WelcomeCtrl from "./WelcomeCtrl";
+import welcomeRoutes from "./welcome.routes";
+import welcomeComponent from "./welcome.component";
 import http from "../core/config/http";
 import routing from "../core/config/routing";
 import ProfileService from "../core/services/ProfileService";
@@ -10,9 +10,7 @@ import ScopeService from "../core/services/ScopeService";
 import "../auth/AuthModule";
 import "../core/config";
 
-import "../welcome/welcome.css";
-
-import "../core/layout.css";
+import "../welcome/welcome.less";
 
 angular.module("vqServices", ["vqConfig"])
   .service("ProfileService", ProfileService)
@@ -26,6 +24,6 @@ angular.module("welcome-app", [
 
 .config(["$locationProvider", "$urlMatcherFactoryProvider", routing])
 .config(["$httpProvider", http])
-.config(["$stateProvider", "$urlRouterProvider", states])
+.config(["$stateProvider", "$urlRouterProvider", welcomeRoutes])
 
-.controller("welcomeCtrl", WelcomeCtrl);
+.controller("welcomeCtrl", welcomeComponent);
