@@ -11,3 +11,4 @@ export default class User {
     addressSLP?: string;
     userProperties?: UserProp[];
   }
+  

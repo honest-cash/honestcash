@@ -10,6 +10,7 @@ import {
   AuthActionTypes,
   LogIn, LogInSuccess, LogInFailure,
   SignUp, SignUpSuccess, SignUpFailure,
+  ForgotPassword, ForgotPasswordSuccess, ForgotPasswordFailure,
   LogOut,
 } from '@store/auth/auth.actions';
 
@@ -83,6 +84,37 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   SignUpFailure: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_FAILURE)
+  );
+
+  @Effect()
+  ForgotPassword: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.FORGOT_PASSWORD),
+    map((action: ForgotPassword) => action.payload),
+    switchMap(payload => {
+      return this.authService.signUp(payload.email, payload.password)
+      .pipe(
+        map((user: User) => {
+          return new ForgotPasswordSuccess({token: user.token, email: payload.email});
+        }),
+        catchError((error) => {
+          return of(new ForgotPasswordFailure({ error: error }));
+        })
+      );
+    })
+  );
+
+  @Effect({ dispatch: false })
+  ForgotPasswordSuccess: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.FORGOT_PASSWORD_SUCCESS),
+    tap((user) => {
+      localStorage.setItem('token', user.payload.token);
+      this.router.navigateByUrl('/');
+    })
+  );
+
+  @Effect({ dispatch: false })
+  ForgotPasswordFailure: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.FORGOT_PASSWORD_FAILURE)
   );
 
   @Effect({ dispatch: false })

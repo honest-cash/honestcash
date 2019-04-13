@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import User from '@models/user';
 import { AppState, selectAuthState } from '@store/app.states';
-import { SignUp } from '@store/auth/auth.actions';
+import { ForgotPassword } from '@store/auth/auth.actions';
 
 
 @Component({
@@ -17,6 +17,7 @@ export class ResetPasswordComponent implements OnInit {
   @HostBinding('style.height') height = '65vh';
 
   user: User = new User();
+  username = '';
   getState: Observable<any>;
   errorMessage: string | null;
 
@@ -37,7 +38,7 @@ export class ResetPasswordComponent implements OnInit {
       email: this.user.email,
       password: this.user.password
     };
-    this.store.dispatch(new SignUp(payload));
+    this.store.dispatch(new ForgotPassword(payload));
   }
 
 }
