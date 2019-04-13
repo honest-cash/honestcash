@@ -2,21 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import User from '@models/user';
 import { AppState, selectAuthState } from '@store/app.states';
-import { LogIn } from '@store/auth/auth.actions';
-
+import { LogOut } from '@store/auth/auth.actions';
 
 @Component({
-  selector: 'app-welcome-page-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-welcome-pages-welcome',
+  templateUrl: './welcome.component.html',
+  styleUrls: ['./welcome.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class WelcomeComponent implements OnInit {
 
-  user: User = new User();
   getState: Observable<any>;
-  errorMessage: string | null;
+  isAuthenticated: false;
+  user = null;
+  errorMessage = null;
 
   constructor(
     private store: Store<AppState>
@@ -26,16 +25,14 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.getState.subscribe((state) => {
+      this.isAuthenticated = state.isAuthenticated;
+      this.user = state.user;
       this.errorMessage = state.errorMessage;
     });
   }
 
-  onSubmit(): void {
-    const payload = {
-      email: this.user.email,
-      password: this.user.password
-    };
-    this.store.dispatch(new LogIn(payload));
+  logOut(): void {
+    this.store.dispatch(new LogOut);
   }
 
 }
