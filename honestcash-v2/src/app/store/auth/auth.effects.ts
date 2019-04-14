@@ -9,14 +9,15 @@ import User from '@models/user';
 import {
   AuthActionTypes,
   LogIn, LogInSuccess, LogInFailure,
+  ChangePasswordAndWallet,
   SignUp, SignUpSuccess, SignUpFailure,
   ForgotPassword, ForgotPasswordSuccess, ForgotPasswordFailure,
   LogOut,
-} from '@store/auth/auth.actions';
-
+} from './auth.actions';
 
 @Injectable()
 export class AuthEffects {
+  private LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
   constructor(
     private actions: Actions,
@@ -40,12 +41,12 @@ export class AuthEffects {
     })
   );
 
-
   @Effect({ dispatch: false })
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     tap((user) => {
-      localStorage.setItem('token', user.payload.token);
+      localStorage.setItem(this.LOCAL_TOKEN_KEY, user.payload.token);
+
       this.router.navigateByUrl('/');
     })
   );
@@ -60,7 +61,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
     switchMap(payload => {
-      return this.authService.signUp(payload.email, payload.password)
+      return this.authService.signUp(payload)
       .pipe(
         map((user: User) => {
           return new SignUpSuccess({token: user.token, email: payload.email});
@@ -76,7 +77,7 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     tap((user) => {
-      localStorage.setItem('token', user.payload.token);
+      localStorage.setItem(this.LOCAL_TOKEN_KEY, user.payload.token);
       this.router.navigateByUrl('/');
     })
   );
@@ -91,7 +92,24 @@ export class AuthEffects {
     ofType(AuthActionTypes.FORGOT_PASSWORD),
     map((action: ForgotPassword) => action.payload),
     switchMap(payload => {
-      return this.authService.signUp(payload.email, payload.password)
+      return this.authService.resetPassword(payload.email)
+      .pipe(
+        map((user: User) => {
+          return new ForgotPasswordSuccess({token: user.token, email: payload.email});
+        }),
+        catchError((error) => {
+          return of(new ForgotPasswordFailure({ error: error }));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  ChangePasswordAndWallet: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.FORGOT_PASSWORD),
+    map((action: ChangePasswordAndWallet) => action.payload),
+    switchMap(payload => {
+      return this.authService.resetPassword(payload.email)
       .pipe(
         map((user: User) => {
           return new ForgotPasswordSuccess({token: user.token, email: payload.email});

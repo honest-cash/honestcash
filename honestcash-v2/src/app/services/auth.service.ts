@@ -11,11 +11,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  getToken(): string {
+  public getToken(): string {
     return localStorage.getItem('token');
   }
 
-  logIn(email: string, password: string): Observable<any> {
+  public logIn(email: string, password: string): Observable<any> {
     const url = `${this.BASE_URL}/login`;
 
     const passwordHash = CryptoUtils.calculatePasswordHash(email, password);
@@ -23,10 +23,40 @@ export class AuthService {
     return this.http.post<User>(url, {email, password: passwordHash});
   }
 
-  signUp(email: string, password: string): Observable<User> {
+  public signUp(payload: {
+    email: string;
+    password: string;
+    username: string;
+  }): Observable<User> {
     const url = `${this.BASE_URL}/register`;
-    return this.http.post<User>(url, {email, password});
+
+    const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
+
+    return this.http.post<User>(url, {
+      username: payload.username,
+      email: payload.email,
+      password: passwordHash
+    });
   }
+
+  public resetPassword(email: string): Observable<User> {
+    const url = `${this.BASE_URL}/register`;
+
+    return this.http.post<User>(url, {
+      email
+    });
+  }
+
+  public async changePassword(data: {
+    email: string;
+    code: string,
+    newPassword: string,
+    repeatNewPassword: string;
+    mnemonicEncrypted: string;
+  }) {
+    return this.http.post(`${this.BASE_URL}/auth/reset-password"`, data);
+  }
+
 
   getStatus(): Observable<User> {
     const url = `${this.BASE_URL}/status`;

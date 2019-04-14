@@ -16,7 +16,10 @@ export enum AuthActionTypes {
 
 export class LogIn implements Action {
   readonly type = AuthActionTypes.LOGIN;
-  constructor(public payload: any) {}
+  constructor(public payload: {
+    email: string;
+    password: string;
+  }) {}
 }
 
 export class LogInSuccess implements Action {
@@ -31,7 +34,11 @@ export class LogInFailure implements Action {
 
 export class SignUp implements Action {
   readonly type = AuthActionTypes.SIGNUP;
-  constructor(public payload: any) {}
+  constructor(public payload: {
+    username: string;
+    email: string;
+    password: string;
+  }) {}
 }
 
 export class SignUpSuccess implements Action {
@@ -52,6 +59,15 @@ export class ForgotPassword implements Action {
 export class ForgotPasswordSuccess implements Action {
   readonly type = AuthActionTypes.FORGOT_PASSWORD_SUCCESS;
   constructor(public payload: any) {}
+}
+
+export class ChangePasswordAndWallet implements Action {
+  readonly type = AuthActionTypes.FORGOT_PASSWORD;
+  constructor(public payload: {
+    username: string;
+    email: string;
+    password: string;
+  }) {}
 }
 
 export class ForgotPasswordFailure implements Action {

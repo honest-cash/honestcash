@@ -2,7 +2,6 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import User from '@models/user';
 import { AppState, selectAuthState } from '@store/app.states';
 import { LogIn } from '@store/auth/auth.actions';
 import { NgForm } from '@angular/forms';
@@ -13,11 +12,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  @HostBinding('class') class = 'w-full items-center justify-center';
-  @HostBinding('style.height') height = '65vh';
-
   isLoading = false;
-  user: User = new User();
   getState: Observable<any>;
   errorMessage: string | null;
 
@@ -33,6 +28,9 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // @todo implement loading on buttons
+  // @todo extend the types for the form.value
+  // @todo tests for the component
   onSubmit(form: NgForm): void {
     const payload = form.value;
 

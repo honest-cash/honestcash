@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import User from '@models/user';
 import { AppState, selectAuthState } from '@store/app.states';
 import { SignUp } from '@store/auth/auth.actions';
+import { NgForm } from '@angular/forms';
 
 
 @Component({
@@ -13,9 +14,6 @@ import { SignUp } from '@store/auth/auth.actions';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-  @HostBinding('class') class = 'w-full items-center justify-center';
-  @HostBinding('style.height') height = '65vh';
-
   isLoading = false;
   user: User = new User();
   getState: Observable<any>;
@@ -33,13 +31,12 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    const payload = {
-      email: this.user.email,
-      password: this.user.password
-    };
+  // @todo implement loading on buttons
+  // @todo extend the types for the form.value
+  // @todo tests for the component
+  onSubmit(form: NgForm): void {
+    const payload = form.value;
 
     this.store.dispatch(new SignUp(payload));
   }
-
 }

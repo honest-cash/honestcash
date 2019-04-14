@@ -1,12 +1,12 @@
 <app-welcome-heading title="What are you waiting for? Get started now." description="Enter your details below"></app-welcome-heading>
-<app-welcome-form>
+
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <input
-    applyTransparentInputClass
-    class="mb-4"
-    type="text"
-    placeholder="Username"
-    [(ngModel)]="user.username"
-    
+      applyTransparentInputClass
+      class="mb-4"
+      type="text"
+      placeholder="Username"
+      name="username"
   />
   <!-- <i
     class="w-fulltext-md opacity-75 font-bold text-red"
@@ -18,20 +18,22 @@
     class="mb-4"
     type="email"
     placeholder="E-mail"
-    [(ngModel)]="user.email"
+    name="email"
   />
   <!-- <i
     class="w-full text-md opacity-75 font-bold text-red"
     *ngIf="errors.email !== ''"
     >{{ errors.email }}</i
   > -->
+
   <input
     applyTransparentInputClass
     class="mb-4"
     type="password"
     placeholder="Password"
-    [(ngModel)]="user.password"
+    name="password"
   />
+
   <!-- <i
     class="w-full text-md opacity-75 font-bold text-red"
     *ngIf="errors.password !== ''"
@@ -59,10 +61,9 @@
   <button
     applyTransparentButtonClass
     [disabled]="isLoading"
-    (click)="onSubmit()"
   >
     <!-- {{ isLoading ? 'Please Wait...' : 'Get Started' }} -->
     Get Started
   </button>
   <app-welcome-form-footer to="login" text="Already have an account?" anchor="Sign In"></app-welcome-form-footer>
-</app-welcome-form>
+  <form>
