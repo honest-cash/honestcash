@@ -1,3 +1,9 @@
+import welcomeHtml from "./landing/welcome.html";
+import thankyouHtml from "./thankyou/thankyou.html";
+import loginHtml from "./login/login.html";
+import aboutHtml from "./about/about.html";
+import appComponentHtml from "../app.component.html";
+
 export default function state($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise("/signup");
 
@@ -6,27 +12,27 @@ export default function state($stateProvider, $urlRouterProvider) {
     controller: "welcomeCtrl",
     controllerAs: "welcomeCtrl",
     url: "/login?code",
-    templateUrl: "/templates/login.html",
+    template: loginHtml,
   })
   .state("signup", {
     controller: "welcomeCtrl",
     controllerAs: "welcomeCtrl",
     url: "/signup",
-    templateUrl: "/templates/welcome.html",
+    template: welcomeHtml,
   })
   .state("thankyou", {
     controller: "welcomeCtrl",
     url: "/thank-you",
-    templateUrl: "/templates/thankyou.html",
+    template: thankyouHtml,
   });
 
   $stateProvider
   .state("starter", {
-    templateUrl: "/templates/layout.html",
+    template: appComponentHtml,
     controller: "welcomeCtrl",
   })
   .state("starter.about", {
     url: "/about",
-    templateUrl: "/templates/about.html",
+    template: aboutHtml,
   });
 }
