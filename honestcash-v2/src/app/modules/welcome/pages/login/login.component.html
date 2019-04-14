@@ -2,31 +2,34 @@
   title="Sign in to Honest."
   description="Enter your details below"
 ></app-welcome-heading>
-<app-welcome-form>
-  <input
-    applyTransparentInputClass
-    class="mb-4"
-    type="text"
-    placeholder="Username"
-    ng-model="data.username"
-  />
-  <!-- <i
-class="w-full text-md opacity-75 font-bold text-red"
-*ngIf="errors.username !== ''"
->{{ errors.username }}</i
-> -->
-  <input
-    applyTransparentInputClass
-    class="mb-2"
-    type="password"
-    placeholder="Password"
-    ng-model="data.password"
-  />
-  <!-- <i
-class="w-full text-md opacity-75 font-bold text-red"
-*ngIf="errors.password !== ''"
->{{ errors.password }}</i
-> -->
+
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <input
+      name="email"
+      applyTransparentInputClass
+      class="mb-4"
+      type="text"
+      placeholder="E-Mail"
+      [ngModel]="user.email"
+    />
+    <!-- <i
+  class="w-full text-md opacity-75 font-bold text-red"
+  *ngIf="errors.username !== ''"
+  >{{ errors.username }}</i
+  > -->
+    <input
+      name="password"
+      applyTransparentInputClass
+      class="mb-2"
+      type="password"
+      placeholder="Password"
+      [ngModel]="user.password"
+    />
+    <!-- <i
+  class="w-full text-md opacity-75 font-bold text-red"
+  *ngIf="errors.password !== ''"
+  >{{ errors.password }}</i
+  > -->
   <app-welcome-form-link-right to="reset-password" anchor="Forgot your password?"></app-welcome-form-link-right>
 
   <!-- <div
@@ -40,10 +43,8 @@ class="w-full items-start justify-start p-4 bg-white border-2 border-white borde
   <button
     applyTransparentButtonClass
     [disabled]="isLoading"
-    (click)="onSubmit()"
   >
-    <!-- {{ isLoading ? 'Please Wait...' : 'Sign In' }} -->
-    Sign In
+    {{ isLoading ? 'Please Wait...' : 'Sign In' }}
   </button>
   <app-welcome-form-footer to="signup" text="Don't have an account?" anchor="Sign Up"></app-welcome-form-footer>
-</app-welcome-form>
+</form>

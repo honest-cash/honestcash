@@ -16,6 +16,7 @@ export class SignupComponent implements OnInit {
   @HostBinding('class') class = 'w-full items-center justify-center';
   @HostBinding('style.height') height = '65vh';
 
+  isLoading = false;
   user: User = new User();
   getState: Observable<any>;
   errorMessage: string | null;
@@ -37,6 +38,7 @@ export class SignupComponent implements OnInit {
       email: this.user.email,
       password: this.user.password
     };
+
     this.store.dispatch(new SignUp(payload));
   }
 

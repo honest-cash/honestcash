@@ -16,6 +16,7 @@ export class ResetPasswordComponent implements OnInit {
   @HostBinding('class') class = 'w-full items-center justify-center';
   @HostBinding('style.height') height = '65vh';
 
+  isLoading = false;
   user: User = new User();
   username = '';
   getState: Observable<any>;
