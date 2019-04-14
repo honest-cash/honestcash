@@ -7,6 +7,7 @@ import ProfileService from "../core/services/ProfileService";
 import ScopeService from "../core/services/ScopeService";
 import { User } from "../core/models/models";
 import { calculatePasswordHash } from "../core/lib/crypto";
+import * as logger from "../core/lib/logger";
 
 declare var SimpleWallet: any;
 declare var grecaptcha: {
@@ -47,7 +48,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     "$rootScope",
     "$scope",
     "$location",
-    "authService",
+    "AuthService",
     "ProfileService",
     "ScopeService",
   ];
@@ -63,6 +64,19 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
 
   private resetCode: string;
   private isCaptchaRendered = false;
+
+  private errorMessages = {
+    // tslint:disable-next-line:max-line-length
+    NOT_ACTIVATED: "The access the the platform is currently limited. Your account has not been activated. Tweet to @Honest_Cash for a personal invitation.",
+    EMAIL_EXISTS:  "E-Mail already exists",
+    EMAIL_WRONGLY_FORMATTED:  "E-Mail wrongly formatted!",
+    WRONG_PASSWORD: "Incorrect email address and / or password.",
+    NO_USER_FOUND: "Incorrect email address and / or password.",
+    LOG_IN_WITH_FACEBOOK: "Log in with Facebook",
+    EMAIL_NOT_FOUND: "Incorrect email address and / or password.",
+    PASSWORDS_DO_NOT_MATCH: "Passwords do not match!",
+    WRONG_RESET_CODE: "Could not reset the password. Is the reset link and e-mail valid?",
+  };
 
   constructor(
     private $rootScope: IGlobalScope,
@@ -98,6 +112,10 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     };
 
     try {
+      logger.log(
+        `Logging in with email ${data.loginemail} and password hash ${passwordHash}.`,
+      );
+
       authData = await this.authService.login({
         email: data.loginemail,
         password: passwordHash,
@@ -108,22 +126,46 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       return this.displayErrorMessage(response.data.code, response.data.desc);
     }
 
+    logger.log(
+      "Returned authData:",
+      authData,
+    );
+
     this.isLoading = false;
 
     let mnemonicEncrypted: string;
 
     if (authData.wallet) {
+      logger.log(
+        "Wallet is set for the user",
+        authData.wallet,
+      );
+
       mnemonicEncrypted = authData.wallet.mnemonicEncrypted;
     } else {
+      logger.log(
+        "Wallet is not defined for the user. Setting it up",
+      );
+
       const sbw: ISimpleWallet = new SimpleWallet();
 
       sbw.mnemonicEncrypted = SimpleWallet.encrypt(sbw.mnemonic, data.loginpassword);
 
       mnemonicEncrypted = sbw.mnemonicEncrypted;
 
+      logger.log(
+        "Setting new wallet with the encrypted mnemonic",
+        mnemonicEncrypted,
+      );
+
       await this.authService.setWallet({
         mnemonicEncrypted,
       });
+
+      logger.log(
+        "Updating user BCH address",
+        mnemonicEncrypted,
+      );
 
       if (!authData.user.addressBCH) {
         await this.profileService.updateUser(
@@ -136,10 +178,23 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       }
     }
 
-    simpleWalletProvider.loadWallet(
-      mnemonicEncrypted,
-      data.loginpassword,
-    );
+    try {
+      simpleWalletProvider.loadWallet(
+        mnemonicEncrypted,
+        data.loginpassword,
+      );
+    } catch (err) {
+      this.isLoading = false;
+
+      await sweetalert(
+        "Could not initialize your wallet. Please recreate your wallet by resetting your password.",
+      );
+
+      this.authService.destroyUserCredentials();
+      this.scopeService.safeApply(this.$scope);
+
+      return;
+    }
 
     const simpleWallet = simpleWalletProvider.get();
 
@@ -184,24 +239,10 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   }
 
   public async changePassword(data: ILoginForm) {
+    logger.log(data);
+
     if (data.loginpassword !== data.loginpasswordreset) {
       this.message = "Passwords do not match!";
-
-      return;
-    }
-
-    this.isLoading = true;
-
-    let simpleWallet;
-
-    try {
-      simpleWallet = await bitcoinAuthFlow({
-        password: data.loginpassword,
-      });
-    } catch (err) {
-      await sweetalert("Your link is invalid!");
-
-      location.href = "/login";
 
       return;
     }
@@ -210,6 +251,14 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       data.loginemail,
       data.loginpassword,
     );
+
+    logger.log(`Calculated password hash is: ${passwordHash}`);
+
+    this.isLoading = true;
+
+    const simpleWallet = await bitcoinAuthFlow({
+      password: data.loginpassword,
+    });
 
     try {
       await this.authService.changePassword({
@@ -242,46 +291,12 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
   }
 
   public async signup(data: ISignupForm) {
-    if (!data) {
-      return alert("Username is required.");
-    }
+    const validationErrorList = this.validateSignup(data);
 
-    if (!data.username) {
-      return alert("Username is required.");
-    }
+    if (validationErrorList.length > 0) {
+      this.message = validationErrorList[0];
 
-    if (!this.checkUserName(data.username)) {
-      this.message = "Username: please only use standard alphanumerics";
-
-      return;
-    }
-
-    if (data.username.length > 25) {
-      this.message = "Username cannot have more than 25 characters";
-
-      return;
-    }
-
-    if (data.username.length < 3) {
-      this.message = "Username should be at least 3 characters";
-
-      return;
-    }
-
-    if (!data.email) {
-      this.message = "Email is required..";
-
-      return;
-    }
-
-    if (!data.password) {
-      this.message = "Password is required..";
-
-      return;
-    }
-
-    if (data.password.length < 8) {
-      this.message = "Password must have at least 8 characters.";
+      this.scopeService.safeApply(this.$scope);
 
       return;
     }
@@ -292,6 +307,7 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
       this.message = "Please verify captcha by checking the checkbox.";
 
       grecaptcha.reset();
+
       return;
     }
 
@@ -324,6 +340,39 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     this.$rootScope.user = authData.user;
 
     location.href = "/thank-you";
+  }
+
+  private validateSignup(data: ISignupForm): string[] {
+    const validationErrorList = [];
+
+    if (!data || !data.username) {
+      validationErrorList.push("Username is required.");
+    }
+
+    if (!this.checkUserName(data.username)) {
+      validationErrorList.push("Please only use standard alphanumerics for username.");
+    }
+
+    if (data.username.length > 25) {
+      validationErrorList.push("Username cannot have more than 25 characters");
+    } else if (data.username.length < 3) {
+      validationErrorList.push("Username should be at least 3 characters");
+    }
+
+    if (!data.email) {
+      validationErrorList.push("Email is required..");
+    }
+
+    if (!data.password) {
+      validationErrorList.push("Password is required..");
+
+    }
+
+    if (data.password.length < 8) {
+      validationErrorList.push("Password must have at least 8 characters.");
+    }
+
+    return validationErrorList;
   }
 
   private setAddressForTips = async (userId: string, bchAddress: string) => {
@@ -398,55 +447,16 @@ export default class WelcomeCtrl implements IWelcomeCtrl {
     }
   }
 
-  private checkUserName(username: string): boolean {
-     // unacceptable chars
-    const pattern = new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/);
-
-    if (pattern.test(username)) {
-      return false;
-    }
-
-    return true; // good user input
-  }
+  private checkUserName = (username: string): boolean =>
+    !(new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/))
+      .test(username)
 
   private displayErrorMessage(code: string, desc?): void {
-    if (desc) {
-      this.message = desc;
-    } else if (code) {
-      switch (code) {
-        case "NOT_ACTIVATED":
-          this.message = "The access the the platform is currently limited. " +
-            "Your account has not been activated. Tweet to @Honest_Cash for a personal invitation.";
-          break;
-        case "EMAIL_EXISTS":
-          this.message = "E-Mail already exists";
-          break;
-        case "EMAIL_WRONGLY_FORMATTED":
-          this.message = "E-Mail wrongly formatted!";
-          break;
-        case "WRONG_PASSWORD":
-          this.message = "Incorrect email address and / or password.";
-          break;
-        case "NO_USER_FOUND":
-          this.message = "Incorrect email address and / or password.";
-          break;
-        case "LOG_IN_WITH_FACEBOOK":
-          this.message = "Log in with Facebook";
-          break;
-        case "EMAIL_NOT_FOUND":
-          this.message = "Incorrect email address and / or password.";
-          break;
-        case "PASSWORDS_DO_NOT_MATCH":
-          this.message = "Passwords do not match!";
-          break;
-        case "WRONG_RESET_CODE":
-          this.message = "Could not reset the password. Is the reset link and e-mail valid?";
-          break;
-        default:
-          this.message = "Login error. Try again...";
-      }
-    }
+    this.message = this.getErrorMessage(code, desc);
 
     this.scopeService.safeApply(this.$scope);
   }
+
+  private getErrorMessage = (code: string, desc?: string): string =>
+    desc || this.errorMessages[code] || "Login error. Try again..."
 }

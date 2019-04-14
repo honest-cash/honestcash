@@ -1,5 +1,6 @@
 import sweetalert from "sweetalert";
 import { ISimpleWallet } from "./interfaces";
+import * as logger from "./logger";
 
 declare var SimpleWallet: any;
 
@@ -54,6 +55,9 @@ const generateWallet = async (data: IGenerateWalletArgs): Promise<ISimpleWallet>
       mnemonic: simpleWallet.mnemonic,
     });
   }
+
+  logger.log("Generated simpleWallet instance");
+  logger.log(simpleWallet);
 
   return simpleWallet;
 };

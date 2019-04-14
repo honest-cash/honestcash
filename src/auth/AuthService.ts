@@ -1,4 +1,3 @@
-import { SHA3 } from "sha3";
 import { User } from "../core/models/models";
 export class AuthService {
   public static $inject = [
@@ -22,7 +21,8 @@ export class AuthService {
     private $http: ng.IHttpService,
     private $q: ng.IQService,
     private apiFactory,
-  ) {}
+  ) {
+  }
 
   public getUserId = () => this.authUserId;
 
@@ -60,7 +60,7 @@ export class AuthService {
 
   public async login(data: { email: string, password: string }) {
     const res = await this.$http.post<{
-      token: string; user: User; wallet: any
+      token: string; user: User; wallet: { mnemonicEncrypted: string }
     }>(this.apiFactory("LOGIN"), data);
 
     this.storeUserCredentials(res.data.token, res.data.user.id);
@@ -72,9 +72,12 @@ export class AuthService {
     return this.$q((resolve, reject) => {
       this.$http
       .post(this.apiFactory("PASSWORD_CHECK"), data)
-      .then((res) => {
-        resolve(res.data);
-      },    reject);
+      .then(
+        (res) => {
+          resolve(res.data);
+        },
+        reject,
+      );
     });
   }
 

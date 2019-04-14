@@ -20,17 +20,17 @@
                 {{welcomeCtrl.message}}
             </div>
 
-            <form ng-if="!welcomeCtrl.hideForm" ng-submit="welcomeCtrl.resetCode ? welcomeCtrl.changePassword(welcomeCtrl.data) : welcomeCtrl.forgot ? welcomeCtrl.resetPassword(welcomeCtrl.data) : welcomeCtrl.login(welcomeCtrl.data)">
+            <form autocomplete="off" ng-if="!welcomeCtrl.hideForm" ng-submit="welcomeCtrl.resetCode ? welcomeCtrl.changePassword(welcomeCtrl.data) : welcomeCtrl.forgot ? welcomeCtrl.resetPassword(welcomeCtrl.data) : welcomeCtrl.login(welcomeCtrl.data)">
               <div class="form-group">
-                  <input type="email" placeholder="Email" class="form-control" ng-model="welcomeCtrl.data.loginemail">
+                  <input type="email" autocomplete="off" placeholder="Email" class="form-control" ng-model="welcomeCtrl.data.loginemail">
               </div>
 
               <div class="form-group" ng-show="!welcomeCtrl.forgot">
-                  <input type="password" placeholder="Password" class="form-control" ng-model="welcomeCtrl.data.loginpassword">
+                  <input type="password" autocomplete="new-password" placeholder="Password" class="form-control" ng-model="welcomeCtrl.data.loginpassword">
               </div>
 
               <div class="form-group" ng-show="welcomeCtrl.resetCode && !welcomeCtrl.forgot">
-                <input type="password" placeholder="Repeat your password" class="form-control" ng-model="welcomeCtrl.data.loginpasswordreset">
+                <input type="password" autocomplete="new-password" placeholder="Repeat your password" class="form-control" ng-model="welcomeCtrl.data.loginpasswordreset">
               </div>
 
               <div>
