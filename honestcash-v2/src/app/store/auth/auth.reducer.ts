@@ -7,11 +7,11 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.LOGIN_SUCCESS: {
       return {
         ...state,
+        password: action.payload.password,
         isAuthenticated: true,
-        user: {
-          token: action.payload.token,
-          email: action.payload.email
-        },
+        token: action.payload.token,
+        user: action.payload.user,
+        wallet: action.payload.wallet,
         errorMessage: null
       };
     }
@@ -25,10 +25,9 @@ export function reducer(state = initialState, action: All): State {
       return {
         ...state,
         isAuthenticated: true,
-        user: {
-          token: action.payload.token,
-          email: action.payload.email
-        },
+        password: action.payload.password,
+        token: action.payload.token,
+        user: action.payload.user,
         errorMessage: null
       };
     }

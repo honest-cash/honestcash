@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AppState, selectAuthState } from '@store/app.states';
 import { LogIn } from '@store/auth/auth.actions';
 import { NgForm } from '@angular/forms';
+import User from '@models/user';
 
 @Component({
   selector: 'app-welcome-page-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   isLoading = false;
   getState: Observable<any>;
   errorMessage: string | null;
+  user = new User();
 
   constructor(
     private store: Store<AppState>

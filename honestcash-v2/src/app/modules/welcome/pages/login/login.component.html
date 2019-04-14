@@ -3,14 +3,15 @@
   description="Enter your details below"
 ></app-welcome-heading>
 
-<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+<form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <input
+      required
       name="email"
+      [ngModel]="user.email"
       applyTransparentInputClass
       class="mb-4"
       type="text"
       placeholder="E-Mail"
-      [ngModel]="user.email"
     />
     <!-- <i
   class="w-full text-md opacity-75 font-bold text-red"
@@ -18,12 +19,13 @@
   >{{ errors.username }}</i
   > -->
     <input
+      required
+      [ngModel]="user.password"
       name="password"
       applyTransparentInputClass
       class="mb-2"
       type="password"
       placeholder="Password"
-      [ngModel]="user.password"
     />
     <!-- <i
   class="w-full text-md opacity-75 font-bold text-red"

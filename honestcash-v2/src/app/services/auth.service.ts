@@ -5,6 +5,12 @@ import User from '@models/user';
 import {environment} from '../../environments/environment';
 import {CryptoUtils} from '../shared/lib/CryptoUtils';
 
+export interface ILogInResponse {
+  user: User;
+  wallet: any;
+  token: string;
+}
+
 @Injectable()
 export class AuthService {
   private BASE_URL = environment.apiUrl;
@@ -15,12 +21,12 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  public logIn(email: string, password: string): Observable<any> {
+  public logIn(email: string, password: string): Observable<ILogInResponse> {
     const url = `${this.BASE_URL}/login`;
 
     const passwordHash = CryptoUtils.calculatePasswordHash(email, password);
 
-    return this.http.post<User>(url, {email, password: passwordHash});
+    return this.http.post<ILogInResponse>(url, {email, password: passwordHash});
   }
 
   public signUp(payload: {

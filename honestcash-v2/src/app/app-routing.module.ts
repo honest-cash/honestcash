@@ -5,9 +5,6 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: './modules/welcome/welcome.module#WelcomeModule'
-  }, {
-    path: 'wallet',
-    loadChildren: './modules/wallet/wallet.module#WalletModule'
   }
 ];
 

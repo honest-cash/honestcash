@@ -30,13 +30,23 @@ export class AuthEffects {
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
     switchMap(payload => {
-      return this.authService.logIn(payload.email, payload.password).pipe(
-        map((user: User) => {
-          return new LogInSuccess({token: user.token, email: payload.email});
+      return this.authService.logIn(payload.email, payload.password)
+      // side effect & setting up the wallet
+      .pipe(
+        map((logInResponse: any) => {
+          return new LogInSuccess({
+            // @todo: refactor to encode with a password hash
+            password: payload.password,
+
+            token: logInResponse.token,
+            user: logInResponse.user,
+            wallet: logInResponse.wallet,
+            email: payload.email
+          });
         }),
         catchError((error) => {
           return of(new LogInFailure({ error: error }));
-        }),
+        })
       );
     })
   );

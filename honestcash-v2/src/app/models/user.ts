@@ -10,4 +10,7 @@ export default class User {
   addressBCH?: string;
   addressSLP?: string;
   userProperties?: UserProp[];
+  wallet?: {
+    mnemonicEncrypted: string;
+  };
 }
