@@ -1,6 +1,8 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { Store } from '@ngrx/store';
+import { StoreMock } from './store/store.mock';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -11,6 +13,11 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [
+        {
+          provide: Store, useClass: StoreMock
+        }
+      ]
     }).compileComponents();
   }));
 

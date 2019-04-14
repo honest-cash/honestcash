@@ -19,13 +19,14 @@ import {
 } from '@services/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({
+      appId: 'honestcash-v2'
+    }),
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
