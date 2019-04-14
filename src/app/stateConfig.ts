@@ -1,4 +1,12 @@
 import appComponentHtml from "../app.component.html";
+import feedsHtml from "./feeds/feeds.html";
+import walletHtml from "./wallet/wallet.html";
+import notifsHtml from "./notifs/notifs.html";
+import settingsHtml from "./settings/settings.html";
+import postsHtml from "./posts/posts.html";
+import profileHtml from "./profile/profile.html";
+import postHtml from "./post/post.html";
+import profileEditHtml from "./profile-edit/profile-edit.html";
 import { IGlobalScope } from "../core/lib/interfaces";
 
 const redirectIfNotLoggedIn = [
@@ -13,7 +21,7 @@ const redirectIfNotLoggedIn = [
 const getFeedState = url => {
   return {
     url,
-    templateUrl: "/templates/feeds.html",
+    template: feedsHtml,
     controller: "feedsController",
   };
 };
@@ -30,7 +38,7 @@ export default function state($stateProvider, $urlRouterProvider) {
     .state("wallet.create", {
       controller: "walletController",
       url: "/wallet",
-      templateUrl: "/templates/wallet.html",
+      template: walletHtml,
       resolve: {
         isLoggedIn: redirectIfNotLoggedIn,
       },
@@ -47,7 +55,10 @@ export default function state($stateProvider, $urlRouterProvider) {
      */
     .state("vicigo.feeds", getFeedState("/"))
     .state("vicigo.feedsNew", getFeedState("/{feedType:new|top}"))
-    .state("vicigo.feedsNewScoped", getFeedState("/{feedType:new|top}?feedScope={last-month|all-time}"))
+    .state(
+      "vicigo.feedsNewScoped",
+      getFeedState("/{feedType:new|top}?feedScope={last-month|all-time}"),
+    )
     .state("vicigo.hashtag", getFeedState("/hashtag/:hashtag?feedScope={all-time}"))
     .state(
       "vicigo.hashtagFeed",
@@ -59,7 +70,7 @@ export default function state($stateProvider, $urlRouterProvider) {
      */
     .state("vicigo.notifs", {
       url: "/notifs",
-      templateUrl: "/templates/notifs.html",
+      template: notifsHtml,
       controller: "notifsCtrl",
       controllerAs: "notifsCtrl",
       resolve: {
@@ -68,7 +79,7 @@ export default function state($stateProvider, $urlRouterProvider) {
     })
     .state("vicigo.settings", {
       url: "/settings",
-      templateUrl: "/templates/settings.html",
+      template: settingsHtml,
       controller: "settingsCtrl",
       resolve: {
         isLoggedIn: redirectIfNotLoggedIn,
@@ -76,23 +87,15 @@ export default function state($stateProvider, $urlRouterProvider) {
     })
     .state("vicigo.posts", {
       url: "/posts",
-      templateUrl: "/templates/posts.html",
+      template: postsHtml,
       controller: "postsCtrl",
-      resolve: {
-        isLoggedIn: redirectIfNotLoggedIn,
-      },
-    })
-    .state("vicigo.drafts", {
-      url: "/drafts/",
-      templateUrl: "/templates/drafts.html",
-      controller: "draftsController",
       resolve: {
         isLoggedIn: redirectIfNotLoggedIn,
       },
     })
     .state("vicigo.profile", {
       url: "/profile/:profileId",
-      templateUrl: "/templates/profile.html",
+      template: profileHtml,
       controller: "profileController",
       controllerAs: "profileCtrl",
       resolve: {
@@ -114,7 +117,7 @@ export default function state($stateProvider, $urlRouterProvider) {
     })
     .state("vicigo.profileEdit", {
       url: "/profile/:profileId/edit",
-      templateUrl: "/templates/profile-edit.html",
+      template: profileEditHtml,
       controller: "profileEditController",
       requireLogin: true,
       resolve: {
@@ -137,19 +140,19 @@ export default function state($stateProvider, $urlRouterProvider) {
     })
     .state("vicigo.post", {
       url: "/:username/:alias",
-      templateUrl: "/templates/post.html",
+      template: postHtml,
       controller: "postController",
       controllerAs: "postCtrl",
     })
     .state("vicigo.postById", {
       url: "/post/:postId",
-      templateUrl: "/templates/post.html",
+      template: postHtml,
       controller: "postController",
       controllerAs: "postCtrl",
     })
     .state("vicigo.postByAlias", {
       url: "/post/:username/:alias",
-      templateUrl: "/templates/post.html",
+      template: postHtml,
       controller: "postController",
       controllerAs: "postCtrl",
     });
