@@ -1,5 +1,3 @@
-import { IHttpService, IQService, IWindowService } from "angular";
-import { SHA3 } from "sha3";
 import { User } from "../core/models/models";
 export class AuthService {
   public static $inject = [
@@ -19,11 +17,12 @@ export class AuthService {
   public LOCAL_USER = "HC_CASH_USER";
 
   constructor(
-    private $window: IWindowService,
-    private $http: IHttpService,
-    private $q: IQService,
+    private $window: ng.IWindowService,
+    private $http: ng.IHttpService,
+    private $q: ng.IQService,
     private apiFactory,
-  ) {}
+  ) {
+  }
 
   public getUserId = () => this.authUserId;
 
@@ -45,7 +44,7 @@ export class AuthService {
 
   public storeUserCredentials(token: string, userId: number): void {
     this.$window.localStorage.setItem(this.LOCAL_TOKEN_KEY, token);
-    this.$window.localStorage.setItem(this.LOCAL_USER_ID_KEY, userId);
+    this.$window.localStorage.setItem(this.LOCAL_USER_ID_KEY, userId.toString());
 
     this.useCredentials(token, userId);
   }
@@ -61,7 +60,7 @@ export class AuthService {
 
   public async login(data: { email: string, password: string }) {
     const res = await this.$http.post<{
-      token: string; user: User; wallet: any
+      token: string; user: User; wallet: { mnemonicEncrypted: string }
     }>(this.apiFactory("LOGIN"), data);
 
     this.storeUserCredentials(res.data.token, res.data.user.id);
@@ -73,9 +72,12 @@ export class AuthService {
     return this.$q((resolve, reject) => {
       this.$http
       .post(this.apiFactory("PASSWORD_CHECK"), data)
-      .then((res) => {
-        resolve(res.data);
-      },    reject);
+      .then(
+        (res) => {
+          resolve(res.data);
+        },
+        reject,
+      );
     });
   }
 
@@ -86,7 +88,9 @@ export class AuthService {
     userType: number;
     captcha: string;
   }) {
-    const response = await this.$http.post<{ token: string; user: any; }>(this.apiFactory("SIGNUP"), data);
+    const response = await this
+      .$http
+      .post<{ token: string; user: any; }>(this.apiFactory("SIGNUP"), data);
     const authData = response.data;
 
     this.storeUserCredentials(authData.token, authData.user.id);
@@ -134,22 +138,5 @@ export class AuthService {
 
   public getAuthToken = () => {
     return this.authToken;
-  }
-
-  public calculatePasswordHash(email: string, password: string): string {
-    return this.calculateSHA3Hash(
-      this.determineMessageForHashing(email, password),
-    );
-  }
-
-  public determineMessageForHashing(salt: string, password: string): string {
-    return `${salt}:${password}`;
-  }
-
-  public calculateSHA3Hash(message: string): string {
-    const hash = new SHA3(512);
-    const passwordHash = hash.update(message).digest("hex");
-
-    return passwordHash;
   }
 }

@@ -1,4 +1,5 @@
 import { ISimpleWallet } from "./interfaces";
+import * as logger from "./logger";
 
 declare var SimpleWallet: any;
 
@@ -7,7 +8,7 @@ let wallet = null;
 export const defaultHdPath = "m/44'/0'/0'/0/0";
 
 export const set = (lWallet: ISimpleWallet) => {
-    wallet = lWallet;
+  wallet = lWallet;
 };
 
 export const clean = () => {
@@ -24,21 +25,31 @@ export const saveLocally = (simpleWallet: ISimpleWallet) => {
 };
 
 export const loadWallet = (mnemonic?: string, password?: string) => {
-  let HdPath;
+  logger.log(`Loading wallet: ${mnemonic}, ${password}, ${defaultHdPath}`);
+
+  // tslint:disable-next-line
+  let HdPath: string;
+  let providedMnemonic: string = mnemonic;
 
   if (!mnemonic) {
-    mnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
+    logger.log("No mnemonic provided, loading from local storage.");
+
+    providedMnemonic = localStorage.getItem("HC_BCH_MNEMONIC");
     HdPath = localStorage.getItem("HC_BCH_HD_PATH") || defaultHdPath;
   }
 
-  if (!mnemonic) {
+  if (!providedMnemonic) {
+    logger.log("No mnemonic so the wallet could not be loaded!");
+
     return;
   }
 
-  const simpleWallet: ISimpleWallet = new SimpleWallet(mnemonic, {
+  const simpleWallet: ISimpleWallet = new SimpleWallet(providedMnemonic, {
     HdPath,
-    password
+    password,
   });
+
+  logger.log(simpleWallet);
 
   saveLocally(simpleWallet);
 
@@ -48,5 +59,5 @@ export const loadWallet = (mnemonic?: string, password?: string) => {
 };
 
 export const get = () => {
-    return wallet;
+  return wallet;
 };

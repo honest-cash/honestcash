@@ -1,7 +1,9 @@
 import "./simple-ledger-protocol-details.styles.less";
-import template from "./simple-ledger-protocol-details.template.html";
+import
+  simpleLedgerProtocolDetailsTemplateHtml
+from "./simple-ledger-protocol-details.template.html";
 
-import tippy from "tippy.js";
+import tippyJs from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import { User } from "../../../core/models/models";
 import BitcoinComService from "../../../core/services/BitcoinComService";
@@ -17,7 +19,7 @@ class SimpleLedgerProtocolDetailsController {
   public static $inject = [
     "$scope",
     "BitcoinComService",
-    "ScopeService"
+    "ScopeService",
   ];
 
   public addressBCH: string;
@@ -28,7 +30,7 @@ class SimpleLedgerProtocolDetailsController {
   constructor(
     private $scope: ISimpleLedgerProtocolDetailsScope,
     private bitcoinComService: BitcoinComService,
-    private scopeService: ScopeService
+    private scopeService: ScopeService,
   ) {
     this.ngOnInit();
   }
@@ -43,7 +45,8 @@ class SimpleLedgerProtocolDetailsController {
     const balanceResult = await this.bitcoinComService.getSLPAddressBalance(this.addressSLP);
 
     const token = balanceResult.find(
-      balance => balance.tokenId ==="c35a87afad11c8d086c1449ffd8b0a84324e72b15b1bcfdf166a493551b4eea6"
+      balance =>
+        balance.tokenId === "c35a87afad11c8d086c1449ffd8b0a84324e72b15b1bcfdf166a493551b4eea6",
     );
 
     if (!token) {
@@ -63,8 +66,8 @@ class SimpleLedgerProtocolDetailsController {
 
     this.scopeService.safeApply(this.$scope);
 
-    tippy(".hc-tokens-badge", {
-      content: `Proud owner of ${this.balanceSLP} Honest Tokens`
+    tippyJs(".hc-tokens-badge", {
+      content: `Proud owner of ${this.balanceSLP} Honest Tokens`,
     });
   }
 }
@@ -75,9 +78,9 @@ export default function simpleLedgerProtocolDetails(): ng.IDirective {
     controllerAs: "simpleLedgerProtocolDetailsCtrl",
     restrict: "E",
     scope: {
-      profile: "="
+      profile: "=",
     },
     replace: true,
-    template
+    template: simpleLedgerProtocolDetailsTemplateHtml,
   };
 }

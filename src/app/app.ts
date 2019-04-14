@@ -1,24 +1,24 @@
 import "../core/style.css";
-import "../core/layout.css";
 import "./styles/profile.css";
 import "./styles/post.css";
 import "./styles/feed.css";
 
-// import angular from 'angular';
 import angularUiRouter from "angular-ui-router";
 import ngInfiniteScroll from  "ng-infinite-scroll";
-import ProfileCtrl from "./controllers/ProfileCtrl";
-import ProfileEditCtrl from "./controllers/ProfileEditCtrl";
-import FeedsCtrl from "./controllers/FeedsCtrl";
-import PostsCtrl from "./controllers/PostsCtrl";
-import DraftsCtrl from "./controllers/DraftsCtrl";
-import NotifsCtrl from "./controllers/NotifsCtrl";
+
+import ProfileCtrl from "./profile/ProfileCtrl";
+import ProfileEditCtrl from "./profile-edit/ProfileEditCtrl";
+import FeedsCtrl from "./feeds/FeedsCtrl";
+import PostsCtrl from "./posts/PostsCtrl";
+import NotifsCtrl from "./notifs/NotifsCtrl";
+import SettingsCtrl from "./settings/SettingsCtrl";
+
 import routing from "../core/config/routing";
 import http from "../core/config/http";
 import stateConfig from "./stateConfig";
 
-import PostCtrl from "./controllers/PostCtrl";
-import WalletCtrl from "./controllers/WalletCtrl";
+import PostCtrl from "./post/PostCtrl";
+import WalletCtrl from "./wallet/WalletCtrl";
 import MainCtrl from "../core/controllers/MainCtrl";
 import * as runs from "../core/runs/runs";
 import { AuthService } from "../auth/AuthService";
@@ -29,7 +29,8 @@ import "../core/services";
 import "./components";
 
 import "../core/config/toastr";
-import SettingsCtrl from "./controllers/SettingsCtrl";
+
+declare var angular: any;
 
 angular.module("hashtag-app", [
   angularUiRouter,
@@ -50,8 +51,8 @@ angular.module("hashtag-app", [
 .controller("appController", [
   "$scope",
   "AuthService",
-  function ($scope, AuthService: AuthService) {
-	  $scope.AUTH_TOKEN = AuthService.getAuthToken();
+  ($scope, authService: AuthService) => {
+    $scope.AUTH_TOKEN = authService.getAuthToken();
   },
 ])
 
@@ -61,7 +62,6 @@ angular.module("hashtag-app", [
 .controller("profileController", ProfileCtrl)
 .controller("profileEditController", ProfileEditCtrl)
 .controller("feedsController", FeedsCtrl)
-.controller("draftsController", DraftsCtrl)
 .controller("postsCtrl", PostsCtrl)
 .controller("settingsCtrl", SettingsCtrl)
 .controller("notifsCtrl", NotifsCtrl)

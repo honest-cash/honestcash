@@ -7,7 +7,7 @@ export interface ICurrencyConversion {
 
 export default class WalletService {
   public static $inject = [
-    "$http"
+    "$http",
   ];
 
   private walletBalance: ICurrencyConversion;
@@ -19,7 +19,7 @@ export default class WalletService {
   };
 
   constructor(
-    private $http: ng.IHttpService
+    private $http: ng.IHttpService,
   ) {
     this.startRefreshing();
   }
@@ -41,7 +41,7 @@ export default class WalletService {
   private async startRefreshing() {
     setInterval(async () => {
       this.walletBalance = await this.updateBalances();
-    }, 30 * 1000);
+    },          30 * 1000);
   }
 
   public async convertBCHtoUSD(bch: number): Promise<ICurrencyConversion> {
@@ -52,11 +52,10 @@ export default class WalletService {
     }
 
     return {
-      bch: bch,
-      usd: Number((this.bchUSDRate * bch).toFixed(2))
+      bch,
+      usd: Number((this.bchUSDRate * bch).toFixed(2)),
     };
   }
-
 
   public async convertUSDtoBCH(usd: number): Promise<ICurrencyConversion> {
     if (!this.bchUSDRate) {
@@ -67,7 +66,7 @@ export default class WalletService {
 
     return {
       usd,
-      bch: Number((1/this.bchUSDRate * usd).toFixed(4))
+      bch: Number((1 / this.bchUSDRate * usd).toFixed(4)),
     };
   }
 
@@ -80,7 +79,9 @@ export default class WalletService {
 
     this.walletInfo = await simpleWallet.getWalletInfo();
 
-    const balanceInBCH = Number((this.walletInfo.balance + this.walletInfo.unconfirmedBalance).toFixed(8));
+    const balanceInBCH = Number(
+      (this.walletInfo.balance + this.walletInfo.unconfirmedBalance).toFixed(8),
+    );
 
     return { totalBalance: balanceInBCH };
   }

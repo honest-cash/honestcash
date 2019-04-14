@@ -1,3 +1,5 @@
-export const log = console.log;
+import { environment } from "../../environments/environment";
 
-export const error = console.error;
+export const log = !environment.production ? console.log : (_) => {};
+
+export const error = !environment.production ? console.error : (_) => {};

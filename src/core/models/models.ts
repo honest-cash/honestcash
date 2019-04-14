@@ -1,3 +1,5 @@
+import { IUserProp } from "../lib/interfaces";
+
 export type TPostTypeId = "comment" | "article" | "response";
 
 export interface IFetchPostsArgs {
@@ -22,6 +24,7 @@ export class User {
   public imageUrl: string;
   public addressBCH: string;
   public addressSLP: string;
+  public userProperties: IUserProp[];
 }
 
 export class Upvote {

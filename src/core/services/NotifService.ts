@@ -3,32 +3,32 @@ import { dateFormat } from "../../core/config/index";
 import Notif from "../models/Notif";
 
 export default class NotifService {
-   public static $inject = [
+  public static $inject = [
     "$http",
-    "API_URL"
+    "API_URL",
   ];
 
   constructor(
     private $http: ng.IHttpService,
-    private API_URL: string
+    private API_URL: string,
   ) {}
 
   public async markAsRead(notif: Notif): Promise<void> {
     await this.$http({
       method: "PUT",
-      url: this.API_URL + `/notifications/${notif.id}/read`
+      url: `${this.API_URL}/notifications/${notif.id}/read`,
     });
 
     return;
   }
 
   public async getNotifs(params: {
-    page: number
+    page: number,
   }): Promise<Notif[]> {
     const res = await this.$http({
-      method: "GET",
       params,
-      url: this.API_URL + "/notifications"
+      method: "GET",
+      url: `${this.API_URL}/notifications`,
     });
 
     const notifs = res.data as Notif[];
