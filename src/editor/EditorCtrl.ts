@@ -64,7 +64,6 @@ export default class EditorCtrl {
     $scope.isFullPostShown = false;
     $scope.hasOnlyOneSection = false;
     $scope.paidSectionEnabled = false;
-    $scope.hasPaidSection = false;
     $scope.publishTouched = false;
     $scope.paidSectionLineBreakTouched = false;
     $scope.paidSectionCostInUSD = 0;
@@ -130,61 +129,65 @@ export default class EditorCtrl {
     };
 
     $scope.switchLinebreak = (action: "increment" | "decrement") => {
-      switch (action) {
-        case ("increment"):
-          if ($scope.draft.paidSectionLinebreak < $scope.paidSectionLinebreakEnd - 1) {
-            adjustPaidSectionLinebreak(action);
-            refreshBodies();
-            scrollToLinebreak(action);
-          }
-          break;
-        case ("decrement"):
-          if ($scope.draft.paidSectionLinebreak > 0) {
-            adjustPaidSectionLinebreak(action);
-            refreshBodies();
-            scrollToLinebreak(action);
-          }
-          break;
-        default:
-          break;
+      if ($scope.draft.hasPaidSection) {
+        switch (action) {
+          case ("increment"):
+            if ($scope.draft.paidSectionLinebreak < $scope.paidSectionLinebreakEnd - 1) {
+              adjustPaidSectionLinebreak(action);
+              refreshBodies();
+              scrollToLinebreak(action);
+            }
+            break;
+          case ("decrement"):
+            if ($scope.draft.paidSectionLinebreak > 0) {
+              adjustPaidSectionLinebreak(action);
+              refreshBodies();
+              scrollToLinebreak(action);
+            }
+            break;
+          default:
+            break;
+        }
       }
     };
 
     $scope.setPaidSectionCost = async (currency) => {
-      const inputBCH = (<HTMLInputElement>document.getElementById("paidSectionCostInBCH"));
-      const inputUSD = (<HTMLInputElement>document.getElementById("paidSectionCostInUSD"));
-      let cost = currency === "bch" ?
-        inputBCH ?
-          inputBCH.valueAsNumber :
-          0 :
-        inputUSD ?
-          inputUSD.valueAsNumber :
-          0;
-      if (currency === "bch") {
-        if (cost > DEFAULT_PAID_SECTION_COST_MAX) {
-          cost = 1;
-          $scope.draft.paidSectionCost = 1;
-        }
-        const { usd } = await this.walletService.convertBCHtoUSD(cost);
-        // the following line is due to bug in firefox
-        inputUSD.valueAsNumber = usd;
-        $scope.draft.paidSectionCost = cost;
-        $scope.paidSectionCostInUSD = usd;
-        this.scopeService.safeApply($scope);
-      } else if (currency === "usd") {
-        const { bch } = await this.walletService.convertUSDtoBCH(cost);
-        if (bch > DEFAULT_PAID_SECTION_COST_MAX) {
-          $scope.draft.paidSectionCost = 1;
-          inputBCH.valueAsNumber = 1;
+      if ($scope.draft.hasPaidSection) {
+        const inputBCH = (<HTMLInputElement>document.getElementById("paidSectionCostInBCH"));
+        const inputUSD = (<HTMLInputElement>document.getElementById("paidSectionCostInUSD"));
+        let cost = currency === "bch" ?
+          inputBCH ?
+            inputBCH.valueAsNumber :
+            0 :
+          inputUSD ?
+            inputUSD.valueAsNumber :
+            0;
+        if (currency === "bch") {
+          if (cost > DEFAULT_PAID_SECTION_COST_MAX) {
+            cost = 1;
+            $scope.draft.paidSectionCost = 1;
+          }
+          const { usd } = await this.walletService.convertBCHtoUSD(cost);
+          // the following line is due to bug in firefox
+          inputUSD.valueAsNumber = usd;
+          $scope.draft.paidSectionCost = cost;
+          $scope.paidSectionCostInUSD = usd;
           this.scopeService.safeApply($scope);
-          return $scope.setPaidSectionCost("bch");
+        } else if (currency === "usd") {
+          const { bch } = await this.walletService.convertUSDtoBCH(cost);
+          if (bch > DEFAULT_PAID_SECTION_COST_MAX) {
+            $scope.draft.paidSectionCost = 1;
+            inputBCH.valueAsNumber = 1;
+            this.scopeService.safeApply($scope);
+            return $scope.setPaidSectionCost("bch");
+          }
+          // the following line is due to bug in firefox
+          inputBCH.valueAsNumber = bch;
+          $scope.paidSectionCostInUSD = cost;
+          $scope.draft.paidSectionCost = bch;
         }
-        // the following line is due to bug in firefox
-        inputBCH.valueAsNumber = bch;
-        $scope.paidSectionCostInUSD = cost;
-        $scope.draft.paidSectionCost = bch;
+        this.scopeService.safeApply($scope);
       }
-      this.scopeService.safeApply($scope);
     };
 
     $scope.togglePaidSection = () => {
@@ -218,19 +221,30 @@ export default class EditorCtrl {
         });
     };
 
+    const resetPaidSectionProperties = () => {
+      if ($scope.hasOnlyOneSection) {
+        $scope.draft.paidSectionCost = null;
+        $scope.draft.paidSectionLinebreak = null;
+        $scope.draft.hasPaidSection = false;
+        this.scopeService.safeApply($scope);
+      }
+    };
+
     const refreshBodies = (externalHtml?) => {
       fixedBody = this.editorService.getFixedBody(bodyEditor, externalHtml);
       $scope.hasOnlyOneSection = $(fixedBody).length < 2 ?
         true :
         false;
+
       $scope.fixedBody = fixedBody;
       $scope.freeBodyCut = this.editorService
-        .getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+      .getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
       $scope.paidBodyCut = this.editorService
-        .getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+      .getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
       $scope.paidBodyCutEnd = this.editorService
-        .getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
+      .getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
       setPaidSectionLinebreakEnd();
+      resetPaidSectionProperties();
     };
 
     let parentPostId;
@@ -314,7 +328,7 @@ export default class EditorCtrl {
     };
 
     $scope.publishPost = (postId: number) => {
-      if ($scope.hasPaidSection && !$scope.paidSectionLineBreakTouched) {
+      if ($scope.draft.hasPaidSection && !$scope.paidSectionLineBreakTouched) {
         $scope.publishTouched = true;
         return;
       }
@@ -547,7 +561,7 @@ export default class EditorCtrl {
 
       if (bodyMD) {
         document.getElementById("body").setAttribute("data-placeholder", "");
-        const html = converter.makeHtml(bodyMD);
+        const html = converter.makeHtml(bodyMD);//
         refreshBodies(html);
         setPaidSectionLinebreakEnd();
         bodyEditor.setContent(fixedBody, 0);
@@ -596,8 +610,9 @@ export default class EditorCtrl {
 
               $scope.draft.hasPaidSection = $scope.draft.paidSectionCost &&
                 $scope.draft.paidSectionLinebreak;
+
               $scope.paidSectionEnabled = $scope.draft.parentPostId ? false : true;
-        
+
               resetPaidSectionCostIfNull();
               initEditor($scope.draft.id);
             },    (err: any) => {
