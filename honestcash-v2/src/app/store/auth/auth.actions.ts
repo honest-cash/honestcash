@@ -38,6 +38,7 @@ export class SignUp implements Action {
     username: string;
     email: string;
     password: string;
+    captcha: string;
   }) {}
 }
 

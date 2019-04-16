@@ -33,15 +33,17 @@ export class AuthService {
     email: string;
     password: string;
     username: string;
+    captcha: string;
   }): Observable<User> {
-    const url = `${this.BASE_URL}/register`;
+    const url = `${this.BASE_URL}/signup/email`;
 
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
     return this.http.post<User>(url, {
       username: payload.username,
       email: payload.email,
-      password: passwordHash
+      password: passwordHash,
+      captcha: payload.captcha
     });
   }
 

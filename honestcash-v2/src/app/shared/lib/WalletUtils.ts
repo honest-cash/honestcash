@@ -18,7 +18,6 @@ interface ISimpleBitcoinWallet {
 }
 
 export class WalletUtils {
-  // @todo add typings to SimpleBitcoinWallet
 
   static generateNewWallet(password: string): ISimpleBitcoinWallet {
     const newWallet = new SimpleBitcoinWallet(null, {
@@ -35,4 +34,15 @@ export class WalletUtils {
 
     return newWallet;
   }
+  // @todo add typings to SimpleBitcoinWallet
+
+  /**
+  private getWallet() {
+    require.ensure(['simple-bitcoin-wallet'], require => {
+      let yourModule = require('simple-bitcoin-wallet');
+
+      yourModule.someFunction();
+   });
+  }
+  */
 }
