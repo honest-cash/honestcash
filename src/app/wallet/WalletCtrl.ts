@@ -7,6 +7,7 @@ import WalletService from "../../core/services/WalletService";
 import ProfileService from "../../core/services/ProfileService";
 import { IGlobalScope } from "../../core/lib/interfaces";
 import UserPropsService from "../../core/services/UserPropsService";
+import { calculatePasswordHash } from "../../core/lib/crypto";
 
 declare var SimpleWallet: any;
 declare var bitbox: any;
@@ -45,6 +46,7 @@ export default class WalletCtrl {
     "ScopeService",
     "WalletService",
     "ProfileService",
+    "UserPropsService",
   ];
 
   constructor(
@@ -100,7 +102,7 @@ export default class WalletCtrl {
       const emails = await this.authService.getEmails();
 
       const data = await this.authService.passwordCheck({
-        password: this.authService.calculatePasswordHash(emails[0], password),
+        password: calculatePasswordHash(emails[0], password),
       });
 
       if (!data.isValid) {

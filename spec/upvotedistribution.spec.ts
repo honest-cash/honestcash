@@ -3,7 +3,7 @@ import * as upvoteDistribution from "../src/core/lib/upvoteDistribution";
 
 describe("upvoteDistribution", () => {
   it("calculates receivers of the upvote", () => {
-    const calculatedReceivers = upvoteDistribution.determineUpvoteRewards(upvoteData(20), {
+    const calculatedReceivers = upvoteDistribution.determineUpvoteRewards(200000, upvoteData(20), {
       id: 1,
       addressBCH: "bitcoincash:qr95a8y0puqm6y89vtg0y5xleklh682z5u97fm628d",
     });

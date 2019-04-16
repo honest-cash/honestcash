@@ -39,9 +39,12 @@ export default class WalletService {
   }
 
   private async startRefreshing() {
-    setInterval(async () => {
-      this.walletBalance = await this.updateBalances();
-    },          30 * 1000);
+    setInterval(
+      async () => {
+        this.walletBalance = await this.updateBalances();
+      },
+      30 * 1000,
+    );
   }
 
   public async convertBCHtoUSD(bch: number): Promise<ICurrencyConversion> {
@@ -59,14 +62,16 @@ export default class WalletService {
 
   public async convertUSDtoBCH(usd: number): Promise<ICurrencyConversion> {
     if (!this.bchUSDRate) {
-      const res = await this.$http.get(`https://api.coinbase.com/v2/exchange-rates?currency=BCH`);
+      const res = await this.$http.get(
+        `https://api.coinbase.com/v2/exchange-rates?currency=BCH&callback=JSON_CALLBACK`,
+      );
 
       this.bchUSDRate = Number((res.data as { data: { rates: { USD: number }}}).data.rates.USD);
     }
 
     return {
       usd,
-      bch: Number((1 / this.bchUSDRate * usd).toFixed(4)),
+      bch: Number((1 / this.bchUSDRate * usd).toFixed(6)),
     };
   }
 
