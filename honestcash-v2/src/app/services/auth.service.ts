@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import User from '@models/user';
 import {environment} from '../../environments/environment';
 import {CryptoUtils} from '../shared/lib/CryptoUtils';
+import { HttpService } from '@app/core';
 
 export interface ILogInResponse {
   user: User;
@@ -15,7 +15,7 @@ export interface ILogInResponse {
 export class AuthService {
   private BASE_URL = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpService) {}
 
   public getToken(): string {
     return localStorage.getItem('token');
@@ -55,7 +55,7 @@ export class AuthService {
     });
   }
 
-  public async changePassword(data: {
+  public changePassword(data: {
     email: string;
     code: string,
     newPassword: string,
@@ -65,6 +65,9 @@ export class AuthService {
     return this.http.post(`${this.BASE_URL}/auth/reset-password"`, data);
   }
 
+  public getMe() {
+    return this.http.get<User>(`${this.BASE_URL}/me`);
+  }
 
   getStatus(): Observable<User> {
     const url = `${this.BASE_URL}/status`;

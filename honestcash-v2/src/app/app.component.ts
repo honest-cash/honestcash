@@ -3,6 +3,8 @@ import { Store } from '@ngrx/store';
 import { AppState, selectAuthState, selectWalletState } from './store/app.states';
 import { Observable } from 'rxjs';
 import { WalletSetup, WalletCleanup } from './store/wallet/wallet.actions';
+import { AuthService } from './services/auth.service';
+import { UserSetup } from './store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +19,20 @@ export class AppComponent implements OnInit {
   authState: Observable<any>;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private authService: AuthService
   ) {
     this.walletState = this.store.select(selectWalletState);
     this.authState = this.store.select(selectAuthState);
   }
 
   ngOnInit() {
+    this.setupUser();
+    this.setupWallet();
+  }
+
+  private setupWallet() {
+    // setup the wallet
     this.authState.subscribe((authState) => {
       // depending on the result of authentification, setup or cleanup the wallet.
       this.store.dispatch(
@@ -37,4 +46,18 @@ export class AppComponent implements OnInit {
       );
     });
   }
+
+  private setupUser() {
+    // setup the user
+    this.authService.getMe().subscribe(user => {
+      // dispatch an action to init a user in a store
+      console.log(user);
+
+      this.store.dispatch(
+        new UserSetup({ user })
+      );
+    });
+  }
+
+  // @todo destroy the subs on exit
 }

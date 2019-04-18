@@ -21,6 +21,12 @@ export function reducer(state = initialState, action: All): State {
         errorMessage: 'Incorrect email and/or password.'
       };
     }
+    case AuthActionTypes.USER_SETUP: {
+      return {
+        ...state,
+        user: action.payload.user
+      };
+    }
     case AuthActionTypes.SIGNUP_SUCCESS: {
       return {
         ...state,
