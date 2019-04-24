@@ -5,6 +5,7 @@ import { IGlobalScope } from "../../core/lib/interfaces";
 import { Post, Upvote, Unlock } from "../../core/models/models";
 import PostService from "../../core/services/PostService";
 import ScopeService from "../../core/services/ScopeService";
+import SoundcloudService from "src/core/services/SoundcloudService";
 
 declare var QRCode: any;
 export default class PostCtrl {
@@ -13,6 +14,7 @@ export default class PostCtrl {
     "$rootScope",
     "$stateParams",
     "PostService",
+    "SoundcloudService",
     "ScopeService",
   ];
   public isLoading: boolean = true;
@@ -31,6 +33,7 @@ export default class PostCtrl {
     private $rootScope: IGlobalScope,
     private $stateParams,
     private postService: PostService,
+    private soundcloudService: SoundcloudService,
     private scopeService: ScopeService,
   ) {
     this.ngInit();
@@ -101,6 +104,7 @@ export default class PostCtrl {
     }
 
     this.initTippy();
+    this.initEmbeds();
   }
 
   private sortResponses(order: "upvoteCount" | "createdAt") {
@@ -133,6 +137,14 @@ export default class PostCtrl {
   private async initTippy() {
     tippyJs(".hc-tooltip");
     tippyJs(".user-follower-count");
+  }
+
+  private async initEmbeds() {
+    $(".embeds-soundcloud").map(async (index, element) => {
+      const link = $(element).find(">:first-child").attr("href");
+      const result = await this.soundcloudService.getIframe(link);
+      $(element).find(">:first-child").replaceWith($(result.data.html));
+    });
   }
 
   private displayFeedBody(html: string): string {

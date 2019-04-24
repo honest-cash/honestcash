@@ -7,6 +7,7 @@ import RelsService from "./RelsService";
 import ScopeService from "./ScopeService";
 import WalletService from "./WalletService";
 import BitcoinComService from "./BitcoinComService";
+import SoundcloudService from "./SoundcloudService";
 import UserPropsService from "./UserPropsService";
 
 declare var angular: any;
@@ -20,5 +21,6 @@ declare var angular: any;
 .service("ScopeService", ScopeService)
 .service("WalletService", WalletService)
 .service("BitcoinComService", BitcoinComService)
+.service("SoundcloudService", SoundcloudService)
 .service("UserPropsService", UserPropsService)
 .service("NotifService", NotifService);

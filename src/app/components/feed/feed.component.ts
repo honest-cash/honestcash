@@ -5,12 +5,22 @@ import feedTemplateHtml from "./feed.template.html";
 import feedStylesLess from "./feed.styles.less";
 
 import PostService from "../../../core/services/PostService";
+import SoundcloudService from "src/core/services/SoundcloudService";
 
 class FeedDirectiveCtrl {
+
+  public static $inject = [
+    "$scope",
+    "$sce",
+    "PostService",
+    "SoundcloudService",
+  ];
+
   constructor(
     private $scope,
     private $sce,
     private postService: PostService,
+    private soundcloudService: SoundcloudService,
   ) {
     this.$scope.styles = feedStylesLess;
 
@@ -23,6 +33,7 @@ class FeedDirectiveCtrl {
     };
 
     this.initTippy();
+    this.initEmbeds();
   }
 
   private async initTippy() {
@@ -37,11 +48,14 @@ class FeedDirectiveCtrl {
     });
   }
 
-  static $inject = [
-    "$scope",
-    "$sce",
-    "PostService",
-  ];
+  private async initEmbeds() {
+    $(".embeds-soundcloud").map(async (index, element) => {
+      const link = $(element).find(">:first-child").attr("href");
+      const result = await this.soundcloudService.getIframe(link);
+      $(element).find(">:first-child").replaceWith($(result.data.html));
+    });
+  }
+
 }
 
 export default function feed(): ng.IDirective {
