@@ -1,6 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CoreModule } from '@app/core';
+import { CoreModule } from '../../core/index';
 import { EditorWrapperComponent } from './editor-wrapper.component';
 
 describe('EditorsComponent', () => {

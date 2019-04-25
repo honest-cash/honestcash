@@ -4,6 +4,6 @@ const localApiUrl = "http://localhost:8080/api";
 
 export const environment = {
   production: false,
-  apiUrl: productionApiUrl,
+  apiUrl: localApiUrl,
   dateFormat: "MMM Do YY",
 };

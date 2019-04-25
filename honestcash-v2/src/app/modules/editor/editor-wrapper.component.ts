@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '@env/environment';
-import { Logger } from '@app/core';
+import { environment } from '../../../environments/environment';
+import { Logger } from '../../core/index';
 
 const log = new Logger('Editor');
 
