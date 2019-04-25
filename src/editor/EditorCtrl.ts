@@ -9,10 +9,16 @@ import "medium-editor/dist/css/themes/default.min.css";
 import { AuthService } from "../auth/AuthService";
 import toastr from "../core/config/toastr";
 import PostService from "../core/services/PostService";
+import * as logger from "../core/lib/logger";
 import EditorService from "./services/EditorService";
 import WalletService, { ICurrencyConversion } from "../core/services/WalletService";
 import ScopeService from "../core/services/ScopeService";
 import { IModalElement, IMediumInsertPlugin, ITagIt } from "../core/lib/dependency-interfaces";
+
+import titleEditorConfig from "./config/titleEditor.config";
+import bodyEditorConfig from "./config/bodyEditor.config";
+
+type TMediumEditor = any;
 
 const converter = new showdown.Converter({
   simpleLineBreaks: true,
@@ -21,6 +27,36 @@ const converter = new showdown.Converter({
 
 const DEFAULT_PAID_SECTION_COST_MIN = 0.001;
 const DEFAULT_PAID_SECTION_COST_MAX = 1;
+
+interface IEditorScope extends ng.IScope {
+  isLoading: boolean;
+  draft: any;
+  ready: boolean;
+  Saving: {
+    body: number | null;
+    title: number | null;
+  };
+  saving: boolean;
+  isFullPostShown: boolean;
+  hasOnlyOneSection: boolean;
+  paidSectionEnabled: boolean;
+  hasPaidSection: boolean;
+  publishTouched: boolean;
+  paidSectionLineBreakTouched: boolean;
+  paidSectionCostInUSD: number;
+  showPaidSectionCostInUSD: boolean;
+  paidSectionLinebreakEnd: number;
+
+  setPaidSectionCost(currency: "bch" | "usd"): Promise<any>;
+  toggleFullPost(): any;
+  trustAsHtml(html: string): any;
+  switchLinebreak(action: "increment" | "decrement"): any;
+  togglePaidSection(): any;
+  displayFeedBody(html: string): any;
+  readyToPublish(): any;
+  publishPost(postId: number): any;
+  switchEditor(): any;
+}
 
 export default class EditorCtrl {
   public static $inject = [
@@ -37,9 +73,13 @@ export default class EditorCtrl {
   ];
 
   private currencies: ICurrencyConversion;
+  private parentPostId: number;
+  private fixedBody;
+  private bodyEditor: TMediumEditor;
+  private titleEditor: TMediumEditor;
 
   constructor(
-      private $scope,
+      private $scope: IEditorScope,
       private $sce,
       private $http: ng.IHttpService,
       private $timeout: ng.ITimeoutService,
@@ -50,53 +90,38 @@ export default class EditorCtrl {
       private scopeService: ScopeService,
       private API_URL: string,
     ) {
-    let titleEditor;
-    let bodyEditor;
-    let fixedBody;
-
-    $scope.isLoading = false;
-    $scope.draft = {};
-    $scope.ready = false;
-    $scope.Saving = {
-      body: false,
-      title: false,
+    this.$scope.isLoading = false;
+    this.$scope.draft = {};
+    this.$scope.ready = false;
+    this.$scope.Saving = {
+      body: null,
+      title: null,
     };
-    $scope.isFullPostShown = false;
-    $scope.hasOnlyOneSection = false;
-    $scope.paidSectionEnabled = false;
-    $scope.publishTouched = false;
-    $scope.paidSectionLineBreakTouched = false;
-    $scope.paidSectionCostInUSD = 0;
-    $scope.showPaidSectionCostInUSD = false;
-    $scope.toggleFullPost = () => $scope.isFullPostShown = !$scope.isFullPostShown;
+    this.$scope.isFullPostShown = false;
+    this.$scope.hasOnlyOneSection = false;
+    this.$scope.paidSectionEnabled = false;
+    this.$scope.publishTouched = false;
+    this.$scope.paidSectionLineBreakTouched = false;
+    this.$scope.paidSectionCostInUSD = 0;
+    this.$scope.showPaidSectionCostInUSD = false;
+    this.$scope.toggleFullPost = () => $scope.isFullPostShown = !$scope.isFullPostShown;
 
-    $scope.trustAsHtml = (html) => {
+    this.$scope.trustAsHtml = (html: string) => {
       return $sce.trustAsHtml(html);
-    };
-
-    const resetPaidSectionCostIfNull = () => {
-      if (!$scope.draft.paidSectionCost || $scope.draft.paidSectionCost === 0) {
-        $scope.draft.paidSectionCost = DEFAULT_PAID_SECTION_COST_MIN;
-        this.scopeService.safeApply($scope);
-      }
-    };
-
-    const setPaidSectionLinebreakEnd = () => {
-      $scope.paidSectionLinebreakEnd = $(fixedBody).length;
     };
 
     const adjustPaidSectionLinebreak = (action: "increment" | "decrement") => {
       if (action === "increment") {
-        $scope.draft.paidSectionLinebreak += 1;
+        this.$scope.draft.paidSectionLinebreak += 1;
       } else if (action === "decrement") {
-        $scope.draft.paidSectionLinebreak -= 1;
+        this.$scope.draft.paidSectionLinebreak -= 1;
       }
-      $scope.paidSectionLineBreakTouched = true;
+      this.$scope.paidSectionLineBreakTouched = true;
     };
 
     const scrollToLinebreak = (action, toLinebreak?: number) => {
       const $container = $(".post-paid-section-preview-paid-section");
-      const $scrollTo = $container.children().eq($scope.draft.paidSectionLinebreak - 1);
+      const $scrollTo = $container.children().eq(this.$scope.draft.paidSectionLinebreak - 1);
 
       if (toLinebreak === null || toLinebreak === undefined) {
         $container.animate({
@@ -128,20 +153,20 @@ export default class EditorCtrl {
       }
     };
 
-    $scope.switchLinebreak = (action: "increment" | "decrement") => {
-      if ($scope.draft.hasPaidSection) {
+    this.$scope.switchLinebreak = (action: "increment" | "decrement") => {
+      if (this.$scope.draft.hasPaidSection) {
         switch (action) {
           case ("increment"):
-            if ($scope.draft.paidSectionLinebreak < $scope.paidSectionLinebreakEnd - 1) {
+            if (this.$scope.draft.paidSectionLinebreak < this.$scope.paidSectionLinebreakEnd - 1) {
               adjustPaidSectionLinebreak(action);
-              refreshBodies();
+              this.refreshBodies();
               scrollToLinebreak(action);
             }
             break;
           case ("decrement"):
-            if ($scope.draft.paidSectionLinebreak > 0) {
+            if (this.$scope.draft.paidSectionLinebreak > 0) {
               adjustPaidSectionLinebreak(action);
-              refreshBodies();
+              this.refreshBodies();
               scrollToLinebreak(action);
             }
             break;
@@ -151,8 +176,8 @@ export default class EditorCtrl {
       }
     };
 
-    $scope.setPaidSectionCost = async (currency) => {
-      if ($scope.draft.hasPaidSection) {
+    this.$scope.setPaidSectionCost = async (currency: "bch"  | "usd") => {
+      if (this.$scope.draft.hasPaidSection) {
         const inputBCH = (<HTMLInputElement>document.getElementById("paidSectionCostInBCH"));
         const inputUSD = (<HTMLInputElement>document.getElementById("paidSectionCostInUSD"));
         let cost = currency === "bch" ?
@@ -165,40 +190,40 @@ export default class EditorCtrl {
         if (currency === "bch") {
           if (cost > DEFAULT_PAID_SECTION_COST_MAX) {
             cost = 1;
-            $scope.draft.paidSectionCost = 1;
+            this.$scope.draft.paidSectionCost = 1;
           }
           const { usd } = await this.walletService.convertBCHtoUSD(cost);
           // the following line is due to bug in firefox
           inputUSD.valueAsNumber = usd;
-          $scope.draft.paidSectionCost = cost;
-          $scope.paidSectionCostInUSD = usd;
-          this.scopeService.safeApply($scope);
+          this.$scope.draft.paidSectionCost = cost;
+          this.$scope.paidSectionCostInUSD = usd;
+          this.scopeService.safeApply(this.$scope);
         } else if (currency === "usd") {
           const { bch } = await this.walletService.convertUSDtoBCH(cost);
           if (bch > DEFAULT_PAID_SECTION_COST_MAX) {
-            $scope.draft.paidSectionCost = 1;
+            this.$scope.draft.paidSectionCost = 1;
             inputBCH.valueAsNumber = 1;
-            this.scopeService.safeApply($scope);
-            return $scope.setPaidSectionCost("bch");
+            this.scopeService.safeApply(this.$scope);
+            return this.$scope.setPaidSectionCost("bch");
           }
           // the following line is due to bug in firefox
           inputBCH.valueAsNumber = bch;
-          $scope.paidSectionCostInUSD = cost;
-          $scope.draft.paidSectionCost = bch;
+          this.$scope.paidSectionCostInUSD = cost;
+          this.$scope.draft.paidSectionCost = bch;
         }
-        this.scopeService.safeApply($scope);
+        this.scopeService.safeApply(this.$scope);
       }
     };
 
-    $scope.togglePaidSection = () => {
-      $scope.draft.hasPaidSection = !$scope.draft.hasPaidSection;
-      if ($scope.draft.hasPaidSection) {
-        if ($scope.draft.paidSectionLinebreak === null) {
-          $scope.draft.paidSectionLinebreak = 1;
+    this.$scope.togglePaidSection = () => {
+      this.$scope.draft.hasPaidSection = !this.$scope.draft.hasPaidSection;
+      if (this.$scope.draft.hasPaidSection) {
+        if (this.$scope.draft.paidSectionLinebreak === null) {
+          this.$scope.draft.paidSectionLinebreak = 1;
         }
         checkForCurrencyConversion();
-        const linebreak = $scope.draft.paidSectionLinebreak !== null ?
-          $scope.draft.paidSectionLinebreak :
+        const linebreak = this.$scope.draft.paidSectionLinebreak !== null ?
+        this.$scope.draft.paidSectionLinebreak :
           0;
         setTimeout(
           () => {
@@ -211,50 +236,25 @@ export default class EditorCtrl {
 
     const checkForCurrencyConversion = () => {
       this.walletService
-        .convertBCHtoUSD($scope.draft.paidSectionCost)
+        .convertBCHtoUSD(this.$scope.draft.paidSectionCost)
         .then((currencies: ICurrencyConversion) => {
-          $scope.showPaidSectionCostInUSD = true;
-          $scope.paidSectionCostInUSD = currencies.usd;
-          this.scopeService.safeApply($scope, () => {
-            $scope.setPaidSectionCost("usd");
+          this.$scope.showPaidSectionCostInUSD = true;
+          this.$scope.paidSectionCostInUSD = currencies.usd;
+
+          this.scopeService.safeApply(this.$scope, () => {
+            this.$scope.setPaidSectionCost("usd");
           });
         });
     };
 
-    const resetPaidSectionProperties = () => {
-      if ($scope.hasOnlyOneSection) {
-        $scope.draft.paidSectionCost = null;
-        $scope.draft.paidSectionLinebreak = null;
-        $scope.draft.hasPaidSection = false;
-        this.scopeService.safeApply($scope);
-      }
-    };
-
-    const refreshBodies = (externalHtml?) => {
-      fixedBody = this.editorService.getFixedBody(bodyEditor, externalHtml);
-      $scope.hasOnlyOneSection = $(fixedBody).length < 2 ?
-        true :
-        false;
-
-      $scope.fixedBody = fixedBody;
-      $scope.freeBodyCut = this.editorService
-      .getSectionHtml("free", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
-      $scope.paidBodyCut = this.editorService
-      .getSectionHtml("paid", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
-      $scope.paidBodyCutEnd = this.editorService
-      .getSectionHtml("paidEnd", $scope.paidSectionLinebreak, $scope.paidSectionLinebreakEnd);
-      setPaidSectionLinebreakEnd();
-      resetPaidSectionProperties();
-    };
-
-    let parentPostId;
     let postId;
     let editingMode = "write";
     const locPath = location.pathname.split("/");
     const locQuery = location.search;
 
     if (locPath[1] === "write" && locPath[2] === "response") {
-      parentPostId = locPath[3];
+      this.parentPostId = Number(locPath[3]);
+
       editingMode = "response";
     }
 
@@ -263,365 +263,385 @@ export default class EditorCtrl {
       editingMode = "edit";
     }
 
-    const saveDraftElement = (element, cb?) => {
-      refreshBodies();
-      const md = converter.makeMd(this.editorService.getFixedBody(bodyEditor));
+    this.$scope.displayFeedBody = (html: string) => this.postService.displayHTML(html);
 
-      const post = {
-        body: md,
-        hashtags: $("input#description").val() || "",
-        title: document.getElementById("title").innerText,
-        hasPaidSection: $scope.draft.hasPaidSection,
-        paidSectionLinebreak: $scope.draft.paidSectionLinebreak,
-        paidSectionCost: $scope.draft.paidSectionCost,
-      };
-
-      if (!post.body && !post.title && !post.hashtags) {
-        $scope.saving = null;
-
-        return cb && cb();
-      }
-
-      if (
-        element === "paidSection" &&
-        post.hasPaidSection &&
-        $scope.paidSectionLineBreakTouched &&
-        post.paidSectionCost === 0
-      ) {
-        $scope.saving = null;
-
-        return cb && cb();
-      }
-
-      $http.put(`${API_URL}/draft/${$scope.draft.id}/${element}`, post)
-          .then((response) => {
-            $scope.saving = null;
-
-            return cb && cb();
-          },    cb);
-    };
-
-    $scope.displayFeedBody = (html: string) => this.postService.displayHTML(html);
-
-    $scope.readyToPublish = () => {
+    this.$scope.readyToPublish = () => {
       if (!document.getElementById("title").innerText) {
         return toastr.error("The story needs to have a title");
       }
 
-      if (bodyEditor.serialize().body.value.length < 50) {
+      if (this.bodyEditor.serialize().body.value.length < 50) {
         return toastr.error("The story needs to be at least 50 characters.");
       }
 
-      refreshBodies();
-      bodyEditor.setContent(fixedBody, 0);
+      this.refreshBodies();
+
+      this.bodyEditor.setContent(this.fixedBody, 0);
 
       ($("#publishModal") as IModalElement).modal("show");
 
-      if ($scope.draft.hasPaidSection && $scope.draft.paidSectionLinebreak) {
+      if (this.$scope.draft.hasPaidSection && this.$scope.draft.paidSectionLinebreak) {
         checkForCurrencyConversion();
-        const linebreak = $scope.draft.paidSectionLinebreak !== null ?
-          $scope.draft.paidSectionLinebreak :
+        const linebreak = this.$scope.draft.paidSectionLinebreak !== null ?
+          this.$scope.draft.paidSectionLinebreak :
           0;
-        this.scopeService.safeApply($scope);
+
+        this.scopeService.safeApply(this.$scope);
+
         scrollToLinebreak(undefined, linebreak);
       }
     };
 
-    $scope.publishPost = (postId: number) => {
-      if ($scope.draft.hasPaidSection && !$scope.paidSectionLineBreakTouched) {
-        $scope.publishTouched = true;
+    this.$scope.publishPost = (postId: number) => {
+      if (this.$scope.draft.hasPaidSection && !this.$scope.paidSectionLineBreakTouched) {
+        this.$scope.publishTouched = true;
         return;
       }
 
-      if ($scope.isLoading === true) {
+      if (this.$scope.isLoading) {
         return toastr.info("Saving...");
       }
 
-      $scope.isLoading = true;
+      this.$scope.isLoading = true;
 
       let publishedPost;
 
-      async.series([
-        (cb: any) => {
-          async.parallel([
-            (cb: any) => saveDraftElement("title", cb),
-            (cb: any) => saveDraftElement("body", cb),
-            (cb: any) => saveDraftElement("hashtags", cb),
-            (cb: any) => saveDraftElement("paidSection", cb),
-          ],             cb);
-        },
-        (cb: any) => {
-          $http.put(`${API_URL}/draft/${postId}/publish`, {})
-                  .then((response) => {
-                    if (response.status !== 200) {
-                      return cb(response);
-                    }
+      async.series(
+        [
+          (cb: any) =>
+          async.each(
+            ["title", "body", "hashtags", "paidSection"],
+            async (element: "title" | "body" | "hashtags" | "paidSection", cb: any) => {
+              await this.saveDraftElement(element);
 
-                    publishedPost = response.data;
+              cb();
+            },
+            cb),
+          async (cb: any) => {
+            const response = await this.$http.put(`${this.API_URL}/draft/${postId}/publish`, {});
 
-                    return cb();
-                  },    cb);
-        },
-      ],           (errResponse) => {
-        $scope.isLoading = false;
-
-        if (errResponse) {
-          if (errResponse.status === 400) {
-            if (errResponse.data.code === "TITLE_TOO_SHORT") {
-              return toastr.warning("Title is too short.");
+            if (response.status !== 200) {
+              return cb(response);
             }
 
-            if (errResponse.data.code === "POST_TOO_SHORT") {
-              return toastr
-                .warning("Your story is too short. The minimum number of characters is 50.");
+            publishedPost = response.data;
+
+            return cb();
+          },
+        ],
+        (errResponse) => {
+          this.$scope.isLoading = false;
+
+          if (errResponse) {
+            if (errResponse.status === 400) {
+              if (errResponse.data.code === "TITLE_TOO_SHORT") {
+                return toastr.warning("Title is too short.");
+              }
+
+              if (errResponse.data.code === "POST_TOO_SHORT") {
+                return toastr
+                  .warning("Your story is too short. The minimum number of characters is 50.");
+              }
             }
+
+            return toastr.warning(errResponse.data.desc || errResponse.data.code);
           }
 
-          return toastr.warning(errResponse.data.desc || errResponse.data.code);
-        }
+          toastr.success("You have successfully published your story.");
 
-        toastr.success("You have successfully published your story.");
+          ($("#publishModal") as IModalElement).modal("hide");
 
-        ($("#publishModal") as IModalElement).modal("hide");
-
-        $timeout(() => {
-          location.href = `/${publishedPost.user.username}/${publishedPost.alias}/`;
-        },       500);
-      });
+          $timeout(
+            () => {
+              location.href = `/${publishedPost.user.username}/${publishedPost.alias}/`;
+            },
+            500,
+          );
+        });
     };
 
-    $scope.switchEditor = () => {
+    this.$scope.switchEditor = () => {
       if (editingMode === "write") {
         window.location.href = `/markdown/write`;
       } else if (editingMode === "edit") {
         window.location.href = `/markdown/edit/${postId}`;
       } else if (editingMode === "response") {
-        window.location.href = `/markdown/write/response/${parentPostId}`;
+        window.location.href = `/markdown/write/response/${this.parentPostId}`;
       }
     };
 
-    const onContentChangedFactory = (element: "title" | "body") => () => {
-      if ($scope.draft.status === "published") {
-        return;
-      }
+    this.loadPostDraft(postId);
+  }
 
-      if ($scope.Saving[element]) {
-        clearTimeout($scope.Saving[element]);
-      }
+  private onContentChangedFactory = (element: "title" | "body") => () => {
+    if (this.$scope.draft.status === "published") {
+      return;
+    }
 
-      $scope.Saving[element] = setTimeout(() => {
-        saveDraftElement(element, () => toastr.success("Draft has been saved."));
-      },                                  3000);
-    };
+    if (this.$scope.Saving[element]) {
+      clearTimeout(this.$scope.Saving[element]);
+    }
 
-    const initMediumEditor = (title: string, bodyMD: string) => {
-      titleEditor = new mediumEditor("#title", {
-        buttons: [],
-        disableDoubleReturn: true,
-        disableReturn: true,
-        paste: {
-          cleanAttrs: ["class", "style"],
-          cleanPastedHTML: true,
-          cleanReplacements: [],
-          cleanTags: [
-            "meta",
-            "dir",
-            "h1",
-            "h4",
-            "h5",
-            "h6",
-            "table",
-            "tr",
-            "td",
-            "a",
-            "ul",
-            "li",
-            "code",
-            "pre",
-          ],
-          forcePlainText: true,
-          unwrapTags: [],
-        },
-        placeholder: {
-          hideOnClick: true,
-          text: "Title",
-        },
-        toolbar: false,
-      });
+    this.$scope.Saving[element] = setTimeout(
+      async () => {
+        try {
+          await this.saveDraftElement(
+            element,
+          );
+        } catch (err) {
+          return toastr.error("Draft could not be saved.");
+        }
 
-      bodyEditor = new mediumEditor("#body", {
-        anchorPreview: true,
+        toastr.success("Draft has been saved.");
+      },
+      3000,
+    );
+  }
 
-        // disabled because broken on markdown
-        autoLink: false,
-        buttonLabels: "fontawesome",
-        extensions: {},
-        placeholder: {
-          hideOnClick: true,
-          text: $scope.draft.parentPostId ? "Write your comment" : "Tell your story...",
-        },
-        toolbar: {
-          buttons: ["bold", "italic", "unorderedlist", "anchor", "h2", "h3", "pre"],
-        },
-        paste: {
-          cleanAttrs: ["id", "class", "style"],
-          cleanPastedHTML: true,
-          cleanReplacements: [],
-          cleanTags: [
-            "img",
-            "meta",
-            "div",
-            "h1",
-            "h4",
-            "h5",
-            "h6",
-            "table",
-            "tr",
-            "td",
-            "code",
-          ],
-          forcePlainText: true,
-          unwrapTags: [],
-        },
-      });
+  private initMediumEditor(title: string, bodyMD: string) {
+    this.titleEditor = new mediumEditor("#title", titleEditorConfig);
+    this.bodyEditor = new mediumEditor("#body", bodyEditorConfig({
+      placeHolderText: this.parentPostId ?
+        "Write a comment" :
+        "Write your story",
+    }));
 
-      ($("#body") as IMediumInsertPlugin).mediumInsert({
-        // (object) Addons configuration
-        addons: {
-          embeds: false,
-          // (object) Image addon configuration
-          images: {
-            // (integer) Min number of images that automatically form a grid
-            autoGrid: 3,
-            captionPlaceholder: "",
-            // (boolean) Enable captions
-            captions: false,
-            deleteMethod: "",
-            // (string) A relative path to a delete script
-            deleteScript: "",
-            // (object) extra parameters send on the delete ajax request
-            // see http://api.jquery.com/jquery.ajax/
-            fileDeleteOptions: {},
-            // DEPRECATED: Use fileUploadOptions instead
-            formData: {},
-            // (string) A label for an image addon
-            label: "<span class='fa fa-camera'></span>",
-            // DEPRECATED: Use fileUploadOptions instead
-            uploadScript: null,
-            // (boolean) Show an image before it is uploaded
-            // (only in browsers that support this feature)
-            preview: false,
-            fileUploadOptions: {
-                        // (object) File upload configuration.
-                        // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
-              url: `${API_URL}/upload/image`, // (string) A relative path to an upload script
-              acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
-              headers: {
-                "x-auth-token": this.authService.getAuthToken(),
-              },
-            },
-            // (object) Actions for an optional second toolbar
-            actions: {
-              // (object) Remove action configuration
-              remove: {
-                // (string) Label for an action
-                label: "<span class='fa fa-times'></span>",
-                // (function) Callback function called when an action is selected
-                clicked: ($el) => {
-                  const $event = $.Event("keydown");
-
-                  $event.which = 8;
-                  $(document).trigger($event);
-                },
-              },
-            },
-            messages: {
-              acceptFileTypesError: "This file is not in a supported format: ",
-              maxFileSizeError: "This file is too big: ",
-            },
-            uploadCompleted: ($el, data) => {
-              console.log($el, data);
-            },
-            uploadFailed: (uploadErrors, data) => {
-              console.log(uploadErrors, data);
+    ($("#body") as IMediumInsertPlugin).mediumInsert({
+      // (object) Addons configuration
+      addons: {
+        embeds: false,
+        // (object) Image addon configuration
+        images: {
+          // (integer) Min number of images that automatically form a grid
+          autoGrid: 3,
+          captionPlaceholder: "",
+          // (boolean) Enable captions
+          captions: false,
+          deleteMethod: "",
+          // (string) A relative path to a delete script
+          deleteScript: "",
+          // (object) extra parameters send on the delete ajax request
+          // see http://api.jquery.com/jquery.ajax/
+          fileDeleteOptions: {},
+          // DEPRECATED: Use fileUploadOptions instead
+          formData: {},
+          // (string) A label for an image addon
+          label: "<span class='fa fa-camera'></span>",
+          // DEPRECATED: Use fileUploadOptions instead
+          uploadScript: null,
+          // (boolean) Show an image before it is uploaded
+          // (only in browsers that support this feature)
+          preview: false,
+          fileUploadOptions: {
+                      // (object) File upload configuration.
+                      // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
+            url: `${this.API_URL}/upload/image`, // (string) A relative path to an upload script
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i, // (regexp) Regexp of accepted file types
+            headers: {
+              "x-auth-token": this.authService.getAuthToken(),
             },
           },
+          // (object) Actions for an optional second toolbar
+          actions: {
+            // (object) Remove action configuration
+            remove: {
+              // (string) Label for an action
+              label: "<span class='fa fa-times'></span>",
+              // (function) Callback function called when an action is selected
+              clicked: ($el) => {
+                const $event = $.Event("keydown");
+
+                $event.which = 8;
+                $(document).trigger($event);
+              },
+            },
+          },
+          messages: {
+            acceptFileTypesError: "This file is not in a supported format: ",
+            maxFileSizeError: "This file is too big: ",
+          },
+          uploadCompleted: ($el, data) => {
+            console.log($el, data);
+          },
+          uploadFailed: (uploadErrors, data) => {
+            console.log(uploadErrors, data);
+          },
         },
-        editor: bodyEditor,
-      });
+      },
+      editor: this.bodyEditor,
+    });
+
+    if (title) {
+      document.getElementById("title").setAttribute("data-placeholder", "");
+      this.titleEditor.setContent(title, 0);
+    }
+
+    if (!title && this.$scope.draft.parentPostId) {
+      this.titleEditor.setContent(title || `RE: ${this.$scope.draft.parentPost.title}`, 0);
+    }
 
       if (title) {
         document.getElementById("title").setAttribute("data-placeholder", "");
-        titleEditor.setContent(title, 0);
+        this.titleEditor.setContent(title, 0);
       }
 
       if (!title && this.$scope.draft.parentPostId) {
-        titleEditor.setContent(title || `RE: ${this.$scope.draft.parentPost.title}`, 0);
+        this.titleEditor.setContent(title || `RE: ${this.$scope.draft.parentPost.title}`, 0);
       }
 
       if (bodyMD) {
         document.getElementById("body").setAttribute("data-placeholder", "");
-        const html = converter.makeHtml(bodyMD);//
-        refreshBodies(html);
-        setPaidSectionLinebreakEnd();
-        bodyEditor.setContent(fixedBody, 0);
+        const html = converter.makeHtml(bodyMD);
+        this.refreshBodies(html);
+        this.setPaidSectionLinebreakEnd();
+        this.bodyEditor.setContent(this.fixedBody, 0);
       }
 
-      bodyEditor.subscribe("editableInput", onContentChangedFactory("body"));
-      titleEditor.subscribe("editableInput", onContentChangedFactory("title"));
-    };
 
-    const initEditor = (postId: number) => {
-      if (!postId) {
-        alert("Editor cannot be initialized");
-      }
+    this.bodyEditor.subscribe("editableInput", this.onContentChangedFactory("body"));
+    this.titleEditor.subscribe("editableInput", this.onContentChangedFactory("title"));
+  }
+
+  private initEditor(postId: number) {
+    if (!postId) {
+      alert("Editor cannot be initialized");
+    }
+
+    ($("#description") as ITagIt).tagit({
+      tagLimit: 6,
+      afterTagAdded: (event, ui) => {
+        if (this.$scope.ready) {
+          this.saveDraftElement("hashtags");
+        }
+      },
+    });
+
+    const hashtags = this.$scope.draft.userPostHashtags || [];
+
+    hashtags.forEach((hashtag) => {
+      ($("#description") as ITagIt).tagit("createTag", hashtag.hashtag);
+    });
+
+    this.initMediumEditor(this.$scope.draft.title, this.$scope.draft.bodyMD);
+
+    this.initTippy();
+    this.$scope.ready = true;
+  }
+
+  private async loadPostDraft(lPostId: number) {
+    let url = this.API_URL;
+
+    url += this.parentPostId ?
+      `/draft?parentPostId=${this.parentPostId}` :
+      lPostId ? `/post/${lPostId}` : "/draft";
+
+    const response = await this.$http.get(url);
+
+    this.$scope.draft = response.data;
 
       ($("#description") as ITagIt).tagit({
         tagLimit: 6,
         afterTagAdded: (event, ui) => {
-          if ($scope.ready) {
-            saveDraftElement("hashtags");
+          if (this.$scope.ready) {
+            this.saveDraftElement("hashtags");
           }
-        },
-      });
 
-      const hashtags = $scope.draft.userPostHashtags || [];
+    this.$scope.paidSectionEnabled = this.$scope.draft.parentPostId ? false : true;
 
-      hashtags.forEach((hashtag) => {
-        ($("#description") as ITagIt).tagit("createTag", hashtag.hashtag);
-      });
+    this.resetPaidSectionCostIfNull();
+    this.initEditor(this.$scope.draft.id);
 
-      initMediumEditor($scope.draft.title, $scope.draft.bodyMD);
+    this.scopeService.safeApply(this.$scope);
+  }
 
-      this.initTippy();
-      $scope.ready = true;
+  private resetPaidSectionCostIfNull() {
+    if (!this.$scope.draft.paidSectionCost || this.$scope.draft.paidSectionCost === 0) {
+      this.$scope.draft.paidSectionCost = DEFAULT_PAID_SECTION_COST_MIN;
+      this.scopeService.safeApply(this.$scope);
+    }
+  }
+
+  private get bodyEditorHtml() {
+    return this.bodyEditor.serialize().body.value;
+  }
+
+  private async saveDraftElement(element: "title" | "paidSection" | "body" | "hashtags") {
+    logger.log(`Saving draft element ${element}`);
+
+    this.refreshBodies();
+
+    const md = converter.makeMd(
+      this.editorService.getFixedBody(this.bodyEditorHtml),
+    );
+
+    const post = {
+      body: md,
+      hashtags: $("input#description").val() || "",
+      title: document.getElementById("title").innerText,
+      hasPaidSection: this.$scope.draft.hasPaidSection,
+      paidSectionLinebreak: this.$scope.draft.paidSectionLinebreak,
+      paidSectionCost: this.$scope.draft.paidSectionCost,
     };
 
-    const loadPostDraft = (lPostId: number) => {
-      let url = API_URL;
+    logger.log(post);
 
-      url += parentPostId ?
-                `/draft?parentPostId=${parentPostId}` :
-                lPostId ? `/post/${lPostId}` : "/draft";
+    if (!post.body && !post.title && !post.hashtags) {
+      this.$scope.saving = null;
 
-      $http.get(url)
-            .then((response) => {
-              $scope.draft = response.data;
+      return;
+    }
 
-              $scope.draft.hasPaidSection = $scope.draft.paidSectionCost &&
-                $scope.draft.paidSectionLinebreak;
+    if (
+      element === "paidSection" &&
+      post.hasPaidSection &&
+      this.$scope.paidSectionLineBreakTouched &&
+      post.paidSectionCost === 0
+    ) {
+      this.$scope.saving = null;
 
-              $scope.paidSectionEnabled = $scope.draft.parentPostId ? false : true;
+      return;
+    }
 
-              resetPaidSectionCostIfNull();
-              initEditor($scope.draft.id);
-            },    (err: any) => {
-              console.log(err);
-            });
-    };
+    const response = await this.$http.put(
+      `${this.API_URL}/draft/${this.$scope.draft.id}/${element}`,
+      post,
+    );
 
-    loadPostDraft(postId);
+    logger.log(`Successfully saved the element ${element}`);
 
+    this.$scope.saving = null;
+
+    return response;
+  }
+
+  private refreshBodies(externalHtml?: string) {
+    this.fixedBody = this.editorService.getFixedBody(this.bodyEditorHtml, externalHtml);
+      this.$scope.hasOnlyOneSection = $(this.fixedBody).length < 2 ?
+        true :
+        false;
+
+      this.$scope.fixedBody = this.fixedBody;
+      this.$scope.freeBodyCut = this.editorService
+      .getSectionHtml("free", this.$scope.paidSectionLinebreak, this.$scope.paidSectionLinebreakEnd);
+      this.$scope.paidBodyCut = this.editorService
+      .getSectionHtml("paid", this.$scope.paidSectionLinebreak, this.$scope.paidSectionLinebreakEnd);
+      this.$scope.paidBodyCutEnd = this.editorService
+      .getSectionHtml("paidEnd", this.$scope.paidSectionLinebreak, this.$scope.paidSectionLinebreakEnd);
+      this.setPaidSectionLinebreakEnd();
+      this.resetPaidSectionProperties();
+  }
+
+  private setPaidSectionLinebreakEnd() {
+    this.$scope.paidSectionLinebreakEnd = $(this.fixedBody).length;
+  }
+
+  private resetPaidSectionProperties() {
+      if (this.$scope.hasOnlyOneSection) {
+        this.$scope.draft.paidSectionCost = null;
+        this.$scope.draft.paidSectionLinebreak = null;
+        this.$scope.draft.hasPaidSection = false;
+        this.scopeService.safeApply(this.$scope);
+      }
   }
 
   private async initTippy() {

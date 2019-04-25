@@ -1,0 +1,69 @@
+<app-welcome-heading title="What are you waiting for? Get started now." description="Enter your details below"></app-welcome-heading>
+
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <input
+      applyTransparentInputClass
+      class="mb-4"
+      type="text"
+      placeholder="Username"
+      name="username"
+  />
+  <!-- <i
+    class="w-fulltext-md opacity-75 font-bold text-red"
+    *ngIf="errors.username !== ''"
+    >{{ errors.username }}</i
+  > -->
+  <input
+    applyTransparentInputClass
+    class="mb-4"
+    type="email"
+    placeholder="E-mail"
+    name="email"
+  />
+  <!-- <i
+    class="w-full text-md opacity-75 font-bold text-red"
+    *ngIf="errors.email !== ''"
+    >{{ errors.email }}</i
+  > -->
+
+  <input
+    applyTransparentInputClass
+    class="mb-4"
+    type="password"
+    placeholder="Password"
+    name="password"
+  />
+
+  <!-- <i
+    class="w-full text-md opacity-75 font-bold text-red"
+    *ngIf="errors.password !== ''"
+    >{{ errors.password }}</i
+  > -->
+  <div
+    id="hc-captcha"
+    class="g-recaptcha w-full p-4 my-4 opacity-75"
+    data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
+  ></div>
+  <!-- <i
+    class="w-full text-md opacity-75 -mt-12 font-bold text-red"
+    *ngIf="errors.captcha !== ''"
+    >{{ errors.captcha }}</i
+  > -->
+
+  <!-- <div
+    class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
+    *ngIf="errors.general !== ''"
+  >
+    <p class="w-full text-md opacity-75 mt-4 font-bold text-red">
+      {{ errors.general }}
+    </p>
+  </div> -->
+  <button
+    applyTransparentButtonClass
+    [disabled]="isLoading"
+  >
+    <!-- {{ isLoading ? 'Please Wait...' : 'Get Started' }} -->
+    Get Started
+  </button>
+  <app-welcome-form-footer to="login" text="Already have an account?" anchor="Sign In"></app-welcome-form-footer>
+  <form>

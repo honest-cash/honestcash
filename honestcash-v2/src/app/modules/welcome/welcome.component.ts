@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.scss']
 })
-export class WelcomeComponent {
-  title = 'welcome component';
+export class WelcomeContainerComponent implements OnInit {
+  @HostBinding('class') class = 'bg-image text-white flex flex-col flex-wrap w-full items-center justify-center';
+
+  constructor(
+  ) {
+  }
+
+  ngOnInit() {
+  }
+
+
+
 }

@@ -12,16 +12,9 @@ import qrcode from "qrcode";
 import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
 import * as upvoteDistribution from "../../../core/lib/upvoteDistribution";
 import { IModalElement } from "../../../core/lib/dependency-interfaces";
+import * as logger from "../../../core/lib/logger";
 
 declare const toastr;
-
-const defaultOptions = {
-  amount: 0.002,
-  isDisabled: false,
-  isUpvoting: false,
-  loadingText: "Upvoting...",
-  text: "Upvote",
-};
 
 interface IScopeUpvoteButtonCtrl extends ng.IScope {
   post: Post;
@@ -37,36 +30,31 @@ class UpvoteButtonController {
     "ScopeService",
   ];
 
-  private amount: number;
-  private text: string;
-  private loadingText: string;
-  private isUpvoting: boolean;
-  private isDisabled: boolean;
+  private readonly amountInUSD: number = 0.1;
+  private readonly loadingText: string = "Upvoting...";
+  private readonly satoshiFactor = 100000000;
+
+  private label: string = "Upvote";
+  private amount: number = 0.00025;
+  private isUpvoting: boolean = false;
+  private isDisabled: boolean = true;
   private post: Post;
+  private canUpvote: boolean = false;
 
   constructor(
-    private $rootScope: IGlobalScope,
-    private $scope: IScopeUpvoteButtonCtrl,
-    private $window: ng.IWindowService,
-    private postService: PostService,
-    private walletService: WalletService,
-    private scopeService: ScopeService,
+    private readonly $rootScope: IGlobalScope,
+    private readonly $scope: IScopeUpvoteButtonCtrl,
+    private readonly $window: ng.IWindowService,
+    private readonly postService: PostService,
+    private readonly walletService: WalletService,
+    private readonly scopeService: ScopeService,
   ) {
     this.ngOnInit();
   }
 
   private ngOnInit() {
-    this.amount = this.amount
-      ? this.amount
-      : defaultOptions.amount;
-    this.text = this.text ? this.text : defaultOptions.text;
-    this.loadingText = this.loadingText
-      ? this.loadingText
-      : defaultOptions.loadingText;
-
     this.post = this.$scope.post;
-    this.isUpvoting = defaultOptions.isUpvoting;
-    this.isDisabled = !this.$rootScope.user || this.post.userId === this.$rootScope.user.id;
+    this.canUpvote = !this.$rootScope.user || this.post.userId === this.$rootScope.user.id;
 
     this.$window.onbeforeunload = (event) => {
       if (this.isUpvoting) {
@@ -75,6 +63,29 @@ class UpvoteButtonController {
         return "There is a pending upvote in process. Are you sure you want to leave?";
       }
     };
+
+    this.determineUpvoteAmountInBCH();
+  }
+
+  private async determineUpvoteAmountInBCH() {
+    logger.log(`Determining BCH conversion rate.`);
+
+    try {
+      this.amount = (await this.walletService.convertUSDtoBCH(this.amountInUSD)).bch;
+
+      logger.log(`Upvote amount set to ${this.amount} BCH`);
+
+      this.label = `${this.amount} ₿`;
+      this.isDisabled = false;
+    } catch (err) {
+      this.isDisabled = true;
+
+      logger.error(
+        "Could not enable the upvotes because we could not determine the conversion rate!",
+      );
+    }
+
+    this.scopeService.safeApply(this.$scope);
   }
 
   private onClick(e) {
@@ -86,7 +97,7 @@ class UpvoteButtonController {
   }
 
   private satoshiToBch = (amountSat: number): string => {
-    return (amountSat / 100000000).toFixed(5);
+    return (amountSat / this.satoshiFactor).toFixed(5);
   }
 
   /**
@@ -128,10 +139,11 @@ class UpvoteButtonController {
     } catch (err) {
       toastr.error("Can't connect.");
 
-      return console.error(err);
+      return logger.error(err);
     }
 
     const receivers = upvoteDistribution.determineUpvoteRewards(
+      this.amount * this.satoshiFactor,
       upvotes,
       this.post.user,
     );
@@ -166,12 +178,14 @@ class UpvoteButtonController {
       distributionInfoEl.appendChild(el);
     }
 
-    // distribute only to testnet of owner
-    // default tip is 100000 satoshis = 0.001 BCH, around 20 cents
+    receivers.push({
+      opReturn: ["0x4801", postId.toString()],
+    });
+
+    logger.log("Sending BCH Transaction with the following receiver array:");
+    logger.log(receivers);
+
     try {
-      receivers.push({
-        opReturn: ["0x4801", postId.toString()],
-      });
       tx = await simpleWallet.send(receivers);
     } catch (err) {
       if (err.message && err.message.indexOf("Insufficient") > -1) {
@@ -209,7 +223,7 @@ class UpvoteButtonController {
         );
       }
 
-      console.error(err);
+      logger.error(err);
 
       this.isUpvoting = false;
       this.scopeService.safeApply(this.$scope, () => {});
@@ -225,7 +239,7 @@ class UpvoteButtonController {
       "bchTippingTransactionUrl",
     ) as HTMLAnchorElement;
 
-    console.log(`Upvote transaction: ${url}`);
+    logger.log(`Upvote transaction: ${url}`);
 
     anchorEl.innerHTML = `Receipt: ${tx.txid.substring(0, 9)}...`;
     anchorEl.href = url;
@@ -253,9 +267,6 @@ export default function upvoteButton(): ng.IDirective {
     controllerAs: "upvoteButtonCtrl",
     restrict: "E",
     scope: {
-      amount: "=?",
-      loadingText: "=?",
-      text: "=?",
       post: "=",
     },
     replace: true,

@@ -1,11 +1,14 @@
+// @todo remove this jquery shit
 export default class EditorService {
-
   public static $inject = [];
 
   private elements: JQuery<any>;
   private fixedBody: string;
+  private $: any;
 
-  constructor() {
+  constructor(jQueryLib) {
+    this.$ = jQueryLib || $;
+
     this.ngOnInit();
   }
 
@@ -16,17 +19,17 @@ export default class EditorService {
     return string.indexOf(find) !== -1;
   }
 
-  public getFixedBody = (editor, externalHtml?) => {
+  public getFixedBody = (editorHtml: string, externalHtml?: string) => {
     // converting from html to md to html cleans the body
-    const bodyHtml = externalHtml ? externalHtml : editor.serialize().body.value;
-    const $bodyHtml = $(bodyHtml);
+    const bodyHtml = externalHtml ? externalHtml : editorHtml;
+    const $bodyHtml = this.$(bodyHtml);
 
     // the html is to replace the body in the editor
     let fixedBody = "";
 
     $bodyHtml.map((i) => {
       const elem = $bodyHtml[i];
-      const $elem = $($bodyHtml[i]);
+      const $elem = this.$($bodyHtml[i]);
 
       // find divs that are inserted by the mediumeditor mediuminsert plugin
       // with showdown converted syntax
@@ -38,7 +41,7 @@ export default class EditorService {
         this.stringIncludes($elem.prop("className"), "medium-insert-images")
       ) {
         const content = $elem;
-        const img = this.getOuterHtml($(content).find("img"));
+        const img = this.getOuterHtml(this.$(content).find("img"));
         const imgWrapped = `<p>${img}</p>`;
         fixedBody += imgWrapped;
       } else if (elem.nodeName === "P" && $elem.prop("childNodes").length === 1) {
@@ -64,11 +67,11 @@ export default class EditorService {
   public getContextElement = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {
     switch (n) {
       case "free":
-        return $(this.elements).eq(linebreak);
+        return this.$(this.elements).eq(linebreak);
       case "paid":
-        return $(this.elements).eq(linebreak + 1);
+        return this.$(this.elements).eq(linebreak + 1);
       case "paidEnd":
-        return $(this.elements).eq(linebreakEnd - 1);
+        return this.$(this.elements).eq(linebreakEnd - 1);
       default:
         break;
     }
@@ -76,7 +79,7 @@ export default class EditorService {
 
   public getOuterHtml = (element) => {
     const child = element[0] ? element[0] : element;
-    return $(child).prop("outerHTML");
+    return this.$(child).prop("outerHTML");
   }
 
   public getSectionHtml = (n: "free" | "paid" | "paidEnd", linebreak, linebreakEnd?) => {

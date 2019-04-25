@@ -1,9 +1,8 @@
 const getBaseLog = (x: number, y: number) => Math.log(y) / Math.log(x);
 
-export const determineUpvoteRewards = (lupvotes, author) => {
+export const determineUpvoteRewards = (tipAmountSat: number, lupvotes, author) => {
   let receivers = [];
 
-  const tipAmountSat = 200000;
   const authorAmountPart = 0.4;
 
      // filter only users with BCH address for receiving tips
