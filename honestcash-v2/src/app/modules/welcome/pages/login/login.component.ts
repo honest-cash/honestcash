@@ -14,6 +14,9 @@ import User from '@models/user';
 })
 export class LoginComponent implements OnInit {
   @HostBinding('class') class = 'w-full';
+  @HostBinding('style.height') height = '65vh';
+  @HostBinding('style.minHeight') minHeight = '65vh';
+
   isLoading = false;
   getState: Observable<any>;
   errorMessage: string | null;

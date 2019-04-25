@@ -15,7 +15,9 @@ import { NgForm } from '@angular/forms';
 })
 export class SignupComponent implements OnInit {
   @HostBinding('class') class = 'w-full';
-  
+  @HostBinding('style.height') height = '65vh';
+  @HostBinding('style.minHeight') minHeight = '65vh';
+
   isLoading = false;
   user: User = new User();
   getState: Observable<any>;
