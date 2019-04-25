@@ -45,6 +45,9 @@ let defaultConfig = require('tailwindcss/defaultConfig')()
 
 let colors = {
   'transparent': 'transparent',
+  'hc-grey': '#fafafa',
+  'hc-blue': '#00aeff',
+  'hc-blue-dark': '#23527c',
 
   'black': '#22292f',
   'grey-darkest': '#3d4852',
@@ -231,6 +234,10 @@ module.exports = {
       'Courier New',
       'monospace',
     ],
+    'helvetica': [
+      'Helvetica',
+      'sans-serif',
+    ]
   },
 
 
