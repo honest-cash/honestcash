@@ -17,6 +17,7 @@ import { FormFooterComponent } from './components/form/components/footer/footer.
 import { FormLinkRightComponent } from './components/form/components/link-right/link-right.component';
 import { ApplyTransparentInputClassDirective } from './directives/apply-transparent-input-class/apply-transparent-input-class.directive';
 import { ApplyTransparentButtonClassDirective } from './directives/apply-transparent-button-class/apply-transparent-button-class.directive';
+import { FatLoadingButtonComponent } from './components/fat-loading-button/fat-loading-button.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     HeadingComponent,
+    FatLoadingButtonComponent,
     FormComponent,
     ApplyTransparentInputClassDirective,
     ApplyTransparentButtonClassDirective,
