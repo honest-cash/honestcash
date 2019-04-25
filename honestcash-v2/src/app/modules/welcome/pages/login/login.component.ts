@@ -13,6 +13,7 @@ import User from '@models/user';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  @HostBinding('class') class = 'w-full';
   isLoading = false;
   getState: Observable<any>;
   errorMessage: string | null;
