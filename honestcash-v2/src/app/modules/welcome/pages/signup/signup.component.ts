@@ -14,6 +14,8 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
+  @HostBinding('class') class = 'w-full';
+  
   isLoading = false;
   user: User = new User();
   getState: Observable<any>;
