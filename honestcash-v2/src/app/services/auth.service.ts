@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import User from '@models/user';
+import User from '../models/user';
 import {environment} from '../../environments/environment';
 import {CryptoUtils} from '../shared/lib/CryptoUtils';
-import { HttpService } from '@app/core';
+import { HttpService } from '../core';
 
 export interface ILogInResponse {
   user: User;

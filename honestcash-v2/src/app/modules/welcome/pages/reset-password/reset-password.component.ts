@@ -2,9 +2,9 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import User from '@models/user';
-import { AppState, selectAuthState } from '@store/app.states';
-import { ForgotPassword } from '@store/auth/auth.actions';
+import User from '../../../../models/user';
+import { AppState, selectAuthState } from '../../../../store/app.states';
+import { ForgotPassword } from '../../../../store/auth/auth.actions';
 
 
 @Component({
