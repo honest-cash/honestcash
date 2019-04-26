@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { Store } from '@ngrx/store';
 import { StoreMock } from './store/store.mock';
+import { AuthService } from './services/auth.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -14,6 +15,7 @@ describe('AppComponent', () => {
         AppComponent
       ],
       providers: [
+        AuthService,
         {
           provide: Store, useClass: StoreMock
         }
