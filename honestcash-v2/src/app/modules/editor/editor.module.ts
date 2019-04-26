@@ -18,9 +18,9 @@ import { EditorRoutingModule } from './editor-routing.module';
 import { NgModule } from '@angular/core';
 import { EditorWrapperComponent } from './editor-wrapper.component';
 import { EditorCoreComponent } from './editor-core/editor-core.component';
-import { PostService } from '@app/services/post.service';
+import { PostService } from '../../services/post.service';
 import { EditorService } from './editor-core/editor.service';
-import { UserService } from '@app/services/user.service';
+import { UserService } from '../../services/user.service';
 
 @NgModule({
   imports: [

@@ -2,9 +2,9 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import User from '@models/user';
-import { AppState, selectAuthState } from '@store/app.states';
-import { ForgotPassword } from '@store/auth/auth.actions';
+import User from '../../../../models/user';
+import { AppState, selectAuthState } from '../../../../store/app.states';
+import { ForgotPassword } from '../../../../store/auth/auth.actions';
 
 
 @Component({
@@ -15,6 +15,7 @@ import { ForgotPassword } from '@store/auth/auth.actions';
 export class ResetPasswordComponent implements OnInit {
   @HostBinding('class') class = 'w-full items-center justify-center';
   @HostBinding('style.height') height = '65vh';
+  @HostBinding('style.minHeight') minHeight = '65vh';
 
   isLoading = false;
   user: User = new User();
