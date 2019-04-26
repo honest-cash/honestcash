@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FatLoadingButtonComponent implements OnInit {
 
   @Input() isLoading;
+  @Input() loadingText;
   @Input() text;
 
   constructor(
