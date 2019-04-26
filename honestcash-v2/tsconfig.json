@@ -17,18 +17,6 @@
     "lib": [
       "es2018",
       "dom"
-    ],
-    "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@config/*": ["app/config/*"],
-      "@modules/*": ["app/modules/*"],
-      "@models/*": ["app/models/*"],
-      "@services/*": ["app/services/*"],
-      "@shared/*": ["app/shared/*"],
-      "@store/*": ["app/store/*"],
-      "@assets/*": ["assets/*"],
-      "@env/*": ["environments/*"]
-    },
+    ]
   }
 }

@@ -15,4 +15,4 @@ import { WalletComponent } from './wallet.component';
   ],
   bootstrap: [WalletComponent]
 })
-export class WelcomeModule { }
+export class WalletModule { }

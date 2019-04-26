@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import Wallet from '@models/wallet';
+import Wallet from '../../models/wallet';
 
 export enum WalletActionTypes {
   WALLET_SETUP = '[Wallet] Wallet setup',

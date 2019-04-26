@@ -1,14 +1,14 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { PostService } from '@app/services/post.service';
+import { PostService } from '../../../services/post.service';
 import { EditorService } from './editor.service';
-import { Post, User } from '@app/shared/interfaces/index';
+import { Post, User } from '../../../shared/interfaces/index';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Logger } from '@app/core';
+import { Logger } from '../../../core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import blankBody from './blankBody';
 import { Store } from '@ngrx/store';
-import { AppState, selectAuthState } from '@app/store/app.states';
+import { AppState, selectAuthState } from '../../../store/app.states';
 
 const log = new Logger('EditorCoreComponent');
 

@@ -1,11 +1,11 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
-import User from '@models/user';
-import { AppState, selectAuthState } from '@store/app.states';
-import { SignUp } from '@store/auth/auth.actions';
 import { NgForm } from '@angular/forms';
+
+import User from '../../../../models/user';
+import { AppState, selectAuthState } from '../../../../store/app.states';
+import { SignUp } from '../../../../store/auth/auth.actions';
 
 
 @Component({
