@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { WalletSetup, WalletCleanup } from './store/wallet/wallet.actions';
 import { AuthService } from './services/auth.service';
 import { UserSetup } from './store/auth/auth.actions';
+import { WalletUtils } from './shared/lib/WalletUtils';
 
 @Component({
   selector: 'app-root',
@@ -29,12 +30,23 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.setupUser();
     this.setupWallet();
+
+
+    WalletUtils.getWallet((wallet) => {
+      console.log(wallet);
+    });
   }
 
   private setupWallet() {
     // setup the wallet
     this.authState.subscribe((authState) => {
+
       // depending on the result of authentification, setup or cleanup the wallet.
+      const simpleWallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+        authState.wallet.mnemonicEncrypted,
+        authState.password
+      );
+
       this.store.dispatch(
         authState.token && authState.wallet ?
           new WalletSetup({

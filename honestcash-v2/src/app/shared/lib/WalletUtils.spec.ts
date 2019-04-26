@@ -1,18 +1,20 @@
 import { WalletUtils } from './WalletUtils';
 
 describe('WalletUtils', () => {
-  it('creates a new wallet with password', () => {
-    const wallet = WalletUtils.generateNewWallet('testpassword');
+  it('creates a new wallet with password', async (done) => {
+    const wallet = await WalletUtils.generateNewWallet('testpassword');
 
     expect(wallet).toBeDefined();
+
+    done();
   });
 
-  it('decrypts a wallet', () => {
+  it('decrypts a wallet', (done) => {
     const mnemonicEncrypted =
       // tslint:disable-next-line: max-line-length
       'U2FsdGVkX1/Eo5CUy/rXWwzjmIaBXdCUzwmVZrp7a8pl4QEmKA/WkYn1zNVNC1nI+tEa58OYiMRqqcE3Iwv3RUay4a++F7AjlfhkaHG2PH7kvtjqrLqU1IuwSevZ73o2QcTjuvnmfgP4oDNpovsbNg==';
 
-    const wallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+    const wallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
       mnemonicEncrypted,
       'testpassword'
     );
@@ -21,9 +23,11 @@ describe('WalletUtils', () => {
     expect(wallet.mnemonic).toBe(
       'yard current warrior merry despair sweet wise round acquire equal hollow mansion'
     );
+
+    done();
   });
 
-  it('does not decrypt a wallet because of a wrong password', () => {
+  it('does not decrypt a wallet because of a wrong password', async (done) => {
     const mnemonicEncrypted =
       // tslint:disable-next-line: max-line-length
       'U2FsdGVkX1/Eo5CUy/rXWwzjmIaBXdCUzwmVZrp7a8pl4QEmKA/WkYn1zNVNC1nI+tEa58OYiMRqqcE3Iwv3RUay4a++F7AjlfhkaHG2PH7kvtjqrLqU1IuwSevZ73o2QcTjuvnmfgP4oDNpovsbNg==';
@@ -31,7 +35,7 @@ describe('WalletUtils', () => {
     let wallet: any, err: any;
 
     try {
-      wallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+      wallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
         mnemonicEncrypted,
         'wrongpassword'
       );
@@ -41,5 +45,7 @@ describe('WalletUtils', () => {
 
     expect(wallet).toBe(undefined);
     expect(err).toBeDefined();
+
+    done();
   });
 });

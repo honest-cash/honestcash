@@ -1,5 +1,3 @@
-import SimpleBitcoinWallet from 'simple-bitcoin-wallet';
-
 // @todo shift to simple-bitcoin-wallet package
 interface ISimpleBitcoinWallet {
   cashAddress: string;
@@ -19,7 +17,9 @@ interface ISimpleBitcoinWallet {
 
 export class WalletUtils {
 
-  static generateNewWallet(password: string): ISimpleBitcoinWallet {
+  static async generateNewWallet(password: string): Promise<ISimpleBitcoinWallet> {
+    const SimpleBitcoinWallet = await WalletUtils.lazyLoadSimpleBitcoinWallet();
+
     const newWallet = new SimpleBitcoinWallet(null, {
       password
     });
@@ -27,22 +27,22 @@ export class WalletUtils {
     return newWallet;
   }
 
-  static generateWalletWithEncryptedRecoveryPhrase(encryptedRecoveryPhrase: string, password: string): ISimpleBitcoinWallet {
+  static async generateWalletWithEncryptedRecoveryPhrase(encryptedRecoveryPhrase: string, password: string): Promise<ISimpleBitcoinWallet> {
+    const SimpleBitcoinWallet = await WalletUtils.lazyLoadSimpleBitcoinWallet();
+
     const newWallet = new SimpleBitcoinWallet(encryptedRecoveryPhrase, {
       password
     });
 
     return newWallet;
   }
+
   // @todo add typings to SimpleBitcoinWallet
+  // this loads the simple-bitcoin-wallet in a lazy way when it is needed
+  // because the package has over 1MB in size!
+  static async lazyLoadSimpleBitcoinWallet() {
+    const slw = await import('simple-bitcoin-wallet');
 
-  /**
-  private getWallet() {
-    require.ensure(['simple-bitcoin-wallet'], require => {
-      let yourModule = require('simple-bitcoin-wallet');
-
-      yourModule.someFunction();
-   });
+    return slw.default;
   }
-  */
 }
