@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: './modules/welcome/welcome.module#WelcomeModule'
+  },
+  {
+    path: 'about',
+    loadChildren: './modules/app/app.module#AppModule'
   }
 ];
 
