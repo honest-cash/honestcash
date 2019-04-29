@@ -15,17 +15,19 @@ export class ApiPrefixInterceptor implements HttpInterceptor {
   constructor(private authentificationService: AuthenticationService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!/^(http|https):/i.test(request.url)) {
+    if (this.authentificationService.credentials) {
+      if (!/^(http|https):/i.test(request.url)) {
+        request = request.clone({
+          url: environment.apiUrl + request.url
+        });
+      }
+
       request = request.clone({
-        url: environment.apiUrl + request.url
+        setHeaders: {
+          'x-auth-token': `${this.authentificationService.credentials.token}`
+        }
       });
     }
-
-    request = request.clone({
-      setHeaders: {
-        'x-auth-token': `${this.authentificationService.credentials.token}`
-      }
-    });
 
     return next.handle(request);
   }
