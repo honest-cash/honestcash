@@ -7,6 +7,13 @@ import { LogIn } from '../../../../store/auth/auth.actions';
 import { NgForm } from '@angular/forms';
 import User from '../../../../models/user';
 
+interface LoginForm extends NgForm {
+  value: {
+    email: string;
+    password: string;
+  };
+}
+
 @Component({
   selector: 'app-welcome-page-login',
   templateUrl: './login.component.html',
@@ -18,6 +25,7 @@ export class LoginComponent implements OnInit {
   @HostBinding('style.minHeight') minHeight = '65vh';
 
   isLoading = false;
+  isSubmitted = false;
   getState: Observable<any>;
   errorMessage: string | null;
   user = new User();
@@ -34,10 +42,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // @todo implement loading on buttons
-  // @todo extend the types for the form.value
   // @todo tests for the component
-  onSubmit(form: NgForm): void {
+  onSubmit(form: LoginForm): void {
+    this.isLoading = true;
+    this.isSubmitted = true;
+
     const payload = form.value;
 
     this.store.dispatch(new LogIn(payload));
