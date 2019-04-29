@@ -77,16 +77,6 @@
       {{ errors.general }}
     </p>
   </div> -->
-  <button class="w-full px-4 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-2 opacity-75 mb-4" [disabled]="isLoading">
-    <!-- {{ isLoading ? 'Please Wait...' : 'Get Started' }} -->
-    Get Started
-  </button>
-  <app-welcome-form-footer
-    to="login"
-    text="Already have an account?"
-    anchor="Sign In"
-  ></app-welcome-form-footer>
-  <form></form>
-</form>
-</div>
-
+  <app-welcome-fat-loading-button text="Get Started" loadingText="Signing Up" [isLoading]="isLoading"></app-welcome-fat-loading-button>
+  <app-welcome-form-footer to="login" text="Already have an account?" anchor="Sign In"></app-welcome-form-footer>
+  <form>
