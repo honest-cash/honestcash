@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
+import { Observable, of, pipe } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService, ILogInSuccessResponse, ILogInFailedResponse } from '../../services/auth.service';
 import User from '../../models/user';
 import {
   AuthActionTypes,
@@ -14,6 +14,8 @@ import {
   ForgotPassword, ForgotPasswordSuccess, ForgotPasswordFailure,
   LogOut,
 } from './auth.actions';
+import { WalletSetup, WalletCleanup } from '../wallet/wallet.actions';
+import { UserSetup, UserCleanup } from '../user/user.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -29,41 +31,33 @@ export class AuthEffects {
   LogIn: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
-    switchMap(payload => {
-      return this.authService.logIn(payload.email, payload.password)
-      // side effect & setting up the wallet
+    switchMap(payload =>
+      this.authService.logIn(payload.email, payload.password)
       .pipe(
-        map((logInResponse: any) => {
-          return new LogInSuccess({
-            // @todo: refactor to encode with a password hash
-            password: payload.password,
-
-            token: logInResponse.token,
-            user: logInResponse.user,
-            wallet: logInResponse.wallet,
-            email: payload.email
-          });
-        }),
-        catchError((error) => {
-          return of(new LogInFailure({ error: error }));
-        })
-      );
-    })
+        map((logInResponse: ILogInSuccessResponse) => new LogInSuccess(logInResponse)),
+        catchError((error) => of(new LogInFailure(error))),
+      )
+    )
   );
 
-  @Effect({ dispatch: false })
+  @Effect()
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
-    tap((user) => {
-      localStorage.setItem(this.LOCAL_TOKEN_KEY, user.payload.token);
-
+    map((action: LogInSuccess) => action.payload),
+    switchMap((payload: ILogInSuccessResponse) => {
       this.router.navigateByUrl('/');
+
+      return [
+        new UserSetup(payload),
+        new WalletSetup(payload),
+      ];
     })
   );
 
   @Effect({ dispatch: false })
   LogInFailure: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.LOGIN_FAILURE)
+    ofType(AuthActionTypes.LOGIN_FAILURE),
+    switchMap((response) => [])
   );
 
   @Effect()
@@ -87,8 +81,6 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     tap((user) => {
-      localStorage.setItem(this.LOCAL_TOKEN_KEY, user.payload.token);
-
       this.router.navigateByUrl('/');
     })
   );
@@ -135,8 +127,7 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   ForgotPasswordSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.FORGOT_PASSWORD_SUCCESS),
-    tap((user) => {
-      localStorage.setItem('token', user.payload.token);
+    tap(() => {
       this.router.navigateByUrl('/');
     })
   );
@@ -149,9 +140,13 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
-    tap((user) => {
-      localStorage.removeItem('token');
+    switchMap(() => {
       this.router.navigateByUrl('/');
+
+      return [
+        new UserCleanup(),
+        new WalletCleanup(),
+      ];
     })
   );
 

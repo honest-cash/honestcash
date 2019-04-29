@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import User from '../../models/user';
+import { ILogInSuccessResponse } from 'app/services/auth.service';
 
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',
@@ -8,7 +8,6 @@ export enum AuthActionTypes {
   SIGNUP = '[Auth] Signup',
   SIGNUP_SUCCESS = '[Auth] Signup Success',
   SIGNUP_FAILURE = '[Auth] Signup Failure',
-  USER_SETUP = '[Auth] User setup',
   FORGOT_PASSWORD = '[Auth] Forgot Password',
   FORGOT_PASSWORD_SUCCESS = '[Auth] Forgot Password Success',
   FORGOT_PASSWORD_FAILURE = '[Auth] Forgot Password Failure',
@@ -24,21 +23,18 @@ export class LogIn implements Action {
   }) {}
 }
 
-export class UserSetup implements Action {
-  readonly type = AuthActionTypes.USER_SETUP;
-  constructor(public payload: {
-    user: User
-  }) {}
-}
-
 export class LogInSuccess implements Action {
   readonly type = AuthActionTypes.LOGIN_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: ILogInSuccessResponse) {}
 }
 
 export class LogInFailure implements Action {
   readonly type = AuthActionTypes.LOGIN_FAILURE;
-  constructor(public payload: any) {}
+  constructor(public payload: {
+    code: string;
+    desc: string;
+    httpCode: number;
+  } | string) {}
 }
 
 export class SignUp implements Action {
@@ -103,6 +99,5 @@ export type All =
   | ForgotPassword
   | ForgotPasswordSuccess
   | ForgotPasswordFailure
-  | UserSetup
   | LogOut
   | GetStatus;

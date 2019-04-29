@@ -1,11 +1,12 @@
 import SimpleBitcoinWallet from 'simple-bitcoin-wallet';
 
 // @todo shift to simple-bitcoin-wallet package
-interface ISimpleBitcoinWallet {
+export interface ISimpleBitcoinWallet {
   cashAddress: string;
   mnemonic: string;
   address: string;
   HdPath: string;
+  privateKey: string;
   legacyAddress: string;
   mnemonicEncrypted: string;
 

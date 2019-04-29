@@ -26,23 +26,14 @@ export class LoginComponent implements OnInit {
 
   isLoading = false;
   isSubmitted = false;
-  getState: Observable<any>;
-  errorMessage: string | null;
   user = new User();
 
   constructor(
     private store: Store<AppState>
-  ) {
-    this.getState = this.store.select(selectAuthState);
-  }
+  ) {}
 
-  ngOnInit() {
-    this.getState.subscribe((state) => {
-      this.errorMessage = state.errorMessage;
-    });
-  }
+  ngOnInit() {}
 
-  // @todo tests for the component
   onSubmit(form: LoginForm): void {
     this.isLoading = true;
     this.isSubmitted = true;

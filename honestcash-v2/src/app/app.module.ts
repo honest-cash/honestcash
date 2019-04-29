@@ -9,6 +9,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { AuthEffects } from './store/auth/auth.effects';
+import { WalletEffects } from './store/wallet/wallet.effects';
+import { UserEffects } from './store/user/user.effects';
+
 import { reducers, metaReducers } from './store/app.states';
 import { AuthService } from './services/auth.service';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -18,6 +21,7 @@ import {
   TokenInterceptor, ErrorInterceptor
 } from './services/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { WalletService } from './services/wallet.service';
 
 @NgModule({
   declarations: [
@@ -31,11 +35,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, UserEffects, WalletEffects ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [
     AuthService,
+    WalletService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

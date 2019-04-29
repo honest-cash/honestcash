@@ -4,29 +4,54 @@ import User from '../models/user';
 import {environment} from '../../environments/environment';
 import {CryptoUtils} from '../shared/lib/CryptoUtils';
 import { HttpService } from '../core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/store/app.states';
 
-export interface ILogInResponse {
+export interface ILogInSuccessResponse {
   user: User;
   wallet: any;
   token: string;
 }
 
+export interface ILogInFailedResponse {
+  code: string;
+  desc: string;
+  httpCode: number;
+}
+
 @Injectable()
 export class AuthService {
   private BASE_URL = environment.apiUrl;
+  private LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
-  constructor(private http: HttpService) {}
+  constructor(
+    private store: Store<AppState>,
+    private http: HttpService
+  ) {}
+
+  public setup(): void {
+    // check or setup token
+    // check or setup wallet
+  }
 
   public getToken(): string {
     return localStorage.getItem('token');
   }
 
-  public logIn(email: string, password: string): Observable<ILogInResponse> {
+  public setToken(token: string): void {
+    return localStorage.setItem(this.LOCAL_TOKEN_KEY, token);
+  }
+
+  public unsetToken(): void {
+    return localStorage.removeItem(this.LOCAL_TOKEN_KEY);
+  }
+
+  public logIn(email: string, password: string): Observable<ILogInSuccessResponse | ILogInFailedResponse> {
     const url = `${this.BASE_URL}/login`;
 
     const passwordHash = CryptoUtils.calculatePasswordHash(email, password);
 
-    return this.http.post<ILogInResponse>(url, {email, password: passwordHash});
+    return this.http.post<ILogInSuccessResponse | ILogInFailedResponse>(url, {email, password: passwordHash});
   }
 
   public signUp(payload: {
