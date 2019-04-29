@@ -1,11 +1,11 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
-import User from '@models/user';
-import { AppState, selectAuthState } from '@store/app.states';
-import { SignUp } from '@store/auth/auth.actions';
 import { NgForm } from '@angular/forms';
+
+import User from '../../../../models/user';
+import { AppState, selectAuthState } from '../../../../store/app.states';
+import { SignUp } from '../../../../store/auth/auth.actions';
 
 
 @Component({
@@ -14,6 +14,10 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
+  @HostBinding('class') class = 'w-full';
+  @HostBinding('style.height') height = '65vh';
+  @HostBinding('style.minHeight') minHeight = '65vh';
+
   isLoading = false;
   user: User = new User();
   getState: Observable<any>;
