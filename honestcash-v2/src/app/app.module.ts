@@ -8,15 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { AuthEffects } from '@store/auth/auth.effects';
-import { reducers, metaReducers } from '@store/app.states';
-import { AuthService } from '@services/auth.service';
+import { AuthEffects } from './store/auth/auth.effects';
+import { reducers, metaReducers } from './store/app.states';
+import { AuthService } from './services/auth.service';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { AuthGuardService as AuthGuard } from '@services/auth-guard.service';
+import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
 import {
   TokenInterceptor, ErrorInterceptor
-} from '@services/token.interceptor';
+} from './services/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({

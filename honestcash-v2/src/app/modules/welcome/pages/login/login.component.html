@@ -2,14 +2,31 @@
   title="Sign in to Honest."
   description="Enter your details below"
 ></app-welcome-heading>
-
-<form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+<div
+  class="
+    flex
+    flex-wrap
+    items-center
+    justify-center
+    xs:w-full
+    sm:w-3/5
+    md:w-1/2
+    lg:w-1/3
+    xl:w-1/4
+    xxl:w-1/5
+    xxxl:w-1/6
+    mx-auto
+    xs:px-4
+    text-center
+    mb-8
+  "
+>
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <input
       required
       name="email"
       [ngModel]="user.email"
-      applyTransparentInputClass
-      class="mb-4"
+      class="mb-4 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
       type="text"
       placeholder="E-Mail"
     />
@@ -22,8 +39,7 @@
       required
       [ngModel]="user.password"
       name="password"
-      applyTransparentInputClass
-      class="mb-2"
+      class="mb-2 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
       type="password"
       placeholder="Password"
     />
@@ -32,9 +48,12 @@
   *ngIf="errors.password !== ''"
   >{{ errors.password }}</i
   > -->
-  <app-welcome-form-link-right to="reset-password" anchor="Forgot your password?"></app-welcome-form-link-right>
+    <app-welcome-form-link-right
+      to="reset-password"
+      anchor="Forgot your password?"
+    ></app-welcome-form-link-right>
 
-  <!-- <div
+    <!-- <div
 class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
 *ngIf="errors.general !== ''"
 >
@@ -42,11 +61,11 @@ class="w-full items-start justify-start p-4 bg-white border-2 border-white borde
   {{ errors.general }}
 </p>
 </div> -->
-  <button
-    applyTransparentButtonClass
-    [disabled]="isLoading"
-  >
-    Sign In
-  </button>
-  <app-welcome-form-footer to="signup" text="Don't have an account?" anchor="Sign Up"></app-welcome-form-footer>
-</form>
+    <app-welcome-fat-loading-button text="Sign In" loadingText="Signing In" [isLoading]="isLoading"></app-welcome-fat-loading-button>
+    <app-welcome-form-footer
+      to="signup"
+      text="Don't have an account?"
+      anchor="Sign Up"
+    ></app-welcome-form-footer>
+  </form>
+</div>

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { AppState, selectAuthState } from '@store/app.states';
-import { LogOut } from '@store/auth/auth.actions';
+import { AppState, selectAuthState } from '../../store/app.states';
+import { LogOut } from '../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-wallet',

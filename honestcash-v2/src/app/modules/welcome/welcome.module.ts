@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
-import { LoginComponent } from '@modules/welcome/pages/login/login.component';
-import { SignupComponent } from '@modules/welcome/pages/signup/signup.component';
-import { StatusComponent } from '@modules/welcome/pages/status/status.component';
-import { ResetPasswordComponent } from '@modules/welcome/pages/reset-password/reset-password.component';
-import { WelcomeComponent } from '@modules/welcome/pages/welcome/welcome.component';
-import { WelcomeContainerComponent } from '@modules/welcome/welcome.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
+import { StatusComponent } from './pages/status/status.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { WelcomeContainerComponent } from './welcome.component';
 import { CommonModule } from '@angular/common';
-import { AuthGuardService as AuthGuard } from '@services/auth-guard.service';
-import { RouterModule, Routes, CanActivate } from '@angular/router';
+import { AuthGuardService as AuthGuard } from '../../services/auth-guard.service';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -15,8 +15,7 @@ import { HeadingComponent } from './components/heading/heading.component';
 import { FormComponent } from './components/form/form.component';
 import { FormFooterComponent } from './components/form/components/footer/footer.component';
 import { FormLinkRightComponent } from './components/form/components/link-right/link-right.component';
-import { ApplyTransparentInputClassDirective } from './directives/apply-transparent-input-class/apply-transparent-input-class.directive';
-import { ApplyTransparentButtonClassDirective } from './directives/apply-transparent-button-class/apply-transparent-button-class.directive';
+import { FatLoadingButtonComponent } from './components/fat-loading-button/fat-loading-button.component';
 
 const routes: Routes = [
   {
@@ -35,9 +34,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     HeadingComponent,
+    FatLoadingButtonComponent,
     FormComponent,
-    ApplyTransparentInputClassDirective,
-    ApplyTransparentButtonClassDirective,
     HeaderComponent,
     FooterComponent,
     FormFooterComponent,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { User } from '@app/shared/interfaces';
+import { User } from '../shared/interfaces';
 import { BehaviorSubject } from 'rxjs';
-import { Logger, HttpService } from '@app/core';
+import { Logger, HttpService } from '../core';
 import { Router } from '@angular/router';
 
 const log = new Logger('UserService');

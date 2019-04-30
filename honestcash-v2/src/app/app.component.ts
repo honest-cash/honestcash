@@ -12,7 +12,7 @@ import { UserSetup } from './store/auth/auth.actions';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  @HostBinding('class') class = 'h-screen w-screen flex flex-wrap';
+  @HostBinding('class') class = 'h-full w-full flex flex-wrap';
   title = 'honestcash-v2';
 
   walletState: Observable<any>;

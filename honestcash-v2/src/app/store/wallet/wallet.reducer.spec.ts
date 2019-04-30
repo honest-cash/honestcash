@@ -1,5 +1,5 @@
-import { reducer } from '@store/wallet/wallet.reducer';
-import { WalletSetup } from '@store/wallet/wallet.actions';
+import { reducer } from './wallet.reducer';
+import { WalletSetup } from './wallet.actions';
 
 describe('wallet.reducer', () => {
   it('WalletSetup', () => {
