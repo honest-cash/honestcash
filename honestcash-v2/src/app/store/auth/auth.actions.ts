@@ -1,5 +1,9 @@
 import { Action } from '@ngrx/store';
-import { ILogInSuccessResponse } from 'app/services/auth.service';
+import {
+  IAuthRequest,
+  IAuthRequestSuccessResponse,
+  IAuthRequestFailedResponse,
+} from 'app/services/auth.service';
 
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',
@@ -17,44 +21,32 @@ export enum AuthActionTypes {
 
 export class LogIn implements Action {
   readonly type = AuthActionTypes.LOGIN;
-  constructor(public payload: {
-    email: string;
-    password: string;
-  }) {}
+  constructor(public payload: IAuthRequest) {}
 }
 
 export class LogInSuccess implements Action {
   readonly type = AuthActionTypes.LOGIN_SUCCESS;
-  constructor(public payload: ILogInSuccessResponse) {}
+  constructor(public payload: IAuthRequestSuccessResponse) {}
 }
 
 export class LogInFailure implements Action {
   readonly type = AuthActionTypes.LOGIN_FAILURE;
-  constructor(public payload: {
-    code: string;
-    desc: string;
-    httpCode: number;
-  } | string) {}
+  constructor(public payload: IAuthRequestFailedResponse | string) {}
 }
 
 export class SignUp implements Action {
   readonly type = AuthActionTypes.SIGNUP;
-  constructor(public payload: {
-    username: string;
-    email: string;
-    password: string;
-    captcha: string;
-  }) {}
+  constructor(public payload: IAuthRequest) {}
 }
 
 export class SignUpSuccess implements Action {
   readonly type = AuthActionTypes.SIGNUP_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: IAuthRequestSuccessResponse) {}
 }
 
 export class SignUpFailure implements Action {
   readonly type = AuthActionTypes.SIGNUP_FAILURE;
-  constructor(public payload: any) {}
+  constructor(public payload: IAuthRequestFailedResponse | string) {}
 }
 
 export class ForgotPassword implements Action {

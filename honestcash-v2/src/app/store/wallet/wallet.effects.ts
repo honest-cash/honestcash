@@ -19,9 +19,14 @@ export class WalletEffects {
   @Effect({ dispatch: false })
   WalletSetup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP),
-    map((action: WalletSetup) => action.payload.wallet),
-    tap((wallet) => {
-      this.walletService.setWallet(wallet.mnemonicEncrpyted, wallet.password);
+    map((action: WalletSetup) => {
+      return {
+        mnemonicEncrypted: action.payload.wallet.mnemonicEncrypted,
+        password: action.payload.password,
+      };
+    }),
+    tap(({ password, mnemonicEncrypted }) => {
+      this.walletService.setWallet(password, mnemonicEncrypted);
     }),
   );
 

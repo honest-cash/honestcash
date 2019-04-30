@@ -7,13 +7,22 @@ import { HttpService } from '../core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store/app.states';
 
-export interface ILogInSuccessResponse {
-  user: User;
-  wallet: any;
-  token: string;
+export interface IAuthRequest {
+  username?: string;
+  email: string;
+  password: string;
+  captcha?: string;
 }
 
-export interface ILogInFailedResponse {
+
+export interface IAuthRequestSuccessResponse {
+  user: User;
+  wallet?: any;
+  token?: string;
+  password?: string;
+}
+
+export interface IAuthRequestFailedResponse {
   code: string;
   desc: string;
   httpCode: number;
@@ -46,20 +55,15 @@ export class AuthService {
     return localStorage.removeItem(this.LOCAL_TOKEN_KEY);
   }
 
-  public logIn(email: string, password: string): Observable<ILogInSuccessResponse | ILogInFailedResponse> {
+  public logIn(payload: IAuthRequest): Observable<IAuthRequestSuccessResponse | IAuthRequestFailedResponse> {
     const url = `${this.BASE_URL}/login`;
 
-    const passwordHash = CryptoUtils.calculatePasswordHash(email, password);
+    const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
-    return this.http.post<ILogInSuccessResponse | ILogInFailedResponse>(url, {email, password: passwordHash});
+    return this.http.post<IAuthRequestSuccessResponse | IAuthRequestFailedResponse>(url, {email: payload.email, password: passwordHash});
   }
 
-  public signUp(payload: {
-    email: string;
-    password: string;
-    username: string;
-    captcha: string;
-  }): Observable<User> {
+  public signUp(payload: IAuthRequest): Observable<User> {
     const url = `${this.BASE_URL}/signup/email`;
 
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);

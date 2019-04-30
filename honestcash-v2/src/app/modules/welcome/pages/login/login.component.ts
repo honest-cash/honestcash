@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
     const payload = form.value;
 
-    // this.store.dispatch(new LogIn(payload));
+    this.store.dispatch(new LogIn(payload));
   }
 
 }

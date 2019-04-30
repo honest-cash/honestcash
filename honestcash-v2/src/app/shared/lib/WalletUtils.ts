@@ -20,21 +20,12 @@ export interface ISimpleBitcoinWallet {
 
 export class WalletUtils {
 
-  static generateNewWallet(password: string): ISimpleBitcoinWallet {
-    const newWallet = new SimpleBitcoinWallet(null, {
-      password
-    });
-
-    return newWallet;
-  }
-
-  static generateWalletWithEncryptedRecoveryPhrase(encryptedRecoveryPhrase: string, password: string): ISimpleBitcoinWallet {
-    const newWallet = new SimpleBitcoinWallet(encryptedRecoveryPhrase, {
-      password
-    });
-
-    return newWallet;
-  }
+  static generateNewWallet = (password: string): ISimpleBitcoinWallet => new SimpleBitcoinWallet(null, { password });
+  static encrypt = (mnemonic: string, password: string): string => SimpleBitcoinWallet.encrypt(mnemonic, password);
+  static generateWalletWithEncryptedRecoveryPhrase = (
+    encryptedRecoveryPhrase: string,
+    password: string
+  ): ISimpleBitcoinWallet => new SimpleBitcoinWallet(encryptedRecoveryPhrase, { password })
   // @todo add typings to SimpleBitcoinWallet
 
   /**

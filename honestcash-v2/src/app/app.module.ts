@@ -22,6 +22,7 @@ import {
 } from './services/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { WalletService } from './services/wallet.service';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { WalletService } from './services/wallet.service';
   providers: [
     AuthService,
     WalletService,
+    UserService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

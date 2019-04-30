@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, of, pipe } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 
-import { AuthService, ILogInSuccessResponse, ILogInFailedResponse } from '../../services/auth.service';
+import { AuthService, IAuthRequest, IAuthRequestSuccessResponse, } from '../../services/auth.service';
 import User from '../../models/user';
 import {
   AuthActionTypes,
@@ -19,7 +19,6 @@ import { UserSetup, UserCleanup } from '../user/user.actions';
 
 @Injectable()
 export class AuthEffects {
-  private LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
   constructor(
     private actions: Actions,
@@ -31,10 +30,10 @@ export class AuthEffects {
   LogIn: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
-    switchMap(payload =>
-      this.authService.logIn(payload.email, payload.password)
+    switchMap((payload: IAuthRequest) =>
+      this.authService.logIn(payload)
       .pipe(
-        map((logInResponse: ILogInSuccessResponse) => new LogInSuccess(logInResponse)),
+        map((logInResponse: IAuthRequestSuccessResponse) => new LogInSuccess({...logInResponse, password: payload.password})),
         catchError((error) => of(new LogInFailure(error))),
       )
     )
@@ -44,7 +43,7 @@ export class AuthEffects {
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LogInSuccess) => action.payload),
-    switchMap((payload: ILogInSuccessResponse) => {
+    switchMap((payload: IAuthRequestSuccessResponse) => {
       this.router.navigateByUrl('/');
 
       return [
@@ -64,30 +63,33 @@ export class AuthEffects {
   SignUp: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
-    switchMap(payload => {
-      return this.authService.signUp(payload)
+    switchMap((payload: IAuthRequest) =>
+      this.authService.signUp(payload)
       .pipe(
-        map((user: User) => {
-          return new SignUpSuccess({token: user.token, email: payload.email});
-        }),
-        catchError((error) => {
-          return of(new SignUpFailure({ error: error }));
-        })
-      );
-    })
+        map((signUpResponse: IAuthRequestSuccessResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),
+        catchError((error) => of(new SignUpFailure(error))),
+      )
+    )
   );
 
-  @Effect({ dispatch: false })
+  @Effect()
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
-    tap((user) => {
+    map((action: SignUpSuccess) => action.payload),
+    switchMap((payload: IAuthRequestSuccessResponse) => {
       this.router.navigateByUrl('/');
+
+      return [
+        new UserSetup(payload),
+        new WalletSetup(payload),
+      ];
     })
   );
 
   @Effect({ dispatch: false })
   SignUpFailure: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.SIGNUP_FAILURE)
+    ofType(AuthActionTypes.SIGNUP_FAILURE),
+    switchMap((response) => [])
   );
 
   @Effect()
