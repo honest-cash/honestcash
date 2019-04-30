@@ -21,33 +21,53 @@
     mb-8
   "
 >
-  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
-    <input
-      required
-      name="email"
-      [ngModel]="user.email"
-      class="mb-4 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
-      type="text"
-      placeholder="E-Mail"
-    />
-    <!-- <i
-  class="w-full text-md opacity-75 font-bold text-red"
-  *ngIf="errors.username !== ''"
-  >{{ errors.username }}</i
-  > -->
-    <input
-      required
-      name="password"
-      [ngModel]="user.password"
-      class="mb-2 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
-      type="password"
-      placeholder="Password"
-    />
-    <!-- <i
-  class="w-full text-md opacity-75 font-bold text-red"
-  *ngIf="errors.password !== ''"
-  >{{ errors.password }}</i
-  > -->
+  <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="w-full mb-4 relative">
+      <input
+        required
+        name="email"
+        #email="ngModel"
+        [ngModel]="user.email"
+        [ngClass]="{ 'border-red': f.submitted && email.invalid }"
+        class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
+        type="text"
+        placeholder="E-Mail"
+        email
+      />
+      <span
+        style="
+          top: 50%;
+          right: 10px;
+          transform: translateY(-50%);
+        "
+        class="absolute text-red cursor-pointer"
+        *ngIf="f.submitted && email.invalid">
+        <i *ngIf="email.errors.required" class="fas fa-exclamation-circle" tooltip="E-mail is required" placement="right" delay="500"></i>
+        <i *ngIf="email.errors.email" class="fas fa-exclamation-circle" tooltip="E-mail must be a valid e-mail address" placement="right" delay="500"></i>
+      </span>
+    </div>
+    <div class="w-full mb-4 relative">
+      <input
+        required
+        name="password"
+        #password="ngModel"
+        [ngModel]="user.password"
+        [ngClass]="{ 'border-red': f.submitted && password.invalid }"
+        class="mb-2 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
+        type="password"
+        placeholder="Password"
+      />
+      <span
+        style="
+          top: 50%;
+          right: 10px;
+          transform: translateY(-50%);
+        "
+        class="absolute text-red cursor-pointer"
+        *ngIf="f.submitted && password.invalid">
+        <i *ngIf="password.errors.required" class="fas fa-exclamation-circle" tooltip="Password is required" placement="right" delay="500"></i>
+      </span>
+    </div>
     <app-welcome-form-link-right
       to="reset-password"
       anchor="Forgot your password?"

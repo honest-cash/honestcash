@@ -9,16 +9,10 @@ export class FormFooterComponent implements OnInit {
   @Input() text;
   @Input() anchor;
   @Input() to;
-  @HostBinding('class') class = 'w-full text-center text-white hover:text-white mt-4';
+  @HostBinding('class') class = 'block w-full text-center text-white hover:text-white mt-2';
 
-  constructor(
+  constructor() {}
 
-  ) {
-
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
 }

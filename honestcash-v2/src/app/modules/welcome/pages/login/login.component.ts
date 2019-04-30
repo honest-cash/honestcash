@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
   @HostBinding('style.minHeight') minHeight = '65vh';
 
   isLoading = false;
-  isSubmitted = false;
   user = new User();
 
   constructor(
@@ -36,11 +35,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: LoginForm): void {
     this.isLoading = true;
-    this.isSubmitted = true;
 
     const payload = form.value;
 
-    this.store.dispatch(new LogIn(payload));
+    // this.store.dispatch(new LogIn(payload));
   }
 
 }
