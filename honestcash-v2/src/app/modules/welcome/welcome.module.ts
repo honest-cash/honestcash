@@ -16,6 +16,7 @@ import { FormComponent } from './components/form/form.component';
 import { FormFooterComponent } from './components/form/components/footer/footer.component';
 import { FormLinkRightComponent } from './components/form/components/link-right/link-right.component';
 import { FatLoadingButtonComponent } from './components/fat-loading-button/fat-loading-button.component';
+import { TooltipDirective } from './directives/tooltip.directive';
 
 const routes: Routes = [
   {
@@ -33,6 +34,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    TooltipDirective,
     HeadingComponent,
     FatLoadingButtonComponent,
     FormComponent,
