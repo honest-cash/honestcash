@@ -22,61 +22,117 @@
     mb-8
   "
 >
-<form #f="ngForm" (ngSubmit)="onSubmit(f)">
-  <input
-    class="mb-4 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
-    type="text"
-    placeholder="Username"
-    name="username"
-  />
-  <!-- <i
-    class="w-fulltext-md opacity-75 font-bold text-red"
-    *ngIf="errors.username !== ''"
-    >{{ errors.username }}</i
-  > -->
-  <input
-    class="mb-4 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
-    type="email"
-    placeholder="E-mail"
-    name="email"
-  />
-  <!-- <i
-    class="w-full text-md opacity-75 font-bold text-red"
-    *ngIf="errors.email !== ''"
-    >{{ errors.email }}</i
-  > -->
-
-  <input
-    class="mb-4 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
-    type="password"
-    placeholder="Password"
-    name="password"
-  />
-
-  <!-- <i
-    class="w-full text-md opacity-75 font-bold text-red"
-    *ngIf="errors.password !== ''"
-    >{{ errors.password }}</i
-  > -->
-  <div
+  <form class="w-full" name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="w-full mb-4 relative">
+      <input
+        required
+        name="username"
+        #username="ngModel"
+        [ngModel]="user.username"
+        [ngClass]="{ 'border-red': f.submitted && username.invalid }"
+        class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
+        type="text"
+        placeholder="Username"
+      />
+      <span
+        style="
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+          "
+        class="absolute text-red cursor-pointer"
+        *ngIf="f.submitted && username.invalid"
+      >
+        <i
+          *ngIf="username.errors.required"
+          class="fas fa-exclamation-circle"
+          tooltip="Username is required"
+          placement="right"
+          delay="500"
+        ></i>
+      </span>
+    </div>
+    <div class="w-full mb-4 relative">
+      <input
+        required
+        name="email"
+        #email="ngModel"
+        [ngModel]="user.email"
+        [ngClass]="{ 'border-red': f.submitted && email.invalid }"
+        class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
+        type="text"
+        placeholder="E-Mail"
+        email
+      />
+      <span
+        style="
+              top: 50%;
+              right: 10px;
+              transform: translateY(-50%);
+            "
+        class="absolute text-red cursor-pointer"
+        *ngIf="f.submitted && email.invalid"
+      >
+        <i
+          *ngIf="email.errors.required"
+          class="fas fa-exclamation-circle"
+          tooltip="E-mail is required"
+          placement="right"
+          delay="500"
+        ></i>
+        <i
+          *ngIf="email.errors.email"
+          class="fas fa-exclamation-circle"
+          tooltip="E-mail must be a valid e-mail address"
+          placement="right"
+          delay="500"
+        ></i>
+      </span>
+    </div>
+    <div class="w-full mb-4 relative">
+      <input
+        required
+        name="password"
+        #password="ngModel"
+        [ngModel]="user.password"
+        [ngClass]="{ 'border-red': f.submitted && password.invalid }"
+        class="mb-2 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-75"
+        type="password"
+        placeholder="Password"
+      />
+      <span
+        style="
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+              "
+        class="absolute text-red cursor-pointer"
+        *ngIf="f.submitted && password.invalid"
+      >
+        <i
+          *ngIf="password.errors.required"
+          class="fas fa-exclamation-circle"
+          tooltip="Password is required"
+          placement="right"
+          delay="500"
+        ></i>
+      </span>
+    </div>
+    <!-- <div
     id="hc-captcha"
     class="g-recaptcha w-full p-4 my-4 opacity-75"
     data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
-  ></div>
-  <!-- <i
-    class="w-full text-md opacity-75 -mt-12 font-bold text-red"
-    *ngIf="errors.captcha !== ''"
-    >{{ errors.captcha }}</i
-  > -->
-
-  <!-- <div
-    class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
-    *ngIf="errors.general !== ''"
-  >
-    <p class="w-full text-md opacity-75 mt-4 font-bold text-red">
-      {{ errors.general }}
-    </p>
-  </div> -->
-  <app-welcome-fat-loading-button text="Get Started" loadingText="Signing Up" [isLoading]="isLoading"></app-welcome-fat-loading-button>
-  <app-welcome-form-footer to="login" text="Already have an account?" anchor="Sign In"></app-welcome-form-footer>
-  <form>
+  ></div> -->
+    <app-welcome-fat-loading-button
+      text="Get Started"
+      loadingText="Signing Up"
+      [isLoading]="isLoading"
+    ></app-welcome-fat-loading-button>
+    <app-welcome-form-footer
+      to="login"
+      text="Already have an account?"
+      anchor="Sign In"
+    ></app-welcome-form-footer>
+    <form></form>
+  </form>
+</div>

@@ -1,10 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-
-import { AppState, selectAuthState } from '../../../../store/app.states';
-import { LogIn } from '../../../../store/auth/auth.actions';
 import { NgForm } from '@angular/forms';
+import { AppState } from '../../../../store/app.states';
+import { LogIn } from '../../../../store/auth/auth.actions';
 import User from '../../../../models/user';
 
 interface LoginForm extends NgForm {

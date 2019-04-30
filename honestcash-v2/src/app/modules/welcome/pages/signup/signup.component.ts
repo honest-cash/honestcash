@@ -1,12 +1,18 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { NgForm } from '@angular/forms';
-
-import User from '../../../../models/user';
-import { AppState, selectAuthState } from '../../../../store/app.states';
+import { AppState } from '../../../../store/app.states';
 import { SignUp } from '../../../../store/auth/auth.actions';
+import User from '../../../../models/user';
 
+interface SignupForm extends NgForm {
+  value: {
+    username: string;
+    email: string;
+    password: string;
+    captcha: string;
+  };
+}
 
 @Component({
   selector: 'app-welcome-page-signup',
@@ -20,27 +26,18 @@ export class SignupComponent implements OnInit {
 
   isLoading = false;
   user: User = new User();
-  getState: Observable<any>;
-  errorMessage: string | null;
 
   constructor(
     private store: Store<AppState>
-  ) {
-    this.getState = this.store.select(selectAuthState);
-  }
+  ) {}
 
-  ngOnInit() {
-    this.getState.subscribe((state) => {
-      this.errorMessage = state.errorMessage;
-    });
-  }
+  ngOnInit() {}
 
-  // @todo implement loading on buttons
-  // @todo extend the types for the form.value
-  // @todo tests for the component
-  onSubmit(form: NgForm): void {
+  onSubmit(form: SignupForm): void {
+    this.isLoading = true;
+
     const payload = form.value;
 
-    this.store.dispatch(new SignUp(payload));
+    // this.store.dispatch(new SignUp(payload));
   }
 }

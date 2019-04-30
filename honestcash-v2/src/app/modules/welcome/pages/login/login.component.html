@@ -21,7 +21,7 @@
     mb-8
   "
 >
-  <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+  <form class="w-full" name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
     <div class="w-full mb-4 relative">
       <input
         required
@@ -72,15 +72,6 @@
       to="reset-password"
       anchor="Forgot your password?"
     ></app-welcome-form-link-right>
-
-    <!-- <div
-class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
-*ngIf="errors.general !== ''"
->
-<p class="w-full text-md opacity-75 mt-4 font-bold text-red">
-  {{ errors.general }}
-</p>
-</div> -->
     <app-welcome-fat-loading-button text="Sign In" loadingText="Signing In" [isLoading]="isLoading"></app-welcome-fat-loading-button>
     <app-welcome-form-footer
       to="signup"
