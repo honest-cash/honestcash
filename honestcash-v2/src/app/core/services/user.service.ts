@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { User } from '../shared/interfaces';
+import { User } from '../../shared/interfaces';
 import { BehaviorSubject } from 'rxjs';
-import { Logger, HttpService } from '../core';
+import { Logger, HttpService } from '../../core';
 import { Router } from '@angular/router';
 import { IAuthRequestSuccessResponse } from './auth.service';
 import { WalletService } from './wallet.service';
 import { Store } from '@ngrx/store';
-import { AppState, selectUserState } from '../store/app.states';
+import { AppState, selectUserState } from '../../store/app.states';
 
 const log = new Logger('UserService');
 

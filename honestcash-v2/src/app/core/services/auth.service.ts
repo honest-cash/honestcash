@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import User from '../models/user';
-import {environment} from '../../environments/environment';
-import {CryptoUtils} from '../shared/lib/CryptoUtils';
-import { HttpService } from '../core';
+import User from '../../models/user';
+import {environment} from '../../../environments/environment';
+import {CryptoUtils} from '../../shared/lib/CryptoUtils';
+import { HttpService } from '../../core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store/app.states';
 

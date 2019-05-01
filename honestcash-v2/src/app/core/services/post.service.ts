@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Post } from '../shared/interfaces';
+import { Post } from '../../shared/interfaces';
 import { Observable } from 'rxjs';
-import { HttpService } from '../core';
+import { HttpService } from '../../core';
 
 export interface DraftContext {
   parentPostId?: number;

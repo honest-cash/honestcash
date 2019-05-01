@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { WalletUtils } from 'app/shared/lib/WalletUtils';
-import Wallet from 'app/models/wallet';
+import { WalletUtils } from '../../shared/lib/WalletUtils';
+import Wallet from '../../models/wallet';
 
 @Injectable({providedIn: 'root'})
 export class WalletService {

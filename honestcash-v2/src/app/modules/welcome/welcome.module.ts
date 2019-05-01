@@ -6,7 +6,7 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { WelcomeContainerComponent } from './welcome.component';
 import { CommonModule } from '@angular/common';
-import { AuthGuardService as AuthGuard } from '../../core/services/auth-guard.service';
+import { AuthGuardService as AuthGuard } from '../../core/guards/auth-guard.service';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
