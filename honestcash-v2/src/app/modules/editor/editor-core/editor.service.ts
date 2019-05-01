@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Post } from '../../../shared/interfaces';
-import { PostService } from '../../../services/post.service';
+import { PostService } from '../../../core/services/post.service';
 
 // @todo publish modal
 // import { PostPublishModalComponent } from '@app/shell/components/modals/post-publish-modal/post-publish-modal.component';

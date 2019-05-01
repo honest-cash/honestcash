@@ -13,16 +13,13 @@ import { WalletEffects } from './store/wallet/wallet.effects';
 import { UserEffects } from './store/user/user.effects';
 
 import { reducers, metaReducers } from './store/app.states';
-import { AuthService } from './services/auth.service';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
+import { AuthGuardService as AuthGuard } from './core/services/auth-guard.service';
 import {
   TokenInterceptor, ErrorInterceptor
-} from './services/token.interceptor';
+} from './core/services/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { WalletService } from './services/wallet.service';
-import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [

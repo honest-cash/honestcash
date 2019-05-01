@@ -7,8 +7,8 @@ import {
   UserActionTypes,
   UserSetup,
 } from './user.actions';
-import { AuthService, IAuthRequestSuccessResponse } from 'app/services/auth.service';
-import { UserService } from '../../services/user.service';
+import { AuthService, IAuthRequestSuccessResponse } from '../../core/services/auth.service';
+import { UserService } from '../../core/services/user.service';
 
 @Injectable()
 export class UserEffects {

@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { PostService } from '../../../services/post.service';
+import { PostService } from '../../../core/services/post.service';
 import { EditorService } from './editor.service';
 import { Post, User } from '../../../shared/interfaces/index';
 import { Router, ActivatedRoute } from '@angular/router';

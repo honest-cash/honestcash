@@ -3,7 +3,7 @@ import {
   IAuthRequest,
   IAuthRequestSuccessResponse,
   IAuthRequestFailedResponse,
-} from 'app/services/auth.service';
+} from '../../core/services/auth.service';
 
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',
