@@ -3,10 +3,10 @@ import { Router, RouterStateSnapshot } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { MockAuthenticationService } from '../mocks/authentication.service.mock';
-import { AuthenticationGuard } from './authentication.guard';
+import { UnauthorizedGuard } from './unauthorized.guard';
 
-describe('AuthenticationGuard', () => {
-  let authenticationGuard: AuthenticationGuard;
+describe('UnauthorizedGuard', () => {
+  let authenticationGuard: UnauthorizedGuard;
   let authenticationService: MockAuthenticationService;
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
@@ -19,7 +19,7 @@ describe('AuthenticationGuard', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        AuthenticationGuard,
+        UnauthorizedGuard,
         { provide: AuthenticationService, useClass: MockAuthenticationService },
         { provide: Router, useValue: mockRouter }
       ]
@@ -27,8 +27,8 @@ describe('AuthenticationGuard', () => {
   });
 
   beforeEach(inject(
-    [AuthenticationGuard, AuthenticationService],
-    (_authenticationGuard: AuthenticationGuard, _authenticationService: MockAuthenticationService) => {
+    [UnauthorizedGuard, AuthenticationService],
+    (_authenticationGuard: UnauthorizedGuard, _authenticationService: MockAuthenticationService) => {
       authenticationGuard = _authenticationGuard;
       authenticationService = _authenticationService;
     }

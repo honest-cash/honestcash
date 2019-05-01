@@ -13,9 +13,9 @@ import { ForgotPassword } from '../../../../core/store/auth/auth.actions';
   styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent implements OnInit {
-  @HostBinding('class') class = 'w-full items-center justify-center';
-  @HostBinding('style.height') height = '65vh';
-  @HostBinding('style.minHeight') minHeight = '65vh';
+  @HostBinding('class') class = 'w-full  flex flex-wrap content-center items-center justify-center';
+  @HostBinding('style.height') height = '75vh';
+  @HostBinding('style.minHeight') minHeight = '75vh';
 
   isLoading = false;
   user: User = new User();

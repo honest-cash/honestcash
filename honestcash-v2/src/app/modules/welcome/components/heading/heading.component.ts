@@ -11,15 +11,19 @@ export class HeadingComponent implements OnInit {
   @Input() title;
   @Input() title2;
   @Input() description;
+  @Input() black;
 
-  constructor(
-
-  ) {
+  constructor() {
 
   }
 
   ngOnInit() {
-
+    console.log('this.black', this.black);
+    if (this.black !== undefined) {
+      this.class += ' text-black';
+    } else {
+      this.class += ' text-white';
+    }
   }
 
 }

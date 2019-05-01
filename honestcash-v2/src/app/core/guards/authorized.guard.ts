@@ -3,12 +3,11 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 
 import { Logger } from '../services/logger.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { Observable, of } from 'rxjs';
 
-const log = new Logger('AuthenticationGuard');
+const log = new Logger('AuthorizedGuard');
 
 @Injectable({providedIn: 'root'})
-export class AuthenticationGuard implements CanActivate {
+export class AuthorizedGuard implements CanActivate {
   constructor(private router: Router, private authenticationService: AuthenticationService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -16,8 +15,8 @@ export class AuthenticationGuard implements CanActivate {
       return true;
     }
 
-    log.debug('Not authenticated, redirecting and adding redirect url...');
-    this.router.navigate(['/login'], { queryParams: { redirect: state.url }, replaceUrl: true });
+    log.debug('Unauthorized, redirecting to welcome page...');
+    this.router.navigateByUrl('/');
     return false;
   }
 }

@@ -7,7 +7,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @HostBinding('class') class = 'flex w-full';
-  @HostBinding('style.height') height = '25vh';
+  @HostBinding('style.height') height = '15vh';
 
 
   constructor(

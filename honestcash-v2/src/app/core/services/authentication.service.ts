@@ -50,18 +50,30 @@ export class AuthenticationService {
 
   set token(token: string) {
     this._token = token;
+    this._isAuthenticated = true;
     localStorage.setItem(LOCAL_TOKEN_KEY, token);
   }
 
   get token(): string {
-    return this._token || localStorage.getItem(LOCAL_TOKEN_KEY);
+    let token: string;
+    if (!this._token && (token = localStorage.getItem(LOCAL_TOKEN_KEY))) {
+      this._token = token;
+    }
+    return this._token;
   }
 
   set isAuthenticated(isAuthenticated: boolean) {
-    this._isAuthenticated = isAuthenticated;
+    if (!isAuthenticated) {
+      this.unsetToken();
+    } else {
+      this._isAuthenticated = isAuthenticated;
+    }
   }
 
   get isAuthenticated(): boolean {
+    if (!this._isAuthenticated && this.token) {
+      this._isAuthenticated = true;
+    }
     return this._isAuthenticated;
   }
 

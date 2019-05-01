@@ -1,0 +1,22 @@
+import { Injectable } from '@angular/core';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+
+import { Logger } from '../services/logger.service';
+import { AuthenticationService } from '../services/authentication.service';
+
+const log = new Logger('UnauthorizedGuard');
+
+@Injectable({providedIn: 'root'})
+export class UnauthorizedGuard implements CanActivate {
+  constructor(private router: Router, private authenticationService: AuthenticationService) {}
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (!this.authenticationService.isAuthenticated) {
+      return true;
+    }
+
+    log.debug('Authorized, redirecting to feed page...');
+    this.router.navigateByUrl('/thank-you');
+    return false;
+  }
+}

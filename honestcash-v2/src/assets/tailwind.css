@@ -4175,6 +4175,14 @@ table {
   opacity: .75;
 }
 
+.opacity-80 {
+  opacity: .8;
+}
+
+.opacity-90 {
+  opacity: .9;
+}
+
 .opacity-100 {
   opacity: 1;
 }
@@ -9876,6 +9884,14 @@ table {
     opacity: .75;
   }
 
+  .xs\:opacity-80 {
+    opacity: .8;
+  }
+
+  .xs\:opacity-90 {
+    opacity: .9;
+  }
+
   .xs\:opacity-100 {
     opacity: 1;
   }
@@ -15560,6 +15576,14 @@ table {
 
   .sm\:opacity-75 {
     opacity: .75;
+  }
+
+  .sm\:opacity-80 {
+    opacity: .8;
+  }
+
+  .sm\:opacity-90 {
+    opacity: .9;
   }
 
   .sm\:opacity-100 {
@@ -21248,6 +21272,14 @@ table {
     opacity: .75;
   }
 
+  .md\:opacity-80 {
+    opacity: .8;
+  }
+
+  .md\:opacity-90 {
+    opacity: .9;
+  }
+
   .md\:opacity-100 {
     opacity: 1;
   }
@@ -26932,6 +26964,14 @@ table {
 
   .lg\:opacity-75 {
     opacity: .75;
+  }
+
+  .lg\:opacity-80 {
+    opacity: .8;
+  }
+
+  .lg\:opacity-90 {
+    opacity: .9;
   }
 
   .lg\:opacity-100 {
@@ -32620,6 +32660,14 @@ table {
     opacity: .75;
   }
 
+  .xl\:opacity-80 {
+    opacity: .8;
+  }
+
+  .xl\:opacity-90 {
+    opacity: .9;
+  }
+
   .xl\:opacity-100 {
     opacity: 1;
   }
@@ -38306,6 +38354,14 @@ table {
     opacity: .75;
   }
 
+  .xxl\:opacity-80 {
+    opacity: .8;
+  }
+
+  .xxl\:opacity-90 {
+    opacity: .9;
+  }
+
   .xxl\:opacity-100 {
     opacity: 1;
   }
@@ -43990,6 +44046,14 @@ table {
 
   .xxxl\:opacity-75 {
     opacity: .75;
+  }
+
+  .xxxl\:opacity-80 {
+    opacity: .8;
+  }
+
+  .xxxl\:opacity-90 {
+    opacity: .9;
   }
 
   .xxxl\:opacity-100 {

@@ -43,14 +43,8 @@ export class AuthEffects {
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LogInSuccess) => action.payload),
-    switchMap((payload: IAuthRequestSuccessResponse) => {
-      this.router.navigateByUrl('/');
-
-      return [
-        new UserSetup(payload),
-        new WalletSetup(payload),
-      ];
-    })
+    switchMap((payload: IAuthRequestSuccessResponse) => [ new UserSetup(payload), new WalletSetup(payload) ]),
+    tap(() => this.router.navigateByUrl('/thank-you'))
   );
 
   @Effect({ dispatch: false })
@@ -76,14 +70,8 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     map((action: SignUpSuccess) => action.payload),
-    switchMap((payload: IAuthRequestSuccessResponse) => {
-      this.router.navigateByUrl('/');
-
-      return [
-        new UserSetup(payload),
-        new WalletSetup(payload),
-      ];
-    })
+    switchMap((payload: IAuthRequestSuccessResponse) => [ new UserSetup(payload), new WalletSetup(payload) ]),
+    tap(() => this.router.navigateByUrl('/thank-you'))
   );
 
   @Effect({ dispatch: false })

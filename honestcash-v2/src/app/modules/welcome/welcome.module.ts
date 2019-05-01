@@ -16,18 +16,21 @@ import { FormFooterComponent } from './components/form/components/footer/footer.
 import { FormLinkRightComponent } from './components/form/components/link-right/link-right.component';
 import { FatLoadingButtonComponent } from './components/fat-loading-button/fat-loading-button.component';
 import { TooltipDirective } from './directives/tooltip.directive';
-import { AuthenticationGuard } from 'app/core/guards/authentication.guard';
+import { AuthorizedGuard } from 'app/core/guards/authorized.guard';
+import { UnauthorizedGuard } from 'app/core/guards/unauthorized.guard';
+import { ThankYouComponent } from './pages/thank-you/thank-you.component';
 
 const routes: Routes = [
   {
     path: '',
     component: WelcomeContainerComponent,
     children: [
-      { path: '', pathMatch: 'full', component: WelcomeComponent },
-      { path: 'login', pathMatch: 'full', component: LoginComponent },
-      { path: 'signup', pathMatch: 'full', component: SignupComponent },
+      { path: '', pathMatch: 'full', component: WelcomeComponent, canActivate: [UnauthorizedGuard] },
+      { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [UnauthorizedGuard] },
+      { path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard] },
       { path: 'reset-password', pathMatch: 'full', component: ResetPasswordComponent },
-      { path: 'status', component: StatusComponent, canActivate: [AuthenticationGuard] },
+      { path: 'status', component: StatusComponent, canActivate: [AuthorizedGuard] },
+      { path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard] },
     ]
   }
 ];
@@ -48,6 +51,7 @@ const routes: Routes = [
     ResetPasswordComponent,
     WelcomeContainerComponent,
     StatusComponent,
+    ThankYouComponent,
   ],
   imports: [
     FormsModule,

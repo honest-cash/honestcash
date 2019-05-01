@@ -10,7 +10,7 @@ import { GetStatus } from '../../../../core/store/auth/auth.actions';
   styleUrls: ['./status.component.scss']
 })
 export class StatusComponent implements OnInit {
-  @HostBinding('style.height') height = '65vh';
+  @HostBinding('style.height') height = '75vh';
 
   constructor(private store: Store<AppState>) { }
 
