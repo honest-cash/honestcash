@@ -16,9 +16,7 @@ import { reducers, metaReducers } from './app.states';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { AuthGuardService as AuthGuard } from './core/guards/auth-guard.service';
-import {
-  TokenInterceptor, ErrorInterceptor
-} from './core/http/token.interceptor';
+import { TokenInterceptor } from './core/http/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
@@ -41,11 +39,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptor,
       multi: true
     }
   ],

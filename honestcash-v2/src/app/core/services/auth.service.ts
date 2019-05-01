@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import User from '../../models/user';
-import {environment} from '../../../environments/environment';
-import {CryptoUtils} from '../../shared/lib/CryptoUtils';
+import { CryptoUtils } from '../../shared/lib/CryptoUtils';
 import { HttpService } from '../../core';
-import { Store } from '@ngrx/store';
 import { AppState } from 'app/app.states';
 
 export interface IAuthRequest {
@@ -30,7 +29,6 @@ export interface IAuthRequestFailedResponse {
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  private BASE_URL = environment.apiUrl;
   private LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
   constructor(
@@ -56,7 +54,7 @@ export class AuthService {
   }
 
   public logIn(payload: IAuthRequest): Observable<IAuthRequestSuccessResponse | IAuthRequestFailedResponse> {
-    const url = `${this.BASE_URL}/login`;
+    const url = `/login`;
 
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
@@ -64,7 +62,7 @@ export class AuthService {
   }
 
   public signUp(payload: IAuthRequest): Observable<User> {
-    const url = `${this.BASE_URL}/signup/email`;
+    const url = `/signup/email`;
 
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
@@ -77,7 +75,7 @@ export class AuthService {
   }
 
   public resetPassword(email: string): Observable<User> {
-    const url = `${this.BASE_URL}/register`;
+    const url = `/register`;
 
     return this.http.post<User>(url, {
       email
@@ -91,15 +89,15 @@ export class AuthService {
     repeatNewPassword: string;
     mnemonicEncrypted: string;
   }) {
-    return this.http.post(`${this.BASE_URL}/auth/reset-password"`, data);
+    return this.http.post(`/auth/reset-password"`, data);
   }
 
   public getMe() {
-    return this.http.get<User>(`${this.BASE_URL}/me`);
+    return this.http.get<User>(`/me`);
   }
 
   getStatus(): Observable<User> {
-    const url = `${this.BASE_URL}/status`;
+    const url = `/status`;
     return this.http.get<User>(url);
   }
 }

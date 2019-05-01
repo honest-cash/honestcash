@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { Router, RouterStateSnapshot } from '@angular/router';
 
-import { AuthenticationService } from './authentication.service';
-import { MockAuthenticationService } from './authentication.service.mock';
+import { AuthenticationService } from '../services/authentication.service';
+import { MockAuthenticationService } from '../mocks/authentication.service.mock';
 import { AuthenticationGuard } from './authentication.guard';
 
 describe('AuthenticationGuard', () => {
