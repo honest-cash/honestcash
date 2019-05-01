@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { IAuthRequestSuccessResponse } from '../../core/services/auth.service';
+import { IAuthRequestSuccessResponse } from '../../services/auth.service';
 
 export enum WalletActionTypes {
   WALLET_SETUP = '[Wallet] Wallet setup',

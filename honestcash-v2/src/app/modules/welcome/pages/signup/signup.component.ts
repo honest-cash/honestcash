@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { NgForm } from '@angular/forms';
-import { AppState } from '../../../../store/app.states';
-import { SignUp } from '../../../../store/auth/auth.actions';
+import { AppState } from '../../../../app.states';
+import { SignUp } from '../../../../core/store/auth/auth.actions';
 import User from '../../../../models/user';
 
 interface SignupForm extends NgForm {

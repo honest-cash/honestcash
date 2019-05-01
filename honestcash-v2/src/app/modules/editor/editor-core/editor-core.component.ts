@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import blankBody from './blankBody';
 import { Store } from '@ngrx/store';
-import { AppState, selectAuthState } from '../../../store/app.states';
+import { AppState, selectAuthState } from '../../../app.states';
 
 const log = new Logger('EditorCoreComponent');
 

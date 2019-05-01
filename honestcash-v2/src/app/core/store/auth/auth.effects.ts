@@ -4,8 +4,8 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 
-import { AuthService, IAuthRequest, IAuthRequestSuccessResponse, } from '../../core/services/auth.service';
-import User from '../../models/user';
+import { AuthService, IAuthRequest, IAuthRequestSuccessResponse, } from '../../services/auth.service';
+import User from '../../../models/user';
 import {
   AuthActionTypes,
   LogIn, LogInSuccess, LogInFailure,

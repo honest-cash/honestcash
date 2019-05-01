@@ -6,14 +6,14 @@ import {
   MetaReducer,
   State
 } from '@ngrx/store';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
 
-import {State as AuthState} from '../store/auth/auth.state';
-import {reducer as AuthReducer} from '../store/auth/auth.reducer';
+import {State as AuthState} from './core/store/auth/auth.state';
+import {reducer as AuthReducer} from './core/store/auth/auth.reducer';
 
 
-import {State as UserState} from '../store/user/user.state';
-import {reducer as UserReducer} from '../store/user/user.reducer';
+import {State as UserState} from './core/store/user/user.state';
+import {reducer as UserReducer} from './core/store/user/user.reducer';
 
 export interface AppState {
   auth: AuthState;

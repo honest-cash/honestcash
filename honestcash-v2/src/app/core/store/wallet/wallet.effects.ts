@@ -7,7 +7,7 @@ import {
     WalletActionTypes,
     WalletSetup,
 } from './wallet.actions';
-import { WalletService } from '../../core/services/wallet.service';
+import { WalletService } from '../../services/wallet.service';
 
 @Injectable()
 export class WalletEffects {

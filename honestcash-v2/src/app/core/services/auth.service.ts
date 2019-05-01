@@ -5,7 +5,7 @@ import {environment} from '../../../environments/environment';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import { HttpService } from '../../core';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store/app.states';
+import { AppState } from 'app/app.states';
 
 export interface IAuthRequest {
   username?: string;

@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import User from '../../../../models/user';
-import { AppState, selectAuthState } from '../../../../store/app.states';
-import { ForgotPassword } from '../../../../store/auth/auth.actions';
+import { AppState, selectAuthState } from '../../../../app.states';
+import { ForgotPassword } from '../../../../core/store/auth/auth.actions';
 
 
 @Component({
