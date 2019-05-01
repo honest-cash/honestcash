@@ -8,7 +8,7 @@ export enum UserActionTypes {
 
 export class UserSetup implements Action {
   readonly type = UserActionTypes.USER_SETUP;
-  constructor(public payload: IAuthRequestSuccessResponse) {}
+  constructor(public payload?: IAuthRequestSuccessResponse) {}
 }
 
 export class UserCleanup implements Action {

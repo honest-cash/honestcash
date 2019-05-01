@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { IAuthRequestSuccessResponse } from './authentication.service';
 import { WalletService } from './wallet.service';
 import { Store } from '@ngrx/store';
-import { AppState, selectUserState } from '../../app.states';
+import { AppStates, selectUserState } from '../../app.states';
 
 const log = new Logger('UserService');
 
@@ -16,7 +16,7 @@ export class UserService {
   private user$;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<AppStates>,
     private router: Router,
     private httpService: HttpService,
     private walletService: WalletService,

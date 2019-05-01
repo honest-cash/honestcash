@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../app.states';
+import { AppStates } from '../../../../app.states';
 import User from '../../../../models/user';
 
 
@@ -18,7 +18,7 @@ export class ThankYouComponent implements OnInit {
   user = new User();
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppStates>
   ) {}
 
   ngOnInit() {}

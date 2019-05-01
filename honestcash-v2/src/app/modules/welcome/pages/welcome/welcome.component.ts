@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { AppState, selectAuthorizationState } from '../../../../app.states';
+import { AppStates, selectAuthorizationState } from '../../../../app.states';
 import { LogOut } from '../../../../core/store/auth/auth.actions';
 
 @Component({
@@ -20,7 +20,7 @@ export class WelcomeComponent implements OnInit {
   errorMessage = null;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppStates>
   ) {
     this.getState = this.store.select(selectAuthorizationState);
   }

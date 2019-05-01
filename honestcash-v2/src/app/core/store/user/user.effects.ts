@@ -24,7 +24,7 @@ export class UserEffects {
     ofType(UserActionTypes.USER_SETUP),
     map((action: UserSetup) => action.payload),
     tap((payload: IAuthRequestSuccessResponse) => {
-      this.authenticationService.token = payload.token;
+      this.authenticationService.init(payload.token);
       this.userService.checkAddressBCH(payload);
     })
   );

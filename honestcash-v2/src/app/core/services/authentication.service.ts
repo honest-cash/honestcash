@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import User from '../../models/user';
 import { CryptoUtils } from '../../shared/lib/CryptoUtils';
 import { HttpService } from '..';
-import { AppState } from 'app/app.states';
+import { AppStates } from 'app/app.states';
 
 export interface IAuthRequest {
   username?: string;
@@ -75,6 +75,16 @@ export class AuthenticationService {
       this._isAuthenticated = true;
     }
     return this._isAuthenticated;
+  }
+
+  public init(token?: string) {
+    if (!token && this.token) {
+      this.token = this.token;
+      this.isAuthenticated = true;
+    } else {
+      this.token = token;
+      this.isAuthenticated = true;
+    }
   }
 
   public unsetToken(): void {

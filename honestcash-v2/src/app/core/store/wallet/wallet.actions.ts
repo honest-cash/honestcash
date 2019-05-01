@@ -8,7 +8,7 @@ export enum WalletActionTypes {
 
 export class WalletSetup implements Action {
   readonly type = WalletActionTypes.WALLET_SETUP;
-  constructor(public payload: IAuthRequestSuccessResponse) {}
+  constructor(public payload?: IAuthRequestSuccessResponse) {}
 }
 
 export class WalletCleanup implements Action {

@@ -18,7 +18,6 @@ export class HeadingComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('this.black', this.black);
     if (this.black !== undefined) {
       this.class += ' text-black';
     } else {

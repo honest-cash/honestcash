@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { AppState } from '../../../../app.states';
+import { AppStates } from '../../../../app.states';
 import { GetStatus } from '../../../../core/store/auth/auth.actions';
 
 @Component({
@@ -12,7 +12,7 @@ import { GetStatus } from '../../../../core/store/auth/auth.actions';
 export class StatusComponent implements OnInit {
   @HostBinding('style.height') height = '75vh';
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppStates>) { }
 
   ngOnInit() {
     this.store.dispatch(new GetStatus);

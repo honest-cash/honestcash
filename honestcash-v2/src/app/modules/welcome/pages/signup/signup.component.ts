@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { NgForm } from '@angular/forms';
-import { AppState } from '../../../../app.states';
+import { AppStates } from '../../../../app.states';
 import { SignUp } from '../../../../core/store/auth/auth.actions';
 import User from '../../../../models/user';
 
@@ -28,7 +28,7 @@ export class SignupComponent implements OnInit {
   user: User = new User();
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppStates>
   ) {}
 
   ngOnInit() {}

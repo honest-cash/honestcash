@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import SimpleBitcoinWallet from 'simple-bitcoin-wallet';
 import { WalletUtils } from '../../shared/lib/WalletUtils';
 import Wallet from '../../models/wallet';
 
@@ -11,26 +12,30 @@ export class WalletService {
   };
 
   private DEFAULT_HD_PATH = `m/44'/0'/0'/0/0`;
+  _wallet: Wallet = null;
   wallet: Wallet = null;
 
   constructor() {}
 
   public getWallet(): Wallet {
-    if (!this.wallet) {
+    if (!this._wallet) {
       const mnemonic = localStorage.getItem(this.WALLET_KEYS.MNEMONIC);
       if (!mnemonic) {
         return null;
       }
-      this.wallet = {
+      this._wallet = {
         privateKey: localStorage.getItem(this.WALLET_KEYS.PRIVATE_KEY),
         mnemonic,
         HdPath: localStorage.getItem(this.WALLET_KEYS.HD_PATH) || this.DEFAULT_HD_PATH,
       };
+      this.wallet = new SimpleBitcoinWallet(mnemonic, {
+        HdPath: this.DEFAULT_HD_PATH,
+      });
     }
     return this.wallet;
   }
 
-  public setWallet(password: string, mnemonic?: string): void {
+  public setWallet(password?: string, mnemonic?: string): void {
     let simpleWallet: Wallet = null;
     if (mnemonic) {
       simpleWallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(mnemonic, password);
@@ -39,15 +44,18 @@ export class WalletService {
       simpleWallet.mnemonic = WalletUtils.encrypt(simpleWallet.mnemonic, password);
     }
 
-    this.wallet = simpleWallet;
+    this._wallet = simpleWallet;
+    this.wallet = new SimpleBitcoinWallet(simpleWallet.mnemonic, {
+      HdPath: this.DEFAULT_HD_PATH,
+    });
 
-    localStorage.setItem(this.WALLET_KEYS.PRIVATE_KEY, simpleWallet.privateKey);
-    localStorage.setItem(this.WALLET_KEYS.MNEMONIC, simpleWallet.mnemonic);
-    return localStorage.setItem(this.WALLET_KEYS.HD_PATH, simpleWallet.HdPath || this.DEFAULT_HD_PATH);
+    localStorage.setItem(this.WALLET_KEYS.PRIVATE_KEY, this.wallet.privateKey);
+    localStorage.setItem(this.WALLET_KEYS.MNEMONIC, this.wallet.mnemonic);
+    return localStorage.setItem(this.WALLET_KEYS.HD_PATH, this.wallet.HdPath || this.DEFAULT_HD_PATH);
   }
 
   public unsetWallet(): void {
-    this.wallet = null;
+    this._wallet = null;
     localStorage.removeItem(this.WALLET_KEYS.PRIVATE_KEY);
     localStorage.removeItem(this.WALLET_KEYS.MNEMONIC);
     return localStorage.removeItem(this.WALLET_KEYS.HD_PATH);

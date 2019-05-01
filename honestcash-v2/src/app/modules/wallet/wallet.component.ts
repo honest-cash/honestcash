@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-
-import { AppState, selectAuthorizationState } from '../../app.states';
-import { LogOut } from '../../core/store/auth/auth.actions';
 
 @Component({
   selector: 'app-wallet',
@@ -11,26 +6,8 @@ import { LogOut } from '../../core/store/auth/auth.actions';
   styleUrls: ['./wallet.component.scss']
 })
 export class WalletComponent implements OnInit {
-  getState: Observable<any>;
-  isAuthenticated: false;
-  user = null;
-  errorMessage = null;
 
-  constructor(
-    private store: Store<AppState>
-  ) {
-    this.getState = this.store.select(selectAuthorizationState);
-  }
+  constructor() {}
 
-  ngOnInit() {
-    this.getState.subscribe((state) => {
-      this.isAuthenticated = state.isAuthenticated;
-      this.user = state.user;
-      this.errorMessage = state.errorMessage;
-    });
-  }
-
-  logOut(): void {
-    this.store.dispatch(new LogOut);
-  }
+  ngOnInit() {}
 }
