@@ -25,19 +25,46 @@ export class SignupComponent implements OnInit {
   @HostBinding('style.minHeight') minHeight = '75vh';
 
   isLoading = false;
+  isCaptchaRendered = false;
+  isCaptchaValid = true;
   user: User = new User();
 
   constructor(
     private store: Store<AppStates>
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.renderCaptcha();
+  }
+
+  private renderCaptcha() {
+    if (this.isCaptchaRendered) {
+      return;
+    }
+
+    try {
+      grecaptcha.render('hc-captcha');
+
+      this.isCaptchaRendered = true;
+    } catch (err) {
+      setTimeout(() => this.renderCaptcha(), 1000);
+    }
+  }
 
   onSubmit(form: SignupForm): void {
+    const captcha = grecaptcha.getResponse();
+
+    if (!captcha || captcha.length === 0) {
+      this.isCaptchaValid = false;
+
+      return grecaptcha.reset();
+    }
+
     this.isLoading = true;
 
     const payload = form.value;
+    payload.captcha = captcha;
 
-    // this.store.dispatch(new SignUp(payload));
+    this.store.dispatch(new SignUp(payload));
   }
 }

@@ -120,9 +120,12 @@
     </div>
     <div
     id="hc-captcha"
-    class="g-recaptcha w-full p-4 my-4 opacity-80"
+    class="g-recaptcha w-full justify-center content-center align-middle px-2 flex opacity-80"
     data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
   ></div>
+  <i *ngIf="!isCaptchaValid" class="w-full mt-2 flex text-center text-white justify-center content-center"><i
+    class="text-red fas fa-exclamation-circle"
+  ></i> Please verify captcha by checking the checkbox</i>
     <app-welcome-fat-loading-button
       text="Get Started"
       loadingText="Signing Up"
@@ -136,4 +139,3 @@
     <form></form>
   </form>
 </div>
-<script src="https://www.google.com/recaptcha/api.js?onload=vcRecapthaApiLoaded&render=explicit&hl=en" async defer></script>
