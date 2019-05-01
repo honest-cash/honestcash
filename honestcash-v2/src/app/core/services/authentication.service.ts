@@ -91,6 +91,12 @@ export class AuthenticationService {
     return this.http.post<IAuthRequestSuccessResponse | IAuthRequestFailedResponse>(url, {email: payload.email, password: passwordHash});
   }
 
+  public logOut(): Observable<any> {
+    const url = `/logout`;
+
+    return this.http.post(url, {});
+  }
+
   public signUp(payload: IAuthRequest): Observable<User> {
     const url = `/signup/email`;
 

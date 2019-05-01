@@ -131,7 +131,11 @@ export class AuthEffects {
   LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
     switchMap(() => [ new UserCleanup(), new WalletCleanup() ]),
-    tap(() => this.router.navigateByUrl('/'))
+    tap(() => {
+      this.authenticationService.logOut().subscribe(() => {
+        this.router.navigateByUrl('/');
+      });
+    })
   );
 
   @Effect({ dispatch: false })
