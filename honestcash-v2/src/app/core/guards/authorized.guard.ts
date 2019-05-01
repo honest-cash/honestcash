@@ -11,7 +11,7 @@ export class AuthorizedGuard implements CanActivate {
   constructor(private router: Router, private authenticationService: AuthenticationService) {}
 
   canActivate(): boolean {
-    if (this.authenticationService.isAuthenticated) {
+    if (this.authenticationService.hasAuthorization()) {
       return true;
     }
 

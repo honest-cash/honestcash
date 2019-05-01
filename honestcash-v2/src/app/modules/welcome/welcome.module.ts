@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './pages/login/login.component';
+import { LogoutComponent } from './pages/logout/logout.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { StatusComponent } from './pages/status/status.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
@@ -27,6 +28,7 @@ const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', component: WelcomeComponent, canActivate: [UnauthorizedGuard] },
       { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [UnauthorizedGuard] },
+      { path: 'logout', pathMatch: 'full', component: LogoutComponent },
       { path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard] },
       { path: 'reset-password', pathMatch: 'full', component: ResetPasswordComponent },
       { path: 'status', component: StatusComponent, canActivate: [AuthorizedGuard] },
@@ -46,6 +48,7 @@ const routes: Routes = [
     FormFooterComponent,
     FormLinkRightComponent,
     LoginComponent,
+    LogoutComponent,
     SignupComponent,
     WelcomeComponent,
     ResetPasswordComponent,

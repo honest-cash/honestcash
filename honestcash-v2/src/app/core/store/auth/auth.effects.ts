@@ -127,17 +127,11 @@ export class AuthEffects {
     ofType(AuthActionTypes.FORGOT_PASSWORD_FAILURE)
   );
 
-  @Effect({ dispatch: false })
+  @Effect()
   LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
-    switchMap(() => {
-      this.router.navigateByUrl('/');
-
-      return [
-        new UserCleanup(),
-        new WalletCleanup(),
-      ];
-    })
+    switchMap(() => [ new UserCleanup(), new WalletCleanup() ]),
+    tap(() => this.router.navigateByUrl('/'))
   );
 
   @Effect({ dispatch: false })

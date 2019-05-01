@@ -41,55 +41,45 @@ export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
-  private _token: string;
-  private _isAuthenticated = false;
+  private token: string;
+  private isAuthenticated = false;
 
   constructor(
     private http: HttpService
   ) {}
 
-  set token(token: string) {
-    this._token = token;
-    this._isAuthenticated = true;
+  public getToken(): string {
+    let token;
+    if (!this.token && (token = localStorage.getItem(LOCAL_TOKEN_KEY))) {
+      this.token = token;
+    }
+    return this.token;
+  }
+
+  public setToken(token: string) {
+    this.token = token;
     localStorage.setItem(LOCAL_TOKEN_KEY, token);
   }
 
-  get token(): string {
-    let token: string;
-    if (!this._token && (token = localStorage.getItem(LOCAL_TOKEN_KEY))) {
-      this._token = token;
+  public hasAuthorization(): boolean {
+    if (!this.isAuthenticated && this.token) {
+      this.isAuthenticated = true;
     }
-    return this._token;
-  }
-
-  set isAuthenticated(isAuthenticated: boolean) {
-    if (!isAuthenticated) {
-      this.unsetToken();
-    } else {
-      this._isAuthenticated = isAuthenticated;
-    }
-  }
-
-  get isAuthenticated(): boolean {
-    if (!this._isAuthenticated && this.token) {
-      this._isAuthenticated = true;
-    }
-    return this._isAuthenticated;
+    return this.isAuthenticated;
   }
 
   public init(token?: string) {
     if (!token && this.token) {
-      this.token = this.token;
       this.isAuthenticated = true;
     } else {
-      this.token = token;
+      this.setToken(token);
       this.isAuthenticated = true;
     }
   }
 
   public unsetToken(): void {
-    this._token = 'false';
-    this._isAuthenticated = false;
+    this.token = '';
+    this.isAuthenticated = false;
     localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
 

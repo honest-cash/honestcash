@@ -56,6 +56,7 @@ export class WalletService {
 
   public unsetWallet(): void {
     this._wallet = null;
+    this.wallet = null;
     localStorage.removeItem(this.WALLET_KEYS.PRIVATE_KEY);
     localStorage.removeItem(this.WALLET_KEYS.MNEMONIC);
     return localStorage.removeItem(this.WALLET_KEYS.HD_PATH);
