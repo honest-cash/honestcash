@@ -10,7 +10,7 @@ import { AppState, selectUserState } from '../store/app.states';
 
 const log = new Logger('UserService');
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserService {
   private user: BehaviorSubject<User | undefined> = new BehaviorSubject(undefined);
   private user$;

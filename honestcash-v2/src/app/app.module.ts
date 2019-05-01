@@ -40,9 +40,6 @@ import { UserService } from './services/user.service';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [
-    AuthService,
-    WalletService,
-    UserService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

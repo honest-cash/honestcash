@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WalletUtils } from 'app/shared/lib/WalletUtils';
 import Wallet from 'app/models/wallet';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class WalletService {
   private WALLET_KEYS = {
     HD_PATH: 'HC_BCH_HD_PATH',

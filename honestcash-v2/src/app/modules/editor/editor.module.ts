@@ -42,7 +42,7 @@ import { UserService } from '../../services/user.service';
     EditorRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [EditorWrapperComponent, EditorCoreComponent],
-  providers: [UserService, PostService, EditorService],
+  providers: [PostService, EditorService],
   bootstrap: [EditorWrapperComponent]
 })
 export class EditorModule {}

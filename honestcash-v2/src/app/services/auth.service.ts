@@ -28,7 +28,7 @@ export interface IAuthRequestFailedResponse {
   httpCode: number;
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthService {
   private BASE_URL = environment.apiUrl;
   private LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
