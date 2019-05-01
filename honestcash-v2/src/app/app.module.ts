@@ -15,7 +15,6 @@ import { UserEffects } from './core/store/user/user.effects';
 import { reducers, metaReducers } from './app.states';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { AuthGuardService as AuthGuard } from './core/guards/auth-guard.service';
 import { TokenInterceptor } from './core/http/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -35,7 +34,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [
-    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

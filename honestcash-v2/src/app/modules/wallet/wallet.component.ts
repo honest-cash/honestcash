@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { AppState, selectAuthState } from '../../app.states';
+import { AppState, selectAuthorizationState } from '../../app.states';
 import { LogOut } from '../../core/store/auth/auth.actions';
 
 @Component({
@@ -19,7 +19,7 @@ export class WalletComponent implements OnInit {
   constructor(
     private store: Store<AppState>
   ) {
-    this.getState = this.store.select(selectAuthState);
+    this.getState = this.store.select(selectAuthorizationState);
   }
 
   ngOnInit() {

@@ -4,7 +4,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 
-import { AuthService, IAuthRequest, IAuthRequestSuccessResponse, } from '../../services/auth.service';
+import { AuthenticationService, IAuthRequest, IAuthRequestSuccessResponse, } from '../../services/authentication.service';
 import User from '../../../models/user';
 import {
   AuthActionTypes,
@@ -22,7 +22,7 @@ export class AuthEffects {
 
   constructor(
     private actions: Actions,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private router: Router,
   ) {}
 
@@ -31,7 +31,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
     switchMap((payload: IAuthRequest) =>
-      this.authService.logIn(payload)
+      this.authenticationService.logIn(payload)
       .pipe(
         map((logInResponse: IAuthRequestSuccessResponse) => new LogInSuccess({...logInResponse, password: payload.password})),
         catchError((error) => of(new LogInFailure(error))),
@@ -64,7 +64,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
     switchMap((payload: IAuthRequest) =>
-      this.authService.signUp(payload)
+      this.authenticationService.signUp(payload)
       .pipe(
         map((signUpResponse: IAuthRequestSuccessResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),
         catchError((error) => of(new SignUpFailure(error))),
@@ -97,7 +97,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.FORGOT_PASSWORD),
     map((action: ForgotPassword) => action.payload),
     switchMap(payload => {
-      return this.authService.resetPassword(payload.email)
+      return this.authenticationService.resetPassword(payload.email)
       .pipe(
         map((user: User) => {
           return new ForgotPasswordSuccess({token: user.token, email: payload.email});
@@ -114,7 +114,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.FORGOT_PASSWORD),
     map((action: ChangePasswordAndWallet) => action.payload),
     switchMap(payload => {
-      return this.authService.resetPassword(payload.email)
+      return this.authenticationService.resetPassword(payload.email)
       .pipe(
         map((user: User) => {
           return new ForgotPasswordSuccess({token: user.token, email: payload.email});
@@ -156,7 +156,7 @@ export class AuthEffects {
   GetStatus: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.GET_STATUS),
     switchMap(payload => {
-      return this.authService.getStatus();
+      return this.authenticationService.getStatus();
     })
   );
 

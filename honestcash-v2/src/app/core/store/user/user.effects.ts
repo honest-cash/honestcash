@@ -7,7 +7,7 @@ import {
   UserActionTypes,
   UserSetup,
 } from './user.actions';
-import { AuthService, IAuthRequestSuccessResponse } from '../../services/auth.service';
+import { AuthenticationService, IAuthRequestSuccessResponse } from '../../services/authentication.service';
 import { UserService } from '../../services/user.service';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class UserEffects {
 
   constructor(
     private actions: Actions,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private userService: UserService,
   ) {}
 
@@ -24,7 +24,7 @@ export class UserEffects {
     ofType(UserActionTypes.USER_SETUP),
     map((action: UserSetup) => action.payload),
     tap((payload: IAuthRequestSuccessResponse) => {
-      this.authService.setToken(payload.token);
+      this.authenticationService.token = payload.token;
       this.userService.checkAddressBCH(payload);
     })
   );
@@ -33,7 +33,7 @@ export class UserEffects {
   UserCleanup: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.USER_CLEANUP),
     tap(() => {
-      this.authService.unsetToken();
+      this.authenticationService.unsetToken();
     })
   );
 }

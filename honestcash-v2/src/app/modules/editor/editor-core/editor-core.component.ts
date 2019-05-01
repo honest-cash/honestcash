@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import blankBody from './blankBody';
 import { Store } from '@ngrx/store';
-import { AppState, selectAuthState } from '../../../app.states';
+import { AppState, selectAuthorizationState } from '../../../app.states';
 
 const log = new Logger('EditorCoreComponent');
 
@@ -34,7 +34,7 @@ export class EditorCoreComponent implements OnDestroy, AfterViewInit {
     private postService: PostService,
     private store: Store<AppState>,
   ) {
-    this.authState = this.store.select(selectAuthState);
+    this.authState = this.store.select(selectAuthorizationState);
 
     const streams = this.editorService.getEventStreams();
     this.editorLoaded = streams.editorLoaded;

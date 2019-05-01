@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import User from '../../../../models/user';
-import { AppState, selectAuthState } from '../../../../app.states';
+import { AppState, selectAuthorizationState } from '../../../../app.states';
 import { ForgotPassword } from '../../../../core/store/auth/auth.actions';
 
 
@@ -26,7 +26,7 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private store: Store<AppState>
   ) {
-    this.getState = this.store.select(selectAuthState);
+    this.getState = this.store.select(selectAuthorizationState);
   }
 
   ngOnInit() {

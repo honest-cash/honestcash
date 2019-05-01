@@ -7,6 +7,7 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.LOGIN_SUCCESS: {
       return {
         ...state,
+        token: action.payload.token,
         isAuthenticated: true,
       };
     }
@@ -18,6 +19,7 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.SIGNUP_SUCCESS: {
       return {
         ...state,
+        token: action.payload.token,
         isAuthenticated: true,
       };
     }

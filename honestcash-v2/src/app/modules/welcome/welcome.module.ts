@@ -6,7 +6,6 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { WelcomeContainerComponent } from './welcome.component';
 import { CommonModule } from '@angular/common';
-import { AuthGuardService as AuthGuard } from '../../core/guards/auth-guard.service';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
@@ -17,6 +16,7 @@ import { FormFooterComponent } from './components/form/components/footer/footer.
 import { FormLinkRightComponent } from './components/form/components/link-right/link-right.component';
 import { FatLoadingButtonComponent } from './components/fat-loading-button/fat-loading-button.component';
 import { TooltipDirective } from './directives/tooltip.directive';
+import { AuthenticationGuard } from 'app/core/guards/authentication.guard';
 
 const routes: Routes = [
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
       { path: 'login', pathMatch: 'full', component: LoginComponent },
       { path: 'signup', pathMatch: 'full', component: SignupComponent },
       { path: 'reset-password', pathMatch: 'full', component: ResetPasswordComponent },
-      { path: 'status', component: StatusComponent, canActivate: [AuthGuard] },
+      { path: 'status', component: StatusComponent, canActivate: [AuthenticationGuard] },
     ]
   }
 ];

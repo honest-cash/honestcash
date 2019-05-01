@@ -7,13 +7,9 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 export class WelcomeContainerComponent implements OnInit {
   @HostBinding('class') class = 'bg-image text-white flex flex-col flex-wrap w-full items-center justify-center';
 
-  constructor(
-  ) {
+  constructor() {
   }
 
-  ngOnInit() {
-  }
-
-
+  ngOnInit() {}
 
 }

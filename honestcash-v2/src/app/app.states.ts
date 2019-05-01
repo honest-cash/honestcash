@@ -16,16 +16,16 @@ import {State as UserState} from './core/store/user/user.state';
 import {reducer as UserReducer} from './core/store/user/user.reducer';
 
 export interface AppState {
-  auth: AuthState;
+  authorization: AuthState;
   user: UserState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-  auth: AuthReducer,
+  authorization: AuthReducer,
   user: UserReducer,
 };
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];
 
-export const selectAuthState = createFeatureSelector<AppState>('auth');
+export const selectAuthorizationState = createFeatureSelector<AppState>('authorization');
 export const selectUserState = createFeatureSelector<AppState>('user');

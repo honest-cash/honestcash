@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +8,7 @@ import { AuthService } from './core/services/auth.service';
 export class AppComponent implements OnInit {
   @HostBinding('class') class = 'h-full w-full flex flex-wrap';
 
-  constructor(
-    private authService: AuthService
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.authService.setup();
-  }
+  ngOnInit() {}
 }

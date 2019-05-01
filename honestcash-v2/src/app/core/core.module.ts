@@ -14,8 +14,6 @@ import { CacheInterceptor } from './http/cache.interceptor';
 @NgModule({
   imports: [CommonModule, HttpClientModule, RouterModule],
   providers: [
-    AuthenticationService,
-    AuthenticationGuard,
     HttpCacheService,
     ApiPrefixInterceptor,
     ErrorHandlerInterceptor,

@@ -1,5 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import User from '../../models/user';
+import { CryptoUtils } from '../../shared/lib/CryptoUtils';
+import { HttpService } from '..';
+import { AppState } from 'app/app.states';
+
+export interface IAuthRequest {
+  username?: string;
+  email: string;
+  password: string;
+  captcha?: string;
+}
+
+
+export interface IAuthRequestSuccessResponse {
+  user: User;
+  wallet?: any;
+  token?: string;
+  password?: string;
+}
+
+export interface IAuthRequestFailedResponse {
+  code: string;
+  desc: string;
+  httpCode: number;
+}
 
 export interface Credentials {
   token: string;
@@ -11,84 +37,81 @@ export interface LoginContext {
   remember?: boolean;
 }
 
-const credentialsKey = 'HC_USER_TOKEN';
+export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
-// @todo unite auth.service.ts and authentification.service.ts
-
-/**
- * Provides a base for authentication workflow.
- * The Credentials interface as well as login/logout methods should be replaced with proper implementation.
- */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class AuthenticationService {
-  private _credentials: Credentials | null;
+  private _token: string;
+  private _isAuthenticated = false;
 
-  constructor() {
-    const xAuthToken = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
-    if (xAuthToken) {
-      this._credentials = { token: xAuthToken };
-    }
+  constructor(
+    private http: HttpService
+  ) {}
+
+  set token(token: string) {
+    this._token = token;
+    localStorage.setItem(LOCAL_TOKEN_KEY, token);
   }
 
-  /**
-   * Authenticates the user.
-   * @param context The login parameters.
-   * @return The user credentials.
-   */
-  login(context: LoginContext): Observable<Credentials> {
-    // Replace by proper authentication call
-    const data = {
-      username: context.username,
-      token: '123456'
-    };
-    this.setCredentials(data, context.remember);
-    return of(data);
+  get token(): string {
+    return this._token || localStorage.getItem(LOCAL_TOKEN_KEY);
   }
 
-  /**
-   * Logs out the user and clear credentials.
-   * @return True if the user was logged out successfully.
-   */
-  logout(): Observable<boolean> {
-    // Customize credentials invalidation here
-    this.setCredentials();
-    return of(true);
+  set isAuthenticated(isAuthenticated: boolean) {
+    this._isAuthenticated = isAuthenticated;
   }
 
-  /**
-   * Checks is the user is authenticated.
-   * @return True if the user is authenticated.
-   */
-  isAuthenticated(): boolean {
-    return !!this.credentials;
+  get isAuthenticated(): boolean {
+    return this._isAuthenticated;
   }
 
-  /**
-   * Gets the user credentials.
-   * @return The user credentials or null if the user is not authenticated.
-   */
-  get credentials(): Credentials | null {
-    return this._credentials;
+  public unsetToken(): void {
+    this._token = 'false';
+    this._isAuthenticated = false;
+    localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
 
-  /**
-   * Sets the user credentials.
-   * The credentials may be persisted across sessions by setting the `remember` parameter to true.
-   * Otherwise, the credentials are only persisted for the current session.
-   * @param credentials The user credentials.
-   * @param remember True to remember credentials across sessions.
-   */
-  private setCredentials(credentials?: Credentials, remember?: boolean) {
-    this._credentials = credentials || null;
+  public logIn(payload: IAuthRequest): Observable<IAuthRequestSuccessResponse | IAuthRequestFailedResponse> {
+    const url = `/login`;
 
-    if (credentials) {
-      const storage = remember ? localStorage : sessionStorage;
-      storage.setItem(credentialsKey, JSON.stringify(credentials));
-    } else {
-      sessionStorage.removeItem(credentialsKey);
-      localStorage.removeItem(credentialsKey);
-    }
+    const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
+
+    return this.http.post<IAuthRequestSuccessResponse | IAuthRequestFailedResponse>(url, {email: payload.email, password: passwordHash});
+  }
+
+  public signUp(payload: IAuthRequest): Observable<User> {
+    const url = `/signup/email`;
+
+    const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
+
+    return this.http.post<User>(url, {
+      username: payload.username,
+      email: payload.email,
+      password: passwordHash,
+      captcha: payload.captcha
+    });
+  }
+
+  public resetPassword(email: string): Observable<User> {
+    const url = `/register`;
+
+    return this.http.post<User>(url, {
+      email
+    });
+  }
+
+  public changePassword(data: {
+    email: string;
+    code: string,
+    newPassword: string,
+    repeatNewPassword: string;
+    mnemonicEncrypted: string;
+  }) {
+    return this.http.post(`/auth/reset-password"`, data);
+  }
+
+  getStatus(): Observable<User> {
+    const url = `/status`;
+    return this.http.get<User>(url);
   }
 }

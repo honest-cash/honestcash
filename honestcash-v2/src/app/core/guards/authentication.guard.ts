@@ -3,15 +3,16 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 
 import { Logger } from '../services/logger.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { Observable, of } from 'rxjs';
 
 const log = new Logger('AuthenticationGuard');
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthenticationGuard implements CanActivate {
   constructor(private router: Router, private authenticationService: AuthenticationService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authenticationService.isAuthenticated()) {
+    if (this.authenticationService.isAuthenticated) {
       return true;
     }
 

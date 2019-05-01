@@ -1,6 +1,6 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
-import { AuthenticationService, Credentials } from './authentication.service';
+import { AuthenticationService, Credentials, LOCAL_TOKEN_KEY } from './authentication.service';
 
 const credentialsKey = 'credentials';
 
@@ -19,14 +19,13 @@ describe('AuthenticationService', () => {
 
   afterEach(() => {
     // Cleanup
-    localStorage.removeItem(credentialsKey);
-    sessionStorage.removeItem(credentialsKey);
+    localStorage.removeItem(LOCAL_TOKEN_KEY);
   });
 
   describe('login', () => {
     it('should return credentials', fakeAsync(() => {
       // Act
-      const request = authenticationService.login({
+      const request = authenticationService.logIn({
         username: 'toto',
         password: '123'
       });

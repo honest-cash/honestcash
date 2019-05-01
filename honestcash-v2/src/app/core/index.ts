@@ -1,7 +1,5 @@
 export * from './core.module';
-export * from './services/authentication.service';
 export * from './mocks/authentication.service.mock';
-export * from './guards/authentication.guard';
 export * from './http/http.service';
 export * from './http/http-cache.service';
 export * from './http/api-prefix.interceptor';
