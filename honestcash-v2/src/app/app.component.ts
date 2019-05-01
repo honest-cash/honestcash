@@ -8,7 +8,6 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
   @HostBinding('class') class = 'h-full w-full flex flex-wrap';
-  title = 'honestcash-v2';
 
   constructor(
     private authService: AuthService

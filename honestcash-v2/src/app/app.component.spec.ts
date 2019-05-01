@@ -32,10 +32,10 @@ describe('AppComponent', () => {
 
   // @todo extend these tests for the entire app
   /*
-  it(`should have as title 'honestcash-v2'`, () => {
+  it(`should have as title 'Honest Cash'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('honestcash-v2');
+    expect(app.title).toEqual('Honest Cash');
   });
 
   it('should render title in a h1 tag', () => {
