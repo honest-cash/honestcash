@@ -8,7 +8,7 @@ import {
   AuthActionTypes,
   LogIn, LogInSuccess, LogInFailure,
   SignUp, SignUpSuccess, SignUpFailure,
-  ResetPassword, ResetPasswordSuccess, ResetPasswordFailure,
+  ResetPasswordRequest, ResetPasswordRequestSuccess, ResetPasswordRequestFailure,
   LogOut,
 } from './auth.actions';
 import { WalletSetup, WalletCleanup } from '../wallet/wallet.actions';
@@ -87,25 +87,25 @@ export class AuthEffects {
 
   @Effect()
   ResetPassword: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.RESET_PASSWORD),
-    map((action: ResetPassword) => action.payload),
+    ofType(AuthActionTypes.RESET_PASSWORD_REQUEST),
+    map((action: ResetPasswordRequest) => action.payload),
     switchMap((payload: ResetPasswordContext) =>
       this.authenticationService.resetPassword(payload)
       .pipe(
-        map(() => new ResetPasswordSuccess()),
-        catchError((error) => of(new ResetPasswordFailure(error)))
+        map(() => new ResetPasswordRequestSuccess()),
+        catchError((error) => of(new ResetPasswordRequestFailure(error)))
       ))
   );
 
   @Effect()
   ResetPasswordSuccess: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.RESET_PASSWORD_SUCCESS),
+    ofType(AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS),
     tap(() => this.router.navigateByUrl('/reset-password/verify'))
   );
 
   @Effect({ dispatch: false })
   ResetPasswordFailure: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.RESET_PASSWORD_FAILURE)
+    ofType(AuthActionTypes.RESET_PASSWORD_REQUEST_FAILURE)
   );
 
   @Effect()

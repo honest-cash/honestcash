@@ -21,6 +21,7 @@ import { AuthorizedGuard } from 'app/core/guards/authorized.guard';
 import { UnauthorizedGuard } from 'app/core/guards/unauthorized.guard';
 import { ThankYouComponent } from './pages/thank-you/thank-you.component';
 import { ForbiddenUsernameValidatorDirective } from './directives/forbidden-username.directive';
+import {ResetPasswordVerifyComponent} from './pages/reset-password-verify/reset-password-verify.component';
 
 const routes: Routes = [
   {
@@ -31,7 +32,8 @@ const routes: Routes = [
       { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [UnauthorizedGuard] },
       { path: 'logout', pathMatch: 'full', component: LogoutComponent },
       { path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard] },
-      { path: 'reset-password', pathMatch: 'full', component: ResetPasswordComponent },
+      { path: 'reset-password', pathMatch: 'full', component: ResetPasswordComponent, canActivate: [UnauthorizedGuard] },
+      { path: 'reset-password/verify', pathMatch: 'full', component: ResetPasswordVerifyComponent, canActivate: [UnauthorizedGuard] },
       { path: 'status', component: StatusComponent, canActivate: [AuthorizedGuard] },
       { path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard] },
     ]
@@ -53,6 +55,7 @@ const routes: Routes = [
     SignupComponent,
     WelcomeComponent,
     ResetPasswordComponent,
+    ResetPasswordVerifyComponent,
     WelcomeContainerComponent,
     StatusComponent,
     ThankYouComponent,

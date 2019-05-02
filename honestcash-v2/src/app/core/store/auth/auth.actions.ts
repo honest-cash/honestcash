@@ -9,9 +9,12 @@ export enum AuthActionTypes {
   SIGNUP = '[Auth] Signup',
   SIGNUP_SUCCESS = '[Auth] Signup Success',
   SIGNUP_FAILURE = '[Auth] Signup Failure',
-  RESET_PASSWORD = '[Auth] Reset Password',
+  RESET_PASSWORD = '[Auth] Reset Password Request',
   RESET_PASSWORD_SUCCESS = '[Auth] Reset Password Success',
   RESET_PASSWORD_FAILURE = '[Auth] Reset Password Failure',
+  RESET_PASSWORD_REQUEST = '[Auth] Reset Password',
+  RESET_PASSWORD_REQUEST_SUCCESS = '[Auth] Reset Password Request Success',
+  RESET_PASSWORD_REQUEST_FAILURE = '[Auth] Reset Password Request Failure',
   LOGOUT = '[Auth] Logout',
   GET_STATUS = '[Auth] GetStatus'
 }
@@ -61,6 +64,21 @@ export class ResetPasswordFailure implements Action {
   constructor(public payload: FailedResponse) {}
 }
 
+export class ResetPasswordRequest implements Action {
+  readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST;
+  constructor(public payload: ResetPasswordContext) {}
+}
+
+export class ResetPasswordRequestSuccess implements Action {
+  readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS;
+  constructor() {}
+}
+
+export class ResetPasswordRequestFailure implements Action {
+  readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST_FAILURE;
+  constructor(public payload: FailedResponse) {}
+}
+
 export class LogOut implements Action {
   readonly type = AuthActionTypes.LOGOUT;
 }
@@ -79,5 +97,8 @@ export type All =
   | ResetPassword
   | ResetPasswordSuccess
   | ResetPasswordFailure
+  | ResetPasswordRequest
+  | ResetPasswordRequestSuccess
+  | ResetPasswordRequestFailure
   | LogOut
   | GetStatus;
