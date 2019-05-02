@@ -1,3 +1,9 @@
 @tailwind preflight;
+
+.transform-y-center {
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
  
 @tailwind utilities;

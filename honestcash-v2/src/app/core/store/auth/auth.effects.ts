@@ -31,6 +31,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
     switchMap((payload: IAuthRequest) =>
+      // @todo: refactor to encode with a password hash
       this.authenticationService.logIn(payload)
       .pipe(
         map((logInResponse: IAuthRequestSuccessResponse) => new LogInSuccess({...logInResponse, password: payload.password})),
@@ -57,6 +58,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
     switchMap((payload: IAuthRequest) =>
+    // @todo: refactor to encode with a password hash
       this.authenticationService.signUp(payload)
       .pipe(
         map((signUpResponse: IAuthRequestSuccessResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),

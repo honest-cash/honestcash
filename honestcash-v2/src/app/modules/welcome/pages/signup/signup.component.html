@@ -38,12 +38,7 @@
         placeholder="Username"
       />
       <span
-        style="
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-          "
-        class="absolute text-red cursor-pointer"
+        class="absolute text-red cursor-pointer transform-y-center"
         *ngIf="f.submitted && username.invalid"
       >
         <i
@@ -89,12 +84,7 @@
         email
       />
       <span
-        style="
-              top: 50%;
-              right: 10px;
-              transform: translateY(-50%);
-            "
-        class="absolute text-red cursor-pointer"
+        class="absolute text-red cursor-pointer transform-y-center"
         *ngIf="f.submitted && email.invalid"
       >
         <i
@@ -126,12 +116,7 @@
         placeholder="Password"
       />
       <span
-        style="
-                top: 50%;
-                right: 10px;
-                transform: translateY(-50%);
-              "
-        class="absolute text-red cursor-pointer"
+        class="absolute text-red cursor-pointer transform-y-center"
         *ngIf="f.submitted && password.invalid"
       >
         <i

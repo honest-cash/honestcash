@@ -35,12 +35,7 @@
         email
       />
       <span
-        style="
-          top: 50%;
-          right: 10px;
-          transform: translateY(-50%);
-        "
-        class="absolute text-red cursor-pointer"
+        class="absolute text-red cursor-pointer transform-y-center"
         *ngIf="f.submitted && email.invalid">
         <i *ngIf="email.errors.required" class="fas fa-exclamation-circle" tooltip="E-mail is required" placement="right" delay="500"></i>
         <i *ngIf="email.errors.email" class="fas fa-exclamation-circle" tooltip="E-mail must be a valid e-mail address" placement="right" delay="500"></i>
@@ -59,12 +54,7 @@
         placeholder="Password"
       />
       <span
-        style="
-          top: 50%;
-          right: 10px;
-          transform: translateY(-50%);
-        "
-        class="absolute text-red cursor-pointer"
+        class="absolute text-red cursor-pointer transform-y-center"
         *ngIf="f.submitted && password.invalid">
         <i *ngIf="password.errors.required" class="fas fa-exclamation-circle" tooltip="Password is required" placement="right" delay="500"></i>
         <i
