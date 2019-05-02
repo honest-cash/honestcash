@@ -16,7 +16,7 @@ export class AuthorizedGuard implements CanActivate {
     }
 
     log.debug('Unauthorized, redirecting to login page...');
-    this.router.navigate('/login', { queryParams: { redirect: state.url }, replaceUrl: true });
+    this.router.navigate(['/login'], { queryParams: { redirect: state.url }, replaceUrl: true });
     return false;
   }
 }
