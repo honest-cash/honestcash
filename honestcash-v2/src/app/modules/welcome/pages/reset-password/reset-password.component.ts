@@ -1,11 +1,16 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 
 import User from '../../../../models/user';
-import { AppStates, selectAuthorizationState } from '../../../../app.states';
-import { ForgotPassword } from '../../../../core/store/auth/auth.actions';
+import { AppStates } from '../../../../app.states';
+import { ResetPassword } from '../../../../core/store/auth/auth.actions';
+import { NgForm } from '@angular/forms';
 
+interface ResetPasswordForm extends NgForm {
+  value: {
+    username: string;
+  };
+}
 
 @Component({
   selector: 'app-welcome-page-reset-password',
@@ -19,28 +24,17 @@ export class ResetPasswordComponent implements OnInit {
 
   isLoading = false;
   user: User = new User();
-  username = '';
-  getState: Observable<any>;
-  errorMessage: string | null;
 
   constructor(
     private store: Store<AppStates>
-  ) {
-    this.getState = this.store.select(selectAuthorizationState);
-  }
+  ) {}
 
-  ngOnInit() {
-    this.getState.subscribe((state) => {
-      this.errorMessage = state.errorMessage;
-    });
-  }
+  ngOnInit() {}
 
-  onSubmit(): void {
-    const payload = {
-      email: this.user.email,
-      password: this.user.password
-    };
-    this.store.dispatch(new ForgotPassword(payload));
+  onSubmit(form: ResetPasswordForm): void {
+    const payload = form.value;
+
+    this.store.dispatch(new ResetPassword(payload));
   }
 
 }

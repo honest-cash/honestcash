@@ -20,6 +20,7 @@ import { TooltipDirective } from './directives/tooltip.directive';
 import { AuthorizedGuard } from 'app/core/guards/authorized.guard';
 import { UnauthorizedGuard } from 'app/core/guards/unauthorized.guard';
 import { ThankYouComponent } from './pages/thank-you/thank-you.component';
+import { ForbiddenUsernameValidatorDirective } from './directives/forbidden-username.directive';
 
 const routes: Routes = [
   {
@@ -55,6 +56,7 @@ const routes: Routes = [
     WelcomeContainerComponent,
     StatusComponent,
     ThankYouComponent,
+    ForbiddenUsernameValidatorDirective,
   ],
   imports: [
     FormsModule,
