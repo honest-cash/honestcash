@@ -3,7 +3,7 @@ import { User } from '../../shared/interfaces';
 import { BehaviorSubject } from 'rxjs';
 import { Logger, HttpService } from '../../core';
 import { Router } from '@angular/router';
-import { IAuthRequestSuccessResponse } from './authentication.service';
+import { IAuthRequestSuccessResponse } from './authentication.interfaces';
 import { WalletService } from './wallet.service';
 import { Store } from '@ngrx/store';
 import { AppStates, selectUserState } from '../../app.states';

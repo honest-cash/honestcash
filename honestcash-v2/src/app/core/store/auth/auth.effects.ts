@@ -4,7 +4,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 
-import { AuthenticationService, IAuthRequest, IAuthRequestSuccessResponse, } from '../../services/authentication.service';
+import { IAuthRequest, IAuthRequestSuccessResponse, } from '../../services/authentication.interfaces';
 import User from '../../../models/user';
 import {
   AuthActionTypes,
@@ -16,6 +16,7 @@ import {
 } from './auth.actions';
 import { WalletSetup, WalletCleanup } from '../wallet/wallet.actions';
 import { UserSetup, UserCleanup } from '../user/user.actions';
+import {AuthenticationService} from '../../services/authentication.service';
 
 @Injectable()
 export class AuthEffects {

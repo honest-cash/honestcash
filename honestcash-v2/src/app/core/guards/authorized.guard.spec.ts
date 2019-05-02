@@ -5,13 +5,13 @@ import { AuthenticationService } from '../services/authentication.service';
 import { MockAuthenticationService } from '../mocks/authentication.service.mock';
 import { AuthorizedGuard } from './authorized.guard';
 
-describe('AuthorizedGuard', () => {
+describe('AuthorizedGuard', async () => {
   let authenticationGuard: AuthorizedGuard;
   let authenticationService: MockAuthenticationService;
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     mockRouter = {
       navigate: jasmine.createSpy('navigate')
     };
@@ -34,38 +34,40 @@ describe('AuthorizedGuard', () => {
     }
   ));
 
-  it('should have a canActivate method', () => {
+  it('should have a canActivate method', async () => {
     expect(typeof authenticationGuard.canActivate).toBe('function');
   });
 
-  it('should return true if user is authenticated', () => {
-    expect(authenticationGuard.canActivate(null, mockSnapshot)).toBe(true);
-  });
-
-  it('should return false and redirect to login if user is not authenticated', () => {
-    // Arrange
-    authenticationService.credentials = null;
-
-    // Act
-    const result = authenticationGuard.canActivate(null, mockSnapshot);
-
-    // Assert
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
-      queryParams: { redirect: undefined },
-      replaceUrl: true
+  describe('canActivate', async () => {
+    it('should return true if user is authenticated', async() => {
+      expect(authenticationGuard.canActivate()).toBe(true);
     });
-    expect(result).toBe(false);
-  });
 
-  it('should save url as queryParam if user is not authenticated', () => {
-    authenticationService.credentials = null;
-    mockRouter.url = '/about';
-    mockSnapshot.url = '/about';
+    it('should return false and redirect to login if user is not authenticated', async() => {
+      // Arrange
+      authenticationService.credentials = null;
 
-    authenticationGuard.canActivate(null, mockSnapshot);
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
-      queryParams: { redirect: mockRouter.url },
-      replaceUrl: true
+      // Act
+      const result = authenticationGuard.canActivate();
+
+      // Assert
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
+        queryParams: { redirect: undefined },
+        replaceUrl: true
+      });
+      expect(result).toBe(false);
+    });
+
+    it('should save url as queryParam if user is not authenticated', () => {
+      authenticationService.credentials = null;
+      mockRouter.url = '/about';
+      mockSnapshot.url = '/about';
+
+      authenticationGuard.canActivate();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
+        queryParams: { redirect: mockRouter.url },
+        replaceUrl: true
+      });
     });
   });
 });

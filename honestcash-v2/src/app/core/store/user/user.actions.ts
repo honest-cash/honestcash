@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { IAuthRequestSuccessResponse } from '../../services/authentication.service';
+import { IAuthRequestSuccessResponse } from '../../services/authentication.interfaces';
 
 export enum UserActionTypes {
   USER_SETUP = '[User] User setup',

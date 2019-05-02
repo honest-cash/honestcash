@@ -1,41 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import User from '../../models/user';
 import { CryptoUtils } from '../../shared/lib/CryptoUtils';
 import { HttpService } from '..';
-import { AppStates } from 'app/app.states';
-
-export interface IAuthRequest {
-  username?: string;
-  email: string;
-  password: string;
-  captcha?: string;
-}
-
-
-export interface IAuthRequestSuccessResponse {
-  user: User;
-  wallet?: any;
-  token?: string;
-  password?: string;
-}
-
-export interface IAuthRequestFailedResponse {
-  code: string;
-  desc: string;
-  httpCode: number;
-}
-
-export interface Credentials {
-  token: string;
-}
-
-export interface LoginContext {
-  username: string;
-  password: string;
-  remember?: boolean;
-}
+import {IAuthRequest, IAuthRequestFailedResponse, IAuthRequestSuccessResponse} from './authentication.interfaces';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
