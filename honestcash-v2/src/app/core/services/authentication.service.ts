@@ -3,7 +3,26 @@ import { Observable } from 'rxjs';
 import User from '../../models/user';
 import { CryptoUtils } from '../../shared/lib/CryptoUtils';
 import { HttpService } from '..';
-import {IAuthRequest, IAuthRequestFailedResponse, IAuthRequestSuccessResponse} from './authentication.interfaces';
+import {
+  ChangePasswordContext, CheckPasswordContext, CheckPasswordResponse,
+  FailedResponse,
+  LoginContext,
+  LoginResponse,
+  ResetPasswordContext, SetWalletContext,
+  SignupContext, SignupResponse
+} from './authentication.interfaces';
+
+const API_ENDPOINTS = {
+  login: `/login`,
+  signup: `/signup/email`,
+  logout: `logout`,
+  resetPassword: `/auth/request-password-reset`,
+  changePassword: `/auth/reset-password`,
+  checkPassword: `/auth/password-check`,
+  setWallet: `/auth/set-wallet`,
+  getEmails: `/auth/emails`,
+  status: `/me`,
+}
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
@@ -51,26 +70,20 @@ export class AuthenticationService {
     localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
 
-  public logIn(payload: IAuthRequest): Observable<IAuthRequestSuccessResponse | IAuthRequestFailedResponse> {
-    const url = `/login`;
-
+  public logIn(payload: LoginContext): Observable<LoginResponse | FailedResponse> {
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
-    return this.http.post<IAuthRequestSuccessResponse | IAuthRequestFailedResponse>(url, {email: payload.email, password: passwordHash});
+    return this.http.post<LoginResponse | FailedResponse>(API_ENDPOINTS.login, {email: payload.email, password: passwordHash});
   }
 
   public logOut(): Observable<any> {
-    const url = `/logout`;
-
-    return this.http.post(url, {});
+    return this.http.post(API_ENDPOINTS.logout, {});
   }
 
-  public signUp(payload: IAuthRequest): Observable<User> {
-    const url = `/signup/email`;
-
+  public signUp(payload: SignupContext): Observable<SignupResponse> {
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
-    return this.http.post<User>(url, {
+    return this.http.post<SignupResponse>(API_ENDPOINTS.signup, {
       username: payload.username,
       email: payload.email,
       password: passwordHash,
@@ -78,26 +91,27 @@ export class AuthenticationService {
     });
   }
 
-  public resetPassword(email: string): Observable<User> {
-    const url = `/register`;
-
-    return this.http.post<User>(url, {
-      email
-    });
+  public setWallet(payload: SetWalletContext): Observable<string> {
+    return this.http.post<string>(API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
   }
 
-  public changePassword(data: {
-    email: string;
-    code: string,
-    newPassword: string,
-    repeatNewPassword: string;
-    mnemonicEncrypted: string;
-  }) {
-    return this.http.post(`/auth/reset-password"`, data);
+  public getEmails(): Observable<string[]> {
+    return this.http.get<string[]>(API_ENDPOINTS.getEmails);
   }
 
-  getStatus(): Observable<User> {
-    const url = `/status`;
-    return this.http.get<User>(url);
+  public resetPassword(payload: ResetPasswordContext): Observable<string> {
+    return this.http.post<string>(API_ENDPOINTS.resetPassword, { username: payload.email });
+  }
+
+  public changePassword(payload: ChangePasswordContext): Observable<string> {
+    return this.http.post<string>(API_ENDPOINTS.changePassword, payload);
+  }
+
+  public checkPassword(payload: CheckPasswordContext): Observable<CheckPasswordResponse> {
+    return this.http.post<CheckPasswordResponse>(API_ENDPOINTS.checkPassword, payload);
+  }
+
+  public getStatus(): Observable<User> {
+    return this.http.get<User>(API_ENDPOINTS.status);
   }
 }

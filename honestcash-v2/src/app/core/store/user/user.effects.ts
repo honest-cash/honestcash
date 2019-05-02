@@ -7,7 +7,7 @@ import {
   UserActionTypes,
   UserSetup,
 } from './user.actions';
-import { IAuthRequestSuccessResponse } from '../../services/authentication.interfaces';
+import { LoginResponse, SignupResponse} from '../../services/authentication.interfaces';
 import { UserService } from '../../services/user.service';
 import {AuthenticationService} from '../../services/authentication.service';
 
@@ -24,7 +24,7 @@ export class UserEffects {
   UserSetup: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.USER_SETUP),
     map((action: UserSetup) => action.payload),
-    tap((payload: IAuthRequestSuccessResponse) => {
+    tap((payload: LoginResponse | SignupResponse) => {
       this.authenticationService.init(payload.token);
       this.userService.checkAddressBCH(payload);
     })

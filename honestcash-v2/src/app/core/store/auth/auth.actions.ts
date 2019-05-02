@@ -1,9 +1,6 @@
 import { Action } from '@ngrx/store';
 import {
-  IAuthRequest,
-  IAuthRequestSuccessResponse,
-  IAuthRequestFailedResponse,
-} from '../../services/authentication.interfaces';
+  LoginContext, LoginResponse, FailedResponse, SignupContext, SignupResponse, ResetPasswordContext} from '../../services/authentication.interfaces';
 
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',
@@ -21,56 +18,47 @@ export enum AuthActionTypes {
 
 export class LogIn implements Action {
   readonly type = AuthActionTypes.LOGIN;
-  constructor(public payload: IAuthRequest) {}
+  constructor(public payload: LoginContext) {}
 }
 
 export class LogInSuccess implements Action {
   readonly type = AuthActionTypes.LOGIN_SUCCESS;
-  constructor(public payload: IAuthRequestSuccessResponse) {}
+  constructor(public payload: LoginResponse) {}
 }
 
 export class LogInFailure implements Action {
   readonly type = AuthActionTypes.LOGIN_FAILURE;
-  constructor(public payload: IAuthRequestFailedResponse | string) {}
+  constructor(public payload: FailedResponse | string) {}
 }
 
 export class SignUp implements Action {
   readonly type = AuthActionTypes.SIGNUP;
-  constructor(public payload: IAuthRequest) {}
+  constructor(public payload: SignupContext) {}
 }
 
 export class SignUpSuccess implements Action {
   readonly type = AuthActionTypes.SIGNUP_SUCCESS;
-  constructor(public payload: IAuthRequestSuccessResponse) {}
+  constructor(public payload: SignupResponse) {}
 }
 
 export class SignUpFailure implements Action {
   readonly type = AuthActionTypes.SIGNUP_FAILURE;
-  constructor(public payload: IAuthRequestFailedResponse | string) {}
+  constructor(public payload: FailedResponse | string) {}
 }
 
 export class ResetPassword implements Action {
   readonly type = AuthActionTypes.RESET_PASSWORD;
-  constructor(public payload: any) {}
+  constructor(public payload: ResetPasswordContext) {}
 }
 
 export class ResetPasswordSuccess implements Action {
   readonly type = AuthActionTypes.RESET_PASSWORD_SUCCESS;
-  constructor(public payload: any) {}
-}
-
-export class ChangePasswordAndWallet implements Action {
-  readonly type = AuthActionTypes.RESET_PASSWORD;
-  constructor(public payload: {
-    username: string;
-    email: string;
-    password: string;
-  }) {}
+  constructor() {}
 }
 
 export class ResetPasswordFailure implements Action {
   readonly type = AuthActionTypes.RESET_PASSWORD_FAILURE;
-  constructor(public payload: any) {}
+  constructor(public payload: FailedResponse) {}
 }
 
 export class LogOut implements Action {
