@@ -5,15 +5,15 @@ import { AuthenticationService } from '../services/authentication.service';
 import { MockAuthenticationService } from '../mocks/authentication.service.mock';
 import { UnauthorizedGuard } from './unauthorized.guard';
 
-describe('UnauthorizedGuard', () => {
+describe('UnauthorizedGuard', async () => {
   let authenticationGuard: UnauthorizedGuard;
   let authenticationService: MockAuthenticationService;
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     mockRouter = {
-      navigate: jasmine.createSpy('navigate')
+      navigateByUrl: jasmine.createSpy('navigate')
     };
     mockSnapshot = jasmine.createSpyObj<RouterStateSnapshot>('RouterStateSnapshot', ['toString']);
 
@@ -34,38 +34,26 @@ describe('UnauthorizedGuard', () => {
     }
   ));
 
-  it('should have a canActivate method', () => {
+  it('should have a canActivate method', async () => {
     expect(typeof authenticationGuard.canActivate).toBe('function');
   });
 
-  it('should return true if user is authenticated', () => {
-    expect(authenticationGuard.canActivate(null, mockSnapshot)).toBe(true);
-  });
-
-  it('should return false and redirect to login if user is not authenticated', () => {
-    // Arrange
-    authenticationService.credentials = null;
-
-    // Act
-    const result = authenticationGuard.canActivate(null, mockSnapshot);
-
-    // Assert
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
-      queryParams: { redirect: undefined },
-      replaceUrl: true
+  describe('canActivate', async () => {
+    it('should return true if user is not authenticated', async() => {
+      authenticationService.isAuthenticated = false;
+      expect(authenticationGuard.canActivate()).toBe(true);
     });
-    expect(result).toBe(false);
-  });
 
-  it('should save url as queryParam if user is not authenticated', () => {
-    authenticationService.credentials = null;
-    mockRouter.url = '/about';
-    mockSnapshot.url = '/about';
+    it('should return false and redirect to feed if user is already authenticated', async() => {
+      // Arrange
+      authenticationService.isAuthenticated = false;
 
-    authenticationGuard.canActivate(null, mockSnapshot);
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
-      queryParams: { redirect: mockRouter.url },
-      replaceUrl: true
+      // Act
+      const result = authenticationGuard.canActivate();
+
+      // Assert
+      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(['/feed']);
+      expect(result).toBe(false);
     });
   });
 });

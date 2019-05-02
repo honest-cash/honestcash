@@ -1,25 +1,23 @@
 import { Observable, of } from 'rxjs';
 
-import { Credentials, LoginContext } from '../services/authentication.service';
+import {LoginContext, LoginResponse} from '../services/authentication.interfaces';
+import User from '../../models/user';
+import Wallet from '../../models/wallet';
 
 export class MockAuthenticationService {
-  credentials: Credentials | null = {
-    token: '123'
-  };
+  isAuthenticated = false;
+  token: string = null;
 
-  login(context: LoginContext): Observable<Credentials> {
+  login(context: LoginContext): Observable<LoginResponse> {
     return of({
-      username: context.username,
-      token: '123456'
+      user: new User(),
+      wallet: new Wallet(),
+      token: '123456',
     });
   }
 
   logout(): Observable<boolean> {
-    this.credentials = null;
     return of(true);
   }
 
-  isAuthenticated(): boolean {
-    return !!this.credentials;
-  }
 }
