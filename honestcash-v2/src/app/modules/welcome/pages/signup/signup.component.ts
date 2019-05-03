@@ -5,8 +5,6 @@ import { AppStates } from '../../../../app.states';
 import { SignUp } from '../../../../core/store/auth/auth.actions';
 import User from '../../../../models/user';
 
-declare const greptcha;
-
 interface SignupForm extends NgForm {
   value: {
     username: string;
@@ -15,6 +13,8 @@ interface SignupForm extends NgForm {
     captcha: string;
   };
 }
+
+declare let grecaptcha: any;
 
 @Component({
   selector: 'app-welcome-page-signup',

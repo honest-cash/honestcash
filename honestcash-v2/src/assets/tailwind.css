@@ -496,6 +496,13 @@ table {
   border-collapse: collapse;
 }
 
+.transform-y-center {
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
 .list-reset {
   list-style: none;
   padding: 0;

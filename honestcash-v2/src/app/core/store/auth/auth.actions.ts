@@ -31,7 +31,7 @@ export class LogInSuccess implements Action {
 
 export class LogInFailure implements Action {
   readonly type = AuthActionTypes.LOGIN_FAILURE;
-  constructor(public payload: FailedResponse | string) {}
+  constructor(public payload: FailedResponse) {}
 }
 
 export class SignUp implements Action {
@@ -46,7 +46,7 @@ export class SignUpSuccess implements Action {
 
 export class SignUpFailure implements Action {
   readonly type = AuthActionTypes.SIGNUP_FAILURE;
-  constructor(public payload: FailedResponse | string) {}
+  constructor(public payload: FailedResponse) {}
 }
 
 export class ResetPassword implements Action {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, HostBinding} from '@angular/core';
 
 @Component({
   selector: 'app-welcome-fat-loading-button',
@@ -6,6 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./fat-loading-button.component.scss']
 })
 export class FatLoadingButtonComponent implements OnInit {
+  @HostBinding('class') class = 'w-full flex';
 
   @Input() isLoading;
   @Input() loadingText;

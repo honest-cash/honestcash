@@ -47,6 +47,7 @@
     "@angular/cli": "~7.1.2",
     "@angular/compiler-cli": "~7.1.0",
     "@angular/language-service": "^7.1.4",
+    "@types/grecaptcha": "^2.0.36",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^11.13.4",

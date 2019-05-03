@@ -37,7 +37,7 @@ export const reducers: ActionReducerMap<AppStates> = {
 
 export const metaReducers: MetaReducer<AppStates>[] = !environment.production ? [] : [];
 
-export const selectApState = createFeatureSelector<AppStates>('app');
-export const selectAuthorizationState = createFeatureSelector<AppStates>('authorization');
-export const selectWalletState = createFeatureSelector<AppStates>('wallet');
-export const selectUserState = createFeatureSelector<AppStates>('user');
+export const selectApState = createFeatureSelector<AppState>('app');
+export const selectAuthorizationState = createFeatureSelector<AuthState>('authorization');
+export const selectWalletState = createFeatureSelector<WalletState>('wallet');
+export const selectUserState = createFeatureSelector<UserState>('user');

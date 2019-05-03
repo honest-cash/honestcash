@@ -8,7 +8,7 @@ import { Component, OnInit, HostBinding, Input } from '@angular/core';
 export class FormLinkRightComponent implements OnInit {
   @Input() anchor;
   @Input() to;
-  @HostBinding('class') class = 'w-full text-sm font-bold text-white text-right mb-2';
+  @HostBinding('class') class = 'flex w-full justify-end text-sm font-bold text-white text-right mb-2';
 
   constructor(
 

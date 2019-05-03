@@ -1,9 +1,12 @@
 import User from '../../models/user';
 
-export interface FailedResponse {
+export type FailedResponse = CodedErrorResponse | string;
+
+export abstract class CodedErrorResponse {
   code: string;
   desc: string;
   httpCode: number;
+  codeNo?: number;
 }
 
 export interface LoginContext {
@@ -33,13 +36,6 @@ export interface SignupResponse {
 
 export interface ResetPasswordContext {
   email: string;
-}
-
-export interface ResetPasswordResponse {
-  user: User;
-  wallet?: any;
-  token?: string;
-  password?: string;
 }
 
 export interface ChangePasswordContext {

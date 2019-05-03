@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
-import User from '../../../models/user';
 import {
   AuthActionTypes,
   LogIn, LogInSuccess, LogInFailure,
@@ -17,7 +16,7 @@ import {AuthenticationService} from '../../services/authentication.service';
 import {
   LoginContext,
   LoginResponse,
-  ResetPasswordContext, ResetPasswordResponse,
+  ResetPasswordContext,
   SignupContext,
   SignupResponse
 } from '../../services/authentication.interfaces';
@@ -53,11 +52,6 @@ export class AuthEffects {
     tap(() => this.router.navigateByUrl('/thank-you'))
   );
 
-  @Effect({ dispatch: false })
-  LogInFailure: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.LOGIN_FAILURE),
-  );
-
   @Effect()
   SignUp: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP),
@@ -76,13 +70,8 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     map((action: SignUpSuccess) => action.payload),
-    switchMap((payload: SignupResponse) => [ new UserSetup(payload), new WalletSetup(payload) ]),
+    switchMap((payload: SignupResponse) => [ new UserSetup(payload) ]),
     tap(() => this.router.navigateByUrl('/thank-you'))
-  );
-
-  @Effect({ dispatch: false })
-  SignUpFailure: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.SIGNUP_FAILURE),
   );
 
   @Effect()
@@ -101,11 +90,6 @@ export class AuthEffects {
   ResetPasswordSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS),
     tap(() => this.router.navigateByUrl('/reset-password/verify'))
-  );
-
-  @Effect({ dispatch: false })
-  ResetPasswordFailure: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.RESET_PASSWORD_REQUEST_FAILURE)
   );
 
   @Effect()
