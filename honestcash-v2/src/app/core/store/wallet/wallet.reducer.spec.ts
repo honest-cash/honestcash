@@ -1,8 +1,8 @@
 import { reducer } from './wallet.reducer';
 import { WalletSetup } from './wallet.actions';
 
-describe('wallet.reducer', () => {
-  it('WalletSetup', () => {
+describe('wallet.reducer', async () => {
+  it('WalletSetup', async () => {
     const newState = reducer(undefined, new WalletSetup({
       mnemonicEncrypted:
         // tslint:disable-next-line: max-line-length

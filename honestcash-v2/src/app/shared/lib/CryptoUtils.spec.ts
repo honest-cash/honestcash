@@ -1,7 +1,7 @@
 import { CryptoUtils } from './CryptoUtils';
 
-describe('CryptoUtils', () => {
-  it('calculates correct hashes', () => {
+describe('CryptoUtils', async () => {
+  it('calculates correct hashes', async () => {
     const hash = CryptoUtils.calculatePasswordHash('test@email.com', 'testpassord');
     const hash2 = CryptoUtils.calculatePasswordHash('test@email.com', 'testpassord2');
 

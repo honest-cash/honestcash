@@ -35,7 +35,7 @@ describe('TokenInterceptor', () => {
     httpMock.verify();
   });
 
-  it('should append token to the request headers as x-auth-token if the user is authenticated', () => {
+  it('should append token to the request headers as x-auth-token if the user is authenticated', async () => {
     authenticationService.isAuthenticated = true;
     // Act
     http.get('http://test.com/toto').subscribe();
@@ -45,7 +45,7 @@ describe('TokenInterceptor', () => {
     expect(httpRequest.request.headers.has('x-auth-token')).toEqual(true);
   });
 
-  it('should not append token to the request headers as x-auth-token if the user is not authenticated', () => {
+  it('should not append token to the request headers as x-auth-token if the user is not authenticated', async () =>{
     authenticationService.isAuthenticated = false;
     // Act
     http.get('http://test.com/toto').subscribe();

@@ -1,10 +1,8 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
-import { AuthenticationService, Credentials, LOCAL_TOKEN_KEY } from './authentication.service';
+import { AuthenticationService, LOCAL_TOKEN_KEY } from './authentication.service';
 
-const credentialsKey = 'credentials';
-
-describe('AuthenticationService', () => {
+describe('AuthenticationService', async () => {
   let authenticationService: AuthenticationService;
 
   beforeEach(() => {
@@ -23,7 +21,7 @@ describe('AuthenticationService', () => {
   });
 
   describe('login', () => {
-    it('should return credentials', fakeAsync(() => {
+    it('should return credentials', fakeAsync(async () => {
       // Act
       const request = authenticationService.logIn({
         username: 'toto',
@@ -38,7 +36,7 @@ describe('AuthenticationService', () => {
       });
     }));
 
-    it('should authenticate user', fakeAsync(() => {
+    it('should authenticate user', fakeAsync(async () => {
       expect(authenticationService.isAuthenticated()).toBe(false);
 
       // Act
@@ -58,7 +56,7 @@ describe('AuthenticationService', () => {
       });
     }));
 
-    it('should persist credentials for the session', fakeAsync(() => {
+    it('should persist credentials for the session', fakeAsync(async () => {
       // Act
       const request = authenticationService.login({
         username: 'toto',
@@ -72,7 +70,7 @@ describe('AuthenticationService', () => {
       });
     }));
 
-    it('should persist credentials across sessions', fakeAsync(() => {
+    it('should persist credentials across sessions', fakeAsync(async () => {
       // Act
       const request = authenticationService.login({
         username: 'toto',
@@ -89,7 +87,7 @@ describe('AuthenticationService', () => {
   });
 
   describe('logout', () => {
-    it('should clear user authentication', fakeAsync(() => {
+    it('should clear user authentication', fakeAsync(async () => {
       // Arrange
       const loginRequest = authenticationService.login({
         username: 'toto',
@@ -113,7 +111,7 @@ describe('AuthenticationService', () => {
       });
     }));
 
-    it('should clear persisted user authentication', fakeAsync(() => {
+    it('should clear persisted user authentication', fakeAsync(async () => {
       // Arrange
       const loginRequest = authenticationService.login({
         username: 'toto',

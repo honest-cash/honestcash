@@ -5,7 +5,7 @@ import { HttpCacheService, HttpCacheEntry } from './http-cache.service';
 
 const cachePersistenceKey = 'httpCache';
 
-describe('HttpCacheService', () => {
+describe('HttpCacheService', async () => {
   let httpCacheService: HttpCacheService;
   let response: HttpResponse<any>;
 
@@ -29,8 +29,8 @@ describe('HttpCacheService', () => {
     httpCacheService.cleanCache();
   });
 
-  describe('setCacheData', () => {
-    it('should set cache data', () => {
+  describe('setCacheData', async () => {
+    it('should set cache data', async () => {
       // Act
       httpCacheService.setCacheData('/popo', response);
 
@@ -38,7 +38,7 @@ describe('HttpCacheService', () => {
       expect(httpCacheService.getCacheData('/popo')).toEqual(response);
     });
 
-    it('should replace existing data', () => {
+    it('should replace existing data', async () => {
       // Arrange
       const newResponse = new HttpResponse({ body: 'new data' });
 
@@ -50,7 +50,7 @@ describe('HttpCacheService', () => {
       expect(httpCacheService.getCacheData('/popo')).toEqual(newResponse);
     });
 
-    it('should set cache date correctly', () => {
+    it('should set cache date correctly', async () => {
       // Act
       const date = new Date(123);
       httpCacheService.setCacheData('/popo', response, date);
@@ -62,12 +62,12 @@ describe('HttpCacheService', () => {
     });
   });
 
-  describe('getCacheData', () => {
-    it('should return null if no cache', () => {
+  describe('getCacheData', async () => {
+    it('should return null if no cache', async () => {
       expect(httpCacheService.getCacheData('/hoho')).toBe(null);
     });
 
-    it('should return cached data if exists', () => {
+    it('should return cached data if exists', async () => {
       // Act
       httpCacheService.setCacheData('/hoho', response);
 
@@ -75,7 +75,7 @@ describe('HttpCacheService', () => {
       expect(httpCacheService.getCacheData('/hoho')).toEqual(response);
     });
 
-    it('should return cached data with url parameters if exists', () => {
+    it('should return cached data with url parameters if exists', async () => {
       // Act
       httpCacheService.setCacheData('/hoho?pif=paf', response);
 
@@ -84,12 +84,12 @@ describe('HttpCacheService', () => {
     });
   });
 
-  describe('getHttpCacheEntry', () => {
-    it('should return null if no cache', () => {
+  describe('getHttpCacheEntry', async () => {
+    it('should return null if no cache', async () => {
       expect(httpCacheService.getHttpCacheEntry('/hoho')).toBe(null);
     });
 
-    it('should return cached data date  if exists', () => {
+    it('should return cached data date  if exists', async () => {
       // Arrange
       const date = new Date(123);
 
@@ -104,8 +104,8 @@ describe('HttpCacheService', () => {
     });
   });
 
-  describe('clearCacheData', () => {
-    it('should clear existing cache data', () => {
+  describe('clearCacheData', async () => {
+    it('should clear existing cache data', async () => {
       // Set cache
       httpCacheService.setCacheData('/hoho', response);
       expect(httpCacheService.getCacheData('/hoho')).toEqual(response);
@@ -115,15 +115,15 @@ describe('HttpCacheService', () => {
       expect(httpCacheService.getCacheData('/hoho')).toBe(null);
     });
 
-    it('should do nothing if no cache exists', () => {
+    it('should do nothing if no cache exists', async () => {
       expect(httpCacheService.getCacheData('/lolo')).toBe(null);
       httpCacheService.clearCache('/hoho');
       expect(httpCacheService.getCacheData('/lolo')).toBe(null);
     });
   });
 
-  describe('cleanCache', () => {
-    it('should clear all cache if no date is specified', () => {
+  describe('cleanCache', async () => {
+    it('should clear all cache if no date is specified', async () => {
       // Set cache
       httpCacheService.setCacheData('/hoho', response);
       httpCacheService.setCacheData('/popo', response);
@@ -136,7 +136,7 @@ describe('HttpCacheService', () => {
       expect(httpCacheService.getCacheData('/popo')).toBe(null);
     });
 
-    it('should clear existing since specified date', () => {
+    it('should clear existing since specified date', async () => {
       // Set cache
       httpCacheService.setCacheData('/hoho', response);
       expect(httpCacheService.getCacheData('/hoho')).toBe(response);
@@ -146,7 +146,7 @@ describe('HttpCacheService', () => {
       expect(httpCacheService.getCacheData('/hoho')).toBe(null);
     });
 
-    it('should not affect cache entries newer than specified date', () => {
+    it('should not affect cache entries newer than specified date', async () => {
       // Set cache
       httpCacheService.setCacheData('/hoho', response);
       expect(httpCacheService.getCacheData('/hoho')).toBe(response);
@@ -162,18 +162,18 @@ describe('HttpCacheService', () => {
     });
   });
 
-  describe('setPersistence', () => {
+  describe('setPersistence', async () => {
     beforeEach(() => {
       httpCacheService.setPersistence();
       httpCacheService.cleanCache = jasmine.createSpy('cleanCache');
     });
 
-    it('should clear previous cache data when persistence value change', () => {
+    it('should clear previous cache data when persistence value change', async () => {
       httpCacheService.setPersistence('local');
       expect(httpCacheService.cleanCache).toHaveBeenCalledWith();
     });
 
-    it('should persist cache to local storage', () => {
+    it('should persist cache to local storage', async () => {
       expect(localStorage.getItem(cachePersistenceKey)).toBeNull();
 
       httpCacheService.setPersistence('local');
@@ -182,7 +182,7 @@ describe('HttpCacheService', () => {
       expect(localStorage.getItem(cachePersistenceKey)).not.toBeNull();
     });
 
-    it('should persist cache to session storage', () => {
+    it('should persist cache to session storage', async () => {
       expect(sessionStorage.getItem(cachePersistenceKey)).toBeNull();
 
       httpCacheService.setPersistence('session');

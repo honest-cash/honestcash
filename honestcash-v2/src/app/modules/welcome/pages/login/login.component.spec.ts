@@ -8,7 +8,7 @@ import { ErrorHandlerInterceptor } from './error-handler.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
 import { ApiPrefixInterceptor } from './api-prefix.interceptor';
 
-describe('LoginComponent', () => {
+describe('LoginComponent', async () => {
   let httpCacheService: HttpCacheService;
   let http: HttpClient;
   let httpMock: HttpTestingController;
@@ -43,7 +43,7 @@ describe('LoginComponent', () => {
     httpMock.verify();
   });
 
-  it('should login successfully', () => {
+  it('should login successfully', async () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
@@ -65,7 +65,7 @@ describe('LoginComponent', () => {
     httpMock.expectOne({}).flush({});
   });
 
-  it('should show error if inputs are empty or invalid', () => {
+  it('should show error if inputs are empty or invalid', async () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
@@ -86,7 +86,7 @@ describe('LoginComponent', () => {
     httpMock.expectOne({}).flush({});
   });
 
-  it('should successfully mount the component', () => {
+  it('should successfully mount the component', async () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
@@ -107,7 +107,7 @@ describe('LoginComponent', () => {
     httpMock.expectOne({}).flush({});
   });
 
-  it('should not use API prefix', () => {
+  it('should not use API prefix', async () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
