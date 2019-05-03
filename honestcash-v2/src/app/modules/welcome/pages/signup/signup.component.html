@@ -22,8 +22,8 @@
     mb-8
   "
 >
-  <form class="w-full" name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
-    <div class="w-full mb-4 relative">
+  <form class="w-full flex flex-wrap" name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="w-full flex mb-4 relative">
       <input
         required
         minlength="3"
@@ -71,7 +71,7 @@
       ></i>
       </span>
     </div>
-    <div class="w-full mb-4 relative">
+    <div class="w-full flex mb-4 relative">
       <input
         required
         name="email"
@@ -103,7 +103,7 @@
         ></i>
       </span>
     </div>
-    <div class="w-full mb-4 relative">
+    <div class="w-full flex mb-4 relative">
       <input
         required
         minlength="8"
@@ -143,6 +143,9 @@
   <i *ngIf="!isCaptchaValid" class="w-full mt-2 flex text-center text-white justify-center content-center"><i
     class="text-red fas fa-exclamation-circle"
   ></i> Please verify captcha by checking the checkbox</i>
+    <div *ngIf="errorMessage" class="w-full flex justify-center mt-4 mb-4 p-4 bg-white border-2 text-sm border-transparent border-solid font-bold text-red rounded-lg opacity-80">
+      <span>{{errorMessageType === 'string' ? errorMessage : errorMessage.desc}}</span>
+    </div>
     <app-welcome-fat-loading-button
       text="Get Started"
       loadingText="Signing Up"

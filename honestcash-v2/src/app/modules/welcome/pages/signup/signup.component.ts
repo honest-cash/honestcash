@@ -1,9 +1,12 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { NgForm } from '@angular/forms';
-import { AppStates } from '../../../../app.states';
+import {AppStates, selectAuthorizationState} from '../../../../app.states';
 import { SignUp } from '../../../../core/store/auth/auth.actions';
 import User from '../../../../models/user';
+import {CodedErrorResponse, FailedResponse} from '../../../../core/services/authentication.interfaces';
+import {Observable} from 'rxjs';
+import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
 
 interface SignupForm extends NgForm {
   value: {
@@ -26,16 +29,30 @@ export class SignupComponent implements OnInit {
   @HostBinding('style.height') height = '75vh';
   @HostBinding('style.minHeight') minHeight = '75vh';
 
-  isLoading = false;
+  isLoading: boolean;
+  getState: Observable<AuthorizationState>;
+  errorMessage: FailedResponse;
+  errorMessageType: 'string' | 'class';
   isCaptchaRendered = false;
   isCaptchaValid = true;
   user: User = new User();
 
   constructor(
     private store: Store<AppStates>
-  ) {}
+  ) {
+    this.getState = this.store.select(selectAuthorizationState);
+  }
 
   ngOnInit() {
+    this.getState.subscribe((state) => {
+      if (state.errorMessage instanceof CodedErrorResponse) {
+        this.errorMessageType = 'class';
+      } else if (typeof state.errorMessage === 'string') {
+        this.errorMessageType = 'string';
+      }
+      this.isLoading = state.isLoading;
+      this.errorMessage = state.errorMessage;
+    });
     this.renderCaptcha();
   }
 
@@ -61,8 +78,6 @@ export class SignupComponent implements OnInit {
 
       return grecaptcha.reset();
     }
-
-    this.isLoading = true;
 
     const payload = form.value;
     payload.captcha = captcha;

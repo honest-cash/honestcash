@@ -3,7 +3,7 @@ import User from '../../models/user';
 export type FailedResponse = CodedErrorResponse | string;
 
 export abstract class CodedErrorResponse {
-  code: string;
+  code: string | number;
   desc: string;
   httpCode: number;
   codeNo?: number;

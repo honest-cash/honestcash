@@ -61,7 +61,7 @@ export class AuthEffects {
       this.authenticationService.signUp(payload)
       .pipe(
         map((signUpResponse: SignupResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),
-        catchError((error) => of(new SignUpFailure(error))),
+        catchError((error) => of(new SignUpFailure({code: 400, desc: 'test', httpCode: 400}))),
       )
     )
   );

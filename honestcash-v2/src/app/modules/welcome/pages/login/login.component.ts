@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   user = new User();
 
   constructor(
-    private store: Store<AuthorizationState>
+    private store: Store<AppStates>
   ) {
     this.getState = this.store.select(selectAuthorizationState);
   }
@@ -62,8 +62,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(form: LoginForm): void {
-    this.isLoading = true;
-
     const payload = form.value;
 
     this.store.dispatch(new LogIn(payload));
