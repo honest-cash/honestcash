@@ -10,6 +10,12 @@ export function reducer(state = initialState, action: All): State {
         ...state,
       };
     }
+    case WalletActionTypes.WALLET_GENERATED: {
+      return {
+        ...state,
+        wallet: action.payload.wallet
+      };
+    }
     case WalletActionTypes.WALLET_CLEANUP: {
       return {
         ...state,

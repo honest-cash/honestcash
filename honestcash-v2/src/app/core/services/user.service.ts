@@ -12,34 +12,17 @@ const log = new Logger('UserService');
 
 @Injectable({providedIn: 'root'})
 export class UserService {
-  private user: BehaviorSubject<User | undefined> = new BehaviorSubject(undefined);
-  private user$;
-
   constructor(
     private store: Store<AppStates>,
     private router: Router,
     private httpService: HttpService,
     private walletService: WalletService,
   ) {
-    this.user$ = this.store.select(selectUserState);
   }
 
-  public getUser() {
-    return this.user;
-  }
 
   public checkAddressBCH(payload: LoginSuccessResponse | SignupSuccessResponse) {
-    return this.user$.subscribe(({user}) => {
-      if (!user) {
-        return;
-      }
-
-      if (!user.addressBCH) {
-        const wallet = this.walletService.getWallet();
-      }
-    });
-
-    // api req to SET_WALLET with sw.mnemonicEncrypted
+   // api req to SET_WALLET with sw.mnemonicEncrypted
     /* // if user has no bch address and no wallet: updateUser(
           authData.user.id,
           "addressBCH",
@@ -76,15 +59,7 @@ export class UserService {
     } */
   }
 
-  private getMe() {
-    this.httpService.get('/me').subscribe(
-      (user: User) => {
-        this.user.next(user);
-      },
-      error => {
-        log.error(error);
-        this.router.navigate(['/http-error']);
-      }
-    );
+  public getMe() {
+    return this.httpService.get('/me');
   }
 }

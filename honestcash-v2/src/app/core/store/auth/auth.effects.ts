@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, Effect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 import {
@@ -20,6 +20,7 @@ import {
   SignupContext,
   SignupSuccessResponse
 } from '../../models/authentication';
+import { UserService } from 'app/core/services/user.service';
 
 @Injectable()
 export class AuthEffects {
@@ -27,8 +28,26 @@ export class AuthEffects {
   constructor(
     private actions: Actions,
     private authenticationService: AuthenticationService,
+    private userService: UserService,
     private router: Router,
   ) {}
+
+  @Effect({ dispatch: false })
+  Start: Observable<any> = this.actions.pipe(
+    ofType(ROOT_EFFECTS_INIT),
+    switchMap(() => {
+      if (!this.authenticationService.getToken()) {
+        return of('No token.');
+      }
+
+      return this.userService.getMe()
+      .pipe(
+        // setup user here
+        tap((user: any) => void 0),
+        catchError((error) => of(new LogInFailure(error))),
+      );
+    })
+  );
 
   @Effect()
   LogIn: Observable<any> = this.actions.pipe(

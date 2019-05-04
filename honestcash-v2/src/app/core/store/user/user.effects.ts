@@ -8,7 +8,6 @@ import {
   UserSetup,
 } from './user.actions';
 import { LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
-import { UserService } from '../../services/user.service';
 import {AuthenticationService} from '../../services/authentication.service';
 
 @Injectable()
@@ -17,7 +16,6 @@ export class UserEffects {
   constructor(
     private actions: Actions,
     private authenticationService: AuthenticationService,
-    private userService: UserService,
   ) {}
 
   @Effect({dispatch: false})
@@ -26,7 +24,6 @@ export class UserEffects {
     map((action: UserSetup) => action.payload),
     tap((payload: LoginSuccessResponse | SignupSuccessResponse) => {
       this.authenticationService.init(payload.token);
-      this.userService.checkAddressBCH(payload);
     })
   );
 
