@@ -57,11 +57,11 @@ export class AuthEffects {
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
     switchMap((payload: SignupContext) =>
-    // @todo: refactor to encode with a password hash
+      // @todo: refactor to encode with a password hash
       this.authenticationService.signUp(payload)
       .pipe(
         map((signUpResponse: SignupSuccessResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),
-        catchError((error) => of(new SignUpFailure({code: 400, desc: 'test', httpCode: 400}))),
+        catchError((error) => of(new SignUpFailure(error))),
       )
     )
   );

@@ -7,6 +7,7 @@ import User from '../../../../core/models/user';
 import {Observable} from 'rxjs';
 import {LogIn} from '../../../../core/store/auth/auth.actions';
 import {CodedErrorResponse, FailedResponse} from '../../../../core/models/authentication';
+import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
 
 interface LoginForm extends NgForm {
   value: {
@@ -14,19 +15,6 @@ interface LoginForm extends NgForm {
     password: string;
   };
 }
-
-export const ERROR_MESSAGES = {
-  USER_NOT_FOUND: 'Incorrect email address and / or password.',
-  EMAIL_EXISTS:  'E-Mail already exists',
-  USER_BLOCKED: 'USER_BLOCKED',
-  NOT_ACTIVATED: 'NOT_ACTIVATED',
-  USER_NOT_VERIFIED: 'USER_NOT_VERIFIED',
-  INITIAL_PARAMS: 'INITIAL_PARAMS',
-  INITIAL_EMAIL: 'INITIAL_EMAIL',
-  INITIAL_PASSWORD: 'INITIAL_PASSWORD',
-  EMAIL_NOT_FOUND: 'Incorrect email address and / or password.',
-  WRONG_PASSWORD: 'Incorrect email address and / or password.',
-};
 
 @Component({
   selector: 'app-welcome-page-login',
@@ -58,7 +46,7 @@ export class LoginComponent implements OnInit {
         return;
       }
 
-      this.errorMessage = this.getErrorDesc(state.errorMessage);
+      this.errorMessage = WelcomeErrorHandler.getErrorDesc(state.errorMessage);
 
       this.isLoading = state.isLoading;
     });
@@ -69,18 +57,5 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
     this.store.dispatch(new LogIn(payload));
-  }
-
-  // @todo type deriviation
-  private getErrorDesc(errorMessage: any): string {
-    if (typeof errorMessage === 'string') {
-      return errorMessage;
-    } else if (errorMessage instanceof CodedErrorResponse) {
-      return ERROR_MESSAGES[errorMessage.code];
-    } else if (errorMessage.error) {
-      return ERROR_MESSAGES[errorMessage.error.code];
-    }
-
-    return 'Unknown error';
   }
 }

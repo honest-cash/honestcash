@@ -144,7 +144,7 @@
     class="text-red fas fa-exclamation-circle"
   ></i> Please verify captcha by checking the checkbox</i>
     <div *ngIf="errorMessage" class="w-full flex justify-center mt-4 mb-4 p-4 bg-white border-2 text-sm border-transparent border-solid font-bold text-red rounded-lg opacity-80">
-      <span>{{errorMessageType === 'string' ? errorMessage : errorMessage.desc}}</span>
+      <span>{{errorMessage}}</span>
     </div>
     <app-welcome-fat-loading-button
       text="Get Started"
