@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {LoginResponse, SignupResponse} from '../../services/authentication.interfaces';
+import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
 
 export enum UserActionTypes {
   USER_SETUP = '[User] User setup',
@@ -8,7 +8,7 @@ export enum UserActionTypes {
 
 export class UserSetup implements Action {
   readonly type = UserActionTypes.USER_SETUP;
-  constructor(public payload?: LoginResponse | SignupResponse) {}
+  constructor(public payload?: LoginSuccessResponse | SignupSuccessResponse) {}
 }
 
 export class UserCleanup implements Action {

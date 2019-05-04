@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import User from '../../../../models/user';
+import User from '../../../../core/models/user';
 import { AppStates } from '../../../../app.states';
 import { ResetPasswordRequest } from '../../../../core/store/auth/auth.actions';
 import { NgForm } from '@angular/forms';

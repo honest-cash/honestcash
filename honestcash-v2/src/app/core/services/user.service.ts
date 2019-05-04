@@ -3,7 +3,7 @@ import { User } from '../../shared/interfaces';
 import { BehaviorSubject } from 'rxjs';
 import { Logger, HttpService } from '../../core';
 import { Router } from '@angular/router';
-import { LoginResponse, SignupResponse} from './authentication.interfaces';
+import { LoginSuccessResponse, SignupSuccessResponse} from '../models/authentication';
 import { WalletService } from './wallet.service';
 import { Store } from '@ngrx/store';
 import { AppStates, selectUserState } from '../../app.states';
@@ -28,7 +28,7 @@ export class UserService {
     return this.user;
   }
 
-  public checkAddressBCH(payload: LoginResponse | SignupResponse) {
+  public checkAddressBCH(payload: LoginSuccessResponse | SignupSuccessResponse) {
     return this.user$.subscribe(({user}) => {
       if (!user) {
         return;

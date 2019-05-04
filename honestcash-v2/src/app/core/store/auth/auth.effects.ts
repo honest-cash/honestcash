@@ -15,11 +15,11 @@ import { UserSetup, UserCleanup } from '../user/user.actions';
 import {AuthenticationService} from '../../services/authentication.service';
 import {
   LoginContext,
-  LoginResponse,
+  LoginSuccessResponse,
   ResetPasswordContext,
   SignupContext,
-  SignupResponse
-} from '../../services/authentication.interfaces';
+  SignupSuccessResponse
+} from '../../models/authentication';
 
 @Injectable()
 export class AuthEffects {
@@ -38,7 +38,7 @@ export class AuthEffects {
       // @todo: refactor to encode with a password hash
       this.authenticationService.logIn(payload)
       .pipe(
-        map((logInResponse: LoginResponse) => new LogInSuccess({...logInResponse, password: payload.password})),
+        map((logInResponse: LoginSuccessResponse) => new LogInSuccess({...logInResponse, password: payload.password})),
         catchError((error) => of(new LogInFailure(error))),
       )
     )
@@ -48,7 +48,7 @@ export class AuthEffects {
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LogInSuccess) => action.payload),
-    switchMap((payload: LoginResponse) => [ new UserSetup(payload), new WalletSetup(payload) ]),
+    switchMap((payload: LoginSuccessResponse) => [ new UserSetup(payload), new WalletSetup(payload) ]),
     tap(() => this.router.navigateByUrl('/thank-you'))
   );
 
@@ -60,7 +60,7 @@ export class AuthEffects {
     // @todo: refactor to encode with a password hash
       this.authenticationService.signUp(payload)
       .pipe(
-        map((signUpResponse: SignupResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),
+        map((signUpResponse: SignupSuccessResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),
         catchError((error) => of(new SignUpFailure({code: 400, desc: 'test', httpCode: 400}))),
       )
     )
@@ -70,7 +70,7 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     map((action: SignUpSuccess) => action.payload),
-    switchMap((payload: SignupResponse) => [ new UserSetup(payload) ]),
+    switchMap((payload: SignupSuccessResponse) => [ new UserSetup(payload) ]),
     tap(() => this.router.navigateByUrl('/thank-you'))
   );
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import SimpleBitcoinWallet from 'simple-bitcoin-wallet';
 import { WalletUtils } from '../../shared/lib/WalletUtils';
-import Wallet from '../../models/wallet';
+import Wallet from '../models/wallet';
 
 @Injectable({providedIn: 'root'})
 export class WalletService {

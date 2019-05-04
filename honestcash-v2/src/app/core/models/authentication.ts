@@ -1,6 +1,9 @@
-import User from '../../models/user';
+import User from './user';
 
 export type FailedResponse = CodedErrorResponse | string;
+export type LoginResponse = LoginSuccessResponse | FailedResponse;
+export type SignupResponse = SignupSuccessResponse | FailedResponse;
+export type CheckPasswordResponse = CheckPasswordSuccessResponse | FailedResponse;
 
 export abstract class CodedErrorResponse {
   code: string | number;
@@ -14,7 +17,7 @@ export interface LoginContext {
   password: string;
 }
 
-export interface LoginResponse {
+export interface LoginSuccessResponse {
   user: User;
   wallet: any;
   token: string;
@@ -28,7 +31,7 @@ export interface SignupContext {
   captcha: string;
 }
 
-export interface SignupResponse {
+export interface SignupSuccessResponse {
   user: User;
   token: string;
   password?: string;
@@ -54,7 +57,7 @@ export interface CheckPasswordContext {
   mnemonicEncrypted: string;
 }
 
-export interface CheckPasswordResponse {
+export interface CheckPasswordSuccessResponse {
   isValid: boolean;
 }
 

@@ -1,4 +1,4 @@
-import User from 'app/models/user';
+import User from 'app/core/models/user';
 
 export interface State {
   user: User | null;

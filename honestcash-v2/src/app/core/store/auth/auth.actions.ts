@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import {
-  LoginContext, LoginResponse, FailedResponse, SignupContext, SignupResponse, ResetPasswordContext} from '../../services/authentication.interfaces';
+  LoginContext, LoginSuccessResponse, FailedResponse, SignupContext, SignupSuccessResponse, ResetPasswordContext} from '../../models/authentication';
 
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',
@@ -26,7 +26,7 @@ export class LogIn implements Action {
 
 export class LogInSuccess implements Action {
   readonly type = AuthActionTypes.LOGIN_SUCCESS;
-  constructor(public payload: LoginResponse) {}
+  constructor(public payload: LoginSuccessResponse) {}
 }
 
 export class LogInFailure implements Action {
@@ -41,7 +41,7 @@ export class SignUp implements Action {
 
 export class SignUpSuccess implements Action {
   readonly type = AuthActionTypes.SIGNUP_SUCCESS;
-  constructor(public payload: SignupResponse) {}
+  constructor(public payload: SignupSuccessResponse) {}
 }
 
 export class SignUpFailure implements Action {

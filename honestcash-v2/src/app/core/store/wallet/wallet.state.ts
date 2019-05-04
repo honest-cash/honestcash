@@ -1,4 +1,4 @@
-import Wallet from '../../../models/wallet';
+import Wallet from '../../models/wallet';
 
 export interface State {
   wallet: Wallet | null;

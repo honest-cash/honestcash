@@ -1,4 +1,4 @@
-import {FailedResponse} from '../../services/authentication.interfaces';
+import {FailedResponse} from '../../models/authentication';
 
 export interface State {
   // is a user authenticated?

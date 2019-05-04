@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppStates } from '../../../../app.states';
-import User from '../../../../models/user';
+import User from '../../../../core/models/user';
 
 
 @Component({
