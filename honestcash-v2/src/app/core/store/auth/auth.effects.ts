@@ -32,23 +32,6 @@ export class AuthEffects {
     private router: Router,
   ) {}
 
-  @Effect({ dispatch: false })
-  Start: Observable<any> = this.actions.pipe(
-    ofType(ROOT_EFFECTS_INIT),
-    switchMap(() => {
-      if (!this.authenticationService.getToken()) {
-        return of('No token.');
-      }
-
-      return this.userService.getMe()
-      .pipe(
-        // setup user here
-        tap((user: any) => void 0),
-        catchError((error) => of(new LogInFailure(error))),
-      );
-    })
-  );
-
   @Effect()
   LogIn: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN),
@@ -67,7 +50,16 @@ export class AuthEffects {
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LogInSuccess) => action.payload),
-    switchMap((payload: LoginSuccessResponse) => [ new UserSetup(payload), new WalletSetup(payload) ]),
+    tap((payload) => {
+      this.authenticationService.init(payload.token);
+    }),
+    switchMap((payload: LoginSuccessResponse) => [
+      new UserSetup(),
+      new WalletSetup({
+        mnemonic: payload.wallet.encryptedMnemonic,
+        password: payload.password
+      })
+    ]),
     tap(() => this.router.navigateByUrl('/thank-you'))
   );
 
@@ -89,7 +81,8 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     map((action: SignUpSuccess) => action.payload),
-    switchMap((payload: SignupSuccessResponse) => [ new UserSetup(payload) ]),
+    tap((payload: SignupSuccessResponse) => this.authenticationService.init(payload.token)),
+    switchMap(payload => of(new UserSetup())),
     tap(() => this.router.navigateByUrl('/thank-you'))
   );
 

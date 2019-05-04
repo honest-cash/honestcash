@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable } from 'rxjs';
+import { Actions, Effect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
+import { Observable, of } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import {
     WalletActionTypes,
@@ -19,7 +19,7 @@ export class WalletEffects {
   constructor(
     private actions: Actions,
     private walletService: WalletService,
-    private authentificationService: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
     this.logger = new Logger('WalletEffects');
   }
@@ -33,21 +33,20 @@ export class WalletEffects {
   @Effect()
   WalletSetup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP),
-    map((action: WalletSetup) => ({
-      mnemonicEncrypted: action.payload.wallet ? action.payload.wallet.mnemonicEncrypted : undefined,
-      password: action.payload.password,
-    })),
-    map(({ password, mnemonicEncrypted }) => {
+    map((action: WalletSetup) => {
+      return action.payload;
+    }),
+    map((payload) => {
       let simpleWallet: Wallet;
 
-      if (mnemonicEncrypted) {
+      if (payload.mnemonic) {
         this.logger.info('Setting up an already existing wallet');
 
-        simpleWallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(mnemonicEncrypted, password);
+        simpleWallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(payload.mnemonic, payload.password);
       } else {
         this.logger.info('Setting up a new wallet');
 
-        simpleWallet = WalletUtils.generateNewWallet(password);
+        simpleWallet = WalletUtils.generateNewWallet(payload.password);
       }
 
       return { wallet: simpleWallet };
@@ -56,7 +55,7 @@ export class WalletEffects {
       this.walletService.setWallet(wallet.mnemonic);
     }),
     tap(({ wallet }) => {
-      this.authentificationService.setWallet({ mnemonicEncrypted: wallet.mnemonicEncrypted});
+      this.authenticationService.setWallet({ mnemonicEncrypted: wallet.mnemonicEncrypted});
     }),
     map(({ wallet }) => {
       return new WalletGenerated({

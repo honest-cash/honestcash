@@ -10,7 +10,7 @@ export enum WalletActionTypes {
 
 export class WalletSetup implements Action {
   readonly type = WalletActionTypes.WALLET_SETUP;
-  constructor(public payload?: LoginSuccessResponse) {}
+  constructor(public payload: { mnemonic: string; password?: string }) {}
 }
 
 export class WalletCleanup implements Action {
