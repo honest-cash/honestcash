@@ -5,7 +5,7 @@ export interface State {
   isAuthenticated: boolean;
   isLoading: boolean;
   token: string | null;
-  errorMessage: FailedResponse | string;
+  errorMessage: FailedResponse | string | { error: { code: string }};
 }
 
 export const initialState: State = {

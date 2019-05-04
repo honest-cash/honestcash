@@ -46,13 +46,14 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
     this.getState.subscribe((state) => {
       if (state.errorMessage instanceof CodedErrorResponse) {
-        this.errorMessageType = 'class';
+        this.errorMessage = state.errorMessage.desc;
       } else if (typeof state.errorMessage === 'string') {
-        this.errorMessageType = 'string';
+        this.errorMessage = state.errorMessage;
       }
+
       this.isLoading = state.isLoading;
-      this.errorMessage = state.errorMessage;
     });
+
     this.renderCaptcha();
   }
 

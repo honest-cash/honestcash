@@ -16,16 +16,17 @@ interface LoginForm extends NgForm {
 }
 
 export const ERROR_MESSAGES = {
-  USER_NOT_FOUND: 'USER_NOT_FOUND',
+  USER_NOT_FOUND: 'Incorrect email address and / or password.',
+  EMAIL_EXISTS:  'E-Mail already exists',
   USER_BLOCKED: 'USER_BLOCKED',
   NOT_ACTIVATED: 'NOT_ACTIVATED',
   USER_NOT_VERIFIED: 'USER_NOT_VERIFIED',
   INITIAL_PARAMS: 'INITIAL_PARAMS',
   INITIAL_EMAIL: 'INITIAL_EMAIL',
   INITIAL_PASSWORD: 'INITIAL_PASSWORD',
-  EMAIL_NOT_FOUND: 'EMAIL_NOT_FOUND',
-  WRONG_PASSWORD: 'WRONG_PASSWORD',
-}
+  EMAIL_NOT_FOUND: 'Incorrect email address and / or password.',
+  WRONG_PASSWORD: 'Incorrect email address and / or password.',
+};
 
 @Component({
   selector: 'app-welcome-page-login',
@@ -37,34 +38,49 @@ export class LoginComponent implements OnInit {
   @HostBinding('style.height') height = '75vh';
   @HostBinding('style.minHeight') minHeight = '75vh';
 
-  isLoading: boolean;
-  getState: Observable<AuthorizationState>;
-  errorMessage: FailedResponse;
-  errorMessageType: 'string' | 'class';
-  user = new User();
+  public isLoading: boolean;
+  public authState: Observable<AuthorizationState>;
+  public errorMessage: FailedResponse;
+  public errorMessageType: 'string' | 'class';
+  public user = new User();
 
   constructor(
     private store: Store<AppStates>
   ) {
-    this.getState = this.store.select(selectAuthorizationState);
+    this.authState = this.store.select(selectAuthorizationState);
   }
 
-  ngOnInit() {
-    this.getState.subscribe((state) => {
-      if (state.errorMessage instanceof CodedErrorResponse) {
-        this.errorMessageType = 'class';
-      } else if (typeof state.errorMessage === 'string') {
-        this.errorMessageType = 'string';
+  public ngOnInit() {
+    this.authState.subscribe((state) => {
+      if (!state.errorMessage) {
+        delete this.errorMessage;
+
+        return;
       }
+
+      this.errorMessage = this.getErrorDesc(state.errorMessage);
+
       this.isLoading = state.isLoading;
-      this.errorMessage = state.errorMessage;
     });
   }
 
-  onSubmit(form: LoginForm): void {
+  public onSubmit(form: LoginForm): void {
     const payload = form.value;
 
+    this.isLoading = true;
     this.store.dispatch(new LogIn(payload));
   }
 
+  // @todo type deriviation
+  private getErrorDesc(errorMessage: any): string {
+    if (typeof errorMessage === 'string') {
+      return errorMessage;
+    } else if (errorMessage instanceof CodedErrorResponse) {
+      return ERROR_MESSAGES[errorMessage.code];
+    } else if (errorMessage.error) {
+      return ERROR_MESSAGES[errorMessage.error.code];
+    }
+
+    return 'Unknown error';
+  }
 }
