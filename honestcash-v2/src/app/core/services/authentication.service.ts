@@ -8,7 +8,7 @@ import {
   FailedResponse,
   LoginContext, LoginResponse,
   LoginSuccessResponse,
-  ResetPasswordContext, SetWalletContext,
+  ResetPasswordRequestContext, SetWalletContext,
   SignupContext, SignupResponse, SignupSuccessResponse
 } from '../models/authentication';
 
@@ -99,7 +99,7 @@ export class AuthenticationService {
     return this.http.get<string[]>(this.API_ENDPOINTS.getEmails);
   }
 
-  public resetPassword(payload: ResetPasswordContext): Observable<string> {
+  public resetPassword(payload: ResetPasswordRequestContext): Observable<string> {
     return this.http.post<string>(this.API_ENDPOINTS.resetPassword, { email: payload.email });
   }
 

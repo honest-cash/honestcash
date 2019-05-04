@@ -37,7 +37,7 @@ export interface SignupSuccessResponse {
   password?: string;
 }
 
-export interface ResetPasswordContext {
+export interface ResetPasswordRequestContext {
   email: string;
 }
 
@@ -46,7 +46,6 @@ export interface ChangePasswordContext {
   code: string;
   newPassword: string;
   repeatNewPassword: string;
-  mnemonicEncrypted: string;
 }
 
 export interface CheckPasswordContext {

@@ -16,7 +16,7 @@ import {AuthenticationService} from '../../services/authentication.service';
 import {
   LoginContext,
   LoginSuccessResponse,
-  ResetPasswordContext,
+  ResetPasswordRequestContext,
   SignupContext,
   SignupSuccessResponse
 } from '../../models/authentication';
@@ -78,7 +78,7 @@ export class AuthEffects {
   ResetPassword: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.RESET_PASSWORD_REQUEST),
     map((action: ResetPasswordRequest) => action.payload),
-    switchMap((payload: ResetPasswordContext) =>
+    switchMap((payload: ResetPasswordRequestContext) =>
       this.authenticationService.resetPassword(payload)
       .pipe(
         map(() => new ResetPasswordRequestSuccess()),

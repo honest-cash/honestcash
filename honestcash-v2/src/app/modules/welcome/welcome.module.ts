@@ -32,8 +32,8 @@ const routes: Routes = [
       { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [UnauthorizedGuard] },
       { path: 'logout', pathMatch: 'full', component: LogoutComponent },
       { path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard] },
+      { path: 'reset-password/:resetCode', pathMatch: 'full', component: ResetPasswordVerifyComponent, canActivate: [UnauthorizedGuard] },
       { path: 'reset-password', pathMatch: 'full', component: ResetPasswordComponent, canActivate: [UnauthorizedGuard] },
-      { path: 'reset-password/verify', pathMatch: 'full', component: ResetPasswordVerifyComponent, canActivate: [UnauthorizedGuard] },
       { path: 'status', component: StatusComponent, canActivate: [AuthorizedGuard] },
       { path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard] },
     ]
