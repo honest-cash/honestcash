@@ -54,6 +54,19 @@ export function reducer(state = initialState, action: All): State {
         errorMessage: action.payload
       };
     }
+    case AuthActionTypes.RESET_PASSWORD_REQUEST_FAILURE: {
+      return {
+        ...initialState,
+        errorMessage: action.payload
+      };
+    }
+    case AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS: {
+      return {
+        ...initialState,
+        errorMessage: undefined,
+        newPasswordRequested: true
+      };
+    }
     case AuthActionTypes.LOGOUT: {
       return initialState;
     }

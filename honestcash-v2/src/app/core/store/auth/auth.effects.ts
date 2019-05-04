@@ -87,12 +87,6 @@ export class AuthEffects {
   );
 
   @Effect()
-  ResetPasswordSuccess: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS),
-    tap(() => this.router.navigateByUrl('/reset-password/verify'))
-  );
-
-  @Effect()
   LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
     switchMap(() => [ new UserCleanup(), new WalletCleanup() ]),

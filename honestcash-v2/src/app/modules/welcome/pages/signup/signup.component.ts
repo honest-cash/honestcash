@@ -32,8 +32,7 @@ export class SignupComponent implements OnInit {
 
   isLoading: boolean;
   authState: Observable<AuthorizationState>;
-  errorMessage: FailedResponse;
-  errorMessageType: 'string' | 'class';
+  errorMessage: string;
   isCaptchaRendered = false;
   isCaptchaValid = true;
   user: User = new User();

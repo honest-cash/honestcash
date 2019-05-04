@@ -100,7 +100,7 @@ export class AuthenticationService {
   }
 
   public resetPassword(payload: ResetPasswordContext): Observable<string> {
-    return this.http.post<string>(this.API_ENDPOINTS.resetPassword, { username: payload.email });
+    return this.http.post<string>(this.API_ENDPOINTS.resetPassword, { email: payload.email });
   }
 
   public changePassword(payload: ChangePasswordContext): Observable<string> {
