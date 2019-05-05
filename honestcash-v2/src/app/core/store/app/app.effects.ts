@@ -6,9 +6,10 @@ import {
   AppActionTypes,
 } from './app.actions';
 import { UserSetup } from '../user/user.actions';
-import { WalletSetup } from '../wallet/wallet.actions';
+import { WalletSetup, WalletCleanup } from '../wallet/wallet.actions';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { WalletService } from 'app/core/services/wallet.service';
+import { AuthCleanup } from '../auth/auth.actions';
 
 @Injectable()
 export class AppEffects {
@@ -25,13 +26,16 @@ export class AppEffects {
     switchMap(() => {
       const actionsOnLoad = [];
 
-      if (this.authenticationService.getToken()) {
+      if (this.walletService.getWalletMnemonic() && this.authenticationService.getToken()) {
         actionsOnLoad.push(new WalletSetup({
           mnemonic: this.walletService.getWalletMnemonic(),
           password: undefined
         }));
 
         actionsOnLoad.push(new UserSetup());
+      } else {
+        actionsOnLoad.push(new WalletCleanup());
+        actionsOnLoad.push(new AuthCleanup());
       }
 
       return actionsOnLoad;

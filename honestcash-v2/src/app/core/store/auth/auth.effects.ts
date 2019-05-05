@@ -5,10 +5,15 @@ import { Observable, of } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 import {
   AuthActionTypes,
-  LogIn, LogInSuccess, LogInFailure,
-  SignUp, SignUpSuccess, SignUpFailure,
-  ResetPasswordRequest, ResetPasswordRequestSuccess, ResetPasswordRequestFailure,
-  LogOut,
+  LogIn,
+  LogInSuccess,
+  LogInFailure,
+  SignUp,
+  SignUpSuccess,
+  SignUpFailure,
+  ResetPasswordRequest,
+  ResetPasswordRequestSuccess,
+  ResetPasswordRequestFailure,
 } from './auth.actions';
 import { WalletSetup, WalletCleanup } from '../wallet/wallet.actions';
 import { UserSetup, UserCleanup } from '../user/user.actions';
@@ -56,7 +61,7 @@ export class AuthEffects {
     switchMap((payload: LoginSuccessResponse) => [
       new UserSetup(),
       new WalletSetup({
-        mnemonic: payload.wallet.encryptedMnemonic,
+        mnemonic: payload.wallet.mnemonicEncrypted,
         password: payload.password
       })
     ]),
@@ -114,6 +119,14 @@ export class AuthEffects {
     ofType(AuthActionTypes.GET_STATUS),
     switchMap(payload => {
       return this.authenticationService.getStatus();
+    })
+  );
+
+  @Effect({ dispatch: false })
+  AuthCleanup: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.AUTH_CLEANUP),
+    tap(() => {
+      return this.authenticationService.unsetToken();
     })
   );
 

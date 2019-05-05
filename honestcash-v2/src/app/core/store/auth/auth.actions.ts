@@ -18,7 +18,8 @@ export enum AuthActionTypes {
   RESET_PASSWORD_REQUEST_SUCCESS = '[Auth] Reset Password Request Success',
   RESET_PASSWORD_REQUEST_FAILURE = '[Auth] Reset Password Request Failure',
   LOGOUT = '[Auth] Logout',
-  GET_STATUS = '[Auth] GetStatus'
+  GET_STATUS = '[Auth] GetStatus',
+  AUTH_CLEANUP = '[Auth] Auth cleanup'
 }
 
 export class LogIn implements Action {
@@ -89,8 +90,13 @@ export class GetStatus implements Action {
   readonly type = AuthActionTypes.GET_STATUS;
 }
 
+export class AuthCleanup implements Action {
+  readonly type = AuthActionTypes.AUTH_CLEANUP;
+}
+
 export type All =
   | LogIn
+  | AuthCleanup
   | LogInSuccess
   | LogInFailure
   | SignUp
