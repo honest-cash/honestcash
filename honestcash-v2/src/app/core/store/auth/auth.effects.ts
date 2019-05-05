@@ -14,6 +14,9 @@ import {
   ResetPasswordRequest,
   ResetPasswordRequestSuccess,
   ResetPasswordRequestFailure,
+  ResetPassword,
+  ResetPasswordSuccess,
+  ResetPasswordFailure,
 } from './auth.actions';
 import { WalletSetup, WalletCleanup } from '../wallet/wallet.actions';
 import { UserSetup, UserCleanup } from '../user/user.actions';
@@ -23,7 +26,8 @@ import {
   LoginSuccessResponse,
   ResetPasswordRequestContext,
   SignupContext,
-  SignupSuccessResponse
+  SignupSuccessResponse,
+  ChangePasswordContext
 } from '../../models/authentication';
 import { UserService } from 'app/core/services/user.service';
 
@@ -93,6 +97,18 @@ export class AuthEffects {
 
   @Effect()
   ResetPassword: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.RESET_PASSWORD),
+    map((action: ResetPassword) => action.payload),
+    switchMap((payload: ChangePasswordContext) =>
+      this.authenticationService.changePassword(payload)
+      .pipe(
+        map(() => new ResetPasswordSuccess()),
+        catchError((error) => of(new ResetPasswordFailure(error)))
+      ))
+  );
+
+  @Effect()
+  ResetPasswordRequest: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.RESET_PASSWORD_REQUEST),
     map((action: ResetPasswordRequest) => action.payload),
     switchMap((payload: ResetPasswordRequestContext) =>

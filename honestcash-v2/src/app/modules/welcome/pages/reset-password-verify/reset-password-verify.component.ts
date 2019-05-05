@@ -30,7 +30,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
   @HostBinding('style.minHeight') minHeight = '75vh';
 
   private logger = new Logger('ResetPasswordVerifyComponent');
-  private authState: Observable<AuthorizationState>;
+  private auth$: Observable<AuthorizationState>;
   private resetCode: string;
 
   public errorMessage: string;
@@ -46,6 +46,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
   ) {
+    this.auth$ = this.store.select(selectAuthorizationState);
   }
 
   public ngOnInit() {
@@ -55,7 +56,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
       this.logger.info(`Password reset code: ${this.resetCode}`);
     });
 
-    this.authState.subscribe((state) => {
+    this.auth$.subscribe((state) => {
       if (state.newPasswordRequested) {
         delete this.errorMessage;
       } else if (!state.errorMessage) {

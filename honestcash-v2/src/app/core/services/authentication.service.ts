@@ -11,8 +11,14 @@ import {
   ResetPasswordRequestContext, SetWalletContext,
   SignupContext, SignupResponse, SignupSuccessResponse
 } from '../models/authentication';
+import { WalletUtils } from 'app/shared/lib/WalletUtils';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
+
+// @todo refactor
+interface ChangePasswordPayload extends ChangePasswordContext {
+  mnemonicEncrypted: string;
+}
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
@@ -103,7 +109,16 @@ export class AuthenticationService {
     return this.http.post<string>(this.API_ENDPOINTS.resetPassword, { email: payload.email });
   }
 
-  public changePassword(payload: ChangePasswordContext): Observable<string> {
+  public changePassword(context: ChangePasswordContext): Observable<string> {
+    const payload: ChangePasswordPayload = {
+      email: context.email,
+      code: context.code,
+      newPassword: CryptoUtils.calculatePasswordHash(context.email, context.newPassword),
+      repeatNewPassword: CryptoUtils.calculatePasswordHash(context.email, context.repeatNewPassword),
+      // @todo generate wallet here
+      mnemonicEncrypted: WalletUtils.generateNewWallet(context.newPassword).mnemonicEncrypted,
+    };
+
     return this.http.post<string>(this.API_ENDPOINTS.changePassword, payload);
   }
 

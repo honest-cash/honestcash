@@ -46,6 +46,7 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.RESET_PASSWORD_SUCCESS: {
       return {
         ...state,
+        newPasswordSet: true
       };
     }
     case AuthActionTypes.RESET_PASSWORD_FAILURE: {

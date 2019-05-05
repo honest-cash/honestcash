@@ -7,6 +7,7 @@ export interface State {
   token: string | null;
   errorMessage: FailedResponse | string | { error: { code: string }};
   newPasswordRequested: boolean;
+  newPasswordSet: boolean;
 }
 
 export const initialState: State = {
@@ -14,5 +15,6 @@ export const initialState: State = {
   isLoading: false,
   token: null,
   errorMessage: null,
-  newPasswordRequested: false
+  newPasswordRequested: false,
+  newPasswordSet: false
 };
