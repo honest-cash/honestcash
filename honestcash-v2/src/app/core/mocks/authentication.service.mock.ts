@@ -1,10 +1,9 @@
 import { Observable, of } from 'rxjs';
-
 import {
-  ChangePasswordContext, CheckPasswordContext, CheckPasswordResponse, FailedResponse,
+  ChangePasswordContext, CheckPasswordContext, CheckPasswordResponse, EmptyResponse, FailedResponse,
   LoginContext,
   LoginResponse,
-  LoginSuccessResponse, ResetPasswordRequestContext, SetWalletContext,
+  LoginSuccessResponse, OkResponse, ResetPasswordRequestContext, SetWalletContext,
   SignupContext,
   SignupResponse,
   SignupSuccessResponse
@@ -12,12 +11,10 @@ import {
 import User from '../models/user';
 import Wallet from '../models/wallet';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
-import {AuthenticationService, LOCAL_TOKEN_KEY} from '../services/authentication.service';
-import {HttpService} from '..';
+import {LOCAL_TOKEN_KEY} from '../services/authentication.service';
+
 
 export class MockAuthenticationService {
-
-  public API_ENDPOINTS = this.authenticationService.API_ENDPOINTS;
 
   public mocks = {
     token: '123',
@@ -76,50 +73,59 @@ export class MockAuthenticationService {
       return CryptoUtils.calculatePasswordHash(this.email, this.password);
     }
   };
-  private isAuthenticated = false;
-  private token: string = null;
-
-  constructor(
-    private authenticationService: AuthenticationService,
-  ) {}
+  public isAuthenticated = false;
+  public token = '';
 
   public getToken(): string {
-    return this.authenticationService.getToken();
+    let token;
+    if (!this.token && (token = localStorage.getItem(LOCAL_TOKEN_KEY))) {
+      this.token = token;
+    }
+    return this.token;
   }
 
   public setToken(token: string) {
-    return this.authenticationService.setToken(token);
+    this.token = token;
+    localStorage.setItem(LOCAL_TOKEN_KEY, token);
   }
 
   public unsetToken(): void {
-    return this.authenticationService.unsetToken();
+    this.token = '';
+    this.isAuthenticated = false;
+    localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
 
   public hasAuthorization(): boolean {
-    return this.authenticationService.hasAuthorization();
+    if (!this.isAuthenticated && this.getToken()) {
+      this.isAuthenticated = true;
+    }
+    return this.isAuthenticated;
   }
 
   public init(token?: string) {
-    return this.authenticationService.init(token);
+    if (!token && this.getToken()) {
+      this.isAuthenticated = true;
+    } else if (!token) {
+
+    } else {
+      this.setToken(token);
+      this.isAuthenticated = true;
+    }
   }
 
   public logIn(payload: LoginContext): Observable<LoginResponse> {
-    // trigger request for mock to catch
-    this.authenticationService.logIn(payload).subscribe(() => {});
-    // check if correct and return succes
+    // check if correct and return success
     if (payload.email === this.mocks.email && payload.password === this.mocks.password) {
       return of(this.mocks.loginSuccess);
     }
     return of (this.mocks.loginFailure);
   }
 
-  public logOut(): Observable<any> {
-    return this.authenticationService.logOut();
+  public logOut(): Observable<EmptyResponse> {
+    return of({});
   }
 
   public signUp(payload: SignupContext): Observable<SignupResponse> {
-    // trigger request for mock to catch
-    this.authenticationService.signUp(payload).subscribe(() => {});
     // check if correct and return succes
     if (payload.username === this.mocks.username) {
       return of(this.mocks.signupSuccess);
@@ -127,28 +133,30 @@ export class MockAuthenticationService {
     return of (this.mocks.signupFailure);
   }
 
-  public setWallet(payload: SetWalletContext): Observable<string> {
-    //return this.http.post<string>(this.API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
+  public setWallet(payload: SetWalletContext): Observable<OkResponse> {
+    return of({ok: true});
   }
 
   public getEmails(): Observable<string[]> {
-    //return this.http.get<string[]>(this.API_ENDPOINTS.getEmails);
+    return of([
+      'toto@toto.com'
+    ]);
   }
 
-  public resetPassword(payload: ResetPasswordRequestContext): Observable<string> {
-    //return this.http.post<string>(this.API_ENDPOINTS.resetPassword, { email: payload.email });
+  public resetPassword(payload: ResetPasswordRequestContext): Observable<EmptyResponse> {
+    return of({});
   }
 
-  public changePassword(payload: ChangePasswordContext): Observable<string> {
-    //return this.http.post<string>(this.API_ENDPOINTS.changePassword, payload);
+  public changePassword(payload: ChangePasswordContext): Observable<OkResponse> {
+    return of({ok: true});
   }
 
   public checkPassword(payload: CheckPasswordContext): Observable<CheckPasswordResponse> {
-    //return this.http.post<CheckPasswordResponse>(this.API_ENDPOINTS.checkPassword, payload);
+    return of({isValid: true});
   }
 
   public getStatus(): Observable<User> {
-    //return this.http.get<User>(this.API_ENDPOINTS.status);
+    return of(new User());
   }
 
 }

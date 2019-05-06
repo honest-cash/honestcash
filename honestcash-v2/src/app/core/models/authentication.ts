@@ -12,6 +12,16 @@ export abstract class CodedErrorResponse {
   codeNo?: number;
 }
 
+export abstract class OkResponse {
+  ok: boolean;
+}
+
+export abstract class DataResponse {
+  data: any;
+}
+
+export abstract class EmptyResponse {}
+
 export interface LoginContext {
   email: string;
   password: string;

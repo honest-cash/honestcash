@@ -1,6 +1,6 @@
 import { WalletUtils } from './WalletUtils';
 
-describe('WalletUtils', async () => {
+describe('WalletUtils', () => {
   it('creates a new wallet with password', async () => {
     const wallet = await WalletUtils.generateNewWallet('testpassword');
 

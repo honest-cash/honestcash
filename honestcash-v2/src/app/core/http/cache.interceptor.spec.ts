@@ -5,7 +5,7 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpResponse } from '@angular/common/htt
 import { CacheInterceptor } from './cache.interceptor';
 import { HttpCacheService } from './http-cache.service';
 
-describe('CacheInterceptor', async () => {
+describe('CacheInterceptor', () => {
   let interceptorOptions: Object | null = {};
   let httpCacheService: HttpCacheService;
   let cacheInterceptor: CacheInterceptor;
@@ -37,7 +37,7 @@ describe('CacheInterceptor', async () => {
     httpMock.verify();
   });
 
-  describe('with default configuration', async () => {
+  describe('with default configuration', () => {
     beforeEach(() => {
       interceptorOptions = null;
     });
@@ -51,7 +51,7 @@ describe('CacheInterceptor', async () => {
       }
     ));
 
-    it('should cache the request', async () => {
+    it('should cache the request', () => {
       // Act
       http.get('/toto').subscribe(() => {
         // Assert
@@ -63,7 +63,7 @@ describe('CacheInterceptor', async () => {
       httpMock.expectOne({ url: '/toto' }).flush('someData');
     });
 
-    it('should respond from the cache', async () => {
+    it('should respond from the cache', () => {
       // Arrange
       httpCacheService.setCacheData('/toto', new HttpResponse({ body: 'cachedData' }));
 
@@ -76,7 +76,7 @@ describe('CacheInterceptor', async () => {
       httpMock.expectNone({ url: '/toto' });
     });
 
-    it('should not cache the request in case of error', async () => {
+    it('should not cache the request in case of error', () => {
       // Act
       http.get('/toto').subscribe(
         () => {},
@@ -93,7 +93,7 @@ describe('CacheInterceptor', async () => {
     });
   });
 
-  describe('with update forced configuration', async () => {
+  describe('with update forced configuration', () => {
     beforeEach(() => {
       interceptorOptions = { update: true };
     });
@@ -112,7 +112,7 @@ describe('CacheInterceptor', async () => {
       httpMock.verify();
     });
 
-    it('should force cache update', async () => {
+    it('should force cache update', () => {
       // Arrange
       httpCacheService.setCacheData('/toto', new HttpResponse({ body: 'oldCachedData' }));
       cacheInterceptor.configure({ update: true });

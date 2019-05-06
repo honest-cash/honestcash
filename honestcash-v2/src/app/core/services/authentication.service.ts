@@ -4,15 +4,16 @@ import User from '../models/user';
 import { CryptoUtils } from '../../shared/lib/CryptoUtils';
 import { HttpService } from '..';
 import {
-  ChangePasswordContext, CheckPasswordContext, CheckPasswordResponse, CheckPasswordSuccessResponse,
+  ChangePasswordContext, CheckPasswordContext, CheckPasswordResponse, CheckPasswordSuccessResponse, EmptyResponse,
   FailedResponse,
   LoginContext, LoginResponse,
-  LoginSuccessResponse,
+  LoginSuccessResponse, OkResponse,
   ResetPasswordRequestContext, SetWalletContext,
   SignupContext, SignupResponse, SignupSuccessResponse
 } from '../models/authentication';
 import { WalletUtils } from 'app/shared/lib/WalletUtils';
 import { map, mergeMap } from 'rxjs/operators';
+import {environment} from "../../../environments/environment";
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
 // @todo refactor
@@ -20,21 +21,26 @@ interface ChangePasswordPayload extends ChangePasswordContext {
   mnemonicEncrypted: string;
 }
 
-@Injectable({providedIn: 'root'})
-export class AuthenticationService {
-  public API_ENDPOINTS = {
-    login: `/login`,
-    signup: `/signup/email`,
-    logout: `/logout`,
-    resetPassword: `/auth/request-password-reset`,
-    changePassword: `/auth/reset-password`,
-    checkPassword: `/auth/password-check`,
-    setWallet: `/auth/set-wallet`,
-    getEmails: `/auth/emails`,
-    status: `/me`,
-  };
+export const API_ENDPOINTS = {
+  login: `/login`,
+  signup: `/signup/email`,
+  logout: `/logout`,
+  resetPassword: `/auth/request-password-reset`,
+  changePassword: `/auth/reset-password`,
+  checkPassword: `/auth/password-check`,
+  setWallet: `/auth/set-wallet`,
+  getEmails: `/auth/emails`,
+  status: `/me`,
+};
 
-  private token: string;
+export const getPrefixedEndpoint = (endpoint: string) => {
+  return `${environment.apiUrl}${API_ENDPOINTS[endpoint]}`;
+}
+
+@Injectable()
+export class AuthenticationService {
+
+  private token = '';
   private isAuthenticated = false;
 
   constructor(
@@ -70,7 +76,7 @@ export class AuthenticationService {
   public init(token?: string) {
     if (!token && this.getToken()) {
       this.isAuthenticated = true;
-    } else {
+    } else if (token) {
       this.setToken(token);
       this.isAuthenticated = true;
     }
@@ -79,17 +85,17 @@ export class AuthenticationService {
   public logIn(payload: LoginContext): Observable<LoginResponse> {
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
-    return this.http.post<LoginResponse>(this.API_ENDPOINTS.login, {email: payload.email, password: passwordHash});
+    return this.http.post<LoginResponse>(API_ENDPOINTS.login, {email: payload.email, password: passwordHash});
   }
 
-  public logOut(): Observable<any> {
-    return this.http.post(this.API_ENDPOINTS.logout, {});
+  public logOut(): Observable<EmptyResponse> {
+    return this.http.post(API_ENDPOINTS.logout, {});
   }
 
   public signUp(payload: SignupContext): Observable<SignupResponse> {
     const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
 
-    return this.http.post<SignupSuccessResponse>(this.API_ENDPOINTS.signup, {
+    return this.http.post<SignupSuccessResponse>(API_ENDPOINTS.signup, {
       username: payload.username,
       email: payload.email,
       password: passwordHash,
@@ -97,19 +103,19 @@ export class AuthenticationService {
     });
   }
 
-  public setWallet(payload: SetWalletContext): Observable<string> {
-    return this.http.post<string>(this.API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
+  public setWallet(payload: SetWalletContext): Observable<OkResponse> {
+    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
   }
 
   public getEmails(): Observable<string[]> {
-    return this.http.get<string[]>(this.API_ENDPOINTS.getEmails);
+    return this.http.get<string[]>(API_ENDPOINTS.getEmails);
   }
 
-  public resetPassword(payload: ResetPasswordRequestContext): Observable<string> {
-    return this.http.post<string>(this.API_ENDPOINTS.resetPassword, { email: payload.email });
+  public resetPassword(payload: ResetPasswordRequestContext): Observable<EmptyResponse> {
+    return this.http.post<string>(API_ENDPOINTS.resetPassword, { email: payload.email });
   }
 
-  public changePassword(context: ChangePasswordContext): Observable<string> {
+  public changePassword(context: ChangePasswordContext): Observable<OkResponse> {
     return defer(async () => {
       const mnemonicEncrypted = (await WalletUtils.generateNewWallet(context.newPassword)).mnemonicEncrypted;
 
@@ -126,17 +132,17 @@ export class AuthenticationService {
             mnemonicEncrypted,
           };
 
-        return this.http.post<string>(this.API_ENDPOINTS.changePassword, payload);
+        return this.http.post<OkResponse>(API_ENDPOINTS.changePassword, payload);
         })
       )
     );
   }
 
   public checkPassword(payload: CheckPasswordContext): Observable<CheckPasswordResponse> {
-    return this.http.post<CheckPasswordResponse>(this.API_ENDPOINTS.checkPassword, payload);
+    return this.http.post<CheckPasswordResponse>(API_ENDPOINTS.checkPassword, payload);
   }
 
   public getStatus(): Observable<User> {
-    return this.http.get<User>(this.API_ENDPOINTS.status);
+    return this.http.get<User>(API_ENDPOINTS.status);
   }
 }

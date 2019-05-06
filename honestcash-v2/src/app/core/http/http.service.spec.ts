@@ -8,7 +8,7 @@ import { ErrorHandlerInterceptor } from './error-handler.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
 import { ApiPrefixInterceptor } from './api-prefix.interceptor';
 
-describe('HttpService', async () => {
+describe('HttpService', () => {
   let httpCacheService: HttpCacheService;
   let http: HttpClient;
   let httpMock: HttpTestingController;
@@ -43,7 +43,7 @@ describe('HttpService', async () => {
     httpMock.verify();
   });
 
-  it('should use error handler, API prefix and no cache by default', async () => {
+  it('should use error handler, API prefix and no cache by default', () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
@@ -65,7 +65,7 @@ describe('HttpService', async () => {
     httpMock.expectOne({}).flush({});
   });
 
-  it('should use cache', async () => {
+  it('should use cache', () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
@@ -86,7 +86,7 @@ describe('HttpService', async () => {
     httpMock.expectOne({}).flush({});
   });
 
-  it('should skip error handler', async () => {
+  it('should skip error handler', () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
@@ -107,7 +107,7 @@ describe('HttpService', async () => {
     httpMock.expectOne({}).flush({});
   });
 
-  it('should not use API prefix', async () => {
+  it('should not use API prefix', () => {
     // Arrange
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;

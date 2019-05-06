@@ -5,13 +5,13 @@ import { AuthenticationService } from '../services/authentication.service';
 import { MockAuthenticationService } from '../mocks/authentication.service.mock';
 import { AuthorizedGuard } from './authorized.guard';
 
-describe('AuthorizedGuard', async () => {
+describe('AuthorizedGuard', () => {
   let authenticationGuard: AuthorizedGuard;
   let authenticationService: MockAuthenticationService;
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     mockRouter = {
       navigate: jasmine.createSpy('navigate')
     };
@@ -34,17 +34,17 @@ describe('AuthorizedGuard', async () => {
     }
   ));
 
-  it('should have a canActivate method', async () => {
+  it('should have a canActivate method', () => {
     expect(typeof authenticationGuard.canActivate).toBe('function');
   });
 
-  describe('canActivate', async () => {
-    it('should return true if user is authenticated', async() => {
+  describe('canActivate', () => {
+    it('should return true if user is authenticated', () => {
       authenticationService.isAuthenticated = true;
       expect(authenticationGuard.canActivate(null, mockSnapshot)).toBe(true);
     });
 
-    it('should return false and redirect to login page if user is not authenticated', async() => {
+    it('should return false and redirect to login page if user is not authenticated', () => {
       // Arrange
       authenticationService.isAuthenticated = false;
 

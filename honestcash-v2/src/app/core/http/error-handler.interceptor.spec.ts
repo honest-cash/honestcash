@@ -4,7 +4,7 @@ import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 
 import { ErrorHandlerInterceptor } from './error-handler.interceptor';
 
-describe('ErrorHandlerInterceptor', async () => {
+describe('ErrorHandlerInterceptor', () => {
   let errorHandlerInterceptor: ErrorHandlerInterceptor;
   let http: HttpClient;
   let httpMock: HttpTestingController;
@@ -36,7 +36,7 @@ describe('ErrorHandlerInterceptor', async () => {
     httpMock.verify();
   });
 
-  it('should catch error and call error handler', async () => {
+  it('should catch error and call error handler', () => {
     // Arrange
     // Note: here we spy on private method since target is customization here,
     // but you should replace it by actual behavior in your app

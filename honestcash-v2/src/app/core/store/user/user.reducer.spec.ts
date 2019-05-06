@@ -1,8 +1,8 @@
 import { reducer } from './user.reducer';
 import { UserLoaded } from './user.actions';
 
-describe('user.reducer', async () => {
-  it('UserLoaded', async () => {
+describe('user.reducer', () => {
+  it('UserLoaded', () => {
     const newState = reducer(undefined, new UserLoaded({
       user: {
         username: 'test',

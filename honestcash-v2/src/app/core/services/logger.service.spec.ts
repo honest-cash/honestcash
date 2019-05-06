@@ -2,7 +2,7 @@ import { Logger, LogLevel, LogOutput } from './logger.service';
 
 const logMethods = ['log', 'info', 'warn', 'error'];
 
-describe('Logger', async () => {
+describe('Logger', () => {
   let savedConsole: Function[];
   let savedLevel: LogLevel;
   let savedOutputs: LogOutput[];
@@ -25,11 +25,11 @@ describe('Logger', async () => {
     Logger.outputs = savedOutputs;
   });
 
-  it('should create an instance', async () => {
+  it('should create an instance', () => {
     expect(new Logger()).toBeTruthy();
   });
 
-  it('should add a new LogOutput and receives log entries', async () => {
+  it('should add a new LogOutput and receives log entries', () => {
     // Arrange
     const outputSpy = jasmine.createSpy('outputSpy');
     const log = new Logger('test');
@@ -51,7 +51,7 @@ describe('Logger', async () => {
     expect(outputSpy).toHaveBeenCalledWith('test', LogLevel.Error, 'e', { error: true });
   });
 
-  it('should add a new LogOutput and receives only production log entries', async () => {
+  it('should add a new LogOutput and receives only production log entries', () => {
     // Arrange
     const outputSpy = jasmine.createSpy('outputSpy');
     const log = new Logger('test');

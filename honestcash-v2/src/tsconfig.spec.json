@@ -5,14 +5,16 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "files": [
     "test.ts",
     "polyfills.ts"
   ],
   "include": [
-    "**/*.spec.ts",
+    "**/*.specc.ts",
     "**/*.d.ts"
   ]
 }

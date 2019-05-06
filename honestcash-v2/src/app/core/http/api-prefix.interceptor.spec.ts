@@ -5,7 +5,7 @@ import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ApiPrefixInterceptor } from './api-prefix.interceptor';
 
-describe('ApiPrefixInterceptor', async () => {
+describe('ApiPrefixInterceptor',() => {
   let http: HttpClient;
   let httpMock: HttpTestingController;
 
@@ -31,7 +31,7 @@ describe('ApiPrefixInterceptor', async () => {
     httpMock.verify();
   });
 
-  it('should prepend environment.apiUrl to the request url', async () => {
+  it('should prepend environment.apiUrl to the request url', () => {
     // Act
     http.get('/toto').subscribe();
 
@@ -39,7 +39,7 @@ describe('ApiPrefixInterceptor', async () => {
     httpMock.expectOne({ url: environment.apiUrl + '/toto' });
   });
 
-  it('should not prepend environment.apiUrl to request url', async () => {
+  it('should not prepend environment.apiUrl to request url', () => {
     // Act
     http.get('hTtPs://domain.com/toto').subscribe();
 
