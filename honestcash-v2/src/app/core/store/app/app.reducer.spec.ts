@@ -5,6 +5,6 @@ describe('app.reducer', () => {
   it('AppLoad', () => {
     const newState = reducer(undefined, new AppLoad());
 
-    // expect(newState.user).toBeDefined();
+    expect(newState.isLoaded).toBeTruthy();
   });
 });

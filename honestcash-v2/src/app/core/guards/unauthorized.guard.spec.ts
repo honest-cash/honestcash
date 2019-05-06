@@ -46,13 +46,13 @@ describe('UnauthorizedGuard', () => {
 
     it('should return false and redirect to feed if user is already authenticated', () => {
       // Arrange
-      authenticationService.isAuthenticated = false;
+      authenticationService.isAuthenticated = true;
 
       // Act
       const result = authenticationGuard.canActivate();
 
       // Assert
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(['/feed']);
+      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/feed');
       expect(result).toBe(false);
     });
   });

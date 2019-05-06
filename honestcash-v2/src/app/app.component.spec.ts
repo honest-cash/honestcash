@@ -1,12 +1,11 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { Store } from '@ngrx/store';
 import { StoreMock } from './core/mocks/store.mock';
-import { AuthenticationService } from './core/services/authentication.service';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
@@ -15,7 +14,6 @@ describe('AppComponent', () => {
         AppComponent
       ],
       providers: [
-        AuthenticationService,
         {
           provide: Store, useClass: StoreMock
         }

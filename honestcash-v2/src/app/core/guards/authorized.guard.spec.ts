@@ -52,7 +52,10 @@ describe('AuthorizedGuard', () => {
       const result = authenticationGuard.canActivate(null, mockSnapshot);
 
       // Assert
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
+        queryParams: { redirect: mockRouter.url },
+        replaceUrl: true
+      });
       expect(result).toBe(false);
     });
 

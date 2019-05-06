@@ -5,7 +5,7 @@ import {State as AuthorizationState} from './core/store/auth/auth.state';
 import {State as WalletState} from './core/store/wallet/wallet.state';
 import {State as UserState} from './core/store/user/user.state';
 import { Observable } from 'rxjs';
-import { Logger } from './core';
+import { Logger } from './core/services/logger.service';
 import { AppLoad } from './core/store/app/app.actions';
 
 @Component({
