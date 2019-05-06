@@ -19,7 +19,9 @@ describe('AuthenticationService', async () => {
     });
   });
 
-  beforeEach(inject([AuthenticationService, HttpClient, HttpTestingController], (_authenticationService: AuthenticationService, _httpMock: HttpTestingController) => {
+  beforeEach(inject([
+    AuthenticationService, HttpClient, HttpTestingController
+  ], (_authenticationService: AuthenticationService, _httpMock: HttpTestingController) => {
     authenticationService = _authenticationService;
     httpMock = _httpMock;
   }));

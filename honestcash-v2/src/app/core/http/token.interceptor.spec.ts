@@ -9,6 +9,7 @@ import {AuthenticationService} from '../services/authentication.service';
 describe('TokenInterceptor', () => {
   let http: HttpClient;
   let httpMock: HttpTestingController;
+  // @todo: use jamine.Spy to replace the mock services. too much overhead.
   let authenticationService: MockAuthenticationService;
 
   beforeEach(() => {
@@ -25,7 +26,9 @@ describe('TokenInterceptor', () => {
     });
   });
 
-  beforeEach(inject([HttpClient, HttpTestingController, AuthenticationService], (_http: HttpClient, _httpMock: HttpTestingController, _authenticationService: MockAuthenticationService) => {
+  beforeEach(inject([
+    HttpClient, HttpTestingController, AuthenticationService
+  ], (_http: HttpClient, _httpMock: HttpTestingController, _authenticationService: MockAuthenticationService) => {
     http = _http;
     httpMock = _httpMock;
     authenticationService = _authenticationService;
@@ -36,7 +39,7 @@ describe('TokenInterceptor', () => {
   });
 
   it('should append token to the request headers as x-auth-token if the user is authenticated', async () => {
-    authenticationService.isAuthenticated = true;
+    authenticationService.setToken('testtoken');
     // Act
     http.get('http://test.com/toto').subscribe();
 
@@ -45,8 +48,9 @@ describe('TokenInterceptor', () => {
     expect(httpRequest.request.headers.has('x-auth-token')).toEqual(true);
   });
 
-  it('should not append token to the request headers as x-auth-token if the user is not authenticated', async () =>{
-    authenticationService.isAuthenticated = false;
+  it('should not append token to the request headers as x-auth-token if the user is not authenticated', async () => {
+    authenticationService.unsetToken();
+
     // Act
     http.get('http://test.com/toto').subscribe();
 

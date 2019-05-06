@@ -6,9 +6,9 @@ import Wallet from '../models/wallet';
 
 export class MockAuthenticationService {
   isAuthenticated = false;
-  token: string = null;
+  private token: string = null;
 
-  login(context: LoginContext): Observable<LoginSuccessResponse> {
+  public login(context: LoginContext): Observable<LoginSuccessResponse> {
     return of({
       user: new User(),
       wallet: new Wallet(),
@@ -16,8 +16,19 @@ export class MockAuthenticationService {
     });
   }
 
-  logout(): Observable<boolean> {
-    return of(true);
+  public setToken(token: string) {
+    this.token = token;
   }
 
+  public unsetToken() {
+    delete this.token;
+  }
+
+  public getToken() {
+    return this.token;
+  }
+
+  public logout(): Observable<boolean> {
+    return of(true);
+  }
 }
