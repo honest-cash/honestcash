@@ -1,3 +1,4 @@
+/**
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -44,3 +45,4 @@ export class HeaderComponent implements OnInit {
     return credentials ? credentials.username : null;
   }
 }
+*/

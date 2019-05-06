@@ -4,17 +4,39 @@ import User from '../models/user';
 import { CryptoUtils } from '../../shared/lib/CryptoUtils';
 import { HttpService } from '..';
 import {
-  ChangePasswordContext, CheckPasswordContext, CheckPasswordResponse, CheckPasswordSuccessResponse, EmptyResponse,
-  FailedResponse,
-  LoginContext, LoginResponse,
-  LoginSuccessResponse, OkResponse,
-  ResetPasswordRequestContext, SetWalletContext,
-  SignupContext, SignupResponse, SignupSuccessResponse
+  ChangePasswordContext,
+  CheckPasswordContext,
+  CheckPasswordResponse,
+  EmptyResponse,
+  LoginContext,
+  LoginResponse,
+  OkResponse,
+  ResetPasswordRequestContext,
+  SetWalletContext,
+  SignupContext,
+  SignupResponse,
+  SignupSuccessResponse
 } from '../models/authentication';
 import { WalletUtils } from 'app/shared/lib/WalletUtils';
-import { map, mergeMap } from 'rxjs/operators';
-import {environment} from "../../../environments/environment";
+import { mergeMap } from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
+
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
+
+/**
+ * This function exists only for SSR because the SSR server does not support localStorage.
+ */
+const getLocalStorage = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage;
+  }
+
+  return {
+    setItem: (_key: string, _value: string) => void 0,
+    getItem: (_key: string) => void 0,
+    removeItem: (_key: string) => void 0
+  };
+};
 
 // @todo refactor
 interface ChangePasswordPayload extends ChangePasswordContext {
@@ -35,9 +57,11 @@ export const API_ENDPOINTS = {
 
 export const getPrefixedEndpoint = (endpoint: string) => {
   return `${environment.apiUrl}${API_ENDPOINTS[endpoint]}`;
-}
+};
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthenticationService {
 
   private token = '';
@@ -49,7 +73,7 @@ export class AuthenticationService {
 
   public getToken(): string {
     let token;
-    if (!this.token && (token = localStorage.getItem(LOCAL_TOKEN_KEY))) {
+    if (!this.token && (token = getLocalStorage().getItem(LOCAL_TOKEN_KEY))) {
       this.token = token;
     }
     return this.token;
@@ -57,13 +81,13 @@ export class AuthenticationService {
 
   public setToken(token: string) {
     this.token = token;
-    localStorage.setItem(LOCAL_TOKEN_KEY, token);
+    getLocalStorage().setItem(LOCAL_TOKEN_KEY, token);
   }
 
   public unsetToken(): void {
     this.token = '';
     this.isAuthenticated = false;
-    localStorage.removeItem(LOCAL_TOKEN_KEY);
+    getLocalStorage().removeItem(LOCAL_TOKEN_KEY);
   }
 
   public hasAuthorization(): boolean {

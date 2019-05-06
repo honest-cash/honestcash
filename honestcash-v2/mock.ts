@@ -26,5 +26,7 @@ export function mock(clazz, name?) {
   for (const key in clazz.prototype) {
     keys.push(key);
   }
-  return keys.length > 0 ? jasmine.createSpyObj(name || 'mock', keys) : {};
+
+  // dummy wrapper for jasmine for ssr
+  return keys.length > 0 ? (() => typeof jasmine !== undefined ? jasmine : {} as any)().createSpyObj(name || 'mock', keys) : {};
 }

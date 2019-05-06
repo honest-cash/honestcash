@@ -1,25 +1,17 @@
-import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
-
-import {API_ENDPOINTS, AuthenticationService, getPrefixedEndpoint, LOCAL_TOKEN_KEY} from './authentication.service';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import {API_ENDPOINTS, AuthenticationService, LOCAL_TOKEN_KEY} from './authentication.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {
-  CheckPasswordSuccessResponse,
   CodedErrorResponse, EmptyResponse,
-  FailedResponse,
-  LoginContext,
-  LoginResponse,
   LoginSuccessResponse, OkResponse,
-  SignupResponse,
   SignupSuccessResponse
 } from '../models/authentication';
-import {HttpService, MockAuthenticationService} from '..';
+import {HttpService} from '../http/http.service';
 import User from '../models/user';
 import Wallet from '../models/wallet';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
-import {mock} from '../helpers/mock';
+import {mock} from '../../../../mock';
 import {of} from 'rxjs';
-import {WalletUtils} from "../../shared/lib/WalletUtils";
 
 const SHARED_MOCKS = {
   token: '123',
@@ -30,6 +22,7 @@ const SHARED_MOCKS = {
   mnemonicEncrypted: 'test test2 test3 test4',
   hashedPassword: '',
 };
+
 SHARED_MOCKS.hashedPassword = CryptoUtils.calculatePasswordHash(SHARED_MOCKS.email, SHARED_MOCKS.password);
 
 describe('AuthenticationService', () => {

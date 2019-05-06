@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import SimpleBitcoinWallet from 'simple-bitcoin-wallet';
-import { WalletUtils } from '../../shared/lib/WalletUtils';
 import Wallet from '../models/wallet';
+import { getLocalStorage } from '../helpers/localStorage';
 
 export const WALLET_LOCALSTORAGE_KEYS = {
   HD_PATH: 'HC_BCH_HD_PATH',
@@ -19,17 +18,17 @@ export class WalletService {
   constructor() {}
 
   public getWalletMnemonic(): string {
-    return localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+    return getLocalStorage().getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
   }
 
   public setWallet(mnemonic: string): void {
-    localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, mnemonic);
+    getLocalStorage().setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, mnemonic);
 
     return;
   }
 
   public unsetWallet(): void {
-    localStorage.removeItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+    getLocalStorage().removeItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
 
     return;
   }

@@ -2,10 +2,8 @@ import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '..';
-import {mock} from '../helpers/mock';
-import {of} from 'rxjs';
+import {mock} from '../../../../mock';
 import {WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.service';
-import wallet from "../models/wallet";
 
 const SHARED_MOCKS = {
   mnemonic: 'test test2 test3 test4',
