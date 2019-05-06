@@ -4,7 +4,7 @@ import { WalletSetup } from './wallet.actions';
 describe('wallet.reducer', async () => {
   it('WalletSetup', async () => {
     const newState = reducer(undefined, new WalletSetup({
-      mnemonicEncrypted:
+      mnemonic:
         // tslint:disable-next-line: max-line-length
         'U2FsdGVkX1/Eo5CUy/rXWwzjmIaBXdCUzwmVZrp7a8pl4QEmKA/WkYn1zNVNC1nI+tEa58OYiMRqqcE3Iwv3RUay4a++F7AjlfhkaHG2PH7kvtjqrLqU1IuwSevZ73o2QcTjuvnmfgP4oDNpovsbNg==',
       password: 'testpassword'

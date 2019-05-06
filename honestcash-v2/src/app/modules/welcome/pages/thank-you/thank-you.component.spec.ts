@@ -1,12 +1,13 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpInterceptor } from '@angular/common/http';
-
-import { HttpService } from './http.service';
-import { HttpCacheService } from './http-cache.service';
-import { ErrorHandlerInterceptor } from './error-handler.interceptor';
-import { CacheInterceptor } from './cache.interceptor';
-import { ApiPrefixInterceptor } from './api-prefix.interceptor';
+import {
+  HttpService,
+  ApiPrefixInterceptor,
+  CacheInterceptor,
+  ErrorHandlerInterceptor,
+  HttpCacheService
+} from 'app/core';
 
 describe('LoginComponent', async () => {
   let httpCacheService: HttpCacheService;

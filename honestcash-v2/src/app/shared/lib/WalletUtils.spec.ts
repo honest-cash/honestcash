@@ -2,7 +2,7 @@ import { WalletUtils } from './WalletUtils';
 
 describe('WalletUtils', async () => {
   it('creates a new wallet with password', async () => {
-    const wallet = WalletUtils.generateNewWallet('testpassword');
+    const wallet = await WalletUtils.generateNewWallet('testpassword');
 
     expect(wallet).toBeDefined();
   });
@@ -12,7 +12,7 @@ describe('WalletUtils', async () => {
       // tslint:disable-next-line: max-line-length
       'U2FsdGVkX1/Eo5CUy/rXWwzjmIaBXdCUzwmVZrp7a8pl4QEmKA/WkYn1zNVNC1nI+tEa58OYiMRqqcE3Iwv3RUay4a++F7AjlfhkaHG2PH7kvtjqrLqU1IuwSevZ73o2QcTjuvnmfgP4oDNpovsbNg==';
 
-    const wallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+    const wallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
       mnemonicEncrypted,
       'testpassword'
     );
@@ -31,7 +31,7 @@ describe('WalletUtils', async () => {
     let wallet: any, err: any;
 
     try {
-      wallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+      wallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
         mnemonicEncrypted,
         'wrongpassword'
       );
