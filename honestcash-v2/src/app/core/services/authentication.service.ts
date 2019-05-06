@@ -139,6 +139,9 @@ export class AuthenticationService {
   }
 
   public checkPassword(payload: CheckPasswordContext): Observable<CheckPasswordResponse> {
+    // it is not used yet so when it is used complete the following:
+    // @todo write tests
+    // @todo hash passwords before sending
     return this.http.post<CheckPasswordResponse>(API_ENDPOINTS.checkPassword, payload);
   }
 

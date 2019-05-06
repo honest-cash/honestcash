@@ -4,11 +4,12 @@ import {API_ENDPOINTS, AuthenticationService, getPrefixedEndpoint, LOCAL_TOKEN_K
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {
+  CheckPasswordSuccessResponse,
   CodedErrorResponse, EmptyResponse,
   FailedResponse,
   LoginContext,
   LoginResponse,
-  LoginSuccessResponse,
+  LoginSuccessResponse, OkResponse,
   SignupResponse,
   SignupSuccessResponse
 } from '../models/authentication';
@@ -18,6 +19,7 @@ import Wallet from '../models/wallet';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import {mock} from '../helpers/mock';
 import {of} from 'rxjs';
+import {WalletUtils} from "../../shared/lib/WalletUtils";
 
 const SHARED_MOCKS = {
   token: '123',
@@ -25,10 +27,10 @@ const SHARED_MOCKS = {
   email: 'toto@toto.com',
   password: '123',
   captcha: 'asdf',
-  get hashedPassword() {
-    return CryptoUtils.calculatePasswordHash(this.email, this.password);
-  }
+  mnemonicEncrypted: 'test test2 test3 test4',
+  hashedPassword: '',
 };
+SHARED_MOCKS.hashedPassword = CryptoUtils.calculatePasswordHash(SHARED_MOCKS.email, SHARED_MOCKS.password);
 
 describe('AuthenticationService', () => {
   let authenticationService: AuthenticationService;
@@ -262,7 +264,8 @@ describe('AuthenticationService', () => {
        mocks.signupContext
      ).subscribe((response: SignupSuccessResponse) => {
        // Assert
-       expect(httpServiceMock.post).toHaveBeenCalledWith(API_ENDPOINTS.signup, {...mocks.signupContext, password: SHARED_MOCKS.hashedPassword});
+       expect(httpServiceMock.post)
+         .toHaveBeenCalledWith(API_ENDPOINTS.signup, {...mocks.signupContext, password: SHARED_MOCKS.hashedPassword});
        done();
      });
    });
@@ -294,5 +297,160 @@ describe('AuthenticationService', () => {
      });
    });
  });
+
+  describe('setWallet', () => {
+    const mocks = {
+      setWalletContext: {
+        mnemonicEncrypted: SHARED_MOCKS.mnemonicEncrypted,
+      },
+      setWalletSuccess: {
+        ok: true
+      },
+    };
+
+    it('should make API request to the correct API endpoint and have the correct body on request', (done) => {
+      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.setWalletSuccess));
+      // Act
+      authenticationService.setWallet(
+        mocks.setWalletContext
+      ).subscribe((response: OkResponse) => {
+        // Assert
+        expect(httpServiceMock.post)
+          .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, SHARED_MOCKS.mnemonicEncrypted);
+        done();
+      });
+    });
+
+  });
+
+  describe('getEmails', () => {
+    const mocks = {
+      getEmailsContext: {
+        mnemonicEncrypted: SHARED_MOCKS.mnemonicEncrypted,
+      },
+      getEmailsSuccess: ['toto1@toto.com', 'toto2@toto.com'],
+    };
+
+    it('should make API request to the correct API endpoint', (done) => {
+      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getEmailsSuccess));
+      // Act
+      authenticationService.getEmails().subscribe((response: string[]) => {
+        // Assert
+        expect(httpServiceMock.get)
+          .toHaveBeenCalledWith(API_ENDPOINTS.getEmails);
+        done();
+      });
+    });
+
+    it('should return emails', (done) => {
+      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getEmailsSuccess));
+      // Act
+      authenticationService.getEmails().subscribe((response: string[]) => {
+        // Assert
+        expect(response).toBe(mocks.getEmailsSuccess);
+        done();
+      });
+    });
+
+  });
+
+  describe('resetPassword', () => {
+    const mocks = {
+      resetPasswordContext: {
+        email: SHARED_MOCKS.email,
+      },
+      resetPasswordSuccess: {},
+    };
+
+    it('should make API request to the correct API endpoint and have the correct body on request', (done) => {
+      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.resetPasswordSuccess));
+      // Act
+      authenticationService.resetPassword(mocks.resetPasswordContext).subscribe((response: EmptyResponse) => {
+        // Assert
+        expect(httpServiceMock.post)
+          .toHaveBeenCalledWith(API_ENDPOINTS.resetPassword, {...mocks.resetPasswordContext});
+        done();
+      });
+    });
+
+    it('should return nothing as a response', (done) => {
+      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.resetPasswordSuccess));
+      // Act
+      authenticationService.resetPassword(mocks.resetPasswordContext).subscribe((response: EmptyResponse) => {
+        // Assert
+        expect(response).toBe(mocks.resetPasswordSuccess);
+        done();
+      });
+    });
+
+  });
+
+  describe('changePassword', () => {
+    const mocks = {
+      changePasswordContext: {
+        email: SHARED_MOCKS.email,
+        code: 'asdfasdfasdfasdf',
+        newPassword: SHARED_MOCKS.password,
+        repeatNewPassword: SHARED_MOCKS.password,
+      },
+      changePasswordSuccess: {},
+    };
+
+    it('should make API request to the correct API endpoint and'
+    + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', async (done) => {
+      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.changePasswordSuccess));
+      // Act
+      authenticationService.changePassword(mocks.changePasswordContext).subscribe(async (response: OkResponse) => {
+        // Assert
+        const newPassword = SHARED_MOCKS.hashedPassword;
+        const repeatNewPassword = SHARED_MOCKS.hashedPassword;
+        expect(httpServiceMock.post)
+          .toHaveBeenCalledWith(
+            API_ENDPOINTS.changePassword,
+            {...mocks.changePasswordContext, newPassword, repeatNewPassword, mnemonicEncrypted: jasmine.any(String)}
+          );
+        done();
+      });
+    });
+
+    it('should return nothing as a response', (done) => {
+      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.changePasswordSuccess));
+      // Act
+      authenticationService.resetPassword(mocks.changePasswordContext).subscribe((response: EmptyResponse) => {
+        // Assert
+        expect(response).toBe(mocks.changePasswordSuccess);
+        done();
+      });
+    });
+
+  });
+
+  describe('getStatus', () => {
+    const mocks = {
+      getStatusSuccess: new User(),
+    };
+
+    it('should make API request to the correct API endpoint and', (done) => {
+      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getStatusSuccess));
+      // Act
+      authenticationService.getStatus().subscribe((response: User) => {
+        // Assert
+        expect(httpServiceMock.get)
+          .toHaveBeenCalledWith(API_ENDPOINTS.status);
+        done();
+      });
+    });
+
+    it('should return a User as a response', (done) => {
+      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getStatusSuccess));
+      // Act
+      authenticationService.getStatus().subscribe((response: User) => {
+        // Assert
+        expect(response).toBe(mocks.getStatusSuccess);
+        done();
+      });
+    });
+
+  });
 
 });
