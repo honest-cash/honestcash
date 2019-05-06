@@ -1,18 +1,13 @@
-import { Component, OnInit, HostBinding, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
+  // @todo rename the selector -> its confusing!
   selector: 'app-welcome-form-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FormFooterComponent implements OnInit {
+export class FormFooterComponent {
   @Input() text;
   @Input() anchor;
   @Input() to;
-  @HostBinding('class') class = 'block w-full text-center text-white hover:text-white mt-2';
-
-  constructor() {}
-
-  ngOnInit() {}
-
 }

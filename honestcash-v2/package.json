@@ -4,8 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "tailwind": "./node_modules/.bin/tailwind build ./src/assets/tailwind-build.css -c ./tailwind.config.js -o ./src/assets/tailwind.css --watch",
-    "prestart": "npm run tailwind",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -62,7 +60,6 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
-    "tailwindcss": "^0.7.4",
     "ts-loader": "^5.2.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",

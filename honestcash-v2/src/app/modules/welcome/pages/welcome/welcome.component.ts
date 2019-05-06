@@ -11,9 +11,6 @@ import { LogOut } from '../../../../core/store/auth/auth.actions';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  @HostBinding('class') class = 'w-full  flex flex-wrap content-center items-center justify-center';
-  @HostBinding('style.height') height = '75vh';
-
   getState: Observable<any>;
   isAuthenticated: false;
   user = null;

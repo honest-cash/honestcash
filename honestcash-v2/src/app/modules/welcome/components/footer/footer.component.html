@@ -1,53 +1,46 @@
 <div
-  class="
-    flex
-    flex-wrap
-    items-end
-    justify-between
-    lg:justify-center
-    xl:justify-center
-    xxl:justify-center
-    xxxl:justify-center
-    w-full
-    h-full
-    xxxl:px-32
-    xxl:px-32
-    xl:px-32
-    lg:px-16
-    md:px-8
-    sm:px-4
-    xs:px-2
-    pb-4
-  "
+  class="text-center"
 >
-  <a
-    [routerLink]="['/about']"
-    class="flex text-white hover:text-white no-underline hover:underline font-semibold lg:px-2 xl:px-2 xxl:px-2 xxxl:px-2"
-    >About</a
-  >
-  <a
-    href="https://honest.cash/honest_cash/frequently-asked-questions"
-    class="flex text-white hover:text-white no-underline hover:underline font-semibold lg:px-2 xl:px-2 xxl:px-2 xxxl:px-2"
-    >FAQ</a
-  >
-  <a
-    href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
-    class="flex text-white hover:text-white no-underline hover:underline font-semibold lg:px-2 xl:px-2 xxl:px-2 xxxl:px-2"
-    >Transparency</a
-  >
-  <a
-    href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124"
-    class="flex text-white hover:text-white no-underline hover:underline font-semibold lg:px-2 xl:px-2 xxl:px-2 xxxl:px-2"
-    >Terms</a
-  >
-  <a
-    href="https://honest.cash/honest_cash/honestcash-privacy-policy"
-    class="flex text-white hover:text-white no-underline hover:underline font-semibold lg:px-2 xl:px-2 xxl:px-2 xxxl:px-2"
-    >Privacy</a
-  >
-  
+  <ul class="list-inline">
+    <li class="list-inline-item">
+    <a
+      [routerLink]="['/about']"
+      class="nav-link text-white"
+      >About</a
+    >
+    </li>
+    <li class="list-inline-item">
+    <a
+    class="nav-link text-white"
+      href="https://honest.cash/honest_cash/frequently-asked-questions"
+      >FAQ</a
+    >
+    </li>
+    <li class="list-inline-item">
+    <a
+      class="nav-link text-white"
+      href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
+      >Transparency</a
+    >
+    </li>
+    <li class="list-inline-item">
+    <a
+      href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124"
+      class="nav-link text-white"
+      >Terms</a
+    >
+    </li>
+    <li class="list-inline-item">
+    <a
+      href="https://honest.cash/honest_cash/honestcash-privacy-policy"
+      class="nav-link text-white"
+      >Privacy</a
+    >
+    </li>
+  </ul>
+  <br />
   <span
-    class="flex w-full text-white hover:text-white justify-center font-semibold"
-    >&copy; 2019 Honest.cash</span
+    class="nav-link text-white"
+    >&copy; 2019 Honest</span
   >
 </div>
