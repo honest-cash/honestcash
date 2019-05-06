@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { Observable, of, defer } from 'rxjs';
+import { tap, map, mergeMap } from 'rxjs/operators';
 import {
     WalletActionTypes,
     WalletSetup,
@@ -36,21 +36,21 @@ export class WalletEffects {
     map((action: WalletSetup) => {
       return action.payload;
     }),
-    map((payload) => {
+    mergeMap((payload) => defer(async () => {
       let simpleWallet: Wallet;
 
       if (payload.mnemonic) {
         this.logger.info('Setting up an already existing wallet');
 
-        simpleWallet = WalletUtils.generateWalletWithEncryptedRecoveryPhrase(payload.mnemonic, payload.password);
+        simpleWallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(payload.mnemonic, payload.password);
       } else {
         this.logger.info('Setting up a new wallet');
 
-        simpleWallet = WalletUtils.generateNewWallet(payload.password);
+        simpleWallet = await WalletUtils.generateNewWallet(payload.password);
       }
 
       return { wallet: simpleWallet };
-    }),
+    })),
     tap(({ wallet }) => {
       this.walletService.setWallet(wallet.mnemonic);
     }),
