@@ -24,7 +24,7 @@ export class ResetPasswordComponent implements OnInit {
   @HostBinding('style.height') height = '75vh';
   @HostBinding('style.minHeight') minHeight = '75vh';
 
-  private authState: Observable<AuthorizationState>;
+  public auth$: Observable<AuthorizationState>;
   public isLoading = false;
   public user: User = new User();
   public errorMessage: string;
@@ -32,11 +32,11 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private store: Store<AppStates>
   ) {
-    this.authState = this.store.select(selectAuthorizationState);
+    this.auth$ = this.store.select(selectAuthorizationState);
   }
 
   public ngOnInit() {
-    this.authState.subscribe((state) => {
+    this.auth$.subscribe((state) => {
       if (state.newPasswordRequested) {
         delete this.errorMessage;
       } else if (!state.errorMessage) {

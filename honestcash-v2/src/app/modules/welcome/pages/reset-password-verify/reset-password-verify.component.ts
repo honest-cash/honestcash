@@ -30,9 +30,9 @@ export class ResetPasswordVerifyComponent implements OnInit {
   @HostBinding('style.minHeight') minHeight = '75vh';
 
   private logger = new Logger('ResetPasswordVerifyComponent');
-  private auth$: Observable<AuthorizationState>;
   private resetCode: string;
 
+  public auth$: Observable<AuthorizationState>;
   public errorMessage: string;
   public isLoading = false;
   public values: any = {

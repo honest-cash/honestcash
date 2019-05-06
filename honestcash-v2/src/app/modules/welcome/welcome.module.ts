@@ -22,6 +22,7 @@ import { UnauthorizedGuard } from 'app/core/guards/unauthorized.guard';
 import { ThankYouComponent } from './pages/thank-you/thank-you.component';
 import { ForbiddenUsernameValidatorDirective } from './directives/forbidden-username.directive';
 import {ResetPasswordVerifyComponent} from './pages/reset-password-verify/reset-password-verify.component';
+import { AboutComponent } from './pages/about/about.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,7 @@ const routes: Routes = [
     component: WelcomeContainerComponent,
     children: [
       { path: '', pathMatch: 'full', component: WelcomeComponent, canActivate: [UnauthorizedGuard] },
+      { path: 'about', component: AboutComponent, canActivate: [UnauthorizedGuard] },
       { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [UnauthorizedGuard] },
       { path: 'logout', pathMatch: 'full', component: LogoutComponent },
       { path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard] },
@@ -52,6 +54,7 @@ const routes: Routes = [
     FormLinkRightComponent,
     LoginComponent,
     LogoutComponent,
+    AboutComponent,
     SignupComponent,
     WelcomeComponent,
     ResetPasswordComponent,
