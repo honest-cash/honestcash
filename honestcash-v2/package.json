@@ -13,7 +13,7 @@
     "compile:server": "webpack --config webpack.server.config.js --progress --colors",
     "serve:ssr": "node dist/server",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod && ng run honestcash-v2:server:production"
+    "build:client-and-server-bundles": "ng build --prod --base-href /v2/ --deploy-url /v2/ && ng run honestcash-v2:server:production"
   },
   "private": true,
   "dependencies": {
