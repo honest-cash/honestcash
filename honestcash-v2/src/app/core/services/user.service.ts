@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../shared/interfaces';
 import {BehaviorSubject, Observable} from 'rxjs';
 import { Logger, HttpService } from '../../core';
 import { Router } from '@angular/router';
@@ -7,6 +6,7 @@ import { LoginSuccessResponse, SignupSuccessResponse} from '../models/authentica
 import { WalletService } from './wallet.service';
 import { Store } from '@ngrx/store';
 import { AppStates, selectUserState } from '../../app.states';
+import User from '../models/user';
 
 const log = new Logger('UserService');
 

@@ -15,7 +15,7 @@ const SHARED_MOCKS = {
   mnemonic: 'test test2 test3 test4',
 };
 
-describe('WalletService', () => {
+describe('UserService', () => {
   let userService: UserService;
   let httpServiceMock: HttpService;
 
