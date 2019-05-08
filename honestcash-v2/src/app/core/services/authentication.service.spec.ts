@@ -423,7 +423,7 @@ describe('AuthenticationService', () => {
       getStatusSuccess: new User(),
     };
 
-    it('should make API request to the correct API endpoint and', (done) => {
+    it('should make API request to the correct API endpoint', (done) => {
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getStatusSuccess));
       // Act
       authenticationService.getStatus().subscribe((response: User) => {

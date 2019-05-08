@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../shared/interfaces';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { Logger, HttpService } from '../../core';
 import { Router } from '@angular/router';
 import { LoginSuccessResponse, SignupSuccessResponse} from '../models/authentication';
@@ -10,12 +10,16 @@ import { AppStates, selectUserState } from '../../app.states';
 
 const log = new Logger('UserService');
 
+export const API_ENDPOINTS = {
+  status: `/me`,
+};
+
 @Injectable({providedIn: 'root'})
 export class UserService {
   constructor(
     private store: Store<AppStates>,
     private router: Router,
-    private httpService: HttpService,
+    private http: HttpService,
     private walletService: WalletService,
   ) {
   }
@@ -59,7 +63,7 @@ export class UserService {
     } */
   }
 
-  public getMe() {
-    return this.httpService.get('/me');
+  public getMe(): Observable<User> {
+    return this.http.get<User>('/me');
   }
 }

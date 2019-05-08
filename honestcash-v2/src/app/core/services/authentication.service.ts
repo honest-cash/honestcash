@@ -55,10 +55,6 @@ export const API_ENDPOINTS = {
   status: `/me`,
 };
 
-export const getPrefixedEndpoint = (endpoint: string) => {
-  return `${environment.apiUrl}${API_ENDPOINTS[endpoint]}`;
-};
-
 @Injectable({
   providedIn: 'root'
 })
