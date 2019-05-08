@@ -12,6 +12,7 @@ import Wallet from '../models/wallet';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import {mock} from '../../../../mock';
 import {of} from 'rxjs';
+import {resetLocalStorage} from '../helpers/localStorage';
 
 const SHARED_MOCKS = {
   token: '123',
@@ -45,7 +46,7 @@ describe('AuthenticationService', () => {
 
   afterEach(() => {
     // Cleanup
-    localStorage.removeItem(LOCAL_TOKEN_KEY);
+    resetLocalStorage();
   });
 
   describe('instance', () => {
