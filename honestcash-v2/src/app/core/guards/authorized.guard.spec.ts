@@ -1,9 +1,10 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { Router, RouterStateSnapshot } from '@angular/router';
 
-import { AuthenticationService } from '../services/authentication.service';
+import {AuthenticationService, LOCAL_TOKEN_KEY} from '../services/authentication.service';
 import { MockAuthenticationService } from '../mocks/authentication.service.mock';
 import { AuthorizedGuard } from './authorized.guard';
+import {resetLocalStorage} from '../helpers/localStorage';
 
 describe('AuthorizedGuard', () => {
   let authenticationGuard: AuthorizedGuard;
@@ -33,6 +34,10 @@ describe('AuthorizedGuard', () => {
       authenticationService = _authenticationService;
     }
   ));
+
+  afterEach(() => {
+    resetLocalStorage();
+  });
 
   it('should have a canActivate method', () => {
     expect(typeof authenticationGuard.canActivate).toBe('function');

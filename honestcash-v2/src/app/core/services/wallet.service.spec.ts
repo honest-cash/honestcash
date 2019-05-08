@@ -29,6 +29,7 @@ describe('WalletService', () => {
 
   afterEach(() => {
     // Cleanup
+    localStorage.removeItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
   });
 
   describe('instance', () => {
