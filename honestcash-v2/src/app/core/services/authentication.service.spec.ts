@@ -28,17 +28,17 @@ SHARED_MOCKS.hashedPassword = CryptoUtils.calculatePasswordHash(SHARED_MOCKS.ema
 
 describe('AuthenticationService', () => {
   let authenticationService: AuthenticationService;
-  let httpServiceMock: HttpService;
+  let mockHttpService: HttpService;
 
   beforeEach(() => {
-    httpServiceMock = mock(HttpService);
+    mockHttpService = mock(HttpService);
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
       ],
       providers: [
         AuthenticationService,
-        {provide: HttpService, useValue: httpServiceMock}
+        {provide: HttpService, useValue: mockHttpService}
       ]
     });
     authenticationService = TestBed.get(AuthenticationService);
@@ -160,20 +160,20 @@ describe('AuthenticationService', () => {
     };
 
     it('should make API request to the correct API endpoint and have the correct body on request with hashed password', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loginSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.loginSuccess));
       // Act
       authenticationService.logIn(
         mocks.loginContext
       ).subscribe((response: LoginSuccessResponse) => {
         // Assert
-        expect(httpServiceMock.post)
+        expect(mockHttpService.post)
           .toHaveBeenCalledWith(API_ENDPOINTS.login, {...mocks.loginContext, password: SHARED_MOCKS.hashedPassword});
         done();
       });
     });
 
     it('if login is correct, should have the correct body on response with user, wallet, token', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loginSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.loginSuccess));
       // Act
       authenticationService.logIn(
         mocks.loginContext
@@ -187,7 +187,7 @@ describe('AuthenticationService', () => {
     });
 
     it('if login is NOT correct, should have CodedErrorResponse as a response', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loginFailure));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.loginFailure));
       // Act
       authenticationService.logIn(
         mocks.loginContext
@@ -208,17 +208,17 @@ describe('AuthenticationService', () => {
     };
 
       it('should make API request to the correct API endpoint and have NO body', (done) => {
-        (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.logoutSuccess));
+        (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.logoutSuccess));
         // Act
         authenticationService.logOut().subscribe((response: EmptyResponse) => {
           // Assert
-          expect(httpServiceMock.post).toHaveBeenCalledWith(API_ENDPOINTS.logout, {});
+          expect(mockHttpService.post).toHaveBeenCalledWith(API_ENDPOINTS.logout, {});
           done();
         });
       });
 
       it('should have no body on response', (done) => {
-        (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.logoutSuccess));
+        (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.logoutSuccess));
         // Act
         authenticationService.logOut().subscribe((response: EmptyResponse) => {
           // Assert
@@ -252,20 +252,20 @@ describe('AuthenticationService', () => {
     };
 
    it('should make API request to the correct API endpoint and have the correct body on request with hashed password', (done) => {
-     (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.signupSuccess));
+     (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupSuccess));
      // Act
      authenticationService.signUp(
        mocks.signupContext
      ).subscribe((response: SignupSuccessResponse) => {
        // Assert
-       expect(httpServiceMock.post)
+       expect(mockHttpService.post)
          .toHaveBeenCalledWith(API_ENDPOINTS.signup, {...mocks.signupContext, password: SHARED_MOCKS.hashedPassword});
        done();
      });
    });
 
    it('if signup is correct, should have the correct body on response with user, token', (done) => {
-     (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.signupSuccess));
+     (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupSuccess));
      // Act
      authenticationService.signUp(
        mocks.signupContext
@@ -278,7 +278,7 @@ describe('AuthenticationService', () => {
    });
 
    it('if signup is NOT correct, should have CodedErrorResponse as a response', (done) => {
-     (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.signupFailure));
+     (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupFailure));
      // Act
      authenticationService.signUp(
        mocks.signupContext
@@ -303,13 +303,13 @@ describe('AuthenticationService', () => {
     };
 
     it('should make API request to the correct API endpoint and have the correct body on request', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.setWalletSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.setWalletSuccess));
       // Act
       authenticationService.setWallet(
         mocks.setWalletContext
       ).subscribe((response: OkResponse) => {
         // Assert
-        expect(httpServiceMock.post)
+        expect(mockHttpService.post)
           .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, SHARED_MOCKS.mnemonicEncrypted);
         done();
       });
@@ -326,18 +326,18 @@ describe('AuthenticationService', () => {
     };
 
     it('should make API request to the correct API endpoint', (done) => {
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getEmailsSuccess));
+      (<jasmine.Spy>mockHttpService.get).and.returnValue(of(mocks.getEmailsSuccess));
       // Act
       authenticationService.getEmails().subscribe((response: string[]) => {
         // Assert
-        expect(httpServiceMock.get)
+        expect(mockHttpService.get)
           .toHaveBeenCalledWith(API_ENDPOINTS.getEmails);
         done();
       });
     });
 
     it('should return emails', (done) => {
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getEmailsSuccess));
+      (<jasmine.Spy>mockHttpService.get).and.returnValue(of(mocks.getEmailsSuccess));
       // Act
       authenticationService.getEmails().subscribe((response: string[]) => {
         // Assert
@@ -357,18 +357,18 @@ describe('AuthenticationService', () => {
     };
 
     it('should make API request to the correct API endpoint and have the correct body on request', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.resetPasswordSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.resetPasswordSuccess));
       // Act
       authenticationService.resetPassword(mocks.resetPasswordContext).subscribe((response: EmptyResponse) => {
         // Assert
-        expect(httpServiceMock.post)
+        expect(mockHttpService.post)
           .toHaveBeenCalledWith(API_ENDPOINTS.resetPassword, {...mocks.resetPasswordContext});
         done();
       });
     });
 
     it('should return nothing as a response', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.resetPasswordSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.resetPasswordSuccess));
       // Act
       authenticationService.resetPassword(mocks.resetPasswordContext).subscribe((response: EmptyResponse) => {
         // Assert
@@ -392,13 +392,13 @@ describe('AuthenticationService', () => {
 
     it('should make API request to the correct API endpoint and'
     + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', async (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.changePasswordSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
       // Act
       authenticationService.changePassword(mocks.changePasswordContext).subscribe(async (response: OkResponse) => {
         // Assert
         const newPassword = SHARED_MOCKS.hashedPassword;
         const repeatNewPassword = SHARED_MOCKS.hashedPassword;
-        expect(httpServiceMock.post)
+        expect(mockHttpService.post)
           .toHaveBeenCalledWith(
             API_ENDPOINTS.changePassword,
             {...mocks.changePasswordContext, newPassword, repeatNewPassword, mnemonicEncrypted: jasmine.any(String)}
@@ -408,7 +408,7 @@ describe('AuthenticationService', () => {
     });
 
     it('should return nothing as a response', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.changePasswordSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
       // Act
       authenticationService.resetPassword(mocks.changePasswordContext).subscribe((response: EmptyResponse) => {
         // Assert
@@ -425,18 +425,18 @@ describe('AuthenticationService', () => {
     };
 
     it('should make API request to the correct API endpoint', (done) => {
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getStatusSuccess));
+      (<jasmine.Spy>mockHttpService.get).and.returnValue(of(mocks.getStatusSuccess));
       // Act
       authenticationService.getStatus().subscribe((response: User) => {
         // Assert
-        expect(httpServiceMock.get)
+        expect(mockHttpService.get)
           .toHaveBeenCalledWith(API_ENDPOINTS.status);
         done();
       });
     });
 
     it('should return a User as a response', (done) => {
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getStatusSuccess));
+      (<jasmine.Spy>mockHttpService.get).and.returnValue(of(mocks.getStatusSuccess));
       // Act
       authenticationService.getStatus().subscribe((response: User) => {
         // Assert

@@ -59,7 +59,6 @@ export class ResetPassword implements Action {
 
 export class ResetPasswordSuccess implements Action {
   readonly type = AuthActionTypes.RESET_PASSWORD_SUCCESS;
-  constructor() {}
 }
 
 export class ResetPasswordFailure implements Action {
@@ -74,7 +73,6 @@ export class ResetPasswordRequest implements Action {
 
 export class ResetPasswordRequestSuccess implements Action {
   readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS;
-  constructor() {}
 }
 
 export class ResetPasswordRequestFailure implements Action {
