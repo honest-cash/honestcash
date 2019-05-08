@@ -1,9 +1,3 @@
-/**
- * This function exists only for SSR because the SSR server does not support localStorage.
- */
-import {LOCAL_TOKEN_KEY} from '../services/authentication.service';
-import {WALLET_LOCALSTORAGE_KEYS} from '../services/wallet.service';
-
 export const getLocalStorage = () => {
   if (typeof window !== 'undefined') {
     return localStorage;
@@ -20,6 +14,6 @@ export const getLocalStorage = () => {
  * This function exists to reset localStorage inside afterEach in tests
  */
 export const resetLocalStorage = () => {
-  localStorage.removeItem(LOCAL_TOKEN_KEY);
-  localStorage.removeItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+  localStorage.removeItem('HC_USER_TOKEN');
+  localStorage.removeItem('HC_BCH_MNEMONIC');
 };
