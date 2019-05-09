@@ -4,6 +4,7 @@ import { Router, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { MockAuthenticationService } from '../mocks/authentication.service.mock';
 import { UnauthorizedGuard } from './unauthorized.guard';
+import {resetLocalStorage} from '../helpers/localStorage';
 
 describe('UnauthorizedGuard', () => {
   let authenticationGuard: UnauthorizedGuard;
@@ -33,6 +34,10 @@ describe('UnauthorizedGuard', () => {
       authenticationService = _authenticationService;
     }
   ));
+
+  afterEach(() => {
+    resetLocalStorage();
+  });
 
   it('should have a canActivate method', () => {
     expect(typeof authenticationGuard.canActivate).toBe('function');

@@ -11,7 +11,7 @@
     "compile:server": "webpack --config webpack.server.config.js --progress --colors",
     "serve:ssr": "node dist/server",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod && ng run honestcash-v2:server:production"
+    "build:client-and-server-bundles": "ng build --prod --base-href /v2/ --deploy-url /v2/ && ng run honestcash-v2:server:production"
   },
   "private": true,
   "dependencies": {
@@ -53,6 +53,7 @@
     "@types/node": "^11.13.4",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
+    "jasmine-marbles": "^0.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.1",
     "karma-chrome-launcher": "~2.2.0",

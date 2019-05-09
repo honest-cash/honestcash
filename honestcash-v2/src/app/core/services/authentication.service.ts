@@ -55,16 +55,13 @@ export const API_ENDPOINTS = {
   status: `/me`,
 };
 
-export const getPrefixedEndpoint = (endpoint: string) => {
-  return `${environment.apiUrl}${API_ENDPOINTS[endpoint]}`;
-};
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
   private token = '';
+  private userId: number;
   private isAuthenticated = false;
 
   constructor(
@@ -84,6 +81,13 @@ export class AuthenticationService {
     getLocalStorage().setItem(LOCAL_TOKEN_KEY, token);
   }
 
+  // needed for the v1 integration, @todo, review its use after.
+  public setUserId(userId: number) {
+    this.userId = userId;
+
+    getLocalStorage().setItem('HC_USER_ID', String(userId));
+  }
+
   public unsetToken(): void {
     this.token = '';
     this.isAuthenticated = false;
@@ -97,11 +101,13 @@ export class AuthenticationService {
     return this.isAuthenticated;
   }
 
-  public init(token?: string) {
+  public init(token?: string, userId?: number) {
     if (!token && this.getToken()) {
       this.isAuthenticated = true;
     } else if (token) {
       this.setToken(token);
+      this.setUserId(userId);
+
       this.isAuthenticated = true;
     }
   }

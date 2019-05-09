@@ -60,7 +60,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LogInSuccess) => action.payload),
     tap((payload) => {
-      this.authenticationService.init(payload.token);
+      this.authenticationService.init(payload.token, payload.user.id);
     }),
     switchMap((payload: LoginSuccessResponse) => [
       new UserSetup(),
@@ -90,7 +90,7 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     map((action: SignUpSuccess) => action.payload),
-    tap((payload: SignupSuccessResponse) => this.authenticationService.init(payload.token)),
+    tap((payload: SignupSuccessResponse) => this.authenticationService.init(payload.token, payload.user.id)),
     switchMap(payload => of(new UserSetup())),
     tap(() => this.router.navigateByUrl('/thank-you'))
   );

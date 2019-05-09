@@ -16,7 +16,11 @@ export class UnauthorizedGuard implements CanActivate {
     }
 
     log.debug('Authorized, redirecting to feed page...');
-    this.router.navigateByUrl('/feed');
+
+    // @todo - v2 migration (this redirects to v1 with a hard refresh)
+    location.href = '/';
+    // this.router.navigateByUrl('/feed');
+
     return false;
   }
 }

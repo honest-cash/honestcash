@@ -6,10 +6,12 @@ import { Routes, RouterModule } from '@angular/router';
  * - Every module here is lazy-loaded
  */
 const routes: Routes = [
+  /**
   {
     path: 'editor',
     loadChildren: './modules/editor/editor.module#EditorModule'
   },
+  */
   {
     path: '',
     loadChildren: './modules/welcome/welcome.module#WelcomeModule'
