@@ -38,7 +38,7 @@ describe('LogoutComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should dispatch LogOut action with no payload on ngOnInit', () => {
+  it('should dispatch LogOut action on ngOnInit with no payload', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     component.ngOnInit();
     const action = new LogOut();

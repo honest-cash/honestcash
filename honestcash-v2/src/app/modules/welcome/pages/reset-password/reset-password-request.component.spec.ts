@@ -52,7 +52,7 @@ describe('ResetPasswordRequestComponent', () => {
     expect(component.user).toEqual(new User());
   });
 
-  it('should dispatch LogIn action and set isLoading to true', () => {
+  it('should dispatch LogIn action onSubmit and set isLoading to true', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     const payload = {
       value: {
