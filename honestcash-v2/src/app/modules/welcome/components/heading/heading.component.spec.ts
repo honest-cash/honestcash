@@ -2,16 +2,16 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {HeaderComponent} from './header.component';
+import {HeadingComponent} from './heading.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
+describe('HeadingComponent', () => {
+  let component: HeadingComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HeaderComponent
+        HeadingComponent
       ],
       imports: [
       ],
@@ -19,7 +19,7 @@ describe('HeaderComponent', () => {
         NO_ERRORS_SCHEMA
       ],
     });
-    component = new HeaderComponent();
+    component = new HeadingComponent();
   }));
 
   it('should create', () => {
