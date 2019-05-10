@@ -8,18 +8,18 @@ import { ResetPasswordRequest } from '../../../../core/store/auth/auth.actions';
 import { NgForm } from '@angular/forms';
 import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
 
-interface ResetPasswordForm extends NgForm {
+export interface ResetPasswordRequestForm extends NgForm {
   value: {
     email: string;
   };
 }
 
 @Component({
-  selector: 'app-welcome-page-reset-password',
-  templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.scss']
+  selector: 'app-welcome-page-reset-password-request',
+  templateUrl: './reset-password-request.component.html',
+  styleUrls: ['./reset-password-request.component.scss']
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordRequestComponent implements OnInit {
   @HostBinding('class') class = 'card mb-auto mt-auto';
 
   public auth$: Observable<AuthorizationState>;
@@ -47,7 +47,7 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
-  public onSubmit(form: ResetPasswordForm): void {
+  public onSubmit(form: ResetPasswordRequestForm): void {
     const payload = form.value;
 
     this.isLoading = true;

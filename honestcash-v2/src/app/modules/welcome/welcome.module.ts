@@ -3,7 +3,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { StatusComponent } from './pages/status/status.component';
-import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { ResetPasswordRequestComponent } from './pages/reset-password/reset-password-request.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { WelcomeContainerComponent } from './welcome.component';
 import { CommonModule } from '@angular/common';
@@ -36,7 +36,7 @@ const routes: Routes = [
       { path: 'logout', pathMatch: 'full', component: LogoutComponent },
       { path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard] },
       { path: 'reset-password/:resetCode', pathMatch: 'full', component: ResetPasswordVerifyComponent, canActivate: [UnauthorizedGuard] },
-      { path: 'reset-password', pathMatch: 'full', component: ResetPasswordComponent, canActivate: [UnauthorizedGuard] },
+      { path: 'reset-password', pathMatch: 'full', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard] },
       { path: 'status', component: StatusComponent, canActivate: [AuthorizedGuard] },
       { path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard] },
     ]
@@ -58,7 +58,7 @@ const routes: Routes = [
     AboutComponent,
     SignupComponent,
     WelcomeComponent,
-    ResetPasswordComponent,
+    ResetPasswordRequestComponent,
     ResetPasswordVerifyComponent,
     WelcomeContainerComponent,
     StatusComponent,

@@ -6,22 +6,22 @@ import {
   fakeAsync,
   tick
 } from '@angular/core/testing';
-import {LoginComponent, LoginForm} from './login.component';
+import {ResetPasswordRequestComponent, ResetPasswordRequestForm} from './reset-password-request.component';
 import User from '../../../../core/models/user';
 import {Store, StoreModule} from '@ngrx/store';
 import {AppStates, metaReducers, reducers} from '../../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {LogIn} from '../../../../core/store/auth/auth.actions';
+import {ResetPasswordRequest} from '../../../../core/store/auth/auth.actions';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
+describe('ResetPasswordRequestComponent', () => {
+  let component: ResetPasswordRequestComponent;
   let store: Store<AppStates>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        LoginComponent
+        ResetPasswordRequestComponent
       ],
       imports: [
         FormsModule,
@@ -35,7 +35,7 @@ describe('LoginComponent', () => {
   }));
 
   beforeEach(() => {
-    component = new LoginComponent(store);
+    component = new ResetPasswordRequestComponent(store);
   });
 
   afterEach(() => {
@@ -57,11 +57,10 @@ describe('LoginComponent', () => {
     const payload = {
       value: {
         email: 'toto@toto.com',
-        password: '123',
       },
     };
-    const action = new LogIn(payload.value);
-    component.onSubmit(<LoginForm>payload);
+    const action = new ResetPasswordRequest(payload.value);
+    component.onSubmit(<ResetPasswordRequestForm>payload);
     expect(component.isLoading).toBeTruthy();
     expect(dispatchSpy).toHaveBeenCalledWith(action);
 

@@ -15,7 +15,7 @@ interface ResetPasswordVerifyForm extends NgForm {
 }
 
 @Component({
-  selector: 'app-welcome-page-reset-password',
+  selector: 'app-welcome-page-reset-password-request',
   templateUrl: './reset-password-verify.component.html',
   styleUrls: ['./reset-password-verify.component.scss']
 })
