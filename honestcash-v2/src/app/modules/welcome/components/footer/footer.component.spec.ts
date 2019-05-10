@@ -2,16 +2,16 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {WelcomeContainerComponent} from './welcome.component';
+import {FooterComponent} from './footer.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('WelcomeContainerComponent', () => {
-  let component: WelcomeContainerComponent;
+describe('FooterComponent', () => {
+  let component: FooterComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        WelcomeContainerComponent
+        FooterComponent
       ],
       imports: [
       ],
@@ -19,7 +19,7 @@ describe('WelcomeContainerComponent', () => {
         NO_ERRORS_SCHEMA
       ],
     });
-    component = new WelcomeContainerComponent();
+    component = new FooterComponent();
   }));
 
   it('should create', () => {
