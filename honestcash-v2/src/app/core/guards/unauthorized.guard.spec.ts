@@ -14,7 +14,7 @@ describe('UnauthorizedGuard', () => {
 
   beforeEach(() => {
     mockRouter = {
-      navigateByUrl: jasmine.createSpy('navigate')
+      navigateByUrl: jasmine.createSpy('navigateByUrl')
     };
     mockSnapshot = jasmine.createSpyObj<RouterStateSnapshot>('RouterStateSnapshot', ['toString']);
 
@@ -49,7 +49,8 @@ describe('UnauthorizedGuard', () => {
       expect(authenticationGuard.canActivate()).toBe(true);
     });
 
-    it('should return false and redirect to feed if user is already authenticated', () => {
+    // @todo reenable this test when /feed redirect is uncommented in unauthorized.guard
+    xit('should return false and redirect to feed if user is already authenticated', () => {
       // Arrange
       authenticationService.isAuthenticated = true;
 

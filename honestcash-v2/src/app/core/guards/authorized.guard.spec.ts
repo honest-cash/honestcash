@@ -37,6 +37,7 @@ describe('AuthorizedGuard', () => {
 
   afterEach(() => {
     resetLocalStorage();
+    authenticationService.isAuthenticated = false;
   });
 
   it('should have a canActivate method', () => {
