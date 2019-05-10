@@ -1,166 +1,144 @@
-<div class="container text-muted">
-    <div class="row justify-content-center">
-      <div class="col col-md-10 col-lg-8">
-        <div class="jumbotron justify-content-center mt-5 hc-jumbotron-halftransparent">
-          <div class="row justify-content-center">
-              <app-welcome-header></app-welcome-header>
-          </div>
-
-          <div class="row justify-content-center">
-              <app-welcome-heading
-                title="What are you waiting for? Get started now."
-                description="Enter your details below"
-            ></app-welcome-heading>
-          </div>
-          <div class="row justify-content-center">
-              <form class="flex-wrap" name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
-                <div class="w-full flex mb-4 relative">
-                    <input
-                      required
-                      minlength="3"
-                      maxlength="25"
-                      appForbiddenUsername
-                      name="username"
-                      #username="ngModel"
-                      [ngModel]="user.username"
-                      [ngClass]="{ 'border-red': f.submitted && username.invalid }"
-                      class="form-control"
-                      type="text"
-                      placeholder="Username"
-                    />
-                    <span
-                      class="absolute text-red cursor-pointer transform-y-center"
-                      *ngIf="f.submitted && username.invalid"
-                    >
-                      <i
-                        *ngIf="username.errors.required"
-                        class="fas fa-exclamation-circle"
-                        tooltip="Username is required"
-                        placement="right"
-                        delay="500"
-                      ></i>
-                      <i
-                      *ngIf="username.errors.minlength"
-                      class="fas fa-exclamation-circle"
-                      tooltip="Username must be at least 3 characters long"
-                      placement="right"
-                      delay="500"
-                    ></i>
-                      <i
-                      *ngIf="username.errors.maxlength"
-                      class="fas fa-exclamation-circle"
-                      tooltip="Username cannot be longer than 25 characters"
-                      placement="right"
-                      delay="500"
-                    ></i>
-                    <i
-                      *ngIf="username.errors.forbiddenUsername"
-                      class="fas fa-exclamation-circle"
-                      tooltip="Username can only contain alpha-numeric characters"
-                      placement="right"
-                      delay="500"
-                    ></i>
-                    </span>
-                  </div>
-                  <div class="w-full flex mb-4 relative">
-                    <input
-                      required
-                      name="email"
-                      #email="ngModel"
-                      [ngModel]="user.email"
-                      [ngClass]="{ 'border-red': f.submitted && email.invalid }"
-                      class="form-control"
-                      type="text"
-                      placeholder="E-Mail"
-                      email
-                    />
-                    <span
-                      class="absolute text-red cursor-pointer transform-y-center"
-                      *ngIf="f.submitted && email.invalid"
-                    >
-                      <i
-                        *ngIf="email.errors.required"
-                        class="fas fa-exclamation-circle"
-                        tooltip="E-mail is required"
-                        placement="right"
-                        delay="500"
-                      ></i>
-                      <i
-                        *ngIf="email.errors.email"
-                        class="fas fa-exclamation-circle"
-                        tooltip="E-mail must be a valid e-mail address"
-                        placement="right"
-                        delay="500"
-                      ></i>
-                    </span>
-                  </div>
-                  <div class="w-full flex mb-4 relative">
-                    <input
-                      required
-                      minlength="8"
-                      name="password"
-                      #password="ngModel"
-                      [ngModel]="user.password"
-                      [ngClass]="{ 'border-red': f.submitted && password.invalid }"
-                      class="form-control"
-                      type="password"
-                      placeholder="Password"
-                    />
-                    <span
-                      class="absolute text-red cursor-pointer transform-y-center"
-                      *ngIf="f.submitted && password.invalid"
-                    >
-                      <i
-                        *ngIf="password.errors.required"
-                        class="fas fa-exclamation-circle"
-                        tooltip="Password is required"
-                        placement="right"
-                        delay="500"
-                      ></i>
-                      <i
-                        *ngIf="password.errors.minlength"
-                        class="fas fa-exclamation-circle"
-                        tooltip="Password must be at least 8 characters long"
-                        placement="right"
-                        delay="500"
-                      ></i>
-                    </span>
-                  </div>
-                  <div
-                  id="hc-captcha"
-                  class="g-recaptcha w-full justify-center content-center align-middle pr-2 flex opacity-80"
-                  data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
-                ></div>
-                <i *ngIf="!isCaptchaValid" class="w-full mt-2 flex text-center text-white justify-center content-center"><i
-                  class="text-red fas fa-exclamation-circle"
-                ></i> Please verify captcha by checking the checkbox</i>
-                  <div *ngIf="errorMessage" class="w-full flex justify-center mt-4 mb-4 p-4 bg-white border-2 text-sm border-transparent border-solid font-bold text-red rounded-lg opacity-80">
-                    <span>{{errorMessage}}</span>
-                  </div>
-
-                  <app-welcome-fat-loading-button
-                    text="Sign Up"
-                    loadingText="Signing Up"
-                    [isLoading]="isLoading"
-                  ></app-welcome-fat-loading-button>
-                  <app-welcome-form-footer
-                    to="login"
-                    text="Already have an account?"
-                    anchor="Sign In"
-                  ></app-welcome-form-footer>
-
-                  <p>
-                      Bitcoin wallet will be generated and encrypted with your email and password. Please make sure to use a strong password. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. If you forget your email/password or do not save your recovery phrase you can lose access to your funds forever!
-                  </p>
-
-                  <p>
-                      By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">privacy policy</a>.
-                  </p>
-                </form>
-          </div>
+<app-welcome-heading
+  title="What are you waiting for? Get started now."
+  description="Enter your details below"
+></app-welcome-heading>
+<div class="card-body">
+  <form name="form" class="needs-validation" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['far', 'user']"></fa-icon></span>
+      </div>
+      <input
+        required
+        minlength="3"
+        maxlength="25"
+        appForbiddenUsername
+        name="username"
+        #username="ngModel"
+        [ngModel]="user.username"
+        [ngClass]="{ 'is-invalid': f.submitted && username.invalid, 'is-valid': f.submitted && username.valid }"
+        class="form-control"
+        type="text"
+        placeholder="Username"
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && username.invalid"
+      >
+        <span
+          *ngIf="username.errors.required"
+        >
+          Username is required.
+        </span>
+        <span
+          *ngIf="username.errors.minlength"
+        >
+          Username must be at least 3 characters long.
+        </span>
+        <span
+          *ngIf="username.errors.maxlength"
+        >
+          Username cannot be longer than 25 characters.
+        </span>
+        <span
+          *ngIf="username.errors.forbiddenUsername"
+        >
+          Username can only contain alpha-numeric characters.
+        </span>
         </div>
+    </div>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['far', 'envelope']"></fa-icon></span>
+      </div>
+      <input
+        required
+        name="email"
+        #email="ngModel"
+        [ngModel]="user.email"
+        [ngClass]="{ 'is-invalid': f.submitted && email.invalid, 'is-valid': f.submitted && email.valid }"
+        class="form-control"
+        type="text"
+        placeholder="E-Mail"
+        email
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && email.invalid"
+      >
+        <span
+          *ngIf="email.errors.required"
+        >
+          E-mail is required.
+        </span>
+        <span
+          *ngIf="email.errors.email"
+        >
+          E-mail must be a valid e-mail address.
+        </span>
       </div>
     </div>
-  </div>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['fas', 'key']"></fa-icon></span>
+      </div>
+      <input
+        required
+        minlength="8"
+        name="password"
+        #password="ngModel"
+        [ngModel]="user.password"
+        class="form-control"
+        type="password"
+        placeholder="Password"
+        [ngClass]="{ 'is-invalid': f.submitted && password.invalid, 'is-valid': f.submitted && password.valid }"
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && password.invalid"
+      >
+        <span
+          *ngIf="password.errors.required"
+        >
+          Password is required.
+        </span>
+        <span
+          *ngIf="password.errors.minlength"
+        >
+          Password must be at least 8 characters long.
+        </span>
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <div
+        id="hc-captcha"
+        class="g-recaptcha m-auto"
+        data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
+      ></div>
+      <div *ngIf="!isCaptchaValid" class="w-100 text-center text-danger">Please verify captcha by checking the checkbox</div>
+    </div>
+    <div *ngIf="errorMessage" class="card errors mb-2">
+      <div class="card-body text-danger">{{errorMessage}}</div>
+    </div>
+    <p class="small">
+      Bitcoin wallet will be generated and encrypted with your email and password. Please make sure to use a strong password. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. If you forget your email/password or do not save your recovery phrase you can lose access to your funds forever!
+    </p>
+    <p class="small">
+      By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">Privacy Policy</a>.
+    </p>
 
-
+    <div class="form-group">
+      <app-welcome-loading-submit-button
+        text="Sign Up"
+        loadingText="Signing Up"
+        [isLoading]="isLoading"
+        btnClass="btn-light"
+      ></app-welcome-loading-submit-button>
+    </div>
+  </form>
+</div>
+<app-welcome-card-footer
+  to="login"
+  text="Already have an account?"
+  anchor="Sign In"
+></app-welcome-card-footer>

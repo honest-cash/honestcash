@@ -1,24 +1,14 @@
-import {Component, OnInit, Input, HostBinding} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'app-welcome-fat-loading-button',
-  templateUrl: './fat-loading-button.component.html',
-  styleUrls: ['./fat-loading-button.component.scss']
+  selector: 'app-welcome-loading-submit-button',
+  templateUrl: './loading-submit-button.component.html',
+  styleUrls: ['./loading-submit-button.component.scss']
 })
-export class FatLoadingButtonComponent implements OnInit {
-  // @todo - no types?
-  @Input() isLoading;
-  @Input() loadingText;
-  @Input() text;
-
-  constructor(
-
-  ) {
-
-  }
-
-  ngOnInit() {
-
-  }
+export class LoadingSubmitButtonComponent {
+  @Input() isLoading: boolean;
+  @Input() loadingText: string;
+  @Input() text: string;
+  @Input() btnClass: string;
 
 }

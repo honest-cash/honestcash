@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppStates, selectAuthorizationState, selectWalletState, selectUserState } from './app.states';
 import {State as AuthorizationState} from './core/store/auth/auth.state';
@@ -14,8 +14,6 @@ import { AppLoad } from './core/store/app/app.actions';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  @HostBinding('class') class = 'h-full w-full flex flex-wrap';
-
   private logger: Logger;
   private wallet$: Observable<WalletState>;
   private auth$: Observable<AuthorizationState>;

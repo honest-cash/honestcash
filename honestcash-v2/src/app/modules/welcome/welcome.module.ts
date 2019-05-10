@@ -13,9 +13,9 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeadingComponent } from './components/heading/heading.component';
 import { FormComponent } from './components/form/form.component';
-import { FormFooterComponent } from './components/form/components/footer/footer.component';
+import { CardFooterComponent } from './components/card/footer/footer.component';
 import { FormLinkRightComponent } from './components/form/components/link-right/link-right.component';
-import { FatLoadingButtonComponent } from './components/fat-loading-button/fat-loading-button.component';
+import { LoadingSubmitButtonComponent } from './components/loading-submit-button/loading-submit-button.component';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { AuthorizedGuard } from 'app/core/guards/authorized.guard';
 import { UnauthorizedGuard } from 'app/core/guards/unauthorized.guard';
@@ -23,6 +23,7 @@ import { ThankYouComponent } from './pages/thank-you/thank-you.component';
 import { ForbiddenUsernameValidatorDirective } from './directives/forbidden-username.directive';
 import {ResetPasswordVerifyComponent} from './pages/reset-password-verify/reset-password-verify.component';
 import { AboutComponent } from './pages/about/about.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 const routes: Routes = [
   {
@@ -46,11 +47,11 @@ const routes: Routes = [
   declarations: [
     TooltipDirective,
     HeadingComponent,
-    FatLoadingButtonComponent,
+    LoadingSubmitButtonComponent,
     FormComponent,
     HeaderComponent,
     FooterComponent,
-    FormFooterComponent,
+    CardFooterComponent,
     FormLinkRightComponent,
     LoginComponent,
     LogoutComponent,
@@ -67,7 +68,8 @@ const routes: Routes = [
   imports: [
     FormsModule,
     RouterModule.forChild(routes),
-    CommonModule
+    CommonModule,
+    FontAwesomeModule
   ],
   providers: [
   ],

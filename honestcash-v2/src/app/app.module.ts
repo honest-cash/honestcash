@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
+import { FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 import { FormsModule } from '@angular/forms';
 
@@ -18,6 +19,11 @@ import { environment } from '../environments/environment';
 import { TokenInterceptor } from './core/http/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppEffects } from './core/store/app/app.effects';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faEnvelope, faUser} from '@fortawesome/free-regular-svg-icons';
+import {faKey} from '@fortawesome/free-solid-svg-icons/faKey';
+import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
+import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
   declarations: [
@@ -33,6 +39,7 @@ import { AppEffects } from './core/store/app/app.effects';
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([ AppEffects, AuthEffects, UserEffects, WalletEffects ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    FontAwesomeModule,
   ],
   providers: [
     {
@@ -43,4 +50,12 @@ import { AppEffects } from './core/store/app/app.effects';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    library.add(faSpinner);
+    library.add(faEnvelope);
+    library.add(faUser);
+    library.add(faKey);
+    library.add(faExclamationCircle);
+  }
+}

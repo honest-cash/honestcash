@@ -1,0 +1,18 @@
+@import '../../../../../styles';
+
+.container{
+  height: 100%;
+  align-content: center;
+}
+
+:host {
+  width: 400px;
+  @include background-opacity(5);
+}
+
+.errors {
+  @include background-opacity(5);
+  & > .card-body {
+    @include opacity(10);
+  }
+}

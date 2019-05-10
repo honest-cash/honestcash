@@ -26,9 +26,9 @@ declare let grecaptcha: any;
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-  @HostBinding('class') class = 'w-full flex flex-wrap content-center items-center justify-center';
-  @HostBinding('style.height') height = '75vh';
-  @HostBinding('style.minHeight') minHeight = '75vh';
+  @HostBinding('class') class = 'card mb-auto mt-auto';
+  @HostBinding('style.height') height = '';
+  @HostBinding('style.minHeight') minHeight = '';
 
   isLoading: boolean;
   authState: Observable<AuthorizationState>;
@@ -64,8 +64,6 @@ export class SignupComponent implements OnInit {
 
     if (!captcha || captcha.length === 0) {
       this.isCaptchaValid = false;
-
-      this.errorMessage = 'Invalid captcha';
 
       return grecaptcha.reset();
     }

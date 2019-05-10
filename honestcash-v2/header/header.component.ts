@@ -9,7 +9,7 @@ import { AuthenticationService, I18nService } from '@app/core';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class WelcomeCardHeader implements OnInit {
   menuHidden = true;
 
   constructor(

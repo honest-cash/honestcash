@@ -1,7 +1,7 @@
-import { Directive, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators } from '@angular/forms';
+import { Directive } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, Validator, ValidatorFn } from '@angular/forms';
 
-/** A hero's name can't match the given regular expression */
+/** A user's name can't match the given regular expression */
 export function forbiddenUsernameValidator(): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
     const forbidden = (new RegExp(/[~`!#@$%\^&*+=. \-\[\]\\';,/{}|\\":<>\?]/)).test(control.value);

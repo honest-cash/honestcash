@@ -6,12 +6,12 @@ import { Component, OnInit, HostBinding, Input } from '@angular/core';
   styleUrls: ['./heading.component.scss']
 })
 export class HeadingComponent implements OnInit {
-  @HostBinding('class') class = 'flex w-full flex-wrap w-full items-center justify-center mb-8';
+  @HostBinding('class') class = 'text-center p-1';
 
-  @Input() title;
-  @Input() title2;
-  @Input() description;
-  @Input() black;
+  @Input() title: string;
+  @Input() title2: string;
+  @Input() description: string;
+  @Input() black: boolean;
 
   constructor() {
 

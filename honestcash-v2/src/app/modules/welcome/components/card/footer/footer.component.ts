@@ -1,13 +1,12 @@
 import {Component, HostBinding, Input} from '@angular/core';
 
 @Component({
-  // @todo rename the selector -> its confusing!
-  selector: 'app-welcome-shared-footer',
+  selector: 'app-welcome-card-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class WelcomeSharedFooterComponent {
-  @HostBinding('class') class = 'text-center';
+export class CardFooterComponent {
+  @HostBinding('class') class = 'card-footer';
   @Input() text;
   @Input() anchor;
   @Input() to;
