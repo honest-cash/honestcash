@@ -9,7 +9,7 @@ import {LogIn} from '../../../../core/store/auth/auth.actions';
 import {CodedErrorResponse, FailedResponse} from '../../../../core/models/authentication';
 import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
 
-interface LoginForm extends NgForm {
+export interface LoginForm extends NgForm {
   value: {
     email: string;
     password: string;
@@ -24,10 +24,9 @@ interface LoginForm extends NgForm {
 export class LoginComponent implements OnInit {
   @HostBinding('class') class = 'card mb-auto mt-auto';
 
-  public isLoading: boolean;
+  public isLoading = false;
   public authState: Observable<AuthorizationState>;
   public errorMessage: FailedResponse;
-  public errorMessageType: 'string' | 'class';
   public user = new User();
 
   constructor(
