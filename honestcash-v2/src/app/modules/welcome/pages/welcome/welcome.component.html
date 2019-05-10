@@ -1,24 +1,14 @@
-<div class="container text-muted">
-  <div class="row justify-content-center">
-    <div class="col col-md-10 col-lg-8">
-      <div class="jumbotron justify-content-center mt-5 hc-jumbotron-halftransparent">
-        <div class="row justify-content-center">
-            <app-welcome-header></app-welcome-header>
-        </div>
-
-        <div class="row justify-content-center">
-          <app-welcome-heading title="Designed for writers, creatives and thinkers." title2="Powered by Bitcoin." description="Honest is reinventing how ideas are shared">
-          </app-welcome-heading>
-        </div>
-        <div class="row justify-content-center">
-            <a class="btn btn-light btn-lg btn-block" [routerLink]="['/signup']">
-              Get Started
-            </a>
-            <a class="btn btn-outline-light btn-lg btn-block" [routerLink]="['/login']">
-              Sign In
-            </a>
-        </div>
-      </div>
-    </div>
-  </div>
+<app-welcome-heading
+  title="Designed for writers, creatives and thinkers."
+  title2="Powered by Bitcoin."
+  description="Honest is reinventing how ideas are shared"
+>
+</app-welcome-heading>
+<div class="card-body">
+  <a class="btn btn-light btn-block font-weight-bold text-uppercase" [routerLink]="['/signup']">
+    Get Started
+  </a>
+  <a class="btn btn-outline-light btn-block font-weight-bold text-uppercase" [routerLink]="['/login']">
+    Sign In
+  </a>
 </div>

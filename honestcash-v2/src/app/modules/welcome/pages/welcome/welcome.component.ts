@@ -11,6 +11,8 @@ import { LogOut } from '../../../../core/store/auth/auth.actions';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
+  @HostBinding('class') class = 'card mb-auto mt-auto';
+
   getState: Observable<any>;
   isAuthenticated: false;
   user = null;
