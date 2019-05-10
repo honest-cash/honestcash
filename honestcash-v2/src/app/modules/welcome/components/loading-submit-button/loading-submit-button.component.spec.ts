@@ -1,14 +1,8 @@
-/* tslint:disable:no-unused-variable */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { LoadingSubmitButtonComponent} from './loading-submit-button.component';
-import {Input, NO_ERRORS_SCHEMA} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faEnvelope, faUser} from '@fortawesome/free-regular-svg-icons';
-import {faKey} from '@fortawesome/free-solid-svg-icons/faKey';
-import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
-import {faComments, faGlobe, faHeart, faRetweet, faShareAlt, faSpinner, faTerminal} from '@fortawesome/free-solid-svg-icons';
-import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
+import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 describe('LoadingSubmitButtonComponent', () => {
@@ -23,9 +17,6 @@ describe('LoadingSubmitButtonComponent', () => {
       declarations: [
         LoadingSubmitButtonComponent
       ],
-      schemas: [
-        // NO_ERRORS_SCHEMA
-      ]
     }).compileComponents().then(() => {
       library.add(faSpinner);
     });
