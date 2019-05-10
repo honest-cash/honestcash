@@ -10,7 +10,7 @@ import { GetStatus } from '../../../../core/store/auth/auth.actions';
   styleUrls: ['./status.component.scss']
 })
 export class StatusComponent implements OnInit {
-  @HostBinding('style.height') height = '75vh';
+  @HostBinding('class') class = 'card mb-auto mt-auto';
 
   constructor(private store: Store<AppStates>) { }
 
