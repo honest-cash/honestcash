@@ -50,7 +50,7 @@ describe('UnauthorizedGuard', () => {
     });
 
     // @todo reenable this test when /feed redirect is uncommented in unauthorized.guard
-    xit('should return false and redirect to feed if user is already authenticated', () => {
+    /*it('should return false and redirect to feed if user is already authenticated', () => {
       // Arrange
       authenticationService.isAuthenticated = true;
 
@@ -60,6 +60,6 @@ describe('UnauthorizedGuard', () => {
       // Assert
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/feed');
       expect(result).toBe(false);
-    });
+    });*/
   });
 });
