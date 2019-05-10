@@ -2,29 +2,24 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {StatusComponent} from './status.component';
+import {ThankYouComponent} from './thank-you.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {Store, StoreModule} from '@ngrx/store';
-import {AppStates, metaReducers, reducers} from '../../../../app.states';
 
-describe('StatusComponent', () => {
-  let component: StatusComponent;
-  let store: Store<AppStates>;
+describe('ThankYouComponent', () => {
+  let component: ThankYouComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        StatusComponent
+        ThankYouComponent
       ],
       imports: [
-        StoreModule.forRoot(reducers, { metaReducers }),
       ],
       schemas: [
         NO_ERRORS_SCHEMA
       ],
     });
-    store = TestBed.get(Store);
-    component = new StatusComponent(store);
+    component = new ThankYouComponent();
   }));
 
   it('should create', () => {
