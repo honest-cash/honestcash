@@ -5,7 +5,7 @@ import {
 import {AboutComponent} from './about.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('LoginComponent', () => {
+describe('AboutComponent', () => {
   let component: AboutComponent;
 
   beforeEach(async(() => {
