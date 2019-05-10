@@ -12,9 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeadingComponent } from './components/heading/heading.component';
-import { FormComponent } from './components/form/form.component';
 import { CardFooterComponent } from './components/card/footer/footer.component';
-import { FormLinkRightComponent } from './components/form/components/link-right/link-right.component';
 import { LoadingSubmitButtonComponent } from './components/loading-submit-button/loading-submit-button.component';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { AuthorizedGuard } from 'app/core/guards/authorized.guard';
@@ -35,6 +33,7 @@ const routes: Routes = [
       { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [UnauthorizedGuard] },
       { path: 'logout', pathMatch: 'full', component: LogoutComponent },
       { path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard] },
+      // tslint:disable-next-line:max-line-length
       { path: 'reset-password-request/:resetCode', pathMatch: 'full', component: ResetPasswordVerifyComponent, canActivate: [UnauthorizedGuard] },
       { path: 'reset-password-request', pathMatch: 'full', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard] },
       { path: 'status', component: StatusComponent, canActivate: [AuthorizedGuard] },
@@ -48,11 +47,9 @@ const routes: Routes = [
     TooltipDirective,
     HeadingComponent,
     LoadingSubmitButtonComponent,
-    FormComponent,
     HeaderComponent,
     FooterComponent,
     CardFooterComponent,
-    FormLinkRightComponent,
     LoginComponent,
     LogoutComponent,
     AboutComponent,
