@@ -23,7 +23,8 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEnvelope, faUser} from '@fortawesome/free-regular-svg-icons';
 import {faKey} from '@fortawesome/free-solid-svg-icons/faKey';
 import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
-import {faSpinner} from '@fortawesome/free-solid-svg-icons';
+import {faComments, faGlobe, faHeart, faRetweet, faShareAlt, faSpinner, faTerminal} from '@fortawesome/free-solid-svg-icons';
+import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,13 @@ import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 })
 export class AppModule {
   constructor() {
+    library.add(faComments);
+    library.add(faTerminal);
+    library.add(faGlobe);
+    library.add(faRetweet);
+    library.add(faBitcoin);
+    library.add(faShareAlt);
+    library.add(faHeart);
     library.add(faSpinner);
     library.add(faEnvelope);
     library.add(faUser);

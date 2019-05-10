@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 
 
 @Component({
@@ -6,14 +6,6 @@ import { Component, OnInit, HostBinding } from '@angular/core';
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent implements OnInit {
-  @HostBinding('class') class = 'flex flex-wrap items-center justify-center w-full h-full bg-hc-grey font-helvetica text-black';
-
-  constructor(
-  ) {
-  }
-
-  ngOnInit() {
-  }
-
+export class AboutComponent {
+  @HostBinding('class') class = 'card mb-auto mt-auto';
 }
