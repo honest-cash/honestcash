@@ -36,18 +36,13 @@ describe('SignupComponent', () => {
       ],
     });
     (<any>window).grecaptcha = {
-      getResponse: () => SHARED_MOCKS.captcha,
-      reset: () => {},
+      getResponse: (): string => SHARED_MOCKS.captcha,
+      reset: (): void => {},
+      render: (id: string) => {}
     };
     store = TestBed.get(Store);
-  }));
-
-  beforeEach(() => {
     component = new SignupComponent(store);
-  });
-
-  afterEach(() => {
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -58,14 +53,40 @@ describe('SignupComponent', () => {
     expect(component.isLoading).toBeFalsy();
     expect(component.errorMessage).toBeUndefined();
     expect(component.user).toEqual(new User());
-    expect(component.isCaptchaRendered).toBeFalsy();
-    expect(component.isCaptchaValid).toBeTruthy();
   });
 
   it('should fire renderCaptcha function ngOnInit', () => {
     const dispatchSpy = spyOn(component, 'renderCaptcha');
     component.ngOnInit();
     expect(dispatchSpy).toHaveBeenCalled();
+  });
+
+  it('should render captcha on ngOnInit via renderCaptcha', () => {
+    component.ngOnInit();
+    expect(component.isCaptchaRendered).toBeTruthy();
+  });
+
+  it('should return void onSubmit if captcha is unavailable', () => {
+    (<any>window).grecaptcha = {
+      getResponse: (): string => '', // deliberately return an empty captcha
+      reset: (): void => {},
+      render: (id: string) => {}
+    };
+    const grecaptchaResetSpy = spyOn((<any>window).grecaptcha, 'reset');
+    const dispatchSpy = spyOn(store, 'dispatch');
+    const payload = {
+      value: {
+        email: SHARED_MOCKS.email,
+        username: SHARED_MOCKS.username,
+        password: SHARED_MOCKS.password,
+        captcha: SHARED_MOCKS.captcha,
+      },
+    };
+    component.ngOnInit();
+    component.onSubmit(<SignupForm>payload);
+    expect(component.isCaptchaValid).toBeFalsy();
+    expect(grecaptchaResetSpy).toHaveBeenCalled();
+    expect(dispatchSpy).not.toHaveBeenCalled();
   });
 
   it('should dispatch SignUp action onSubmit and set isLoading to true', () => {
