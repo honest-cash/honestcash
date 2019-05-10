@@ -1,5 +1,7 @@
 @import '../../../../../styles';
 
+$black: #000;
+
 .container{
   height: 100%;
   align-content: center;
@@ -7,9 +9,9 @@
 
 :host {
   width: 800px;
-  @include background-opacity(5);
+  @include background-opacity($black, 5);
 }
 
 ul.list-group > li.list-group-item {
-  @include background-opacity(5);
+  @include background-opacity($black, 5);
 }

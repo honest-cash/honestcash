@@ -1,11 +1,13 @@
 @import '../../../../../styles';
 
+$black: #000;
+
 .container{
   height: 100%;
   align-content: center;
 }
 
 :host {
-  width: 400px;
-  @include background-opacity(5);
+  width: 800px;
+  @include background-opacity($black, 5);
 }

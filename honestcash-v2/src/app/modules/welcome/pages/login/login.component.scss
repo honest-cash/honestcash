@@ -1,5 +1,7 @@
 @import '../../../../../styles';
 
+$black: #000;
+
 .container{
   height: 100%;
   align-content: center;
@@ -7,11 +9,11 @@
 
 :host {
   width: 400px;
-  @include background-opacity(5);
+  @include background-opacity($black, 5);
 }
 
 .errors {
-  @include background-opacity(5);
+  @include background-opacity($black, 5);
   & > .card-body {
     @include opacity(10);
   }
