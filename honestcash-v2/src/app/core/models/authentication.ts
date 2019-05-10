@@ -51,7 +51,7 @@ export interface ResetPasswordRequestContext {
   email: string;
 }
 
-export interface ChangePasswordContext {
+export interface ResetPasswordContext {
   email: string;
   code: string;
   newPassword: string;

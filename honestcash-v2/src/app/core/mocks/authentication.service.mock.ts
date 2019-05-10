@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 import {
-  ChangePasswordContext, CheckPasswordContext, CheckPasswordResponse, EmptyResponse, FailedResponse,
+  ResetPasswordContext, CheckPasswordContext, CheckPasswordResponse, EmptyResponse, FailedResponse,
   LoginContext,
   LoginResponse,
   LoginSuccessResponse, OkResponse, ResetPasswordRequestContext, SetWalletContext,
@@ -147,7 +147,7 @@ export class MockAuthenticationService {
     return of({});
   }
 
-  public changePassword(payload: ChangePasswordContext): Observable<OkResponse> {
+  public changePassword(payload: ResetPasswordContext): Observable<OkResponse> {
     return of({ok: true});
   }
 

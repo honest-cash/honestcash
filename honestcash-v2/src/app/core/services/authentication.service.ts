@@ -4,7 +4,7 @@ import User from '../models/user';
 import { CryptoUtils } from '../../shared/lib/CryptoUtils';
 import { HttpService } from '..';
 import {
-  ChangePasswordContext,
+  ResetPasswordContext,
   CheckPasswordContext,
   CheckPasswordResponse,
   EmptyResponse,
@@ -39,7 +39,7 @@ const getLocalStorage = () => {
 };
 
 // @todo refactor
-interface ChangePasswordPayload extends ChangePasswordContext {
+interface ChangePasswordPayload extends ResetPasswordContext {
   mnemonicEncrypted: string;
 }
 
@@ -145,7 +145,7 @@ export class AuthenticationService {
     return this.http.post<string>(API_ENDPOINTS.resetPassword, { email: payload.email });
   }
 
-  public changePassword(context: ChangePasswordContext): Observable<OkResponse> {
+  public changePassword(context: ResetPasswordContext): Observable<OkResponse> {
     return defer(async () => {
       const mnemonicEncrypted = (await WalletUtils.generateNewWallet(context.newPassword)).mnemonicEncrypted;
 

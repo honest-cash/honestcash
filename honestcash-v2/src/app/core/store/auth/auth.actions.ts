@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import {
   LoginContext, LoginSuccessResponse, FailedResponse, SignupContext, SignupSuccessResponse,
   ResetPasswordRequestContext,
-  ChangePasswordContext} from '../../models/authentication';
+  ResetPasswordContext} from '../../models/authentication';
 
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',
@@ -54,7 +54,7 @@ export class SignUpFailure implements Action {
 
 export class ResetPassword implements Action {
   readonly type = AuthActionTypes.RESET_PASSWORD;
-  constructor(public payload: ChangePasswordContext) {}
+  constructor(public payload: ResetPasswordContext) {}
 }
 
 export class ResetPasswordSuccess implements Action {
