@@ -8,15 +8,10 @@ import {Observable} from 'rxjs';
 import {AppStates, selectAuthorizationState} from '../../../../app.states';
 import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
 import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
+import {ChangePasswordContext} from '../../../../core/models/authentication';
 
 interface ResetPasswordVerifyForm extends NgForm {
-  value: {
-    email: string;
-    code: string;
-    newPassword: string;
-    repeatNewPassword: string;
-    mnemonicEncrypted: string;
-  };
+  value: ChangePasswordContext;
 }
 
 @Component({
@@ -25,9 +20,7 @@ interface ResetPasswordVerifyForm extends NgForm {
   styleUrls: ['./reset-password-verify.component.scss']
 })
 export class ResetPasswordVerifyComponent implements OnInit {
-  @HostBinding('class') class = 'w-full  flex flex-wrap content-center items-center justify-center';
-  @HostBinding('style.height') height = '75vh';
-  @HostBinding('style.minHeight') minHeight = '75vh';
+  @HostBinding('class') class = 'card mb-auto mt-auto';
 
   private logger = new Logger('ResetPasswordVerifyComponent');
   private resetCode: string;
@@ -35,7 +28,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
   public auth$: Observable<AuthorizationState>;
   public errorMessage: string;
   public isLoading = false;
-  public values: any = {
+  public values: ChangePasswordContext = {
     email: '',
     code: '',
     newPassword: '',
