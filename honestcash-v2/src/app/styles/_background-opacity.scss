@@ -1,0 +1,10 @@
+@mixin background-opacity($value) {
+  @if $value >= 10 {
+    $value: 10;
+  } @else if $value < 0 {
+    $value: 0;
+  } @else {
+    @value: '0.#{$value}';
+  }
+  background-color: rgba(0,0,0,$value) !important;
+}

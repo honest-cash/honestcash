@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, HostBinding} from '@angular/core';
 
 @Component({
-  selector: 'app-welcome-header',
+  selector: 'app-welcome-card-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class CardHeaderComponent {
+  @HostBinding('class') class = '';
 }
