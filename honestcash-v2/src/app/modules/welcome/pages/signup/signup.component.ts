@@ -9,7 +9,7 @@ import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
 import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
 
-interface SignupForm extends NgForm {
+export interface SignupForm extends NgForm {
   value: {
     username: string;
     email: string;
@@ -28,7 +28,7 @@ declare let grecaptcha: any;
 export class SignupComponent implements OnInit {
   @HostBinding('class') class = 'card mb-auto mt-auto';
 
-  isLoading: boolean;
+  isLoading = false;
   authState: Observable<AuthorizationState>;
   errorMessage: string;
   isCaptchaRendered = false;
@@ -66,6 +66,7 @@ export class SignupComponent implements OnInit {
       return grecaptcha.reset();
     }
 
+    this.isLoading = true;
     const payload = form.value;
 
     payload.captcha = captcha;
@@ -73,7 +74,7 @@ export class SignupComponent implements OnInit {
     this.store.dispatch(new SignUp(payload));
   }
 
-  private renderCaptcha() {
+  public renderCaptcha() {
     if (this.isCaptchaRendered) {
       return;
     }
