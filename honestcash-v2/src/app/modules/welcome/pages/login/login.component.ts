@@ -22,9 +22,7 @@ interface LoginForm extends NgForm {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  @HostBinding('class') class = 'w-full flex flex-wrap content-center items-center justify-center';
-  @HostBinding('style.height') height = '75vh';
-  @HostBinding('style.minHeight') minHeight = '75vh';
+  @HostBinding('class') class = 'card mb-auto mt-auto';
 
   public isLoading: boolean;
   public authState: Observable<AuthorizationState>;

@@ -2,82 +2,95 @@
   title="Sign in to Honest."
   description="Enter your details below"
 ></app-welcome-heading>
-<div
-  class="
-    flex
-    flex-wrap
-    items-center
-    justify-center
-    xs:w-full
-    sm:w-3/5
-    md:w-1/2
-    lg:w-1/3
-    xl:w-1/4
-    xxl:w-1/5
-    xxxl:w-1/6
-    mx-auto
-    xs:px-4
-    text-center
-    mb-8
-  "
->
-  <form class="flex flex-wrap w-full" name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
-    <div class="flex w-full mb-4 relative">
+<div class="card-body">
+  <form name="form" class="needs-validation" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['far', 'envelope']"></fa-icon></span>
+      </div>
       <input
         required
         name="email"
         #email="ngModel"
         [ngModel]="user.email"
-        [ngClass]="{ 'border-red': f.submitted && email.invalid }"
-        class="w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-80"
+        [ngClass]="{ 'is-invalid': f.submitted && email.invalid, 'is-valid': f.submitted && email.valid }"
+        class="form-control"
         type="text"
         placeholder="E-Mail"
         email
-      />
-      <span
-        class="absolute text-red cursor-pointer transform-y-center"
-        *ngIf="f.submitted && email.invalid">
-        <i *ngIf="email.errors.required" class="fas fa-exclamation-circle" tooltip="E-mail is required" placement="right" delay="500"></i>
-        <i *ngIf="email.errors.email" class="fas fa-exclamation-circle" tooltip="E-mail must be a valid e-mail address" placement="right" delay="500"></i>
-      </span>
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && email.invalid"
+      >
+        <span
+          *ngIf="email.errors.required"
+        >
+          E-mail is required.
+        </span>
+        <span
+          *ngIf="email.errors.email"
+        >
+          E-mail must be a valid e-mail address.
+        </span>
+      </div>
     </div>
-    <div class="flex w-full relative">
+    <div class="input-group form-group mb-0">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['fas', 'key']"></fa-icon></span>
+      </div>
       <input
         required
         minlength="8"
         name="password"
         #password="ngModel"
         [ngModel]="user.password"
-        [ngClass]="{ 'border-red': f.submitted && password.invalid }"
-        class="mb-2 w-full p-4 bg-white border-2 border-transparent border-solid font-bold text-black rounded-lg opacity-80"
+        class="form-control"
         type="password"
         placeholder="Password"
-      />
-      <span
-        class="absolute text-red cursor-pointer transform-y-center"
-        *ngIf="f.submitted && password.invalid">
-        <i *ngIf="password.errors.required" class="fas fa-exclamation-circle" tooltip="Password is required" placement="right" delay="500"></i>
-        <i
-        *ngIf="password.errors.minlength"
-        class="fas fa-exclamation-circle"
-        tooltip="Password must be at least 8 characters long"
-        placement="right"
-        delay="500"
-      ></i>
-      </span>
+        [ngClass]="{ 'is-invalid': f.submitted && password.invalid, 'is-valid': f.submitted && password.valid }"
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && password.invalid"
+      >
+        <span
+          *ngIf="password.errors.required"
+        >
+          Password is required.
+        </span>
+        <span
+          *ngIf="password.errors.minlength"
+        >
+          Password must be at least 8 characters long.
+        </span>
+      </div>
     </div>
-    <app-welcome-form-link-right
-      to="reset-password"
-      anchor="Forgot your password?"
-    ></app-welcome-form-link-right>
-    <div *ngIf="errorMessage" class="w-full flex justify-center mb-4 p-4 bg-white border-2 text-sm border-transparent border-solid font-bold text-red rounded-lg opacity-80">
-      <span>{{errorMessage}}</span>
+    <div class="text-right mb-4">
+      <a
+        class="small"
+        [routerLink]="['/reset-password']"
+      >Forgot your password?</a>
     </div>
-    <app-welcome-loading-submit-button text="Sign In" loadingText="Signing In" [isLoading]="isLoading"></app-welcome-loading-submit-button>
-    <app-welcome-card-footer
-      to="signup"
-      text="Don't have an account?"
-      anchor="Sign Up"
-    ></app-welcome-card-footer>
+    <div *ngIf="errorMessage" class="card errors mb-2">
+      <div class="card-body text-danger">{{errorMessage}}</div>
+    </div>
+    <p class="small">
+      Ensure that the website is <code class="domain">https://honest.cash</code> with a valid security certificate. Your email and password is used to decrypt your wallet and get access to your bitcoin.
+    </p>
+
+    <div class="form-group">
+      <app-welcome-loading-submit-button
+        text="Sign In"
+        loadingText="Signing In"
+        [isLoading]="isLoading"
+        btnClass="btn-light"
+      ></app-welcome-loading-submit-button>
+    </div>
   </form>
 </div>
+<app-welcome-card-footer
+  to="signup"
+  text="Don't have an account?"
+  anchor="Sign Up"
+></app-welcome-card-footer>

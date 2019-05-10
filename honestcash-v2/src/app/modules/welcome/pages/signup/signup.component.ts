@@ -27,8 +27,6 @@ declare let grecaptcha: any;
 })
 export class SignupComponent implements OnInit {
   @HostBinding('class') class = 'card mb-auto mt-auto';
-  @HostBinding('style.height') height = '';
-  @HostBinding('style.minHeight') minHeight = '';
 
   isLoading: boolean;
   authState: Observable<AuthorizationState>;

@@ -7,6 +7,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 })
 export class WelcomeContainerComponent implements OnInit {
   @HostBinding('class') class = 'd-block bg-image text-white';
+  @HostBinding('style.minHeight') minHeight = '100vh';
 
   constructor() {
   }
