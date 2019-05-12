@@ -13,7 +13,7 @@ const redirectIfNotLoggedIn = [
   "$rootScope",
   ($rootScope: IGlobalScope) => {
     if (!$rootScope.user || ($rootScope.user && !$rootScope.user.id)) {
-      location.href = "/login";
+      location.href = "/h2/login";
     }
   },
 ];

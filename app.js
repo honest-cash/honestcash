@@ -242,14 +242,11 @@ for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown
 	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
 }
 
-// About page
-for (let welcomePath of [ "/about" ]) {
-	app.get(welcomePath, (_, res) => res.sendfile("welcome.html", { root: __dirname + "/public" }));
-}
-
-// Login paths
-for (let welcomePath of [ "/login", "/signup", "/thank-you" ]) {
-	app.get(welcomePath, (_, res) => res.sendfile("new-welcome.html", { root: __dirname + "/public" }));
+// PATHS MIGRATED TO V2
+for (let welcomePath of [ "/login", "/signup", "/thank-you", "/about" ]) {
+  app.get(welcomePath, (_, res) =>
+    res.redirect(`/v2${welcomePath}`)
+  );
 }
 
 // Welcome paths

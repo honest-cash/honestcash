@@ -47,7 +47,7 @@ angular.module("editor-app", [
   try {
     res = await authService.validate();
   } catch (err) {
-    return location.href = "/login";
+    return location.href = "/v2/login";
   }
 
   const data = res.data;
