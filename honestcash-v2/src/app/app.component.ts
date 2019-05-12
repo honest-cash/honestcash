@@ -1,8 +1,12 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState, selectAuthState, selectWalletState } from './store/app.states';
+import { AppStates, selectAuthorizationState, selectWalletState, selectUserState } from './app.states';
+import {State as AuthorizationState} from './core/store/auth/auth.state';
+import {State as WalletState} from './core/store/wallet/wallet.state';
+import {State as UserState} from './core/store/user/user.state';
 import { Observable } from 'rxjs';
-import { WalletSetup, WalletCleanup } from './store/wallet/wallet.actions';
+import { Logger } from './core/services/logger.service';
+import { AppLoad } from './core/store/app/app.actions';
 
 @Component({
   selector: 'app-root',
@@ -10,31 +14,34 @@ import { WalletSetup, WalletCleanup } from './store/wallet/wallet.actions';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  @HostBinding('class') class = 'h-screen w-screen flex flex-wrap';
-  title = 'honestcash-v2';
-
-  walletState: Observable<any>;
-  authState: Observable<any>;
+  private logger: Logger;
+  private wallet$: Observable<WalletState>;
+  private auth$: Observable<AuthorizationState>;
+  private user$: Observable<UserState>;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppStates>
   ) {
-    this.walletState = this.store.select(selectWalletState);
-    this.authState = this.store.select(selectAuthState);
+    this.logger = new Logger('AppComponent');
+
+    this.wallet$ = this.store.select(selectWalletState);
+    this.auth$ = this.store.select(selectAuthorizationState);
+    this.user$ = this.store.select(selectUserState);
+
+    this.store.dispatch(new AppLoad());
   }
 
   ngOnInit() {
-    this.authState.subscribe((authState) => {
-      // depending on the result of authentification, setup or cleanup the wallet.
-      this.store.dispatch(
-        authState.token && authState.wallet ?
-          new WalletSetup({
-            // @refactor and hash it for encoding of the mnemonics
-            password: authState.password,
-            mnemonicEncrypted: authState.wallet.mnemonicEncrypted
-          }) :
-          new WalletCleanup()
-      );
+    this.wallet$.subscribe(wallet => {
+      this.logger.debug('new wallet', wallet);
+    });
+
+    this.auth$.subscribe(auth => {
+      this.logger.debug('new auth', auth);
+    });
+
+    this.user$.subscribe(auth => {
+      this.logger.debug('new user', auth);
     });
   }
 }

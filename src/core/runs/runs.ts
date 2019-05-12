@@ -27,7 +27,7 @@ export const onStateChange = function ($rootScope, $state, authService: AuthServ
         };
       } else {
         if (location.pathname === "/") {
-          location.href = "/signup";
+          location.href = "/v2/signup";
         }
       }
 
@@ -37,11 +37,11 @@ export const onStateChange = function ($rootScope, $state, authService: AuthServ
       $rootScope.user = user || null;
 
       if (!user && location.pathname === "/") {
-        return location.href = "/signup";
+        return location.href = "/v2/signup";
       }
 
       if (user.status !== "11" && user.status !== "10" && location.pathname === "/") {
-        return location.href = "/thank-you";
+        return location.href = "/v2/thank-you";
       }
     }
 

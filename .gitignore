@@ -7,3 +7,4 @@ public/js/editor.js
 public/js/welcome.js
 public/js/*.map
 !honestcash-v2
+.idea

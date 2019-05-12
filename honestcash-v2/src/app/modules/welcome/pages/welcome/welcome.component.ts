@@ -2,8 +2,8 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { AppState, selectAuthState } from '@store/app.states';
-import { LogOut } from '@store/auth/auth.actions';
+import { AppStates, selectAuthorizationState } from '../../../../app.states';
+import { LogOut } from '../../../../core/store/auth/auth.actions';
 
 @Component({
   selector: 'app-welcome-pages-welcome',
@@ -11,8 +11,7 @@ import { LogOut } from '@store/auth/auth.actions';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  @HostBinding('class') class = 'w-full items-center justify-center';
-  @HostBinding('style.height') height = '65vh';
+  @HostBinding('class') class = 'card mb-auto mt-auto';
 
   getState: Observable<any>;
   isAuthenticated: false;
@@ -20,9 +19,9 @@ export class WelcomeComponent implements OnInit {
   errorMessage = null;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppStates>
   ) {
-    this.getState = this.store.select(selectAuthState);
+    this.getState = this.store.select(selectAuthorizationState);
   }
 
   ngOnInit() {

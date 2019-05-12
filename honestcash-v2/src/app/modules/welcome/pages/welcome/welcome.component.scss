@@ -1,0 +1,28 @@
+@import '../../../../../styles';
+
+$black: #000;
+
+.container{
+  height: 100%;
+  align-content: center;
+}
+
+:host {
+  width: 400px;
+  @include background-opacity($black, 5);
+}
+
+.errors {
+  @include background-opacity($black, 5);
+  & > .card-body {
+    @include opacity(10);
+  }
+}
+
+code.domain {
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  padding: 0px 2px;
+}

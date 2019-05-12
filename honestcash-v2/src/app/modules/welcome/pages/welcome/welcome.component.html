@@ -1,59 +1,14 @@
-<!-- <div class="row">
-  <div class="col-md-4">
-    <div *ngIf="isAuthenticated; then doSomething; else doSomethingElse;"></div>
-    <ng-template #doSomething>
-      <p>You logged in <em>{{user.email}}!</em></p>
-      <button class="btn btn-primary" (click)="logOut()">Log out</button>
-    </ng-template>
-    <ng-template #doSomethingElse>
-      <a [routerLink]="['/login']" class="btn btn-primary">Log in</a>
-      <a [routerLink]="['/signup']" class="btn btn-primary">Sign up</a>
-    </ng-template>
-
-    <a [routerLink]="['/status']" class="btn btn-primary">Status</a>
-
-    <br><br><br>
-
-    <div class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Current State</h5>
-        <ul>
-          <li><strong>isAuthenticated</strong> - {{isAuthenticated}}</li>
-          <li><strong>user.email</strong> - {{ user?.email || 'null'}}</li>
-          <li><strong>user.token</strong> - {{ user?.token || 'null'}}</li>
-          <li><strong>errorMessage</strong> - {{ errorMessage || 'null'}}</li>
-        </ul>
-      </div>
-    </div>
-
-
-    <router-outlet></router-outlet>
-  </div>
-</div> -->
-<app-welcome-heading title="Designed for writers, creatives and thinkers." title2="Powered by Bitcoin." description="Honest is reinventing how ideas are shared"></app-welcome-heading>
-<div
-  class="flex w-1/6 flex-wrap mx-auto items-center justify-center"
+<app-welcome-heading
+  title="Designed for writers, creatives and thinkers."
+  title2="Powered by Bitcoin."
+  description="Honest is reinventing how ideas are shared"
 >
-  <div
-    class="flex flex-wrap text-center w-full items-center"
-  >
-    <a
-      [routerLink]="['/signup']"
-      class="w-full px-4 py-4 bg-white border-2 border-white border-solid font-bold text-black uppercase rounded-lg text-black no-underline"
-    >
-      Get Started
-    </a>
-    <a
-      class="w-full px-4 py-4 bg-transparent border-2 border-white border-solid font-bold text-white uppercase rounded-lg mt-6 no-underline"
-      [routerLink]="['/login']"
-    >
-      Sign In
-    </a>
-    <a
-      href="https://cryptopop.threadless.com/designs/supper-at-the-bitcoin-moonbase/home"
-      target="_blan"
-      class="w-full px-4 font-bold text-center text-white hover:text-white uppercase mt-6 cursor-pointer no-underline"
-      >Buy Featured Art</a
-    >
-  </div>
+</app-welcome-heading>
+<div class="card-body">
+  <a class="btn btn-light btn-block font-weight-bold text-uppercase" [routerLink]="['/signup']">
+    Get Started
+  </a>
+  <a class="btn btn-outline-light btn-block font-weight-bold text-uppercase" [routerLink]="['/login']">
+    Sign In
+  </a>
 </div>

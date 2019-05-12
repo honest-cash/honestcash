@@ -1,3 +1,6 @@
+import writeHtml from "./write.html";
+import layoutWriteHtml from "./layout_write.html"
+
 export default function state ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("/");
 
@@ -5,18 +8,18 @@ export default function state ($stateProvider, $urlRouterProvider) {
         .state("editor", {
             abstract: true,
             controller: "EditorCtrl",
-            templateUrl: "/templates/layout_write.html",
+            template: layoutWriteHtml,
         })
         .state("editor.write", {
             url: "/write",
-            templateUrl: "/templates/write.html",
+            template: writeHtml,
         })
         .state("editor.response", {
             url: "/write/response/:parentPostId",
-            templateUrl: "/templates/write.html",
+            template: writeHtml,
         })
         .state("editor.edit", {
             url: "/edit/:postId",
-            templateUrl: "/templates/write.html",
+            template: writeHtml,
         });
 };

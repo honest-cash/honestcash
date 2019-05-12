@@ -1,11 +1,11 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { Store } from '@ngrx/store';
-import { StoreMock } from './store/store.mock';
+import { StoreMock } from './core/mocks/store.mock';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
@@ -30,10 +30,10 @@ describe('AppComponent', () => {
 
   // @todo extend these tests for the entire app
   /*
-  it(`should have as title 'honestcash-v2'`, () => {
+  it(`should have as title 'Honest Cash'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('honestcash-v2');
+    expect(app.title).toEqual('Honest Cash');
   });
 
   it('should render title in a h1 tag', () => {

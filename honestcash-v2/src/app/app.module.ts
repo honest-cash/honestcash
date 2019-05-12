@@ -8,16 +8,23 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { AuthEffects } from '@store/auth/auth.effects';
-import { reducers, metaReducers } from '@store/app.states';
-import { AuthService } from '@services/auth.service';
+import { AuthEffects } from './core/store/auth/auth.effects';
+import { WalletEffects } from './core/store/wallet/wallet.effects';
+import { UserEffects } from './core/store/user/user.effects';
+
+import { reducers, metaReducers } from './app.states';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { AuthGuardService as AuthGuard } from '@services/auth-guard.service';
-import {
-  TokenInterceptor, ErrorInterceptor
-} from '@services/token.interceptor';
+import { TokenInterceptor } from './core/http/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AppEffects } from './core/store/app/app.effects';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faEnvelope, faUser} from '@fortawesome/free-regular-svg-icons';
+import {faKey} from '@fortawesome/free-solid-svg-icons/faKey';
+import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
+import {faComments, faGlobe, faHeart, faRetweet, faShareAlt, faSpinner, faTerminal} from '@fortawesome/free-solid-svg-icons';
+import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
+import {FontAwesomeModule} from './core/modules/font-awesome.module';
 
 @NgModule({
   declarations: [
@@ -31,23 +38,19 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([ AppEffects, AuthEffects, UserEffects, WalletEffects ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    FontAwesomeModule,
   ],
   providers: [
-    AuthService,
-    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptor,
       multi: true
     }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {}
+}

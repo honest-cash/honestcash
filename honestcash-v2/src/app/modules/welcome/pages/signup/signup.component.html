@@ -1,69 +1,144 @@
-<app-welcome-heading title="What are you waiting for? Get started now." description="Enter your details below"></app-welcome-heading>
-
-<form #f="ngForm" (ngSubmit)="onSubmit(f)">
-    <input
-      applyTransparentInputClass
-      class="mb-4"
-      type="text"
-      placeholder="Username"
-      name="username"
-  />
-  <!-- <i
-    class="w-fulltext-md opacity-75 font-bold text-red"
-    *ngIf="errors.username !== ''"
-    >{{ errors.username }}</i
-  > -->
-  <input
-    applyTransparentInputClass
-    class="mb-4"
-    type="email"
-    placeholder="E-mail"
-    name="email"
-  />
-  <!-- <i
-    class="w-full text-md opacity-75 font-bold text-red"
-    *ngIf="errors.email !== ''"
-    >{{ errors.email }}</i
-  > -->
-
-  <input
-    applyTransparentInputClass
-    class="mb-4"
-    type="password"
-    placeholder="Password"
-    name="password"
-  />
-
-  <!-- <i
-    class="w-full text-md opacity-75 font-bold text-red"
-    *ngIf="errors.password !== ''"
-    >{{ errors.password }}</i
-  > -->
-  <div
-    id="hc-captcha"
-    class="g-recaptcha w-full p-4 my-4 opacity-75"
-    data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
-  ></div>
-  <!-- <i
-    class="w-full text-md opacity-75 -mt-12 font-bold text-red"
-    *ngIf="errors.captcha !== ''"
-    >{{ errors.captcha }}</i
-  > -->
-
-  <!-- <div
-    class="w-full items-start justify-start p-4 bg-white border-2 border-white border-solid rounded-lg opacity-75"
-    *ngIf="errors.general !== ''"
-  >
-    <p class="w-full text-md opacity-75 mt-4 font-bold text-red">
-      {{ errors.general }}
+<app-welcome-heading
+  title="What are you waiting for? Get started now."
+  description="Enter your details below"
+></app-welcome-heading>
+<div class="card-body">
+  <form name="form" class="needs-validation" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['far', 'user']"></fa-icon></span>
+      </div>
+      <input
+        required
+        minlength="3"
+        maxlength="25"
+        appForbiddenUsername
+        name="username"
+        #username="ngModel"
+        [ngModel]="user.username"
+        [ngClass]="{ 'is-invalid': f.submitted && username.invalid, 'is-valid': f.submitted && username.valid }"
+        class="form-control"
+        type="text"
+        placeholder="Username"
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && username.invalid"
+      >
+        <span
+          *ngIf="username.errors.required"
+        >
+          Username is required.
+        </span>
+        <span
+          *ngIf="username.errors.minlength"
+        >
+          Username must be at least 3 characters long.
+        </span>
+        <span
+          *ngIf="username.errors.maxlength"
+        >
+          Username cannot be longer than 25 characters.
+        </span>
+        <span
+          *ngIf="username.errors.forbiddenUsername"
+        >
+          Username can only contain alpha-numeric characters.
+        </span>
+        </div>
+    </div>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['far', 'envelope']"></fa-icon></span>
+      </div>
+      <input
+        required
+        name="email"
+        #email="ngModel"
+        [ngModel]="user.email"
+        [ngClass]="{ 'is-invalid': f.submitted && email.invalid, 'is-valid': f.submitted && email.valid }"
+        class="form-control"
+        type="text"
+        placeholder="E-Mail"
+        email
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && email.invalid"
+      >
+        <span
+          *ngIf="email.errors.required"
+        >
+          E-mail is required.
+        </span>
+        <span
+          *ngIf="email.errors.email"
+        >
+          E-mail must be a valid e-mail address.
+        </span>
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['fas', 'key']"></fa-icon></span>
+      </div>
+      <input
+        required
+        minlength="8"
+        name="password"
+        #password="ngModel"
+        [ngModel]="user.password"
+        class="form-control"
+        type="password"
+        placeholder="Password"
+        [ngClass]="{ 'is-invalid': f.submitted && password.invalid, 'is-valid': f.submitted && password.valid }"
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && password.invalid"
+      >
+        <span
+          *ngIf="password.errors.required"
+        >
+          Password is required.
+        </span>
+        <span
+          *ngIf="password.errors.minlength"
+        >
+          Password must be at least 8 characters long.
+        </span>
+      </div>
+    </div>
+    <div class="input-group form-group">
+      <div
+        id="hc-captcha"
+        class="g-recaptcha m-auto"
+        data-sitekey="6LcN8I4UAAAAAMvwa01DpArBsh7LVZHIVgoeJ9AK"
+      ></div>
+      <div *ngIf="!isCaptchaValid" class="w-100 text-center text-danger">Please verify captcha by checking the checkbox</div>
+    </div>
+    <div *ngIf="errorMessage" class="card errors mb-2">
+      <div class="card-body text-danger">{{errorMessage}}</div>
+    </div>
+    <p class="small">
+      Bitcoin wallet will be generated and encrypted with your email and password. Please make sure to use a strong password. In order to ensure that your account is not lost, backup your key using the "Export Recovery Phrase" tool after login. If you forget your email/password or do not save your recovery phrase you can lose access to your funds forever!
     </p>
-  </div> -->
-  <button
-    applyTransparentButtonClass
-    [disabled]="isLoading"
-  >
-    <!-- {{ isLoading ? 'Please Wait...' : 'Get Started' }} -->
-    Get Started
-  </button>
-  <app-welcome-form-footer to="login" text="Already have an account?" anchor="Sign In"></app-welcome-form-footer>
-  <form>
+    <p class="small">
+      By clicking "Sign Up" you indicate that you agree to Honest's <a href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124" target="_blank">Terms of Service</a> and acknowledge Honest's <a href="https://honest.cash/honest_cash/honestcash-privacy-policy">Privacy Policy</a>.
+    </p>
+
+    <div class="form-group">
+      <app-welcome-loading-submit-button
+        text="Sign Up"
+        loadingText="Signing Up"
+        [isLoading]="isLoading"
+        btnClass="btn-light"
+      ></app-welcome-loading-submit-button>
+    </div>
+  </form>
+</div>
+<app-welcome-card-footer
+  to="login"
+  text="Already have an account?"
+  anchor="Sign In"
+></app-welcome-card-footer>

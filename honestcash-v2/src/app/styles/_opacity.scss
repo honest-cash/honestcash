@@ -1,0 +1,9 @@
+@mixin opacity($value) {
+  @if $value >= 10 {
+    $value: 10;
+  } @else if $value < 0 {
+    $value: 0;
+  }
+  $value:  0.1 * $value;
+  opacity: $value !important;
+}
