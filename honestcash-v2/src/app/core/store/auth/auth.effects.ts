@@ -30,6 +30,7 @@ import {
   ResetPasswordContext
 } from '../../models/authentication';
 import { UserService } from 'app/core/services/user.service';
+import { WalletService } from 'app/core/services/wallet.service';
 
 @Injectable()
 export class AuthEffects {
@@ -37,6 +38,7 @@ export class AuthEffects {
   constructor(
     private actions: Actions,
     private authenticationService: AuthenticationService,
+    private walletService: WalletService,
     private userService: UserService,
     private router: Router,
   ) {}
@@ -69,7 +71,11 @@ export class AuthEffects {
         password: payload.password
       })
     ]),
-    tap(() => this.router.navigateByUrl('/thank-you'))
+    tap(() => {
+      // @todo
+      this.tryGoToMainPageAfterLogin();
+      // this.router.navigateByUrl('/thank-you');
+    })
   );
 
   @Effect()
@@ -146,4 +152,20 @@ export class AuthEffects {
     })
   );
 
+  /**
+   * Recursive function trying to switch to the main page.
+   * We check if the token and wallet mnemonic have been initialized and then forward to main page after login.
+   * @todo: replace with with a more cleaner approach.
+   */
+  private tryGoToMainPageAfterLogin() {
+    if (this.authenticationService.getToken() && this.walletService.getWalletMnemonic()) {
+      // this.router.navigateByUrl('/thank-you');
+      // @todo: hard reload to go to V1
+      location.href = '/';
+    } else {
+      setTimeout(() => {
+        this.tryGoToMainPageAfterLogin();
+      }, 1000);
+    }
+  }
 }

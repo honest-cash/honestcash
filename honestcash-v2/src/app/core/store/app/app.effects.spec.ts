@@ -57,7 +57,7 @@ describe('app.effects', () => {
       const walletSetupParams = {
         mnemonic: mock.mnemonic,
         password: mock.password,
-      }
+      };
 
       const action = new AppActions.AppLoad();
 
