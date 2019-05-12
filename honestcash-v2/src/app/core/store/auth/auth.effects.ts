@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
-import { tap, map, switchMap, catchError } from 'rxjs/operators';
+import { Observable, of, defer } from 'rxjs';
+import { tap, map, switchMap, catchError, mergeMap } from 'rxjs/operators';
 import {
   AuthActionTypes,
   LogIn,
@@ -31,9 +31,12 @@ import {
 } from '../../models/authentication';
 import { UserService } from 'app/core/services/user.service';
 import { WalletService } from 'app/core/services/wallet.service';
+import { WalletUtils, ISimpleBitcoinWallet } from 'app/shared/lib/WalletUtils';
+import { Logger } from 'app/core/services/logger.service';
 
 @Injectable()
 export class AuthEffects {
+  private logger: Logger;
 
   constructor(
     private actions: Actions,
@@ -41,7 +44,9 @@ export class AuthEffects {
     private walletService: WalletService,
     private userService: UserService,
     private router: Router,
-  ) {}
+  ) {
+    this.logger = new Logger('AuthEffects');
+  }
 
   @Effect()
   LogIn: Observable<any> = this.actions.pipe(
@@ -64,6 +69,28 @@ export class AuthEffects {
     tap((payload) => {
       this.authenticationService.init(payload.token, payload.user.id);
     }),
+    // this generates a new wallet
+    // @todo refactor it together with wallet.effects as the functionality is mixed together.
+    mergeMap((payload: LoginSuccessResponse) => defer(async () => {
+      let simpleWallet: ISimpleBitcoinWallet;
+
+      if (!payload.wallet || !payload.wallet.mnemonicEncrypted) {
+        this.logger.info('Creating new wallet.');
+
+        simpleWallet = await WalletUtils.generateNewWallet(payload.password);
+
+        await this.walletService.setWallet(simpleWallet.mnemonicEncrypted);
+      }
+
+      return {
+        user: payload.user,
+        password: payload.password,
+        token: payload.token,
+        wallet: {
+          mnemonicEncrypted: simpleWallet.mnemonicEncrypted
+        }
+      };
+    })),
     switchMap((payload: LoginSuccessResponse) => [
       new UserSetup(),
       new WalletSetup({
