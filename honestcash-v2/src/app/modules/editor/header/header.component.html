@@ -1,0 +1,37 @@
+<header>
+  <nav class="navbar navbar-light navbar-expand">
+    <a class="navbar-brand" href="/">
+      <img height="34" src="https://honest.cash/img/honest-logo-2.png" />
+    </a>
+    <div class="navbar-nav">
+      <div class="nav-item">
+        Post Details
+        <!--<app-partial-post-details></app-partial-post-details>-->
+      </div>
+    </div>
+
+    <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
+      <div class="navbar-nav ml-auto">
+        <div class="nav-item mr-4 buttons-wrapper">
+          Save Button <!--<app-button-post-save></app-button-post-save>-->
+        </div>
+        <div class="nav-item" ngbDropdown placement="bottom-right">
+          <a id="user-dropdown" class="nav-link" ngbDropdownToggle>
+            <img class="user-image" src="{{ user.imageUrl }}" />
+          </a>
+          <div ngbDropdownMenu aria-labelledby="user-dropdown">
+            <button class="dropdown-item" (click)="goTo('profile')" translate>my profile</button>
+            <button class="dropdown-item" (click)="goTo('posts')" translate>my posts</button>
+            <button class="dropdown-item" (click)="goTo('wallet')" translate>my wallet</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" (click)="goTo('help')" translate>help</button>
+            <button class="dropdown-item" (click)="goTo('terms-of-service')" translate>terms of service</button>
+            <button class="dropdown-item" (click)="goTo('privacy-policy')" translate>privacy policy</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" (click)="logout()" translate>Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
