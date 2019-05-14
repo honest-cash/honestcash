@@ -12,6 +12,7 @@ import Code from '@editorjs/code';
 import Marker from '@editorjs/marker';
 import Delimiter from '@editorjs/delimiter';
 import Warning from '@editorjs/warning';
+import Paywall from './plugins/paywall.js';
 
 const editorConfig: EditorConfig = {
   holder: 'editor',
@@ -61,7 +62,7 @@ const editorConfig: EditorConfig = {
       class: Marker,
       inlineToolbar: true,
     },
-    delimited: {
+    delimiter: {
       class: Delimiter,
       inlineToolbar: true,
     },
@@ -69,6 +70,9 @@ const editorConfig: EditorConfig = {
       class: Warning,
       inlineToolbar: true,
     },
+    paywall: {
+      class: Paywall
+    }
   },
 };
 
@@ -142,7 +146,7 @@ export class EditorComponent implements OnInit {
 
       setInterval(() => {
         this.editor.saver.save().then((outputData) => {
-          console.log('Article data: ', JSON.stringify(outputData.blocks, null, 2));
+          //console.log('Article data: ', JSON.stringify(outputData.blocks, null, 2));
         }).catch((error) => {
           console.log('Saving failed: ', error);
         });

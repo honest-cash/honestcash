@@ -3,3 +3,20 @@
   margin: 0 auto;
   color: black;
 }
+
+:host ::ng-deep .ce-paywall {
+  width: 100%;
+  text-align: center;
+  background-color: red;
+  border: 1px solid #fafafa;
+  border-radius: 4px;
+}
+
+:host ::ng-deep .ce-paywall:before {
+  display: inline-block;
+  content: "Content below will have to be unlocked by the reader";
+  color: white;
+  font-size: 18px;
+  height: 30px;
+  letter-spacing: 0.2em;
+}
