@@ -245,13 +245,8 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
         class: Header,
         inlineToolbar: true,
       },
-      link: {
-        class: Link,
-        inlineToolbar: true,
-      },
-      image: {
-        class: SimpleImage,
-      },
+      link: Link,
+      image: SimpleImage,
       /*checklist: {
         class: Checklist,
         inlineToolbar: true,
@@ -260,40 +255,16 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
         class: List,
         inlineToolbar: true,
       },
-      embed: {
-        class: Embed,
-        inlineToolbar: true,
-      },
-      quote: {
-        class: Quote,
-        inlineToolbar: true,
-      },
+      embed: Embed,
+      quote: Quote,
       paragraph: {
         class: Paragraph,
         inlineToolbar: true,
-        config: {
-          placeholder: 'Tell us your story...'
-        }
       },
-      code: {
-        class: Code,
-        inlineToolbar: true,
-      },
-      Marker: {
-        class: Marker,
-        inlineToolbar: true,
-      },
-      delimiter: {
-        class: Delimiter,
-        inlineToolbar: true,
-      },
-      /*warning: {
-        class: Warning,
-        inlineToolbar: true,
-      },*/
-      /*paywall: {
-        class: Paywall
-      }*/
+      code: Code,
+      Marker: Marker,
+      delimiter: Delimiter,
+      /*warning: Warning,*/
     },
   };
   story = new Post();
