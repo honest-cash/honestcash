@@ -1,11 +1,153 @@
+<ng-template #paywallPopContent>For more information about pay-to-read sections, please refer to <a href="https://honest.cash/honest_cash/earn-more-money-for-your-content-paywalls-3552" target="_blank">Paywalls Guide</a></ng-template>
+<ng-template #paywallPopTitle>About Pay-to-read Sections</ng-template>
 <div class="modal-body">
-  <div id="editor"></div>
+  <div class="panes" [@slide]="activePane">
+    <div class="pane"><div id="editor"></div></div>
+    <div class="pane ml-4 p-4">
+      <form [hidden]="activePane === 'first'" name="form" class="needs-validation" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input
+                required
+                minlength="1"
+                id="title"
+                name="title"
+                #title="ngModel"
+                [ngModel]="story.title"
+                [ngClass]="{ 'is-invalid': f.submitted && title.invalid, 'is-valid': f.submitted && title.valid }"
+                class="form-control"
+                type="text"
+                placeholder="Title of your story"
+              >
+              <div
+                class="invalid-feedback"
+                *ngIf="f.submitted && title.invalid"
+              >
+        <span
+          *ngIf="title.errors.required"
+        >
+          Title is required.
+        </span>
+                <span
+                  *ngIf="title.errors.minlength"
+                >
+          Title must be at least 1 character long.
+        </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <label for="summary">Summary</label>
+              <textarea
+                id="summary"
+                name="summary"
+                #summary="ngModel"
+                [ngModel]="story.summary"
+                [ngClass]="{ 'is-invalid': f.submitted && summary.invalid, 'is-valid': f.submitted && summary.valid }"
+                class="form-control"
+                type="text"
+                placeholder="Summary of your story"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <label for="coverPhoto">Cover Photo</label>
+              <input
+                id="coverPhoto"
+                name="summary"
+                #summary="ngModel"
+                [ngModel]="story.summary"
+                [ngClass]="{ 'is-invalid': f.submitted && summary.invalid, 'is-valid': f.submitted && summary.valid }"
+                class="form-control-file"
+                type="file"
+                placeholder="Upload a cover photo"
+              >
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="tags">Tags</label>
+              <textarea
+                id="tags"
+                name="summary"
+                #summary="ngModel"
+                [ngModel]="story.summary"
+                [ngClass]="{ 'is-invalid': f.submitted && summary.invalid, 'is-valid': f.submitted && summary.valid }"
+                class="form-control"
+                type="text"
+                placeholder="Tag your story"
+                aria-describedby="tagsHelpInline"
+              ></textarea>
+              <small id="tagsHelpInline" class="text-muted">
+                Tags can be submitted by pressing enter
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-auto">
+            <div class="form-group btn-group btn-group-toggle">
+              <label class="btn-outline-dark" ngbButtonLabel placement="right" [ngbPopover]="paywallPopContent" [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="'outside'">
+                <input type="checkbox" ngbButton id="hasPaidSection" name="hasPaidSection" #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"> I have a pay-to-read section in my story
+              </label>
+            </div>
+          </div>
+        </div>
+        <div [hidden]="!story.hasPaidSection" class="form-row">
+          <div class="col-auto">
+            <div class="form-group">
+              <input
+                id="paidSectionLinebreak"
+                name="paidSectionLinebreak"
+                #paidSectionLinebreak="ngModel"
+                [ngModel]="story.paidSectionLinebreak"
+                [ngClass]="{ 'is-invalid': f.submitted && paidSectionLinebreak.invalid, 'is-valid': f.submitted && paidSectionLinebreak.valid }"
+                class="form-control"
+                placeholder="Sectionbreak Number"
+                type="number"
+                aria-describedby="paidSectionLinebreakHelpInline">
+              <small id="paidSectionLinebreakHelpInline" class="text-muted">
+                Sectionbreak Numbers are written on top-left corner of your editing blocks inside the editor
+              </small>
+            </div>
+          </div>
+          <div class="col-auto">
+            <div class="form-group">
+              <input
+                id="paidSectionCost"
+                name="paidSectionCost"
+                #paidSectionCost="ngModel"
+                [ngModel]="story.paidSectionCost"
+                [ngClass]="{ 'is-invalid': f.submitted && paidSectionCost.invalid, 'is-valid': f.submitted && paidSectionCost.valid }"
+                class="form-control"
+                placeholder="Price in BCH"
+                type="number"
+                aria-describedby="paidSectionCostHelpInline">
+              <small id="paidSectionCostHelpInline" class="text-muted">
+                Please enter cost in BCH
+              </small>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 <div class="modal-footer">
   <div class="col text-left">
-    <button type="button" class="btn btn-outline-dark" (click)="onDismiss()">Close <fa-icon [icon]="['fas', 'window-close']"></fa-icon></button>
+    <button *ngIf="activePane === 'first'" type="button" class="btn btn-outline-dark" (click)="onDismiss()">Close <fa-icon [icon]="['fas', 'window-close']"></fa-icon></button>
+    <button *ngIf="activePane === 'second'" type="button" class="btn btn-outline-dark" (click)="onBack()">Back <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon></button>
   </div>
   <div class="col text-right">
-    <button type="button" class="btn btn-success" (click)="onPublish()">Publish <fa-icon [icon]="['far', 'paper-plane']"></fa-icon></button>
+    <button *ngIf="activePane === 'first'" type="button" class="btn btn-success" (click)="onNext()">Publish <fa-icon [icon]="['fas', 'chevron-right']"></fa-icon></button>
+    <button *ngIf="activePane === 'second'" type="button" class="btn btn-success" (click)="onPublish()">Publish <fa-icon [icon]="['far', 'paper-plane']"></fa-icon></button>
   </div>
 </div>

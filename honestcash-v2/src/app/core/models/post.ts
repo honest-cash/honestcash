@@ -5,6 +5,7 @@ export type TPostTypeId = 'comment' | 'article' | 'response';
 export default class Post {
     id: number;
     title: string;
+    summary: string;
     alias: string;
     body: string;
     bodyMD: string;
@@ -28,5 +29,6 @@ export default class Post {
     hasPaidSection?: boolean;
     paidSectionCost?: number;
     hasBeenPaidFor?: boolean;
+    paidSectionLinebreak?: number;
     isOwner?: boolean;
   }

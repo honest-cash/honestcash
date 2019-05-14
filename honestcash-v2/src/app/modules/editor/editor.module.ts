@@ -9,6 +9,7 @@ import {StoryComponent} from './story/story.component';
 import {FontAwesomeModule} from '../../core/modules/font-awesome.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EmbeddableEditorComponent} from './embed/embed.component';
+import {FormsModule} from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -36,6 +37,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    FormsModule,
     FontAwesomeModule,
     NgbModule,
   ],

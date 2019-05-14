@@ -19,15 +19,14 @@ import { TokenInterceptor } from './core/http/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppEffects } from './core/store/app/app.effects';
 import {FontAwesomeModule} from './core/modules/font-awesome.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({
-      appId: 'honestcash-v2'
-    }),
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,

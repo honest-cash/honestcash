@@ -17,7 +17,7 @@ import {
   faSpinner,
   faTerminal,
   faExclamationCircle,
-  faWindowClose,
+  faWindowClose, faChevronLeft, faChevronRight, faHeading, faAlignLeft, faTags, faImage,
 } from '@fortawesome/free-solid-svg-icons';
 import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
 
@@ -46,5 +46,12 @@ export class FontAwesomeModule {
     library.add(faPenAlt);
     library.add(faPaperPlane);
     library.add(faWindowClose);
+    library.add(faChevronLeft);
+    library.add(faChevronRight);
+    library.add(faHeading);
+    library.add(faAlignLeft);
+    library.add(faTags);
+    library.add(faImage);
+    library.add(faExclamationCircle);
   }
 }

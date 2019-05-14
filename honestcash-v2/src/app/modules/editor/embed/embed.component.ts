@@ -1,5 +1,5 @@
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
@@ -14,6 +14,8 @@ import Marker from '@editorjs/marker';
 import Delimiter from '@editorjs/delimiter';
 import Warning from '@editorjs/warning';
 import Paywall from '../plugins/paywall';
+import {trigger, state, style, transition, animate} from '@angular/animations';
+import Post from '../../../core/models/post';
 
 const initialValue = [
   {
@@ -217,10 +219,19 @@ const initialValue = [
   }
 ];
 
+type PaneType = 'first' | 'second';
+
 @Component({
              selector: 'app-editor-embeddable',
              templateUrl: './embed.component.html',
-  styleUrls: ['./embed.component.scss']
+  styleUrls: ['./embed.component.scss'],
+             animations: [
+               trigger('slide', [
+                 state('first', style({ transform: 'translateX(0)' })),
+                 state('second', style({ transform: 'translateX(-50%)' })),
+                 transition('* => *', animate(300))
+               ])
+             ]
            })
 export class EmbeddableEditorComponent implements OnInit, OnDestroy {
 
@@ -284,7 +295,10 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
         class: Paywall
       }
     },
-  }
+  };
+  story = new Post();
+
+  @Input() activePane: PaneType = 'first';
 
   constructor(public activeModal: NgbActiveModal) {}
 
@@ -296,6 +310,18 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
       this.editor.blocks.render({blocks: initialValue});
 
     });
+  }
+
+  onBack() {
+    this.activePane = 'first';
+  }
+
+  onNext() {
+    this.activePane = 'second';
+  }
+
+  onSubmit(form) {
+    console.log('form', form);
   }
 
   onPublish() {
@@ -312,7 +338,9 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editor.destroy();
+    if (this.editor && this.editor.destroy) {
+      this.editor.destroy();
+    }
   }
 
 }
