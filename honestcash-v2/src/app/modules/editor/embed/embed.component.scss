@@ -16,7 +16,9 @@
 }
 
 :host ::ng-deep .codex-editor__redactor {
-  padding-bottom: 0px !important;
+  padding-top: 10px;
+  padding-bottom: 50px !important;
+  min-height: 50vh;
 }
 
 :host ::ng-deep .codex-editor__redactor {

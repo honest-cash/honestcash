@@ -252,10 +252,10 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
       image: {
         class: SimpleImage,
       },
-      checklist: {
+      /*checklist: {
         class: Checklist,
         inlineToolbar: true,
-      },
+      },*/
       list: {
         class: List,
         inlineToolbar: true,
@@ -287,13 +287,13 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
         class: Delimiter,
         inlineToolbar: true,
       },
-      warning: {
+      /*warning: {
         class: Warning,
         inlineToolbar: true,
-      },
-      paywall: {
+      },*/
+      /*paywall: {
         class: Paywall
-      }
+      }*/
     },
   };
   story = new Post();
