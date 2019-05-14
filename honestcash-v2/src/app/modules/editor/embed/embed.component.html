@@ -1,6 +1,6 @@
 <ng-template #paywallPopContent>For more information about pay-to-read sections, please refer to <a href="https://honest.cash/honest_cash/earn-more-money-for-your-content-paywalls-3552" target="_blank">Paywalls Guide</a></ng-template>
 <ng-template #paywallPopTitle>About Pay-to-read Sections</ng-template>
-<div class="modal-body">
+<div #modalBody class="modal-body">
   <div class="panes" [@slide]="activePane">
     <div class="pane"><div id="editor"></div></div>
     <div class="pane ml-4 p-4">
@@ -115,7 +115,7 @@
                 type="number"
                 aria-describedby="paidSectionLinebreakHelpInline">
               <small id="paidSectionLinebreakHelpInline" class="text-muted">
-                Sectionbreak Numbers are written on top-left corner of your editing blocks inside the editor
+                Sectionbreak Numbers are written on top-right corner of your editing blocks inside the editor
               </small>
             </div>
           </div>

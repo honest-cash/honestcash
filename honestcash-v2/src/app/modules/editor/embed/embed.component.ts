@@ -1,5 +1,5 @@
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
@@ -299,6 +299,7 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
   story = new Post();
 
   @Input() activePane: PaneType = 'first';
+  @ViewChild('modalBody') modalBody: ElementRef;
 
   constructor(public activeModal: NgbActiveModal) {}
 
@@ -314,10 +315,12 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
 
   onBack() {
     this.activePane = 'first';
+    this.modalBody.nativeElement.scrollTop = 0;
   }
 
   onNext() {
     this.activePane = 'second';
+    this.modalBody.nativeElement.scrollTop = 0;
   }
 
   onSubmit(form) {

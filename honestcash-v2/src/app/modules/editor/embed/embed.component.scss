@@ -18,3 +18,18 @@
 :host ::ng-deep .codex-editor__redactor {
   padding-bottom: 0px !important;
 }
+
+:host ::ng-deep .codex-editor__redactor {
+  counter-reset: line-number;
+}
+
+:host ::ng-deep .codex-editor__redactor > .ce-block {
+  counter-increment: line-number;
+}
+
+:host ::ng-deep .codex-editor__redactor > .ce-block.ce-block--focused > .ce-block__content:before {
+  position: absolute;
+  right: -40px;
+  content: counter(line-number);
+  top: 0px;
+}
