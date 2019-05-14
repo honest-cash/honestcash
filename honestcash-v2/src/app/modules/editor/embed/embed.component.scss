@@ -1,0 +1,8 @@
+:host ::ng-deep .modal-body {
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
+:host ::ng-deep .codex-editor__redactor {
+  padding-bottom: 0px !important;
+}

@@ -18,12 +18,6 @@ import { environment } from '../environments/environment';
 import { TokenInterceptor } from './core/http/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppEffects } from './core/store/app/app.effects';
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {faEnvelope, faUser} from '@fortawesome/free-regular-svg-icons';
-import {faKey} from '@fortawesome/free-solid-svg-icons/faKey';
-import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
-import {faComments, faGlobe, faHeart, faRetweet, faShareAlt, faSpinner, faTerminal} from '@fortawesome/free-solid-svg-icons';
-import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeModule} from './core/modules/font-awesome.module';
 
 @NgModule({

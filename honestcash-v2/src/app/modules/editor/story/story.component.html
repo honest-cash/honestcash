@@ -1,0 +1,31 @@
+<div class="row mb-2">
+  <div class="col">
+    <h1 class="story-title">{{story.title}}</h1>
+  </div>
+</div>
+<div class="row mb-2">
+  <div class="col-1">
+    <app-avatar [src]="story.user.imageUrl" large="true"></app-avatar>
+  </div>
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <a class="font-weight-bold" [routerLink]="['/profile', story.user.username]">{{story.user.username}}</a>
+        <button type="button" class="btn btn-light btn-xs ml-2">Follow</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-muted">
+        {{story.updatedAt | date:'MMM d, yy'}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mb-5">
+  <div class="col story-body" [innerHTML]="story.body"></div>
+</div>
+<div class="row">
+  <div class="col">
+    <a *ngFor="let tag of story.userPostHashtags; let i = index;" [ngClass]="{'ml-2': i > 0}" class="badge badge-light p-3 font-weight-normal" [routerLink]="['/feed', 'hashtag', tag.hashtag]">{{tag.hashtag}}</a>
+  </div>
+</div>

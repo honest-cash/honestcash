@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import User from '../../../core/models/user';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { EmbeddableEditorComponent } from '../embed/embed.component';
 
 @Component({
              selector: 'app-header',
@@ -12,13 +14,22 @@ export class HeaderComponent implements OnInit {
   public user: User;
 
   constructor(
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     // @todo access from store instead
+    this.user = new User();
     /*this.userService.getUser().subscribe(user => {
       this.user = user;
     });*/
+  }
+
+  openEditorModal() {
+    const modalRef = this.modalService.open(EmbeddableEditorComponent, {
+      size: 'lg',
+      centered: true,
+    });
   }
 
   toggleMenu() {
