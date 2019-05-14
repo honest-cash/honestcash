@@ -29,6 +29,7 @@ export class HeaderComponent implements OnInit {
     const modalRef = this.modalService.open(EmbeddableEditorComponent, {
       size: 'lg',
       centered: true,
+      backdrop: 'static',
     });
   }
 
