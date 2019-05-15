@@ -8,10 +8,10 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     imports: [],
-                                     declarations: [HeaderComponent],
-                                     providers: []
-                                   }).compileComponents();
+      imports: [],
+      declarations: [HeaderComponent],
+      providers: []
+    }).compileComponents();
   }));
 
   beforeEach(() => {
