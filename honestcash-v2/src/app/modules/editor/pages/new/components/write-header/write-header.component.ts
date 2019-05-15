@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import User from '../../../../../../core/models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { EmbeddableEditorComponent } from '../../../../embed/embed.component';
@@ -8,6 +8,7 @@ import {LogOut} from '../../../../../../core/store/auth/auth.actions';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../../../core/store/auth/auth.state';
 import {State as UserState} from '../../../../../../core/store/user/user.state';
+import {EDITOR_SAVE_STATUS} from '../../editor-write.component';
 
 @Component({
    selector: 'app-editor-write-header',
@@ -15,7 +16,8 @@ import {State as UserState} from '../../../../../../core/store/user/user.state';
    styleUrls: ['./write-header.component.scss']
 })
 export class WriteHeaderComponent implements OnInit {
-  menuHidden = true;
+  @Input() public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
+  public menuHidden = true;
   public authState: Observable<AuthorizationState>;
   public userState: Observable<UserState>;
   private user: User;

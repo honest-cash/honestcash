@@ -6,10 +6,8 @@ import {StoryComponent} from './story/story.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EmbeddableEditorComponent} from './embed/embed.component';
 import {FormsModule} from '@angular/forms';
-import {EditorEditComponent} from './pages/edit/editor-edit.component';
 import {SharedModule} from '../../shared/shared.module';
 import {WriteHeaderComponent} from './pages/new/components/write-header/write-header.component';
-import {EditHeaderComponent} from './pages/edit/components/edit-header/edit-header.component';
 
 const routes: Routes = [
   {
@@ -17,7 +15,6 @@ const routes: Routes = [
     component: EditorContainerComponent,
     children: [
       { path: 'write', pathMatch: 'full', component: EditorWriteComponent },
-      { path: 'edit/:id', pathMatch: 'full', component: EditorEditComponent },
       { path: 'story', pathMatch: 'full', component: StoryComponent },
     ]
   }
@@ -28,8 +25,6 @@ const routes: Routes = [
     EditorContainerComponent,
     EditorWriteComponent,
     WriteHeaderComponent,
-    EditorEditComponent,
-    EditHeaderComponent,
     StoryComponent,
     EmbeddableEditorComponent,
   ],

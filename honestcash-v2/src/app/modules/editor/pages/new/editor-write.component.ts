@@ -215,12 +215,19 @@ const initialValue = [
   }
 ];
 
+export enum EDITOR_SAVE_STATUS {
+  NotSaved = 'NOT_SAVED',
+  Saved = 'SAVED',
+  Saving = 'SAVING',
+}
+
 @Component({
   selector: 'app-editor-write',
   templateUrl: './editor-write.component.html',
   styleUrls: ['./editor-write.component.scss']
 })
 export class EditorWriteComponent implements OnInit, OnDestroy {
+  public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
 
   editor: EditorJS;
   editorConfig: EditorConfig = {
