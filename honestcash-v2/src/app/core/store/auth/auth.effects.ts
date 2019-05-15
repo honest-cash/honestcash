@@ -82,12 +82,14 @@ export class AuthEffects {
         await this.walletService.setWallet(simpleWallet.mnemonicEncrypted);
       }
 
+      const mnemonicEncrypted = simpleWallet ? simpleWallet.mnemonicEncrypted : payload.wallet.mnemonicEncrypted;
+
       return {
         user: payload.user,
         password: payload.password,
         token: payload.token,
         wallet: {
-          mnemonicEncrypted: simpleWallet.mnemonicEncrypted
+          mnemonicEncrypted
         }
       };
     })),
