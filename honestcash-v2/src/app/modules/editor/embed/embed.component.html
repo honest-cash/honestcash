@@ -17,7 +17,6 @@
               <label for="title">Title</label>
               <input
                 required
-                minlength="1"
                 id="title"
                 name="title"
                 #title="ngModel"
@@ -36,11 +35,6 @@
         >
           Title is required.
         </span>
-                <span
-                  *ngIf="title.errors.minlength"
-                >
-          Title must be at least 1 character long.
-        </span>
               </div>
             </div>
           </div>
@@ -51,10 +45,10 @@
               <label for="tags">Tags</label>
               <textarea
                 id="tags"
-                name="summary"
-                #summary="ngModel"
-                [ngModel]="story.summary"
-                [ngClass]="{ 'is-invalid': f.submitted && summary.invalid, 'is-valid': f.submitted && summary.valid }"
+                name="userPostHashtags"
+                #userPostHashtags="ngModel"
+                [ngModel]="story.userPostHashtags"
+                [ngClass]="{ 'is-invalid': f.submitted && userPostHashtags.invalid, 'is-valid': f.submitted && userPostHashtags.valid }"
                 class="form-control"
                 type="text"
                 placeholder="Tag your story"

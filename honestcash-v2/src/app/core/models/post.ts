@@ -1,4 +1,5 @@
 import User from './user';
+import Hashtag from './hashtag';
 
 export type TPostTypeId = 'comment' | 'article' | 'response';
 
@@ -25,6 +26,7 @@ export default class Post {
     archivedAtFormatted: string;
     userPosts?: Post[];
     userPostRefs: any;
+    userPostHashtags?: Hashtag[];
     hasPaidSection?: boolean;
     paidSectionCost?: number;
     hasBeenPaidFor?: boolean;
