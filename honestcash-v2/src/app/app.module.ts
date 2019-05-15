@@ -26,6 +26,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     AppComponent
   ],
   imports: [
+    BrowserModule.withServerTransition({
+      appId: 'honestcash-v2'
+    }),
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
