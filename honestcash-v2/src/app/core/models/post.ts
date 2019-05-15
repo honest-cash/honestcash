@@ -5,7 +5,6 @@ export type TPostTypeId = 'comment' | 'article' | 'response';
 export default class Post {
     id: number;
     title: string;
-    summary: string;
     alias: string;
     body: string;
     bodyMD: string;

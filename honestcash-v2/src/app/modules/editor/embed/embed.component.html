@@ -48,38 +48,6 @@
         <div class="form-row">
           <div class="col">
             <div class="form-group">
-              <label for="summary">Summary</label>
-              <textarea
-                id="summary"
-                name="summary"
-                #summary="ngModel"
-                [ngModel]="story.summary"
-                [ngClass]="{ 'is-invalid': f.submitted && summary.invalid, 'is-valid': f.submitted && summary.valid }"
-                class="form-control"
-                type="text"
-                placeholder="Summary of your story"
-              ></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col">
-            <div class="form-group">
-              <label for="coverPhoto">Cover Photo</label>
-              <input
-                id="coverPhoto"
-                name="summary"
-                #summary="ngModel"
-                [ngModel]="story.summary"
-                [ngClass]="{ 'is-invalid': f.submitted && summary.invalid, 'is-valid': f.submitted && summary.valid }"
-                class="form-control-file"
-                type="file"
-                placeholder="Upload a cover photo"
-              >
-            </div>
-          </div>
-          <div class="col">
-            <div class="form-group">
               <label for="tags">Tags</label>
               <textarea
                 id="tags"
