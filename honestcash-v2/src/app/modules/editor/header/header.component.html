@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div id="navbar-menu" class="collapse navbar-collapse float-xs-none">
+    <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
       <div class="navbar-nav ml-auto">
         <div class="nav-item mr-4 buttons-wrapper">
           <button class="btn btn-outline-success" (click)="openEditorModal()"><fa-icon [icon]="['fas', 'pen-alt']"></fa-icon></button>
