@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EditorComponent } from './editor.component';
 import {RouterModule, Routes} from '@angular/router';
 import {EditorContainerComponent} from './container/editor-container.component';
-import {HeaderComponent} from './header/header.component';
+import {HeaderComponent} from '../../shared/components/header/header.component';
 import {AvatarComponent} from '../../shared/components/avatar/avatar.component';
 import {StoryComponent} from './story/story.component';
 import {FontAwesomeModule} from '../../core/modules/font-awesome.module';
