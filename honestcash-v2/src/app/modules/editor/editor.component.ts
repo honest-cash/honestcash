@@ -12,7 +12,6 @@ import Code from '@editorjs/code';
 import Marker from '@editorjs/marker';
 import Delimiter from '@editorjs/delimiter';
 import Warning from '@editorjs/warning';
-import Paywall from './plugins/paywall.js';
 
 const editorConfig: EditorConfig = {
   holder: 'editor',
@@ -69,9 +68,6 @@ const editorConfig: EditorConfig = {
       class: Warning,
       inlineToolbar: true,
     },
-    paywall: {
-      class: Paywall
-    }
   },
 };
 

@@ -13,7 +13,6 @@ import Code from '@editorjs/code';
 import Marker from '@editorjs/marker';
 import Delimiter from '@editorjs/delimiter';
 import Warning from '@editorjs/warning';
-import Paywall from '../plugins/paywall';
 import {trigger, state, style, transition, animate} from '@angular/animations';
 import Post from '../../../core/models/post';
 
