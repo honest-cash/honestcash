@@ -8,15 +8,15 @@ import {LogOut} from '../../../../../../core/store/auth/auth.actions';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../../../core/store/auth/auth.state';
 import {State as UserState} from '../../../../../../core/store/user/user.state';
-import {EDITOR_SAVE_STATUS} from '../../editor-write.component';
+import {EDITOR_SAVE_STATUS} from '../../editor-new.component';
 import Post from '../../../../../../core/models/post';
 
 @Component({
    selector: 'app-editor-write-header',
-   templateUrl: './write-header.component.html',
-   styleUrls: ['./write-header.component.scss']
+   templateUrl: './new-header.component.html',
+   styleUrls: ['./new-header.component.scss']
 })
-export class WriteHeaderComponent implements OnInit {
+export class NewHeaderComponent implements OnInit {
   @Input() public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
   @Input() public story: Post = new Post();
   private EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS;

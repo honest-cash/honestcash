@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { EditorWriteComponent } from './pages/new/editor-write.component';
+import { EditorNewComponent } from './pages/new/editor-new.component';
 import {RouterModule, Routes} from '@angular/router';
 import {EditorContainerComponent} from './editor-container.component';
 import {StoryComponent} from './story/story.component';
@@ -7,7 +7,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EmbeddableEditorComponent} from './embed/embed.component';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
-import {WriteHeaderComponent} from './pages/new/components/write-header/write-header.component';
+import {NewHeaderComponent} from './pages/new/components/write-header/new-header.component';
 import {AuthorizedGuard} from '../../core/guards/authorized.guard';
 
 const routes: Routes = [
@@ -15,7 +15,7 @@ const routes: Routes = [
     path: '',
     component: EditorContainerComponent,
     children: [
-      { path: 'write', pathMatch: 'full', component: EditorWriteComponent, canActivate: [AuthorizedGuard] },
+      { path: 'write', pathMatch: 'full', component: EditorNewComponent, canActivate: [AuthorizedGuard] },
       { path: 'story', pathMatch: 'full', component: StoryComponent },
     ]
   }
@@ -24,8 +24,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     EditorContainerComponent,
-    EditorWriteComponent,
-    WriteHeaderComponent,
+    EditorNewComponent,
+    NewHeaderComponent,
     StoryComponent,
     EmbeddableEditorComponent,
   ],
@@ -40,6 +40,6 @@ const routes: Routes = [
   ],
   providers: [
   ],
-  bootstrap: [EditorWriteComponent]
+  bootstrap: [EditorNewComponent]
 })
 export class EditorModule { }

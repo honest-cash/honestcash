@@ -223,10 +223,10 @@ export enum EDITOR_SAVE_STATUS {
 
 @Component({
   selector: 'app-editor-write',
-  templateUrl: './editor-write.component.html',
-  styleUrls: ['./editor-write.component.scss']
+  templateUrl: './editor-new.component.html',
+  styleUrls: ['./editor-new.component.scss']
 })
-export class EditorWriteComponent implements OnInit, OnDestroy {
+export class EditorNewComponent implements OnInit, OnDestroy {
   public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
 
   editor: EditorJS;
