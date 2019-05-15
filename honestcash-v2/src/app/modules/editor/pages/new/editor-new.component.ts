@@ -86,7 +86,7 @@ export class EditorNewComponent implements OnInit, OnDestroy {
         this.story = editorState.story;
         this.editor.blocks.clear();
         console.log(this.story.body);
-        this.editor.blocks.render({blocks: this.story.body});
+        this.editor.blocks.render({blocks: <any[]>this.story.body});
       }
     });
   }
