@@ -1,12 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import User from '../../../../../../core/models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EmbeddableEditorComponent} from '../../../../embed/embed.component';
 import {Store} from '@ngrx/store';
-import {AppStates, selectAuthorizationState, selectUserState} from '../../../../../../app.states';
-import {LogOut} from '../../../../../../core/store/auth/auth.actions';
-import {Observable} from 'rxjs';
-import {State as AuthorizationState} from '../../../../../../core/store/auth/auth.state';
+import {AppStates, selectEditorState, selectUserState} from '../../../../../../app.states';
+import { Subscription} from 'rxjs';
+import {State as EditorState} from '../../../../../../core/store/editor/editor.state';
 import {State as UserState} from '../../../../../../core/store/user/user.state';
 import {EDITOR_SAVE_STATUS} from '../../editor-new.component';
 import Post from '../../../../../../core/models/post';
@@ -16,30 +15,30 @@ import Post from '../../../../../../core/models/post';
    templateUrl: './new-header.component.html',
    styleUrls: ['./new-header.component.scss']
 })
-export class NewHeaderComponent implements OnInit {
+export class NewHeaderComponent implements OnInit, OnDestroy {
   @Input() public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
-  @Input() public story: Post = new Post();
+  @Input() public saveDraftCallback: Function;
   private EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS;
-  public menuHidden = true;
-  public authState: Observable<AuthorizationState>;
-  public userState: Observable<UserState>;
+  private userState$: Subscription;
+  private editorState$: Subscription;
   private user: User;
+  private story: Post;
 
   constructor(
     private store: Store<AppStates>,
     private modalService: NgbModal
-  ) {
-    this.authState = this.store.select(selectAuthorizationState);
-    this.userState = this.store.select(selectUserState);
-  }
+  ) {}
 
   ngOnInit() {
-    this.userState.subscribe((userState: UserState) => {
-      this.user = userState.user;
-    });
+    this.userState$ = this.store.select(selectUserState).subscribe((userState: UserState) => this.user = userState.user);
+    this.editorState$ = this.store.select(selectEditorState).subscribe((editorState: EditorState) => this.story = editorState.story);
   }
 
-  openEditorModal() {
+  saveDraft() {
+    this.saveDraftCallback();
+  }
+
+  openPublishModal() {
     const modalRef = this.modalService.open(EmbeddableEditorComponent, {
       size: 'lg',
       centered: true,
@@ -47,43 +46,8 @@ export class NewHeaderComponent implements OnInit {
     });
   }
 
-  saveDraft() {
-    this.saveStatus = EDITOR_SAVE_STATUS.Saving;
-    setTimeout(() => {
-      this.saveStatus = EDITOR_SAVE_STATUS.Saved;
-    }, 2000);
-  }
-
-  toggleMenu() {
-    this.menuHidden = !this.menuHidden;
-  }
-
-  logout() {
-    this.store.dispatch(new LogOut());
-  }
-
-  goTo(path: string) {
-    switch (path) {
-      case 'profile':
-        window.location.href = `/profile/${this.user.username}`;
-        break;
-      case 'posts':
-        window.location.href = `/posts`;
-        break;
-      case 'wallet':
-        window.location.href = `/wallet`;
-        break;
-      case 'help':
-        window.location.href = `/honest_cash/frequently-asked-questions`;
-        break;
-      case 'terms-of-service':
-        window.location.href = `/honest_cash/honest-cash-terms-of-service-124`;
-        break;
-      case 'privacy-policy':
-        window.location.href = `/honest_cash/honestcash-privacy-policy`;
-        break;
-      default:
-        break;
-    }
+  ngOnDestroy() {
+    this.userState$.unsubscribe();
+    this.editorState$.unsubscribe();
   }
 }

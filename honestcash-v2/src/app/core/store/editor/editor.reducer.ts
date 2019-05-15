@@ -7,7 +7,11 @@ export function reducer(state = initialState, action: All): State {
     case EditorActionTypes.EDITOR_LOAD: {
       return {
         isLoaded: true,
+        story: action.payload ? action.payload.story : initialState.story,
       };
+    }
+    case EditorActionTypes.EDITOR_UNLOAD: {
+      return initialState;
     }
     default: {
       return state;

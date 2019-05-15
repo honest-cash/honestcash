@@ -13,7 +13,12 @@ export class EditorEffects {
   ) {}
 
   @Effect()
-  AppLoad: Observable<any> = this.actions.pipe(
+  EditorLoad: Observable<any> = this.actions.pipe(
     ofType(EditorActionTypes.EDITOR_LOAD),
+  );
+
+  @Effect()
+  EditorUnload: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_UNLOAD),
   );
 }

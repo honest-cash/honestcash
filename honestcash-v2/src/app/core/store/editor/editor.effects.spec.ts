@@ -32,6 +32,9 @@ describe('editor.effects', () => {
     });
   });
 
-  describe('AppLoad', () => {
+  describe('EditorLoad', () => {
+  });
+
+  describe('EditorUnload', () => {
   });
 });
