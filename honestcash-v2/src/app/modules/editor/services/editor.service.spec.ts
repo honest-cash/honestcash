@@ -1,24 +1,18 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {HttpService} from '..';
-import {mock} from '../../../../mock';
-import {UserService} from './user.service';
+import {mock} from '../../../../../mock';
 import {of} from 'rxjs';
-import User from '../models/user';
-import {API_ENDPOINTS} from './post.service';
+import {API_ENDPOINTS} from './editor.service';
 import {StoreModule} from '@ngrx/store';
-import {metaReducers, reducers} from '../../app.states';
-import {AppRoutingModule} from '../../app-routing.module';
-import {PostService} from './post.service';
-import Post from '../models/post';
+import {metaReducers, reducers} from '../../../app.states';
+import {AppRoutingModule} from '../../../app-routing.module';
+import {EditorService} from './editor.service';
+import {HttpService} from '../../../core';
+import Post from '../../../core/models/post';
 
-const SHARED_MOCKS = {
-  mnemonic: 'test test2 test3 test4',
-};
-
-describe('PostService', () => {
-  let postService: PostService;
+describe('EditorService', () => {
+  let postService: EditorService;
   let httpServiceMock: HttpService;
 
   beforeEach(() => {
@@ -30,11 +24,11 @@ describe('PostService', () => {
         StoreModule.forRoot(reducers, { metaReducers}),
       ],
       providers: [
-        PostService,
+        EditorService,
         {provide: HttpService, useValue: httpServiceMock}
       ]
     });
-    postService = TestBed.get(PostService);
+    postService = TestBed.get(EditorService);
   });
 
   afterEach(() => {
@@ -207,14 +201,14 @@ describe('PostService', () => {
       },
       saveDraftSuccess: new Post(),
     };
-    it('should make API request to the correct API endpoint with Post bodyMD as body inside request body', (done) => {
-      mocks.context.post.bodyMD = `# Test Header`;
+    it('should make API request to the correct API endpoint with Post.body as request.body', (done) => {
+      mocks.context.post.body = `Test Header`;
       (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.saveDraftSuccess));
       // Act
       postService.saveDraft(mocks.context.post).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.put)
-          .toHaveBeenCalledWith(API_ENDPOINTS.saveDraft(mocks.context.post), { body: mocks.context.post.bodyMD });
+          .toHaveBeenCalledWith(API_ENDPOINTS.saveDraft(mocks.context.post), { body: mocks.context.post.body });
         done();
       });
 

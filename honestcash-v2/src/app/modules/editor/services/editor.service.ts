@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpService } from '../../core';
-import Post from '../models/post';
+import Post from '../../../core/models/post';
+import {HttpService} from '../../../core';
+import {EditorModule} from '../editor.module';
 
 export interface DraftContext {
   parentPostId?: number;
@@ -18,8 +19,10 @@ export const API_ENDPOINTS = {
   publishPost: (p: Post) => `/draft/${p.id}/publish`
 };
 
-@Injectable()
-export class PostService {
+@Injectable({
+  providedIn: EditorModule
+})
+export class EditorService {
   constructor(private http: HttpService) {}
 
   getPost(id: number): Observable<Post> {
@@ -40,7 +43,7 @@ export class PostService {
 
   saveDraft(post: Post): Observable<Post> {
     return this.http.put<Post>(API_ENDPOINTS.saveDraft(post), {
-      body: post.bodyMD
+      body: post.body
     });
   }
 

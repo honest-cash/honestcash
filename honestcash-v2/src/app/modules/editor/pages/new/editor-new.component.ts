@@ -14,7 +14,7 @@ import Delimiter from '@editorjs/delimiter';
 import Post from '../../../../core/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EditorLoad, EditorUnload} from '../../../../core/store/editor/editor.actions';
+import {EditorLoad, EditorStorySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
 import {State as EditorState} from '../../../../core/store/editor/editor.state';
 import {Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -92,7 +92,14 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   }
 
   saveDraftStory() {
-    console.log('save');
+    this.editor.saver.save()
+      .then((outputData) => {
+        this.story.body = outputData.blocks;
+        this.store.dispatch(new EditorStorySave(this.story));
+      })
+      .catch((error) => {
+        console.log('Save Error on EditorJS', error);
+      });
     this.saveStatus = EDITOR_SAVE_STATUS.Saving;
     setTimeout(() => {
       // emulate update
@@ -100,11 +107,7 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       this.story.updatedAt = '2019-05-12T08:06:35.000Z';
       this.saveStatus = EDITOR_SAVE_STATUS.Saved;
     }, 2000);
-    this.editor.saver.save().then((outputData) => {
-       console.log('Article data: ', JSON.stringify(outputData.blocks, null, 2));
-     }).catch((error) => {
-       console.log('Saving failed: ', error);
-     });
+
   }
 
   publishStory() {
