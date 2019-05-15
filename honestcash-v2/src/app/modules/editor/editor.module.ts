@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { EditorComponent } from './editor.component';
+import { EditorWriteComponent } from './pages/new/editor-write.component';
 import {RouterModule, Routes} from '@angular/router';
-import {EditorContainerComponent} from './container/editor-container.component';
-import {HeaderComponent} from '../../shared/components/header/header.component';
-import {AvatarComponent} from '../../shared/components/avatar/avatar.component';
+import {EditorContainerComponent} from './editor-container.component';
 import {StoryComponent} from './story/story.component';
-import {FontAwesomeModule} from '../../core/modules/font-awesome.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EmbeddableEditorComponent} from './embed/embed.component';
 import {FormsModule} from '@angular/forms';
+import {EditorEditComponent} from './pages/edit/editor-edit.component';
+import {SharedModule} from '../../shared/shared.module';
+import {WriteHeaderComponent} from './pages/new/components/write-header/write-header.component';
+import {EditHeaderComponent} from './pages/edit/components/edit-header/edit-header.component';
 
 const routes: Routes = [
   {
     path: '',
     component: EditorContainerComponent,
     children: [
-      { path: 'write', pathMatch: 'full', component: EditorComponent },
+      { path: 'write', pathMatch: 'full', component: EditorWriteComponent },
+      { path: 'edit/:id', pathMatch: 'full', component: EditorEditComponent },
       { path: 'story', pathMatch: 'full', component: StoryComponent },
     ]
   }
@@ -24,10 +25,11 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    HeaderComponent,
     EditorContainerComponent,
-    EditorComponent,
-    AvatarComponent,
+    EditorWriteComponent,
+    WriteHeaderComponent,
+    EditorEditComponent,
+    EditHeaderComponent,
     StoryComponent,
     EmbeddableEditorComponent,
   ],
@@ -35,14 +37,13 @@ const routes: Routes = [
     EmbeddableEditorComponent,
   ],
   imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
     FormsModule,
-    FontAwesomeModule,
+    RouterModule.forChild(routes),
     NgbModule,
+    SharedModule,
   ],
   providers: [
   ],
-  bootstrap: [EditorComponent]
+  bootstrap: [EditorWriteComponent]
 })
 export class EditorModule { }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
@@ -11,65 +11,7 @@ import Paragraph from '@editorjs/paragraph';
 import Code from '@editorjs/code';
 import Marker from '@editorjs/marker';
 import Delimiter from '@editorjs/delimiter';
-import Warning from '@editorjs/warning';
-
-const editorConfig: EditorConfig = {
-  holder: 'editor',
-  autofocus: true,
-  initialBlock: 'paragraph',
-  tools: {
-    header: {
-      class: Header,
-      inlineToolbar: true,
-    },
-    link: {
-      class: Link,
-      inlineToolbar: true,
-    },
-    image: {
-      class: SimpleImage,
-    },
-    checklist: {
-      class: Checklist,
-      inlineToolbar: true,
-    },
-    list: {
-      class: List,
-      inlineToolbar: true,
-    },
-    embed: {
-      class: Embed,
-      inlineToolbar: true,
-    },
-    quote: {
-      class: Quote,
-      inlineToolbar: true,
-    },
-    paragraph: {
-      class: Paragraph,
-      inlineToolbar: true,
-      config: {
-        placeholder: 'Tell us your story...'
-      }
-    },
-    code: {
-      class: Code,
-      inlineToolbar: true,
-    },
-    Marker: {
-      class: Marker,
-      inlineToolbar: true,
-    },
-    delimiter: {
-      class: Delimiter,
-      inlineToolbar: true,
-    },
-    warning: {
-      class: Warning,
-      inlineToolbar: true,
-    },
-  },
-};
+import Post from '../../../../core/models/post';
 
 const initialValue = [
   {
@@ -274,33 +216,82 @@ const initialValue = [
 ];
 
 @Component({
-  selector: 'app-editor',
-  template: '<div id="editor"></div>',
-  styleUrls: ['./editor.component.scss']
+  selector: 'app-editor-write',
+  templateUrl: './editor-write.component.html',
+  styleUrls: ['./editor-write.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorWriteComponent implements OnInit, OnDestroy {
 
-  editor: EditorJS = new EditorJS(editorConfig);
+  editor: EditorJS;
+  editorConfig: EditorConfig = {
+    holder: 'editor',
+    autofocus: true,
+    initialBlock: 'paragraph',
+    tools: {
+      header: {
+        class: Header,
+        inlineToolbar: true,
+      },
+      link: Link,
+      image: SimpleImage,
+      /*checklist: {
+        class: Checklist,
+        inlineToolbar: true,
+      },*/
+      list: {
+        class: List,
+        inlineToolbar: true,
+      },
+      embed: Embed,
+      quote: Quote,
+      paragraph: {
+        class: Paragraph,
+        inlineToolbar: true,
+      },
+      code: Code,
+      Marker: Marker,
+      delimiter: Delimiter,
+      /*warning: Warning,*/
+    },
+  };
+  story = new Post();
   constructor() {}
 
   ngOnInit() {
+    this.editor = new EditorJS(this.editorConfig);
     this.editor.isReady.then(() => {
-      //const editorEl = document.querySelector('.codex-editor');
-
-      // editorEl.classList.add('codex-editor--empty');
-
-      setInterval(() => {
-        this.editor.saver.save().then((outputData) => {
-          console.log('Article data: ', JSON.stringify(outputData.blocks, null, 2));
-        }).catch((error) => {
-          console.log('Saving failed: ', error);
-        });
-      }, 5000);
-
       // for editing mode
       this.editor.blocks.clear();
       this.editor.blocks.render({blocks: initialValue});
 
     });
+  }
+
+  onBack() {
+  }
+
+  onNext() {
+  }
+
+  onSubmit(form) {
+    console.log('form', form);
+  }
+
+  onPublish() {
+    this.editor.saver.save().then((outputData) => {
+      console.log('Article data: ', JSON.stringify(outputData.blocks, null, 2));
+    }).catch((error) => {
+      console.log('Saving failed: ', error);
+    });
+  }
+
+  onDismiss() {
+    this.editor.destroy();
+  }
+
+  ngOnDestroy() {
+    if (this.editor && this.editor.destroy) {
+      this.editor.destroy();
+    }
   }
 }
