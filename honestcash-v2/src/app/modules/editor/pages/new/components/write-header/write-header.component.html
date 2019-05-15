@@ -11,6 +11,17 @@
     </div>
     <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
       <div class="navbar-nav ml-auto">
+        <div class="nav-item editor-header__save-status mr-3">
+          <u class="save text-warning" *ngIf="saveStatus === EDITOR_SAVE_STATUS.NotSaved" placement="bottom" ngbTooltip="Click to save" (click)="saveDraft()">Not saved</u>
+          <u class="text-success" *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saved" placement="bottom" ngbTooltip="Last saved at {{story.updatedAt | date:'MMMM d, y, h:mm:ss'}}">Saved</u>
+          <u class="text-muted" *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saving">Saving...</u>
+        </div>
+        <div class="nav-item editor-header__publish-button mr-4">
+          <button type="button" class="btn btn-sm btn-success" [disabled]="saveStatus === EDITOR_SAVE_STATUS.Saving">Publish&nbsp;
+            <fa-icon *ngIf="saveStatus !== EDITOR_SAVE_STATUS.Saving" [icon]="['far', 'paper-plane']"></fa-icon>
+            <fa-icon *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saving" [icon]="['fas', 'spinner']" spin="spin"></fa-icon>
+          </button>
+        </div>
         <app-header-profile-menu [user]="user"></app-header-profile-menu>
       </div>
     </div>

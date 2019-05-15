@@ -1,10 +1,7 @@
 import {
-  ActionReducer,
   ActionReducerMap,
   createFeatureSelector,
-  createSelector,
   MetaReducer,
-  State
 } from '@ngrx/store';
 import { environment } from '../environments/environment';
 
@@ -21,11 +18,15 @@ import {reducer as UserReducer} from './core/store/user/user.reducer';
 import {State as WalletState} from './core/store/wallet/wallet.state';
 import {reducer as WalletReducer} from './core/store/wallet/wallet.reducer';
 
+import {State as EditorState} from './core/store/editor/editor.state';
+import {reducer as EditorReducer} from './core/store/editor/editor.reducer';
+
 export interface AppStates {
   app: AppState;
   authorization: AuthState;
   user: UserState;
   wallet: WalletState;
+  editor: EditorState;
 }
 
 export const reducers: ActionReducerMap<AppStates> = {
@@ -33,6 +34,7 @@ export const reducers: ActionReducerMap<AppStates> = {
   authorization: AuthReducer,
   user: UserReducer,
   wallet: WalletReducer,
+  editor: EditorReducer,
 };
 
 export const metaReducers: MetaReducer<AppStates>[] = !environment.production ? [] : [];
@@ -41,3 +43,4 @@ export const selectAppState = createFeatureSelector<AppState>('app');
 export const selectAuthorizationState = createFeatureSelector<AuthState>('authorization');
 export const selectWalletState = createFeatureSelector<WalletState>('wallet');
 export const selectUserState = createFeatureSelector<UserState>('user');
+export const selectEditorState = createFeatureSelector<EditorState>('editor');

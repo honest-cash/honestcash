@@ -262,7 +262,10 @@ export class EditorWriteComponent implements OnInit, OnDestroy {
     },
   };
   story = new Post();
-  constructor() {}
+  constructor() {
+    this.story.createdAt = '2019-04-22T10:42:12.000Z';
+    this.story.updatedAt = '2019-05-12T08:06:35.000Z';
+  }
 
   ngOnInit() {
     this.editor = new EditorJS(this.editorConfig);

@@ -8,13 +8,14 @@ import {EmbeddableEditorComponent} from './embed/embed.component';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {WriteHeaderComponent} from './pages/new/components/write-header/write-header.component';
+import {AuthorizedGuard} from '../../core/guards/authorized.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: EditorContainerComponent,
     children: [
-      { path: 'write', pathMatch: 'full', component: EditorWriteComponent },
+      { path: 'write', pathMatch: 'full', component: EditorWriteComponent, canActivate: [AuthorizedGuard] },
       { path: 'story', pathMatch: 'full', component: StoryComponent },
     ]
   }

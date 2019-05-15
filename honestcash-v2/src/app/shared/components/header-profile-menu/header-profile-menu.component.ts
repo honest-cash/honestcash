@@ -5,10 +5,10 @@ import {AppStates} from '../../../app.states';
 import {LogOut} from '../../../core/store/auth/auth.actions';
 
 @Component({
-             selector: 'app-header-profile-menu',
-             templateUrl: './header-profile-menu.component.html',
-             styleUrls: ['./header-profile-menu.component.scss']
-           })
+  selector: 'app-header-profile-menu',
+  templateUrl: './header-profile-menu.component.html',
+  styleUrls: ['./header-profile-menu.component.scss']
+})
 export class HeaderProfileMenuComponent implements OnInit {
   private menuHidden = true;
   @Input() public user: User;

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import User from '../../../../../../core/models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import { EmbeddableEditorComponent } from '../../../../embed/embed.component';
+import {EmbeddableEditorComponent} from '../../../../embed/embed.component';
 import {Store} from '@ngrx/store';
 import {AppStates, selectAuthorizationState, selectUserState} from '../../../../../../app.states';
 import {LogOut} from '../../../../../../core/store/auth/auth.actions';
@@ -9,6 +9,7 @@ import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../../../core/store/auth/auth.state';
 import {State as UserState} from '../../../../../../core/store/user/user.state';
 import {EDITOR_SAVE_STATUS} from '../../editor-write.component';
+import Post from '../../../../../../core/models/post';
 
 @Component({
    selector: 'app-editor-write-header',
@@ -17,6 +18,8 @@ import {EDITOR_SAVE_STATUS} from '../../editor-write.component';
 })
 export class WriteHeaderComponent implements OnInit {
   @Input() public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
+  @Input() public story: Post = new Post();
+  private EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS;
   public menuHidden = true;
   public authState: Observable<AuthorizationState>;
   public userState: Observable<UserState>;
@@ -42,6 +45,13 @@ export class WriteHeaderComponent implements OnInit {
       centered: true,
       backdrop: 'static',
     });
+  }
+
+  saveDraft() {
+    this.saveStatus = EDITOR_SAVE_STATUS.Saving;
+    setTimeout(() => {
+      this.saveStatus = EDITOR_SAVE_STATUS.Saved;
+    }, 2000);
   }
 
   toggleMenu() {
