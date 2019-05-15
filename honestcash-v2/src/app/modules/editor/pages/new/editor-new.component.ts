@@ -17,7 +17,6 @@ import {AppStates, selectEditorState} from '../../../../app.states';
 import {EditorLoad, EditorUnload} from '../../../../core/store/editor/editor.actions';
 import {State as EditorState} from '../../../../core/store/editor/editor.state';
 import {Subscription} from 'rxjs';
-import {EmbeddableEditorComponent} from '../../embed/embed.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 export enum EDITOR_SAVE_STATUS {
@@ -35,7 +34,7 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
 
   readonly editor: EditorJS;
-  private editorConfig: EditorConfig = {
+  readonly editorConfig: EditorConfig = {
     holder: 'editor',
     autofocus: true,
     initialBlock: 'paragraph',
@@ -44,7 +43,10 @@ export class EditorNewComponent implements OnInit, OnDestroy {
         class: Header,
         inlineToolbar: true,
       },
-      link: Link,
+      link: {
+        class: Link,
+        inlineToolbar: true,
+      },
       image: SimpleImage,
       /*checklist: {
         class: Checklist,
@@ -79,7 +81,14 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.editorState$ = this.store.select(selectEditorState).subscribe((editorState: EditorState) => this.story = editorState.story);
+    this.editorState$ = this.store.select(selectEditorState).subscribe((editorState: EditorState) => {
+      if (editorState.isLoaded) {
+        this.story = editorState.story;
+        this.editor.blocks.clear();
+        console.log(this.story.body);
+        this.editor.blocks.render({blocks: this.story.body});
+      }
+    });
   }
 
   saveDraftStory() {
@@ -91,11 +100,11 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       this.story.updatedAt = '2019-05-12T08:06:35.000Z';
       this.saveStatus = EDITOR_SAVE_STATUS.Saved;
     }, 2000);
-    /*this.editor.saver.save().then((outputData) => {
+    this.editor.saver.save().then((outputData) => {
        console.log('Article data: ', JSON.stringify(outputData.blocks, null, 2));
      }).catch((error) => {
        console.log('Saving failed: ', error);
-     });*/
+     });
   }
 
   publishStory() {

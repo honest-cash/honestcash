@@ -7,7 +7,7 @@ export default class Post {
     id: number;
     title: string;
     alias: string;
-    body: string;
+    body: string | any[];
     bodyMD: string;
     plain: string;
     user: User;
