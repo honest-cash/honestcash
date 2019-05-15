@@ -2,27 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import User from '../../../core/models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { EmbeddableEditorComponent } from '../embed/embed.component';
+import {Store} from '@ngrx/store';
+import {AppStates, selectAuthorizationState, selectUserState} from '../../../app.states';
+import {LogOut} from '../../../core/store/auth/auth.actions';
+import {Observable} from 'rxjs';
+import {State as AuthorizationState} from '../../../core/store/auth/auth.state';
+import {State as UserState} from '../../../core/store/user/user.state';
 
 @Component({
-             selector: 'app-header',
-             templateUrl: './header.component.html',
-             styleUrls: ['./header.component.scss']
-           })
+   selector: 'app-header',
+   templateUrl: './header.component.html',
+   styleUrls: ['./header.component.scss']
+})
 export class HeaderComponent implements OnInit {
   menuHidden = true;
-  // @todo get it from store instead
-  public user: User;
+  public authState: Observable<AuthorizationState>;
+  public userState: Observable<UserState>;
+  private user: User;
 
   constructor(
+    private store: Store<AppStates>,
     private modalService: NgbModal
-  ) {}
+  ) {
+    this.authState = this.store.select(selectAuthorizationState);
+    this.userState = this.store.select(selectUserState);
+  }
 
   ngOnInit() {
-    // @todo access from store instead
-    this.user = new User();
-    /*this.userService.getUser().subscribe(user => {
-      this.user = user;
-    });*/
+    this.userState.subscribe((userState: UserState) => {
+      this.user = userState.user;
+    });
   }
 
   openEditorModal() {
@@ -38,8 +47,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    // @todo implement logout action dispatch
-    // this.authenticationService.logout().subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
+    this.store.dispatch(new LogOut());
   }
 
   goTo(path: string) {
