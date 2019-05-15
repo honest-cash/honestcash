@@ -1,7 +1,5 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import User from '../../../../../../core/models/user';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {EmbeddableEditorComponent} from '../../../../embed/embed.component';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState, selectUserState} from '../../../../../../app.states';
 import { Subscription} from 'rxjs';
@@ -18,6 +16,8 @@ import Post from '../../../../../../core/models/post';
 export class NewHeaderComponent implements OnInit, OnDestroy {
   @Input() public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
   @Input() public saveDraftCallback: Function;
+  @Output() onSaveClick = new EventEmitter<void>();
+  @Output() onSavePublishClick = new EventEmitter<void>();
   private EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS;
   private userState$: Subscription;
   private editorState$: Subscription;
@@ -26,7 +26,6 @@ export class NewHeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStates>,
-    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -34,16 +33,12 @@ export class NewHeaderComponent implements OnInit, OnDestroy {
     this.editorState$ = this.store.select(selectEditorState).subscribe((editorState: EditorState) => this.story = editorState.story);
   }
 
-  saveDraft() {
-    this.saveDraftCallback();
+  saveDraftStory() {
+    this.onSaveClick.emit();
   }
 
-  openPublishModal() {
-    const modalRef = this.modalService.open(EmbeddableEditorComponent, {
-      size: 'lg',
-      centered: true,
-      backdrop: 'static',
-    });
+  publishStory() {
+    this.onSavePublishClick.emit();
   }
 
   ngOnDestroy() {

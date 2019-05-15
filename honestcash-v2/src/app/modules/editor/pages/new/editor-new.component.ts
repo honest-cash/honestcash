@@ -17,6 +17,8 @@ import {AppStates, selectEditorState} from '../../../../app.states';
 import {EditorLoad, EditorUnload} from '../../../../core/store/editor/editor.actions';
 import {State as EditorState} from '../../../../core/store/editor/editor.state';
 import {Subscription} from 'rxjs';
+import {EmbeddableEditorComponent} from '../../embed/embed.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 export enum EDITOR_SAVE_STATUS {
   NotSaved = 'NOT_SAVED',
@@ -68,6 +70,7 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   private story: Post;
   constructor(
     private store: Store<AppStates>,
+    private modalService: NgbModal,
   ) {
     this.editor = new EditorJS(this.editorConfig);
     this.editor.isReady.then(() => {
@@ -79,7 +82,8 @@ export class EditorNewComponent implements OnInit, OnDestroy {
     this.editorState$ = this.store.select(selectEditorState).subscribe((editorState: EditorState) => this.story = editorState.story);
   }
 
-  saveDraft() {
+  saveDraftStory() {
+    console.log('save');
     this.saveStatus = EDITOR_SAVE_STATUS.Saving;
     setTimeout(() => {
       // emulate update
@@ -92,6 +96,15 @@ export class EditorNewComponent implements OnInit, OnDestroy {
      }).catch((error) => {
        console.log('Saving failed: ', error);
      });*/
+  }
+
+  publishStory() {
+    console.log('publish');
+    /*const modalRef = this.modalService.open(EmbeddableEditorComponent, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static',
+    });*/
   }
 
   ngOnDestroy() {
