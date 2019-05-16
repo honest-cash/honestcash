@@ -3,12 +3,14 @@ import Post, {PostSaveSuccessResponse} from '../../models/post';
 import {FailedResponse} from '../../models/authentication';
 import Hashtag from '../../models/hashtag';
 import {INgxChipsTag} from '../../../modules/editor/components/publish-modal/publish-modal.component';
+import {STORY_PROPERTIES} from '../../../modules/editor/services/editor.service';
 
 export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',
   EDITOR_UNLOAD = '[Editor] Editor Unload',
   EDITOR_CHANGE = '[Editor] Editor Change',
   EDITOR_STORY_PROPERTY_CHANGE = '[Editor] Story Property Change',
+  EDITOR_STORY_PROPERTY_SAVE = '[Editor] Story Property Save',
   EDITOR_STORY_SAVE = '[Editor] Story Save',
   EDITOR_STORY_SAVE_SUCCESS = '[Editor] Story Save Success',
   EDITOR_STORY_SAVE_FAILURE = '[Editor] Story Save Failure',
@@ -33,9 +35,14 @@ export class EditorChange implements Action {
   constructor(public payload: Post) {}
 }
 
-export class EditorPropertyChange implements Action {
+export class EditorStoryPropertyChange implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE;
   constructor(public payload: { property: string; value: string | Hashtag[] | INgxChipsTag[]; }) {}
+}
+
+export class EditorStoryPropertySave implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE;
+  constructor(public payload: { story: Post, property: STORY_PROPERTIES }) {}
 }
 
 export class EditorStorySave implements Action {
@@ -77,7 +84,8 @@ export type All =
    | EditorLoad
    | EditorUnload
    | EditorChange
-   | EditorPropertyChange
+   | EditorStoryPropertyChange
+   | EditorStoryPropertySave
    | EditorStorySave
    | EditorStorySaveSuccess
    | EditorStorySaveFailure

@@ -15,20 +15,21 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {
   EditorChange,
-  EditorLoad,
+  EditorLoad, EditorStoryPropertySave,
   EditorStoryPublish,
   EditorStorySave,
   EditorStorySaveAndPublish,
   EditorUnload
 } from '../../../../core/store/editor/editor.actions';
 import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
-import {Observable, Subscription} from 'rxjs';
+import {interval, Observable, Subscription, timer} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PublishModalComponent} from '../../components/publish-modal/publish-modal.component';
+import {STORY_PROPERTIES} from '../../services/editor.service';
 
 export const EDITOR_AUTO_SAVE = {
-  on: true,
-  interval: 5000,
+  ON: true,
+  INTERVAL: 5000,
 };
 
 @Component({
@@ -37,8 +38,7 @@ export const EDITOR_AUTO_SAVE = {
   styleUrls: ['./editor-new.component.scss']
 })
 export class EditorNewComponent implements OnInit, OnDestroy {
-  public saveStatus: EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS.NotSaved;
-
+  public saveStatus: EDITOR_SAVE_STATUS;
   readonly editor: EditorJS;
   readonly editorConfig: EditorConfig = {
     holder: 'editor',
@@ -79,6 +79,8 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   private editorState$: Subscription;
   private story: Post;
   private hasEditorInitialized = false;
+  private autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
+  private autoSaveInterval$: Subscription;
   constructor(
     private store: Store<AppStates>,
     private modalService: NgbModal,
@@ -93,13 +95,15 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.editorState$ = this.editorStateObservable
       .subscribe((editorState: EditorState) => {
+        this.saveStatus = editorState.status;
+        this.story = editorState.story;
+
         if (editorState.isLoaded && !this.hasEditorInitialized) {
           this.editor.blocks.clear();
           this.editor.blocks.render({blocks: <any[]>this.story.body});
           this.hasEditorInitialized = true;
         }
-        this.saveStatus = editorState.status;
-        this.story = editorState.story;
+
         if (this.saveStatus === EDITOR_SAVE_STATUS.Published) {
           this.modalService.dismissAll();
         }
@@ -111,6 +115,14 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       .then((outputData) => {
         this.story.body = outputData.blocks;
         this.store.dispatch(new EditorChange(this.story));
+
+        if (EDITOR_AUTO_SAVE.ON) {
+          this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
+            if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+              this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
+            }
+          });
+        }
       });
   }
 
@@ -143,5 +155,6 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       this.store.dispatch(new EditorUnload());
     }
     this.editorState$.unsubscribe();
+    this.autoSaveInterval$.unsubscribe();
   }
 }

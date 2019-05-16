@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import {forkJoin, Observable, of, zip} from 'rxjs';
+import {forkJoin, Observable, of, timer, zip} from 'rxjs';
 import {
-  EditorActionTypes,
+  EditorActionTypes, EditorStoryPropertyChange, EditorStoryPropertySave,
   EditorStoryPublish,
   EditorStoryPublishFailure,
   EditorStoryPublishSuccess,
@@ -24,6 +24,13 @@ export class EditorEffects {
     private editorService: EditorService,
     private router: Router,
   ) {}
+
+  @Effect({dispatch: false})
+  EditorStoryPropertySave: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE),
+    map((action: EditorStoryPropertySave) => action.payload),
+    switchMap((payload) => this.editorService.savePostProperty(payload.story, payload.property)),
+  );
 
   @Effect()
   EditorStorySave: Observable<any> = this.actions.pipe(

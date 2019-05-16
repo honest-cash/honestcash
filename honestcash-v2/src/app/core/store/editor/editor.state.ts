@@ -6,6 +6,8 @@ export enum EDITOR_SAVE_STATUS {
   Saving = 'SAVING',
   Publishing = 'PUBLISHING',
   Published = 'PUBLISHED',
+  Initialized = 'INITIALIZED',
+  NotInitialized = 'NOT_INITIALIZED',
 }
 
 export interface State {
@@ -16,6 +18,6 @@ export interface State {
 
 export const initialState: State = {
   isLoaded: false,
-  status: EDITOR_SAVE_STATUS.NotSaved,
+  status: EDITOR_SAVE_STATUS.NotInitialized,
   story: new Post(),
 };

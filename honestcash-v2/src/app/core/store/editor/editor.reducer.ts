@@ -15,6 +15,7 @@ export function reducer(state = initialState, action: All): State {
       return {
         ...state,
         isLoaded: true,
+        status: EDITOR_SAVE_STATUS.Initialized,
         story,
       };
     }
@@ -54,6 +55,12 @@ export function reducer(state = initialState, action: All): State {
           ...state.story,
           [property]: action.payload.value
         }
+      };
+    }
+    case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE: {
+      return {
+        ...state,
+        status: action.payload.property === STORY_PROPERTIES.Body ? EDITOR_SAVE_STATUS.Saved : state.status,
       };
     }
     case EditorActionTypes.EDITOR_STORY_SAVE: {

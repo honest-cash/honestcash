@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {State as EditorState} from '../../../../core/store/editor/editor.state';
-import {EditorChange, EditorPropertyChange} from '../../../../core/store/editor/editor.actions';
+import {EditorChange, EditorStoryPropertyChange} from '../../../../core/store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../services/editor.service';
 import Hashtag from '../../../../core/models/hashtag';
 
@@ -50,11 +50,11 @@ export class PublishModalComponent implements OnInit, OnDestroy {
   }
 
   onTitleChange(title: string) {
-    this.store.dispatch(new EditorPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
   }
 
   onTagChange(tags: INgxChipsTag[]) {
-    this.store.dispatch(new EditorPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
   }
 
   onDismiss() {
