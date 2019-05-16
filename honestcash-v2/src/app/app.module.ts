@@ -20,6 +20,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppEffects } from './core/store/app/app.effects';
 import {FontAwesomeModule} from './core/modules/font-awesome.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {EditorEffects} from './core/store/editor/editor.effects';
 
 @NgModule({
   declarations: [
@@ -34,8 +35,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([ AppEffects, AuthEffects, UserEffects, WalletEffects ]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EffectsModule.forRoot([ AppEffects, AuthEffects, UserEffects, EditorEffects ]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !environment.production }),
     FontAwesomeModule,
   ],
   providers: [

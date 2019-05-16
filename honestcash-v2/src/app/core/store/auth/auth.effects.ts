@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, Effect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of, defer } from 'rxjs';
 import { tap, map, switchMap, catchError, mergeMap } from 'rxjs/operators';
 import {

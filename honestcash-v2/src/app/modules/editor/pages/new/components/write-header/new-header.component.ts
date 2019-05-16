@@ -3,9 +3,8 @@ import User from '../../../../../../core/models/user';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState, selectUserState} from '../../../../../../app.states';
 import { Subscription} from 'rxjs';
-import {State as EditorState} from '../../../../../../core/store/editor/editor.state';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../../../core/store/editor/editor.state';
 import {State as UserState} from '../../../../../../core/store/user/user.state';
-import {EDITOR_SAVE_STATUS} from '../../editor-new.component';
 import Post from '../../../../../../core/models/post';
 
 @Component({

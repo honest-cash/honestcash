@@ -14,16 +14,15 @@ import Delimiter from '@editorjs/delimiter';
 import Post from '../../../../core/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EditorLoad, EditorStorySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
-import {State as EditorState} from '../../../../core/store/editor/editor.state';
-import {Subscription} from 'rxjs';
+import {EditorChange, EditorLoad, EditorStorySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
+import {Observable, of, Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
-export enum EDITOR_SAVE_STATUS {
-  NotSaved = 'NOT_SAVED',
-  Saved = 'SAVED',
-  Saving = 'SAVING',
-}
+export const EDITOR_AUTO_SAVE = {
+  on: true,
+  interval: 5000,
+};
 
 @Component({
   selector: 'app-editor-write',
@@ -67,9 +66,13 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       delimiter: Delimiter,
       /*warning: Warning,*/
     },
+    onChange: this.onEditorChange.bind(this)
   };
+  private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
   private story: Post;
+  private hasEditorInitialized = false;
+  private hasEditorChanged = of(false);
   constructor(
     private store: Store<AppStates>,
     private modalService: NgbModal,
@@ -78,17 +81,28 @@ export class EditorNewComponent implements OnInit, OnDestroy {
     this.editor.isReady.then(() => {
       this.store.dispatch(new EditorLoad());
     });
+    this.editorStateObservable = this.store.select(selectEditorState);
   }
 
   ngOnInit() {
-    this.editorState$ = this.store.select(selectEditorState).subscribe((editorState: EditorState) => {
-      if (editorState.isLoaded) {
-        this.story = editorState.story;
-        this.editor.blocks.clear();
-        console.log(this.story.body);
-        this.editor.blocks.render({blocks: <any[]>this.story.body});
-      }
-    });
+    this.editorState$ = this.editorStateObservable
+      .subscribe((editorState: EditorState) => {
+        if (editorState.isLoaded && !this.hasEditorInitialized) {
+          this.story = editorState.story;
+          this.editor.blocks.clear();
+          this.editor.blocks.render({blocks: <any[]>this.story.body});
+          this.hasEditorInitialized = true;
+        }
+        this.saveStatus = editorState.status;
+      });
+  }
+
+  onEditorChange() {
+    this.editor.saver.save()
+      .then((outputData) => {
+        this.story.body = outputData.blocks;
+        this.store.dispatch(new EditorChange(this.story));
+      });
   }
 
   saveDraftStory() {
@@ -96,18 +110,7 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       .then((outputData) => {
         this.story.body = outputData.blocks;
         this.store.dispatch(new EditorStorySave(this.story));
-      })
-      .catch((error) => {
-        console.log('Save Error on EditorJS', error);
       });
-    this.saveStatus = EDITOR_SAVE_STATUS.Saving;
-    setTimeout(() => {
-      // emulate update
-      this.story.createdAt = '2019-04-22T10:42:12.000Z';
-      this.story.updatedAt = '2019-05-12T08:06:35.000Z';
-      this.saveStatus = EDITOR_SAVE_STATUS.Saved;
-    }, 2000);
-
   }
 
   publishStory() {
