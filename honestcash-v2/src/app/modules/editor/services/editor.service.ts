@@ -2,15 +2,27 @@ import { Injectable } from '@angular/core';
 import {Observable, of} from 'rxjs';
 import Post from '../../../core/models/post';
 import {HttpService} from '../../../core';
-import {EditorModule} from '../editor.module';
 import blankBody from '../../../core/store/editor/editor.story.body.initial-value';
 import {EmptyResponse} from '../../../core/models/authentication';
 import Hashtag from '../../../core/models/hashtag';
-import {delay, timeout} from 'rxjs/operators';
+import {delay} from 'rxjs/operators';
+import {HttpHeaders} from '@angular/common/http';
+import {ContentTypeFormDataHeader} from '../../../core/http/token.interceptor';
 
 export interface DraftContext {
   parentPostId?: number;
   postId?: number;
+}
+
+export interface UploadImageResponse {
+  files: [{ url: string; }];
+}
+
+export interface UploadImageEditorExpectedResponse {
+  success: number;
+  file: {
+    url: string;
+  };
 }
 
 export const API_ENDPOINTS = {
@@ -20,7 +32,8 @@ export const API_ENDPOINTS = {
   newDraft: () => `/draft`,
   savePostProperty: (p: Post, property: 'title' | 'body' | 'hashtags' | 'paidSection') => `/draft/${p.id}/${property}`,
   saveDraft: (p: Post) => `/draft/${p.id}/body`,
-  publishPost: (p: Post) => `/draft/${p.id}/publish`
+  publishPost: (p: Post) => `/draft/${p.id}/publish`,
+  uploadImage: () => `/upload/image`
 };
 
 export enum STORY_PROPERTIES {
@@ -76,6 +89,17 @@ export class EditorService {
     _post.updatedAt = new Date().toString();
     return of(_post);
     // return this.http.put<Post>(API_ENDPOINTS.publishPost(post), post);
+  }
+
+  uploadImage(image: File): Observable<UploadImageResponse> {
+    const formData = new FormData();
+    formData.append('files[]', image, image.name);
+
+    const httpOptions = {
+      headers: new HttpHeaders().set(ContentTypeFormDataHeader, '')
+    };
+
+    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadImage(), formData, httpOptions);
   }
 
   private transformTags(tags: Hashtag[]): string {

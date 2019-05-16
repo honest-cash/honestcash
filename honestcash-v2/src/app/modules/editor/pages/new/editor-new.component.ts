@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
+import Image from '@editorjs/image';
 import SimpleImage from '@editorjs/simple-image';
 import List from '@editorjs/list';
 import Embed from '@editorjs/embed';
@@ -22,15 +23,47 @@ import {
   EditorUnload
 } from '../../../../core/store/editor/editor.actions';
 import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
-import {interval, Observable, Subscription, timer} from 'rxjs';
+import {interval, Observable, of, Subscription, timer} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PublishModalComponent} from '../../components/publish-modal/publish-modal.component';
-import {STORY_PROPERTIES} from '../../services/editor.service';
+import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 
 export const EDITOR_AUTO_SAVE = {
-  ON: true,
+  ON: false,
   INTERVAL: 5000,
 };
+
+interface HonestEditorConfig extends EditorConfig {
+  tools: {
+    header: {
+      class: Header,
+      inlineToolbar: boolean,
+    };
+    link: {
+      class: Link;
+      inlineToolbar: boolean;
+    };
+    image: {
+      class: Image;
+      inlineToolbar: boolean;
+      config: {} // needs to be populated in constructor for upload
+    };
+    list: {
+      class: List;
+      inlineToolbar: boolean;
+    };
+    embed: Embed;
+    quote: Quote;
+    paragraph: {
+      class: Paragraph;
+      inlineToolbar: boolean;
+    };
+    code: Code;
+    Marker: Marker;
+    delimiter: Delimiter;
+  };
+  onChange: () => void;
+}
 
 @Component({
   selector: 'app-editor-write',
@@ -40,7 +73,7 @@ export const EDITOR_AUTO_SAVE = {
 export class EditorNewComponent implements OnInit, OnDestroy {
   public saveStatus: EDITOR_SAVE_STATUS;
   readonly editor: EditorJS;
-  readonly editorConfig: EditorConfig = {
+  private editorConfig: HonestEditorConfig = {
     holder: 'editor',
     autofocus: true,
     initialBlock: 'paragraph',
@@ -53,7 +86,11 @@ export class EditorNewComponent implements OnInit, OnDestroy {
         class: Link,
         inlineToolbar: true,
       },
-      image: SimpleImage,
+      image: {
+        class: Image,
+        inlineToolbar: true,
+        config: {} // needs to be populated in constructor for upload
+      },
       /*checklist: {
         class: Checklist,
         inlineToolbar: true,
@@ -84,12 +121,21 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppStates>,
     private modalService: NgbModal,
+    private editorService: EditorService,
   ) {
+    this.editorConfig.tools.image.config = {
+      uploader: {
+        uploadByFile: this.uploadImage.bind(this)
+      }
+    };
     this.editor = new EditorJS(this.editorConfig);
     this.editor.isReady.then(() => {
       this.store.dispatch(new EditorLoad());
     });
     this.editorStateObservable = this.store.select(selectEditorState);
+    // explicitly turn autosave on write mode
+    // so that on edit mode it is default by default even if forgotten
+    EDITOR_AUTO_SAVE.ON = true;
   }
 
   ngOnInit() {
@@ -144,6 +190,17 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       } else {
         this.store.dispatch(new EditorStoryPublish(this.story));
       }
+    });
+  }
+
+  uploadImage(file: File) {
+    return this.editorService.uploadImage(file).toPromise().then((response) => {
+      return {
+        success: 1,
+        file: {
+          url: response.files[0].url
+        }
+      };
     });
   }
 
