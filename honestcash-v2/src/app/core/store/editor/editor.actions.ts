@@ -1,6 +1,8 @@
 import { Action } from '@ngrx/store';
 import Post, {PostSaveSuccessResponse} from '../../models/post';
 import {FailedResponse} from '../../models/authentication';
+import Hashtag from '../../models/hashtag';
+import {INgxChipsTag} from '../../../modules/editor/components/publish-modal/publish-modal.component';
 
 export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',
@@ -10,6 +12,7 @@ export enum EditorActionTypes {
   EDITOR_STORY_SAVE = '[Editor] Story Save',
   EDITOR_STORY_SAVE_SUCCESS = '[Editor] Story Save Success',
   EDITOR_STORY_SAVE_FAILURE = '[Editor] Story Save Failure',
+  EDITOR_STORY_SAVE_AND_PUBLISH = '[Editor] Story Save and Publish',
   EDITOR_STORY_PUBLISH = '[Editor] Story Publish',
   EDITOR_STORY_PUBLISH_SUCCESS = '[Editor] Story Publish Success',
   EDITOR_STORY_PUBLISH_FAILURE = '[Editor] Story Publish Failure',
@@ -32,7 +35,7 @@ export class EditorChange implements Action {
 
 export class EditorPropertyChange implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE;
-  constructor(public payload: { property: string; value: string; }) {}
+  constructor(public payload: { property: string; value: string | Hashtag[] | INgxChipsTag[]; }) {}
 }
 
 export class EditorStorySave implements Action {
@@ -42,6 +45,11 @@ export class EditorStorySave implements Action {
 
 export class EditorStorySaveSuccess implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE_SUCCESS;
+  constructor(public payload: Post) {}
+}
+
+export class EditorStorySaveAndPublish implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH;
   constructor(public payload: Post) {}
 }
 
@@ -73,6 +81,7 @@ export type All =
    | EditorStorySave
    | EditorStorySaveSuccess
    | EditorStorySaveFailure
+   | EditorStorySaveAndPublish
    | EditorStoryPublish
    | EditorStoryPublishSuccess
    | EditorStoryPublishFailure;

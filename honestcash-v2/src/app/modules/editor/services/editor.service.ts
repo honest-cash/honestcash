@@ -5,6 +5,8 @@ import {HttpService} from '../../../core';
 import {EditorModule} from '../editor.module';
 import blankBody from '../../../core/store/editor/editor.story.body.initial-value';
 import {EmptyResponse} from '../../../core/models/authentication';
+import Hashtag from '../../../core/models/hashtag';
+import {delay, timeout} from 'rxjs/operators';
 
 export interface DraftContext {
   parentPostId?: number;
@@ -59,16 +61,24 @@ export class EditorService {
   }
 
   savePostProperty(post: Post, property: STORY_PROPERTIES): Observable<EmptyResponse> {
-    return of({});
+    if (property === STORY_PROPERTIES.Hashtags && post.userPostHashtags.length > 0) {
+      post.userPostHashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
+    }
+    return of({}).pipe(delay(6000));
     // return this.http.put<Post>(API_ENDPOINTS.savePostProperty(post, property), post);
   }
 
   publishPost(post: Post): Observable<Post> {
+    console.log('publish');
     const _post = post;
     _post.publishedAt = new Date().toString();
     _post.createdAt = new Date().toString();
     _post.updatedAt = new Date().toString();
     return of(_post);
     // return this.http.put<Post>(API_ENDPOINTS.publishPost(post), post);
+  }
+
+  private transformTags(tags: Hashtag[]): string {
+    return tags.map(h => h.hashtag).join(',');
   }
 }

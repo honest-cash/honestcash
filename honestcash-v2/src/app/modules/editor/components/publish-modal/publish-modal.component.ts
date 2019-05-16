@@ -5,7 +5,13 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {State as EditorState} from '../../../../core/store/editor/editor.state';
-import {EditorChange} from '../../../../core/store/editor/editor.actions';
+import {EditorChange, EditorPropertyChange} from '../../../../core/store/editor/editor.actions';
+import {STORY_PROPERTIES} from '../../services/editor.service';
+import Hashtag from '../../../../core/models/hashtag';
+
+export interface INgxChipsTag {
+  hashtag: string;
+}
 
 @Component({
   selector: 'app-editor-publish-modal',
@@ -13,11 +19,12 @@ import {EditorChange} from '../../../../core/store/editor/editor.actions';
   styleUrls: ['./publish-modal.component.scss'],
 })
 export class PublishModalComponent implements OnInit, OnDestroy {
-  @Output() onPublishClick = new EventEmitter<void>();
+  @Output() publishClick = new EventEmitter<void>();
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
   private story: Post;
   private isPublishing = false;
+  private _hashtags: Hashtag[] | INgxChipsTag[] | string;
   constructor(
     private store: Store<AppStates>,
     public activeModal: NgbActiveModal,
@@ -30,17 +37,24 @@ export class PublishModalComponent implements OnInit, OnDestroy {
       .subscribe((editorState: EditorState) => {
         if (editorState.isLoaded) {
           this.story = editorState.story;
+          if (!this._hashtags) {
+            this._hashtags = this.story.userPostHashtags;
+          }
         }
       });
   }
 
-  onSubmit(form) {
-    console.log('form', form);
+  onSubmit() {
+    this.isPublishing = true;
+    this.publishClick.emit();
   }
 
-  onPublish() {
-    this.isPublishing = true;
-    this.onPublishClick.emit();
+  onTitleChange(title: string) {
+    this.store.dispatch(new EditorPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
+  }
+
+  onTagChange(tags: INgxChipsTag[]) {
+    this.store.dispatch(new EditorPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
   }
 
   onDismiss() {

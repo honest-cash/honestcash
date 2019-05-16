@@ -13,7 +13,14 @@ import Delimiter from '@editorjs/delimiter';
 import Post from '../../../../core/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EditorChange, EditorLoad, EditorStoryPublish, EditorStorySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
+import {
+  EditorChange,
+  EditorLoad,
+  EditorStoryPublish,
+  EditorStorySave,
+  EditorStorySaveAndPublish,
+  EditorUnload
+} from '../../../../core/store/editor/editor.actions';
 import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -87,12 +94,12 @@ export class EditorNewComponent implements OnInit, OnDestroy {
     this.editorState$ = this.editorStateObservable
       .subscribe((editorState: EditorState) => {
         if (editorState.isLoaded && !this.hasEditorInitialized) {
-          this.story = editorState.story;
           this.editor.blocks.clear();
           this.editor.blocks.render({blocks: <any[]>this.story.body});
           this.hasEditorInitialized = true;
         }
         this.saveStatus = editorState.status;
+        this.story = editorState.story;
         if (this.saveStatus === EDITOR_SAVE_STATUS.Published) {
           this.modalService.dismissAll();
         }
@@ -121,8 +128,12 @@ export class EditorNewComponent implements OnInit, OnDestroy {
       centered: true,
       backdrop: 'static',
     });
-    modalRef.componentInstance.onPublishClick.subscribe(() => {
-      this.store.dispatch(new EditorStoryPublish(this.story));
+    modalRef.componentInstance.publishClick.subscribe(() => {
+      if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+        this.store.dispatch(new EditorStorySaveAndPublish(this.story));
+      } else {
+        this.store.dispatch(new EditorStoryPublish(this.story));
+      }
     });
   }
 

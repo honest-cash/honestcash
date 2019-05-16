@@ -1,6 +1,7 @@
 import {All, EditorActionTypes} from './editor.actions';
 import {EDITOR_SAVE_STATUS, initialState, State} from './editor.state';
 import blankBody from './editor.story.body.initial-value';
+import {STORY_PROPERTIES} from '../../../modules/editor/services/editor.service';
 
 export function reducer(state = initialState, action: All): State {
   switch (action.type) {
@@ -28,11 +29,30 @@ export function reducer(state = initialState, action: All): State {
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE: {
+      let property: string;
+      switch (action.payload.property) {
+        case STORY_PROPERTIES.Title: {
+          property = 'title';
+          break;
+        }
+        case STORY_PROPERTIES.Body: {
+          property = 'body';
+          break;
+        }
+        case STORY_PROPERTIES.Hashtags: {
+          property = 'userPostHashtags';
+          break;
+        }
+        case STORY_PROPERTIES.PaidSection: {
+          // @ todo
+          break;
+        }
+      }
       return {
         ...state,
         story: {
           ...state.story,
-          [action.payload.property]: action.payload.value
+          [property]: action.payload.value
         }
       };
     }

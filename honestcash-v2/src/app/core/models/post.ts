@@ -26,7 +26,7 @@ export default class Post {
   archivedAtFormatted: string;
   userPosts?: Post[];
   userPostRefs: any;
-  userPostHashtags?: Hashtag[];
+  userPostHashtags?: Hashtag[] | string;
   hasPaidSection?: boolean;
   paidSectionCost?: number;
   hasBeenPaidFor?: boolean;

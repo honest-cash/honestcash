@@ -41,6 +41,7 @@
     "core-js": "^2.5.4",
     "express": "^4.15.2",
     "js-sha3": "^0.8.0",
+    "ngx-chips": "^2.0.0-beta.0",
     "ngx-toastr": "^10.0.2",
     "rxjs": "~6.3.3",
     "simple-bitcoin-wallet": "0.0.6-alpha.5",

@@ -10,6 +10,7 @@ import {SharedModule} from '../../shared/shared.module';
 import {NewHeaderComponent} from './pages/new/components/write-header/new-header.component';
 import {AuthorizedGuard} from '../../core/guards/authorized.guard';
 import {PublishModalComponent} from './components/publish-modal/publish-modal.component';
+import {TagInputModule} from 'ngx-chips';
 
 const routes: Routes = [
   {
@@ -40,6 +41,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgbModule,
     SharedModule,
+    TagInputModule,
   ],
   providers: [
   ],
