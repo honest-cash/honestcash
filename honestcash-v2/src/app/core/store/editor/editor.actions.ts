@@ -6,10 +6,13 @@ export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',
   EDITOR_UNLOAD = '[Editor] Editor Unload',
   EDITOR_CHANGE = '[Editor] Editor Change',
-  EDITOR_STORY_PROPERTY_CHANGE = '[Editor] Story Property <v>hange',
+  EDITOR_STORY_PROPERTY_CHANGE = '[Editor] Story Property Change',
   EDITOR_STORY_SAVE = '[Editor] Story Save',
   EDITOR_STORY_SAVE_SUCCESS = '[Editor] Story Save Success',
   EDITOR_STORY_SAVE_FAILURE = '[Editor] Story Save Failure',
+  EDITOR_STORY_PUBLISH = '[Editor] Story Publish',
+  EDITOR_STORY_PUBLISH_SUCCESS = '[Editor] Story Publish Success',
+  EDITOR_STORY_PUBLISH_FAILURE = '[Editor] Story Publish Failure',
 }
 
 export class EditorLoad implements Action {
@@ -47,6 +50,21 @@ export class EditorStorySaveFailure implements Action {
   constructor(public payload: FailedResponse) {}
 }
 
+export class EditorStoryPublish implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH;
+  constructor(public payload: Post) {}
+}
+
+export class EditorStoryPublishSuccess implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH_SUCCESS;
+  constructor(public payload: Post) {}
+}
+
+export class EditorStoryPublishFailure implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH_FAILURE;
+  constructor(public payload: FailedResponse) {}
+}
+
 export type All =
    | EditorLoad
    | EditorUnload
@@ -54,4 +72,7 @@ export type All =
    | EditorPropertyChange
    | EditorStorySave
    | EditorStorySaveSuccess
-   | EditorStorySaveFailure;
+   | EditorStorySaveFailure
+   | EditorStoryPublish
+   | EditorStoryPublishSuccess
+   | EditorStoryPublishFailure;

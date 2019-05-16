@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import {forkJoin, Observable, of} from 'rxjs';
 import {
-  EditorActionTypes, EditorStorySave, EditorStorySaveFailure, EditorStorySaveSuccess,
+  EditorActionTypes, EditorStoryPublishFailure, EditorStoryPublishSuccess, EditorStorySave, EditorStorySaveFailure, EditorStorySaveSuccess,
 } from './editor.actions';
 import {catchError, map, mergeMap, switchMap, tap} from 'rxjs/operators';
 import Post from '../../models/post';
 import {EditorService, STORY_PROPERTIES} from '../../../modules/editor/services/editor.service';
-import {EmptyResponse} from '../../models/authentication';
+import {EmptyResponse, LoginSuccessResponse} from '../../models/authentication';
 import {Router} from '@angular/router';
+import {LogInFailure, LogInSuccess} from '../auth/auth.actions';
 
 @Injectable()
 export class EditorEffects {
@@ -35,6 +36,19 @@ export class EditorEffects {
         map((saveDraftResponse: EmptyResponse[]) => new EditorStorySaveSuccess(post)),
         catchError((error) => of(new EditorStorySaveFailure(error))),
       )
+    )
+  );
+
+  @Effect()
+  EditorStoryPublish: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_STORY_PUBLISH),
+    map((action: EditorStorySave) => action.payload),
+    switchMap((post: Post) =>
+      this.editorService.publishPost(post)
+        .pipe(
+          map((publishPostResponse: Post) => new EditorStoryPublishSuccess(publishPostResponse)),
+          catchError((error) => of(new EditorStoryPublishFailure(error))),
+        )
     )
   );
 }

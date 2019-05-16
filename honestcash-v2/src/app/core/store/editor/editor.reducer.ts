@@ -52,6 +52,20 @@ export function reducer(state = initialState, action: All): State {
         status: EDITOR_SAVE_STATUS.Saved,
       };
     }
+    case EditorActionTypes.EDITOR_STORY_PUBLISH: {
+      return {
+        ...state,
+        story: action.payload,
+        status: EDITOR_SAVE_STATUS.Publishing,
+      };
+    }
+    case EditorActionTypes.EDITOR_STORY_PUBLISH_SUCCESS: {
+      return {
+        ...state,
+        story: action.payload,
+        status: EDITOR_SAVE_STATUS.Published,
+      };
+    }
     default: {
       return state;
     }

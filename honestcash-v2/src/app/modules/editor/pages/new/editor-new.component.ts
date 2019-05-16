@@ -3,7 +3,6 @@ import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
 import SimpleImage from '@editorjs/simple-image';
-import Checklist from '@editorjs/checklist';
 import List from '@editorjs/list';
 import Embed from '@editorjs/embed';
 import Quote from '@editorjs/quote';
@@ -14,10 +13,11 @@ import Delimiter from '@editorjs/delimiter';
 import Post from '../../../../core/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EditorChange, EditorLoad, EditorStorySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
+import {EditorChange, EditorLoad, EditorStoryPublish, EditorStorySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
 import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
-import {Observable, of, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PublishModalComponent} from '../../components/publish-modal/publish-modal.component';
 
 export const EDITOR_AUTO_SAVE = {
   on: true,
@@ -72,7 +72,6 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   private editorState$: Subscription;
   private story: Post;
   private hasEditorInitialized = false;
-  private hasEditorChanged = of(false);
   constructor(
     private store: Store<AppStates>,
     private modalService: NgbModal,
@@ -94,6 +93,9 @@ export class EditorNewComponent implements OnInit, OnDestroy {
           this.hasEditorInitialized = true;
         }
         this.saveStatus = editorState.status;
+        if (this.saveStatus === EDITOR_SAVE_STATUS.Published) {
+          this.modalService.dismissAll();
+        }
       });
   }
 
@@ -114,12 +116,14 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   }
 
   publishStory() {
-    console.log('publish');
-    /*const modalRef = this.modalService.open(EmbeddableEditorComponent, {
+    const modalRef = this.modalService.open(PublishModalComponent, {
       size: 'lg',
       centered: true,
       backdrop: 'static',
-    });*/
+    });
+    modalRef.componentInstance.onPublishClick.subscribe(() => {
+      this.store.dispatch(new EditorStoryPublish(this.story));
+    });
   }
 
   ngOnDestroy() {

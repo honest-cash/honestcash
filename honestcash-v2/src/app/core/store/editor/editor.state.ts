@@ -4,6 +4,8 @@ export enum EDITOR_SAVE_STATUS {
   NotSaved = 'NOT_SAVED',
   Saved = 'SAVED',
   Saving = 'SAVING',
+  Publishing = 'PUBLISHING',
+  Published = 'PUBLISHED',
 }
 
 export interface State {

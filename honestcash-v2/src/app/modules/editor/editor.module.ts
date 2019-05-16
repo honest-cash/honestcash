@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {NewHeaderComponent} from './pages/new/components/write-header/new-header.component';
 import {AuthorizedGuard} from '../../core/guards/authorized.guard';
+import {PublishModalComponent} from './components/publish-modal/publish-modal.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    PublishModalComponent,
     EditorContainerComponent,
     EditorNewComponent,
     NewHeaderComponent,
@@ -30,6 +32,7 @@ const routes: Routes = [
     EmbeddableEditorComponent,
   ],
   entryComponents: [
+    PublishModalComponent,
     EmbeddableEditorComponent,
   ],
   imports: [

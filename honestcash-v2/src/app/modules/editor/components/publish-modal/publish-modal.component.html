@@ -1,0 +1,117 @@
+<ng-template #paywallPopContent>For more information about pay-to-read sections, please refer to <a href="https://honest.cash/honest_cash/earn-more-money-for-your-content-paywalls-3552" target="_blank">Paywalls Guide</a></ng-template>
+<ng-template #paywallPopTitle>About Pay-to-read Sections</ng-template>
+<div class="modal-header">
+  <h4 class="modal-title col text-uppercase text-center">Publish Story</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form name="form" class="p-4 needs-validation" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input
+            required
+            id="title"
+            name="title"
+            #title="ngModel"
+            [ngModel]="story.title"
+            [ngClass]="{ 'is-invalid': f.submitted && title.invalid, 'is-valid': f.submitted && title.valid }"
+            class="form-control"
+            type="text"
+            placeholder="Title of your story"
+          >
+          <div
+            class="invalid-feedback"
+            *ngIf="f.submitted && title.invalid"
+          >
+        <span
+          *ngIf="title.errors.required"
+        >
+          Title is required.
+        </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="tags">Tags</label>
+          <textarea
+            id="tags"
+            name="userPostHashtags"
+            #userPostHashtags="ngModel"
+            [ngModel]="story.userPostHashtags"
+            [ngClass]="{ 'is-invalid': f.submitted && userPostHashtags.invalid, 'is-valid': f.submitted && userPostHashtags.valid }"
+            class="form-control"
+            type="text"
+            placeholder="Tag your story"
+            aria-describedby="tagsHelpInline"
+          ></textarea>
+          <small id="tagsHelpInline" class="text-muted">
+            Tags can be submitted by pressing enter
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-auto">
+        <div class="form-group btn-group btn-group-toggle">
+          <label class="btn-outline-dark" ngbButtonLabel placement="right" [ngbPopover]="paywallPopContent" [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
+            <input type="checkbox" ngbButton id="hasPaidSection" name="hasPaidSection" #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"> I have a pay-to-read section in my story
+          </label>
+        </div>
+      </div>
+    </div>
+    <div [hidden]="!story.hasPaidSection" class="form-row">
+      <div class="col-auto">
+        <div class="form-group">
+          <input
+            id="paidSectionLinebreak"
+            name="paidSectionLinebreak"
+            #paidSectionLinebreak="ngModel"
+            [ngModel]="story.paidSectionLinebreak"
+            [ngClass]="{ 'is-invalid': f.submitted && paidSectionLinebreak.invalid, 'is-valid': f.submitted && paidSectionLinebreak.valid }"
+            class="form-control"
+            placeholder="Sectionbreak Number"
+            type="number"
+            aria-describedby="paidSectionLinebreakHelpInline">
+          <small id="paidSectionLinebreakHelpInline" class="text-muted">
+            Everything after this section will be pay-to-read. The section numbers turn visible at the top-right corner when you click inside of the blocks in the editor.
+          </small>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="form-group">
+          <input
+            id="paidSectionCost"
+            name="paidSectionCost"
+            #paidSectionCost="ngModel"
+            [ngModel]="story.paidSectionCost"
+            [ngClass]="{ 'is-invalid': f.submitted && paidSectionCost.invalid, 'is-valid': f.submitted && paidSectionCost.valid }"
+            class="form-control"
+            placeholder="Price in BCH"
+            type="number"
+            aria-describedby="paidSectionCostHelpInline">
+          <small id="paidSectionCostHelpInline" class="text-muted">
+            Please enter cost in BCH
+          </small>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <div class="col text-left">
+    <button type="button" class="btn btn-outline-dark" (click)="onDismiss()" [disabled]="isPublishing">Close <fa-icon [icon]="['fas', 'window-close']"></fa-icon></button>
+  </div>
+  <div class="col text-right">
+    <button type="button" class="btn btn-success" (click)="onPublish()" [disabled]="isPublishing">Publish
+      <fa-icon *ngIf="!isPublishing" [icon]="['far', 'paper-plane']"></fa-icon>
+      <fa-icon *ngIf="isPublishing" [icon]="['fas', 'spinner']" spin="spin"></fa-icon>
+    </button>
+  </div>
+</div>
