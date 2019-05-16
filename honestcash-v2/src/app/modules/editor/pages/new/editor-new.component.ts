@@ -125,7 +125,8 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   ) {
     this.editorConfig.tools.image.config = {
       uploader: {
-        uploadByFile: this.uploadImage.bind(this)
+        uploadByFile: this.uploadImage.bind(this),
+        uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
       }
     };
     this.editor = new EditorJS(this.editorConfig);
@@ -195,6 +196,17 @@ export class EditorNewComponent implements OnInit, OnDestroy {
 
   uploadImage(file: File) {
     return this.editorService.uploadImage(file).toPromise().then((response) => {
+      return {
+        success: 1,
+        file: {
+          url: response.files[0].url
+        }
+      };
+    });
+  }
+
+  downloadImageFromUrlAndUpload(url: string) {
+    return this.editorService.downloadImageFromUrl(url).toPromise().then(response => {
       return {
         success: 1,
         file: {

@@ -33,7 +33,8 @@ export const API_ENDPOINTS = {
   savePostProperty: (p: Post, property: 'title' | 'body' | 'hashtags' | 'paidSection') => `/draft/${p.id}/${property}`,
   saveDraft: (p: Post) => `/draft/${p.id}/body`,
   publishPost: (p: Post) => `/draft/${p.id}/publish`,
-  uploadImage: () => `/upload/image`
+  uploadImage: () => `/upload/image`,
+  uploadRemoteImage: () => `/upload/image/remote`
 };
 
 export enum STORY_PROPERTIES {
@@ -100,6 +101,14 @@ export class EditorService {
     };
 
     return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadImage(), formData, httpOptions);
+  }
+
+  downloadImageFromUrl(url: string) {
+    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadRemoteImage(), url);
+  }
+
+  getRandomFilename() {
+    return '_' + Math.random().toString(36).substr(2, 9);
   }
 
   private transformTags(tags: Hashtag[]): string {
