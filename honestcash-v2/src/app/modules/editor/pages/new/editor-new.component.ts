@@ -116,11 +116,9 @@ export class EditorNewComponent implements OnInit, OnDestroy {
         this.story.body = outputData.blocks;
         this.store.dispatch(new EditorChange(this.story));
 
-        if (EDITOR_AUTO_SAVE.ON) {
+        if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
           this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
-            if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
-              this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
-            }
+            this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
           });
         }
       });
