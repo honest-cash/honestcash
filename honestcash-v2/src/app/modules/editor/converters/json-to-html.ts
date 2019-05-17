@@ -45,7 +45,9 @@ type ListElement = {
 type ImageElement = {
   type: ELEMENT_TYPES.Image;
   data: {
-    url: string;
+    file: {
+      url: string
+    },
     caption: string;
     withBorder?: boolean;
     withBackground?: boolean;
@@ -82,7 +84,7 @@ type EmbedElement = {
   };
 };
 
-export type BlockElements =
+export type Block =
   | HeaderElement
   | ParagraphElement
   | ListElement
@@ -93,61 +95,97 @@ export type BlockElements =
   | EmbedElement;
 /* tslint:enable */
 
-export const convertBlocksArrayToHtml = (
-  blocks: BlockElements[]
-) => {
-  return blocks.map((block, index) => {
-    switch (block.type) {
-      case 'header': {
-        const {level, text} = block.data;
-        return `<h${level} id="story-section__id-${index}">${text}</h${level}>`;
-      }
-      case 'paragraph': {
-        const {text} = block.data;
-        return `<p id="story-section__id-${index}">${text}</p>`;
-      }
-      case 'list': {
-        const {style, items} = block.data;
-        const listStyle = style === 'ordered' ? 'ol' : 'ul';
-        const wrapper = (children) => `<${listStyle} id="story-section__id-${index}">${children}</${listStyle}>`;
-        const listItems = items.map(item => `<li>${item}</li>`).join('');
-        return `${wrapper(listItems)}`;
-      }
-      case 'image': {
-        const {url, caption} = block.data;
-        return `<figure id="story-section__id-${index}"><img src="${url}" alt="${caption}"><figcaption>${caption}</figcaption></figure>`;
-      }
-      case 'quote': {
-        const {text, caption} = block.data;
-        return `<blockquote id="story-section__id-${index}" cite="${caption}">${text}</blockquote>`;
-      }
-      case 'code': {
-        const {code} = block.data;
-        return `<code id="story-section__id-${index}">${code}</code>`;
-      }
-      case 'delimiter': {
-        return `<p id="story-section__id-${index}" class="story-elements__delimiter"></p>`;
-      }
-      case 'embed': {
-        const {embed, caption, service} = block.data;
-        switch (service) {
-          case 'youtube': {
-              return `
-              <figure id="story-section__id-${index}">
-                <iframe frameborder="0" scrolling="no" allowfullscreen="" src="${embed}"></iframe>
-                <figcaption>${caption}</figcaption>
-              </figure>
-            `;
-          }
-          default: {
-            return ``;
-          }
-        }
-        break;
-      }
-      default: {
-        return ``;
-      }
+export const convertHeaderBlockToHtml = (block: HeaderElement) => {
+  const {level, text} = block.data;
+  return `<h${level}>${text}</h${level}>`;
+};
+
+export const convertParagraphBlockToHtml = (block: ParagraphElement) => {
+  const {text} = block.data;
+  return `<p>${text}</p>`;
+};
+
+export const convertListBlockToHtml = (block: ListElement) => {
+  const {style, items} = block.data;
+  const listStyle = style === 'ordered' ? 'ol' : 'ul';
+  const wrapper = (children) => `<${listStyle}>${children}</${listStyle}>`;
+  const listItems = items.map(item => `<li>${item}</li>`).join('');
+  return `${wrapper(listItems)}`;
+};
+
+export const convertImageBlockToHtml = (block: ImageElement) => {
+  const {file, caption} = block.data;
+  return `<figure><img src="${file.url}" alt="${caption}"><figcaption>${caption}</figcaption></figure>`;
+};
+
+export const convertQuoteBlockToHtml = (block: QuoteElement) => {
+  const {text, caption} = block.data;
+  return `<blockquote cite="${caption}">${text}</blockquote>`;
+};
+
+export const convertCodeBlockToHtml = (block: CodeElement) => {
+  const {code} = block.data;
+  return `<code>${code}</code>`;
+};
+
+export const convertDelimiterBlockToHtml = (block: DelimiterElement) => {
+  return `<p class="story-elements__delimiter"></p>`;
+};
+
+export const convertEmbedBlockToHtml = (block: EmbedElement) => {
+  const {embed, caption, service} = block.data;
+  switch (service) {
+    case 'youtube': {
+      return `
+        <figure>
+          <iframe frameborder="0" scrolling="no" allowfullscreen="" src="${embed}"></iframe>
+          <figcaption>${caption}</figcaption>
+        </figure>
+      `;
     }
-  }).join('');
+    default: {
+      return null;
+    }
+  }
+};
+
+export const convertBlocksArrayToHtml = (
+  blockOrBlocks: Block | Block[]
+) => {
+  if (Array.isArray(blockOrBlocks)) {
+    return blockOrBlocks.map(convertEmbedBlockToHtml).join('');
+  }
+  return convertBlockToHtml(blockOrBlocks);
+};
+
+export const convertBlockToHtml = (block: Block) => {
+  switch (block.type) {
+    case 'header': {
+      return convertHeaderBlockToHtml(block);
+    }
+    case 'paragraph': {
+      return convertParagraphBlockToHtml(block);
+    }
+    case 'list': {
+      return convertListBlockToHtml(block);
+    }
+    case 'image': {
+      return convertImageBlockToHtml(block);
+    }
+    case 'quote': {
+      return convertQuoteBlockToHtml(block);
+    }
+    case 'code': {
+      return convertCodeBlockToHtml(block);
+    }
+    case 'delimiter': {
+      return convertDelimiterBlockToHtml(block);
+    }
+    case 'embed': {
+      return convertEmbedBlockToHtml(block);
+    }
+    default: {
+      return null;
+    }
+  }
 };

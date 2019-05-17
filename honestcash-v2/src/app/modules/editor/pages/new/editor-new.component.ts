@@ -33,7 +33,7 @@ export const EDITOR_AUTO_SAVE = {
   INTERVAL: 5000,
 };
 
-interface HonestEditorConfig extends EditorConfig {
+export interface HonestEditorConfig extends EditorConfig {
   tools: {
     header: {
       class: Header,

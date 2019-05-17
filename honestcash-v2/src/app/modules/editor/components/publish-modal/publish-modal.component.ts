@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import Post from '../../../../core/models/post';
 import {Store} from '@ngrx/store';
@@ -8,9 +8,20 @@ import {State as EditorState} from '../../../../core/store/editor/editor.state';
 import {EditorChange, EditorStoryPropertyChange} from '../../../../core/store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../services/editor.service';
 import Hashtag from '../../../../core/models/hashtag';
+import {Block, convertBlocksArrayToHtml, convertBlockToHtml} from '../../converters/json-to-html';
 
 export interface INgxChipsTag {
   hashtag: string;
+}
+
+export enum LINEBREAK_ACTION {
+  MoveUp = 'MOVE_UP',
+  MoveDown = 'MOVE_DOWN',
+}
+
+export enum PAID_SECTION_CURRENCIES {
+  Bch = 'BCH',
+  Usd = 'USD',
 }
 
 @Component({
@@ -20,6 +31,13 @@ export interface INgxChipsTag {
 })
 export class PublishModalComponent implements OnInit, OnDestroy {
   @Output() publishClick = new EventEmitter<void>();
+  @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
+  public LINEBREAK_ACTION = LINEBREAK_ACTION;
+  public PAID_SECTION_CURRENCIES = PAID_SECTION_CURRENCIES;
+  private canCalculateUsdRate = false;
+  private paidSectionCostInUsd: number;
+  private paidSectionLineBreakTouched = false;
+  private paidSectionLinebreakEnd: number;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
   private story: Post;
@@ -41,7 +59,9 @@ export class PublishModalComponent implements OnInit, OnDestroy {
             this._hashtags = this.story.userPostHashtags;
           }
         }
+        this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.body).length) - 1);
       });
+    this.onHasPaidSectionChange();
   }
 
   onSubmit() {
@@ -57,11 +77,59 @@ export class PublishModalComponent implements OnInit, OnDestroy {
     this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
   }
 
+  onHasPaidSectionChange() {
+    if (this.story.hasPaidSection) {
+      if (!this.story.paidSectionLinebreak) {
+        this.story.paidSectionLinebreak = 0;
+      }
+      if (!this.paidSectionCostInUsd) {
+        this.paidSectionCostInUsd = 0;
+      }
+      if (!this.story.paidSectionCost) {
+        this.story.paidSectionCost = 0;
+      }
+    }
+  }
+
+  onSwitchLinebreak(action: LINEBREAK_ACTION) {
+    this.paidSectionLineBreakTouched = true;
+    let element: ElementRef;
+    switch (action) {
+      case LINEBREAK_ACTION.MoveUp: {
+        if (this.story.paidSectionLinebreak > 0) {
+          this.story.paidSectionLinebreak--;
+          element = this.getPaidSectionBlockElementByLinebreak();
+        }
+        break;
+      }
+      case LINEBREAK_ACTION.MoveDown: {
+        if (this.story.paidSectionLinebreak < this.paidSectionLinebreakEnd) {
+          this.story.paidSectionLinebreak++;
+          element = this.getPaidSectionBlockElementByLinebreak();
+        }
+        break;
+      }
+    }
+    element.nativeElement.scrollIntoView({behavior: 'smooth'});
+  }
+
+  onChangePaidSectionCost(currency: PAID_SECTION_CURRENCIES) {
+
+  }
+
   onDismiss() {
     this.activeModal.dismiss();
   }
 
   ngOnDestroy() {
     this.editorState$.unsubscribe();
+  }
+
+  convertBlockToHtml(block: Block) {
+    return convertBlockToHtml(block);
+  }
+
+  private getPaidSectionBlockElementByLinebreak() {
+    return this.paidSectionElements.find((el, index) => index === this.story.paidSectionLinebreak);
   }
 }

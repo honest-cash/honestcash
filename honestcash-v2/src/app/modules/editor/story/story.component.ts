@@ -1,5 +1,5 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
-import {BlockElements, convertBlocksArrayToHtml} from '../converters/json-to-html';
+import {Block, convertBlocksArrayToHtml} from '../converters/json-to-html';
 
 @Component({
   selector: 'app-story',
@@ -304,6 +304,6 @@ export class StoryComponent implements OnInit{
   /* tslint:enable */
 
   ngOnInit() {
-    this.story.bodyHtml = convertBlocksArrayToHtml(<BlockElements[]>this.story.body);
+    this.story.bodyHtml = convertBlocksArrayToHtml(<Block[]>this.story.body);
   }
 }

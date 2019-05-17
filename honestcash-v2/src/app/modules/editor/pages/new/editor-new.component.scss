@@ -4,49 +4,32 @@
   color: black;
 }
 
-:host ::ng-deep .ce-paywall {
-  width: 100%;
-  text-align: center;
-  background-color: red;
-  border: 1px solid #fafafa;
-  border-radius: 4px;
-}
-
-:host ::ng-deep .ce-paywall:before {
-  display: inline-block;
-  content: "Content below will have to be unlocked by the reader";
-  color: white;
-  font-size: 18px;
-  height: 30px;
-  letter-spacing: 0.2em;
-}
-
 :host ::ng-deep .ce-header {
   font-weight: normal;
 }
 
 :host ::ng-deep h1.ce-header {
-  font-size: 40px;
+  font-size: 2.5rem;
 }
 
 :host ::ng-deep h2.ce-header {
-  font-size: 30px;
+  font-size: 1.875rem;
 }
 
 :host ::ng-deep h3.ce-header {
-  font-size: 23.4px;
+  font-size: 1.5rem;
 }
 
 :host ::ng-deep h5.ce-header {
-  font-size: 16.6px;
+  font-size: 1rem;
 }
 
 :host ::ng-deep h6.ce-header {
-  font-size: 13.4px;
+  font-size: .8125rem;
 }
 
 :host ::ng-deep .cdx-quote {
-  font-size: 30px;
+  font-size: 1.875rem;
 }
 
 :host ::ng-deep .cdx-checklist,
@@ -55,7 +38,11 @@
 :host ::ng-deep .ce-paragraph,
 :host ::ng-deep h4.ce-header,
 :host ::ng-deep .ce-delimiter:before {
-  font-size: 20px;
+  font-size: 1.2rem;
+}
+
+:host ::ng-deep .cdx-input.image-tool__caption {
+  font-size: 1rem;
 }
 
 :host ::ng-deep .cdx-warning:before {

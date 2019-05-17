@@ -52,3 +52,95 @@
   width: 100%;
   background-color: transparent;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  /* Hide Scroll */
+  height: 0 !important; /* Webkit */
+  width: 0 !important; /* Webkit */
+}
+
+.hide-scrollbar {
+  /* Hide Scroll */
+  -ms-overflow-style: none; /* IE */
+  overflow: -moz-scrollbars-none; /* Firefox */
+  scrollbar-width: none; /* Firefox */
+}
+
+.editor-publish-modal__paid-section {
+  min-height: 100px;
+  max-height: 200px;
+  overflow-y: scroll;
+  border: 1px solid #c5c5c5;
+  border-radius: .25rem;
+}
+
+.editor-publish-modal__paid-section.invalid {
+  border: 1px solid #dc3545;
+}
+
+:host ::ng-deep .paid-section__dashed-underline {
+  border-bottom: 2px dashed #dc3545;
+  margin-bottom: 5px;
+}
+
+:host ::ng-deep .editor-publish-modal__paid-section {
+  /*  the em specified below for html elements
+      helps resize them all by percentage
+      relative to this font-size
+   */
+  font-size: 12px;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: normal;
+  }
+  /*
+      Font sizes are intentionally specified as em
+      so that they can be relatively and proportionally
+      be resized to smaller size to fit in paid section window
+   */
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  h2 {
+    font-size: 1.875em;
+  }
+
+  h3 {
+    font-size: 1.5em;
+  }
+
+  h5 {
+    font-size: 1em;
+  }
+
+  h6 {
+    font-size: .8125em;
+  }
+
+  blockquote {
+    font-size: 1.875em;
+  }
+
+  ul,
+  ol,
+  li,
+  p,
+  h4 {
+    font-size: 1.2em;
+  }
+
+  figcaption {
+    font-size: 1em;
+  }
+
+  figure > img {
+    max-width: 100%;
+  }
+}

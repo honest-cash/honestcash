@@ -1,5 +1,6 @@
 import User from './user';
 import Hashtag from './hashtag';
+import {Block} from '../../modules/editor/converters/json-to-html';
 
 export type TPostTypeId = 'comment' | 'article' | 'response';
 
@@ -7,7 +8,7 @@ export default class Post {
   id: number;
   title: string;
   alias: string;
-  body: string | any[];
+  body: string | any[] | Block[];
   bodyMD: string;
   plain: string;
   user: User;
