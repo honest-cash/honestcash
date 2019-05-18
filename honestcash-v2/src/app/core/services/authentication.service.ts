@@ -1,42 +1,27 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, defer } from 'rxjs';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {defer, Observable} from 'rxjs';
 import User from '../models/user';
-import { CryptoUtils } from '../../shared/lib/CryptoUtils';
-import { HttpService } from '..';
+import {CryptoUtils} from '../../shared/lib/CryptoUtils';
+import {HttpService} from '..';
 import {
-  ResetPasswordContext,
   CheckPasswordContext,
   CheckPasswordResponse,
   EmptyResponse,
   LoginContext,
   LoginResponse,
   OkResponse,
+  ResetPasswordContext,
   ResetPasswordRequestContext,
   SetWalletContext,
   SignupContext,
   SignupResponse,
   SignupSuccessResponse
 } from '../models/authentication';
-import { WalletUtils } from 'app/shared/lib/WalletUtils';
-import { mergeMap } from 'rxjs/operators';
-import {environment} from '../../../environments/environment';
+import {WalletUtils} from 'app/shared/lib/WalletUtils';
+import {mergeMap} from 'rxjs/operators';
+import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
-
-/**
- * This function exists only for SSR because the SSR server does not support localStorage.
- */
-const getLocalStorage = () => {
-  if (typeof window !== 'undefined') {
-    return localStorage;
-  }
-
-  return {
-    setItem: (_key: string, _value: string) => void 0,
-    getItem: (_key: string) => void 0,
-    removeItem: (_key: string) => void 0
-  };
-};
 
 // @todo refactor
 interface ChangePasswordPayload extends ResetPasswordContext {
@@ -65,12 +50,15 @@ export class AuthenticationService {
   private isAuthenticated = false;
 
   constructor(
-    private http: HttpService
-  ) {}
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject('LOCALSTORAGE') private localStorage: Storage,
+    private http: HttpService,
+  ) {
+  }
 
   public getToken(): string {
     let token;
-    if (!this.token && (token = getLocalStorage().getItem(LOCAL_TOKEN_KEY))) {
+    if (!this.token && (token = this.localStorage.getItem(LOCAL_TOKEN_KEY))) {
       this.token = token;
     }
     return this.token;
@@ -78,20 +66,20 @@ export class AuthenticationService {
 
   public setToken(token: string) {
     this.token = token;
-    getLocalStorage().setItem(LOCAL_TOKEN_KEY, token);
+    this.localStorage.setItem(LOCAL_TOKEN_KEY, token);
   }
 
   // needed for the v1 integration, @todo, review its use after.
   public setUserId(userId: number) {
     this.userId = userId;
 
-    getLocalStorage().setItem('HC_USER_ID', String(userId));
+    this.localStorage.setItem('HC_USER_ID', String(userId));
   }
 
   public unsetToken(): void {
     this.token = '';
     this.isAuthenticated = false;
-    getLocalStorage().removeItem(LOCAL_TOKEN_KEY);
+    this.localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
 
   public hasAuthorization(): boolean {
@@ -102,13 +90,22 @@ export class AuthenticationService {
   }
 
   public init(token?: string, userId?: number) {
-    if (!token && this.getToken()) {
-      this.isAuthenticated = true;
-    } else if (token) {
-      this.setToken(token);
-      this.setUserId(userId);
+    if (isPlatformBrowser(this.platformId)) {
+      // localStorage will be available: we can use it.
+      if (!token && this.getToken()) {
+        this.isAuthenticated = true;
+      } else if (token) {
+        this.setToken(token);
+        this.setUserId(userId);
 
-      this.isAuthenticated = true;
+        this.isAuthenticated = true;
+      }
+    }
+    if (isPlatformServer(this.platformId)) {
+      // localStorage will be null.
+      if (token) {
+        this.isAuthenticated = true;
+      }
     }
   }
 
@@ -142,7 +139,7 @@ export class AuthenticationService {
   }
 
   public resetPassword(payload: ResetPasswordRequestContext): Observable<EmptyResponse> {
-    return this.http.post<string>(API_ENDPOINTS.resetPassword, { email: payload.email });
+    return this.http.post<string>(API_ENDPOINTS.resetPassword, {email: payload.email});
   }
 
   public changePassword(context: ResetPasswordContext): Observable<OkResponse> {
@@ -162,7 +159,7 @@ export class AuthenticationService {
             mnemonicEncrypted,
           };
 
-        return this.http.post<OkResponse>(API_ENDPOINTS.changePassword, payload);
+          return this.http.post<OkResponse>(API_ENDPOINTS.changePassword, payload);
         })
       )
     );
