@@ -1,21 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
-import { Observable, of, defer } from 'rxjs';
-import { tap, map, mergeMap } from 'rxjs/operators';
-import {
-    WalletActionTypes,
-    WalletSetup,
-    WalletGenerated
-} from './wallet.actions';
-import { WalletService } from '../../services/wallet.service';
-import { AuthenticationService } from 'app/core/services/authentication.service';
-import { WalletUtils } from 'app/shared/lib/WalletUtils';
-import Wallet from 'app/core/models/wallet';
-import { Logger } from 'app/core/services/logger.service';
+import {Injectable} from '@angular/core';
+import {Actions, Effect, ofType} from '@ngrx/effects';
+import {defer, Observable} from 'rxjs';
+import {map, mergeMap, tap} from 'rxjs/operators';
+import {WalletActionTypes, WalletGenerated, WalletSetup} from './wallet.actions';
+import {WalletService} from '../../services/wallet.service';
+import {AuthenticationService} from 'app/core/services/authentication.service';
+import {ISimpleBitcoinWallet, WalletUtils} from 'app/shared/lib/WalletUtils';
+import {Logger} from 'app/core/services/logger.service';
 
 @Injectable()
 export class WalletEffects {
   private logger: Logger;
+
   constructor(
     private actions: Actions,
     private walletService: WalletService,
@@ -37,34 +33,34 @@ export class WalletEffects {
       return action.payload;
     }),
     mergeMap((payload) => defer(async () => {
-      let simpleWallet: Wallet;
+      let simpleWallet: ISimpleBitcoinWallet;
 
-      if (payload.mnemonic) {
-        this.logger.info('Setting up an already existing wallet');
-
-        simpleWallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(payload.mnemonic, payload.password);
-      } else {
-        this.logger.info('Setting up a new wallet');
+      if (!payload.wallet || !payload.wallet.mnemonicEncrypted) {
+        this.logger.info('Creating new wallet.');
 
         simpleWallet = await WalletUtils.generateNewWallet(payload.password);
+      } else if (payload.wallet && payload.wallet.mnemonic) {
+        this.logger.info('Setting up an already existing wallet');
+
+        simpleWallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(payload.wallet.mnemonic, payload.password);
       }
 
-      return { wallet: simpleWallet };
+      return {wallet: simpleWallet};
     })),
-    tap(({ wallet }) => {
+    tap(({wallet}) => {
       this.walletService.setWallet(wallet.mnemonic);
     }),
-    tap(({ wallet }) => {
-      this.authenticationService.setWallet({ mnemonicEncrypted: wallet.mnemonicEncrypted});
+    tap(({wallet}) => {
+      this.authenticationService.setWallet({mnemonicEncrypted: wallet.mnemonicEncrypted});
     }),
-    map(({ wallet }) => {
+    map(({wallet}) => {
       return new WalletGenerated({
         wallet
       });
     }),
   );
 
-  @Effect({ dispatch: false })
+  @Effect({dispatch: false})
   WalletCleanup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_CLEANUP),
     tap(() => {
