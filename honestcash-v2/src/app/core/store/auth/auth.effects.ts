@@ -65,19 +65,15 @@ export class AuthEffects {
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LogInSuccess) => action.payload),
-    tap((payload) => {
-      this.authenticationService.init(payload.token, payload.user.id);
-    }),
     switchMap((payload: LoginSuccessResponse) => [
-      new UserSetup(),
-      new WalletSetup({
-        wallet: payload.wallet,
-        password: payload.password
-      })
+      new UserSetup(payload),
+      new WalletSetup(payload)
     ]),
     tap(() => {
-      // @todo
-      this.tryGoToMainPageAfterLogin();
+      // @todo switch the lines when v1 is deprecated
+      // the VersionOneGuard kicks in if user is logged in
+      // in the root page
+      this.router.navigateByUrl('/');
       // this.router.navigateByUrl('/thank-you');
     })
   );
@@ -100,8 +96,7 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     map((action: SignUpSuccess) => action.payload),
-    tap((payload: SignupSuccessResponse) => this.authenticationService.init(payload.token, payload.user.id)),
-    switchMap(payload => of(new UserSetup())),
+    switchMap(payload => of(new UserSetup(payload))),
     tap(() => this.router.navigateByUrl('/thank-you'))
   );
 
@@ -152,24 +147,7 @@ export class AuthEffects {
   AuthCleanup: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.AUTH_CLEANUP),
     tap(() => {
-      return this.authenticationService.unsetToken();
+      return this.authenticationService.unsetTokenAndUnAuthenticate();
     })
   );
-
-  /**
-   * Recursive function trying to switch to the main page.
-   * We check if the token and wallet mnemonic have been initialized and then forward to main page after login.
-   * @todo: replace with with a more cleaner approach.
-   */
-  private tryGoToMainPageAfterLogin() {
-    if (this.authenticationService.getToken() && this.walletService.getWalletMnemonic()) {
-      // this.router.navigateByUrl('/thank-you');
-      // @todo: hard reload to go to V1
-      location.href = '/';
-    } else {
-      setTimeout(() => {
-        this.tryGoToMainPageAfterLogin();
-      }, 1000);
-    }
-  }
 }

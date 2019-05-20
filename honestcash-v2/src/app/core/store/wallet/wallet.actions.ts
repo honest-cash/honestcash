@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import Wallet from 'app/core/models/wallet';
+import {LoginSuccessResponse} from '../../models/authentication';
 import {ISimpleBitcoinWallet} from '../../../shared/lib/WalletUtils';
 
 export enum WalletActionTypes {
@@ -11,7 +11,7 @@ export enum WalletActionTypes {
 export class WalletSetup implements Action {
   readonly type = WalletActionTypes.WALLET_SETUP;
 
-  constructor(public payload: { wallet: ISimpleBitcoinWallet; password?: string }) {
+  constructor(public payload?: LoginSuccessResponse) {
   }
 }
 
@@ -25,7 +25,7 @@ export class WalletCleanup implements Action {
 export class WalletGenerated implements Action {
   readonly type = WalletActionTypes.WALLET_GENERATED;
 
-  constructor(public payload: { wallet: Wallet }) {
+  constructor(public payload: { wallet: ISimpleBitcoinWallet }) {
   }
 }
 

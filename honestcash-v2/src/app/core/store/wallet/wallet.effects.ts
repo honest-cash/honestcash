@@ -1,18 +1,20 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {defer, Observable} from 'rxjs';
-import {map, mergeMap, tap} from 'rxjs/operators';
+import {flatMap, map, tap} from 'rxjs/operators';
 import {WalletActionTypes, WalletGenerated, WalletSetup} from './wallet.actions';
 import {WalletService} from '../../services/wallet.service';
 import {AuthenticationService} from 'app/core/services/authentication.service';
-import {ISimpleBitcoinWallet, WalletUtils} from 'app/shared/lib/WalletUtils';
 import {Logger} from 'app/core/services/logger.service';
+import {LoginSuccessResponse} from '../../models/authentication';
 
 @Injectable()
 export class WalletEffects {
   private logger: Logger;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject('LOCALSTORAGE') private localStorage: Storage,
     private actions: Actions,
     private walletService: WalletService,
     private authenticationService: AuthenticationService
@@ -29,31 +31,17 @@ export class WalletEffects {
   @Effect()
   WalletSetup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP),
-    map((action: WalletSetup) => {
-      return action.payload;
+    map((action: WalletSetup) => action.payload),
+    flatMap((payload?: LoginSuccessResponse) => defer(
+      async () => await this.walletService.setupWallet(payload)
+    )),
+    tap((wallet) => {
+      this.walletService.setWallet(wallet);
     }),
-    mergeMap((payload) => defer(async () => {
-      let simpleWallet: ISimpleBitcoinWallet;
-
-      if (!payload.wallet || !payload.wallet.mnemonicEncrypted) {
-        this.logger.info('Creating new wallet.');
-
-        simpleWallet = await WalletUtils.generateNewWallet(payload.password);
-      } else if (payload.wallet && payload.wallet.mnemonic) {
-        this.logger.info('Setting up an already existing wallet');
-
-        simpleWallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(payload.wallet.mnemonic, payload.password);
-      }
-
-      return {wallet: simpleWallet};
-    })),
-    tap(({wallet}) => {
-      this.walletService.setWallet(wallet.mnemonic);
+    tap((wallet) => {
+      this.authenticationService.setWallet(wallet);
     }),
-    tap(({wallet}) => {
-      this.authenticationService.setWallet({mnemonicEncrypted: wallet.mnemonicEncrypted});
-    }),
-    map(({wallet}) => {
+    map((wallet) => {
       return new WalletGenerated({
         wallet
       });

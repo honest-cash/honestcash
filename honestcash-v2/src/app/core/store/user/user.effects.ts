@@ -1,18 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
-import { tap, map, switchMap, catchError } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Observable} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
 
-import {
-  UserActionTypes,
-  UserSetup,
-  UserLoaded,
-  UserCleanup,
-} from './user.actions';
-import { LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
+import {UserActionTypes, UserSetup} from './user.actions';
 import {AuthenticationService} from '../../services/authentication.service';
-import { UserService } from 'app/core/services/user.service';
-import User from 'app/core/models/user';
+import {UserService} from 'app/core/services/user.service';
+import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
 
 @Injectable()
 export class UserEffects {
@@ -21,29 +15,23 @@ export class UserEffects {
     private actions: Actions,
     private authenticationService: AuthenticationService,
     private userService: UserService
-  ) {}
+  ) {
+  }
 
-  @Effect()
+  @Effect({dispatch: false})
   UserSetup: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.USER_SETUP),
-    switchMap((_payload) =>
-      this.userService.getMe().pipe(
-        map(meResponse =>
-          new UserLoaded({
-            user: meResponse
-          }
-        )
-        )
-      )
-    ),
-    catchError((err) => of(new UserCleanup()))
+    map((action: UserSetup) => action.payload),
+    tap((payload: LoginSuccessResponse | SignupSuccessResponse) => {
+      this.authenticationService.init(payload.token, payload.user.id);
+    })
   );
 
   @Effect({dispatch: false})
   UserCleanup: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.USER_CLEANUP),
     tap(() => {
-      this.authenticationService.unsetToken();
+      this.authenticationService.unsetTokenAndUnAuthenticate();
     })
   );
 }

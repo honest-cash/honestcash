@@ -1,5 +1,5 @@
 import User from './user';
-import {ISimpleBitcoinWallet} from '../../shared/lib/WalletUtils';
+import Wallet from './wallet';
 
 export type FailedResponse = CodedErrorResponse | string;
 export type LoginResponse = LoginSuccessResponse | FailedResponse;
@@ -31,7 +31,7 @@ export interface LoginContext {
 
 export interface LoginSuccessResponse {
   user: User;
-  wallet: ISimpleBitcoinWallet;
+  wallet: Wallet;
   token: string;
   password?: string;
 }
@@ -70,8 +70,4 @@ export interface CheckPasswordContext {
 
 export interface CheckPasswordSuccessResponse {
   isValid: boolean;
-}
-
-export interface SetWalletContext {
-  mnemonicEncrypted: string;
 }

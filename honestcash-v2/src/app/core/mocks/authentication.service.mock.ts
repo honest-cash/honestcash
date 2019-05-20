@@ -1,18 +1,24 @@
-import { Observable, of } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {
-  ResetPasswordContext, CheckPasswordContext, CheckPasswordResponse, EmptyResponse, FailedResponse,
+  CheckPasswordContext,
+  CheckPasswordResponse,
+  EmptyResponse,
+  FailedResponse,
   LoginContext,
   LoginResponse,
-  LoginSuccessResponse, OkResponse, ResetPasswordRequestContext, SetWalletContext,
+  LoginSuccessResponse,
+  OkResponse,
+  ResetPasswordContext,
+  ResetPasswordRequestContext,
   SignupContext,
   SignupResponse,
   SignupSuccessResponse
 } from '../models/authentication';
 import User from '../models/user';
-import Wallet from '../models/wallet';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import {LOCAL_TOKEN_KEY} from '../services/authentication.service';
-
+import Wallet from '../models/wallet';
+import {ISimpleBitcoinWallet} from '../../shared/lib/WalletUtils';
 
 export class MockAuthenticationService {
 
@@ -118,7 +124,7 @@ export class MockAuthenticationService {
     if (payload.email === this.mocks.email && payload.password === this.mocks.password) {
       return of(this.mocks.loginSuccess);
     }
-    return of (this.mocks.loginFailure);
+    return of(this.mocks.loginFailure);
   }
 
   public logOut(): Observable<EmptyResponse> {
@@ -130,10 +136,10 @@ export class MockAuthenticationService {
     if (payload.username === this.mocks.username) {
       return of(this.mocks.signupSuccess);
     }
-    return of (this.mocks.signupFailure);
+    return of(this.mocks.signupFailure);
   }
 
-  public setWallet(payload: SetWalletContext): Observable<OkResponse> {
+  public setWallet(wallet: ISimpleBitcoinWallet): Observable<OkResponse> {
     return of({ok: true});
   }
 

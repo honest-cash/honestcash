@@ -1,7 +1,5 @@
-
-import { WalletActionTypes, All } from './wallet.actions';
-import { State, initialState } from './wallet.state';
-import { WalletUtils } from '../../../shared/lib/WalletUtils';
+import {All, WalletActionTypes} from './wallet.actions';
+import {initialState, State} from './wallet.state';
 
 export function reducer(state = initialState, action: All): State {
   switch (action.type) {
@@ -13,14 +11,11 @@ export function reducer(state = initialState, action: All): State {
     case WalletActionTypes.WALLET_GENERATED: {
       return {
         ...state,
-        wallet: action.payload.wallet
+        wallet: action.payload.wallet,
       };
     }
     case WalletActionTypes.WALLET_CLEANUP: {
-      return {
-        ...state,
-        wallet: null
-      };
+      return initialState;
     }
     default: {
       return state;

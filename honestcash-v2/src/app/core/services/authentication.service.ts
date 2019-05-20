@@ -12,14 +12,13 @@ import {
   OkResponse,
   ResetPasswordContext,
   ResetPasswordRequestContext,
-  SetWalletContext,
   SignupContext,
   SignupResponse,
   SignupSuccessResponse
 } from '../models/authentication';
-import {WalletUtils} from 'app/shared/lib/WalletUtils';
+import {ISimpleBitcoinWallet, WalletUtils} from 'app/shared/lib/WalletUtils';
 import {mergeMap} from 'rxjs/operators';
-import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
@@ -48,17 +47,19 @@ export class AuthenticationService {
   private token = '';
   private userId: number;
   private isAuthenticated = false;
+  readonly isPlatformBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject('LOCALSTORAGE') private localStorage: Storage,
     private http: HttpService,
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
   public getToken(): string {
     let token;
-    if (!this.token && (token = this.localStorage.getItem(LOCAL_TOKEN_KEY))) {
+    if (!this.token && this.isPlatformBrowser && (token = this.localStorage.getItem(LOCAL_TOKEN_KEY))) {
       this.token = token;
     }
     return this.token;
@@ -66,23 +67,33 @@ export class AuthenticationService {
 
   public setToken(token: string) {
     this.token = token;
-    this.localStorage.setItem(LOCAL_TOKEN_KEY, token);
+    if (this.isPlatformBrowser) {
+      this.localStorage.setItem(LOCAL_TOKEN_KEY, token);
+    }
   }
 
   // needed for the v1 integration, @todo, review its use after.
   public setUserId(userId: number) {
     this.userId = userId;
 
-    this.localStorage.setItem('HC_USER_ID', String(userId));
+    if (this.isPlatformBrowser) {
+      this.localStorage.setItem('HC_USER_ID', String(userId));
+    }
   }
 
-  public unsetToken(): void {
+  public unsetTokenAndUnAuthenticate(): void {
     this.token = '';
     this.isAuthenticated = false;
-    this.localStorage.removeItem(LOCAL_TOKEN_KEY);
+    if (this.isPlatformBrowser) {
+      this.localStorage.removeItem(LOCAL_TOKEN_KEY);
+    }
   }
 
   public hasAuthorization(): boolean {
+    // this function is used throughout the app
+    // to determine whether a user is logged in
+    // if the token exists via this instance or via localStorage
+    // the user is considered as authenticated
     if (!this.isAuthenticated && this.getToken()) {
       this.isAuthenticated = true;
     }
@@ -90,22 +101,12 @@ export class AuthenticationService {
   }
 
   public init(token?: string, userId?: number) {
-    if (isPlatformBrowser(this.platformId)) {
-      // localStorage will be available: we can use it.
-      if (!token && this.getToken()) {
-        this.isAuthenticated = true;
-      } else if (token) {
-        this.setToken(token);
-        this.setUserId(userId);
-
-        this.isAuthenticated = true;
-      }
-    }
-    if (isPlatformServer(this.platformId)) {
-      // localStorage will be null.
-      if (token) {
-        this.isAuthenticated = true;
-      }
+    if (token) {
+      this.setToken(token);
+      this.setUserId(userId);
+      this.isAuthenticated = true;
+    } else if (this.getToken()) {
+      this.isAuthenticated = true;
     }
   }
 
@@ -130,8 +131,8 @@ export class AuthenticationService {
     });
   }
 
-  public setWallet(payload: SetWalletContext): Observable<OkResponse> {
-    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
+  public setWallet(wallet: ISimpleBitcoinWallet): Observable<OkResponse> {
+    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, wallet.mnemonicEncrypted);
   }
 
   public getEmails(): Observable<string[]> {
