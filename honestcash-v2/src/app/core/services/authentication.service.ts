@@ -22,6 +22,7 @@ import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageToken} from '../helpers/localStorage';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
+export const LOCAL_USER_ID_KEY = 'HC_USER_ID';
 
 // @todo refactor
 interface ChangePasswordPayload extends ResetPasswordContext {
@@ -78,13 +79,13 @@ export class AuthenticationService {
     this.userId = userId;
 
     if (this.isPlatformBrowser) {
-      this.localStorage.setItem('HC_USER_ID', String(userId));
+      this.localStorage.setItem(LOCAL_USER_ID_KEY, String(userId));
     }
   }
 
   public getUserId(): number | undefined {
     if (this.isPlatformBrowser && !this.userId) {
-      return parseInt(this.localStorage.getItem('HC_USER_ID'), 10);
+      return parseInt(this.localStorage.getItem(LOCAL_USER_ID_KEY), 10);
     }
     return this.userId;
   }
@@ -176,8 +177,8 @@ export class AuthenticationService {
 
   public checkPassword(payload: CheckPasswordContext): Observable<CheckPasswordResponse> {
     // it is not used yet so when it is used complete the following:
-    // @todo write tests
     // @todo hash passwords before sending
+    // and add hash tests
     return this.http.post<CheckPasswordResponse>(API_ENDPOINTS.checkPassword, payload);
   }
 

@@ -1,6 +1,6 @@
 import 'jasmine';
 import {TestBed} from '@angular/core/testing';
-import {API_ENDPOINTS, AuthenticationService, LOCAL_TOKEN_KEY} from './authentication.service';
+import {API_ENDPOINTS, AuthenticationService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './authentication.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../http/http.service';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
@@ -9,7 +9,14 @@ import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../hel
 import User from '../models/user';
 import Wallet from '../models/wallet';
 import {of} from 'rxjs';
-import {CodedErrorResponse, EmptyResponse, LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models/authentication';
+import {
+  CheckPasswordResponse,
+  CodedErrorResponse,
+  EmptyResponse,
+  LoginSuccessResponse,
+  OkResponse,
+  SignupSuccessResponse
+} from '../models/authentication';
 
 const SHARED_MOCKS = {
   token: '123',
@@ -80,6 +87,28 @@ describe('AuthenticationService', () => {
 
       // Assert
       expect(authenticationService.getToken()).toBe(SHARED_MOCKS.token);
+    });
+  });
+
+  describe('setUserId', () => {
+    it('should set the userId correctly to the instance and the localstorage', () => {
+      const userId = 2;
+      authenticationService.setUserId(userId);
+      expect(authenticationService.getUserId()).toEqual(userId);
+      expect(localStorage.getItem(LOCAL_USER_ID_KEY)).toEqual(String(userId));
+    });
+  });
+
+  describe('getUserId', () => {
+    it('should return the userId correctly if it is defined in the instance', () => {
+      const userId = 2;
+      authenticationService.setUserId(userId);
+      expect(authenticationService.getUserId()).toEqual(userId);
+    });
+    it('should return the userId correctly if it is NOT defined in the instance but defined in localStorage', () => {
+      const userId = 2;
+      localStorage.setItem(LOCAL_USER_ID_KEY, String(userId));
+      expect(authenticationService.getUserId()).toEqual(userId);
     });
   });
 
@@ -392,10 +421,10 @@ describe('AuthenticationService', () => {
     };
 
     it('should make API request to the correct API endpoint and'
-      + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', async (done) => {
+      + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', (done) => {
       (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
       // Act
-      await authenticationService.changePassword(mocks.changePasswordContext).subscribe(async (response: OkResponse) => {
+      authenticationService.changePassword(mocks.changePasswordContext).subscribe((response: OkResponse) => {
         // Assert
         const newPassword = SHARED_MOCKS.hashedPassword;
         const repeatNewPassword = SHARED_MOCKS.hashedPassword;
@@ -414,6 +443,42 @@ describe('AuthenticationService', () => {
       authenticationService.resetPassword(mocks.changePasswordContext).subscribe((response: EmptyResponse) => {
         // Assert
         expect(response).toBe(mocks.changePasswordSuccess);
+        done();
+      });
+    });
+
+  });
+
+  describe('checkPassword', () => {
+    const mocks = {
+      checkPasswordContext: {
+        email: 'toto@toto.com',
+        code: 'asdf',
+        newPassword: 'asdf123',
+        repeatNewPassword: 'asdf123',
+        mnemonicEncrypted: 'asdf asdf asdf',
+      },
+      checkPasswordSuccess: {
+        isValid: true
+      },
+    };
+
+    it('should make API request to the correct API endpoint with the correct body', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.checkPasswordSuccess));
+      // Act
+      authenticationService.checkPassword(mocks.checkPasswordContext).subscribe((response: CheckPasswordResponse) => {
+        // Assert
+        expect(mockHttpService.post).toHaveBeenCalledWith(API_ENDPOINTS.checkPassword, mocks.checkPasswordContext);
+        done();
+      });
+    });
+
+    it('should have no body on response', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.checkPasswordSuccess));
+      // Act
+      authenticationService.checkPassword(mocks.checkPasswordContext).subscribe((response: CheckPasswordResponse) => {
+        // Assert
+        expect(response).toEqual(mocks.checkPasswordSuccess);
         done();
       });
     });

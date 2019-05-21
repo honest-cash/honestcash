@@ -30,10 +30,10 @@ const routes: Routes = [
     component: WelcomeContainerComponent,
     children: [
       {path: '', pathMatch: 'full', component: WelcomeComponent, canActivate: [VersionOneGuard, UnauthorizedGuard]},
-      {path: 'about', component: AboutComponent, canActivate: [UnauthorizedGuard]},
-      {path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [UnauthorizedGuard]},
+      {path: 'about', component: AboutComponent},
+      {path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [VersionOneGuard, UnauthorizedGuard]},
       {path: 'logout', pathMatch: 'full', component: LogoutComponent},
-      {path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [UnauthorizedGuard]},
+      {path: 'signup', pathMatch: 'full', component: SignupComponent, canActivate: [VersionOneGuard, UnauthorizedGuard]},
       // tslint:disable-next-line:max-line-length
       {
         path: 'reset-password-request/:resetCode',

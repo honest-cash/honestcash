@@ -1,9 +1,9 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { Router, RouterStateSnapshot } from '@angular/router';
+import {inject, TestBed} from '@angular/core/testing';
+import {Router, RouterStateSnapshot} from '@angular/router';
 
-import { AuthenticationService } from '../services/authentication.service';
-import { MockAuthenticationService } from '../mocks/authentication.service.mock';
-import { UnauthorizedGuard } from './unauthorized.guard';
+import {AuthenticationService} from '../services/authentication.service';
+import {MockAuthenticationService} from '../mocks/authentication.service.mock';
+import {UnauthorizedGuard} from './unauthorized.guard';
 import {resetLocalStorage} from '../helpers/localStorage';
 
 describe('UnauthorizedGuard', () => {
@@ -21,8 +21,8 @@ describe('UnauthorizedGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         UnauthorizedGuard,
-        { provide: AuthenticationService, useClass: MockAuthenticationService },
-        { provide: Router, useValue: mockRouter }
+        {provide: AuthenticationService, useClass: MockAuthenticationService},
+        {provide: Router, useValue: mockRouter}
       ]
     });
   });
@@ -49,8 +49,7 @@ describe('UnauthorizedGuard', () => {
       expect(authenticationGuard.canActivate()).toBe(true);
     });
 
-    // @todo reenable this test when /feed redirect is uncommented in unauthorized.guard
-    /*it('should return false and redirect to feed if user is already authenticated', () => {
+    it('should return false and redirect to feed if user is already authenticated', () => {
       // Arrange
       authenticationService.isAuthenticated = true;
 
@@ -60,6 +59,6 @@ describe('UnauthorizedGuard', () => {
       // Assert
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/feed');
       expect(result).toBe(false);
-    });*/
+    });
   });
 });
