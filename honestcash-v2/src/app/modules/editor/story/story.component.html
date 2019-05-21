@@ -1,3 +1,7 @@
+<button class="btn btn-outline-success" (click)="openEditorModal()">
+  <fa-icon [icon]="['fas', 'pen-alt']"></fa-icon>
+</button>
+
 <div class="row mb-2">
   <div class="col">
     <h1 class="story-title">{{story.title}}</h1>
@@ -26,6 +30,8 @@
 </div>
 <div class="row">
   <div class="col">
-    <a *ngFor="let tag of story.userPostHashtags; let i = index;" [ngClass]="{'ml-2': i > 0}" class="badge badge-light p-3 font-weight-normal" [routerLink]="['/feed', 'hashtag', tag.hashtag]">{{tag.hashtag}}</a>
+    <a *ngFor="let tag of story.userPostHashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
+       class="badge badge-light p-3 font-weight-normal"
+       [routerLink]="['/feed', 'hashtag', tag.hashtag]">{{tag.hashtag}}</a>
   </div>
 </div>
