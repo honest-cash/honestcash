@@ -7,7 +7,7 @@ import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.s
 import Wallet from '../models/wallet';
 import {of} from 'rxjs';
 import {OkResponse} from '../models/authentication';
-import {getLocalStorage} from '../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
 
 const SHARED_MOCKS = {
   mnemonic: 'test test2 test3 test4',
@@ -27,7 +27,7 @@ describe('WalletService', () => {
         WalletService,
         {provide: HttpService, useValue: mockHttpService},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
-        {provide: 'LOCALSTORAGE', useFactory: getLocalStorage},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
       ]
     });
     walletService = TestBed.get(WalletService);

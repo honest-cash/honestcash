@@ -19,6 +19,7 @@ import {
 import {WalletUtils} from 'app/shared/lib/WalletUtils';
 import {mergeMap} from 'rxjs/operators';
 import {isPlatformBrowser} from '@angular/common';
+import {LocalStorageToken} from '../helpers/localStorage';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
@@ -51,7 +52,7 @@ export class AuthenticationService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
-    @Inject('LOCALSTORAGE') private localStorage: Storage,
+    @Inject(LocalStorageToken) private localStorage: Storage,
     private http: HttpService,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);

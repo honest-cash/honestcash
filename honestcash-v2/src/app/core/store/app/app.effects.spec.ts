@@ -9,7 +9,7 @@ import * as UserActions from '../user/user.actions';
 import * as WalletActions from '../wallet/wallet.actions';
 import {WalletService} from '../../services/wallet.service';
 import {AuthenticationService, LOCAL_TOKEN_KEY} from '../../services/authentication.service';
-import {getLocalStorage, resetLocalStorage} from '../../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../../helpers/localStorage';
 
 describe('app.effects', () => {
   let effects: AppEffects;
@@ -23,7 +23,7 @@ describe('app.effects', () => {
       ],
       providers: [
         {provide: 'PLATFORM_ID', useValue: 'browser'},
-        {provide: 'LOCALSTORAGE', useFactory: getLocalStorage},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
         AppEffects,
         AuthenticationService,
         WalletService,

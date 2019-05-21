@@ -7,6 +7,7 @@ import {WalletService} from '../../services/wallet.service';
 import {AuthenticationService} from 'app/core/services/authentication.service';
 import {Logger} from 'app/core/services/logger.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
+import {LocalStorageToken} from '../../helpers/localStorage';
 
 @Injectable()
 export class WalletEffects {
@@ -14,7 +15,7 @@ export class WalletEffects {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
-    @Inject('LOCALSTORAGE') private localStorage: Storage,
+    @Inject(LocalStorageToken) private localStorage: Storage,
     private actions: Actions,
     private walletService: WalletService,
     private authenticationService: AuthenticationService

@@ -5,7 +5,7 @@ import {Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
 import {AuthenticationService} from '../../services/authentication.service';
-import {getLocalStorage, resetLocalStorage} from '../../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../../helpers/localStorage';
 import {AuthEffects} from './auth.effects';
 import {UserService} from '../../services/user.service';
 import {StoreModule} from '@ngrx/store';
@@ -61,7 +61,7 @@ describe('auth.effects', () => {
           }
         },
         {provide: 'PLATFORM_ID', useValue: 'browser'},
-        {provide: 'LOCALSTORAGE', useFactory: getLocalStorage},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
         AuthEffects,
         {provide: AuthenticationService, useValue: mockAuthenticationService},
         UserService,

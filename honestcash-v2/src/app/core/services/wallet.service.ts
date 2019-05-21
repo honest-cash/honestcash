@@ -7,6 +7,7 @@ import {Logger} from './logger.service';
 import {defer, Observable} from 'rxjs';
 import {AuthenticationService} from './authentication.service';
 import {HttpService} from '..';
+import {LocalStorageToken} from '../helpers/localStorage';
 
 export const API_ENDPOINTS = {
   setWallet: `/auth/set-wallet`,
@@ -31,7 +32,7 @@ export class WalletService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
-    @Inject('LOCALSTORAGE') private localStorage: Storage,
+    @Inject(LocalStorageToken) private localStorage: Storage,
     private http: HttpService,
     private authenticationService: AuthenticationService,
   ) {
@@ -67,15 +68,6 @@ export class WalletService {
             // it means the app loads wallet from localStorage
             simpleWallet = await WalletUtils.generateWalletWithDecryptedRecoveryPhrase(this.locallySavedMnemonic);
           }
-          /*
-              there needs to be an else if block here
-              else if (this.authenticationService.getToken() && !this.locallySavedMnemonic)
-              so it should somehow load a wallet via API request because user auto-logs in
-              to get encrypted mnemonic (but also requires the password to decrypt and load wallet)
-              or that it creates a brand new wallet but it also requires a password but there is no payload
-              because it is appload
-
-           */
         }
         return simpleWallet;
       }

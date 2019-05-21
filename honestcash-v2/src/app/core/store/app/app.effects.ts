@@ -6,13 +6,14 @@ import {AppActionTypes} from './app.actions';
 import {UserCleanup, UserSetup} from '../user/user.actions';
 import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
 import {AuthenticationService} from 'app/core/services/authentication.service';
+import {LocalStorageToken} from '../../helpers/localStorage';
 
 @Injectable()
 export class AppEffects {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
-    @Inject('LOCALSTORAGE') private localStorage: Storage,
+    @Inject(LocalStorageToken) private localStorage: Storage,
     private actions: Actions,
     private authenticationService: AuthenticationService,
   ) {

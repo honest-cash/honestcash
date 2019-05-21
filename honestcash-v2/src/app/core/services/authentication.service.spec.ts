@@ -5,7 +5,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../http/http.service';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import {mock} from '../../../../mock';
-import {getLocalStorage, resetLocalStorage} from '../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../helpers/localStorage';
 import User from '../models/user';
 import Wallet from '../models/wallet';
 import {of} from 'rxjs';
@@ -37,7 +37,7 @@ describe('AuthenticationService', () => {
         AuthenticationService,
         {provide: HttpService, useValue: mockHttpService},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
-        {provide: 'LOCALSTORAGE', useFactory: getLocalStorage},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
       ]
     });
     authenticationService = TestBed.get(AuthenticationService);
@@ -395,7 +395,7 @@ describe('AuthenticationService', () => {
       + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', async (done) => {
       (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
       // Act
-      authenticationService.changePassword(mocks.changePasswordContext).subscribe(async (response: OkResponse) => {
+      await authenticationService.changePassword(mocks.changePasswordContext).subscribe(async (response: OkResponse) => {
         // Assert
         const newPassword = SHARED_MOCKS.hashedPassword;
         const repeatNewPassword = SHARED_MOCKS.hashedPassword;
