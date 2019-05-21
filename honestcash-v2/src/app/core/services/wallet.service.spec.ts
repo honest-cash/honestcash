@@ -6,11 +6,19 @@ import {mock} from '../../../../mock';
 import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.service';
 import Wallet from '../models/wallet';
 import {of} from 'rxjs';
-import {OkResponse} from '../models/authentication';
+import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models/authentication';
 import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
+import User from '../models/user';
+import {ISimpleBitcoinWallet} from '../../shared/lib/WalletUtils';
+import {LOCAL_TOKEN_KEY} from './authentication.service';
 
 const SHARED_MOCKS = {
-  mnemonic: 'test test2 test3 test4',
+  mnemonic: 'test1 test2 test3 test4 test5 test6 test7 test8',
+  password: '12345abc',
+  // this is encrypted with the above mnemonic and password
+  // with CryptoJS AES encryption
+  // in order to test simpleWallets match the one the service returns
+  mnemonicEncrypted: 'U2FsdGVkX19s2+ZuTD0IAQ8Asf/ShwBsLHkMzXzHOvh3sgggyfR8KpIPv9OcET65wnzjMv85LiUjYZoh4859hQ==',
 };
 
 describe('WalletService', () => {
@@ -41,6 +49,72 @@ describe('WalletService', () => {
   describe('instance', () => {
     it('should have been initialized', () => {
       expect(walletService).toBeDefined();
+    });
+  });
+
+  describe('setupWallet', () => {
+    const mocks = {
+      setupWalletContext: {
+        user: new User(),
+        wallet: new Wallet(),
+        token: 'adf',
+        password: SHARED_MOCKS.password,
+      },
+      setupWalletSuccess: {
+        ok: true
+      },
+    };
+    it('should return a SimpleBitcoinWallet if there is a payload and payload is a LoginSuccessResponse', (done) => {
+      const loginSuccessResponse: LoginSuccessResponse = {
+        user: mocks.setupWalletContext.user,
+        wallet: mocks.setupWalletContext.wallet,
+        token: mocks.setupWalletContext.token,
+        password: mocks.setupWalletContext.password,
+      };
+      loginSuccessResponse.wallet.mnemonic = SHARED_MOCKS.mnemonic;
+      loginSuccessResponse.wallet.mnemonicEncrypted = SHARED_MOCKS.mnemonicEncrypted;
+
+      // Act
+      walletService.setupWallet(loginSuccessResponse).subscribe((wallet: ISimpleBitcoinWallet) => {
+        // Assert
+        expect(wallet).toBeDefined();
+        done();
+      });
+    });
+
+    it('should return a SimpleBitcoinWallet if there is a payload and payload is a SignupSuccessResponse with NO wallet attached', (done) => {
+      const signupSuccessResponse: SignupSuccessResponse = {
+        user: mocks.setupWalletContext.user,
+        token: mocks.setupWalletContext.token,
+        password: mocks.setupWalletContext.password,
+      };
+
+      // Act
+      walletService.setupWallet(signupSuccessResponse).subscribe((wallet: ISimpleBitcoinWallet) => {
+        // Assert
+        expect(wallet).toBeDefined();
+        done();
+      });
+    });
+
+    it('should return a SimpleBitcoinWallet if there is NO payload but a token and decrypted mnemonic exists in localStorage', (done) => {
+      localStorage.setItem(LOCAL_TOKEN_KEY, mocks.setupWalletContext.token);
+      localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, SHARED_MOCKS.mnemonic);
+      // Act
+      walletService.setupWallet().subscribe((wallet: ISimpleBitcoinWallet) => {
+        // Assert
+        expect(wallet).toBeDefined();
+        done();
+      });
+    });
+
+    it('should NOT return a SimpleBitcoinWallet if there is NO payload and NO token and NO decrypted mnemonic exists in localStorage', (done) => {
+      // Act
+      walletService.setupWallet().subscribe((wallet: ISimpleBitcoinWallet) => {
+        // Assert
+        expect(wallet).toBeUndefined();
+        done();
+      });
     });
   });
 

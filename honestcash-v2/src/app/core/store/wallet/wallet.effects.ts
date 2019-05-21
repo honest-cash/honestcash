@@ -8,6 +8,7 @@ import {AuthenticationService} from 'app/core/services/authentication.service';
 import {Logger} from 'app/core/services/logger.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
 import {LocalStorageToken} from '../../helpers/localStorage';
+import {ISimpleBitcoinWallet} from '../../../shared/lib/WalletUtils';
 
 @Injectable()
 export class WalletEffects {
@@ -34,8 +35,16 @@ export class WalletEffects {
     ofType(WalletActionTypes.WALLET_SETUP),
     map((action: WalletSetup) => action.payload),
     switchMap((payload?: LoginSuccessResponse | SignupSuccessResponse) => this.walletService.setupWallet(payload)),
-    tap((wallet) => this.walletService.setWallet(wallet)),
-    map((wallet) => new WalletGenerated({wallet})),
+    tap((wallet?: ISimpleBitcoinWallet) => {
+      if (wallet) {
+        this.walletService.setWallet(wallet);
+      }
+    }),
+    map((wallet?: ISimpleBitcoinWallet) => {
+      if (wallet) {
+        return new WalletGenerated({wallet});
+      }
+    }),
   );
 
   @Effect({dispatch: false})

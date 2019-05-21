@@ -27,7 +27,6 @@ export class WalletService {
   wallet: Wallet = null;
 
   private logger: Logger;
-  readonly locallySavedMnemonic: string | void;
   readonly isPlatformBrowser: boolean;
 
   constructor(
@@ -38,7 +37,6 @@ export class WalletService {
   ) {
     this.logger = new Logger('WalletService');
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
-    this.locallySavedMnemonic = this.getWalletMnemonic();
   }
 
   public setupWallet(payload?: LoginSuccessResponse | SignupSuccessResponse) {
@@ -62,11 +60,11 @@ export class WalletService {
             simpleWallet = await WalletUtils.generateNewWallet(payload.password);
           }
         } else {
-          if (this.authenticationService.getToken() && this.locallySavedMnemonic) {
+          if (this.authenticationService.getToken() && this.getWalletMnemonic()) {
             // if there is no payload
             // but there is a decrypted mnemonic and a token in the localstorage
             // it means the app loads wallet from localStorage
-            simpleWallet = await WalletUtils.generateWalletWithDecryptedRecoveryPhrase(this.locallySavedMnemonic);
+            simpleWallet = await WalletUtils.generateWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
           }
         }
         return simpleWallet;
