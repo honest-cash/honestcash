@@ -1,38 +1,38 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, of, defer } from 'rxjs';
-import { tap, map, switchMap, catchError, mergeMap } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {Actions, Effect, ofType} from '@ngrx/effects';
+import {defer, Observable, of} from 'rxjs';
+import {catchError, map, mergeMap, switchMap, tap} from 'rxjs/operators';
 import {
   AuthActionTypes,
   LogIn,
-  LogInSuccess,
   LogInFailure,
-  SignUp,
-  SignUpSuccess,
-  SignUpFailure,
-  ResetPasswordRequest,
-  ResetPasswordRequestSuccess,
-  ResetPasswordRequestFailure,
+  LogInSuccess,
   ResetPassword,
-  ResetPasswordSuccess,
   ResetPasswordFailure,
+  ResetPasswordRequest,
+  ResetPasswordRequestFailure,
+  ResetPasswordRequestSuccess,
+  ResetPasswordSuccess,
+  SignUp,
+  SignUpFailure,
+  SignUpSuccess,
 } from './auth.actions';
-import { WalletSetup, WalletCleanup } from '../wallet/wallet.actions';
-import { UserSetup, UserCleanup } from '../user/user.actions';
+import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
+import {UserCleanup, UserSetup} from '../user/user.actions';
 import {AuthenticationService} from '../../services/authentication.service';
 import {
   LoginContext,
   LoginSuccessResponse,
+  ResetPasswordContext,
   ResetPasswordRequestContext,
   SignupContext,
-  SignupSuccessResponse,
-  ResetPasswordContext
+  SignupSuccessResponse
 } from '../../models/authentication';
-import { UserService } from 'app/core/services/user.service';
-import { WalletService } from 'app/core/services/wallet.service';
-import { WalletUtils, ISimpleBitcoinWallet } from 'app/shared/lib/WalletUtils';
-import { Logger } from 'app/core/services/logger.service';
+import {UserService} from 'app/core/services/user.service';
+import {WalletService} from 'app/core/services/wallet.service';
+import {ISimpleBitcoinWallet, WalletUtils} from 'app/shared/lib/WalletUtils';
+import {Logger} from 'app/core/services/logger.service';
 
 @Injectable()
 export class AuthEffects {
@@ -79,12 +79,12 @@ export class AuthEffects {
 
         simpleWallet = await WalletUtils.generateNewWallet(payload.password);
 
-        await this.walletService.setWallet(simpleWallet.mnemonicEncrypted);
+        await this.walletService.setWallet(simpleWallet.mnemonic);
       }
 
       const mnemonicEncrypted = simpleWallet ? simpleWallet.mnemonicEncrypted : payload.wallet.mnemonicEncrypted;
 
-      return {
+      return <LoginSuccessResponse>{
         user: payload.user,
         password: payload.password,
         token: payload.token,
@@ -95,10 +95,7 @@ export class AuthEffects {
     })),
     switchMap((payload: LoginSuccessResponse) => [
       new UserSetup(),
-      new WalletSetup({
-        mnemonic: payload.wallet.mnemonicEncrypted,
-        password: payload.password
-      })
+      new WalletSetup({mnemonic: payload.wallet.mnemonicEncrypted, password: payload.password})
     ]),
     tap(() => {
       // @todo
@@ -157,7 +154,7 @@ export class AuthEffects {
   @Effect()
   LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
-    switchMap(() => [ new UserCleanup(), new WalletCleanup() ]),
+    switchMap(() => [new UserCleanup(), new WalletCleanup()]),
     tap(() => {
       this.authenticationService.logOut().subscribe(() => {
         this.router.navigateByUrl('/');
@@ -165,7 +162,7 @@ export class AuthEffects {
     })
   );
 
-  @Effect({ dispatch: false })
+  @Effect({dispatch: false})
   GetStatus: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.GET_STATUS),
     switchMap(payload => {
@@ -173,7 +170,7 @@ export class AuthEffects {
     })
   );
 
-  @Effect({ dispatch: false })
+  @Effect({dispatch: false})
   AuthCleanup: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.AUTH_CLEANUP),
     tap(() => {

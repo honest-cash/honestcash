@@ -1,4 +1,7 @@
-<ng-template #paywallPopContent>For more information about pay-to-read sections, please refer to <a href="https://honest.cash/honest_cash/earn-more-money-for-your-content-paywalls-3552" target="_blank">Paywalls Guide</a>.</ng-template>
+<ng-template #paywallPopContent>For more information about pay-to-read sections, please refer to <a
+  href="https://honest.cash/honest_cash/earn-more-money-for-your-content-paywalls-3552" target="_blank">Paywalls
+  Guide</a>.
+</ng-template>
 <ng-template #paywallPopTitle>About Pay-to-read Sections</ng-template>
 <div class="modal-header">
   <h5 class="modal-title col text-uppercase text-center">Publish Story</h5>
@@ -6,161 +9,83 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<form name="form" class="p-4 needs-validation" #f="ngForm" (ngSubmit)="(f.form.valid && ((story.hasPaidSection && story.paidSectionCost > 0 && story.paidSectionLinebreak > 0) || !story.hasPaidSection)) && onSubmit()" novalidate>
+<form name="form" class="p-4 needs-validation" #f="ngForm"
+      (ngSubmit)="(f.form.valid && ((story.hasPaidSection && story.paidSectionCost > 0 && story.paidSectionLinebreak > 0) || !story.hasPaidSection)) && onSubmit()"
+      novalidate>
   <div class="modal-body">
-      <div class="form-row">
-        <div class="col">
-          <div class="form-group">
-            <label for="title" class="text-uppercase"><b>Title</b></label>
-            <input
-              required
-              id="title"
-              name="title"
-              #title="ngModel"
-              [ngModel]="story.title"
-              (ngModelChange)="onTitleChange($event)"
-              [ngClass]="{ 'is-invalid': f.submitted && title.invalid, 'is-valid': f.submitted && title.valid }"
-              class="form-control"
-              type="text"
-              placeholder="Title of your story"
-            >
-            <div
-              class="invalid-feedback"
-              *ngIf="f.submitted && title.invalid"
-            >
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="title" class="text-uppercase"><b>Title</b></label>
+          <input
+            required
+            id="title"
+            name="title"
+            #title="ngModel"
+            [ngModel]="story.title"
+            (ngModelChange)="onTitleChange($event)"
+            [ngClass]="{ 'is-invalid': f.submitted && title.invalid, 'is-valid': f.submitted && title.valid }"
+            class="form-control"
+            type="text"
+            placeholder="Title of your story"
+          >
+          <div
+            class="invalid-feedback"
+            *ngIf="f.submitted && title.invalid"
+          >
           <span
             *ngIf="title.errors.required"
           >
             Title is required.
           </span>
-            </div>
           </div>
         </div>
       </div>
-      <div class="form-row">
-        <div class="col">
-          <div class="form-group">
-            <label for="userPostHashtags" class="text-uppercase"><b>Tags</b></label>
-            <tag-input
-              theme="hc-theme"
-              id="userPostHashtags"
-              name="userPostHashtags"
-              #userPostHashtags="ngModel"
-              [(ngModel)]="_hashtags"
-              (ngModelChange)="onTagChange($event)"
-              [separatorKeyCodes]="[32, 188]"
-              [maxItems]="6"
-              [addOnBlur]="true"
-              [identifyBy]="'hashtag'"
-              [displayBy]="'hashtag'"
-              [placeholder]="'You can add up to 5 tags'"
-            ></tag-input>
-            <small id="tagsHelpInline" class="text-muted">
-              Tags can be submitted by pressing enter
-            </small>
-          </div>
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="userPostHashtags" class="text-uppercase"><b>Tags</b></label>
+          <tag-input
+            theme="hc-theme"
+            id="userPostHashtags"
+            name="userPostHashtags"
+            #userPostHashtags="ngModel"
+            [(ngModel)]="_hashtags"
+            (ngModelChange)="onTagChange($event)"
+            [separatorKeyCodes]="[32, 188]"
+            [maxItems]="6"
+            [addOnBlur]="true"
+            [identifyBy]="'hashtag'"
+            [displayBy]="'hashtag'"
+            [placeholder]="'You can add up to 5 tags'"
+          ></tag-input>
+          <small id="tagsHelpInline" class="text-muted">
+            Tags can be submitted by pressing enter
+          </small>
         </div>
       </div>
-      <div class="form-row">
-        <div class="col d-flex justify-content-center align-items-center">
-          <div class="btn-block btn-group-toggle">
-            <label class="btn-outline-dark" ngbButtonLabel placement="right" [ngbPopover]="paywallPopContent" [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
-              <input type="checkbox" ngbButton id="hasPaidSection" #hasPaidSection="ngModel" name="hasPaidSection" #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection" (ngModelChange)="onHasPaidSectionChange()"> I have a pay-to-read section in my story
-            </label>
-          </div>
+    </div>
+    <div class="form-row">
+      <div class="col d-flex justify-content-center align-items-center">
+        <div class="btn-block btn-group-toggle">
+          <label class="btn-outline-dark" ngbButtonLabel placement="right" [ngbPopover]="paywallPopContent"
+                 [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
+            <input type="checkbox" ngbButton id="hasPaidSection" #hasPaidSection="ngModel" name="hasPaidSection"
+                   #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"
+            > I have a pay-to-read section in my story
+          </label>
         </div>
       </div>
-      <div [hidden]="!story.hasPaidSection" class="form-row mt-3">
-        <div class="col">
-          <div class="text-uppercase"><b>Pay-to-read Section Cost</b></div>
-          <div><small class="text-muted">Choose how much readers pay in order to read your paid section.</small></div>
-        </div>
-        <div class="w-100"></div>
-        <div class="col">
-          <label for="elPaidSectionCostInBch"><small><b>Cost in BCH:</b></small></label>
-          <input
-            class="form-control"
-            name="elPaidSectionCostInBch"
-            #elPaidSectionCostInBch="ngModel"
-            type="number"
-            step="0.001"
-            min="0"
-            required
-            id="elPaidSectionCostInBch"
-            [(ngModel)]="story.paidSectionCost"
-            (ngModelChange)="onChangePaidSectionCost(PAID_SECTION_CURRENCIES.Bch)"
-            [ngClass]="{ 'is-invalid': f.submitted && elPaidSectionCostInBch.invalid, 'is-valid': f.submitted && elPaidSectionCostInBch.valid }"
-          />
-        </div>
-        <div class="col" [hidden]="canCalculateUsdRate">
-          <label for="elPaidSectionCostInUsd"><small><b>Cost in USD:</b></small></label>
-          <input
-            class="form-control"
-            name="elPaidSectionCostInUsd"
-            #elPaidSectionCostInUsd="ngModel"
-            type="number"
-            step="0.1"
-            min="0"
-            required
-            id="elPaidSectionCostInUsd"
-            [(ngModel)]="paidSectionCostInUsd"
-            (ngModelChange)="onChangePaidSectionCost(PAID_SECTION_CURRENCIES.Usd)"
-            [ngClass]="{ 'is-invalid': f.submitted && elPaidSectionCostInUsd.invalid, 'is-valid': f.submitted && elPaidSectionCostInUsd.valid }"
-          />
-        </div>
-      </div>
-      <div [hidden]="!story.hasPaidSection" class="form-row mt-3">
-        <div class="col">
-          <div class="text-uppercase"><b>Pay-to-read Section</b></div>
-          <div><small
-            [ngClass]="{ 'text-danger': f.submitted && !paidSectionLineBreakTouched, 'text-muted': !f.submitted }"
-          >Choose where your paid section starts by moving the up and down arrows. The red line indicates where the free
-            section ends and the paid section starts.
-          </small></div>
-        </div>
-        <div class="w-100 mb-2"></div>
-        <div class="col">
-          <div class="row">
-            <div class="col-10">
-              <article class="editor-publish-modal__paid-section hide-scrollbar p-3" [ngClass]="{ 'invalid': f.submitted && !paidSectionLineBreakTouched }">
-                <div
-                  #paidSectionElements
-                  *ngFor="let block of this.story.body; let index = index;"
-                  [ngClass]="{'paid-section__dashed-underline': index === this.story.paidSectionLinebreak}"
-                  [innerHTML]="convertBlockToHtml(block)">
-                </div>
-              </article>
-            </div>
-            <div class="col-2 d-flex flex-column">
-              <div class="col d-flex align-items-end pb-2">
-                <button
-                  type="button"
-                  class="btn btn-block btn-outline-dark"
-                  (click)="onSwitchLinebreak(LINEBREAK_ACTION.MoveUp)"
-                  [disabled]="story.paidSectionLinebreak === 0"
-                ><fa-icon [icon]="['fas', 'chevron-up']"></fa-icon></button>
-              </div>
-              <div class="col d-flex align-items-start pt-2">
-                <button
-                  type="button"
-                  class="btn btn-block btn-outline-dark"
-                  (click)="onSwitchLinebreak(LINEBREAK_ACTION.MoveDown)"
-                  [disabled]="story.paidSectionLinebreak === paidSectionLinebreakEnd - 1"
-                ><fa-icon [icon]="['fas', 'chevron-down']"></fa-icon></button>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <small class="text-muted"><fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>&nbsp;Spaces around blocks and font sizes have been reduced to fit story into this frame.</small>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+    <app-editor-publish-modal-paid-section-selection [form]="f"
+                                                     [hidden]="!story.hasPaidSection"></app-editor-publish-modal-paid-section-selection>
   </div>
   <div class="modal-footer px-0">
     <div class="col text-left">
-      <button type="button" class="btn btn-outline-dark" (click)="onDismiss()" [disabled]="isPublishing">Close <fa-icon [icon]="['fas', 'window-close']"></fa-icon></button>
+      <button type="button" class="btn btn-outline-dark" (click)="onDismiss()" [disabled]="isPublishing">Close
+        <fa-icon [icon]="['fas', 'window-close']"></fa-icon>
+      </button>
     </div>
     <div class="col text-right">
       <button type="submit" class="btn btn-success" [disabled]="isPublishing">Publish

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { EditorNewComponent } from './pages/new/editor-new.component';
+import {NgModule} from '@angular/core';
+import {EditorNewComponent} from './pages/new/editor-new.component';
 import {RouterModule, Routes} from '@angular/router';
 import {EditorContainerComponent} from './editor-container.component';
 import {StoryComponent} from './story/story.component';
@@ -11,14 +11,15 @@ import {NewHeaderComponent} from './pages/new/components/write-header/new-header
 import {AuthorizedGuard} from '../../core/guards/authorized.guard';
 import {PublishModalComponent} from './components/publish-modal/publish-modal.component';
 import {TagInputModule} from 'ngx-chips';
+import {PaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
 
 const routes: Routes = [
   {
     path: '',
     component: EditorContainerComponent,
     children: [
-      { path: 'write', pathMatch: 'full', component: EditorNewComponent, canActivate: [AuthorizedGuard] },
-      { path: 'story', pathMatch: 'full', component: StoryComponent },
+      {path: 'write', pathMatch: 'full', component: EditorNewComponent, canActivate: [AuthorizedGuard]},
+      {path: 'story', pathMatch: 'full', component: StoryComponent},
     ]
   }
 ];
@@ -31,6 +32,7 @@ const routes: Routes = [
     NewHeaderComponent,
     StoryComponent,
     EmbeddableEditorComponent,
+    PaidSectionSelectionComponent,
   ],
   entryComponents: [
     PublishModalComponent,
@@ -43,8 +45,8 @@ const routes: Routes = [
     SharedModule,
     TagInputModule,
   ],
-  providers: [
-  ],
+  providers: [],
   bootstrap: [EditorNewComponent]
 })
-export class EditorModule { }
+export class EditorModule {
+}
