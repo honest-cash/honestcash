@@ -1,24 +1,39 @@
 import {reducer} from './wallet.reducer';
-import {WalletGenerated} from './wallet.actions';
+import {WalletCleanup, WalletGenerated, WalletSetup} from './wallet.actions';
+import {initialState as initialWalletState} from './wallet.state';
 import Wallet from '../../models/wallet';
+import {LoginSuccessResponse} from '../../models/authentication';
+import User from '../../models/user';
 
 describe('wallet.reducer', () => {
   it('WalletSetup', () => {
-    let wallet = new Wallet();
-    wallet = {
-      ...wallet,
-      mnemonic: 'yard current warrior merry despair sweet wise round acquire equal hollow mansion',
-      privateKey: 'asd',
-      HdPath: 'm/44\'/0\'/0\'/0/0'
+    const payload: LoginSuccessResponse = {
+      user: new User(),
+      wallet: new Wallet(),
+      token: 'asdf',
+      password: 'asdf',
     };
 
-    const newState = reducer(undefined, new WalletGenerated({
-      wallet
-    }));
+    const newState = reducer(initialWalletState, new WalletSetup(payload));
+
+    expect(newState).toEqual(initialWalletState);
+  });
+  it('WalletSetup', () => {
+
+    const newState = reducer(undefined, new WalletGenerated({wallet: new Wallet()}));
 
     expect(newState.wallet).toBeDefined();
-    expect(newState.wallet.mnemonic).toBeDefined();
-    expect(newState.wallet.HdPath).toBeDefined();
-    expect(newState.wallet.privateKey).toBeDefined();
+  });
+
+  it('WalletCleanup', () => {
+    const updatedState = {
+      ...initialWalletState,
+      wallet: new Wallet(),
+    };
+    updatedState.wallet.mnemonic = 'asdf';
+
+    const newState = reducer(updatedState, new WalletCleanup());
+
+    expect(newState).toEqual(initialWalletState);
   });
 });
