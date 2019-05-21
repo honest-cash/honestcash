@@ -27,13 +27,14 @@ export class PaidSectionSelectionComponent implements OnInit, OnDestroy {
   @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
   public PAID_SECTION_CURRENCIES = PAID_SECTION_CURRENCIES;
+  private isLoading = true;
   private canCalculateUsdRate = false;
   private paidSectionCostInUsd: number;
   private paidSectionLineBreakTouched = false;
   private paidSectionLinebreakEnd: number;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private story: Post;
+  private story: Post = new Post();
 
   constructor(
     private store: Store<AppStates>,
@@ -56,6 +57,7 @@ export class PaidSectionSelectionComponent implements OnInit, OnDestroy {
           this.story.paidSectionCost = 0;
         }
         this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.body).length) - 1);
+        this.isLoading = false;
       }
     });
   }
