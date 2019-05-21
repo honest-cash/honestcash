@@ -1,5 +1,9 @@
-import { reducer } from './user.reducer';
-import { UserLoaded } from './user.actions';
+import {reducer} from './user.reducer';
+import {UserCleanup, UserLoaded, UserSetup} from './user.actions';
+import {initialState as initialUserState} from './user.state';
+import {LoginSuccessResponse} from '../../models/authentication';
+import User from '../../models/user';
+import Wallet from '../../models/wallet';
 
 describe('user.reducer', () => {
   it('UserLoaded', () => {
@@ -11,5 +15,27 @@ describe('user.reducer', () => {
 
     expect(newState.user).toBeDefined();
     expect(newState.user.username).toBe('test');
+  });
+  it('UserSetup', () => {
+    const payload: LoginSuccessResponse = {
+      user: new User(),
+      wallet: new Wallet(),
+      token: 'asdf',
+      password: 'asdf',
+    };
+    const newState = reducer(initialUserState, new UserSetup(payload));
+
+    expect(newState).toEqual(initialUserState);
+  });
+  it('UserCleanup', () => {
+    const updatedState = {
+      ...initialUserState,
+      user: new User(),
+    };
+    updatedState.user.username = 'asdf';
+
+    const newState = reducer(updatedState, new UserCleanup());
+
+    expect(newState).toEqual(initialUserState);
   });
 });
