@@ -16,7 +16,7 @@ import {
   SignupResponse,
   SignupSuccessResponse
 } from '../models/authentication';
-import {ISimpleBitcoinWallet, WalletUtils} from 'app/shared/lib/WalletUtils';
+import {WalletUtils} from 'app/shared/lib/WalletUtils';
 import {mergeMap} from 'rxjs/operators';
 import {isPlatformBrowser} from '@angular/common';
 
@@ -81,9 +81,17 @@ export class AuthenticationService {
     }
   }
 
+  public getUserId(): number | undefined {
+    if (this.isPlatformBrowser && !this.userId) {
+      return parseInt(this.localStorage.getItem('HC_USER_ID'), 10);
+    }
+    return this.userId;
+  }
+
   public unsetTokenAndUnAuthenticate(): void {
     this.token = '';
     this.isAuthenticated = false;
+    this.userId = undefined;
     if (this.isPlatformBrowser) {
       this.localStorage.removeItem(LOCAL_TOKEN_KEY);
     }
@@ -106,7 +114,10 @@ export class AuthenticationService {
       this.setUserId(userId);
       this.isAuthenticated = true;
     } else if (this.getToken()) {
-      this.isAuthenticated = true;
+      this.getStatus().subscribe((response) => {
+        console.log('response', response);
+        this.isAuthenticated = true;
+      });
     }
   }
 
@@ -129,10 +140,6 @@ export class AuthenticationService {
       password: passwordHash,
       captcha: payload.captcha
     });
-  }
-
-  public setWallet(wallet: ISimpleBitcoinWallet): Observable<OkResponse> {
-    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, wallet.mnemonicEncrypted);
   }
 
   public getEmails(): Observable<string[]> {

@@ -1,12 +1,12 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {defer, Observable} from 'rxjs';
-import {flatMap, map, tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {map, switchMap, tap} from 'rxjs/operators';
 import {WalletActionTypes, WalletGenerated, WalletSetup} from './wallet.actions';
 import {WalletService} from '../../services/wallet.service';
 import {AuthenticationService} from 'app/core/services/authentication.service';
 import {Logger} from 'app/core/services/logger.service';
-import {LoginSuccessResponse} from '../../models/authentication';
+import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
 
 @Injectable()
 export class WalletEffects {
@@ -32,20 +32,9 @@ export class WalletEffects {
   WalletSetup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP),
     map((action: WalletSetup) => action.payload),
-    flatMap((payload?: LoginSuccessResponse) => defer(
-      async () => await this.walletService.setupWallet(payload)
-    )),
-    tap((wallet) => {
-      this.walletService.setWallet(wallet);
-    }),
-    tap((wallet) => {
-      this.authenticationService.setWallet(wallet);
-    }),
-    map((wallet) => {
-      return new WalletGenerated({
-        wallet
-      });
-    }),
+    switchMap((payload?: LoginSuccessResponse | SignupSuccessResponse) => this.walletService.setupWallet(payload)),
+    tap((wallet) => this.walletService.setWallet(wallet)),
+    map((wallet) => new WalletGenerated({wallet})),
   );
 
   @Effect({dispatch: false})

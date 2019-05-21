@@ -1,14 +1,15 @@
+import 'jasmine';
 import {TestBed} from '@angular/core/testing';
 import {API_ENDPOINTS, AuthenticationService, LOCAL_TOKEN_KEY} from './authentication.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {CodedErrorResponse, EmptyResponse, LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models/authentication';
 import {HttpService} from '../http/http.service';
-import User from '../models/user';
-import Wallet from '../models/wallet';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import {mock} from '../../../../mock';
+import {getLocalStorage, resetLocalStorage} from '../helpers/localStorage';
+import User from '../models/user';
+import Wallet from '../models/wallet';
 import {of} from 'rxjs';
-import {resetLocalStorage} from '../helpers/localStorage';
+import {CodedErrorResponse, EmptyResponse, LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models/authentication';
 
 const SHARED_MOCKS = {
   token: '123',
@@ -34,7 +35,9 @@ describe('AuthenticationService', () => {
       ],
       providers: [
         AuthenticationService,
-        {provide: HttpService, useValue: mockHttpService}
+        {provide: HttpService, useValue: mockHttpService},
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: 'LOCALSTORAGE', useFactory: getLocalStorage},
       ]
     });
     authenticationService = TestBed.get(AuthenticationService);
@@ -108,6 +111,7 @@ describe('AuthenticationService', () => {
   });
 
   describe('init', () => {
+    // the actual saving to localStorage is tested with setToken tests
     it('should set isAuthenticated and the token if a token is provided', () => {
       // Act
       authenticationService.init(SHARED_MOCKS.token);
@@ -131,6 +135,21 @@ describe('AuthenticationService', () => {
       // Assert
       expect(authenticationService.getToken()).toEqual('');
       expect(authenticationService.hasAuthorization()).toBeFalsy();
+    });
+    it('should set userId if a token and userId is provided', () => {
+      const userId = 2;
+      // Act
+      authenticationService.init('token', userId);
+      // Assert
+      expect(authenticationService.getUserId()).toBe(userId);
+    });
+    xit('should set userId via getStatus if NO token is provided but a local token exists', () => {
+      localStorage.setItem(LOCAL_TOKEN_KEY, SHARED_MOCKS.token);
+      const userId = 2;
+      // Act
+      authenticationService.init('token', userId);
+      // Assert
+      expect(authenticationService.getUserId()).toBe(userId);
     });
   });
 
@@ -286,31 +305,6 @@ describe('AuthenticationService', () => {
         done();
       });
     });
-  });
-
-  describe('setWallet', () => {
-    const mocks = {
-      setWalletContext: {
-        mnemonicEncrypted: SHARED_MOCKS.mnemonicEncrypted,
-      },
-      setWalletSuccess: {
-        ok: true
-      },
-    };
-
-    it('should make API request to the correct API endpoint and have the correct body on request', (done) => {
-      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.setWalletSuccess));
-      // Act
-      authenticationService.setWallet(
-        mocks.setWalletContext
-      ).subscribe((response: OkResponse) => {
-        // Assert
-        expect(mockHttpService.post)
-        .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, SHARED_MOCKS.mnemonicEncrypted);
-        done();
-      });
-    });
-
   });
 
   describe('getEmails', () => {
