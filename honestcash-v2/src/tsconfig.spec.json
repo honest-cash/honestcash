@@ -14,7 +14,6 @@
     "polyfills.ts"
   ],
   "include": [
-    "node_modules/@types/jasmine",
     "**/*.specc.ts",
     "**/*.d.ts"
   ]

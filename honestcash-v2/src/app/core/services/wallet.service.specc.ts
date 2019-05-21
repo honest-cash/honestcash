@@ -7,6 +7,7 @@ import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.s
 import Wallet from '../models/wallet';
 import {of} from 'rxjs';
 import {OkResponse} from '../models/authentication';
+import {getLocalStorage} from '../helpers/localStorage';
 
 const SHARED_MOCKS = {
   mnemonic: 'test test2 test3 test4',
@@ -24,7 +25,9 @@ describe('WalletService', () => {
       ],
       providers: [
         WalletService,
-        {provide: HttpService, useValue: mockHttpService}
+        {provide: HttpService, useValue: mockHttpService},
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: 'LOCALSTORAGE', useFactory: getLocalStorage},
       ]
     });
     walletService = TestBed.get(WalletService);
@@ -55,7 +58,7 @@ describe('WalletService', () => {
       // Act
       walletService.setWallet(mocks.setWalletContext.wallet);
       // Assert
-      expect(localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC)).toEqual(SHARED_MOCKS.mnemonic);
+      expect(localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC)).toEqual(mocks.setWalletContext.wallet.mnemonic);
     });
     it('should make a request to API to set wallet with mnemonicEncrypted', (done) => {
       mocks.setWalletContext.wallet.mnemonicEncrypted = 'asdfasdfasdfasdf';
@@ -84,10 +87,12 @@ describe('WalletService', () => {
 
   describe('getWalletMnemonic', () => {
     it('should get the mnemonic', () => {
+      const wallet = new Wallet();
+      wallet.mnemonic = 'asdf';
       // Act
-      walletService.setWallet(SHARED_MOCKS.mnemonic);
+      walletService.setWallet(wallet);
       // Assert
-      expect(walletService.getWalletMnemonic()).toEqual(SHARED_MOCKS.mnemonic);
+      expect(walletService.getWalletMnemonic()).toEqual(wallet.mnemonic);
     });
   });
 

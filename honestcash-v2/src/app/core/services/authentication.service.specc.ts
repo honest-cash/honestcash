@@ -120,16 +120,24 @@ describe('AuthenticationService', () => {
       expect(authenticationService.hasAuthorization()).toBeTruthy();
     });
 
-    it('should set isAuthenticated and the token if a token is NOT provided but exists in localStorage', () => {
+    it('should set isAuthenticated and the token via getStatus if a token is NOT provided but exists in localStorage', () => {
+      const mocks = {
+        getStatusSuccess: new User(),
+      };
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.getStatusSuccess));
+      (<jasmine.Spy>spyOn(authenticationService, 'getStatus')).and.returnValue(of(new User()));
       // Act
       localStorage.setItem(LOCAL_TOKEN_KEY, SHARED_MOCKS.token);
       authenticationService.init();
       // Assert
       expect(authenticationService.getToken()).toBe(SHARED_MOCKS.token);
+      expect(authenticationService.getStatus).toHaveBeenCalled();
       expect(authenticationService.hasAuthorization()).toBeTruthy();
     });
 
     it('should NOT set isAuthenticated and the token if a token is NOT provided and does NOT exist in localStorage', () => {
+      (<jasmine.Spy>spyOn(authenticationService, 'getStatus')).and.returnValue(of(new User()));
+      localStorage.removeItem(LOCAL_TOKEN_KEY);
       // Act
       authenticationService.init();
       // Assert
@@ -143,13 +151,16 @@ describe('AuthenticationService', () => {
       // Assert
       expect(authenticationService.getUserId()).toBe(userId);
     });
-    xit('should set userId via getStatus if NO token is provided but a local token exists', () => {
+    it('should set userId via getStatus if NO token is provided but a local token exists', () => {
+      const user = new User();
+      user.id = 2;
       localStorage.setItem(LOCAL_TOKEN_KEY, SHARED_MOCKS.token);
-      const userId = 2;
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of({}));
+      (<jasmine.Spy>spyOn(authenticationService, 'getStatus')).and.returnValue(of(user));
       // Act
-      authenticationService.init('token', userId);
+      authenticationService.init();
       // Assert
-      expect(authenticationService.getUserId()).toBe(userId);
+      expect(authenticationService.getUserId()).toBe(user.id);
     });
   });
 

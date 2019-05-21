@@ -114,8 +114,8 @@ export class AuthenticationService {
       this.setUserId(userId);
       this.isAuthenticated = true;
     } else if (this.getToken()) {
-      this.getStatus().subscribe((response) => {
-        console.log('response', response);
+      this.getStatus().subscribe((user: User) => {
+        this.setUserId(user.id);
         this.isAuthenticated = true;
       });
     }
