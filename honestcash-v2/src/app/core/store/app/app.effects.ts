@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {map, mergeMap} from 'rxjs/operators';
 import {AppActionTypes} from './app.actions';
 import {UserCleanup, UserSetup} from '../user/user.actions';
 import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
@@ -11,6 +11,8 @@ import {AuthenticationService} from 'app/core/services/authentication.service';
 export class AppEffects {
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject('LOCALSTORAGE') private localStorage: Storage,
     private actions: Actions,
     private authenticationService: AuthenticationService,
   ) {
@@ -19,15 +21,17 @@ export class AppEffects {
   @Effect()
   AppLoad: Observable<any> = this.actions.pipe(
     ofType(AppActionTypes.APP_LOAD),
-    switchMap((value, index) => {
-      let _actions = [];
+    map(() => this.authenticationService.hasAuthorization()),
+    mergeMap((hasAuthorization: boolean) => {
+        let actions = [];
+        if (hasAuthorization) {
+          actions = [new WalletSetup(), new UserSetup()];
+        } else {
+          actions = [new WalletCleanup(), new UserCleanup()];
+        }
 
-      if (this.authenticationService.hasAuthorization()) {
-        return _actions = [new WalletSetup(), new UserSetup()];
+        return actions;
       }
-
-      _actions = [new WalletCleanup(), new UserCleanup()];
-      return _actions;
-    }),
+    )
   );
 }

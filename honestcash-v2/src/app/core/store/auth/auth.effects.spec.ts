@@ -5,7 +5,7 @@ import {Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
 import {AuthenticationService} from '../../services/authentication.service';
-import {resetLocalStorage} from '../../helpers/localStorage';
+import {getLocalStorage, resetLocalStorage} from '../../helpers/localStorage';
 import {AuthEffects} from './auth.effects';
 import {UserService} from '../../services/user.service';
 import {StoreModule} from '@ngrx/store';
@@ -13,14 +13,10 @@ import {metaReducers, reducers} from '../../../app.states';
 import User from '../../models/user';
 import Wallet from '../../models/wallet';
 import {mock} from '../../../../../mock';
-import {RouterTestingModule} from '@angular/router/testing';
 import {Router} from '@angular/router';
 import {UserSetup} from '../user/user.actions';
 import {WalletSetup} from '../wallet/wallet.actions';
-import {ThankYouComponent} from '../../../modules/welcome/pages/thank-you/thank-you.component';
-import {HeadingComponent} from '../../../modules/welcome/components/heading/heading.component';
-import {HeaderComponent} from '../../../modules/welcome/components/header/header.component';
-import {FooterComponent} from '../../../modules/welcome/components/footer/footer.component';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 const SHARED_MOCKS = {
   username: 'toto',
@@ -38,7 +34,7 @@ const SHARED_MOCKS = {
   }
 };
 
-xdescribe('auth.effects', () => {
+describe('auth.effects', () => {
   let effects: AuthEffects;
   let actions: Observable<any>;
   let mockAuthenticationService: AuthenticationService;
@@ -47,20 +43,25 @@ xdescribe('auth.effects', () => {
   beforeEach(() => {
     mockAuthenticationService = mock(AuthenticationService);
     TestBed.configureTestingModule({
-      declarations: [
-        ThankYouComponent,
-        HeadingComponent,
-        HeaderComponent,
-        FooterComponent,
-      ],
+      declarations: [],
       imports: [
         HttpClientTestingModule,
         StoreModule.forRoot(reducers, {metaReducers}),
-        RouterTestingModule.withRoutes([
-          {path: 'thank-you', component: ThankYouComponent}
-        ]),
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA,
       ],
       providers: [
+        {
+          provide: Router, useValue: {
+            navigate: () => {
+            },
+            navigateByUrl: () => {
+            }
+          }
+        },
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: 'LOCALSTORAGE', useFactory: getLocalStorage},
         AuthEffects,
         {provide: AuthenticationService, useValue: mockAuthenticationService},
         UserService,
@@ -69,6 +70,9 @@ xdescribe('auth.effects', () => {
     });
     router = TestBed.get(Router);
     effects = TestBed.get(AuthEffects);
+
+    spyOn(router, 'navigate').and.callThrough();
+    spyOn(router, 'navigateByUrl').and.callThrough();
   });
 
   afterEach(() => {
@@ -125,41 +129,28 @@ xdescribe('auth.effects', () => {
       });
     });
     describe('LogInSuccess', () => {
-      it('should init on AuthenticationService with the token', () => {
-
-        (<jasmine.Spy>mockAuthenticationService.init).and.callThrough();
-        const context = {
-          mnemonic: SHARED_MOCKS.mnemonic,
-          password: SHARED_MOCKS.password,
-        };
-        const wallet = {
-          ...SHARED_MOCKS.wallet,
-          mnemonicEncrypted: SHARED_MOCKS.mnemonic
-        };
-        const action = new AuthActions.LogInSuccess({...mocks.logInSuccess, wallet});
+      it('should correctly return UserSetup and WalletSetup with mnemonicEncrypted and password', () => {
+        const action = new AuthActions.LogInSuccess(mocks.logInSuccess);
 
         actions = hot('-a', {a: action});
         const expected = cold('-(bc)', {
-          b: new UserSetup(),
-          c: new WalletSetup(context),
+          b: new UserSetup(mocks.logInSuccess),
+          c: new WalletSetup(mocks.logInSuccess),
         });
 
-        // @todo this one fails, several combinations I tried
-        expect(mockAuthenticationService.init).toHaveBeenCalledWith(SHARED_MOCKS.token);
-        // this one runs as expected
         expect(effects.LogInSuccess).toBeObservable(expected);
 
       });
-      /*it('should correctly return UserSetup and WalletSetup with mnemonicEncrypted and password', () => {
-        const navigateByUrlSpy = spyOn(router, 'navigateByUrl');
+      it('should correctly redirect to root', (done) => {
 
         const action = new AuthActions.LogInSuccess(mocks.logInSuccess);
-        actions = hot('-a', { a: action });
-        const expected = cold('-b', {
-          b: new AuthActions.LogInSuccess(mocks.logInSuccess)
+        actions = of(action);
+
+        effects.LogInSuccess.subscribe(() => {
+          expect(router.navigateByUrl).toHaveBeenCalledWith('/');
+          done();
         });
-        expect(effects.LogInSuccess).toBeObservable(expected);
-      });*/
+      });
     });
   });
 });

@@ -1,14 +1,19 @@
-import { reducer } from './wallet.reducer';
-import { WalletGenerated } from './wallet.actions';
+import {reducer} from './wallet.reducer';
+import {WalletGenerated} from './wallet.actions';
+import Wallet from '../../models/wallet';
 
 describe('wallet.reducer', () => {
   it('WalletSetup', () => {
+    let wallet = new Wallet();
+    wallet = {
+      ...wallet,
+      mnemonic: 'yard current warrior merry despair sweet wise round acquire equal hollow mansion',
+      privateKey: 'asd',
+      HdPath: 'm/44\'/0\'/0\'/0/0'
+    };
+
     const newState = reducer(undefined, new WalletGenerated({
-      wallet: {
-        mnemonic: 'yard current warrior merry despair sweet wise round acquire equal hollow mansion',
-        privateKey: 'asd',
-        HdPath: 'm/44\'/0\'/0\'/0/0'
-      }
+      wallet
     }));
 
     expect(newState.wallet).toBeDefined();

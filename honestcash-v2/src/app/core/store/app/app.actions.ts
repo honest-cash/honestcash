@@ -1,4 +1,4 @@
-import { Action } from '@ngrx/store';
+import {Action} from '@ngrx/store';
 
 export enum AppActionTypes {
   APP_LOAD = '[App] App load',
@@ -6,8 +6,10 @@ export enum AppActionTypes {
 
 export class AppLoad implements Action {
   readonly type = AppActionTypes.APP_LOAD;
-  constructor() {}
+
+  constructor() {
+  }
 }
 
 export type All =
-   | AppLoad;
+  | AppLoad;

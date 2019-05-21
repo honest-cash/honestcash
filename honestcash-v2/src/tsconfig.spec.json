@@ -14,7 +14,7 @@
     "polyfills.ts"
   ],
   "include": [
-    "**/*.specc.ts",
+    "**/*.spec.ts",
     "**/*.d.ts"
   ]
 }

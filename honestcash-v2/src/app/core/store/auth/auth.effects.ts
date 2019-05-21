@@ -142,12 +142,4 @@ export class AuthEffects {
       return this.authenticationService.getStatus();
     })
   );
-
-  @Effect({dispatch: false})
-  AuthCleanup: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.AUTH_CLEANUP),
-    tap(() => {
-      return this.authenticationService.unsetTokenAndUnAuthenticate();
-    })
-  );
 }

@@ -1,20 +1,19 @@
 import {
   AuthActionTypes,
+  GetStatus,
   LogIn,
-  LogInSuccess,
   LogInFailure,
-  SignUp,
-  SignUpSuccess,
-  SignUpFailure,
+  LogInSuccess,
+  LogOut,
   ResetPassword,
-  ResetPasswordSuccess,
   ResetPasswordFailure,
   ResetPasswordRequest,
-  ResetPasswordRequestSuccess,
   ResetPasswordRequestFailure,
-  LogOut,
-  GetStatus,
-  AuthCleanup,
+  ResetPasswordRequestSuccess,
+  ResetPasswordSuccess,
+  SignUp,
+  SignUpFailure,
+  SignUpSuccess,
 } from './auth.actions';
 import User from '../../models/user';
 import Wallet from '../../models/wallet';
@@ -106,9 +105,9 @@ describe('auth.effects', () => {
     it('ResetPassword should create an action', () => {
       const context = {
         email: SHARED_MOCKS.email,
-      code: 'verificationcode',
-      newPassword: SHARED_MOCKS.password,
-      repeatNewPassword: SHARED_MOCKS.password,
+        code: 'verificationcode',
+        newPassword: SHARED_MOCKS.password,
+        repeatNewPassword: SHARED_MOCKS.password,
 
       };
       const action = new ResetPassword(context);
@@ -173,15 +172,6 @@ describe('auth.effects', () => {
       const action = new GetStatus();
       expect({...action}).toEqual({
         type: AuthActionTypes.GET_STATUS
-      });
-    });
-  });
-
-  describe('AuthCleanup Actions', () => {
-    it('AuthCleanup should create an action', () => {
-      const action = new AuthCleanup();
-      expect({...action}).toEqual({
-        type: AuthActionTypes.AUTH_CLEANUP
       });
     });
   });
