@@ -5,7 +5,7 @@ import {Observable, of, ReplaySubject, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
 import {AuthService} from '../../services/auth.service';
-import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken} from '../../helpers/localStorage';
 import {AuthEffects} from './auth.effects';
 import {UserService} from '../../services/user.service';
 import {StoreModule} from '@ngrx/store';
@@ -18,6 +18,7 @@ import {UserCleanup, UserSetup} from '../user/user.actions';
 import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../../models/authentication';
+import {resetLocalStorage} from '../../helpers/tests';
 
 const SHARED_MOCKS = {
   username: 'toto',

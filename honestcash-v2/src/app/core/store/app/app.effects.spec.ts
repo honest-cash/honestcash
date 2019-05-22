@@ -9,7 +9,8 @@ import * as UserActions from '../user/user.actions';
 import * as WalletActions from '../wallet/wallet.actions';
 import {WalletService} from '../../services/wallet.service';
 import {AuthService, LOCAL_TOKEN_KEY} from '../../services/auth.service';
-import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken} from '../../helpers/localStorage';
+import {resetLocalStorage} from '../../helpers/tests';
 
 describe('app.effects', () => {
   let effects: AppEffects;

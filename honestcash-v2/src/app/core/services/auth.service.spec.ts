@@ -5,7 +5,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../http/http.service';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import {mock} from '../../../../mock';
-import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
 import User from '../models/user';
 import Wallet from '../models/wallet';
 import {of} from 'rxjs';
@@ -17,6 +17,7 @@ import {
   OkResponse,
   SignupSuccessResponse
 } from '../models/authentication';
+import {resetLocalStorage} from '../helpers/tests';
 
 const SHARED_MOCKS = {
   token: '123',

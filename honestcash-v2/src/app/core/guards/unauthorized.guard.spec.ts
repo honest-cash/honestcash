@@ -4,7 +4,7 @@ import {Router, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {MockAuthenticationService} from '../mocks/authentication.service.mock';
 import {UnauthorizedGuard} from './unauthorized.guard';
-import {resetLocalStorage} from '../helpers/localStorage';
+import {resetLocalStorage} from '../helpers/tests';
 
 describe('UnauthorizedGuard', () => {
   let authenticationGuard: UnauthorizedGuard;

@@ -3,7 +3,7 @@ import {Router, RouterStateSnapshot} from '@angular/router';
 
 import {AuthService, LOCAL_TOKEN_KEY} from '../services/auth.service';
 import {VersionOneGuard} from './version-one.guard';
-import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../helpers/localStorage';
+import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
 import {HttpService} from '..';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {mock} from '../../../../mock';
@@ -11,6 +11,7 @@ import {WALLET_LOCALSTORAGE_KEYS} from '../services/wallet.service';
 import {WindowToken} from '../helpers/window';
 import {environmentProvider, EnvironmentToken} from '../helpers/environment';
 import {resetEnvironment} from '../../../environments/environment';
+import {resetLocalStorage} from '../helpers/tests';
 
 const MockWindow = {
   location: {
