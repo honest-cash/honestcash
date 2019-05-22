@@ -1,4 +1,4 @@
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
@@ -17,16 +17,8 @@ import {interval, Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {EditorService, STORY_PROPERTIES} from '../services/editor.service';
-import {
-  EditorChange,
-  EditorLoad,
-  EditorStoryPropertySave,
-  EditorStoryPublish,
-  EditorStorySave,
-  EditorStorySaveAndPublish
-} from '../../../core/store/editor/editor.actions';
+import {EditorChange, EditorLoad, EditorStoryPropertySave, EditorStorySave} from '../../../core/store/editor/editor.actions';
 import {EDITOR_AUTO_SAVE, HonestEditorConfig} from '../pages/new/editor-new.component';
-import {PublishModalComponent} from '../components/publish-modal/publish-modal.component';
 
 type PaneType = 'first' | 'second';
 
@@ -96,7 +88,7 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStates>,
-    private modalService: NgbModal,
+    private activeModal: NgbActiveModal,
     private editorService: EditorService,
   ) {
     this.editorConfig.tools.image.config = {
@@ -148,21 +140,6 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
     .then((outputData) => {
       this.story.body = outputData.blocks;
       this.store.dispatch(new EditorStorySave(this.story));
-    });
-  }
-
-  publishStory() {
-    const modalRef = this.modalService.open(PublishModalComponent, {
-      size: 'lg',
-      centered: true,
-      backdrop: 'static',
-    });
-    modalRef.componentInstance.publishClick.subscribe(() => {
-      if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
-        this.store.dispatch(new EditorStorySaveAndPublish(this.story));
-      } else {
-        this.store.dispatch(new EditorStoryPublish(this.story));
-      }
     });
   }
 
