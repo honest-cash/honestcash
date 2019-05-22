@@ -1,9 +1,8 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
 
-import { AppStates, selectAuthorizationState } from '../../../../app.states';
-import { LogOut } from '../../../../core/store/auth/auth.actions';
+import {AppStates, selectAuthorizationState} from '../../../../app.states';
 
 @Component({
   selector: 'app-welcome-pages-welcome',
@@ -25,15 +24,5 @@ export class WelcomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getState.subscribe((state) => {
-      this.isAuthenticated = state.isAuthenticated;
-      this.user = state.user;
-      this.errorMessage = state.errorMessage;
-    });
   }
-
-  logOut(): void {
-    this.store.dispatch(new LogOut);
-  }
-
 }

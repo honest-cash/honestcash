@@ -1,13 +1,13 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { NgForm } from '@angular/forms';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {NgForm} from '@angular/forms';
 import {AppStates, selectAuthorizationState} from '../../../../app.states';
-import { State as AuthorizationState } from '../../../../core/store/auth/auth.state';
+import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
 import User from '../../../../core/models/user';
 import {Observable} from 'rxjs';
 import {LogIn} from '../../../../core/store/auth/auth.actions';
-import {CodedErrorResponse, FailedResponse} from '../../../../core/models/authentication';
-import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
+import {FailedResponse} from '../../../../core/models/authentication';
+import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
 
 export interface LoginForm extends NgForm {
   value: {
@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
 
   public ngOnInit() {
     this.authState.subscribe((state) => {
+      console.log('state', state);
       if (!state.errorMessage) {
         delete this.errorMessage;
 

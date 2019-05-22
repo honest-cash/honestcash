@@ -1,22 +1,30 @@
-import {
-  ComponentFixture,
-  TestBed,
-  async,
-  discardPeriodicTasks,
-  fakeAsync,
-  tick
-} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {LoginComponent, LoginForm} from './login.component';
+import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import User from '../../../../core/models/user';
-import {Store, StoreModule} from '@ngrx/store';
-import {AppStates, metaReducers, reducers} from '../../../../app.states';
+import {Store} from '@ngrx/store';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {LogIn} from '../../../../core/store/auth/auth.actions';
+import {initialState as initialWalletState} from '../../../../core/store/wallet/wallet.state';
+import {initialState as initialAppState} from '../../../../core/store/app/app.state';
+import {initialState as initialUserState} from '../../../../core/store/user/user.state';
+import {initialState as initialAuthState} from '../../../../core/store/auth/auth.state';
+import {CodedErrorResponse} from '../../../../core/models/authentication';
+import {AppStates} from '../../../../app.states';
+import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+
+const INITIAL_STATE: AppStates = {
+  app: initialAppState,
+  wallet: initialWalletState,
+  user: initialUserState,
+  auth: initialAuthState,
+};
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
-  let store: Store<AppStates>;
+  let store: MockStore<AppStates>;
+  let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -25,18 +33,18 @@ describe('LoginComponent', () => {
       ],
       imports: [
         FormsModule,
-        StoreModule.forRoot(reducers, { metaReducers }),
       ],
       schemas: [
         NO_ERRORS_SCHEMA
+      ],
+      providers: [
+        provideMockStore({initialState: INITIAL_STATE})
       ]
     });
     store = TestBed.get(Store);
+    fixture = TestBed.createComponent(LoginComponent);
+    component = fixture.componentInstance;
   }));
-
-  beforeEach(() => {
-    component = new LoginComponent(store);
-  });
 
   afterEach(() => {
   });
@@ -50,6 +58,57 @@ describe('LoginComponent', () => {
     expect(component.isLoading).toBeFalsy();
     expect(component.errorMessage).toBeUndefined();
     expect(component.user).toEqual(new User());
+  });
+
+  it('should subscribe to authState and set errorMessage and isLoading correctly if they are specified in store', async () => {
+    const errorMessage: CodedErrorResponse = {
+      code: 400,
+      desc: 'EXAMPLE_FAILURE',
+      httpCode: 400,
+    };
+    store.setState({
+      ...INITIAL_STATE,
+      auth: {
+        isLoading: true,
+        errorMessage,
+        isAuthenticated: false,
+        newPasswordSet: false,
+        newPasswordRequested: false,
+        token: null,
+      }
+    });
+
+    fixture = TestBed.createComponent(LoginComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    component = fixture.componentInstance;
+
+    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(subscribeSpy).toHaveBeenCalled();
+
+    const expectedErrorMessage = WelcomeErrorHandler.getErrorDesc(errorMessage);
+
+    expect(component.isLoading).toBeTruthy();
+    expect(component.errorMessage).toEqual(expectedErrorMessage);
+
+  });
+
+  it('should subscribe to authState and delete errorMessage and set isLoading correctly if they are NOT specified in store', async () => {
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    component = fixture.componentInstance;
+
+    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(subscribeSpy).toHaveBeenCalled();
+
+    expect(component.isLoading).toEqual(initialAuthState.isLoading);
+    expect(component.errorMessage).toBeUndefined();
+
   });
 
   it('should dispatch LogIn action onSubmit and set isLoading to true', () => {

@@ -31,8 +31,10 @@ import {CacheInterceptor} from './http/cache.interceptor';
   ]
 })
 export class CoreModule {
+  /* istanbul ignore next */
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     // Import guard
+    /* istanbul ignore next */
     if (parentModule) {
       throw new Error(`${parentModule} has already been loaded. Import Core module in the AppModule only.`);
     }
