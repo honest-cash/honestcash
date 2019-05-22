@@ -2,7 +2,7 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 
-import {AppStates, selectAuthorizationState} from '../../../../app.states';
+import {AppStates, selectAuthState} from '../../../../app.states';
 
 @Component({
   selector: 'app-welcome-pages-welcome',
@@ -20,7 +20,7 @@ export class WelcomeComponent implements OnInit {
   constructor(
     private store: Store<AppStates>
   ) {
-    this.getState = this.store.select(selectAuthorizationState);
+    this.getState = this.store.select(selectAuthState);
   }
 
   ngOnInit() {

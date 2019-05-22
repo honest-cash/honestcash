@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {LoginComponent} from './pages/login/login.component';
 import {LogoutComponent} from './pages/logout/logout.component';
 import {SignupComponent} from './pages/signup/signup.component';
-import {StatusComponent} from './pages/status/status.component';
 import {ResetPasswordRequestComponent} from './pages/reset-password-request/reset-password-request.component';
 import {WelcomeComponent} from './pages/welcome/welcome.component';
 import {WelcomeContainerComponent} from './welcome.component';
@@ -42,7 +41,6 @@ const routes: Routes = [
         canActivate: [UnauthorizedGuard]
       },
       {path: 'reset-password-request', pathMatch: 'full', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
-      {path: 'status', component: StatusComponent, canActivate: [AuthorizedGuard]},
       {path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard]},
     ]
   }
@@ -64,7 +62,6 @@ const routes: Routes = [
     ResetPasswordRequestComponent,
     ResetPasswordVerifyComponent,
     WelcomeContainerComponent,
-    StatusComponent,
     ThankYouComponent,
     ForbiddenUsernameValidatorDirective,
   ],

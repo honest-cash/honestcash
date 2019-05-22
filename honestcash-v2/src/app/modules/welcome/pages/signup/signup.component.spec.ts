@@ -1,14 +1,16 @@
-import {
-  TestBed,
-  async,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {SignupComponent, SignupForm} from './signup.component';
 import User from '../../../../core/models/user';
-import {Store, StoreModule} from '@ngrx/store';
-import {AppStates, metaReducers, reducers} from '../../../../app.states';
+import {Store} from '@ngrx/store';
+import {AppStates} from '../../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {SignUp} from '../../../../core/store/auth/auth.actions';
+import {MockStore, provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../../../../core/mocks/app.states.mock';
+import {CodedErrorResponse} from '../../../../core/models/authentication';
+import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {initialState as initialAuthState} from '../../../../core/store/auth/auth.state';
 
 const SHARED_MOCKS = {
   username: 'toto',
@@ -20,7 +22,8 @@ const SHARED_MOCKS = {
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
-  let store: Store<AppStates>;
+  let store: MockStore<AppStates>;
+  let fixture: ComponentFixture<SignupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -29,19 +32,24 @@ describe('SignupComponent', () => {
       ],
       imports: [
         FormsModule,
-        StoreModule.forRoot(reducers, { metaReducers }),
       ],
       schemas: [
         NO_ERRORS_SCHEMA
       ],
+      providers: [
+        provideMockStore({initialState: initialAppStates}),
+      ]
     });
     (<any>window).grecaptcha = {
       getResponse: (): string => SHARED_MOCKS.captcha,
-      reset: (): void => {},
-      render: (id: string) => {}
+      reset: (): void => {
+      },
+      render: (id: string) => {
+      }
     };
+    fixture = TestBed.createComponent(SignupComponent);
+    component = fixture.componentInstance;
     store = TestBed.get(Store);
-    component = new SignupComponent(store);
   }));
 
   it('should create', () => {
@@ -53,6 +61,58 @@ describe('SignupComponent', () => {
     expect(component.isLoading).toBeFalsy();
     expect(component.errorMessage).toBeUndefined();
     expect(component.user).toEqual(new User());
+  });
+
+  it('should subscribe to authState and set errorMessage and isLoading correctly if they are specified in store', async () => {
+    const errorMessage: CodedErrorResponse = {
+      code: 400,
+      desc: 'EXAMPLE_FAILURE',
+      httpCode: 400,
+    };
+    store.setState({
+      ...initialAppStates,
+      auth: {
+        isLoading: true,
+        errorMessage,
+        isAuthenticated: false,
+        newPasswordSet: false,
+        newPasswordRequested: false,
+        token: null,
+      }
+    });
+
+    fixture = TestBed.createComponent(SignupComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    component = fixture.componentInstance;
+
+    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(subscribeSpy).toHaveBeenCalled();
+
+    const expectedErrorMessage = WelcomeErrorHandler.getErrorDesc(errorMessage);
+
+    expect(component.isLoading).toBeTruthy();
+    expect(component.errorMessage).toEqual(expectedErrorMessage);
+
+  });
+
+  it('should subscribe to authState and delete errorMessage and set isLoading correctly ' +
+    'if there is no error message specified in store', async () => {
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    component = fixture.componentInstance;
+
+    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(subscribeSpy).toHaveBeenCalled();
+
+    expect(component.isLoading).toEqual(initialAuthState.isLoading);
+    expect(component.errorMessage).toBeUndefined();
+
   });
 
   it('should fire renderCaptcha function ngOnInit', () => {
@@ -69,8 +129,10 @@ describe('SignupComponent', () => {
   it('should return void onSubmit if captcha is unavailable', () => {
     (<any>window).grecaptcha = {
       getResponse: (): string => '', // deliberately return an empty captcha
-      reset: (): void => {},
-      render: (id: string) => {}
+      reset: (): void => {
+      },
+      render: (id: string) => {
+      }
     };
     const grecaptchaResetSpy = spyOn((<any>window).grecaptcha, 'reset');
     const dispatchSpy = spyOn(store, 'dispatch');
@@ -106,5 +168,39 @@ describe('SignupComponent', () => {
     expect(dispatchSpy).toHaveBeenCalledWith(action);
 
   });
+
+  it('renderCaptcha function should render captcha', () => {
+    component.renderCaptcha();
+    expect(component.isCaptchaRendered).toBeTruthy();
+  });
+
+  it('renderCaptcha function should try to render captcha every 1 secs', fakeAsync(() => {
+    (<any>window).grecaptcha = {
+      getResponse: (): string => '',
+      reset: (): void => {
+      },
+      render: (id: string) => {
+        throw new Error('asdf'); // explicitly make render fail to trigger setTimeout
+      }
+    };
+    // make it fail on first try
+    component.renderCaptcha();
+    expect(component.isCaptchaRendered).toBeFalsy();
+
+    // make it work on second try (to test setTimeout)
+    (<any>window).grecaptcha = {
+      getResponse: (): string => '',
+      reset: (): void => {
+      },
+      render: (id: string) => { // change it back so that it suddenly works
+      }
+    };
+    fixture.detectChanges();
+    const dispatchSpy = spyOn(component, 'renderCaptcha');
+    tick(1000);
+    fixture.detectChanges();
+    expect(component.isCaptchaRendered).toBeTruthy();
+    expect(dispatchSpy).toHaveBeenCalled();
+  }));
 
 });

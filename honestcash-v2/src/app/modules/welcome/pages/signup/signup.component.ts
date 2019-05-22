@@ -1,13 +1,12 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { NgForm } from '@angular/forms';
-import {AppStates, selectAuthorizationState} from '../../../../app.states';
-import { SignUp } from '../../../../core/store/auth/auth.actions';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {NgForm} from '@angular/forms';
+import {AppStates, selectAuthState} from '../../../../app.states';
+import {SignUp} from '../../../../core/store/auth/auth.actions';
 import User from '../../../../core/models/user';
-import {CodedErrorResponse, FailedResponse} from '../../../../core/models/authentication';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
-import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
+import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
 
 export interface SignupForm extends NgForm {
   value: {
@@ -38,11 +37,10 @@ export class SignupComponent implements OnInit {
   constructor(
     private store: Store<AppStates>
   ) {
-    this.authState = this.store.select(selectAuthorizationState);
+    this.authState = this.store.select(selectAuthState);
   }
 
   public ngOnInit() {
-    // @todo
     this.authState.subscribe((state) => {
       if (!state.errorMessage) {
         delete this.errorMessage;

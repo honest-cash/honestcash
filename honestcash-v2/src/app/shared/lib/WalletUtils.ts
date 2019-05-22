@@ -39,6 +39,7 @@ const loadJS = function (url: string, implementationCode: () => void, location: 
   location.appendChild(scriptTag);
 };
 
+/* istanbul ignore next */
 export class WalletUtils {
   static generateNewWallet = async (password: string): Promise<ISimpleBitcoinWallet> => {
     const SimpleBitcoinWallet: any = await WalletUtils.getWallet();

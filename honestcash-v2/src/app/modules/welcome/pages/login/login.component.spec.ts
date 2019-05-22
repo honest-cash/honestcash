@@ -6,20 +6,11 @@ import {Store} from '@ngrx/store';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {LogIn} from '../../../../core/store/auth/auth.actions';
-import {initialState as initialWalletState} from '../../../../core/store/wallet/wallet.state';
-import {initialState as initialAppState} from '../../../../core/store/app/app.state';
-import {initialState as initialUserState} from '../../../../core/store/user/user.state';
 import {initialState as initialAuthState} from '../../../../core/store/auth/auth.state';
 import {CodedErrorResponse} from '../../../../core/models/authentication';
 import {AppStates} from '../../../../app.states';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
-
-const INITIAL_STATE: AppStates = {
-  app: initialAppState,
-  wallet: initialWalletState,
-  user: initialUserState,
-  auth: initialAuthState,
-};
+import {initialAppStates} from '../../../../core/mocks/app.states.mock';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -38,7 +29,7 @@ describe('LoginComponent', () => {
         NO_ERRORS_SCHEMA
       ],
       providers: [
-        provideMockStore({initialState: INITIAL_STATE})
+        provideMockStore({initialState: initialAppStates})
       ]
     });
     store = TestBed.get(Store);
@@ -67,7 +58,7 @@ describe('LoginComponent', () => {
       httpCode: 400,
     };
     store.setState({
-      ...INITIAL_STATE,
+      ...initialAppStates,
       auth: {
         isLoading: true,
         errorMessage,

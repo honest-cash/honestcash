@@ -1,7 +1,7 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {NgForm} from '@angular/forms';
-import {AppStates, selectAuthorizationState} from '../../../../app.states';
+import {AppStates, selectAuthState} from '../../../../app.states';
 import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
 import User from '../../../../core/models/user';
 import {Observable} from 'rxjs';
@@ -32,12 +32,11 @@ export class LoginComponent implements OnInit {
   constructor(
     private store: Store<AppStates>
   ) {
-    this.authState = this.store.select(selectAuthorizationState);
+    this.authState = this.store.select(selectAuthState);
   }
 
   public ngOnInit() {
     this.authState.subscribe((state) => {
-      console.log('state', state);
       if (!state.errorMessage) {
         delete this.errorMessage;
 
