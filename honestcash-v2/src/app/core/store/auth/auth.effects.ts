@@ -20,7 +20,7 @@ import {
 } from './auth.actions';
 import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
 import {UserCleanup, UserSetup} from '../user/user.actions';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthService} from '../../services/auth.service';
 import {
   LoginContext,
   LoginSuccessResponse,
@@ -39,7 +39,7 @@ export class AuthEffects {
 
   constructor(
     private actions: Actions,
-    private authenticationService: AuthenticationService,
+    private authService: AuthService,
     private walletService: WalletService,
     private userService: UserService,
     private router: Router,
@@ -53,7 +53,7 @@ export class AuthEffects {
     map((action: LogIn) => action.payload),
     switchMap((payload: LoginContext) =>
       // @todo: refactor to encode with a password hash
-      this.authenticationService.logIn(payload)
+      this.authService.logIn(payload)
       .pipe(
         map((logInResponse: LoginSuccessResponse) => new LogInSuccess({...logInResponse, password: payload.password})),
         catchError((error) => of(new LogInFailure(error))),
@@ -84,7 +84,7 @@ export class AuthEffects {
     map((action: SignUp) => action.payload),
     switchMap((payload: SignupContext) =>
       // @todo: refactor to encode with a password hash
-      this.authenticationService.signUp(payload)
+      this.authService.signUp(payload)
       .pipe(
         map((signUpResponse: SignupSuccessResponse) => new SignUpSuccess({...signUpResponse, password: payload.password})),
         catchError((error) => of(new SignUpFailure(error))),
@@ -105,7 +105,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.RESET_PASSWORD),
     map((action: ResetPassword) => action.payload),
     switchMap((payload: ResetPasswordContext) =>
-      this.authenticationService.changePassword(payload)
+      this.authService.changePassword(payload)
       .pipe(
         map(() => new ResetPasswordSuccess()),
         catchError((error) => of(new ResetPasswordFailure(error)))
@@ -117,7 +117,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.RESET_PASSWORD_REQUEST),
     map((action: ResetPasswordRequest) => action.payload),
     switchMap((payload: ResetPasswordRequestContext) =>
-      this.authenticationService.resetPassword(payload)
+      this.authService.resetPassword(payload)
       .pipe(
         map(() => new ResetPasswordRequestSuccess()),
         catchError((error) => of(new ResetPasswordRequestFailure(error)))
@@ -129,7 +129,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.LOGOUT),
     switchMap(() => [new UserCleanup(), new WalletCleanup()]),
     tap(() => {
-      this.authenticationService.logOut().subscribe(() => {
+      this.authService.logOut().subscribe(() => {
         this.router.navigateByUrl('/');
       });
     })
@@ -138,8 +138,9 @@ export class AuthEffects {
   @Effect({dispatch: false})
   GetStatus: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.GET_STATUS),
-    switchMap(payload => {
-      return this.authenticationService.getStatus();
-    })
+    switchMap(
+      /* istanbul ignore next: functionality is tested but istanbul has incorrect coverage */
+      () => this.authService.getStatus()
+    ),
   );
 }

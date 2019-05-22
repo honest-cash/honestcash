@@ -44,7 +44,7 @@ export const API_ENDPOINTS = {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthService {
 
   private token = '';
   private userId: number;

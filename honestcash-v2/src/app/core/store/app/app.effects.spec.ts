@@ -8,13 +8,13 @@ import * as AppActions from './app.actions';
 import * as UserActions from '../user/user.actions';
 import * as WalletActions from '../wallet/wallet.actions';
 import {WalletService} from '../../services/wallet.service';
-import {AuthenticationService, LOCAL_TOKEN_KEY} from '../../services/authentication.service';
+import {AuthService, LOCAL_TOKEN_KEY} from '../../services/auth.service';
 import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../../helpers/localStorage';
 
 describe('app.effects', () => {
   let effects: AppEffects;
   let actions: Observable<any>;
-  let authenticationService: AuthenticationService;
+  let authenticationService: AuthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,14 +25,14 @@ describe('app.effects', () => {
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
         AppEffects,
-        AuthenticationService,
+        AuthService,
         WalletService,
         provideMockActions(() => actions),
       ],
     });
 
     effects = TestBed.get(AppEffects);
-    authenticationService = TestBed.get(AuthenticationService);
+    authenticationService = TestBed.get(AuthService);
   });
 
   afterEach(() => {

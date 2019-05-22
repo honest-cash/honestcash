@@ -1,6 +1,5 @@
-
-import { AuthActionTypes, All } from './auth.actions';
-import { State, initialState } from './auth.state';
+import {All, AuthActionTypes} from './auth.actions';
+import {initialState, State} from './auth.state';
 
 export function reducer(state = initialState, action: All): State {
   switch (action.type) {
@@ -64,7 +63,6 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS: {
       return {
         ...initialState,
-        errorMessage: undefined,
         newPasswordRequested: true
       };
     }

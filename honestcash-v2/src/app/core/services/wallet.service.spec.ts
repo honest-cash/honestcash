@@ -10,7 +10,7 @@ import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models
 import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
 import User from '../models/user';
 import {ISimpleBitcoinWallet} from '../../shared/lib/WalletUtils';
-import {LOCAL_TOKEN_KEY} from './authentication.service';
+import {LOCAL_TOKEN_KEY} from './auth.service';
 
 const SHARED_MOCKS = {
   mnemonic: 'test1 test2 test3 test4 test5 test6 test7 test8',

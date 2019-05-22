@@ -1,9 +1,9 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { Router, RouterStateSnapshot } from '@angular/router';
+import {inject, TestBed} from '@angular/core/testing';
+import {Router, RouterStateSnapshot} from '@angular/router';
 
-import {AuthenticationService, LOCAL_TOKEN_KEY} from '../services/authentication.service';
-import { MockAuthenticationService } from '../mocks/authentication.service.mock';
-import { AuthorizedGuard } from './authorized.guard';
+import {AuthService} from '../services/auth.service';
+import {MockAuthenticationService} from '../mocks/authentication.service.mock';
+import {AuthorizedGuard} from './authorized.guard';
 import {resetLocalStorage} from '../helpers/localStorage';
 
 describe('AuthorizedGuard', () => {
@@ -21,14 +21,14 @@ describe('AuthorizedGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         AuthorizedGuard,
-        { provide: AuthenticationService, useClass: MockAuthenticationService },
-        { provide: Router, useValue: mockRouter }
+        {provide: AuthService, useClass: MockAuthenticationService},
+        {provide: Router, useValue: mockRouter}
       ]
     });
   });
 
   beforeEach(inject(
-    [AuthorizedGuard, AuthenticationService],
+    [AuthorizedGuard, AuthService],
     (_authenticationGuard: AuthorizedGuard, _authenticationService: MockAuthenticationService) => {
       authenticationGuard = _authenticationGuard;
       authenticationService = _authenticationService;
@@ -59,7 +59,7 @@ describe('AuthorizedGuard', () => {
 
       // Assert
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
-        queryParams: { redirect: mockRouter.url },
+        queryParams: {redirect: mockRouter.url},
         replaceUrl: true
       });
       expect(result).toBe(false);
@@ -72,7 +72,7 @@ describe('AuthorizedGuard', () => {
 
       authenticationGuard.canActivate(null, mockSnapshot);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
-        queryParams: { redirect: mockRouter.url },
+        queryParams: {redirect: mockRouter.url},
         replaceUrl: true
       });
     });

@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 
 import {Logger} from '../services/logger.service';
-import {AuthenticationService} from '../services/authentication.service';
+import {AuthService} from '../services/auth.service';
 import {WalletService} from '../services/wallet.service';
 import {WindowToken} from '../helpers/window';
 import {EnvironmentToken} from '../helpers/environment';
@@ -16,7 +16,7 @@ export class VersionOneGuard implements CanActivate {
     @Inject(WindowToken) private window: Window,
     @Inject(EnvironmentToken) private environment: Environment,
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
     private walletService: WalletService,
   ) {
   }

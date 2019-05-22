@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {Router, RouterStateSnapshot} from '@angular/router';
 
-import {AuthenticationService, LOCAL_TOKEN_KEY} from '../services/authentication.service';
+import {AuthService, LOCAL_TOKEN_KEY} from '../services/auth.service';
 import {VersionOneGuard} from './version-one.guard';
 import {localStorageProvider, LocalStorageToken, resetLocalStorage} from '../helpers/localStorage';
 import {HttpService} from '..';
@@ -37,7 +37,7 @@ describe('VersionOneGuard', () => {
         HttpClientTestingModule,
       ],
       providers: [
-        AuthenticationService,
+        AuthService,
         VersionOneGuard,
         {provide: HttpService, useValue: mockHttpService},
         {provide: Router, useValue: mockRouter},

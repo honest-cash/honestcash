@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 
 import {UserActionTypes, UserSetup} from './user.actions';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthService} from '../../services/auth.service';
 import {UserService} from 'app/core/services/user.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
 
@@ -13,7 +13,7 @@ export class UserEffects {
 
   constructor(
     private actions: Actions,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
     private userService: UserService
   ) {
   }

@@ -16,7 +16,7 @@ import {
 } from '../models/authentication';
 import User from '../models/user';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
-import {LOCAL_TOKEN_KEY} from '../services/authentication.service';
+import {LOCAL_TOKEN_KEY} from '../services/auth.service';
 import Wallet from '../models/wallet';
 import {ISimpleBitcoinWallet} from '../../shared/lib/WalletUtils';
 

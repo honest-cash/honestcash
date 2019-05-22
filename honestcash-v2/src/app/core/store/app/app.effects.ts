@@ -5,7 +5,7 @@ import {map, mergeMap} from 'rxjs/operators';
 import {AppActionTypes} from './app.actions';
 import {UserCleanup, UserSetup} from '../user/user.actions';
 import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
-import {AuthenticationService} from 'app/core/services/authentication.service';
+import {AuthService} from 'app/core/services/auth.service';
 import {LocalStorageToken} from '../../helpers/localStorage';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class AppEffects {
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(LocalStorageToken) private localStorage: Storage,
     private actions: Actions,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
   ) {
   }
 

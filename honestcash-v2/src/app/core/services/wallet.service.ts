@@ -5,7 +5,7 @@ import {ISimpleBitcoinWallet, WalletUtils} from '../../shared/lib/WalletUtils';
 import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models/authentication';
 import {Logger} from './logger.service';
 import {defer, Observable} from 'rxjs';
-import {AuthenticationService} from './authentication.service';
+import {AuthService} from './auth.service';
 import {HttpService} from '..';
 import {LocalStorageToken} from '../helpers/localStorage';
 
@@ -33,7 +33,7 @@ export class WalletService {
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(LocalStorageToken) private localStorage: Storage,
     private http: HttpService,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
   ) {
     this.logger = new Logger('WalletService');
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);

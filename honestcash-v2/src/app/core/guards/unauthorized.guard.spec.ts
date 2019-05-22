@@ -1,7 +1,7 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {Router, RouterStateSnapshot} from '@angular/router';
 
-import {AuthenticationService} from '../services/authentication.service';
+import {AuthService} from '../services/auth.service';
 import {MockAuthenticationService} from '../mocks/authentication.service.mock';
 import {UnauthorizedGuard} from './unauthorized.guard';
 import {resetLocalStorage} from '../helpers/localStorage';
@@ -21,14 +21,14 @@ describe('UnauthorizedGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         UnauthorizedGuard,
-        {provide: AuthenticationService, useClass: MockAuthenticationService},
+        {provide: AuthService, useClass: MockAuthenticationService},
         {provide: Router, useValue: mockRouter}
       ]
     });
   });
 
   beforeEach(inject(
-    [UnauthorizedGuard, AuthenticationService],
+    [UnauthorizedGuard, AuthService],
     (_authenticationGuard: UnauthorizedGuard, _authenticationService: MockAuthenticationService) => {
       authenticationGuard = _authenticationGuard;
       authenticationService = _authenticationService;

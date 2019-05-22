@@ -1,6 +1,6 @@
 import 'jasmine';
 import {TestBed} from '@angular/core/testing';
-import {API_ENDPOINTS, AuthenticationService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './authentication.service';
+import {API_ENDPOINTS, AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../http/http.service';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
@@ -30,8 +30,8 @@ const SHARED_MOCKS = {
 
 SHARED_MOCKS.hashedPassword = CryptoUtils.calculatePasswordHash(SHARED_MOCKS.email, SHARED_MOCKS.password);
 
-describe('AuthenticationService', () => {
-  let authenticationService: AuthenticationService;
+describe('AuthService', () => {
+  let authenticationService: AuthService;
   let mockHttpService: HttpService;
 
   beforeEach(() => {
@@ -41,13 +41,13 @@ describe('AuthenticationService', () => {
         HttpClientTestingModule,
       ],
       providers: [
-        AuthenticationService,
+        AuthService,
         {provide: HttpService, useValue: mockHttpService},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
       ]
     });
-    authenticationService = TestBed.get(AuthenticationService);
+    authenticationService = TestBed.get(AuthService);
   });
 
   afterEach(() => {

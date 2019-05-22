@@ -87,6 +87,7 @@
             "codeCoverageExclude": [
               "/**/*mock*.ts"
             ],
+            "sourceMap": true,
             "styles": [
               "src/styles.scss"
             ],

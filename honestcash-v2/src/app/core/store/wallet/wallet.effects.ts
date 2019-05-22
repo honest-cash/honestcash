@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {map, switchMap, tap} from 'rxjs/operators';
 import {WalletActionTypes, WalletGenerated, WalletSetup} from './wallet.actions';
 import {WalletService} from '../../services/wallet.service';
-import {AuthenticationService} from 'app/core/services/authentication.service';
+import {AuthService} from 'app/core/services/auth.service';
 import {Logger} from 'app/core/services/logger.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
 import {LocalStorageToken} from '../../helpers/localStorage';
@@ -19,7 +19,7 @@ export class WalletEffects {
     @Inject(LocalStorageToken) private localStorage: Storage,
     private actions: Actions,
     private walletService: WalletService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthService
   ) {
     this.logger = new Logger('WalletEffects');
   }
