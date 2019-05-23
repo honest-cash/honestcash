@@ -6,6 +6,7 @@ import {Component, HostBinding, Input} from '@angular/core';
   styleUrls: ['./footer.component.scss']
 })
 export class CardFooterComponent {
+  /* istanbul ignore next*/
   @HostBinding('class') class = 'card-footer';
   @Input() text;
   @Input() anchor;

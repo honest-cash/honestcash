@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {cold, hot} from 'jasmine-marbles';
-import {Observable, of, ReplaySubject, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
 import {AuthService} from '../../services/auth.service';
@@ -72,6 +72,7 @@ describe('auth.effects', () => {
     });
     router = TestBed.get(Router);
     effects = TestBed.get(AuthEffects);
+    mockAuthenticationService = TestBed.get(AuthService);
 
     spyOn(router, 'navigate').and.callThrough();
     spyOn(router, 'navigateByUrl').and.callThrough();
@@ -344,9 +345,8 @@ describe('auth.effects', () => {
   describe('GetStatus Effects', () => {
     describe('GetStatus', () => {
       it('should correctly call getStatus on authenticationService', () => {
-        (<jasmine.Spy>mockAuthenticationService.getStatus).and.returnValue(of({}));
-        const _actions = new ReplaySubject(1);
-        _actions.next(new AuthActions.GetStatus());
+        (<jasmine.Spy>mockAuthenticationService.getStatus).and.returnValue(of(new User()));
+        actions = cold('a', {a: new AuthActions.GetStatus()});
 
         effects.GetStatus.subscribe(() => {
           expect(mockAuthenticationService.getStatus).toHaveBeenCalled();

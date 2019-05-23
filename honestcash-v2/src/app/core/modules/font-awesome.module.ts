@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { FontAwesomeModule as OriginalFontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {NgModule} from '@angular/core';
+import {FontAwesomeModule as OriginalFontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEnvelope, faUser} from '@fortawesome/free-regular-svg-icons';
 import {faKey} from '@fortawesome/free-solid-svg-icons/faKey';
@@ -16,6 +16,7 @@ import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
   exports: [OriginalFontAwesomeModule],
 })
 export class FontAwesomeModule {
+  /* istanbul ignore next */
   constructor() {
     library.add(faComments);
     library.add(faTerminal);

@@ -31,15 +31,21 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new AppLoad());
   }
 
+  // remove this when there is something real
+  // inside ngOnInit
+  /* istanbul ignore next*/
   ngOnInit() {
+    /* istanbul ignore next*/
     this.walletState.subscribe(wallet => {
       this.logger.debug('new wallet', wallet);
     });
 
+    /* istanbul ignore next*/
     this.authState.subscribe(auth => {
       this.logger.debug('new auth', auth);
     });
 
+    /* istanbul ignore next*/
     this.userState.subscribe(auth => {
       this.logger.debug('new user', auth);
     });

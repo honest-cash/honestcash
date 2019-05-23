@@ -10,8 +10,7 @@ import {mock} from '../../../../mock';
 import {WALLET_LOCALSTORAGE_KEYS} from '../services/wallet.service';
 import {WindowToken} from '../helpers/window';
 import {environmentProvider, EnvironmentToken} from '../helpers/environment';
-import {resetEnvironment} from '../../../environments/environment';
-import {resetLocalStorage} from '../helpers/tests';
+import {resetEnvironment, resetLocalStorage} from '../helpers/tests';
 
 const MockWindow = {
   location: {

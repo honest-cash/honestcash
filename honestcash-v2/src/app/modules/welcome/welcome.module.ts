@@ -13,7 +13,6 @@ import {FooterComponent} from './components/footer/footer.component';
 import {HeadingComponent} from './components/heading/heading.component';
 import {CardFooterComponent} from './components/card/footer/footer.component';
 import {LoadingSubmitButtonComponent} from './components/loading-submit-button/loading-submit-button.component';
-import {TooltipDirective} from './directives/tooltip.directive';
 import {AuthorizedGuard} from 'app/core/guards/authorized.guard';
 import {UnauthorizedGuard} from 'app/core/guards/unauthorized.guard';
 import {ThankYouComponent} from './pages/thank-you/thank-you.component';
@@ -48,7 +47,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    TooltipDirective,
     HeadingComponent,
     LoadingSubmitButtonComponent,
     HeaderComponent,

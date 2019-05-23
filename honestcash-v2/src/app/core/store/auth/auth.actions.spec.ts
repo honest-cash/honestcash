@@ -33,7 +33,7 @@ const SHARED_MOCKS = {
   }
 };
 
-describe('auth.effects', () => {
+describe('auth.actions', () => {
   describe('LogIn Actions', () => {
     it('LogIn should create an action', () => {
       const context = {

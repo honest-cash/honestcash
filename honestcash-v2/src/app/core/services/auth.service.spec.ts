@@ -1,4 +1,3 @@
-import 'jasmine';
 import {TestBed} from '@angular/core/testing';
 import {API_ENDPOINTS, AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';

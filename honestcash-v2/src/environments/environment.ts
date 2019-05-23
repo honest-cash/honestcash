@@ -8,7 +8,7 @@ export interface Environment {
   production: boolean;
 }
 
-const ENVIRONMENT_DEFAULTS: Environment = {
+export const ENVIRONMENT_DEFAULTS: Environment = {
   apiUrl: 'https://honest.cash/api', // http://localhost:8080/api
   clientUrl: 'https://honest.cash/', // http://localhost:3010/
   production: false
@@ -23,14 +23,6 @@ export const environment: Environment = {
   apiUrl: ENVIRONMENT_DEFAULTS.apiUrl,
   clientUrl: ENVIRONMENT_DEFAULTS.clientUrl,
   production: ENVIRONMENT_DEFAULTS.production,
-};
-
-export const resetEnvironment = () => {
-  // this exists for certain tests
-  // to reset the state back to initial state
-  environment.apiUrl = ENVIRONMENT_DEFAULTS.apiUrl;
-  environment.clientUrl = ENVIRONMENT_DEFAULTS.clientUrl;
-  environment.production = ENVIRONMENT_DEFAULTS.production;
 };
 
 /*

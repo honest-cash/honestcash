@@ -5,7 +5,6 @@ import {map, tap} from 'rxjs/operators';
 
 import {UserActionTypes, UserSetup} from './user.actions';
 import {AuthService} from '../../services/auth.service';
-import {UserService} from 'app/core/services/user.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
 
 @Injectable()
@@ -13,8 +12,7 @@ export class UserEffects {
 
   constructor(
     private actions: Actions,
-    private authenticationService: AuthService,
-    private userService: UserService
+    private authService: AuthService,
   ) {
   }
 
@@ -24,9 +22,9 @@ export class UserEffects {
     map((action: UserSetup) => action.payload),
     tap((payload?: LoginSuccessResponse | SignupSuccessResponse) => {
       if (payload) {
-        return this.authenticationService.init(payload.token, payload.user.id);
+        return this.authService.init(payload.token, payload.user.id);
       }
-      return this.authenticationService.init();
+      return this.authService.init();
     })
   );
 
@@ -34,7 +32,7 @@ export class UserEffects {
   UserCleanup: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.USER_CLEANUP),
     tap(() => {
-      this.authenticationService.unsetTokenAndUnAuthenticate();
+      this.authService.unsetTokenAndUnAuthenticate();
     })
   );
 }

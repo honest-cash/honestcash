@@ -1,6 +1,6 @@
 import {AppActionTypes, AppLoad} from './app.actions';
 
-describe('app.effects', () => {
+describe('app.actions', () => {
   describe('AppLoad', () => {
     it('should create an action', () => {
       const action = new AppLoad();
