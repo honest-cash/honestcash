@@ -43,9 +43,8 @@ export class WalletService {
     return defer(
       async () => {
         let simpleWallet: ISimpleBitcoinWallet;
-
         if (payload) {
-          if ((<LoginSuccessResponse>payload).wallet) {
+          if ((<LoginSuccessResponse>payload).wallet && (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted) {
             // if there is a payload and a wallet attached
             // it means it is a login action
             this.logger.info('Setting up an already existing wallet');
