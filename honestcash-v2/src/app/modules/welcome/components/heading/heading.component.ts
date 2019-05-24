@@ -11,10 +11,8 @@ export class HeadingComponent implements OnInit {
   @Input() title: string;
   @Input() title2: string;
   @Input() description: string;
-  @Input() black: boolean;
 
   constructor() {
-
   }
 
   ngOnInit() {

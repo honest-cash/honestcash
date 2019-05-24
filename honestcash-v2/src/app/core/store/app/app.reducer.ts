@@ -1,10 +1,13 @@
+import {All, AppActionTypes} from './app.actions';
+import {initialState, State} from './app.state';
+import {Logger} from '../..';
 
-import { AppActionTypes, All } from './app.actions';
-import { State, initialState } from './app.state';
+const logger = new Logger();
 
 export function reducer(state = initialState, action: All): State {
   switch (action.type) {
     case AppActionTypes.APP_LOAD: {
+      logger.info('App Loaded');
       return {
         isLoaded: true,
       };

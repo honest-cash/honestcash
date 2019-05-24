@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
-import { Store } from '@ngrx/store';
-import { StoreMock } from './core/mocks/store.mock';
+import {TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {AppComponent} from './app.component';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from './core/mocks/app.states.mock';
 
 describe('AppComponent', () => {
   beforeEach((() => {
@@ -14,9 +14,7 @@ describe('AppComponent', () => {
         AppComponent
       ],
       providers: [
-        {
-          provide: Store, useClass: StoreMock
-        }
+        provideMockStore({initialState: initialAppStates})
       ]
     }).compileComponents();
   }));

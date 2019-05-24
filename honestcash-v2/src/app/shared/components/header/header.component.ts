@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import User from '../../../core/models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import { EmbeddableEditorComponent } from '../../../modules/editor/embed/embed.component';
+import {EmbeddableEditorComponent} from '../../../modules/editor/embed/embed.component';
 import {Store} from '@ngrx/store';
-import {AppStates, selectAuthorizationState, selectUserState} from '../../../app.states';
+import {AppStates, selectAuthState, selectUserState} from '../../../app.states';
 import {LogOut} from '../../../core/store/auth/auth.actions';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../core/store/auth/auth.state';
 import {State as UserState} from '../../../core/store/user/user.state';
 
 @Component({
-   selector: 'app-header',
-   templateUrl: './header.component.html',
-   styleUrls: ['./header.component.scss']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   menuHidden = true;
@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
     private store: Store<AppStates>,
     private modalService: NgbModal
   ) {
-    this.authState = this.store.select(selectAuthorizationState);
+    this.authState = this.store.select(selectAuthState);
     this.userState = this.store.select(selectUserState);
   }
 

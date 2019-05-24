@@ -1,4 +1,5 @@
 import User from './user';
+import Wallet from './wallet';
 
 export type FailedResponse = CodedErrorResponse | string;
 export type LoginResponse = LoginSuccessResponse | FailedResponse;
@@ -20,7 +21,8 @@ export abstract class DataResponse {
   data: any;
 }
 
-export abstract class EmptyResponse {}
+export abstract class EmptyResponse {
+}
 
 export interface LoginContext {
   email: string;
@@ -29,7 +31,7 @@ export interface LoginContext {
 
 export interface LoginSuccessResponse {
   user: User;
-  wallet: any;
+  wallet: Wallet;
   token: string;
   password?: string;
 }
@@ -68,8 +70,4 @@ export interface CheckPasswordContext {
 
 export interface CheckPasswordSuccessResponse {
   isValid: boolean;
-}
-
-export interface SetWalletContext {
-  mnemonicEncrypted: string;
 }

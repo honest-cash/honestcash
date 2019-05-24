@@ -1,26 +1,27 @@
+import {All, WalletActionTypes} from './wallet.actions';
+import {initialState, State} from './wallet.state';
+import {Logger} from '../..';
 
-import { WalletActionTypes, All } from './wallet.actions';
-import { State, initialState } from './wallet.state';
-import { WalletUtils } from '../../../shared/lib/WalletUtils';
+const logger = new Logger();
 
 export function reducer(state = initialState, action: All): State {
   switch (action.type) {
     case WalletActionTypes.WALLET_SETUP: {
+      logger.info('Wallet Setup Started');
       return {
         ...state,
       };
     }
     case WalletActionTypes.WALLET_GENERATED: {
+      logger.info('Wallet Generated', action.payload.wallet);
       return {
         ...state,
-        wallet: action.payload.wallet
+        wallet: action.payload.wallet,
       };
     }
     case WalletActionTypes.WALLET_CLEANUP: {
-      return {
-        ...state,
-        wallet: null
-      };
+      logger.info('Wallet Cleanup Success');
+      return initialState;
     }
     default: {
       return state;

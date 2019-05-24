@@ -82,6 +82,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "/**/*mock*.ts"
+            ],
+            "sourceMap": true,
             "styles": [
               "src/styles.scss"
             ],

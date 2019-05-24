@@ -20,6 +20,7 @@ import {AppEffects} from './core/store/app/app.effects';
 import {FontAwesomeModule} from './core/modules/font-awesome.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EditorEffects} from './core/store/editor/editor.effects';
+import {AppSharedModule} from './app.shared.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {EditorEffects} from './core/store/editor/editor.effects';
     }),
     BrowserAnimationsModule,
     AppRoutingModule,
+    AppSharedModule,
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),

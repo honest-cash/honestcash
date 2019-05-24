@@ -1,10 +1,10 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import {inject, TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HTTP_INTERCEPTORS, HttpClient} from '@angular/common/http';
 
-import { TokenInterceptor } from './token.interceptor';
+import {TokenInterceptor} from './token.interceptor';
 import {MockAuthenticationService} from '../mocks/authentication.service.mock';
-import {AuthenticationService} from '../services/authentication.service';
+import {AuthService} from '../services/auth.service';
 
 describe('TokenInterceptor', () => {
   let http: HttpClient;
@@ -16,7 +16,7 @@ describe('TokenInterceptor', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        { provide: AuthenticationService, useClass: MockAuthenticationService },
+        {provide: AuthService, useClass: MockAuthenticationService},
         {
           provide: HTTP_INTERCEPTORS,
           useClass: TokenInterceptor,
@@ -27,7 +27,7 @@ describe('TokenInterceptor', () => {
   });
 
   beforeEach(inject([
-    HttpClient, HttpTestingController, AuthenticationService
+    HttpClient, HttpTestingController, AuthService
   ], (_http: HttpClient, _httpMock: HttpTestingController, _authenticationService: MockAuthenticationService) => {
     http = _http;
     httpMock = _httpMock;
@@ -44,7 +44,7 @@ describe('TokenInterceptor', () => {
     http.get('http://test.com/toto').subscribe();
 
     // Assert
-    const httpRequest = httpMock.expectOne({ url: 'http://test.com/toto' });
+    const httpRequest = httpMock.expectOne({url: 'http://test.com/toto'});
     expect(httpRequest.request.headers.has('x-auth-token')).toEqual(true);
   });
 
@@ -55,7 +55,7 @@ describe('TokenInterceptor', () => {
     http.get('http://test.com/toto').subscribe();
 
     // Assert
-    const httpRequest = httpMock.expectOne({ url: 'http://test.com/toto' });
+    const httpRequest = httpMock.expectOne({url: 'http://test.com/toto'});
     expect(httpRequest.request.headers.has('x-auth-token')).toEqual(false);
   });
 });

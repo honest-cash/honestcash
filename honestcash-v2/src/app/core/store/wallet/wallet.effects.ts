@@ -1,24 +1,23 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {defer, Observable} from 'rxjs';
-import {map, mergeMap, tap} from 'rxjs/operators';
-import {WalletActionTypes, WalletGenerated, WalletSetup} from './wallet.actions';
+import {Observable} from 'rxjs';
+import {map, switchMap, tap} from 'rxjs/operators';
+import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup, WalletSetupFailed} from './wallet.actions';
 import {WalletService} from '../../services/wallet.service';
-import {AuthenticationService} from 'app/core/services/authentication.service';
-import {WalletUtils} from 'app/shared/lib/WalletUtils';
-import Wallet from 'app/core/models/wallet';
-import {Logger} from 'app/core/services/logger.service';
+import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
+import {LocalStorageToken} from '../../helpers/localStorage';
+import {ISimpleBitcoinWallet} from '../../../shared/lib/WalletUtils';
+import {UserCleanup} from '../user/user.actions';
 
 @Injectable()
 export class WalletEffects {
-  private logger: Logger;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(LocalStorageToken) private localStorage: Storage,
     private actions: Actions,
     private walletService: WalletService,
-    private authenticationService: AuthenticationService
   ) {
-    this.logger = new Logger('WalletEffects');
   }
 
   /**
@@ -30,35 +29,24 @@ export class WalletEffects {
   @Effect()
   WalletSetup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP),
-    map((action: WalletSetup) => {
-      return action.payload;
-    }),
-    mergeMap((payload) => defer(async () => {
-      let simpleWallet: Wallet;
-      
-      if (payload.mnemonic) {
-        this.logger.info('Setting up an already existing wallet');
+    map((action: WalletSetup) => action.payload),
+    switchMap((payload?: LoginSuccessResponse | SignupSuccessResponse) => this.walletService.setupWallet(payload)
+      .pipe(
+        map((wallet: ISimpleBitcoinWallet) => {
+          if (wallet) {
+            this.walletService.setWallet(wallet);
+            return new WalletGenerated({wallet});
+          }
+          return new WalletSetupFailed();
+        })
+      )
+    ),
+  );
 
-        simpleWallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(payload.mnemonic, payload.password);
-      } else {
-        this.logger.info('Setting up a new wallet');
-
-        simpleWallet = await WalletUtils.generateNewWallet(payload.password);
-      }
-
-      return {wallet: simpleWallet};
-    })),
-    tap(({wallet}) => {
-      this.walletService.setWallet(wallet.mnemonic);
-    }),
-    tap(({wallet}) => {
-      this.authenticationService.setWallet({mnemonicEncrypted: wallet.mnemonicEncrypted});
-    }),
-    map(({wallet}) => {
-      return new WalletGenerated({
-        wallet
-      });
-    }),
+  @Effect()
+  WalletSetupFailed: Observable<any> = this.actions.pipe(
+    ofType(WalletActionTypes.WALLET_SETUP_FAILED),
+    switchMap(() => [new UserCleanup(), new WalletCleanup()]),
   );
 
   @Effect({dispatch: false})

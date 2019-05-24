@@ -1,29 +1,39 @@
-import { Action } from '@ngrx/store';
-import {LoginSuccessResponse} from '../../models/authentication';
-import Wallet from 'app/core/models/wallet';
+import {Action} from '@ngrx/store';
+import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
+import {ISimpleBitcoinWallet} from '../../../shared/lib/WalletUtils';
+import Wallet from '../../models/wallet';
 
 export enum WalletActionTypes {
   WALLET_SETUP = '[Wallet] Wallet setup',
+  WALLET_SETUP_FAILED = '[Wallet] Wallet setup failed',
   WALLET_CLEANUP = '[Wallet] Wallet cleanup',
   WALLET_GENERATED = '[Wallet] Wallet has been generated'
 }
 
 export class WalletSetup implements Action {
   readonly type = WalletActionTypes.WALLET_SETUP;
-  constructor(public payload: { mnemonic: string; password?: string }) {}
+
+  constructor(public payload?: LoginSuccessResponse | SignupSuccessResponse) {
+  }
+}
+
+export class WalletSetupFailed implements Action {
+  readonly type = WalletActionTypes.WALLET_SETUP_FAILED;
 }
 
 export class WalletCleanup implements Action {
   readonly type = WalletActionTypes.WALLET_CLEANUP;
-  constructor() {}
 }
 
 export class WalletGenerated implements Action {
   readonly type = WalletActionTypes.WALLET_GENERATED;
-  constructor(public payload: { wallet: Wallet}) {}
+
+  constructor(public payload: { wallet: ISimpleBitcoinWallet | Wallet }) {
+  }
 }
 
 export type All =
-   | WalletSetup
-   | WalletGenerated
-   | WalletCleanup;
+  | WalletSetup
+  | WalletSetupFailed
+  | WalletGenerated
+  | WalletCleanup;

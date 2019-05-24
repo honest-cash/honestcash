@@ -1,18 +1,22 @@
-import { TestBed } from '@angular/core/testing';
-import {API_ENDPOINTS, AuthenticationService, LOCAL_TOKEN_KEY} from './authentication.service';
+import {TestBed} from '@angular/core/testing';
+import {API_ENDPOINTS, AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {
-  CodedErrorResponse, EmptyResponse,
-  LoginSuccessResponse, OkResponse,
-  SignupSuccessResponse
-} from '../models/authentication';
 import {HttpService} from '../http/http.service';
-import User from '../models/user';
-import Wallet from '../models/wallet';
 import {CryptoUtils} from '../../shared/lib/CryptoUtils';
 import {mock} from '../../../../mock';
+import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
+import User from '../models/user';
+import Wallet from '../models/wallet';
 import {of} from 'rxjs';
-import {resetLocalStorage} from '../helpers/localStorage';
+import {
+  CheckPasswordResponse,
+  CodedErrorResponse,
+  EmptyResponse,
+  LoginSuccessResponse,
+  OkResponse,
+  SignupSuccessResponse
+} from '../models/authentication';
+import {resetLocalStorage} from '../helpers/tests';
 
 const SHARED_MOCKS = {
   token: '123',
@@ -26,8 +30,8 @@ const SHARED_MOCKS = {
 
 SHARED_MOCKS.hashedPassword = CryptoUtils.calculatePasswordHash(SHARED_MOCKS.email, SHARED_MOCKS.password);
 
-describe('AuthenticationService', () => {
-  let authenticationService: AuthenticationService;
+describe('AuthService', () => {
+  let authenticationService: AuthService;
   let mockHttpService: HttpService;
 
   beforeEach(() => {
@@ -37,11 +41,13 @@ describe('AuthenticationService', () => {
         HttpClientTestingModule,
       ],
       providers: [
-        AuthenticationService,
-        {provide: HttpService, useValue: mockHttpService}
+        AuthService,
+        {provide: HttpService, useValue: mockHttpService},
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
       ]
     });
-    authenticationService = TestBed.get(AuthenticationService);
+    authenticationService = TestBed.get(AuthService);
   });
 
   afterEach(() => {
@@ -84,11 +90,33 @@ describe('AuthenticationService', () => {
     });
   });
 
-  describe('unsetToken', () => {
+  describe('setUserId', () => {
+    it('should set the userId correctly to the instance and the localstorage', () => {
+      const userId = 2;
+      authenticationService.setUserId(userId);
+      expect(authenticationService.getUserId()).toEqual(userId);
+      expect(localStorage.getItem(LOCAL_USER_ID_KEY)).toEqual(String(userId));
+    });
+  });
+
+  describe('getUserId', () => {
+    it('should return the userId correctly if it is defined in the instance', () => {
+      const userId = 2;
+      authenticationService.setUserId(userId);
+      expect(authenticationService.getUserId()).toEqual(userId);
+    });
+    it('should return the userId correctly if it is NOT defined in the instance but defined in localStorage', () => {
+      const userId = 2;
+      localStorage.setItem(LOCAL_USER_ID_KEY, String(userId));
+      expect(authenticationService.getUserId()).toEqual(userId);
+    });
+  });
+
+  describe('unsetTokenAndUnAuthenticate', () => {
     it('should remove token from the instance and the localStorage and set isAuthenticated to false', () => {
       // Act
       authenticationService.setToken(SHARED_MOCKS.token);
-      authenticationService.unsetToken();
+      authenticationService.unsetTokenAndUnAuthenticate();
 
       // Assert
       expect(authenticationService.getToken()).toBe('');
@@ -112,6 +140,7 @@ describe('AuthenticationService', () => {
   });
 
   describe('init', () => {
+    // the actual saving to localStorage is tested with setToken tests
     it('should set isAuthenticated and the token if a token is provided', () => {
       // Act
       authenticationService.init(SHARED_MOCKS.token);
@@ -120,21 +149,48 @@ describe('AuthenticationService', () => {
       expect(authenticationService.hasAuthorization()).toBeTruthy();
     });
 
-    it('should set isAuthenticated and the token if a token is NOT provided but exists in localStorage', () => {
+    it('should set isAuthenticated and the token via getStatus if a token is NOT provided but exists in localStorage', () => {
+      const mocks = {
+        getStatusSuccess: new User(),
+      };
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.getStatusSuccess));
+      (<jasmine.Spy>spyOn(authenticationService, 'getStatus')).and.returnValue(of(new User()));
       // Act
       localStorage.setItem(LOCAL_TOKEN_KEY, SHARED_MOCKS.token);
       authenticationService.init();
       // Assert
       expect(authenticationService.getToken()).toBe(SHARED_MOCKS.token);
+      expect(authenticationService.getStatus).toHaveBeenCalled();
       expect(authenticationService.hasAuthorization()).toBeTruthy();
     });
 
     it('should NOT set isAuthenticated and the token if a token is NOT provided and does NOT exist in localStorage', () => {
+      (<jasmine.Spy>spyOn(authenticationService, 'getStatus')).and.returnValue(of(new User()));
+      localStorage.removeItem(LOCAL_TOKEN_KEY);
       // Act
       authenticationService.init();
       // Assert
       expect(authenticationService.getToken()).toEqual('');
       expect(authenticationService.hasAuthorization()).toBeFalsy();
+    });
+    it('should set userId if a token and userId is provided', () => {
+      const user = new User();
+      user.id = 2;
+      // Act
+      authenticationService.init('token', user);
+      // Assert
+      expect(authenticationService.getUserId()).toBe(user.id);
+    });
+    it('should set userId via getStatus if NO token is provided but a local token exists', () => {
+      const user = new User();
+      user.id = 2;
+      localStorage.setItem(LOCAL_TOKEN_KEY, SHARED_MOCKS.token);
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of({}));
+      (<jasmine.Spy>spyOn(authenticationService, 'getStatus')).and.returnValue(of(user));
+      // Act
+      authenticationService.init();
+      // Assert
+      expect(authenticationService.getUserId()).toBe(user.id);
     });
   });
 
@@ -167,7 +223,7 @@ describe('AuthenticationService', () => {
       ).subscribe((response: LoginSuccessResponse) => {
         // Assert
         expect(mockHttpService.post)
-          .toHaveBeenCalledWith(API_ENDPOINTS.login, {...mocks.loginContext, password: SHARED_MOCKS.hashedPassword});
+        .toHaveBeenCalledWith(API_ENDPOINTS.login, {...mocks.loginContext, password: SHARED_MOCKS.hashedPassword});
         done();
       });
     });
@@ -207,25 +263,25 @@ describe('AuthenticationService', () => {
       logoutSuccess: {},
     };
 
-      it('should make API request to the correct API endpoint and have NO body', (done) => {
-        (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.logoutSuccess));
-        // Act
-        authenticationService.logOut().subscribe((response: EmptyResponse) => {
-          // Assert
-          expect(mockHttpService.post).toHaveBeenCalledWith(API_ENDPOINTS.logout, {});
-          done();
-        });
+    it('should make API request to the correct API endpoint and have NO body', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.logoutSuccess));
+      // Act
+      authenticationService.logOut().subscribe((response: EmptyResponse) => {
+        // Assert
+        expect(mockHttpService.post).toHaveBeenCalledWith(API_ENDPOINTS.logout, {});
+        done();
       });
+    });
 
-      it('should have no body on response', (done) => {
-        (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.logoutSuccess));
-        // Act
-        authenticationService.logOut().subscribe((response: EmptyResponse) => {
-          // Assert
-          expect(Object.keys(response).length).toEqual(0);
-          done();
-        });
+    it('should have no body on response', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.logoutSuccess));
+      // Act
+      authenticationService.logOut().subscribe((response: EmptyResponse) => {
+        // Assert
+        expect(Object.keys(response).length).toEqual(0);
+        done();
       });
+    });
 
   });
 
@@ -251,70 +307,45 @@ describe('AuthenticationService', () => {
       },
     };
 
-   it('should make API request to the correct API endpoint and have the correct body on request with hashed password', (done) => {
-     (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupSuccess));
-     // Act
-     authenticationService.signUp(
-       mocks.signupContext
-     ).subscribe((response: SignupSuccessResponse) => {
-       // Assert
-       expect(mockHttpService.post)
-         .toHaveBeenCalledWith(API_ENDPOINTS.signup, {...mocks.signupContext, password: SHARED_MOCKS.hashedPassword});
-       done();
-     });
-   });
-
-   it('if signup is correct, should have the correct body on response with user, token', (done) => {
-     (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupSuccess));
-     // Act
-     authenticationService.signUp(
-       mocks.signupContext
-     ).subscribe((response: SignupSuccessResponse) => {
-       // Assert
-       expect(response.user).toBeDefined();
-       expect(response.token).toBeDefined();
-       done();
-     });
-   });
-
-   it('if signup is NOT correct, should have CodedErrorResponse as a response', (done) => {
-     (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupFailure));
-     // Act
-     authenticationService.signUp(
-       mocks.signupContext
-     ).subscribe((response: CodedErrorResponse) => {
-       // Assert
-       expect(response.code).toBeDefined();
-       expect(response.desc).toBeDefined();
-       expect(response.httpCode).toBeDefined();
-       done();
-     });
-   });
- });
-
-  describe('setWallet', () => {
-    const mocks = {
-      setWalletContext: {
-        mnemonicEncrypted: SHARED_MOCKS.mnemonicEncrypted,
-      },
-      setWalletSuccess: {
-        ok: true
-      },
-    };
-
-    it('should make API request to the correct API endpoint and have the correct body on request', (done) => {
-      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.setWalletSuccess));
+    it('should make API request to the correct API endpoint and have the correct body on request with hashed password', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupSuccess));
       // Act
-      authenticationService.setWallet(
-        mocks.setWalletContext
-      ).subscribe((response: OkResponse) => {
+      authenticationService.signUp(
+        mocks.signupContext
+      ).subscribe((response: SignupSuccessResponse) => {
         // Assert
         expect(mockHttpService.post)
-          .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, SHARED_MOCKS.mnemonicEncrypted);
+        .toHaveBeenCalledWith(API_ENDPOINTS.signup, {...mocks.signupContext, password: SHARED_MOCKS.hashedPassword});
         done();
       });
     });
 
+    it('if signup is correct, should have the correct body on response with user, token', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupSuccess));
+      // Act
+      authenticationService.signUp(
+        mocks.signupContext
+      ).subscribe((response: SignupSuccessResponse) => {
+        // Assert
+        expect(response.user).toBeDefined();
+        expect(response.token).toBeDefined();
+        done();
+      });
+    });
+
+    it('if signup is NOT correct, should have CodedErrorResponse as a response', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.signupFailure));
+      // Act
+      authenticationService.signUp(
+        mocks.signupContext
+      ).subscribe((response: CodedErrorResponse) => {
+        // Assert
+        expect(response.code).toBeDefined();
+        expect(response.desc).toBeDefined();
+        expect(response.httpCode).toBeDefined();
+        done();
+      });
+    });
   });
 
   describe('getEmails', () => {
@@ -331,7 +362,7 @@ describe('AuthenticationService', () => {
       authenticationService.getEmails().subscribe((response: string[]) => {
         // Assert
         expect(mockHttpService.get)
-          .toHaveBeenCalledWith(API_ENDPOINTS.getEmails);
+        .toHaveBeenCalledWith(API_ENDPOINTS.getEmails);
         done();
       });
     });
@@ -362,7 +393,7 @@ describe('AuthenticationService', () => {
       authenticationService.resetPassword(mocks.resetPasswordContext).subscribe((response: EmptyResponse) => {
         // Assert
         expect(mockHttpService.post)
-          .toHaveBeenCalledWith(API_ENDPOINTS.resetPassword, {...mocks.resetPasswordContext});
+        .toHaveBeenCalledWith(API_ENDPOINTS.resetPassword, {...mocks.resetPasswordContext});
         done();
       });
     });
@@ -391,18 +422,18 @@ describe('AuthenticationService', () => {
     };
 
     it('should make API request to the correct API endpoint and'
-    + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', async (done) => {
+      + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', (done) => {
       (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
       // Act
-      authenticationService.changePassword(mocks.changePasswordContext).subscribe(async (response: OkResponse) => {
+      authenticationService.changePassword(mocks.changePasswordContext).subscribe((response: OkResponse) => {
         // Assert
         const newPassword = SHARED_MOCKS.hashedPassword;
         const repeatNewPassword = SHARED_MOCKS.hashedPassword;
         expect(mockHttpService.post)
-          .toHaveBeenCalledWith(
-            API_ENDPOINTS.changePassword,
-            {...mocks.changePasswordContext, newPassword, repeatNewPassword, mnemonicEncrypted: jasmine.any(String)}
-          );
+        .toHaveBeenCalledWith(
+          API_ENDPOINTS.changePassword,
+          {...mocks.changePasswordContext, newPassword, repeatNewPassword, mnemonicEncrypted: jasmine.any(String)}
+        );
         done();
       });
     });
@@ -413,6 +444,42 @@ describe('AuthenticationService', () => {
       authenticationService.resetPassword(mocks.changePasswordContext).subscribe((response: EmptyResponse) => {
         // Assert
         expect(response).toBe(mocks.changePasswordSuccess);
+        done();
+      });
+    });
+
+  });
+
+  describe('checkPassword', () => {
+    const mocks = {
+      checkPasswordContext: {
+        email: 'toto@toto.com',
+        code: 'asdf',
+        newPassword: 'asdf123',
+        repeatNewPassword: 'asdf123',
+        mnemonicEncrypted: 'asdf asdf asdf',
+      },
+      checkPasswordSuccess: {
+        isValid: true
+      },
+    };
+
+    it('should make API request to the correct API endpoint with the correct body', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.checkPasswordSuccess));
+      // Act
+      authenticationService.checkPassword(mocks.checkPasswordContext).subscribe((response: CheckPasswordResponse) => {
+        // Assert
+        expect(mockHttpService.post).toHaveBeenCalledWith(API_ENDPOINTS.checkPassword, mocks.checkPasswordContext);
+        done();
+      });
+    });
+
+    it('should have no body on response', (done) => {
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.checkPasswordSuccess));
+      // Act
+      authenticationService.checkPassword(mocks.checkPasswordContext).subscribe((response: CheckPasswordResponse) => {
+        // Assert
+        expect(response).toEqual(mocks.checkPasswordSuccess);
         done();
       });
     });
@@ -430,7 +497,7 @@ describe('AuthenticationService', () => {
       authenticationService.getStatus().subscribe((response: User) => {
         // Assert
         expect(mockHttpService.get)
-          .toHaveBeenCalledWith(API_ENDPOINTS.status);
+        .toHaveBeenCalledWith(API_ENDPOINTS.status);
         done();
       });
     });

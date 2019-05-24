@@ -1,6 +1,17 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import Wallet from '../models/wallet';
-import { getLocalStorage } from '../helpers/localStorage';
+import {isPlatformBrowser} from '@angular/common';
+import {ISimpleBitcoinWallet, WalletUtils} from '../../shared/lib/WalletUtils';
+import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models/authentication';
+import {Logger} from './logger.service';
+import {AsyncSubject, defer, Observable, Subject} from 'rxjs';
+import {AuthService} from './auth.service';
+import {HttpService} from '..';
+import {LocalStorageToken} from '../helpers/localStorage';
+
+export const API_ENDPOINTS = {
+  setWallet: `/auth/set-wallet`,
+};
 
 export const WALLET_LOCALSTORAGE_KEYS = {
   HD_PATH: 'HC_BCH_HD_PATH',
@@ -10,26 +21,89 @@ export const WALLET_LOCALSTORAGE_KEYS = {
 
 export const WALLET_DEFAULT_HD_PATH = `m/44'/0'/0'/0/0`;
 
+export enum WALLET_SETUP_STATUS {
+  NotInitialized = 'NOT_INITIALIZED',
+  Started = 'STARTED',
+  Initialized = 'INITIALIZED',
+}
+
 @Injectable({providedIn: 'root'})
 export class WalletService {
-  _wallet: Wallet = null;
-  wallet: Wallet = null;
+  public _wallet: Wallet = null;
+  public wallet: Wallet = null;
 
-  constructor() {}
+  public isSettingUpWallet: Subject<WALLET_SETUP_STATUS> = new AsyncSubject<WALLET_SETUP_STATUS>();
 
-  public getWalletMnemonic(): string {
-    return getLocalStorage().getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+  private logger: Logger;
+  readonly isPlatformBrowser: boolean;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(LocalStorageToken) private localStorage: Storage,
+    private http: HttpService,
+    private authenticationService: AuthService,
+  ) {
+    this.logger = new Logger('WalletService');
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+    this.isSettingUpWallet.next(WALLET_SETUP_STATUS.NotInitialized);
   }
 
-  public setWallet(mnemonic: string): void {
-    getLocalStorage().setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, mnemonic);
+  public setupWallet(payload?: LoginSuccessResponse | SignupSuccessResponse): Observable<ISimpleBitcoinWallet> {
+    return defer(
+      async () => {
+        this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Started);
+        let simpleWallet: ISimpleBitcoinWallet;
+        if (payload) {
+          if ((<LoginSuccessResponse>payload).wallet && (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted) {
+            // if there is a payload and a wallet attached
+            // it means it is a login action
+            this.logger.info('Setting up an already existing wallet from payload');
+            simpleWallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+              (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted,
+              payload.password
+            );
+          } else {
+            // if there is a payload but NO wallet attached
+            // it means it is a signup action with only the password
+            this.logger.info('Creating new wallet.');
+            simpleWallet = await WalletUtils.generateNewWallet(payload.password);
+          }
+        } else {
+          if (this.authenticationService.getToken() && this.getWalletMnemonic()) {
+            // if there is no payload
+            // but there is a decrypted mnemonic and a token in the localstorage
+            // it means the app loads wallet from localStorage
+            this.logger.info('Setting up an already existing wallet from local storage');
+            simpleWallet = await WalletUtils.generateWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
+          }
+        }
+        this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Initialized);
+        this.isSettingUpWallet.complete();
+        return simpleWallet;
+      }
+    );
+  }
 
-    return;
+  public getWalletSetupStatus(): Observable<WALLET_SETUP_STATUS> {
+    return this.isSettingUpWallet.asObservable();
+  }
+
+  public getWalletMnemonic(): string | void {
+    if (this.isPlatformBrowser) {
+      return this.localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+    }
+  }
+
+  public setWallet(wallet: ISimpleBitcoinWallet | Wallet): Observable<OkResponse> {
+    if (this.isPlatformBrowser) {
+      this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
+    }
+    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, wallet.mnemonicEncrypted);
   }
 
   public unsetWallet(): void {
-    getLocalStorage().removeItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
-
-    return;
+    if (this.isPlatformBrowser) {
+      this.localStorage.removeItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+    }
   }
 }
