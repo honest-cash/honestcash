@@ -17,6 +17,8 @@ import {
   SignupSuccessResponse
 } from '../models/authentication';
 import {resetLocalStorage} from '../helpers/tests';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../mocks/app.states.mock';
 
 const SHARED_MOCKS = {
   token: '123',
@@ -45,6 +47,7 @@ describe('AuthService', () => {
         {provide: HttpService, useValue: mockHttpService},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
+        provideMockStore({initialState: initialAppStates})
       ]
     });
     authenticationService = TestBed.get(AuthService);

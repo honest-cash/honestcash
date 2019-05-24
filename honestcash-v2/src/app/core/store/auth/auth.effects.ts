@@ -39,8 +39,6 @@ import {AppStates} from '../../../app.states';
 @Injectable()
 export class AuthEffects {
 
-  private _payload: any;
-
   constructor(
     @Inject(WindowToken) private window: Window,
     private store: Store<AppStates>,

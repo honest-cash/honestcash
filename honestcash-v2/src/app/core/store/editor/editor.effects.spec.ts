@@ -1,11 +1,10 @@
-import { TestBed } from '@angular/core/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable } from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {provideMockActions} from '@ngrx/effects/testing';
+import {Observable} from 'rxjs';
 import {EditorEffects} from './editor.effects';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-
-describe('editor.effects', () => {
+xdescribe('editor.effects', () => {
   let effects: EditorEffects;
   let actions: Observable<any>;
 

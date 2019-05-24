@@ -12,6 +12,7 @@ import {AuthorizedGuard} from '../../core/guards/authorized.guard';
 import {PublishModalComponent} from './components/publish-modal/publish-modal.component';
 import {TagInputModule} from 'ngx-chips';
 import {PaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
+import {HeaderComponent} from '../../shared/components/header/header.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    HeaderComponent,
     PublishModalComponent,
     EditorContainerComponent,
     EditorNewComponent,

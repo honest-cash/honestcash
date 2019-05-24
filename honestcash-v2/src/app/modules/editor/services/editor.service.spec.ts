@@ -10,7 +10,7 @@ import {AppRoutingModule} from '../../../app-routing.module';
 import {HttpService} from '../../../core';
 import Post from '../../../core/models/post';
 
-describe('EditorService', () => {
+xdescribe('EditorService', () => {
   let editorService: EditorService;
   let httpServiceMock: HttpService;
 

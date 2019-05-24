@@ -1,21 +1,19 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {Store, StoreModule} from '@ngrx/store';
 import {AppStates, metaReducers, reducers} from '../../../app.states';
-import {State as EditorState,
-  initialState as initialEditorState} from './editor.state';
+import {initialState as initialEditorState, State as EditorState} from './editor.state';
 
-describe('EditorState', () => {
+xdescribe('EditorState', () => {
   let store: Store<AppStates>;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        StoreModule.forRoot(reducers, { metaReducers }),
+        StoreModule.forRoot(reducers, {metaReducers}),
       ],
-      providers: [
-      ]
+      providers: []
     });
     store = TestBed.get(Store);
   });

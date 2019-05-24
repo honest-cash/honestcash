@@ -11,6 +11,8 @@ import {WALLET_LOCALSTORAGE_KEYS} from '../services/wallet.service';
 import {WindowToken} from '../helpers/window';
 import {environmentProvider, EnvironmentToken} from '../helpers/environment';
 import {resetEnvironment, resetLocalStorage} from '../helpers/tests';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../mocks/app.states.mock';
 
 const MockWindow = {
   location: {
@@ -45,6 +47,7 @@ describe('VersionOneGuard', () => {
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
         {provide: EnvironmentToken, useFactory: environmentProvider},
+        provideMockStore({initialState: initialAppStates})
 
       ]
     });

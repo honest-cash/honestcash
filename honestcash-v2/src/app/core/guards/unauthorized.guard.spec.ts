@@ -5,6 +5,15 @@ import {AuthService} from '../services/auth.service';
 import {MockAuthenticationService} from '../mocks/authentication.service.mock';
 import {UnauthorizedGuard} from './unauthorized.guard';
 import {resetLocalStorage} from '../helpers/tests';
+import {WindowToken} from '../helpers/window';
+import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
+import {environmentProvider, EnvironmentToken} from '../helpers/environment';
+
+const MockWindow = {
+  location: {
+    href: '',
+  }
+};
 
 describe('UnauthorizedGuard', () => {
   let authenticationGuard: UnauthorizedGuard;
@@ -22,7 +31,11 @@ describe('UnauthorizedGuard', () => {
       providers: [
         UnauthorizedGuard,
         {provide: AuthService, useClass: MockAuthenticationService},
-        {provide: Router, useValue: mockRouter}
+        {provide: Router, useValue: mockRouter},
+        {provide: WindowToken, useValue: MockWindow},
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
+        {provide: EnvironmentToken, useFactory: environmentProvider},
       ]
     });
   });

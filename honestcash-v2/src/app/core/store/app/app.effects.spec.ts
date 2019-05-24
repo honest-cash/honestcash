@@ -11,6 +11,8 @@ import {WalletService} from '../../services/wallet.service';
 import {AuthService, LOCAL_TOKEN_KEY} from '../../services/auth.service';
 import {localStorageProvider, LocalStorageToken} from '../../helpers/localStorage';
 import {resetLocalStorage} from '../../helpers/tests';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../../mocks/app.states.mock';
 
 describe('app.effects', () => {
   let effects: AppEffects;
@@ -29,6 +31,7 @@ describe('app.effects', () => {
         AuthService,
         WalletService,
         provideMockActions(() => actions),
+        provideMockStore({initialState: initialAppStates})
       ],
     });
 

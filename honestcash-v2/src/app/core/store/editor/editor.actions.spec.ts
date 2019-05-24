@@ -25,7 +25,7 @@ const SHARED_MOCKS = {
   }
 };
 
-describe('editor.effects', () => {
+xdescribe('editor.effects', () => {
   describe('EditorLoad', () => {
     it('should create an action when no payload is provided', () => {
       const action = new EditorLoad();

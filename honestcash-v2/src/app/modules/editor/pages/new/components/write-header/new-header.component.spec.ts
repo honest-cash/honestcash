@@ -1,6 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {NewHeaderComponent} from './new-header.component';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../../../../../../core/mocks/app.states.mock';
 
 describe('HeaderComponent', () => {
   let component: NewHeaderComponent;
@@ -10,7 +13,12 @@ describe('HeaderComponent', () => {
     TestBed.configureTestingModule({
       imports: [],
       declarations: [NewHeaderComponent],
-      providers: []
+      providers: [
+        provideMockStore({initialState: initialAppStates})
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA,
+      ]
     }).compileComponents();
   }));
 

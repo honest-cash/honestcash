@@ -1,8 +1,8 @@
-import { reducer } from './editor.reducer';
+import {reducer} from './editor.reducer';
 import {EditorLoad, EditorUnload} from './editor.actions';
 import Post from '../../models/post';
 
-describe('editor.reducer', () => {
+xdescribe('editor.reducer', () => {
   describe('EditorLoad', () => {
     it('should load the story provided in payload', () => {
       const payload = {story: new Post()};

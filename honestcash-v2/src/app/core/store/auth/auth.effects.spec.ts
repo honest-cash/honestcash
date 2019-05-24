@@ -19,6 +19,13 @@ import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../../models/authentication';
 import {resetLocalStorage} from '../../helpers/tests';
+import {WindowToken} from '../../helpers/window';
+
+const MockWindow = {
+  location: {
+    href: '',
+  }
+};
 
 const SHARED_MOCKS = {
   username: 'toto',
@@ -62,6 +69,7 @@ describe('auth.effects', () => {
             }
           }
         },
+        {provide: WindowToken, useValue: MockWindow},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
         AuthEffects,

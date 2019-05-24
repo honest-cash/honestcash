@@ -11,6 +11,8 @@ import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
 import User from '../models/user';
 import {ISimpleBitcoinWallet} from '../../shared/lib/WalletUtils';
 import {LOCAL_TOKEN_KEY} from './auth.service';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../mocks/app.states.mock';
 
 const SHARED_MOCKS = {
   mnemonic: 'test1 test2 test3 test4 test5 test6 test7 test8',
@@ -36,6 +38,7 @@ describe('WalletService', () => {
         {provide: HttpService, useValue: mockHttpService},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
+        provideMockStore({initialState: initialAppStates})
       ]
     });
     walletService = TestBed.get(WalletService);
