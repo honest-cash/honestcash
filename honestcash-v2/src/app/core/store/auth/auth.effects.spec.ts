@@ -1,25 +1,30 @@
 import {TestBed} from '@angular/core/testing';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {cold, hot} from 'jasmine-marbles';
-import {Observable, of, throwError} from 'rxjs';
+import {forkJoin, Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
+import {LogInSuccess, RootRedirect} from './auth.actions';
 import {AuthService} from '../../services/auth.service';
 import {localStorageProvider, LocalStorageToken} from '../../helpers/localStorage';
 import {AuthEffects} from './auth.effects';
 import {UserService} from '../../services/user.service';
-import {StoreModule} from '@ngrx/store';
-import {metaReducers, reducers} from '../../../app.states';
+import {Store, StoreModule} from '@ngrx/store';
+import {AppStates, metaReducers, reducers} from '../../../app.states';
 import User from '../../models/user';
 import Wallet from '../../models/wallet';
 import {mock} from '../../../../../mock';
 import {Router} from '@angular/router';
-import {UserCleanup, UserSetup} from '../user/user.actions';
-import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
+import {UserActionTypes, UserCleanup, UserLoaded, UserSetup} from '../user/user.actions';
+import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup} from '../wallet/wallet.actions';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../../models/authentication';
 import {resetLocalStorage} from '../../helpers/tests';
 import {WindowToken} from '../../helpers/window';
+import {ofType} from '@ngrx/effects';
+import {first} from 'rxjs/operators';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../../mocks/app.states.mock';
 
 const MockWindow = {
   location: {
@@ -48,6 +53,7 @@ describe('auth.effects', () => {
   let actions: Observable<any>;
   let mockAuthenticationService: AuthService;
   let router: Router;
+  let store: Store<AppStates>;
 
   beforeEach(() => {
     mockAuthenticationService = mock(AuthService);
@@ -76,12 +82,15 @@ describe('auth.effects', () => {
         {provide: AuthService, useValue: mockAuthenticationService},
         UserService,
         provideMockActions(() => actions),
+        provideMockStore({initialState: initialAppStates})
       ],
     });
     router = TestBed.get(Router);
     effects = TestBed.get(AuthEffects);
     mockAuthenticationService = TestBed.get(AuthService);
+    store = TestBed.get(Store);
 
+    spyOn(store, 'dispatch').and.callThrough();
     spyOn(router, 'navigate').and.callThrough();
     spyOn(router, 'navigateByUrl').and.callThrough();
   });
@@ -152,14 +161,31 @@ describe('auth.effects', () => {
         expect(effects.LogInSuccess).toBeObservable(expected);
 
       });
-      it('should correctly redirect to root', (done) => {
+      it('should correctly redirect to root after UserLoaded and WalletGenerated are completed', () => {
+        (<jasmine.Spy>mockAuthenticationService.getStatus).and.returnValue(of(new User()));
+        actions = cold('a(bc)', {
+          a: new LogInSuccess(mocks.logInSuccess),
+          b: new UserLoaded({user: new User()}),
+          c: new WalletGenerated({wallet: new Wallet()}),
+        });
 
-        const action = new AuthActions.LogInSuccess(mocks.logInSuccess);
-        actions = of(action);
+        const firstActionSuccess$ = actions.pipe(
+          ofType(UserActionTypes.USER_LOADED),
+          first(),
+        );
+
+        const secondActionsSuccess$ = actions.pipe(
+          ofType(WalletActionTypes.WALLET_GENERATED),
+          first(),
+        );
 
         effects.LogInSuccess.subscribe(() => {
-          expect(router.navigateByUrl).toHaveBeenCalledWith('/');
-          done();
+          console.log('SUBSCRIBE');
+          forkJoin(firstActionSuccess$, secondActionsSuccess$)
+          .pipe(first())
+          .subscribe(() => {
+            expect(store.dispatch).toHaveBeenCalledWith(new RootRedirect());
+          });
         });
       });
     });
@@ -325,28 +351,16 @@ describe('auth.effects', () => {
 
   describe('LogOut Effects', () => {
     describe('LogOut', () => {
-      it('should correctly return return UserCleanup and WalletCleanup', () => {
+      it('should correctly return return UserCleanup, WalletCleanup and RootRedirect', () => {
         (<jasmine.Spy>mockAuthenticationService.logOut).and.returnValue(of({}));
         const action = new AuthActions.LogOut();
         actions = hot('-a', {a: action});
-        const expected = cold('-(bc)', {
+        const expected = cold('-(bcd)', {
           b: new UserCleanup(),
           c: new WalletCleanup(),
+          d: new RootRedirect(),
         });
         expect(effects.LogOut).toBeObservable(expected);
-      });
-      it('should correctly call logOut in authenticationService and redirect to root', () => {
-        (<jasmine.Spy>mockAuthenticationService.logOut).and.returnValue(of({}));
-        const action = new AuthActions.LogOut();
-        actions = hot('-a', {a: action});
-        const expected = cold('-(bc)', {
-          b: new UserCleanup(),
-          c: new WalletCleanup(),
-        });
-
-        expect(effects.LogOut).toBeObservable(expected);
-        expect(mockAuthenticationService.logOut).toHaveBeenCalled();
-        expect(router.navigateByUrl).toHaveBeenCalledWith('/');
       });
     });
   });

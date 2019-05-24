@@ -80,7 +80,7 @@ describe('user.effects', () => {
       actions = cold('a', {a: new UserActions.UserSetup(payload)});
 
       effects.UserSetup.subscribe(() => {
-        expect(mockAuthService.init).toHaveBeenCalledWith(payload.token, payload.user.id);
+        expect(mockAuthService.init).toHaveBeenCalledWith(payload.token, payload.user);
       });
     });
   });

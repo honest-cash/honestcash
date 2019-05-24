@@ -1,4 +1,4 @@
-import {inject, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {Router, RouterStateSnapshot} from '@angular/router';
 
 import {AuthService} from '../services/auth.service';
@@ -17,9 +17,10 @@ const MockWindow = {
 
 describe('UnauthorizedGuard', () => {
   let authenticationGuard: UnauthorizedGuard;
-  let authenticationService: MockAuthenticationService;
+  let authService: MockAuthenticationService;
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
+  let guardWindow: Window;
 
   beforeEach(() => {
     mockRouter = {
@@ -38,18 +39,14 @@ describe('UnauthorizedGuard', () => {
         {provide: EnvironmentToken, useFactory: environmentProvider},
       ]
     });
+    authenticationGuard = TestBed.get(UnauthorizedGuard);
+    authService = TestBed.get(AuthService);
+    guardWindow = TestBed.get(WindowToken);
   });
-
-  beforeEach(inject(
-    [UnauthorizedGuard, AuthService],
-    (_authenticationGuard: UnauthorizedGuard, _authenticationService: MockAuthenticationService) => {
-      authenticationGuard = _authenticationGuard;
-      authenticationService = _authenticationService;
-    }
-  ));
 
   afterEach(() => {
     resetLocalStorage();
+    MockWindow.location.href = '';
   });
 
   it('should have a canActivate method', () => {
@@ -58,19 +55,36 @@ describe('UnauthorizedGuard', () => {
 
   describe('canActivate', () => {
     it('should return true if user is not authenticated', () => {
-      authenticationService.isAuthenticated = false;
+      authService.isAuthenticated = false;
       expect(authenticationGuard.canActivate()).toBe(true);
     });
 
-    it('should return false and redirect to feed if user is already authenticated', () => {
+    it('should return false and redirect to root if user is already authenticated and the environment is production', () => {
       // Arrange
-      authenticationService.isAuthenticated = true;
+      authService.isAuthenticated = true;
+
+      const environment = environmentProvider();
+      environment.production = true;
 
       // Act
       const result = authenticationGuard.canActivate();
 
       // Assert
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/feed');
+      expect(guardWindow.location.href).toEqual('/');
+      expect(result).toBe(false);
+    });
+
+    it('should return false and redirect to localhost root if user is already authenticated and the environment is NOT production', () => {
+      // Arrange
+      authService.isAuthenticated = true;
+      const environment = environmentProvider();
+      environment.production = false;
+
+      // Act
+      const result = authenticationGuard.canActivate();
+
+      // Assert
+      expect(guardWindow.location.href).toEqual('http://localhost:3010/');
       expect(result).toBe(false);
     });
   });

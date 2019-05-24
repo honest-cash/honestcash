@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 import {cold, hot} from 'jasmine-marbles';
 import {WalletEffects} from './wallet.effects';
 import {WalletService} from '../../services/wallet.service';
-import {WalletCleanup, WalletGenerated, WalletSetup} from './wallet.actions';
+import {WalletCleanup, WalletGenerated, WalletSetup, WalletSetupFailed} from './wallet.actions';
 import Wallet from '../../models/wallet';
 import {mock} from '../../../../../mock';
 import {LoginSuccessResponse} from '../../models/authentication';
@@ -117,16 +117,9 @@ describe('wallet.effects', () => {
     it('should NOT call setWallet if payload is NOT provided in the action', () => {
       (<jasmine.Spy>mockWalletService.setupWallet).and.returnValue(of(undefined));
       actions = hot('a|', {a: new WalletSetup()});
-      const expected = cold('b|', {b: new WalletCleanup()});
+      const expected = cold('b|', {b: new WalletSetupFailed()});
       expect(effects.WalletSetup).toBeObservable(expected);
       expect(mockWalletService.setWallet).not.toHaveBeenCalled();
-    });
-
-    it('should correctly return WalletCleanup action when payload is NOT provided in the action', () => {
-      (<jasmine.Spy>mockWalletService.setupWallet).and.returnValue(of(undefined));
-      actions = hot('a|', {a: new WalletSetup()});
-      const expected = cold('b|', {b: new WalletCleanup()});
-      expect(effects.WalletSetup).toBeObservable(expected);
     });
 
   });

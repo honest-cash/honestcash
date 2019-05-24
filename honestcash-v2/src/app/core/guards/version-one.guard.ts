@@ -39,7 +39,7 @@ export class VersionOneGuard implements CanActivate {
     return true;
   }
 
-  canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+  canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.walletService.getWalletSetupStatus()
     .pipe(
       map((status: WALLET_SETUP_STATUS) => {

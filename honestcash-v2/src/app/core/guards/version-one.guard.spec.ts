@@ -7,7 +7,7 @@ import {localStorageProvider, LocalStorageToken} from '../helpers/localStorage';
 import {HttpService} from '..';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {mock} from '../../../../mock';
-import {WALLET_LOCALSTORAGE_KEYS} from '../services/wallet.service';
+import {WALLET_LOCALSTORAGE_KEYS, WALLET_SETUP_STATUS, WalletService} from '../services/wallet.service';
 import {WindowToken} from '../helpers/window';
 import {environmentProvider, EnvironmentToken} from '../helpers/environment';
 import {resetEnvironment, resetLocalStorage} from '../helpers/tests';
@@ -22,6 +22,7 @@ const MockWindow = {
 
 describe('VersionOneGuard', () => {
   let versionOneGuard: VersionOneGuard;
+  let walletService: WalletService;
   let guardWindow: Window;
   let mockHttpService: HttpService;
   let mockRouter: any;
@@ -40,6 +41,7 @@ describe('VersionOneGuard', () => {
       ],
       providers: [
         AuthService,
+        WalletService,
         VersionOneGuard,
         {provide: HttpService, useValue: mockHttpService},
         {provide: Router, useValue: mockRouter},
@@ -53,6 +55,7 @@ describe('VersionOneGuard', () => {
     });
 
     versionOneGuard = TestBed.get(VersionOneGuard);
+    walletService = TestBed.get(WalletService);
     guardWindow = TestBed.get(WindowToken);
   });
 
@@ -60,11 +63,12 @@ describe('VersionOneGuard', () => {
     resetLocalStorage();
   });
 
-  it('should have a canActivate method', () => {
-    expect(typeof versionOneGuard.canActivate).toBe('function');
-  });
-
   describe('canActivate', () => {
+
+    it('should have a canActivate method', () => {
+      expect(typeof versionOneGuard.canActivate).toBe('function');
+    });
+
     it('should redirect window.location to root if user is authenticated and environment is production', () => {
       localStorage.setItem(LOCAL_TOKEN_KEY, 'asdf');
       localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, 'mnemonic');
@@ -86,6 +90,35 @@ describe('VersionOneGuard', () => {
     it('should NOT redirect but let the user pass to the page', () => {
       expect(versionOneGuard.canActivate(null, mockSnapshot)).toBeTruthy();
       resetEnvironment();
+    });
+  });
+
+  describe('canDeactivate', () => {
+
+    it('should have a canDeactivate method', () => {
+      expect(typeof versionOneGuard.canDeactivate).toBe('function');
+    });
+
+    it('should let user leave the page if wallet has been initialized', () => {
+      walletService.isSettingUpWallet.next(WALLET_SETUP_STATUS.NotInitialized);
+      walletService.isSettingUpWallet.complete();
+
+      walletService.isSettingUpWallet.asObservable().subscribe((response) => {
+        versionOneGuard.canDeactivate(null, mockSnapshot).subscribe((result) => {
+          expect(result).toBeFalsy();
+        });
+      });
+    });
+
+    it('should NOT let user leave the page if wallet has NOT yet been initialized (waits for it)', () => {
+      walletService.isSettingUpWallet.next(WALLET_SETUP_STATUS.Initialized);
+      walletService.isSettingUpWallet.complete();
+
+      walletService.isSettingUpWallet.asObservable().subscribe((response) => {
+        versionOneGuard.canDeactivate(null, mockSnapshot).subscribe((result) => {
+          expect(result).toBeTruthy();
+        });
+      });
     });
   });
 });
