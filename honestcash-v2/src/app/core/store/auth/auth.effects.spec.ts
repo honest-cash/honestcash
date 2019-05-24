@@ -376,4 +376,16 @@ describe('auth.effects', () => {
       });
     });
   });
+
+  describe('RootRedirect Effects', () => {
+    describe('RootRedirect', () => {
+      it('should correctly call getStatus on authenticationService', () => {
+        actions = cold('a', {a: new AuthActions.RootRedirect()});
+
+        effects.RootRedirect.subscribe(() => {
+          expect(router.navigateByUrl).toHaveBeenCalledWith('/');
+        });
+      });
+    });
+  });
 });

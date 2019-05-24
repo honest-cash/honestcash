@@ -15,7 +15,7 @@ import {UserEffects} from './core/store/user/user.effects';
 import {metaReducers, reducers} from './app.states';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
-import {TokenInterceptor} from './core/http/token.interceptor';
+import {HeaderInterceptor} from './core/http/header.interceptor';
 import {AppEffects} from './core/store/app/app.effects';
 import {FontAwesomeModule} from './core/modules/font-awesome.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -43,7 +43,7 @@ import {AppSharedModule} from './app.shared.module';
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: HeaderInterceptor,
       multi: true
     }
   ],

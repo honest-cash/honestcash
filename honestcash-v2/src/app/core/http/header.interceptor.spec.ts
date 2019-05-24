@@ -1,8 +1,8 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {HTTP_INTERCEPTORS, HttpClient} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpHeaders} from '@angular/common/http';
 
-import {TokenInterceptor} from './token.interceptor';
+import {ContentTypeFormDataHeader, HeaderInterceptor} from './header.interceptor';
 import {MockAuthenticationService} from '../mocks/authentication.service.mock';
 import {AuthService} from '../services/auth.service';
 
@@ -19,7 +19,7 @@ describe('TokenInterceptor', () => {
         {provide: AuthService, useClass: MockAuthenticationService},
         {
           provide: HTTP_INTERCEPTORS,
-          useClass: TokenInterceptor,
+          useClass: HeaderInterceptor,
           multi: true
         }
       ]
@@ -57,5 +57,18 @@ describe('TokenInterceptor', () => {
     // Assert
     const httpRequest = httpMock.expectOne({url: 'http://test.com/toto'});
     expect(httpRequest.request.headers.has('x-auth-token')).toEqual(false);
+  });
+
+  it('should delete Content-Type when ContentTypeFormDataHeader header is present to make upload work', () => {
+    // Arrange
+    const httpOptions = {
+      headers: new HttpHeaders().set(ContentTypeFormDataHeader, '')
+    };
+    // Act
+    http.get('http://test.com/toto', httpOptions).subscribe();
+
+    // Assert
+    const httpRequest = httpMock.expectOne({url: 'http://test.com/toto'});
+    expect(httpRequest.request.headers.has('Content-Type')).toEqual(false);
   });
 });

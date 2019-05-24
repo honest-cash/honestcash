@@ -8,6 +8,7 @@ import {
   ResetPasswordRequestFailure,
   ResetPasswordRequestSuccess,
   ResetPasswordSuccess,
+  RootRedirect,
   SignUp,
   SignUpFailure,
   SignUpSuccess
@@ -160,6 +161,14 @@ describe('auth.reducer', () => {
       const newState = reducer(SHARED_MOCKS.fakeState, new LogOut());
 
       expect(newState).toEqual(initialAuthState);
+    });
+  });
+
+  describe('RootRedirect Actions', () => {
+    it('RootRedirect should keep the state', () => {
+      const newState = reducer(SHARED_MOCKS.fakeState, new RootRedirect());
+
+      expect(newState).toEqual(SHARED_MOCKS.fakeState);
     });
   });
 });

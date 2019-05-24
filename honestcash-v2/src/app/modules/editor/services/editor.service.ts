@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import Post from '../../../core/models/post';
 import {HttpService} from '../../../core';
@@ -7,7 +7,7 @@ import {EmptyResponse} from '../../../core/models/authentication';
 import Hashtag from '../../../core/models/hashtag';
 import {delay} from 'rxjs/operators';
 import {HttpHeaders} from '@angular/common/http';
-import {ContentTypeFormDataHeader} from '../../../core/http/token.interceptor';
+import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 
 export interface DraftContext {
   parentPostId?: number;
@@ -48,7 +48,8 @@ export enum STORY_PROPERTIES {
   providedIn: 'root'
 })
 export class EditorService {
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService) {
+  }
 
   getPost(id: number): Observable<Post> {
     const post = new Post();

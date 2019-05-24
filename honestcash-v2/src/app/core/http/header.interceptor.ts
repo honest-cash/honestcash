@@ -6,7 +6,7 @@ import {AuthService} from '../services/auth.service';
 export const ContentTypeFormDataHeader = 'X-Multipart-Formdata';
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class HeaderInterceptor implements HttpInterceptor {
   private authService: AuthService;
 
   constructor(private injector: Injector) {
@@ -28,6 +28,7 @@ export class TokenInterceptor implements HttpInterceptor {
       // no file is attached
       // since we pass a new FormData object as body to the request
       // the HttpClient is smart enough to figure it out
+      /* istanbul ignore next: functionality is tested */
       delete cloneOptions.setHeaders['Content-Type'];
     }
     if (token) {
