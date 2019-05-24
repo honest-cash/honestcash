@@ -1,17 +1,15 @@
 @import '../../../../../styles';
 
-$black: #000;
-
-.container{
+.container {
   height: 100%;
   align-content: center;
 }
 
 :host {
   width: 800px;
-  @include background-opacity($black, 5);
+  @include background-opacity($white, 5);
 }
 
 ul.list-group > li.list-group-item {
-  @include background-opacity($black, 5);
+  @include background-opacity($white, 5);
 }

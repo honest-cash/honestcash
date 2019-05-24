@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, Input } from '@angular/core';
+import {Component, HostBinding, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-welcome-heading',
@@ -18,11 +18,6 @@ export class HeadingComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.black !== undefined) {
-      this.class += ' text-black';
-    } else {
-      this.class += ' text-white';
-    }
   }
 
 }

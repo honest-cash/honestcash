@@ -3,7 +3,6 @@ import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
 import Image from '@editorjs/image';
-import SimpleImage from '@editorjs/simple-image';
 import List from '@editorjs/list';
 import Embed from '@editorjs/embed';
 import Quote from '@editorjs/quote';
@@ -16,14 +15,15 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {
   EditorChange,
-  EditorLoad, EditorStoryPropertySave,
+  EditorLoad,
+  EditorStoryPropertySave,
   EditorStoryPublish,
   EditorStorySave,
   EditorStorySaveAndPublish,
   EditorUnload
 } from '../../../../core/store/editor/editor.actions';
 import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
-import {interval, Observable, of, Subscription, timer} from 'rxjs';
+import {interval, Observable, Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PublishModalComponent} from '../../components/publish-modal/publish-modal.component';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
@@ -118,6 +118,7 @@ export class EditorNewComponent implements OnInit, OnDestroy {
   private hasEditorInitialized = false;
   private autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
   private autoSaveInterval$: Subscription;
+
   constructor(
     private store: Store<AppStates>,
     private modalService: NgbModal,
@@ -141,42 +142,42 @@ export class EditorNewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.editorState$ = this.editorStateObservable
-      .subscribe((editorState: EditorState) => {
-        this.saveStatus = editorState.status;
-        this.story = editorState.story;
+    .subscribe((editorState: EditorState) => {
+      this.saveStatus = editorState.status;
+      this.story = editorState.story;
 
-        if (editorState.isLoaded && !this.hasEditorInitialized) {
-          this.editor.blocks.clear();
-          this.editor.blocks.render({blocks: <any[]>this.story.body});
-          this.hasEditorInitialized = true;
-        }
+      if (editorState.isLoaded && !this.hasEditorInitialized) {
+        this.editor.blocks.clear();
+        this.editor.blocks.render({blocks: <any[]>this.story.body});
+        this.hasEditorInitialized = true;
+      }
 
-        if (this.saveStatus === EDITOR_SAVE_STATUS.Published) {
-          this.modalService.dismissAll();
-        }
-      });
+      if (this.saveStatus === EDITOR_SAVE_STATUS.Published) {
+        this.modalService.dismissAll();
+      }
+    });
   }
 
   onEditorChange() {
     this.editor.saver.save()
-      .then((outputData) => {
-        this.story.body = outputData.blocks;
-        this.store.dispatch(new EditorChange(this.story));
+    .then((outputData) => {
+      this.story.body = outputData.blocks;
+      this.store.dispatch(new EditorChange(this.story));
 
-        if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
-          this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
-            this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
-          });
-        }
-      });
+      if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+        this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
+          this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
+        });
+      }
+    });
   }
 
   saveDraftStory() {
     this.editor.saver.save()
-      .then((outputData) => {
-        this.story.body = outputData.blocks;
-        this.store.dispatch(new EditorStorySave(this.story));
-      });
+    .then((outputData) => {
+      this.story.body = outputData.blocks;
+      this.store.dispatch(new EditorStorySave(this.story));
+    });
   }
 
   publishStory() {

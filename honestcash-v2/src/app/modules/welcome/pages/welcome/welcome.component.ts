@@ -1,9 +1,9 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
 
-import { AppStates, selectAuthorizationState } from '../../../../app.states';
-import { LogOut } from '../../../../core/store/auth/auth.actions';
+import {AppStates, selectAuthorizationState} from '../../../../app.states';
+import {LogOut} from '../../../../core/store/auth/auth.actions';
 
 @Component({
   selector: 'app-welcome-pages-welcome',
@@ -11,7 +11,7 @@ import { LogOut } from '../../../../core/store/auth/auth.actions';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  @HostBinding('class') class = 'card mb-auto mt-auto';
+  @HostBinding('class') class = 'card mb-auto mt-auto text-black';
 
   getState: Observable<any>;
   isAuthenticated: false;
