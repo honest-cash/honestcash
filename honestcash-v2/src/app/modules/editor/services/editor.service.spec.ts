@@ -1,18 +1,17 @@
-import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {mock} from '../../../../../mock';
 import {of} from 'rxjs';
-import {API_ENDPOINTS} from './editor.service';
+import {API_ENDPOINTS, EditorService, STORY_PROPERTIES} from './editor.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../../app.states';
 import {AppRoutingModule} from '../../../app-routing.module';
-import {EditorService} from './editor.service';
 import {HttpService} from '../../../core';
 import Post from '../../../core/models/post';
 
 describe('EditorService', () => {
-  let postService: EditorService;
+  let editorService: EditorService;
   let httpServiceMock: HttpService;
 
   beforeEach(() => {
@@ -21,14 +20,14 @@ describe('EditorService', () => {
       imports: [
         HttpClientTestingModule,
         AppRoutingModule,
-        StoreModule.forRoot(reducers, { metaReducers}),
+        StoreModule.forRoot(reducers, {metaReducers}),
       ],
       providers: [
         EditorService,
         {provide: HttpService, useValue: httpServiceMock}
       ]
     });
-    postService = TestBed.get(EditorService);
+    editorService = TestBed.get(EditorService);
   });
 
   afterEach(() => {
@@ -37,7 +36,7 @@ describe('EditorService', () => {
 
   describe('instance', () => {
     it('should have been initialized', () => {
-      expect(postService).toBeDefined();
+      expect(editorService).toBeDefined();
     });
   });
 
@@ -49,10 +48,10 @@ describe('EditorService', () => {
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      postService.getPost(mocks.id).subscribe((response: Post) => {
+      editorService.getPost(mocks.id).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.get)
-          .toHaveBeenCalledWith(API_ENDPOINTS.getPost(mocks.id));
+        .toHaveBeenCalledWith(API_ENDPOINTS.getPost(mocks.id));
         done();
       });
 
@@ -65,7 +64,7 @@ describe('EditorService', () => {
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      postService.getPost(mocks.id).subscribe((response: Post) => {
+      editorService.getPost(mocks.id).subscribe((response: Post) => {
         // Assert
         expect(response).toBe(mocks.getPostSuccess);
         done();
@@ -86,10 +85,10 @@ describe('EditorService', () => {
 
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
       // Act
-      postService.loadPostDraft({}).subscribe((response: Post) => {
+      editorService.loadPostDraft({}).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.get)
-          .toHaveBeenCalledWith(API_ENDPOINTS.draft({}));
+        .toHaveBeenCalledWith(API_ENDPOINTS.draft({}));
         done();
       });
 
@@ -99,10 +98,10 @@ describe('EditorService', () => {
 
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
       // Act
-      postService.loadPostDraft({parentPostId: mocks.context.parentPostId}).subscribe((response: Post) => {
+      editorService.loadPostDraft({parentPostId: mocks.context.parentPostId}).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.get)
-          .toHaveBeenCalledWith(API_ENDPOINTS.draft({parentPostId: mocks.context.parentPostId}));
+        .toHaveBeenCalledWith(API_ENDPOINTS.draft({parentPostId: mocks.context.parentPostId}));
         done();
       });
 
@@ -112,10 +111,10 @@ describe('EditorService', () => {
 
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
       // Act
-      postService.loadPostDraft(mocks.context).subscribe((response: Post) => {
+      editorService.loadPostDraft(mocks.context).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.get)
-          .toHaveBeenCalledWith(API_ENDPOINTS.draft(mocks.context));
+        .toHaveBeenCalledWith(API_ENDPOINTS.draft(mocks.context));
         done();
       });
 
@@ -124,7 +123,7 @@ describe('EditorService', () => {
     it('should get a Post as a response NO matter the context', (done) => {
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
       // Act
-      postService.loadPostDraft({}).subscribe((response: Post) => {
+      editorService.loadPostDraft({}).subscribe((response: Post) => {
         // Assert
         expect(response).toBe(mocks.loadPostDraftSuccess);
         done();
@@ -141,10 +140,10 @@ describe('EditorService', () => {
 
       (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loadNewPostDraftSuccess));
       // Act
-      postService.loadNewPostDraft().subscribe((response: Post) => {
+      editorService.loadNewPostDraft().subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.post)
-          .toHaveBeenCalledWith(API_ENDPOINTS.newDraft(), {});
+        .toHaveBeenCalledWith(API_ENDPOINTS.newDraft(), {});
         done();
       });
 
@@ -153,7 +152,7 @@ describe('EditorService', () => {
     it('should get a Post as a response NO matter the context', (done) => {
       (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loadNewPostDraftSuccess));
       // Act
-      postService.loadNewPostDraft().subscribe((response: Post) => {
+      editorService.loadNewPostDraft().subscribe((response: Post) => {
         // Assert
         expect(response).toBe(mocks.loadNewPostDraftSuccess);
         done();
@@ -173,10 +172,10 @@ describe('EditorService', () => {
 
       (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.savePostPropertySuccess));
       // Act
-      postService.savePostProperty(mocks.context.post, 'title').subscribe((response: Post) => {
+      editorService.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.put)
-          .toHaveBeenCalledWith(API_ENDPOINTS.savePostProperty(mocks.context.post, 'title'), mocks.context.post);
+        .toHaveBeenCalledWith(API_ENDPOINTS.savePostProperty(mocks.context.post, 'title'), mocks.context.post);
         done();
       });
 
@@ -185,41 +184,9 @@ describe('EditorService', () => {
     it('should get a Post as a response', (done) => {
       (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.savePostPropertySuccess));
       // Act
-      postService.savePostProperty(mocks.context.post, 'title').subscribe((response: Post) => {
+      editorService.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title).subscribe((response: Post) => {
         // Assert
         expect(response).toBe(mocks.savePostPropertySuccess);
-        done();
-      });
-
-    });
-  });
-
-  describe('saveDraft', () => {
-    const mocks = {
-      context: {
-        post: new Post(),
-      },
-      saveDraftSuccess: new Post(),
-    };
-    it('should make API request to the correct API endpoint with Post.body as request.body', (done) => {
-      mocks.context.post.body = `Test Header`;
-      (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.saveDraftSuccess));
-      // Act
-      postService.saveDraft(mocks.context.post).subscribe((response: Post) => {
-        // Assert
-        expect(httpServiceMock.put)
-          .toHaveBeenCalledWith(API_ENDPOINTS.saveDraft(mocks.context.post), { body: mocks.context.post.body });
-        done();
-      });
-
-    });
-
-    it('should get a Post as a response', (done) => {
-      (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.saveDraftSuccess));
-      // Act
-      postService.saveDraft(mocks.context.post).subscribe((response: Post) => {
-        // Assert
-        expect(response).toBe(mocks.saveDraftSuccess);
         done();
       });
 
@@ -236,10 +203,10 @@ describe('EditorService', () => {
     it('should make API request to the correct API endpoint with Post as request body', (done) => {
       (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.publishPostSuccess));
       // Act
-      postService.publishPost(mocks.context.post).subscribe((response: Post) => {
+      editorService.publishPost(mocks.context.post).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.put)
-          .toHaveBeenCalledWith(API_ENDPOINTS.publishPost(mocks.context.post), mocks.context.post);
+        .toHaveBeenCalledWith(API_ENDPOINTS.publishPost(mocks.context.post), mocks.context.post);
         done();
       });
 
@@ -248,7 +215,7 @@ describe('EditorService', () => {
     it('should get a Post as a response', (done) => {
       (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.publishPostSuccess));
       // Act
-      postService.publishPost(mocks.context.post).subscribe((response: Post) => {
+      editorService.publishPost(mocks.context.post).subscribe((response: Post) => {
         // Assert
         expect(response).toBe(mocks.publishPostSuccess);
         done();
@@ -256,6 +223,5 @@ describe('EditorService', () => {
 
     });
   });
-
 
 });

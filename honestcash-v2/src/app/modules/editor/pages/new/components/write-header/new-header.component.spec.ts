@@ -1,21 +1,21 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { WriteHeaderComponent } from './header.component';
+import {NewHeaderComponent} from './new-header.component';
 
 describe('HeaderComponent', () => {
-  let component: WriteHeaderComponent;
-  let fixture: ComponentFixture<WriteHeaderComponent>;
+  let component: NewHeaderComponent;
+  let fixture: ComponentFixture<NewHeaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [WriteHeaderComponent],
+      declarations: [NewHeaderComponent],
       providers: []
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WriteHeaderComponent);
+    fixture = TestBed.createComponent(NewHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -9,7 +9,6 @@ import {
 import Post from '../../models/post';
 import User from '../../models/user';
 import Wallet from '../../models/wallet';
-import {AuthActionTypes, LogInFailure, LogInSuccess} from '../auth/auth.actions';
 
 const SHARED_MOCKS = {
   username: 'toto',
@@ -51,15 +50,13 @@ describe('editor.effects', () => {
       expect({...action}).toEqual({type: EditorActionTypes.EDITOR_STORY_SAVE, payload});
     });
     it('EditorStorySaveSuccess should create an action', () => {
-      const payload = {
-        story: new Post(),
-      };
+      const payload = new Post();
       const action = new EditorStorySaveSuccess(payload);
-      expect({...action}).toEqual({ type: EditorActionTypes.EDITOR_STORY_SAVE_SUCCESS, payload });
+      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_STORY_SAVE_SUCCESS, payload});
     });
     it('EditorStorySaveFailure should create an action', () => {
       const action = new EditorStorySaveFailure(SHARED_MOCKS.codedErrorResponse);
-      expect({...action}).toEqual({ type: EditorActionTypes.EDITOR_STORY_SAVE_FAILURE, payload: SHARED_MOCKS.codedErrorResponse });
+      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_STORY_SAVE_FAILURE, payload: SHARED_MOCKS.codedErrorResponse});
     });
   });
 });

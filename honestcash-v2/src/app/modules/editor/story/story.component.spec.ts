@@ -1,20 +1,17 @@
-import {
-  TestBed,
-  async,
-} from '@angular/core/testing';
-import {AboutComponent} from './story.component';
+import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
+import {StoryComponent} from './story.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('AboutComponent', () => {
-  let component: AboutComponent;
+describe('StoryComponent', () => {
+  let component: StoryComponent;
+  let fixture: ComponentFixture<StoryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AboutComponent
+        StoryComponent
       ],
-      imports: [
-      ],
+      imports: [],
       schemas: [
         NO_ERRORS_SCHEMA
       ]
@@ -22,7 +19,8 @@ describe('AboutComponent', () => {
   }));
 
   beforeEach(() => {
-    component = new AboutComponent();
+    fixture = TestBed.createComponent(StoryComponent);
+    component = fixture.componentInstance;
   });
 
   afterEach(() => {
