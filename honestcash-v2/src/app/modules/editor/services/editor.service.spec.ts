@@ -7,7 +7,7 @@ import {API_ENDPOINTS, EditorService, STORY_PROPERTIES} from './editor.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../../app.states';
 import {HttpService} from '../../../core';
-import Post from '../../../core/models/post';
+import Post from '../../../shared/models/post';
 import {RouterTestingModule} from '@angular/router/testing';
 
 xdescribe('EditorService', () => {

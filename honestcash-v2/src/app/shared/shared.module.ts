@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FontAwesomeModule} from '../core/modules/font-awesome.module';
+import {FontAwesomeModule} from './modules/font-awesome.module';
 import {AvatarComponent} from './components/avatar/avatar.component';
 import {HeaderProfileMenuComponent} from './components/header-profile-menu/header-profile-menu.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -22,4 +22,5 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     FontAwesomeModule,
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+}

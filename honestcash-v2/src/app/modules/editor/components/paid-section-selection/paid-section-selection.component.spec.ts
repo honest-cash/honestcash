@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/mocks/app.states.mock';
+import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {EditorPaidSectionSelectionComponent} from './paid-section-selection.component.component';
 
 describe('EditorPaidSectionSelectionComponent', () => {

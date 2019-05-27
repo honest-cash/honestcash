@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import Post from '../../../core/models/post';
+import Post from '../../../shared/models/post';
 import {HttpService} from '../../../core';
-import {EmptyResponse} from '../../../core/models/authentication';
-import Hashtag from '../../../core/models/hashtag';
+import {EmptyResponse} from '../../../shared/models/authentication';
+import Hashtag from '../../../shared/models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 

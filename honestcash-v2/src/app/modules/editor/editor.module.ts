@@ -4,7 +4,7 @@ import {EditorContainerComponent} from './editor-container.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
-import {AuthorizedGuard} from '../../core/guards/authorized.guard';
+import {AuthorizedGuard} from '../../shared/guards/authorized.guard';
 import {TagInputModule} from 'ngx-chips';
 import {HeaderComponent} from '../../shared/components/header/header.component';
 import {EditorStoryPreviewComponent} from './pages/story-preview/story-preview.component';

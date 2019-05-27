@@ -13,14 +13,14 @@ import {FooterComponent} from './components/footer/footer.component';
 import {HeadingComponent} from './components/heading/heading.component';
 import {CardFooterComponent} from './components/card/footer/footer.component';
 import {LoadingSubmitButtonComponent} from './components/loading-submit-button/loading-submit-button.component';
-import {AuthorizedGuard} from 'app/core/guards/authorized.guard';
-import {UnauthorizedGuard} from 'app/core/guards/unauthorized.guard';
+import {AuthorizedGuard} from 'app/shared/guards/authorized.guard';
+import {UnauthorizedGuard} from 'app/shared/guards/unauthorized.guard';
 import {ThankYouComponent} from './pages/thank-you/thank-you.component';
 import {ForbiddenUsernameValidatorDirective} from './directives/forbidden-username.directive';
 import {ResetPasswordVerifyComponent} from './pages/reset-password-verify/reset-password-verify.component';
 import {AboutComponent} from './pages/about/about.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {VersionOneGuard} from '../../core/guards/version-one.guard';
+import {VersionOneGuard} from '../../shared/guards/version-one.guard';
 
 const routes: Routes = [
   {

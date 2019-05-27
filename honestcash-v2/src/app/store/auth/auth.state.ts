@@ -1,4 +1,4 @@
-import {FailedResponse} from '../../core/models/authentication';
+import {FailedResponse} from '../../shared/models/authentication';
 
 export interface State {
   // is a user authenticated?
