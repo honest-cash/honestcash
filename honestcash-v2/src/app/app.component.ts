@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectAuthState, selectUserState, selectWalletState} from './app.states';
-import {AppLoad} from './core/store/app/app.actions';
+import {AppLoad} from './store/app/app.actions';
 import {Observable} from 'rxjs';
 import {State as WalletState} from './core/store/wallet/wallet.state';
-import {State as AuthState} from './core/store/auth/auth.state';
+import {State as AuthState} from './store/auth/auth.state';
 import {State as UserState} from './core/store/user/user.state';
 
 @Component({

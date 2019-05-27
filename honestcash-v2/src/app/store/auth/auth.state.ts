@@ -1,11 +1,11 @@
-import {FailedResponse} from '../../models/authentication';
+import {FailedResponse} from '../../core/models/authentication';
 
 export interface State {
   // is a user authenticated?
   isAuthenticated: boolean;
   isLoading: boolean;
   token: string | null;
-  errorMessage: FailedResponse | string | { error: { code: string }};
+  errorMessage: FailedResponse | string | { error: { code: string } };
   newPasswordRequested: boolean;
   newPasswordSet: boolean;
 }

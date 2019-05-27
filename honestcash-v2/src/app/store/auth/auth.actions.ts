@@ -7,7 +7,7 @@ import {
   ResetPasswordRequestContext,
   SignupContext,
   SignupSuccessResponse
-} from '../../models/authentication';
+} from '../../core/models/authentication';
 
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',

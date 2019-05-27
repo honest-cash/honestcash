@@ -1,6 +1,6 @@
 import {All, AppActionTypes} from './app.actions';
 import {initialState, State} from './app.state';
-import {Logger} from '../..';
+import {Logger} from '../../core';
 
 const logger = new Logger();
 

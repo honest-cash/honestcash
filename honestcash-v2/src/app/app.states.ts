@@ -1,11 +1,11 @@
 import {ActionReducerMap, createFeatureSelector, MetaReducer} from '@ngrx/store';
 import {environment} from '../environments/environment';
 
-import {State as AppState} from './core/store/app/app.state';
-import {reducer as AppReducer} from './core/store/app/app.reducer';
+import {State as AppState} from './store/app/app.state';
+import {reducer as AppReducer} from './store/app/app.reducer';
 
-import {State as AuthState} from './core/store/auth/auth.state';
-import {reducer as AuthReducer} from './core/store/auth/auth.reducer';
+import {State as AuthState} from './store/auth/auth.state';
+import {reducer as AuthReducer} from './store/auth/auth.reducer';
 
 import {State as UserState} from './core/store/user/user.state';
 import {reducer as UserReducer} from './core/store/user/user.reducer';
