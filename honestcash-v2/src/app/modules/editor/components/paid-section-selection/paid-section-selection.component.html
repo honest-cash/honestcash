@@ -1,4 +1,4 @@
-<div [hidden]="!story.hasPaidSection && isLoading" class="form-row mt-3">
+<div [hidden]="!story.hasPaidSection && !isLoaded" class="form-row mt-3">
   <div class="col">
     <div class="text-uppercase"><b>Pay-to-read Section Cost</b></div>
     <div>
@@ -6,7 +6,7 @@
     </div>
   </div>
   <div class="w-100"></div>
-  <div class="col">
+  <div class="col-4">
     <label for="elPaidSectionCostInBch">
       <small><b>Cost in BCH:</b></small>
     </label>
@@ -21,31 +21,12 @@
       required
       id="elPaidSectionCostInBch"
       [(ngModel)]="story.paidSectionCost"
-      (ngModelChange)="onChangePaidSectionCost(PAID_SECTION_CURRENCIES.Bch)"
+      (ngModelChange)="onChangePaidSectionCost()"
       [ngClass]="{ 'is-invalid': form.submitted && elPaidSectionCostInBch.invalid, 'is-valid': form.submitted && elPaidSectionCostInBch.valid }"
     />
   </div>
-  <div class="col" [hidden]="canCalculateUsdRate">
-    <label for="elPaidSectionCostInUsd">
-      <small><b>Cost in USD:</b></small>
-    </label>
-    <input
-      class="form-control"
-      name="elPaidSectionCostInUsd"
-      #elPaidSectionCostInUsd="ngModel"
-      type="number"
-      step="0.1"
-      min="0"
-      value="0"
-      required
-      id="elPaidSectionCostInUsd"
-      [(ngModel)]="paidSectionCostInUsd"
-      (ngModelChange)="onChangePaidSectionCost(PAID_SECTION_CURRENCIES.Usd)"
-      [ngClass]="{ 'is-invalid': form.submitted && elPaidSectionCostInUsd.invalid, 'is-valid': form.submitted && elPaidSectionCostInUsd.valid }"
-    />
-  </div>
 </div>
-<div [hidden]="!story.hasPaidSection && isLoading" class="form-row mt-3">
+<div [hidden]="!story.hasPaidSection && !isLoaded" class="form-row mt-3">
   <div class="col">
     <div class="text-uppercase"><b>Pay-to-read Section</b></div>
     <div>

@@ -73,6 +73,7 @@
                  [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
             <input type="checkbox" ngbButton id="hasPaidSection" #hasPaidSection="ngModel" name="hasPaidSection"
                    #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"
+                   (ngModelChange)="onChangeHasPaidSection()"
             > I have a pay-to-read section in my story
           </label>
         </div>
@@ -83,14 +84,15 @@
   </div>
   <div class="modal-footer px-0">
     <div class="col text-left">
-      <button type="button" class="btn btn-outline-dark" (click)="onDismiss()" [disabled]="isPublishing">Close
+      <button type="button" class="btn btn-outline-dark" (click)="onDismiss()"
+              [disabled]="saveStatus === EDITOR_SAVE_STATUS.Publishing">Close
         <fa-icon [icon]="['fas', 'window-close']"></fa-icon>
       </button>
     </div>
     <div class="col text-right">
-      <button type="submit" class="btn btn-success" [disabled]="isPublishing">Publish
-        <fa-icon *ngIf="!isPublishing" [icon]="['far', 'paper-plane']"></fa-icon>
-        <fa-icon *ngIf="isPublishing" [icon]="['fas', 'spinner']" spin="spin"></fa-icon>
+      <button type="submit" class="btn btn-success" [disabled]="saveStatus === EDITOR_SAVE_STATUS.Publishing">Publish
+        <fa-icon *ngIf="saveStatus !== EDITOR_SAVE_STATUS.Publishing" [icon]="['far', 'paper-plane']"></fa-icon>
+        <fa-icon *ngIf="saveStatus === EDITOR_SAVE_STATUS.Publishing" [icon]="['fas', 'spinner']" spin="spin"></fa-icon>
       </button>
     </div>
   </div>

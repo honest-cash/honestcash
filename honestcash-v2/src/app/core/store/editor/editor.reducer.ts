@@ -20,6 +20,7 @@ export function reducer(state = initialState, action: All): State {
         ...state,
         isLoaded: true,
         status: EDITOR_SAVE_STATUS.Initialized,
+        editor: action.payload.editor,
         story,
       };
     }
@@ -31,7 +32,8 @@ export function reducer(state = initialState, action: All): State {
       logger.info('Editor Change Success', action.payload);
       return {
         ...state,
-        story: action.payload,
+        story: action.payload.story,
+        editor: action.payload.editor,
         status: EDITOR_SAVE_STATUS.NotSaved,
       };
     }
@@ -50,8 +52,16 @@ export function reducer(state = initialState, action: All): State {
           property = 'userPostHashtags';
           break;
         }
-        case STORY_PROPERTIES.PaidSection: {
-          // @ todo
+        case STORY_PROPERTIES.PaidSectionCost: {
+          property = 'paidSectionCost';
+          break;
+        }
+        case STORY_PROPERTIES.PaidSectionLinebreak: {
+          property = 'paidSectionLinebreak';
+          break;
+        }
+        case STORY_PROPERTIES.HasPaidSection: {
+          property = 'hasPaidSection';
           break;
         }
       }

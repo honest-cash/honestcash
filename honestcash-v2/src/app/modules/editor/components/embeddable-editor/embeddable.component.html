@@ -11,11 +11,11 @@
 <div #modalBody class="modal-body">
   <div class="panes" [@slide]="activePane">
     <div class="pane">
-      <div id="editor" class="p-4"></div>
+      <editor class="p-4"></editor>
     </div>
     <div class="pane">
       <form [hidden]="activePane === 'first'" name="form" class="p-4 needs-validation" #f="ngForm"
-            (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+            (ngSubmit)="f.form.valid && onPublish(f)" novalidate>
         <div class="form-row">
           <div class="col">
             <div class="form-group">

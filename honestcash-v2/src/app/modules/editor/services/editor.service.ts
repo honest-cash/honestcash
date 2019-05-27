@@ -28,7 +28,7 @@ export const API_ENDPOINTS = {
   draft: (c: DraftContext = {}) =>
     c.parentPostId ? `/draft?parentPostId=${c.parentPostId}` : c.postId ? `/post/${c.postId}` : '/draft',
   newDraft: () => `/draft`,
-  savePostProperty: (p: Post, property: 'title' | 'body' | 'hashtags' | 'paidSection') => `/draft/${p.id}/${property}`,
+  savePostProperty: (p: Post, property: STORY_PROPERTIES) => `/draft/${p.id}/${property}`,
   saveDraft: (p: Post) => `/draft/${p.id}/body`,
   publishPost: (p: Post) => `/draft/${p.id}/publish`,
   uploadImage: () => `/upload/image`,
@@ -39,7 +39,9 @@ export enum STORY_PROPERTIES {
   Title = 'title',
   Body = 'body',
   Hashtags = 'hashtags',
-  PaidSection = 'paidSection',
+  HasPaidSection = 'hasPaidSection',
+  PaidSectionLinebreak = 'paidSectionLinebreak',
+  PaidSectionCost = 'paidSectionCost',
 }
 
 @Injectable({

@@ -1,13 +1,14 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import Post from '../../../../core/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {State as EditorState} from '../../../../core/store/editor/editor.state';
-import {EditorStoryPropertyChange} from '../../../../core/store/editor/editor.actions';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
+import {EditorStoryPropertyChange, EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../core/store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../services/editor.service';
 import Hashtag from '../../../../core/models/hashtag';
+import EditorJS from '@editorjs/editorjs';
 
 export interface INgxChipsTag {
   hashtag: string;
@@ -18,12 +19,13 @@ export interface INgxChipsTag {
   templateUrl: './publish-modal.component.html',
   styleUrls: ['./publish-modal.component.scss'],
 })
-export class PublishModalComponent implements OnInit, OnDestroy {
-  @Output() publishClick = new EventEmitter<void>();
+export class EditorPublishModalComponent implements OnInit, OnDestroy {
+  private editor: EditorJS;
+  private EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
+  private saveStatus: EDITOR_SAVE_STATUS;
   private story: Post;
-  private isPublishing = false;
   private _hashtags: Hashtag[] | INgxChipsTag[] | string;
 
   constructor(
@@ -38,6 +40,8 @@ export class PublishModalComponent implements OnInit, OnDestroy {
     .subscribe((editorState: EditorState) => {
       if (editorState.isLoaded) {
         this.story = editorState.story;
+        this.saveStatus = editorState.status;
+        this.editor = editorState.editor;
         if (!this._hashtags) {
           this._hashtags = this.story.userPostHashtags;
         }
@@ -46,8 +50,15 @@ export class PublishModalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.isPublishing = true;
-    this.publishClick.emit();
+    if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+      this.editor.saver.save()
+      .then((outputData) => {
+        this.story.body = outputData.blocks;
+        this.store.dispatch(new EditorStorySaveAndPublish(this.story));
+      });
+    } else {
+      this.store.dispatch(new EditorStoryPublish(this.story));
+    }
   }
 
   onTitleChange(title: string) {
@@ -56,6 +67,10 @@ export class PublishModalComponent implements OnInit, OnDestroy {
 
   onTagChange(tags: INgxChipsTag[]) {
     this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
+  }
+
+  onChangeHasPaidSection() {
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
   }
 
   onDismiss() {

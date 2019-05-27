@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import User from '../../../core/models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {EmbeddableEditorComponent} from '../../../modules/editor/embed/embed.component';
+import {EmbeddableEditorComponent} from '../../../modules/editor/components/embed/embed.component';
 import {Store} from '@ngrx/store';
 import {AppStates, selectAuthState, selectUserState} from '../../../app.states';
 import {LogOut} from '../../../core/store/auth/auth.actions';

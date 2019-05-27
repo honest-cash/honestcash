@@ -1,9 +1,8 @@
-import { Action } from '@ngrx/store';
-import Post, {PostSaveSuccessResponse} from '../../models/post';
+import {Action} from '@ngrx/store';
+import Post from '../../models/post';
 import {FailedResponse} from '../../models/authentication';
-import Hashtag from '../../models/hashtag';
-import {INgxChipsTag} from '../../../modules/editor/components/publish-modal/publish-modal.component';
 import {STORY_PROPERTIES} from '../../../modules/editor/services/editor.service';
+import EditorJS from '@editorjs/editorjs';
 
 export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',
@@ -22,74 +21,98 @@ export enum EditorActionTypes {
 
 export class EditorLoad implements Action {
   readonly type = EditorActionTypes.EDITOR_LOAD;
-  constructor(public payload?: { story: Post }) {}
+
+  constructor(public payload?: { story?: Post, editor: EditorJS }) {
+  }
 }
 
 export class EditorUnload implements Action {
   readonly type = EditorActionTypes.EDITOR_UNLOAD;
-  constructor() {}
+
+  constructor() {
+  }
 }
 
 export class EditorChange implements Action {
   readonly type = EditorActionTypes.EDITOR_CHANGE;
-  constructor(public payload: Post) {}
+
+  constructor(public payload: { story: Post, editor: EditorJS }) {
+  }
 }
 
 export class EditorStoryPropertyChange implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE;
-  constructor(public payload: { property: string; value: string | Hashtag[] | INgxChipsTag[]; }) {}
+
+  constructor(public payload: { property: STORY_PROPERTIES; value: any; }) {
+  }
 }
 
 export class EditorStoryPropertySave implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE;
-  constructor(public payload: { story: Post, property: STORY_PROPERTIES }) {}
+
+  constructor(public payload: { story: Post, property: STORY_PROPERTIES }) {
+  }
 }
 
 export class EditorStorySave implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE;
-  constructor(public payload: Post) {}
+
+  constructor(public payload: Post) {
+  }
 }
 
 export class EditorStorySaveSuccess implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE_SUCCESS;
-  constructor(public payload: Post) {}
+
+  constructor(public payload: Post) {
+  }
 }
 
 export class EditorStorySaveAndPublish implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH;
-  constructor(public payload: Post) {}
+
+  constructor(public payload: Post) {
+  }
 }
 
 export class EditorStorySaveFailure implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE_FAILURE;
-  constructor(public payload: FailedResponse) {}
+
+  constructor(public payload: FailedResponse) {
+  }
 }
 
 export class EditorStoryPublish implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH;
-  constructor(public payload: Post) {}
+
+  constructor(public payload: Post) {
+  }
 }
 
 export class EditorStoryPublishSuccess implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH_SUCCESS;
-  constructor(public payload: Post) {}
+
+  constructor(public payload: Post) {
+  }
 }
 
 export class EditorStoryPublishFailure implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH_FAILURE;
-  constructor(public payload: FailedResponse) {}
+
+  constructor(public payload: FailedResponse) {
+  }
 }
 
 export type All =
-   | EditorLoad
-   | EditorUnload
-   | EditorChange
-   | EditorStoryPropertyChange
-   | EditorStoryPropertySave
-   | EditorStorySave
-   | EditorStorySaveSuccess
-   | EditorStorySaveFailure
-   | EditorStorySaveAndPublish
-   | EditorStoryPublish
-   | EditorStoryPublishSuccess
-   | EditorStoryPublishFailure;
+  | EditorLoad
+  | EditorUnload
+  | EditorChange
+  | EditorStoryPropertyChange
+  | EditorStoryPropertySave
+  | EditorStorySave
+  | EditorStorySaveSuccess
+  | EditorStorySaveFailure
+  | EditorStorySaveAndPublish
+  | EditorStoryPublish
+  | EditorStoryPublishSuccess
+  | EditorStoryPublishFailure;

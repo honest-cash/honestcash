@@ -5,36 +5,32 @@ import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {State as EditorState} from '../../../../core/store/editor/editor.state';
 import {Block, convertBlockToHtml} from '../../converters/json-to-html';
-import {Form} from '@angular/forms';
+import {NgForm} from '@angular/forms';
+import {EditorStoryPropertyChange} from '../../../../core/store/editor/editor.actions';
+import {STORY_PROPERTIES} from '../../services/editor.service';
 
 export enum LINEBREAK_ACTION {
   MoveUp = 'MOVE_UP',
   MoveDown = 'MOVE_DOWN',
 }
 
-export enum PAID_SECTION_CURRENCIES {
-  Bch = 'BCH',
-  Usd = 'USD',
-}
-
 @Component({
-  selector: 'app-editor-publish-modal-paid-section-selection',
+  selector: 'editor-paid-section-selection',
   templateUrl: './paid-section-selection.component.html',
   styleUrls: ['./paid-section-selection.component.scss'],
 })
-export class PaidSectionSelectionComponent implements OnInit, OnDestroy {
-  @Input() form: Form;
+export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
+  @Input() form: NgForm;
   @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
-  public PAID_SECTION_CURRENCIES = PAID_SECTION_CURRENCIES;
-  private isLoading = true;
-  private canCalculateUsdRate = false;
+  public convertBlockToHtml = convertBlockToHtml;
+  private isLoaded: boolean;
   private paidSectionCostInUsd: number;
   private paidSectionLineBreakTouched = false;
   private paidSectionLinebreakEnd: number;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private story: Post = new Post();
+  private story: Post;
 
   constructor(
     private store: Store<AppStates>,
@@ -45,8 +41,10 @@ export class PaidSectionSelectionComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
+      this.isLoaded = editorState.isLoaded;
+      this.story = editorState.story;
+
       if (editorState.isLoaded) {
-        this.story = editorState.story;
         if (!this.story.paidSectionLinebreak) {
           this.story.paidSectionLinebreak = 0;
         }
@@ -57,7 +55,6 @@ export class PaidSectionSelectionComponent implements OnInit, OnDestroy {
           this.story.paidSectionCost = 0;
         }
         this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.body).length) - 1);
-        this.isLoading = false;
       }
     });
   }
@@ -74,7 +71,6 @@ export class PaidSectionSelectionComponent implements OnInit, OnDestroy {
         break;
       }
       case LINEBREAK_ACTION.MoveDown: {
-        console.log('a', this.story.paidSectionLinebreak, this.paidSectionLinebreakEnd);
         if (this.story.paidSectionLinebreak < this.paidSectionLinebreakEnd) {
           this.story.paidSectionLinebreak++;
           element = this.getPaidSectionBlockElementByLinebreak();
@@ -83,18 +79,23 @@ export class PaidSectionSelectionComponent implements OnInit, OnDestroy {
       }
     }
     element.nativeElement.scrollIntoView({behavior: 'smooth'});
+    this.store.dispatch(
+      new EditorStoryPropertyChange(
+        {property: STORY_PROPERTIES.PaidSectionLinebreak, value: this.story.paidSectionLinebreak}
+      )
+    );
   }
 
-  onChangePaidSectionCost(currency: PAID_SECTION_CURRENCIES) {
-
+  onChangePaidSectionCost() {
+    this.store.dispatch(
+      new EditorStoryPropertyChange(
+        {property: STORY_PROPERTIES.PaidSectionCost, value: this.story.paidSectionCost}
+      )
+    );
   }
 
   ngOnDestroy() {
     this.editorState$.unsubscribe();
-  }
-
-  convertBlockToHtml(block: Block) {
-    return convertBlockToHtml(block);
   }
 
   private getPaidSectionBlockElementByLinebreak() {

@@ -1,44 +1,60 @@
 import {NgModule} from '@angular/core';
-import {EditorNewComponent} from './pages/new/editor-new.component';
 import {RouterModule, Routes} from '@angular/router';
 import {EditorContainerComponent} from './editor-container.component';
-import {StoryComponent} from './story/story.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {EmbeddableEditorComponent} from './embed/embed.component';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
-import {NewHeaderComponent} from './pages/new/components/write-header/new-header.component';
 import {AuthorizedGuard} from '../../core/guards/authorized.guard';
-import {PublishModalComponent} from './components/publish-modal/publish-modal.component';
 import {TagInputModule} from 'ngx-chips';
-import {PaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
 import {HeaderComponent} from '../../shared/components/header/header.component';
+import {EditorStoryPreviewComponent} from './pages/story-preview/story-preview.component';
+import {EditorWriteComponent} from './pages/write/write.component';
+import {EditorEditComponent} from './pages/edit/edit.component';
+import {EditorModalExampleComponent} from './pages/modal-example/modal-example.component';
+import {EditorPublishModalComponent} from './components/publish-modal/publish-modal.component';
+import {EditorPublishButtonComponent} from './components/publish-button/publish-button.component';
+import {EditorHeaderComponent} from './components/header/header.component';
+import {EditorEmbeddableComponent} from './components/embeddable-editor/embeddable.component';
+import {EditorPaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
+import {EditorSaveStatusComponent} from './components/save-status/save-status.component';
+import {EditorComponent} from './components/editor/editor.component';
 
 const routes: Routes = [
   {
     path: '',
     component: EditorContainerComponent,
     children: [
-      {path: 'write', pathMatch: 'full', component: EditorNewComponent, canActivate: [AuthorizedGuard]},
-      {path: 'story', pathMatch: 'full', component: StoryComponent},
+      {path: 'write', pathMatch: 'full', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
+      {path: 'edit', pathMatch: 'full', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
+      {path: 'story-preview', pathMatch: 'full', component: EditorStoryPreviewComponent, canActivate: [AuthorizedGuard]},
+      {path: 'modal-example', pathMatch: 'full', component: EditorModalExampleComponent},
     ]
   }
 ];
 
 @NgModule({
   declarations: [
+    EditorComponent,
     HeaderComponent,
-    PublishModalComponent,
+    EditorPublishModalComponent,
+    EditorPublishButtonComponent,
+    EditorSaveStatusComponent,
     EditorContainerComponent,
-    EditorNewComponent,
-    NewHeaderComponent,
-    StoryComponent,
-    EmbeddableEditorComponent,
-    PaidSectionSelectionComponent,
+    EditorWriteComponent,
+    EditorEditComponent,
+    EditorModalExampleComponent,
+    EditorStoryPreviewComponent,
+    EditorHeaderComponent,
+    EditorStoryPreviewComponent,
+    EditorEmbeddableComponent,
+    EditorPaidSectionSelectionComponent,
   ],
   entryComponents: [
-    PublishModalComponent,
-    EmbeddableEditorComponent,
+    EditorComponent,
+    EditorPublishModalComponent,
+    EditorPublishButtonComponent,
+    EditorSaveStatusComponent,
+    EditorEmbeddableComponent
   ],
   imports: [
     FormsModule,
@@ -48,7 +64,7 @@ const routes: Routes = [
     TagInputModule,
   ],
   providers: [],
-  bootstrap: [EditorNewComponent]
+  bootstrap: [EditorContainerComponent]
 })
 export class EditorModule {
 }

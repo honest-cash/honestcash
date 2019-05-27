@@ -1,0 +1,14 @@
+<header>
+  <nav class="navbar navbar-light navbar-expand">
+    <a class="navbar-brand" href="/">
+      <img height="34" src="https://honest.cash/img/honest-logo-2.png"/>
+    </a>
+    <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
+      <div class="navbar-nav ml-auto">
+        <editor-save-status></editor-save-status>
+        <editor-publish-button></editor-publish-button>
+        <app-header-profile-menu [user]="user"></app-header-profile-menu>
+      </div>
+    </div>
+  </nav>
+</header>

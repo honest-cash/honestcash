@@ -1,15 +1,15 @@
 import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
-import {StoryComponent} from './story.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {EditorModalExampleComponent} from './modal-example.component';
 
 describe('StoryComponent', () => {
-  let component: StoryComponent;
-  let fixture: ComponentFixture<StoryComponent>;
+  let component: EditorModalExampleComponent;
+  let fixture: ComponentFixture<EditorModalExampleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        StoryComponent
+        EditorModalExampleComponent
       ],
       imports: [],
       schemas: [
@@ -19,7 +19,7 @@ describe('StoryComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StoryComponent);
+    fixture = TestBed.createComponent(EditorModalExampleComponent);
     component = fixture.componentInstance;
   });
 

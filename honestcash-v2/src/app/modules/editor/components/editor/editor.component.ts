@@ -1,8 +1,8 @@
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import EditorJS from '@editorjs/editorjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
+import Image from '@editorjs/image';
 import List from '@editorjs/list';
 import Embed from '@editorjs/embed';
 import Quote from '@editorjs/quote';
@@ -10,34 +10,57 @@ import Paragraph from '@editorjs/paragraph';
 import Code from '@editorjs/code';
 import Marker from '@editorjs/marker';
 import Delimiter from '@editorjs/delimiter';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import Post from '../../../core/models/post';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../core/store/editor/editor.state';
-import {interval, Observable, Subscription} from 'rxjs';
+import Post from '../../../../core/models/post';
 import {Store} from '@ngrx/store';
-import {AppStates, selectEditorState} from '../../../app.states';
-import {EditorService, STORY_PROPERTIES} from '../services/editor.service';
-import {EditorChange, EditorLoad, EditorStoryPropertySave, EditorStorySave} from '../../../core/store/editor/editor.actions';
-import {EDITOR_AUTO_SAVE, HonestEditorConfig} from '../pages/new/editor-new.component';
+import {AppStates, selectEditorState} from '../../../../app.states';
+import {interval, Observable, Subscription} from 'rxjs';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
+import {EditorChange, EditorLoad, EditorStoryPropertySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
+import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 
-type PaneType = 'first' | 'second';
+export const EDITOR_AUTO_SAVE = {
+  ON: false,
+  INTERVAL: 5000,
+};
+
+export interface HonestEditorConfig extends EditorConfig {
+  tools: {
+    header: {
+      class: Header,
+      inlineToolbar: boolean,
+    };
+    link: {
+      class: Link;
+      inlineToolbar: boolean;
+    };
+    image: {
+      class: Image;
+      inlineToolbar: boolean;
+      config: {} // needs to be populated in constructor for upload
+    };
+    list: {
+      class: List;
+      inlineToolbar: boolean;
+    };
+    embed: Embed;
+    quote: Quote;
+    paragraph: {
+      class: Paragraph;
+      inlineToolbar: boolean;
+    };
+    code: Code;
+    Marker: Marker;
+    delimiter: Delimiter;
+  };
+  onChange: () => void;
+}
 
 @Component({
-  selector: 'app-editor-embeddable',
-  templateUrl: './embed.component.html',
-  styleUrls: ['./embed.component.scss'],
-  animations: [
-    trigger('slide', [
-      state('first', style({transform: 'translateX(0)'})),
-      state('second', style({transform: 'translateX(-50%)'})),
-      transition('* => *', animate(300))
-    ])
-  ]
+  selector: 'editor',
+  templateUrl: './editor.component.html',
+  styleUrls: ['./editor.component.scss']
 })
-export class EmbeddableEditorComponent implements OnInit, OnDestroy {
-  @Input() activePane: PaneType = 'first';
-  @ViewChild('modalBody') modalBody: ElementRef;
-
+export class EditorComponent implements OnInit, OnDestroy {
   public saveStatus: EDITOR_SAVE_STATUS;
   readonly editor: EditorJS;
   private editorConfig: HonestEditorConfig = {
@@ -88,7 +111,6 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStates>,
-    private activeModal: NgbActiveModal,
     private editorService: EditorService,
   ) {
     this.editorConfig.tools.image.config = {
@@ -99,7 +121,7 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
     };
     this.editor = new EditorJS(this.editorConfig);
     this.editor.isReady.then(() => {
-      this.store.dispatch(new EditorLoad());
+      this.store.dispatch(new EditorLoad({editor: this.editor}));
     });
     this.editorStateObservable = this.store.select(selectEditorState);
     // explicitly turn autosave on write mode
@@ -125,21 +147,13 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
     this.editor.saver.save()
     .then((outputData) => {
       this.story.body = outputData.blocks;
-      this.store.dispatch(new EditorChange(this.story));
+      this.store.dispatch(new EditorChange({story: this.story, editor: this.editor}));
 
       if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
         this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
           this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
         });
       }
-    });
-  }
-
-  saveDraftStory() {
-    this.editor.saver.save()
-    .then((outputData) => {
-      this.story.body = outputData.blocks;
-      this.store.dispatch(new EditorStorySave(this.story));
     });
   }
 
@@ -165,37 +179,12 @@ export class EmbeddableEditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  onBack() {
-    this.activePane = 'first';
-    this.modalBody.nativeElement.scrollTop = 0;
-  }
-
-  onNext() {
-    this.activePane = 'second';
-    this.modalBody.nativeElement.scrollTop = 0;
-  }
-
-  onSubmit(form) {
-    console.log('form', form);
-  }
-
-  onPublish() {
-    this.editor.saver.save().then((outputData) => {
-      console.log('Article data: ', JSON.stringify(outputData.blocks, null, 2));
-    }).catch((error) => {
-      console.log('Saving failed: ', error);
-    });
-  }
-
-  onDismiss() {
-    this.editor.destroy();
-    this.activeModal.dismiss();
-  }
-
   ngOnDestroy() {
     if (this.editor && this.editor.destroy) {
       this.editor.destroy();
+      this.store.dispatch(new EditorUnload());
     }
+    this.autoSaveInterval$.unsubscribe();
+    this.editorState$.unsubscribe();
   }
-
 }
