@@ -2,10 +2,10 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {NgForm} from '@angular/forms';
 import {AppStates, selectAuthState} from '../../../../app.states';
-import {SignUp} from '../../../../core/store/auth/auth.actions';
-import User from '../../../../core/models/user';
+import {SignUp} from '../../../../store/auth/auth.actions';
+import User from '../../../../shared/models/user';
 import {Observable} from 'rxjs';
-import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
+import {State as AuthorizationState} from '../../../../store/auth/auth.state';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
 
 export interface SignupForm extends NgForm {

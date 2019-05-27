@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import User from '../../../../core/models/user';
+import User from '../../../../shared/models/user';
 import {Store} from '@ngrx/store';
 import {AppStates, selectUserState} from '../../../../app.states';
 import {Subscription} from 'rxjs';
-import {State as UserState} from '../../../../core/store/user/user.state';
+import {State as UserState} from '../../../../store/user/user.state';
 
 @Component({
   selector: 'editor-header',

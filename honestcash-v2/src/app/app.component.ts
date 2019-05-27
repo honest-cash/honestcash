@@ -3,9 +3,9 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectAuthState, selectUserState, selectWalletState} from './app.states';
 import {AppLoad} from './store/app/app.actions';
 import {Observable} from 'rxjs';
-import {State as WalletState} from './core/store/wallet/wallet.state';
+import {State as WalletState} from './store/wallet/wallet.state';
 import {State as AuthState} from './store/auth/auth.state';
-import {State as UserState} from './core/store/user/user.state';
+import {State as UserState} from './store/user/user.state';
 
 @Component({
   selector: 'app-root',

@@ -1,13 +1,13 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {ResetPassword} from '../../../../core/store/auth/auth.actions';
+import {ResetPassword} from '../../../../store/auth/auth.actions';
 import {NgForm} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AppStates, selectAuthState} from '../../../../app.states';
-import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
+import {State as AuthorizationState} from '../../../../store/auth/auth.state';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
-import {ResetPasswordContext} from '../../../../core/models/authentication';
+import {ResetPasswordContext} from '../../../../shared/models/authentication';
 import {Logger} from '../../../../core';
 
 export interface ResetPasswordForm extends NgForm {

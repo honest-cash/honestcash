@@ -5,14 +5,14 @@ import {Observable} from 'rxjs';
 import {AppEffects} from './app.effects';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AppActions from './app.actions';
-import * as UserActions from '../../core/store/user/user.actions';
-import * as WalletActions from '../../core/store/wallet/wallet.actions';
-import {WalletService} from '../../core/services/wallet.service';
-import {AuthService, LOCAL_TOKEN_KEY} from '../../core/services/auth.service';
+import * as UserActions from '../user/user.actions';
+import * as WalletActions from '../wallet/wallet.actions';
+import {WalletService} from '../../shared/services/wallet.service';
+import {AuthService, LOCAL_TOKEN_KEY} from '../../shared/services/auth.service';
 import {localStorageProvider, LocalStorageToken} from '../../core/helpers/localStorage';
 import {resetLocalStorage} from '../../core/helpers/tests';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../core/mocks/app.states.mock';
+import {initialAppStates} from '../../shared/mocks/app.states.mock';
 
 describe('app.effects', () => {
   let effects: AppEffects;

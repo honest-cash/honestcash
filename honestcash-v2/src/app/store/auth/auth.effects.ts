@@ -19,9 +19,9 @@ import {
   SignUpFailure,
   SignUpSuccess,
 } from './auth.actions';
-import {WalletActionTypes, WalletCleanup, WalletSetup} from '../../core/store/wallet/wallet.actions';
-import {UserActionTypes, UserCleanup, UserSetup} from '../../core/store/user/user.actions';
-import {AuthService} from '../../core/services/auth.service';
+import {WalletActionTypes, WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
+import {UserActionTypes, UserCleanup, UserSetup} from '../user/user.actions';
+import {AuthService} from '../../shared/services/auth.service';
 import {
   LoginContext,
   LoginSuccessResponse,
@@ -29,9 +29,9 @@ import {
   ResetPasswordRequestContext,
   SignupContext,
   SignupSuccessResponse
-} from '../../core/models/authentication';
-import {UserService} from 'app/core/services/user.service';
-import {WalletService} from 'app/core/services/wallet.service';
+} from '../../shared/models/authentication';
+import {UserService} from 'app/shared/services/user.service';
+import {WalletService} from 'app/shared/services/wallet.service';
 import {WindowToken} from '../../core/helpers/window';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';

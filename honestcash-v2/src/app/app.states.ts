@@ -7,14 +7,14 @@ import {reducer as AppReducer} from './store/app/app.reducer';
 import {State as AuthState} from './store/auth/auth.state';
 import {reducer as AuthReducer} from './store/auth/auth.reducer';
 
-import {State as UserState} from './core/store/user/user.state';
-import {reducer as UserReducer} from './core/store/user/user.reducer';
+import {State as UserState} from './store/user/user.state';
+import {reducer as UserReducer} from './store/user/user.reducer';
 
-import {State as WalletState} from './core/store/wallet/wallet.state';
-import {reducer as WalletReducer} from './core/store/wallet/wallet.reducer';
+import {State as WalletState} from './store/wallet/wallet.state';
+import {reducer as WalletReducer} from './store/wallet/wallet.reducer';
 
-import {State as EditorState} from './core/store/editor/editor.state';
-import {reducer as EditorReducer} from './core/store/editor/editor.reducer';
+import {State as EditorState} from './store/editor/editor.state';
+import {reducer as EditorReducer} from './store/editor/editor.reducer';
 
 export interface AppStates {
   app: AppState;

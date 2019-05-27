@@ -1,16 +1,16 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {LoginComponent, LoginForm} from './login.component';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import User from '../../../../core/models/user';
+import User from '../../../../shared/models/user';
 import {Store} from '@ngrx/store';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {LogIn} from '../../../../core/store/auth/auth.actions';
-import {initialState as initialAuthState} from '../../../../core/store/auth/auth.state';
-import {CodedErrorResponse} from '../../../../core/models/authentication';
+import {LogIn} from '../../../../store/auth/auth.actions';
+import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
+import {CodedErrorResponse} from '../../../../shared/models/authentication';
 import {AppStates} from '../../../../app.states';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
-import {initialAppStates} from '../../../../core/mocks/app.states.mock';
+import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

@@ -1,13 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import User from '../../../core/models/user';
+import User from '../../models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EmbeddableEditorComponent} from '../../../modules/editor/components/embed/embed.component';
 import {Store} from '@ngrx/store';
 import {AppStates, selectAuthState, selectUserState} from '../../../app.states';
-import {LogOut} from '../../../core/store/auth/auth.actions';
+import {LogOut} from '../../../store/auth/auth.actions';
 import {Observable} from 'rxjs';
-import {State as AuthorizationState} from '../../../core/store/auth/auth.state';
-import {State as UserState} from '../../../core/store/user/user.state';
+import {State as AuthorizationState} from '../../../store/auth/auth.state';
+import {State as UserState} from '../../../store/user/user.state';
 import {WindowToken} from '../../../core/helpers/window';
 import {GOTO_PATHS} from '../header-profile-menu/header-profile-menu.component';
 

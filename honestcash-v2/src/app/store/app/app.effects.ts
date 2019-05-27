@@ -3,9 +3,9 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable} from 'rxjs';
 import {map, mergeMap} from 'rxjs/operators';
 import {AppActionTypes} from './app.actions';
-import {UserCleanup, UserSetup} from '../../core/store/user/user.actions';
-import {WalletCleanup, WalletSetup} from '../../core/store/wallet/wallet.actions';
-import {AuthService} from 'app/core/services/auth.service';
+import {UserCleanup, UserSetup} from '../user/user.actions';
+import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
+import {AuthService} from 'app/shared/services/auth.service';
 import {LocalStorageToken} from '../../core/helpers/localStorage';
 
 @Injectable()

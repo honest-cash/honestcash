@@ -9,17 +9,17 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {StoreModule} from '@ngrx/store';
 import {AuthEffects} from './store/auth/auth.effects';
-import {WalletEffects} from './core/store/wallet/wallet.effects';
-import {UserEffects} from './core/store/user/user.effects';
+import {WalletEffects} from './store/wallet/wallet.effects';
+import {UserEffects} from './store/user/user.effects';
 
 import {metaReducers, reducers} from './app.states';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
 import {HeaderInterceptor} from './core/http/header.interceptor';
 import {AppEffects} from './store/app/app.effects';
-import {FontAwesomeModule} from './core/modules/font-awesome.module';
+import {FontAwesomeModule} from './shared/modules/font-awesome.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {EditorEffects} from './core/store/editor/editor.effects';
+import {EditorEffects} from './store/editor/editor.effects';
 import {AppSharedModule} from './app.shared.module';
 
 @NgModule({

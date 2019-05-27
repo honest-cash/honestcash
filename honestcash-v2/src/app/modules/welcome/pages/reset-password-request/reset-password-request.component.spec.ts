@@ -1,16 +1,16 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ResetPasswordRequestComponent, ResetPasswordRequestForm} from './reset-password-request.component';
-import User from '../../../../core/models/user';
+import User from '../../../../shared/models/user';
 import {Store, StoreModule} from '@ngrx/store';
 import {AppStates, metaReducers, reducers} from '../../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {ResetPasswordRequest} from '../../../../core/store/auth/auth.actions';
+import {ResetPasswordRequest} from '../../../../store/auth/auth.actions';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/mocks/app.states.mock';
-import {CodedErrorResponse} from '../../../../core/models/authentication';
+import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {CodedErrorResponse} from '../../../../shared/models/authentication';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
-import {initialState as initialAuthState} from '../../../../core/store/auth/auth.state';
+import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 
 describe('ResetPasswordRequestComponent', () => {
   let component: ResetPasswordRequestComponent;

@@ -2,11 +2,11 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {NgForm} from '@angular/forms';
 import {AppStates, selectAuthState} from '../../../../app.states';
-import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
-import User from '../../../../core/models/user';
+import {State as AuthorizationState} from '../../../../store/auth/auth.state';
+import User from '../../../../shared/models/user';
 import {Observable} from 'rxjs';
-import {LogIn} from '../../../../core/store/auth/auth.actions';
-import {FailedResponse} from '../../../../core/models/authentication';
+import {LogIn} from '../../../../store/auth/auth.actions';
+import {FailedResponse} from '../../../../shared/models/authentication';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
 
 export interface LoginForm extends NgForm {

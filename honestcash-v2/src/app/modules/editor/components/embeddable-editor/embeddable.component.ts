@@ -2,12 +2,12 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import Post from '../../../../core/models/post';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
+import Post from '../../../../shared/models/post';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../core/store/editor/editor.actions';
+import {EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
 
 type PaneType = 'first' | 'second';
 

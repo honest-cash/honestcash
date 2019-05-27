@@ -10,12 +10,12 @@ import Paragraph from '@editorjs/paragraph';
 import Code from '@editorjs/code';
 import Marker from '@editorjs/marker';
 import Delimiter from '@editorjs/delimiter';
-import Post from '../../../../core/models/post';
+import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {interval, Observable, Subscription} from 'rxjs';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
-import {EditorChange, EditorLoad, EditorStoryPropertySave, EditorUnload} from '../../../../core/store/editor/editor.actions';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {EditorChange, EditorLoad, EditorStoryPropertySave, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 
 export const EDITOR_AUTO_SAVE = {

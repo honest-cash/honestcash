@@ -1,10 +1,10 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
-import User from '../../../../core/models/user';
+import User from '../../../../shared/models/user';
 import {AppStates, selectAuthState} from '../../../../app.states';
-import {State as AuthState} from '../../../../core/store/auth/auth.state';
-import {ResetPasswordRequest} from '../../../../core/store/auth/auth.actions';
+import {State as AuthState} from '../../../../store/auth/auth.state';
+import {ResetPasswordRequest} from '../../../../store/auth/auth.actions';
 import {NgForm} from '@angular/forms';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
 

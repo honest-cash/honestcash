@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditorPublishModalComponent} from '../../components/publish-modal/publish-modal.component';

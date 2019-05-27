@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import Post from '../../../../core/models/post';
+import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../core/store/editor/editor.state';
-import {EditorStoryPropertyChange, EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../core/store/editor/editor.actions';
+import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {EditorStoryPropertyChange, EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../services/editor.service';
-import Hashtag from '../../../../core/models/hashtag';
+import Hashtag from '../../../../shared/models/hashtag';
 import EditorJS from '@editorjs/editorjs';
 
 export interface INgxChipsTag {

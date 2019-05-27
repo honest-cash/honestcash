@@ -1,16 +1,16 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {SignupComponent, SignupForm} from './signup.component';
-import User from '../../../../core/models/user';
+import User from '../../../../shared/models/user';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {SignUp} from '../../../../core/store/auth/auth.actions';
+import {SignUp} from '../../../../store/auth/auth.actions';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/mocks/app.states.mock';
-import {CodedErrorResponse} from '../../../../core/models/authentication';
+import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {CodedErrorResponse} from '../../../../shared/models/authentication';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
-import {initialState as initialAuthState} from '../../../../core/store/auth/auth.state';
+import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 
 const SHARED_MOCKS = {
   username: 'toto',
