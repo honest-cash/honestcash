@@ -15,8 +15,8 @@ import {
   SignUpFailure,
   SignUpSuccess,
 } from './auth.actions';
-import User from '../../models/user';
-import Wallet from '../../models/wallet';
+import User from '../../shared/models/user';
+import Wallet from '../../shared/models/wallet';
 
 const SHARED_MOCKS = {
   username: 'toto',

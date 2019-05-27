@@ -8,6 +8,7 @@ import {Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
+import {NgForm} from '@angular/forms';
 
 type PaneType = 'first' | 'second';
 
@@ -58,15 +59,17 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
     this.modalBody.nativeElement.scrollTop = 0;
   }
 
-  onPublish() {
-    if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
-      this.editor.saver.save()
-      .then((outputData) => {
-        this.story.body = outputData.blocks;
-        this.store.dispatch(new EditorStorySaveAndPublish(this.story));
-      });
-    } else {
-      this.store.dispatch(new EditorStoryPublish(this.story));
+  onPublish(f: NgForm) {
+    if (f.form.valid) {
+      if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+        this.editor.saver.save()
+        .then((outputData) => {
+          this.story.body = outputData.blocks;
+          this.store.dispatch(new EditorStorySaveAndPublish(this.story));
+        });
+      } else {
+        this.store.dispatch(new EditorStoryPublish(this.story));
+      }
     }
   }
 
@@ -75,7 +78,9 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editorState$.unsubscribe();
+    if (this.editorState$) {
+      this.editorState$.unsubscribe();
+    }
   }
 
 }

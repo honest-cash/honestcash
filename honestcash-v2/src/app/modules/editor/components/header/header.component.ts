@@ -24,6 +24,8 @@ export class EditorHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.userState$.unsubscribe();
+    if (this.userState$) {
+      this.userState$.unsubscribe();
+    }
   }
 }

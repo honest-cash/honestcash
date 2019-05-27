@@ -95,7 +95,9 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editorState$.unsubscribe();
+    if (this.editorState$) {
+      this.editorState$.unsubscribe();
+    }
   }
 
   private getPaidSectionBlockElementByLinebreak() {

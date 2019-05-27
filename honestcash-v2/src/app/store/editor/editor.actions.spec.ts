@@ -17,6 +17,18 @@ import Post from '../../shared/models/post';
 import User from '../../shared/models/user';
 import Wallet from '../../shared/models/wallet';
 import {STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
+import EditorJS from '@editorjs/editorjs';
+import Header from '@editorjs/header';
+import Link from '@editorjs/link';
+import Image from '@editorjs/image';
+import List from '@editorjs/list';
+import Embed from '@editorjs/embed';
+import Quote from '@editorjs/quote';
+import Paragraph from '@editorjs/paragraph';
+import Code from '@editorjs/code';
+import Marker from '@editorjs/marker';
+import Delimiter from '@editorjs/delimiter';
+import {HonestEditorConfig} from '../../modules/editor/components/editor/editor.component';
 
 const SHARED_MOCKS = {
   username: 'toto',
@@ -33,6 +45,45 @@ const SHARED_MOCKS = {
   }
 };
 
+const editorConfig: HonestEditorConfig = {
+  holder: 'editor',
+  autofocus: true,
+  initialBlock: 'paragraph',
+  tools: {
+    header: {
+      class: Header,
+      inlineToolbar: true,
+    },
+    link: {
+      class: Link,
+      inlineToolbar: true,
+    },
+    image: {
+      class: Image,
+      inlineToolbar: true,
+      config: {} // needs to be populated in constructor for upload
+    },
+    /*checklist: {
+	  class: Checklist,
+	  inlineToolbar: true,
+	},*/
+    list: {
+      class: List,
+      inlineToolbar: true,
+    },
+    embed: Embed,
+    quote: Quote,
+    paragraph: {
+      class: Paragraph,
+      inlineToolbar: true,
+    },
+    code: Code,
+    Marker: Marker,
+    delimiter: Delimiter,
+    /*warning: Warning,*/
+  },
+};
+
 describe('editor.effects', () => {
   describe('EditorLoad', () => {
     it('should create an action when no payload is provided', () => {
@@ -40,7 +91,7 @@ describe('editor.effects', () => {
       expect({...action}).toEqual({type: EditorActionTypes.EDITOR_LOAD, payload: undefined});
     });
     it('should create an action when payload is provided', () => {
-      const payload = {story: new Post()};
+      const payload = {story: new Post(), editor: new EditorJS(editorConfig)};
       const action = new EditorLoad(payload);
       expect({...action}).toEqual({type: EditorActionTypes.EDITOR_LOAD, payload});
     });
@@ -53,9 +104,9 @@ describe('editor.effects', () => {
   });
   describe('EditorChange', () => {
     it('should create an action', () => {
-      const post = new Post();
-      const action = new EditorChange(post);
-      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_CHANGE, payload: post});
+      const payload = {story: new Post(), editor: new EditorJS(editorConfig)};
+      const action = new EditorChange(payload);
+      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_CHANGE, payload});
     });
   });
   describe('EditorStoryPropertyChange', () => {

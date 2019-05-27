@@ -175,7 +175,7 @@ xdescribe('EditorService', () => {
       editorService.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.put)
-        .toHaveBeenCalledWith(API_ENDPOINTS.savePostProperty(mocks.context.post, 'title'), mocks.context.post);
+        .toHaveBeenCalledWith(API_ENDPOINTS.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title), mocks.context.post);
         done();
       });
 

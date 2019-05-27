@@ -4,6 +4,9 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {EditorEmbeddableComponent} from './embeddable.component';
+import {FormsModule} from '@angular/forms';
+import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('EditorEmbeddableComponent', () => {
   let component: EditorEmbeddableComponent;
@@ -11,9 +14,14 @@ describe('EditorEmbeddableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        NgbModule,
+      ],
       declarations: [EditorEmbeddableComponent],
       providers: [
+        NgbActiveModal,
         provideMockStore({initialState: initialAppStates})
       ],
       schemas: [

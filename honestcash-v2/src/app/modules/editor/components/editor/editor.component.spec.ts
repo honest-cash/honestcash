@@ -4,6 +4,8 @@ import {EditorComponent} from './editor.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -11,7 +13,10 @@ describe('EditorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [
+        HttpClientTestingModule,
+        NgbModule,
+      ],
       declarations: [EditorComponent],
       providers: [
         provideMockStore({initialState: initialAppStates})
@@ -33,15 +38,7 @@ describe('EditorComponent', () => {
   });
 
   describe('functions', () => {
-    it('saveDraftStory should emit an Event through saveDraftStory', () => {
-      const emitSpy = spyOn(component.onSaveClick, 'emit').and.callThrough();
-      component.saveDraftStory();
-      expect(emitSpy).toHaveBeenCalled();
-    });
-    it('publishStory should emit an Event through onSavePublishClick', () => {
-      const emitSpy = spyOn(component.onSavePublishClick, 'emit').and.callThrough();
-      component.publishStory();
-      expect(emitSpy).toHaveBeenCalled();
+    it('', () => {
     });
   });
 });

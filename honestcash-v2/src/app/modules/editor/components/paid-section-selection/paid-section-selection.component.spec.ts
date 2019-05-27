@@ -2,7 +2,8 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
-import {EditorPaidSectionSelectionComponent} from './paid-section-selection.component.component';
+import {EditorPaidSectionSelectionComponent} from './paid-section-selection.component';
+import {FormsModule, NgForm} from '@angular/forms';
 
 describe('EditorPaidSectionSelectionComponent', () => {
   let component: EditorPaidSectionSelectionComponent;
@@ -10,7 +11,9 @@ describe('EditorPaidSectionSelectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [
+        FormsModule,
+      ],
       declarations: [EditorPaidSectionSelectionComponent],
       providers: [
         provideMockStore({initialState: initialAppStates})
@@ -24,6 +27,11 @@ describe('EditorPaidSectionSelectionComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorPaidSectionSelectionComponent);
     component = fixture.componentInstance;
+    component.form = <NgForm>{
+      value: {
+        title: ''
+      }
+    };
     fixture.detectChanges();
   });
 

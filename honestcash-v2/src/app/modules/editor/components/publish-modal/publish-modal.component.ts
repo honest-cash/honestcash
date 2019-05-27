@@ -38,11 +38,11 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
+      this.story = editorState.story;
       if (editorState.isLoaded) {
-        this.story = editorState.story;
         this.saveStatus = editorState.status;
         this.editor = editorState.editor;
-        if (!this._hashtags) {
+        if (!this._hashtags && this.story.userPostHashtags.length) {
           this._hashtags = this.story.userPostHashtags;
         }
       }

@@ -13,9 +13,9 @@ import {
   SignUpFailure,
   SignUpSuccess
 } from './auth.actions';
-import User from '../../models/user';
-import Wallet from '../../models/wallet';
 import {initialState as initialAuthState} from './auth.state';
+import User from '../../shared/models/user';
+import Wallet from '../../shared/models/wallet';
 
 const SHARED_MOCKS = {
   email: 'toto@toto.com',

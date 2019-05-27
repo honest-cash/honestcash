@@ -5,26 +5,26 @@ import {forkJoin, Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
 import {LogInSuccess, RootRedirect} from './auth.actions';
-import {AuthService} from '../../services/auth.service';
-import {localStorageProvider, LocalStorageToken} from '../../helpers/localStorage';
 import {AuthEffects} from './auth.effects';
-import {UserService} from '../../services/user.service';
 import {Store, StoreModule} from '@ngrx/store';
-import {AppStates, metaReducers, reducers} from '../../../app.states';
-import User from '../../models/user';
-import Wallet from '../../models/wallet';
-import {mock} from '../../../../../mock';
 import {Router} from '@angular/router';
 import {UserActionTypes, UserCleanup, UserLoaded, UserSetup} from '../user/user.actions';
 import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup} from '../wallet/wallet.actions';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../../models/authentication';
-import {resetLocalStorage} from '../../helpers/tests';
-import {WindowToken} from '../../helpers/window';
 import {ofType} from '@ngrx/effects';
 import {first} from 'rxjs/operators';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../mocks/app.states.mock';
+import User from '../../shared/models/user';
+import Wallet from '../../shared/models/wallet';
+import {AuthService} from '../../shared/services/auth.service';
+import {AppStates, metaReducers, reducers} from '../../app.states';
+import {mock} from '../../../../mock';
+import {WindowToken} from '../../core/helpers/window';
+import {localStorageProvider, LocalStorageToken} from '../../core/helpers/localStorage';
+import {UserService} from '../../shared/services/user.service';
+import {initialAppStates} from '../../shared/mocks/app.states.mock';
+import {resetLocalStorage} from '../../core/helpers/tests';
+import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../../shared/models/authentication';
 
 const MockWindow = {
   location: {

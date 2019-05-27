@@ -1,6 +1,6 @@
 import {All, AuthActionTypes} from './auth.actions';
 import {initialState, State} from './auth.state';
-import {Logger} from '../..';
+import {Logger} from '../../shared/services/logger.service';
 
 const logger = new Logger();
 

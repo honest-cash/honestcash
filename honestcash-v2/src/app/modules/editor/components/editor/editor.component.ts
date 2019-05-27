@@ -52,7 +52,7 @@ export interface HonestEditorConfig extends EditorConfig {
     Marker: Marker;
     delimiter: Delimiter;
   };
-  onChange: () => void;
+  onChange?: () => void;
 }
 
 @Component({
@@ -184,7 +184,11 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.editor.destroy();
       this.store.dispatch(new EditorUnload());
     }
-    this.autoSaveInterval$.unsubscribe();
-    this.editorState$.unsubscribe();
+    if (EDITOR_AUTO_SAVE.ON && this.autoSaveInterval$) {
+      this.autoSaveInterval$.unsubscribe();
+    }
+    if (this.editorState$) {
+      this.editorState$.unsubscribe();
+    }
   }
 }
