@@ -1,4 +1,4 @@
-enum ELEMENT_TYPES {
+export enum ELEMENT_TYPES {
   Header = 'header',
   Paragraph = 'paragraph',
   List = 'list',
@@ -9,24 +9,24 @@ enum ELEMENT_TYPES {
   Embed = 'embed',
 }
 
-enum LIST_STYLES {
+export enum LIST_STYLES {
   Ordered = 'ordered',
   Unordered = 'unordered',
 }
 
-enum EMBED_SERVICES {
+export enum EMBED_SERVICES {
   Youtube = 'youtube',
 }
 
 /* tslint:disable */
-type ParagraphElement = {
+export type ParagraphElement = {
   type: ELEMENT_TYPES.Paragraph;
   data: {
     text: string;
   };
 };
 
-type HeaderElement = {
+export type HeaderElement = {
   type: ELEMENT_TYPES.Header;
   data: {
     level: number;
@@ -34,7 +34,7 @@ type HeaderElement = {
   };
 };
 
-type ListElement = {
+export type ListElement = {
   type: ELEMENT_TYPES.List;
   data: {
     style: LIST_STYLES.Ordered | LIST_STYLES.Unordered;
@@ -42,7 +42,7 @@ type ListElement = {
   };
 };
 
-type ImageElement = {
+export type ImageElement = {
   type: ELEMENT_TYPES.Image;
   data: {
     file: {
@@ -55,7 +55,7 @@ type ImageElement = {
   };
 };
 
-type QuoteElement = {
+export type QuoteElement = {
   type: ELEMENT_TYPES.Quote;
   data: {
     text: string;
@@ -63,19 +63,19 @@ type QuoteElement = {
   };
 };
 
-type CodeElement = {
+export type CodeElement = {
   type: ELEMENT_TYPES.Code;
   data: {
     code: string;
   };
 };
 
-type DelimiterElement = {
+export type DelimiterElement = {
   type: ELEMENT_TYPES.Delimiter;
   data: {};
 };
 
-type EmbedElement = {
+export type EmbedElement = {
   type: ELEMENT_TYPES.Embed;
   data: {
     service: EMBED_SERVICES.Youtube;
@@ -95,7 +95,7 @@ export type Block =
   | EmbedElement;
 /* tslint:enable */
 
-export const convertHeaderBlockToHtml = (block: HeaderElement) => {
+export const convertHeadingBlockToHtml = (block: HeaderElement) => {
   const {level, text} = block.data;
   return `<h${level}>${text}</h${level}>`;
 };
@@ -107,7 +107,7 @@ export const convertParagraphBlockToHtml = (block: ParagraphElement) => {
 
 export const convertListBlockToHtml = (block: ListElement) => {
   const {style, items} = block.data;
-  const listStyle = style === 'ordered' ? 'ol' : 'ul';
+  const listStyle = style === LIST_STYLES.Ordered ? 'ol' : 'ul';
   const wrapper = (children) => `<${listStyle}>${children}</${listStyle}>`;
   const listItems = items.map(item => `<li>${item}</li>`).join('');
   return `${wrapper(listItems)}`;
@@ -129,31 +129,24 @@ export const convertCodeBlockToHtml = (block: CodeElement) => {
 };
 
 export const convertDelimiterBlockToHtml = (block: DelimiterElement) => {
-  return `<p class="story-elements__delimiter"></p>`;
+  return `<delimiter></delimiter>`;
 };
 
 export const convertEmbedBlockToHtml = (block: EmbedElement) => {
   const {embed, caption, service} = block.data;
-  switch (service) {
-    case 'youtube': {
-      return `
+  return `
         <figure>
           <iframe frameborder="0" scrolling="no" allowfullscreen="" src="${embed}"></iframe>
           <figcaption>${caption}</figcaption>
         </figure>
       `;
-    }
-    default: {
-      return null;
-    }
-  }
 };
 
 export const convertBlocksArrayToHtml = (
   blockOrBlocks: Block | Block[]
 ) => {
   if (Array.isArray(blockOrBlocks)) {
-    return blockOrBlocks.map(convertEmbedBlockToHtml).join('');
+    return blockOrBlocks.map(convertBlockToHtml).join('');
   }
   return convertBlockToHtml(blockOrBlocks);
 };
@@ -161,7 +154,7 @@ export const convertBlocksArrayToHtml = (
 export const convertBlockToHtml = (block: Block) => {
   switch (block.type) {
     case 'header': {
-      return convertHeaderBlockToHtml(block);
+      return convertHeadingBlockToHtml(block);
     }
     case 'paragraph': {
       return convertParagraphBlockToHtml(block);

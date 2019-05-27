@@ -14,7 +14,7 @@ export interface INgxChipsTag {
 }
 
 @Component({
-  selector: 'app-editor-publish-modal',
+  selector: 'editor-publish-modal',
   templateUrl: './publish-modal.component.html',
   styleUrls: ['./publish-modal.component.scss'],
 })

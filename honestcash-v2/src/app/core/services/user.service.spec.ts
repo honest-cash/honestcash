@@ -1,15 +1,14 @@
-import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '..';
 import {mock} from '../../../../mock';
-import {UserService} from './user.service';
+import {API_ENDPOINTS, UserService} from './user.service';
 import {of} from 'rxjs';
 import User from '../models/user';
-import {API_ENDPOINTS} from './user.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../app.states';
-import {AppRoutingModule} from '../../app-routing.module';
+import {RouterTestingModule} from '@angular/router/testing';
 
 const SHARED_MOCKS = {
   mnemonic: 'test test2 test3 test4',
@@ -24,8 +23,8 @@ describe('UserService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        AppRoutingModule,
-        StoreModule.forRoot(reducers, { metaReducers}),
+        RouterTestingModule,
+        StoreModule.forRoot(reducers, {metaReducers}),
       ],
       providers: [
         UserService,
@@ -55,12 +54,11 @@ describe('UserService', () => {
       userService.getMe().subscribe((response: User) => {
         // Assert
         expect(httpServiceMock.get)
-          .toHaveBeenCalledWith(API_ENDPOINTS.status);
+        .toHaveBeenCalledWith(API_ENDPOINTS.status);
         done();
       });
 
     });
   });
-
 
 });

@@ -48,7 +48,7 @@ export class WalletService {
     this.isSettingUpWallet.next(WALLET_SETUP_STATUS.NotInitialized);
   }
 
-  public setupWallet(payload?: LoginSuccessResponse | SignupSuccessResponse): Observable<ISimpleBitcoinWallet> {
+  public setupWallet(payload?: LoginSuccessResponse | SignupSuccessResponse): Observable<ISimpleBitcoinWallet | Error> {
     return defer(
       async () => {
         this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Started);
@@ -77,6 +77,12 @@ export class WalletService {
             simpleWallet = await WalletUtils.generateWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
           }
         }
+
+        if (!simpleWallet) {
+          return new Error();
+        }
+
+        this.setWallet(simpleWallet);
         this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Initialized);
         this.isSettingUpWallet.complete();
         return simpleWallet;

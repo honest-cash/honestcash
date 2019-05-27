@@ -6,9 +6,9 @@ import {of} from 'rxjs';
 import {API_ENDPOINTS, EditorService, STORY_PROPERTIES} from './editor.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../../app.states';
-import {AppRoutingModule} from '../../../app-routing.module';
 import {HttpService} from '../../../core';
 import Post from '../../../core/models/post';
+import {RouterTestingModule} from '@angular/router/testing';
 
 xdescribe('EditorService', () => {
   let editorService: EditorService;
@@ -19,7 +19,7 @@ xdescribe('EditorService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        AppRoutingModule,
+        RouterTestingModule,
         StoreModule.forRoot(reducers, {metaReducers}),
       ],
       providers: [

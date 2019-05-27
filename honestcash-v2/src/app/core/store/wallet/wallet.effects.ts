@@ -1,7 +1,7 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {Observable} from 'rxjs';
-import {map, switchMap, tap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup, WalletSetupFailed} from './wallet.actions';
 import {WalletService} from '../../services/wallet.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../models/authentication';
@@ -32,13 +32,8 @@ export class WalletEffects {
     map((action: WalletSetup) => action.payload),
     switchMap((payload?: LoginSuccessResponse | SignupSuccessResponse) => this.walletService.setupWallet(payload)
       .pipe(
-        map((wallet: ISimpleBitcoinWallet) => {
-          if (wallet) {
-            this.walletService.setWallet(wallet);
-            return new WalletGenerated({wallet});
-          }
-          return new WalletSetupFailed();
-        })
+        map((wallet: ISimpleBitcoinWallet) => new WalletGenerated({wallet})),
+        catchError(() => of(new WalletSetupFailed()))
       )
     ),
   );

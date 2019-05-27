@@ -113,9 +113,9 @@ describe('WalletService', () => {
 
     it('should NOT return a SimpleBitcoinWallet if there is NO payload and NO token and NO decrypted mnemonic exists in localStorage', (done) => {
       // Act
-      walletService.setupWallet().subscribe((wallet: ISimpleBitcoinWallet) => {
+      walletService.setupWallet().subscribe((wallet: ISimpleBitcoinWallet | Error) => {
         // Assert
-        expect(wallet).toBeUndefined();
+        expect(wallet).toEqual(new Error());
         done();
       });
     });

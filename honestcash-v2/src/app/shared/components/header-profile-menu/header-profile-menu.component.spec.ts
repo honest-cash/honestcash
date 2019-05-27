@@ -1,17 +1,20 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {HeaderComponent} from './header.component';
+import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {GOTO_PATHS, HeaderProfileMenuComponent} from './header-profile-menu.component';
+import {Router} from '@angular/router';
+import {WindowToken} from '../../../core/helpers/window';
+import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
+import {provideMockActions} from '@ngrx/effects/testing';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../core/mocks/app.states.mock';
+import {AuthEffects} from '../../../core/store/auth/auth.effects';
+import {Observable} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {AppStates} from '../../../app.states';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {cold} from 'jasmine-marbles';
 import {LogOut} from '../../../core/store/auth/auth.actions';
 import User from '../../../core/models/user';
-import {GOTO_PATHS} from '../header-profile-menu/header-profile-menu.component';
-import {Store} from '@ngrx/store';
-import {AppStates} from '../../../app.states';
-import {WindowToken} from '../../../core/helpers/window';
-import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
 
 const MockWindow = {
   location: {
@@ -19,33 +22,54 @@ const MockWindow = {
   }
 };
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+describe('HeaderProfileMenu', () => {
+  let effects: AuthEffects;
+  let actions: Observable<any>;
+  let component: HeaderProfileMenuComponent;
+  let fixture: ComponentFixture<HeaderProfileMenuComponent>;
+  let router: Router;
   let store: Store<AppStates>;
   let componentWindow: Window;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [],
-      declarations: [HeaderComponent],
+      declarations: [
+        HeaderProfileMenuComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ],
       providers: [
+        {
+          provide: Router, useValue: {
+            navigate: () => {
+            },
+            navigateByUrl: () => {
+            }
+          }
+        },
+        AuthEffects,
         {provide: WindowToken, useValue: MockWindow},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
+        provideMockActions(() => actions),
         provideMockStore({initialState: initialAppStates})
-      ],
-      schemas: [
-        NO_ERRORS_SCHEMA,
       ]
     });
-    store = TestBed.get(Store);
-    fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderProfileMenuComponent);
     component = fixture.componentInstance;
+
+    router = TestBed.get(Router);
+    effects = TestBed.get(AuthEffects);
+    store = TestBed.get(Store);
     componentWindow = TestBed.get(WindowToken);
 
     spyOn(store, 'dispatch').and.callThrough();
-    fixture.detectChanges();
+    spyOn(router, 'navigate').and.callThrough();
+    spyOn(router, 'navigateByUrl').and.callThrough();
   }));
 
   it('should create', () => {
@@ -108,4 +132,5 @@ describe('HeaderComponent', () => {
       });
     });
   });
+
 });

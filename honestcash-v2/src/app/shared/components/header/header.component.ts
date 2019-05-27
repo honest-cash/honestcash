@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import User from '../../../core/models/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EmbeddableEditorComponent} from '../../../modules/editor/embed/embed.component';
@@ -8,6 +8,8 @@ import {LogOut} from '../../../core/store/auth/auth.actions';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../core/store/auth/auth.state';
 import {State as UserState} from '../../../core/store/user/user.state';
+import {WindowToken} from '../../../core/helpers/window';
+import {GOTO_PATHS} from '../header-profile-menu/header-profile-menu.component';
 
 @Component({
   selector: 'app-header',
@@ -15,12 +17,13 @@ import {State as UserState} from '../../../core/store/user/user.state';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  menuHidden = true;
+  public menuHidden = true;
   public authState: Observable<AuthorizationState>;
   public userState: Observable<UserState>;
-  private user: User;
+  public user: User;
 
   constructor(
+    @Inject(WindowToken) private window,
     private store: Store<AppStates>,
     private modalService: NgbModal
   ) {
@@ -53,23 +56,24 @@ export class HeaderComponent implements OnInit {
   goTo(path: string) {
     switch (path) {
       case 'profile':
-        window.location.href = `/profile/${this.user.username}`;
+        this.window.location.href = GOTO_PATHS.profile(this.user.username);
         break;
       case 'posts':
-        window.location.href = `/posts`;
+        this.window.location.href = GOTO_PATHS.posts();
         break;
       case 'wallet':
-        window.location.href = `/wallet`;
+        this.window.location.href = GOTO_PATHS.wallet();
         break;
       case 'help':
-        window.location.href = `/honest_cash/frequently-asked-questions`;
+        this.window.location.href = GOTO_PATHS.faq();
         break;
       case 'terms-of-service':
-        window.location.href = `/honest_cash/honest-cash-terms-of-service-124`;
+        this.window.location.href = GOTO_PATHS.tos();
         break;
       case 'privacy-policy':
-        window.location.href = `/honest_cash/honestcash-privacy-policy`;
+        this.window.location.href = GOTO_PATHS.privacyPolicy();
         break;
+      /* istanbul ignore next: testing is not needed */
       default:
         break;
     }

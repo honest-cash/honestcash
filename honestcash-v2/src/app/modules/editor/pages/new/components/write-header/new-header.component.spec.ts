@@ -19,7 +19,7 @@ describe('HeaderComponent', () => {
       schemas: [
         NO_ERRORS_SCHEMA,
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
@@ -30,5 +30,18 @@ describe('HeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('functions', () => {
+    it('saveDraftStory should emit an Event through saveDraftStory', () => {
+      const emitSpy = spyOn(component.onSaveClick, 'emit').and.callThrough();
+      component.saveDraftStory();
+      expect(emitSpy).toHaveBeenCalled();
+    });
+    it('publishStory should emit an Event through onSavePublishClick', () => {
+      const emitSpy = spyOn(component.onSavePublishClick, 'emit').and.callThrough();
+      component.publishStory();
+      expect(emitSpy).toHaveBeenCalled();
+    });
   });
 });

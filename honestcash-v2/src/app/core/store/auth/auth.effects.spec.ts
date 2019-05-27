@@ -180,7 +180,6 @@ describe('auth.effects', () => {
         );
 
         effects.LogInSuccess.subscribe(() => {
-          console.log('SUBSCRIBE');
           forkJoin(firstActionSuccess$, secondActionsSuccess$)
           .pipe(first())
           .subscribe(() => {
