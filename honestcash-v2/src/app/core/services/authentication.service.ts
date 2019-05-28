@@ -1,25 +1,23 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, defer } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {defer, Observable} from 'rxjs';
 import User from '../models/user';
-import { CryptoUtils } from '../../shared/lib/CryptoUtils';
-import { HttpService } from '..';
+import {CryptoUtils} from '../../shared/lib/CryptoUtils';
+import {HttpService} from '..';
 import {
-  ResetPasswordContext,
   CheckPasswordContext,
   CheckPasswordResponse,
   EmptyResponse,
   LoginContext,
   LoginResponse,
   OkResponse,
+  ResetPasswordContext,
   ResetPasswordRequestContext,
   SetWalletContext,
   SignupContext,
   SignupResponse,
   SignupSuccessResponse
 } from '../models/authentication';
-import { WalletUtils } from 'app/shared/lib/WalletUtils';
-import { mergeMap } from 'rxjs/operators';
-import {environment} from '../../../environments/environment';
+import {WalletUtils} from 'app/shared/lib/WalletUtils';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 
@@ -66,7 +64,8 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpService
-  ) {}
+  ) {
+  }
 
   public getToken(): string {
     let token;
@@ -142,30 +141,27 @@ export class AuthenticationService {
   }
 
   public resetPassword(payload: ResetPasswordRequestContext): Observable<EmptyResponse> {
-    return this.http.post<string>(API_ENDPOINTS.resetPassword, { email: payload.email });
+    return this.http.post<string>(API_ENDPOINTS.resetPassword, {email: payload.email});
   }
 
   public changePassword(context: ResetPasswordContext): Observable<OkResponse> {
     return defer(async () => {
-      const mnemonicEncrypted = (await WalletUtils.generateNewWallet(context.newPassword)).mnemonicEncrypted;
+      const mnemonic = (await WalletUtils.generateNewWallet(context.newPassword)).mnemonic;
+      const mnemonicEncrypted = await WalletUtils.encrypt(mnemonic, context.newPassword);
+      const payload: ChangePasswordPayload = {
+        email: context.email,
+        code: context.code,
+        newPassword: CryptoUtils.calculatePasswordHash(context.email, context.newPassword),
+        repeatNewPassword: CryptoUtils.calculatePasswordHash(context.email, context.repeatNewPassword),
+        mnemonicEncrypted,
+      };
 
-      return mnemonicEncrypted;
-    })
-    .pipe(
-      mergeMap(
-        (mnemonicEncrypted => {
-          const payload: ChangePasswordPayload = {
-            email: context.email,
-            code: context.code,
-            newPassword: CryptoUtils.calculatePasswordHash(context.email, context.newPassword),
-            repeatNewPassword: CryptoUtils.calculatePasswordHash(context.email, context.repeatNewPassword),
-            mnemonicEncrypted,
-          };
+      await this.http.post<OkResponse>(API_ENDPOINTS.changePassword, payload).toPromise();
 
-        return this.http.post<OkResponse>(API_ENDPOINTS.changePassword, payload);
-        })
-      )
-    );
+      return {
+        ok: true,
+      };
+    });
   }
 
   public checkPassword(payload: CheckPasswordContext): Observable<CheckPasswordResponse> {
