@@ -20,7 +20,6 @@ import {ForbiddenUsernameValidatorDirective} from './directives/forbidden-userna
 import {ResetPasswordVerifyComponent} from './pages/reset-password-verify/reset-password-verify.component';
 import {AboutComponent} from './pages/about/about.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {VersionOneGuard} from '../../shared/guards/version-one.guard';
 
 const routes: Routes = [
   {
@@ -39,7 +38,6 @@ const routes: Routes = [
         pathMatch: 'full',
         component: LoginComponent,
         canActivate: [UnauthorizedGuard],
-        canDeactivate: [VersionOneGuard]
       },
       {path: 'logout', pathMatch: 'full', component: LogoutComponent, canActivate: [AuthorizedGuard]},
       {
@@ -47,7 +45,6 @@ const routes: Routes = [
         pathMatch: 'full',
         component: SignupComponent,
         canActivate: [UnauthorizedGuard],
-        canDeactivate: [VersionOneGuard]
       },
       {
         path: 'reset-password-request/:resetCode',
