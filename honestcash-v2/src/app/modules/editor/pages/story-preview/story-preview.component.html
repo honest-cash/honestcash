@@ -5,12 +5,12 @@
 </div>
 <div class="row mb-2">
   <div class="col-1">
-    <app-avatar [src]="story.user.imageUrl" large="true"></app-avatar>
+    <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
   </div>
   <div class="col">
     <div class="row">
       <div class="col">
-        <a class="font-weight-bold" [routerLink]="['/profile', story.user.username]">{{story.user.username}}</a>
+        <a class="font-weight-bold" [routerLink]="['/profile', user.username]">{{user.username}}</a>
         <button type="button" class="btn btn-light btn-xs ml-2">Follow</button>
       </div>
     </div>

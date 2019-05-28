@@ -1,7 +1,7 @@
 import Post from '../../shared/models/post';
 import EditorJS from '@editorjs/editorjs';
 
-export enum EDITOR_SAVE_STATUS {
+export enum EDITOR_STATUS {
   NotSaved = 'NOT_SAVED',
   Saved = 'SAVED',
   Saving = 'SAVING',
@@ -13,14 +13,14 @@ export enum EDITOR_SAVE_STATUS {
 
 export interface State {
   isLoaded: boolean;
-  status: EDITOR_SAVE_STATUS;
+  status: EDITOR_STATUS;
   story: Post;
   editor: EditorJS;
 }
 
 export const initialState: State = {
   isLoaded: false,
-  status: EDITOR_SAVE_STATUS.NotInitialized,
+  status: EDITOR_STATUS.NotInitialized,
   story: new Post(),
   editor: null,
 };

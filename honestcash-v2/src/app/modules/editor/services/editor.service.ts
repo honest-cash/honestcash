@@ -6,6 +6,7 @@ import {EmptyResponse} from '../../../shared/models/authentication';
 import Hashtag from '../../../shared/models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
+import blankBody from '../../../store/editor/editor.story.body.initial-value';
 
 export interface DraftContext {
   parentPostId?: number;
@@ -87,6 +88,13 @@ export class EditorService {
 
   downloadImageFromUrl(url: string) {
     return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadRemoteImage(), url);
+  }
+
+  setBlankBody(story: Post): Post {
+    return {
+      ...story,
+      body: blankBody,
+    };
   }
 
   private transformTags(tags: Hashtag[]): string {

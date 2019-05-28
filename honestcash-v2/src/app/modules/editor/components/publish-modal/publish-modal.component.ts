@@ -4,7 +4,7 @@ import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorStoryPropertyChange, EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../services/editor.service';
 import Hashtag from '../../../../shared/models/hashtag';
@@ -21,10 +21,10 @@ export interface INgxChipsTag {
 })
 export class EditorPublishModalComponent implements OnInit, OnDestroy {
   private editor: EditorJS;
-  private EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS;
+  private EDITOR_SAVE_STATUS = EDITOR_STATUS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private saveStatus: EDITOR_SAVE_STATUS;
+  private saveStatus: EDITOR_STATUS;
   private story: Post;
   private _hashtags: Hashtag[] | INgxChipsTag[] | string;
 
@@ -50,7 +50,7 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+    if (this.saveStatus === EDITOR_STATUS.NotSaved) {
       this.editor.saver.save()
       .then((outputData) => {
         this.story.body = outputData.blocks;

@@ -3,7 +3,7 @@ import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angul
 import EditorJS from '@editorjs/editorjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import Post from '../../../../shared/models/post';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
@@ -28,7 +28,7 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   @Input() activePane: PaneType = 'first';
   @ViewChild('modalBody') modalBody: ElementRef;
 
-  public saveStatus: EDITOR_SAVE_STATUS;
+  public saveStatus: EDITOR_STATUS;
   readonly editor: EditorJS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
@@ -61,7 +61,7 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
 
   onPublish(f: NgForm) {
     if (f.form.valid) {
-      if (this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+      if (this.saveStatus === EDITOR_STATUS.NotSaved) {
         this.editor.saver.save()
         .then((outputData) => {
           this.story.body = outputData.blocks;

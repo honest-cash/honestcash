@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
@@ -14,9 +14,10 @@ import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {interval, Observable, Subscription} from 'rxjs';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorChange, EditorLoad, EditorStoryPropertySave, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
+import {Block} from '../../converters/json-to-html';
 
 export const EDITOR_AUTO_SAVE = {
   ON: false,
@@ -61,7 +62,9 @@ export interface HonestEditorConfig extends EditorConfig {
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit, OnDestroy {
-  public saveStatus: EDITOR_SAVE_STATUS;
+  @Input() public story: Post;
+  public saveStatus: EDITOR_STATUS;
+  public hasEditorInitialized = false;
   readonly editor: EditorJS;
   private editorConfig: HonestEditorConfig = {
     holder: 'editor',
@@ -102,10 +105,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     },
     onChange: this.onEditorChange.bind(this)
   };
-  private editorStateObservable: Observable<EditorState>;
-  private editorState$: Subscription;
-  private story: Post;
-  private hasEditorInitialized = false;
+  public editorStateObservable: Observable<EditorState>;
+  public editorState$: Subscription;
   private autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
   private autoSaveInterval$: Subscription;
 
@@ -124,20 +125,18 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.store.dispatch(new EditorLoad({editor: this.editor}));
     });
     this.editorStateObservable = this.store.select(selectEditorState);
-    // explicitly turn autosave on write mode
-    // so that on edit mode it is default by default even if forgotten
-    EDITOR_AUTO_SAVE.ON = true;
   }
 
   ngOnInit() {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
-      this.story = editorState.story;
 
-      if (editorState.isLoaded && !this.hasEditorInitialized) {
+      if (editorState.status === EDITOR_STATUS.Initialized && !this.hasEditorInitialized) {
         this.editor.blocks.clear();
-        this.editor.blocks.render({blocks: <any[]>this.story.body});
+        if (this.story.body) {
+          this.editor.blocks.render({blocks: <Block[]>this.story.body});
+        }
         this.hasEditorInitialized = true;
       }
     });
@@ -149,7 +148,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.story.body = outputData.blocks;
       this.store.dispatch(new EditorChange({story: this.story, editor: this.editor}));
 
-      if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_SAVE_STATUS.NotSaved) {
+      if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_STATUS.NotSaved) {
         this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
           this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
         });

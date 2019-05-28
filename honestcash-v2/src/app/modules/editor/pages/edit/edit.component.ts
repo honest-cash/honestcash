@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {EditorPublishModalComponent} from '../../components/publish-modal/publish-modal.component';
+import Post from '../../../../shared/models/post';
 
 @Component({
   selector: 'editor-edit',
@@ -12,6 +12,7 @@ import {EditorPublishModalComponent} from '../../components/publish-modal/publis
   styleUrls: ['./edit.component.scss']
 })
 export class EditorEditComponent implements OnInit, OnDestroy {
+  public story: Post;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
 
@@ -25,17 +26,10 @@ export class EditorEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
-      if (editorState.status === EDITOR_SAVE_STATUS.Published) {
+      this.story = editorState.story;
+      if (editorState.status === EDITOR_STATUS.Published) {
         this.modalService.dismissAll();
       }
-    });
-  }
-
-  publishStory() {
-    this.modalService.open(EditorPublishModalComponent, {
-      size: 'lg',
-      centered: true,
-      backdrop: 'static',
     });
   }
 

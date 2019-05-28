@@ -9,7 +9,6 @@ import {State as AuthorizationState} from '../../../store/auth/auth.state';
 import {State as UserState} from '../../../store/user/user.state';
 import {WindowToken} from '../../../core/helpers/window';
 import {GOTO_PATHS} from '../header-profile-menu/header-profile-menu.component';
-import {EditorEmbeddableComponent} from '../../../modules/editor/components/embeddable-editor/embeddable.component';
 
 @Component({
   selector: 'app-header',
@@ -34,14 +33,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.userState.subscribe((userState: UserState) => {
       this.user = userState.user;
-    });
-  }
-
-  openEditorModal() {
-    const modalRef = this.modalService.open(EditorEmbeddableComponent, {
-      size: 'lg',
-      centered: true,
-      backdrop: 'static',
     });
   }
 

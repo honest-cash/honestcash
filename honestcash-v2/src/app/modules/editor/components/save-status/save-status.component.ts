@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {EDITOR_SAVE_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import Post from '../../../../shared/models/post';
 import {EditorStorySave} from '../../../../store/editor/editor.actions';
 import EditorJS from '@editorjs/editorjs';
@@ -14,11 +14,11 @@ import EditorJS from '@editorjs/editorjs';
 })
 export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   private editor: EditorJS;
-  private EDITOR_SAVE_STATUS = EDITOR_SAVE_STATUS;
+  private EDITOR_SAVE_STATUS = EDITOR_STATUS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
   private story: Post;
-  private saveStatus: EDITOR_SAVE_STATUS;
+  private saveStatus: EDITOR_STATUS;
 
   constructor(
     private store: Store<AppStates>,

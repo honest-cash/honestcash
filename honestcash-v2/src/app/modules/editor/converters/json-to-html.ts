@@ -20,6 +20,7 @@ export enum EMBED_SERVICES {
 
 export interface Block {
   type: ELEMENT_TYPES;
+  data: object;
 }
 
 export interface ParagraphElement extends Block {
