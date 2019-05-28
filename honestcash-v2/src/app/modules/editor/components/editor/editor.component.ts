@@ -122,7 +122,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     };
     this.editor = new EditorJS(this.editorConfig);
     this.editor.isReady.then(() => {
-      this.store.dispatch(new EditorLoad({editor: this.editor}));
+      this.store.dispatch(new EditorLoad({story: this.story, editor: this.editor}));
     });
     this.editorStateObservable = this.store.select(selectEditorState);
   }
@@ -134,8 +134,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 
       if (editorState.status === EDITOR_STATUS.Initialized && !this.hasEditorInitialized) {
         this.editor.blocks.clear();
-        if (this.story.body) {
-          this.editor.blocks.render({blocks: <Block[]>this.story.body});
+        if (this.story.bodyJSON) {
+          this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
         }
         this.hasEditorInitialized = true;
       }
@@ -145,12 +145,12 @@ export class EditorComponent implements OnInit, OnDestroy {
   onEditorChange() {
     this.editor.saver.save()
     .then((outputData) => {
-      this.story.body = outputData.blocks;
+      this.story.bodyJSON = <Block[]>outputData.blocks;
       this.store.dispatch(new EditorChange({story: this.story, editor: this.editor}));
 
       if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_STATUS.NotSaved) {
         this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
-          this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.Body}));
+          this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.BodyJSON}));
         });
       }
     });

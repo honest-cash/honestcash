@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {defer, Observable} from 'rxjs';
 import Post from '../../../shared/models/post';
 import {HttpService} from '../../../core';
 import {EmptyResponse} from '../../../shared/models/authentication';
@@ -25,20 +25,21 @@ export interface UploadImageEditorExpectedResponse {
 }
 
 export const API_ENDPOINTS = {
-  getPost: (id: number) => `/post/${id}`,
+  getPost: (id: number) => `/v2/post/${id}`,
   draft: (c: DraftContext = {}) =>
-    c.parentPostId ? `/draft?parentPostId=${c.parentPostId}` : c.postId ? `/post/${c.postId}` : '/draft',
-  newDraft: () => `/draft`,
-  savePostProperty: (p: Post, property: STORY_PROPERTIES) => `/draft/${p.id}/${property}`,
-  saveDraft: (p: Post) => `/draft/${p.id}/body`,
-  publishPost: (p: Post) => `/draft/${p.id}/publish`,
+    c.parentPostId ? `/v2/draft?parentPostId=${c.parentPostId}` : c.postId ? `/post/${c.postId}` : '/draft',
+  newDraft: () => `/v2/draft`,
+  savePostProperty: (p: Post, property: STORY_PROPERTIES) => `/v2/draft/${p.id}/${property}`,
+  saveDraft: (p: Post) => `/v2/draft/${p.id}/body`,
+  publishPost: (p: Post) => `/v2/draft/${p.id}/publish`,
   uploadImage: () => `/upload/image`,
-  uploadRemoteImage: () => `/upload/image/remote`
+  uploadRemoteImage: () => `/v2/upload/image/remote`
 };
 
 export enum STORY_PROPERTIES {
   Title = 'title',
   Body = 'body',
+  BodyJSON = 'bodyJSON',
   Hashtags = 'hashtags',
   HasPaidSection = 'hasPaidSection',
   PaidSectionLinebreak = 'paidSectionLinebreak',
@@ -57,7 +58,14 @@ export class EditorService {
   }
 
   loadPostDraft(draftContext: DraftContext): Observable<Post> {
-    return this.http.get<Post>(API_ENDPOINTS.draft(draftContext));
+    return defer(async () => {
+      const post: Post = await this.http.get<Post>(API_ENDPOINTS.draft(draftContext)).toPromise();
+      
+      return {
+        ...post,
+        bodyJSON: post.bodyJSON ? JSON.parse(<string>post.bodyJSON) : ''
+      };
+    });
   }
 
   loadNewPostDraft(): Observable<Post> {
@@ -67,6 +75,9 @@ export class EditorService {
   savePostProperty(post: Post, property: STORY_PROPERTIES): Observable<EmptyResponse> {
     if (property === STORY_PROPERTIES.Hashtags && post.userPostHashtags.length > 0) {
       post.userPostHashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
+    }
+    if (property === STORY_PROPERTIES.BodyJSON) {
+      post.bodyJSON = JSON.stringify(post.bodyJSON);
     }
     return this.http.put<Post>(API_ENDPOINTS.savePostProperty(post, property), post);
   }

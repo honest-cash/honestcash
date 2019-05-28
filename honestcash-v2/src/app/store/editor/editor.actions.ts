@@ -8,6 +8,12 @@ export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',
   EDITOR_UNLOAD = '[Editor] Editor Unload',
   EDITOR_CHANGE = '[Editor] Editor Change',
+  EDITOR_DRAFT_LOAD = '[Editor] Editor Draft Load',
+  EDITOR_DRAFT_LOAD_SUCCESS = '[Editor] Editor Draft Load Success',
+  EDITOR_DRAFT_LOAD_FAILURE = '[Editor] Editor Draft Load Failure',
+  EDITOR_STORY_LOAD = '[Editor] Editor Story Load',
+  EDITOR_STORY_LOAD_SUCCESS = '[Editor] Editor Story Load Success',
+  EDITOR_STORY_LOAD_FAILURE = '[Editor] Editor Story Load Failure',
   EDITOR_STORY_PROPERTY_CHANGE = '[Editor] Story Property Change',
   EDITOR_STORY_PROPERTY_SAVE = '[Editor] Story Property Save',
   EDITOR_STORY_SAVE = '[Editor] Story Save',
@@ -37,6 +43,42 @@ export class EditorChange implements Action {
   readonly type = EditorActionTypes.EDITOR_CHANGE;
 
   constructor(public payload: { story: Post, editor: EditorJS }) {
+  }
+}
+
+export class EditorDraftLoad implements Action {
+  readonly type = EditorActionTypes.EDITOR_DRAFT_LOAD;
+}
+
+export class EditorDraftLoadSuccess implements Action {
+  readonly type = EditorActionTypes.EDITOR_DRAFT_LOAD_SUCCESS;
+
+  constructor(public payload: Post) {
+  }
+}
+
+export class EditorDraftLoadFailure implements Action {
+  readonly type = EditorActionTypes.EDITOR_DRAFT_LOAD_FAILURE;
+
+  constructor(public payload: FailedResponse) {
+  }
+}
+
+export class EditorStoryLoad implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_LOAD;
+}
+
+export class EditorStoryLoadSuccess implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_LOAD_SUCCESS;
+
+  constructor(public payload: Post) {
+  }
+}
+
+export class EditorStoryLoadFailure implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_LOAD_FAILURE;
+
+  constructor(public payload: FailedResponse) {
   }
 }
 
@@ -107,6 +149,12 @@ export type All =
   | EditorLoad
   | EditorUnload
   | EditorChange
+  | EditorDraftLoad
+  | EditorDraftLoadSuccess
+  | EditorDraftLoadFailure
+  | EditorStoryLoad
+  | EditorStoryLoadSuccess
+  | EditorStoryLoadFailure
   | EditorStoryPropertyChange
   | EditorStoryPropertySave
   | EditorStorySave

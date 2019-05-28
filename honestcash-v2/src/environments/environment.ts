@@ -9,8 +9,8 @@ export interface Environment {
 }
 
 export const ENVIRONMENT_DEFAULTS: Environment = {
-  apiUrl: 'https://honest.cash/api', // http://localhost:8080/api
-  clientUrl: 'https://honest.cash/', // http://localhost:3010/
+  apiUrl: 'http://localhost:8080/api', // https://honest.cash/api
+  clientUrl: 'http://localhost:3010/', // https://honest.cash/
   production: false
 };
 

@@ -2,6 +2,7 @@ import {All, EditorActionTypes} from './editor.actions';
 import {EDITOR_STATUS, initialState, State} from './editor.state';
 import {STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
 import {Logger} from '../../shared/services/logger.service';
+import blankBody from './editor.story.body.initial-value';
 
 const logger = new Logger();
 
@@ -29,6 +30,16 @@ export function reducer(state = initialState, action: All): State {
         story: action.payload.story,
         editor: action.payload.editor,
         status: EDITOR_STATUS.NotSaved,
+      };
+    }
+    case EditorActionTypes.EDITOR_DRAFT_LOAD_SUCCESS: {
+      logger.info('Editor Draft Load Success', action.payload);
+      return {
+        ...state,
+        story: {
+          ...action.payload,
+          bodyJSON: action.payload.bodyJSON ? JSON.parse(<any>action.payload.bodyJSON) : blankBody,
+        },
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE: {

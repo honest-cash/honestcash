@@ -3,6 +3,10 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {forkJoin, Observable, of} from 'rxjs';
 import {
   EditorActionTypes,
+  EditorDraftLoadFailure,
+  EditorDraftLoadSuccess,
+  EditorStoryLoadFailure,
+  EditorStoryLoadSuccess,
   EditorStoryPropertySave,
   EditorStoryPublishFailure,
   EditorStoryPublishSuccess,
@@ -31,6 +35,28 @@ export class EditorEffects {
     ofType(EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE),
     map((action: EditorStoryPropertySave) => action.payload),
     switchMap((payload) => this.editorService.savePostProperty(payload.story, payload.property)),
+  );
+
+  @Effect()
+  EditorDraftLoad: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_DRAFT_LOAD),
+    switchMap(() => this.editorService.loadNewPostDraft()
+      .pipe(
+        map((story: Post) => new EditorDraftLoadSuccess(story)),
+        catchError(error => of(new EditorDraftLoadFailure(error))),
+      ),
+    ),
+  );
+
+  @Effect()
+  EditorStoryLoad: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_STORY_LOAD),
+    switchMap(() => this.editorService.getPost(0)
+      .pipe(
+        map((story: Post) => new EditorStoryLoadSuccess(story)),
+        catchError(error => of(new EditorStoryLoadFailure(error))),
+      ),
+    ),
   );
 
   @Effect()

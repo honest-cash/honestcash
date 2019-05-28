@@ -10,6 +10,7 @@ export default class Post {
   alias: string;
   body: string | any[] | Block[];
   bodyMD: string;
+  bodyJSON: Block[] | string;
   plain: string;
   user: User;
   userId: number;

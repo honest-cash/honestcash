@@ -7,6 +7,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EDITOR_AUTO_SAVE} from '../../components/editor/editor.component';
 import Post from '../../../../shared/models/post';
 import {EditorService} from '../../services/editor.service';
+import {EditorDraftLoad} from '../../../../store/editor/editor.actions';
 
 @Component({
   selector: 'editor-write',
@@ -30,10 +31,10 @@ export class EditorWriteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.dispatch(new EditorDraftLoad());
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
-      this.story = this.editorService.setBlankBody(this.story);
       if (editorState.status === EDITOR_STATUS.Published) {
         this.modalService.dismissAll();
       }
