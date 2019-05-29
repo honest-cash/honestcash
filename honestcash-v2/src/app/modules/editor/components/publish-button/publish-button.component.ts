@@ -19,11 +19,11 @@ import {Environment} from '../../../../../environments/environment';
 })
 export class EditorPublishButtonComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'd-flex align-items-center';
-  private EDITOR_SAVE_STATUS = EDITOR_STATUS;
+  public EDITOR_SAVE_STATUS = EDITOR_STATUS;
+  public saveStatus: EDITOR_STATUS;
+  public story: Post;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private saveStatus: EDITOR_STATUS;
-  private story: Post;
   private modalRef: NgbModalRef;
 
   constructor(

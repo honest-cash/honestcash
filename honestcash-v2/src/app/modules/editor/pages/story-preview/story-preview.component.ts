@@ -20,14 +20,14 @@ export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
   @ViewChildren('bodyJSON') bodyJSON: QueryList<ElementRef>;
   @ViewChildren('bodyJSONFree') bodyJSONFree: QueryList<ElementRef>;
   @ViewChildren('bodyJSONPaid') bodyJSONPaid: QueryList<ElementRef>;
-  private EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
+  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
+  public story: Post;
+  public user: User;
+  public isLoading = true;
+  public freeBodyJSON: Block[];
+  public paidBodyJSON: Block[];
   private userStateObservable: Observable<UserState>;
   private userState$: Subscription;
-  private story: Post;
-  private user: User;
-  private freeBodyJSON: Block[];
-  private paidBodyJSON: Block[];
-  private isLoading = true;
 
   constructor(
     private store: Store<AppStates>,

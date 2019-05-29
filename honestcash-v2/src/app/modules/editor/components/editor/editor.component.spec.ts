@@ -71,7 +71,7 @@ describe('EditorComponent', () => {
     });
     it('should should dispatch EditorLoad action when editor is ready', () => {
       component.editor.isReady.then(() => {
-        expect(store.dispatch).toHaveBeenCalledWith(new EditorLoad({editor: component.editor}));
+        expect(store.dispatch).toHaveBeenCalledWith(new EditorLoad());
       });
     });
   });

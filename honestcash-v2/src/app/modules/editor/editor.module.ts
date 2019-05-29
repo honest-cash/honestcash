@@ -9,7 +9,6 @@ import {TagInputModule} from 'ngx-chips';
 import {EditorStoryPreviewComponent} from './pages/story-preview/story-preview.component';
 import {EditorWriteComponent} from './pages/write/write.component';
 import {EditorEditComponent} from './pages/edit/edit.component';
-import {EditorModalExampleComponent} from './pages/modal-example/modal-example.component';
 import {EditorPublishModalComponent} from './components/publish-modal/publish-modal.component';
 import {EditorPublishButtonComponent} from './components/publish-button/publish-button.component';
 import {EditorHeaderComponent} from './components/header/header.component';
@@ -34,7 +33,6 @@ const routes: Routes = [
         component: EditorStoryPreviewComponent,
         canActivate: [AuthorizedGuard, LocallySavedStoryGuard]
       },
-      {path: 'modal-example', pathMatch: 'full', component: EditorModalExampleComponent},
     ]
   }
 ];
@@ -50,7 +48,6 @@ const routes: Routes = [
     EditorContainerComponent,
     EditorWriteComponent,
     EditorEditComponent,
-    EditorModalExampleComponent,
     EditorStoryPreviewComponent,
     EditorHeaderComponent,
     EditorStoryPreviewComponent,

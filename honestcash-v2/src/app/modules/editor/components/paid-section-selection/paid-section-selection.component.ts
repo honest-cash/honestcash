@@ -23,12 +23,12 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   @Input() form: NgForm;
   @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
-  private isLoaded: boolean;
-  private paidSectionLineBreakTouched = false;
-  private paidSectionLinebreakEnd: number;
+  public isLoaded: boolean;
+  public paidSectionLineBreakTouched = false;
+  public paidSectionLinebreakEnd: number;
+  public story: Post;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private story: Post;
 
   constructor(
     private store: Store<AppStates>,

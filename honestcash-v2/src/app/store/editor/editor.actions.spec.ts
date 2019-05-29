@@ -88,12 +88,12 @@ describe('editor.effects', () => {
   describe('EditorLoad', () => {
     it('should create an action when no payload is provided', () => {
       const action = new EditorLoad();
-      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_LOAD, payload: undefined});
+      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_LOAD});
     });
     it('should create an action when payload is provided', () => {
       const payload = {story: new Post(), editor: new EditorJS(editorConfig)};
-      const action = new EditorLoad(payload);
-      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_LOAD, payload});
+      const action = new EditorLoad();
+      expect({...action}).toEqual({type: EditorActionTypes.EDITOR_LOAD});
     });
   });
   describe('EditorUnload', () => {
@@ -126,7 +126,7 @@ describe('editor.effects', () => {
   describe('EditoryStorySave Actions', () => {
     it('EditorStorySave should create an action', () => {
       const payload = new Post();
-      const action = new EditorStorySave(payload);
+      const action = new EditorStorySave();
       expect({...action}).toEqual({type: EditorActionTypes.EDITOR_STORY_SAVE, payload});
     });
     it('EditorStorySaveSuccess should create an action', () => {

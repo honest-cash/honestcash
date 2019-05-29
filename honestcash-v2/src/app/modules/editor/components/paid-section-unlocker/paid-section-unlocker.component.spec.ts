@@ -1,18 +1,18 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {EditorSaveStatusComponent} from './save-status.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {EditorPaidSectionUnlockerComponent} from './paid-section-unlocker.component';
 
-describe('EditorSaveStatusComponent', () => {
-  let component: EditorSaveStatusComponent;
-  let fixture: ComponentFixture<EditorSaveStatusComponent>;
+describe('EditorPaidSectionUnlockerComponent', () => {
+  let component: EditorPaidSectionUnlockerComponent;
+  let fixture: ComponentFixture<EditorPaidSectionUnlockerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [EditorSaveStatusComponent],
+      declarations: [EditorPaidSectionUnlockerComponent],
       providers: [
         provideMockStore({initialState: initialAppStates})
       ],
@@ -23,7 +23,7 @@ describe('EditorSaveStatusComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorSaveStatusComponent);
+    fixture = TestBed.createComponent(EditorPaidSectionUnlockerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

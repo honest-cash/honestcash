@@ -20,12 +20,12 @@ export interface INgxChipsTag {
   styleUrls: ['./publish-modal.component.scss'],
 })
 export class EditorPublishModalComponent implements OnInit, OnDestroy {
-  private EDITOR_SAVE_STATUS = EDITOR_STATUS;
+  public story: Post;
+  public _hashtags: Hashtag[] | INgxChipsTag[] | string;
+  public EDITOR_SAVE_STATUS = EDITOR_STATUS;
+  public saveStatus: EDITOR_STATUS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private saveStatus: EDITOR_STATUS;
-  private story: Post;
-  private _hashtags: Hashtag[] | INgxChipsTag[] | string;
 
   constructor(
     private store: Store<AppStates>,

@@ -17,9 +17,9 @@ export enum EDITOR_EDITING_MODES {
 })
 export class EditorHeaderComponent implements OnInit, OnDestroy {
   @Input() public editingMode: EDITOR_EDITING_MODES = EDITOR_EDITING_MODES.Write;
+  public user: User;
   private EDITOR_EDITING_MODE = EDITOR_EDITING_MODES;
   private userState$: Subscription;
-  private user: User;
 
   constructor(
     private store: Store<AppStates>,

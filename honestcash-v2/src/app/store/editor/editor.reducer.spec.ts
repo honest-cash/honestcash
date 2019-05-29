@@ -58,7 +58,7 @@ xdescribe('editor.reducer', () => {
     it('should load the story provided in payload', () => {
       const payload = {story: new Post(), editor: new EditorJS(editorConfig)};
       payload.story.title = 'asdf';
-      const newState = reducer(undefined, new EditorLoad(payload));
+      const newState = reducer(undefined, new EditorLoad());
 
       expect(newState.isLoaded).toBeTruthy();
       expect(newState.story).toEqual(payload.story);

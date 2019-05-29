@@ -17,11 +17,11 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'd-flex align-items-center';
-  private EDITOR_SAVE_STATUS = EDITOR_STATUS;
+  public EDITOR_SAVE_STATUS = EDITOR_STATUS;
+  public story: Post;
+  public saveStatus: EDITOR_STATUS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private story: Post;
-  private saveStatus: EDITOR_STATUS;
   private autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
   private autoSaveInterval$: Subscription;
 

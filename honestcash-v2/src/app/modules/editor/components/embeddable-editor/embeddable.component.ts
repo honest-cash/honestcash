@@ -28,16 +28,15 @@ type PaneType = 'first' | 'second';
 export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   @Input() activePane: PaneType = 'first';
   @ViewChild('modalBody') modalBody: ElementRef;
-
   public saveStatus: EDITOR_STATUS;
+  public story: Post;
+  public _hashtags: Hashtag[] | INgxChipsTag[] | string;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private story: Post;
-  private _hashtags: Hashtag[] | INgxChipsTag[] | string;
 
   constructor(
     private store: Store<AppStates>,
-    private activeModal: NgbActiveModal,
+    public activeModal: NgbActiveModal,
   ) {
     this.editorStateObservable = this.store.select(selectEditorState);
   }
