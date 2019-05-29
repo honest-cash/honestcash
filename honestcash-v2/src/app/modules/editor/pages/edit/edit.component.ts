@@ -14,14 +14,14 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class EditorEditComponent implements OnInit, OnDestroy {
   public story: Post;
-  private editorStateObservable: Observable<EditorState>;
-  private editorState$: Subscription;
+  private editor$: Observable<EditorState>;
+  private editorSub: Subscription;
 
   constructor(
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.editorStateObservable = this.store.select(selectEditorState);
+    this.editor$ = this.store.select(selectEditorState);
   }
 
   ngOnInit() {
@@ -29,13 +29,13 @@ export class EditorEditComponent implements OnInit, OnDestroy {
       this.store.dispatch(new EditorStoryLoad(params.storyId));
     });
 
-    this.editorState$ = this.editorStateObservable
+    this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
     });
   }
 
   ngOnDestroy() {
-    this.editorState$.unsubscribe();
+    this.editorSub.unsubscribe();
   }
 }
