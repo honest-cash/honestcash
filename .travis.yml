@@ -22,6 +22,7 @@ matrix:
 
     install:
     - npm install
+    - npm install -C ./honestcash-v2
 
     script:
     - npm run build
@@ -29,6 +30,9 @@ matrix:
     # - npm run lint
     - npm run transfer-libs
     - npm run test
+    - npm run build --prod -C ./honestcash-v2
+    - npm run build:ssr -C ./honestcash-v2
+    - npm run test -C ./honestcash-v2
 
     before_deploy:
     - npm prune --production
