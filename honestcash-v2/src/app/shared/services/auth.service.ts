@@ -152,6 +152,10 @@ export class AuthService {
     });
   }
 
+  public setWallet(payload: SetWalletContext): Observable<OkResponse> {
+    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
+  }
+
   public getEmails(): Observable<string[]> {
     return this.http.get<string[]>(API_ENDPOINTS.getEmails);
   }
@@ -162,25 +166,22 @@ export class AuthService {
 
   public changePassword(context: ResetPasswordContext): Observable<OkResponse> {
     return defer(async () => {
-      const mnemonicEncrypted = (await WalletUtils.generateNewWallet(context.newPassword)).mnemonicEncrypted;
+      const mnemonic = (await WalletUtils.generateNewWallet(context.newPassword)).mnemonic;
+      const mnemonicEncrypted = await WalletUtils.encrypt(mnemonic, context.newPassword);
+      const payload: ChangePasswordPayload = {
+        email: context.email,
+        code: context.code,
+        newPassword: CryptoUtils.calculatePasswordHash(context.email, context.newPassword),
+        repeatNewPassword: CryptoUtils.calculatePasswordHash(context.email, context.repeatNewPassword),
+        mnemonicEncrypted,
+      };
 
-      return mnemonicEncrypted;
-    })
-    .pipe(
-      mergeMap(
-        (mnemonicEncrypted => {
-          const payload: ChangePasswordPayload = {
-            email: context.email,
-            code: context.code,
-            newPassword: CryptoUtils.calculatePasswordHash(context.email, context.newPassword),
-            repeatNewPassword: CryptoUtils.calculatePasswordHash(context.email, context.repeatNewPassword),
-            mnemonicEncrypted,
-          };
+      await this.http.post<OkResponse>(API_ENDPOINTS.changePassword, payload).toPromise();
 
-          return this.http.post<OkResponse>(API_ENDPOINTS.changePassword, payload);
-        })
-      )
-    );
+      return {
+        ok: true,
+      };
+    });
   }
 
   public checkPassword(payload: CheckPasswordContext): Observable<CheckPasswordResponse> {
