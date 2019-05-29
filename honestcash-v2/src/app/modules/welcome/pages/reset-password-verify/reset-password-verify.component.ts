@@ -1,14 +1,16 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { Store } from '@ngrx/store';
-import {ResetPassword} from '../../../../core/store/auth/auth.actions';
-import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Logger } from 'app/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {ResetPassword} from '../../../../store/auth/auth.actions';
+import {NgForm} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
-import {AppStates, selectAuthorizationState} from '../../../../app.states';
-import {State as AuthorizationState} from '../../../../core/store/auth/auth.state';
-import { WelcomeErrorHandler } from '../../helpers/welcome-error.handler';
-import {ResetPasswordContext} from '../../../../core/models/authentication';
+import {AppStates, selectAuthState} from '../../../../app.states';
+import {State as AuthorizationState} from '../../../../store/auth/auth.state';
+import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {ResetPasswordContext} from '../../../../shared/models/authentication';
+import {Logger} from '../../../../shared/services/logger.service';
+
+const logger: Logger = new Logger('ResetPasswordVerifyComponent');
 
 export interface ResetPasswordForm extends NgForm {
   value: ResetPasswordContext;
@@ -22,9 +24,7 @@ export interface ResetPasswordForm extends NgForm {
 export class ResetPasswordVerifyComponent implements OnInit {
   @HostBinding('class') class = 'card mb-auto mt-auto';
 
-  private logger = new Logger('ResetPasswordVerifyComponent');
-
-  public auth$: Observable<AuthorizationState>;
+  public authState: Observable<AuthorizationState>;
   public errorMessage: string;
   public isLoading = false;
   public values: ResetPasswordContext = {
@@ -39,20 +39,18 @@ export class ResetPasswordVerifyComponent implements OnInit {
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.auth$ = this.store.select(selectAuthorizationState);
+    this.authState = this.store.select(selectAuthState);
   }
 
   public ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.resetCode = params.resetCode;
 
-      this.logger.info(`Password reset code: ${this.resetCode}`);
+      logger.info(`Password reset code: ${this.resetCode}`);
     });
 
-    this.auth$.subscribe((state) => {
-      if (state.newPasswordRequested) {
-        delete this.errorMessage;
-      } else if (!state.errorMessage) {
+    this.authState.subscribe((state) => {
+      if (state.newPasswordRequested || !state.errorMessage) {
         delete this.errorMessage;
       } else {
         this.errorMessage = WelcomeErrorHandler.getErrorDesc(state.errorMessage);

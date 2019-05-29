@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { each } from 'lodash';
+import {Inject, Injectable} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
+import {each} from 'lodash';
 
-import { Logger } from '../services/logger.service';
+import {Logger} from '../../shared/services/logger.service';
+import {WindowToken} from '../helpers/window';
 
 const log = new Logger('HttpCacheService');
 const cachePersistenceKey = 'httpCache';
@@ -20,7 +21,9 @@ export class HttpCacheService {
   private cachedData: { [key: string]: HttpCacheEntry } = {};
   private storage: Storage | null = null;
 
-  constructor() {
+  constructor(
+    @Inject(WindowToken) private window: Window,
+  ) {
     this.loadCacheData();
   }
 
@@ -99,7 +102,7 @@ export class HttpCacheService {
    */
   setPersistence(persistence?: 'local' | 'session') {
     this.cleanCache();
-    this.storage = persistence === 'local' || persistence === 'session' ? window[persistence + 'Storage'] : null;
+    this.storage = persistence === 'local' || persistence === 'session' ? this.window[persistence + 'Storage'] : null;
     this.loadCacheData();
   }
 

@@ -1,13 +1,13 @@
 /**
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
-import { RouterTestingModule } from '@angular/router/testing';
+ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+ import { TranslateModule } from '@ngx-translate/core';
+ import { RouterTestingModule } from '@angular/router/testing';
 
-import { AuthenticationService, I18nService, MockAuthenticationService } from '@app/core';
-import { WelcomeCardHeader } from './header.component';
+ import { AuthService, I18nService, MockAuthenticationService } from '@app/core';
+ import { WelcomeCardHeader } from './header.component';
 
-describe('WelcomeCardHeader', () => {
+ describe('WelcomeCardHeader', () => {
   let component: WelcomeCardHeader;
   let fixture: ComponentFixture<WelcomeCardHeader>;
 
@@ -15,7 +15,7 @@ describe('WelcomeCardHeader', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, NgbModule, TranslateModule.forRoot()],
       declarations: [WelcomeCardHeader],
-      providers: [{ provide: AuthenticationService, useClass: MockAuthenticationService }, I18nService]
+      providers: [{ provide: AuthService, useClass: MockAuthenticationService }, I18nService]
     }).compileComponents();
   }));
 
@@ -29,4 +29,4 @@ describe('WelcomeCardHeader', () => {
     expect(component).toBeTruthy();
   });
 });
-*/
+ */

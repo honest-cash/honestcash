@@ -11,6 +11,10 @@
             true,
             "element",
             "app",
+            "editor",
+            "main",
+            "wallet",
+            "welcome",
             "kebab-case"
         ]
     }

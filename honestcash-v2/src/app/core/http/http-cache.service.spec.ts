@@ -1,19 +1,31 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
+import {inject, TestBed} from '@angular/core/testing';
+import {HttpResponse} from '@angular/common/http';
 
-import { HttpCacheService, HttpCacheEntry } from './http-cache.service';
+import {HttpCacheEntry, HttpCacheService} from './http-cache.service';
+import {WindowToken} from '../helpers/window';
 
 const cachePersistenceKey = 'httpCache';
+
+const MockWindow = {
+  location: {
+    href: '',
+  }
+};
 
 describe('HttpCacheService', () => {
   let httpCacheService: HttpCacheService;
   let response: HttpResponse<any>;
+  let componentWindow: Window;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HttpCacheService]
+      providers: [
+        HttpCacheService,
+        {provide: WindowToken, useValue: MockWindow},
+      ]
     });
 
+    componentWindow = TestBed.get(WindowToken);
     // Start fresh
     window.sessionStorage.removeItem(cachePersistenceKey);
     window.localStorage.removeItem(cachePersistenceKey);
@@ -22,7 +34,7 @@ describe('HttpCacheService', () => {
   beforeEach(inject([HttpCacheService], (_httpCacheService: HttpCacheService) => {
     httpCacheService = _httpCacheService;
 
-    response = new HttpResponse({ body: 'data' });
+    response = new HttpResponse({body: 'data'});
   }));
 
   afterEach(() => {
@@ -40,7 +52,7 @@ describe('HttpCacheService', () => {
 
     it('should replace existing data', () => {
       // Arrange
-      const newResponse = new HttpResponse({ body: 'new data' });
+      const newResponse = new HttpResponse({body: 'new data'});
 
       // Act
       httpCacheService.setCacheData('/popo', response);
@@ -50,7 +62,7 @@ describe('HttpCacheService', () => {
       expect(httpCacheService.getCacheData('/popo')).toEqual(newResponse);
     });
 
-    it('should set cache date correctly',() => {
+    it('should set cache date correctly', () => {
       // Act
       const date = new Date(123);
       httpCacheService.setCacheData('/popo', response, date);

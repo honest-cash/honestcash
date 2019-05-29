@@ -1,10 +1,11 @@
-import {CodedErrorResponse} from '../../../core/models/authentication';
+import {CodedErrorResponse} from '../../../shared/models/authentication';
 
+/* istanbul ignore next */
 export class WelcomeErrorHandler {
   // @todo extract to i18n service
   private static ERROR_MESSAGES = {
     USER_NOT_FOUND: 'Incorrect email address and / or password.',
-    EMAIL_EXISTS:  'E-Mail already exists',
+    EMAIL_EXISTS: 'E-Mail already exists',
     USER_BLOCKED: 'USER_BLOCKED',
     NOT_ACTIVATED: 'NOT_ACTIVATED',
     USER_NOT_VERIFIED: 'USER_NOT_VERIFIED',
@@ -20,6 +21,7 @@ export class WelcomeErrorHandler {
 
   // @todo type deriviation
   // @todo unification of error messages
+  /* istanbul ignore next */
   public static getErrorDesc(errorMessage: any): string {
     if (typeof errorMessage === 'string') {
       return errorMessage;
