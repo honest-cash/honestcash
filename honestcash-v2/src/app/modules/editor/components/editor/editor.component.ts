@@ -20,6 +20,7 @@ import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 import {Block} from '../../converters/json-to-html';
 import {isPlatformBrowser} from '@angular/common';
 
+// @todo editor-v2: get rid of the factory provider pattern, it should be immutable!
 export const EDITOR_AUTO_SAVE = {
   ON: false,
   INTERVAL: 10 * 1000,
