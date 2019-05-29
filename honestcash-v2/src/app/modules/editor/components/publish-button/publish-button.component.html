@@ -1,7 +1,6 @@
-<div class="nav-item editor-header__save-status mr-3">
-  <u class="save text-warning" *ngIf="saveStatus === EDITOR_SAVE_STATUS.NotSaved" placement="bottom"
-     ngbTooltip="Click to save" (click)="saveDraftStory()">Not saved</u>
-  <u class="text-success" *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saved" placement="bottom"
-     ngbTooltip="Last saved at {{story.updatedAt | date:'MMMM d, y, h:mm:ss'}}">Saved</u>
-  <u class="text-muted" *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saving">Saving...</u>
+<div class="nav-item editor-header__publish-button mr-3">
+  <button type="button" class="btn btn-sm btn-success" (click)="openPublishModal()"
+          [disabled]="saveStatus === EDITOR_SAVE_STATUS.Saving || saveStatus === EDITOR_SAVE_STATUS.NotInitialized || saveStatus === EDITOR_SAVE_STATUS.Publishing || saveStatus === EDITOR_SAVE_STATUS.NotSaved">
+    Publish
+  </button>
 </div>

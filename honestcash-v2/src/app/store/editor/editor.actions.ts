@@ -14,8 +14,13 @@ export enum EditorActionTypes {
   EDITOR_STORY_LOAD = '[Editor] Editor Story Load',
   EDITOR_STORY_LOAD_SUCCESS = '[Editor] Editor Story Load Success',
   EDITOR_STORY_LOAD_FAILURE = '[Editor] Editor Story Load Failure',
+  EDITOR_STORY_LOCAL_LOAD = '[Editor] Editor Story Local Load',
+  EDITOR_STORY_LOCAL_LOAD_SUCCESS = '[Editor] Editor Story Local Load Success',
+  EDITOR_STORY_LOCAL_LOAD_FAILURE = '[Editor] Editor Story Local Load Failure',
   EDITOR_STORY_PROPERTY_CHANGE = '[Editor] Story Property Change',
   EDITOR_STORY_PROPERTY_SAVE = '[Editor] Story Property Save',
+  EDITOR_STORY_PROPERTY_SAVE_SUCCESS = '[Editor] Story Property Save Success',
+  EDITOR_STORY_PROPERTY_SAVE_FAILURE = '[Editor] Story Property Save Failure',
   EDITOR_STORY_SAVE = '[Editor] Story Save',
   EDITOR_STORY_SAVE_SUCCESS = '[Editor] Story Save Success',
   EDITOR_STORY_SAVE_FAILURE = '[Editor] Story Save Failure',
@@ -27,9 +32,6 @@ export enum EditorActionTypes {
 
 export class EditorLoad implements Action {
   readonly type = EditorActionTypes.EDITOR_LOAD;
-
-  constructor(public payload?: { story?: Post, editor: EditorJS }) {
-  }
 }
 
 export class EditorUnload implements Action {
@@ -66,6 +68,9 @@ export class EditorDraftLoadFailure implements Action {
 
 export class EditorStoryLoad implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_LOAD;
+
+  constructor(public storyId: number) {
+  }
 }
 
 export class EditorStoryLoadSuccess implements Action {
@@ -77,6 +82,24 @@ export class EditorStoryLoadSuccess implements Action {
 
 export class EditorStoryLoadFailure implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_LOAD_FAILURE;
+
+  constructor(public payload: FailedResponse) {
+  }
+}
+
+export class EditorStoryLocalLoad implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_LOCAL_LOAD;
+}
+
+export class EditorStoryLocalLoadSuccess implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_LOCAL_LOAD_SUCCESS;
+
+  constructor(public payload: Post) {
+  }
+}
+
+export class EditorStoryLocalLoadFailure implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_LOCAL_LOAD_FAILURE;
 
   constructor(public payload: FailedResponse) {
   }
@@ -96,10 +119,18 @@ export class EditorStoryPropertySave implements Action {
   }
 }
 
+export class EditorStoryPropertySaveSuccess implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_SUCCESS;
+}
+
+export class EditorStoryPropertySaveFailure implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_FAILURE;
+}
+
 export class EditorStorySave implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE;
 
-  constructor(public payload: Post) {
+  constructor() {
   }
 }
 
@@ -155,8 +186,13 @@ export type All =
   | EditorStoryLoad
   | EditorStoryLoadSuccess
   | EditorStoryLoadFailure
+  | EditorStoryLocalLoad
+  | EditorStoryLocalLoadSuccess
+  | EditorStoryLocalLoadFailure
   | EditorStoryPropertyChange
   | EditorStoryPropertySave
+  | EditorStoryPropertySaveSuccess
+  | EditorStoryPropertySaveFailure
   | EditorStorySave
   | EditorStorySaveSuccess
   | EditorStorySaveFailure

@@ -1,23 +1,29 @@
 import {NgModule} from '@angular/core';
 import {FontAwesomeModule as OriginalFontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
+import {faEnvelope, faPaperPlane, faUser,} from '@fortawesome/free-regular-svg-icons';
 import {
-  faEnvelope,
-  faUser,
-  faPaperPlane,
-} from '@fortawesome/free-regular-svg-icons';
-import {
+  faAlignLeft,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
   faComments,
-  faKey,
+  faExclamationCircle,
+  faExclamationTriangle,
+  faEye,
   faGlobe,
+  faHeading,
   faHeart,
+  faImage,
+  faKey,
   faPenAlt,
   faRetweet,
   faShareAlt,
   faSpinner,
+  faTags,
   faTerminal,
-  faExclamationCircle,
-  faWindowClose, faChevronLeft, faChevronRight, faHeading, faAlignLeft, faTags, faImage, faChevronUp, faChevronDown, faExclamationTriangle,
+  faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
 import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
 
@@ -56,5 +62,6 @@ export class FontAwesomeModule {
     library.add(faChevronUp);
     library.add(faChevronDown);
     library.add(faExclamationTriangle);
+    library.add(faEye);
   }
 }

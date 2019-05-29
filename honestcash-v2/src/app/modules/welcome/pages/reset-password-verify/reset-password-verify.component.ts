@@ -8,7 +8,9 @@ import {AppStates, selectAuthState} from '../../../../app.states';
 import {State as AuthorizationState} from '../../../../store/auth/auth.state';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
 import {ResetPasswordContext} from '../../../../shared/models/authentication';
-import {Logger} from '../../../../core';
+import {Logger} from '../../../../shared/services/logger.service';
+
+const logger: Logger = new Logger('ResetPasswordVerifyComponent');
 
 export interface ResetPasswordForm extends NgForm {
   value: ResetPasswordContext;
@@ -32,7 +34,6 @@ export class ResetPasswordVerifyComponent implements OnInit {
     repeatNewPassword: '',
   };
   public resetCode: string;
-  private logger: Logger = new Logger();
 
   constructor(
     private store: Store<AppStates>,
@@ -45,7 +46,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.resetCode = params.resetCode;
 
-      this.logger.info(`Password reset code: ${this.resetCode}`);
+      logger.info(`Password reset code: ${this.resetCode}`);
     });
 
     this.authState.subscribe((state) => {

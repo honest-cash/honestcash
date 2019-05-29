@@ -1,12 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EDITOR_AUTO_SAVE} from '../../components/editor/editor.component';
 import Post from '../../../../shared/models/post';
-import {EditorService} from '../../services/editor.service';
 import {EditorDraftLoad} from '../../../../store/editor/editor.actions';
 
 @Component({
@@ -21,8 +19,6 @@ export class EditorWriteComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStates>,
-    private modalService: NgbModal,
-    private editorService: EditorService,
   ) {
     this.editorStateObservable = this.store.select(selectEditorState);
     // explicitly turn autosave on write mode
@@ -35,9 +31,6 @@ export class EditorWriteComponent implements OnInit, OnDestroy {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
-      if (editorState.status === EDITOR_STATUS.Published) {
-        this.modalService.dismissAll();
-      }
     });
   }
 

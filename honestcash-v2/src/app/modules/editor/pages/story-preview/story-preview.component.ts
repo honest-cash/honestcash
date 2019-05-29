@@ -1,12 +1,14 @@
 import {Component, ElementRef, HostBinding, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {convertBlockToHtml} from '../../converters/json-to-html';
+import {Block, convertBlockToHtml} from '../../converters/json-to-html';
 import {Store} from '@ngrx/store';
-import {AppStates, selectEditorState, selectUserState} from '../../../../app.states';
+import {AppStates, selectUserState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {State as EditorState} from '../../../../store/editor/editor.state';
 import {State as UserState} from '../../../../store/user/user.state';
 import Post from '../../../../shared/models/post';
 import User from '../../../../shared/models/user';
+import {EditorService} from '../../services/editor.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 
 @Component({
   selector: 'editor-story-preview',
@@ -15,34 +17,44 @@ import User from '../../../../shared/models/user';
 })
 export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'mb-auto mt-auto';
-  @ViewChildren('body') body: QueryList<ElementRef>;
-  private editorStateObservable: Observable<EditorState>;
-  private editorState$: Subscription;
+  @ViewChildren('bodyJSON') bodyJSON: QueryList<ElementRef>;
+  @ViewChildren('bodyJSONFree') bodyJSONFree: QueryList<ElementRef>;
+  @ViewChildren('bodyJSONPaid') bodyJSONPaid: QueryList<ElementRef>;
+  private EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   private userStateObservable: Observable<UserState>;
   private userState$: Subscription;
   private story: Post;
   private user: User;
-  private convertBlockToHtml = convertBlockToHtml;
+  private freeBodyJSON: Block[];
+  private paidBodyJSON: Block[];
+  private isLoading = true;
 
   constructor(
-    private store: Store<AppStates>
+    private store: Store<AppStates>,
+    private modalService: NgbModal,
+    private editorService: EditorService,
   ) {
-    this.editorStateObservable = this.store.select(selectEditorState);
     this.userStateObservable = this.store.select(selectUserState);
   }
 
   ngOnInit() {
-    this.editorState$ = this.editorStateObservable.subscribe((editorState: EditorState) => {
-      this.story = editorState.story;
-    });
     this.userState$ = this.userStateObservable.subscribe((userState: UserState) => {
       this.user = userState.user;
+      this.story = this.editorService.getLocallySavedPost();
+      if (this.story.hasPaidSection) {
+        this.freeBodyJSON = this.story.bodyJSON.filter((block: Block, index: number) => index <= this.story.paidSectionLinebreak);
+        this.paidBodyJSON = this.story.bodyJSON;
+      }
+      this.isLoading = false;
     });
   }
 
+  private convertBlockToHtml(block: Block) {
+    return convertBlockToHtml(block);
+  }
+
   ngOnDestroy() {
-    if (this.editorState$) {
-      this.editorState$.unsubscribe();
-    }
+    this.userState$.unsubscribe();
+    this.editorService.removeLocallySavedPost();
   }
 }

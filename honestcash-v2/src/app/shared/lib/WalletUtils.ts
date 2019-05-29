@@ -1,6 +1,6 @@
-import {Logger} from 'app/core';
-
 // @todo shift to simple-bitcoin-wallet package
+import {Logger} from '../services/logger.service';
+
 export interface ISimpleBitcoinWallet {
   cashAddress: string;
   mnemonic: string;

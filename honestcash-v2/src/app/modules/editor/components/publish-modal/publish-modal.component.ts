@@ -5,10 +5,10 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
-import {EditorStoryPropertyChange, EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
-import {STORY_PROPERTIES} from '../../services/editor.service';
+import {EditorStoryPropertyChange, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
+import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 import Hashtag from '../../../../shared/models/hashtag';
-import EditorJS from '@editorjs/editorjs';
+import {ToastrService} from 'ngx-toastr';
 
 export interface INgxChipsTag {
   hashtag: string;
@@ -20,7 +20,6 @@ export interface INgxChipsTag {
   styleUrls: ['./publish-modal.component.scss'],
 })
 export class EditorPublishModalComponent implements OnInit, OnDestroy {
-  private editor: EditorJS;
   private EDITOR_SAVE_STATUS = EDITOR_STATUS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
@@ -31,6 +30,8 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppStates>,
     public activeModal: NgbActiveModal,
+    private editorService: EditorService,
+    private toastr: ToastrService,
   ) {
     this.editorStateObservable = this.store.select(selectEditorState);
   }
@@ -39,26 +40,23 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
-      if (editorState.isLoaded) {
-        this.saveStatus = editorState.status;
-        this.editor = editorState.editor;
+      this.saveStatus = editorState.status;
+      if (this.saveStatus === EDITOR_STATUS.Loaded) {
         if (!this._hashtags && this.story.userPostHashtags.length) {
           this._hashtags = this.story.userPostHashtags;
         }
+      }
+
+      if (this.saveStatus === EDITOR_STATUS.Published) {
+        this.toastr.success(`Story Saved`, undefined, {positionClass: 'toast-bottom-right'});
+        this.editorService.removeLocallySavedPost();
+        this.activeModal.close();
       }
     });
   }
 
   onSubmit() {
-    if (this.saveStatus === EDITOR_STATUS.NotSaved) {
-      this.editor.saver.save()
-      .then((outputData) => {
-        this.story.body = outputData.blocks;
-        this.store.dispatch(new EditorStorySaveAndPublish(this.story));
-      });
-    } else {
-      this.store.dispatch(new EditorStoryPublish(this.story));
-    }
+    this.store.dispatch(new EditorStorySaveAndPublish(this.story));
   }
 
   onTitleChange(title: string) {
@@ -71,6 +69,11 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
 
   onChangeHasPaidSection() {
     this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
+  }
+
+  previewDraftStory() {
+    this.editorService.savePostLocally(this.story);
+    window.open('/editor/story-preview', '_blank');
   }
 
   onDismiss() {

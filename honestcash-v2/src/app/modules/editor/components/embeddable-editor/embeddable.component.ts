@@ -1,14 +1,15 @@
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import EditorJS from '@editorjs/editorjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import Post from '../../../../shared/models/post';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EditorStoryPublish, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
-import {NgForm} from '@angular/forms';
+import {EditorStoryLocalLoad, EditorStoryPropertyChange, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
+import Hashtag from '../../../../shared/models/hashtag';
+import {INgxChipsTag} from '../publish-modal/publish-modal.component';
+import {STORY_PROPERTIES} from '../../services/editor.service';
 
 type PaneType = 'first' | 'second';
 
@@ -29,10 +30,10 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   @ViewChild('modalBody') modalBody: ElementRef;
 
   public saveStatus: EDITOR_STATUS;
-  readonly editor: EditorJS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
   private story: Post;
+  private _hashtags: Hashtag[] | INgxChipsTag[] | string;
 
   constructor(
     private store: Store<AppStates>,
@@ -42,9 +43,15 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.dispatch(new EditorStoryLocalLoad());
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
+      if (this.saveStatus === EDITOR_STATUS.Initialized) {
+        if (!this._hashtags && this.story.userPostHashtags.length) {
+          this._hashtags = this.story.userPostHashtags;
+        }
+      }
       this.story = editorState.story;
     });
   }
@@ -59,18 +66,20 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
     this.modalBody.nativeElement.scrollTop = 0;
   }
 
-  onPublish(f: NgForm) {
-    if (f.form.valid) {
-      if (this.saveStatus === EDITOR_STATUS.NotSaved) {
-        this.editor.saver.save()
-        .then((outputData) => {
-          this.story.body = outputData.blocks;
-          this.store.dispatch(new EditorStorySaveAndPublish(this.story));
-        });
-      } else {
-        this.store.dispatch(new EditorStoryPublish(this.story));
-      }
-    }
+  onTitleChange(title: string) {
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
+  }
+
+  onTagChange(tags: INgxChipsTag[]) {
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
+  }
+
+  onChangeHasPaidSection() {
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
+  }
+
+  onSubmit() {
+    this.store.dispatch(new EditorStorySaveAndPublish(this.story));
   }
 
   onDismiss() {

@@ -13,15 +13,15 @@ import Delimiter from '@editorjs/delimiter';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {interval, Observable, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
-import {EditorChange, EditorLoad, EditorStoryPropertySave, EditorUnload} from '../../../../store/editor/editor.actions';
+import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 import {Block} from '../../converters/json-to-html';
 
 export const EDITOR_AUTO_SAVE = {
   ON: false,
-  INTERVAL: 5000,
+  INTERVAL: 10 * 1000,
 };
 
 export interface HonestEditorConfig extends EditorConfig {
@@ -107,8 +107,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   };
   public editorStateObservable: Observable<EditorState>;
   public editorState$: Subscription;
-  private autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
-  private autoSaveInterval$: Subscription;
 
   constructor(
     private store: Store<AppStates>,
@@ -122,7 +120,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     };
     this.editor = new EditorJS(this.editorConfig);
     this.editor.isReady.then(() => {
-      this.store.dispatch(new EditorLoad({story: this.story, editor: this.editor}));
+      this.store.dispatch(new EditorLoad());
     });
     this.editorStateObservable = this.store.select(selectEditorState);
   }
@@ -131,14 +129,12 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
-
-      if (editorState.status === EDITOR_STATUS.Initialized && !this.hasEditorInitialized) {
-        this.editor.blocks.clear();
-        if (this.story.bodyJSON) {
+      this.editor.isReady.then(() => {
+        if (editorState.status === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
+          this.editor.blocks.clear();
           this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
         }
-        this.hasEditorInitialized = true;
-      }
+      });
     });
   }
 
@@ -146,13 +142,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editor.saver.save()
     .then((outputData) => {
       this.story.bodyJSON = <Block[]>outputData.blocks;
-      this.store.dispatch(new EditorChange({story: this.story, editor: this.editor}));
-
-      if (EDITOR_AUTO_SAVE.ON && this.saveStatus === EDITOR_STATUS.NotSaved) {
-        this.autoSaveInterval$ = this.autosaveIntervalObservable.subscribe(() => {
-          this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.BodyJSON}));
-        });
-      }
+      this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
     });
   }
 
@@ -182,9 +172,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     if (this.editor && this.editor.destroy) {
       this.editor.destroy();
       this.store.dispatch(new EditorUnload());
-    }
-    if (EDITOR_AUTO_SAVE.ON && this.autoSaveInterval$) {
-      this.autoSaveInterval$.unsubscribe();
     }
     if (this.editorState$) {
       this.editorState$.unsubscribe();

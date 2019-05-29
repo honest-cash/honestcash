@@ -3,7 +3,7 @@ import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {State as EditorState} from '../../../../store/editor/editor.state';
+import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {Block, convertBlockToHtml} from '../../converters/json-to-html';
 import {NgForm} from '@angular/forms';
 import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
@@ -23,9 +23,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   @Input() form: NgForm;
   @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
-  public convertBlockToHtml = convertBlockToHtml;
   private isLoaded: boolean;
-  private paidSectionCostInUsd: number;
   private paidSectionLineBreakTouched = false;
   private paidSectionLinebreakEnd: number;
   private editorStateObservable: Observable<EditorState>;
@@ -44,23 +42,21 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
       this.isLoaded = editorState.isLoaded;
       this.story = editorState.story;
 
-      if (editorState.isLoaded) {
+      if (editorState.status === EDITOR_STATUS.Loaded) {
         if (!this.story.paidSectionLinebreak) {
           this.story.paidSectionLinebreak = 0;
         }
-        if (!this.paidSectionCostInUsd) {
-          this.paidSectionCostInUsd = 0;
-        }
         if (!this.story.paidSectionCost) {
-          this.story.paidSectionCost = 0;
+          this.story.paidSectionCost = 0.001;
         }
-        this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.body).length) - 1);
+        this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.bodyJSON).length) - 1);
       }
     });
   }
 
   onSwitchLinebreak(action: LINEBREAK_ACTION) {
     this.paidSectionLineBreakTouched = true;
+    console.log('story', this.story, this.paidSectionLinebreakEnd);
     let element: ElementRef;
     switch (action) {
       case LINEBREAK_ACTION.MoveUp: {
@@ -98,6 +94,10 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
     if (this.editorState$) {
       this.editorState$.unsubscribe();
     }
+  }
+
+  private convertBlockToHtml(block: Block) {
+    return convertBlockToHtml(block);
   }
 
   private getPaidSectionBlockElementByLinebreak() {

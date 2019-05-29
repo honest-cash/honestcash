@@ -1,22 +1,9 @@
-$borderColor: #e7e7e7;
-
-.navbar {
-  margin-bottom: 0px;
-}
-
-.nav-link.dropdown-toggle {
-  cursor: pointer;
-}
-
-.user-image {
-  border-style: solid;
-  border-color: $borderColor;
-  border-width: 1px;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-}
-
-.buttons-wrapper {
-  margin-top: 10px;
+:host {
+  ::ng-deep {
+    .editor-header__save-status {
+      & > .save {
+        cursor: pointer;
+      }
+    }
+  }
 }

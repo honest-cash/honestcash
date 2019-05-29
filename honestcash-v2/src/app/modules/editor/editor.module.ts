@@ -6,7 +6,6 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {AuthorizedGuard} from '../../shared/guards/authorized.guard';
 import {TagInputModule} from 'ngx-chips';
-import {HeaderComponent} from '../../shared/components/header/header.component';
 import {EditorStoryPreviewComponent} from './pages/story-preview/story-preview.component';
 import {EditorWriteComponent} from './pages/write/write.component';
 import {EditorEditComponent} from './pages/edit/edit.component';
@@ -18,6 +17,9 @@ import {EditorEmbeddableComponent} from './components/embeddable-editor/embeddab
 import {EditorPaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
 import {EditorSaveStatusComponent} from './components/save-status/save-status.component';
 import {EditorComponent} from './components/editor/editor.component';
+import {LocallySavedStoryGuard} from '../../shared/guards/locally-stored-story.guard';
+import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
+import {EditorEditButtonComponent} from './components/edit-button/edit-button.component';
 
 const routes: Routes = [
   {
@@ -25,8 +27,13 @@ const routes: Routes = [
     component: EditorContainerComponent,
     children: [
       {path: 'write', pathMatch: 'full', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
-      {path: 'edit', pathMatch: 'full', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
-      {path: 'story-preview', pathMatch: 'full', component: EditorStoryPreviewComponent, canActivate: [AuthorizedGuard]},
+      {path: 'edit/:storyId', pathMatch: 'full', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
+      {
+        path: 'story-preview',
+        pathMatch: 'full',
+        component: EditorStoryPreviewComponent,
+        canActivate: [AuthorizedGuard, LocallySavedStoryGuard]
+      },
       {path: 'modal-example', pathMatch: 'full', component: EditorModalExampleComponent},
     ]
   }
@@ -35,9 +42,10 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     EditorComponent,
-    HeaderComponent,
+    EditorHeaderComponent,
     EditorPublishModalComponent,
     EditorPublishButtonComponent,
+    EditorEditButtonComponent,
     EditorSaveStatusComponent,
     EditorContainerComponent,
     EditorWriteComponent,
@@ -48,6 +56,7 @@ const routes: Routes = [
     EditorStoryPreviewComponent,
     EditorEmbeddableComponent,
     EditorPaidSectionSelectionComponent,
+    EditorPaidSectionUnlockerComponent,
   ],
   entryComponents: [
     EditorComponent,

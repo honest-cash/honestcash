@@ -1,12 +1,13 @@
 <header>
   <nav class="navbar navbar-light navbar-expand">
     <a class="navbar-brand" href="/">
-      <img height="34" src="https://honest.cash/img/honest-logo-2.png"/>
+      <app-honest-logo></app-honest-logo>
     </a>
     <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
       <div class="navbar-nav ml-auto">
-        <editor-save-status></editor-save-status>
-        <editor-publish-button></editor-publish-button>
+        <editor-edit-button *ngIf="editingMode === EDITOR_EDITING_MODE.Edit"></editor-edit-button>
+        <editor-save-status *ngIf="editingMode === EDITOR_EDITING_MODE.Write"></editor-save-status>
+        <editor-publish-button *ngIf="editingMode === EDITOR_EDITING_MODE.Write"></editor-publish-button>
         <app-header-profile-menu [user]="user"></app-header-profile-menu>
       </div>
     </div>

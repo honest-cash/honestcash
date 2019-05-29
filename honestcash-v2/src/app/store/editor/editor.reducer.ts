@@ -9,28 +9,16 @@ const logger = new Logger();
 export function reducer(state = initialState, action: All): State {
   switch (action.type) {
     case EditorActionTypes.EDITOR_LOAD: {
-      const story = action.payload && action.payload.story ? action.payload.story : initialState.story;
-      logger.info('Editor Load Success', story);
+      logger.info('Editor Load Success');
       return {
         ...state,
         isLoaded: true,
         status: EDITOR_STATUS.Initialized,
-        editor: action.payload.editor,
-        story,
       };
     }
     case EditorActionTypes.EDITOR_UNLOAD: {
       logger.info('Editor Unload Success');
       return initialState;
-    }
-    case EditorActionTypes.EDITOR_CHANGE: {
-      logger.info('Editor Change Success', action.payload);
-      return {
-        ...state,
-        story: action.payload.story,
-        editor: action.payload.editor,
-        status: EDITOR_STATUS.NotSaved,
-      };
     }
     case EditorActionTypes.EDITOR_DRAFT_LOAD_SUCCESS: {
       logger.info('Editor Draft Load Success', action.payload);
@@ -38,8 +26,33 @@ export function reducer(state = initialState, action: All): State {
         ...state,
         story: {
           ...action.payload,
-          bodyJSON: action.payload.bodyJSON ? JSON.parse(<any>action.payload.bodyJSON) : blankBody,
+          // DraftLoadSuccess is only called on write page
+          // so we can inject a blankBody to guide user through
+          bodyJSON: action.payload.bodyJSON ? action.payload.bodyJSON : blankBody,
         },
+        status: EDITOR_STATUS.Loaded
+      };
+    }
+    case EditorActionTypes.EDITOR_STORY_LOAD_SUCCESS: {
+      logger.info('Editor Story Load Success', action.payload);
+      return {
+        ...state,
+        story: {
+          ...action.payload,
+          bodyJSON: action.payload.bodyJSON
+        },
+        status: EDITOR_STATUS.Loaded
+      };
+    }
+    case EditorActionTypes.EDITOR_STORY_LOCAL_LOAD_SUCCESS: {
+      logger.info('Editor Story Local Load Success', action.payload);
+      return {
+        ...state,
+        story: {
+          ...action.payload,
+          bodyJSON: action.payload.bodyJSON
+        },
+        status: EDITOR_STATUS.Loaded
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE: {
@@ -51,6 +64,10 @@ export function reducer(state = initialState, action: All): State {
         }
         case STORY_PROPERTIES.Body: {
           property = 'body';
+          break;
+        }
+        case STORY_PROPERTIES.BodyJSON: {
+          property = 'bodyJSON';
           break;
         }
         case STORY_PROPERTIES.Hashtags: {
@@ -70,20 +87,35 @@ export function reducer(state = initialState, action: All): State {
           break;
         }
       }
-      logger.info(`Editor Story Property [${property}] Change Success`, action.payload.value);
+      logger.info(`Editor Story Property [${property}] Change`, action.payload.value);
       return {
         ...state,
         story: {
           ...state.story,
           [property]: action.payload.value
-        }
+        },
+        status: property === STORY_PROPERTIES.Body || property === STORY_PROPERTIES.BodyJSON ? EDITOR_STATUS.NotSaved : state.status,
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE: {
-      logger.info(`Editor Story Property [${action.payload.property}] Save Success`);
+      logger.info(`Editor Story Property [${action.payload.property}] Save`);
       return {
         ...state,
-        status: action.payload.property === STORY_PROPERTIES.Body ? EDITOR_STATUS.Saved : state.status,
+        status: EDITOR_STATUS.Saving,
+      };
+    }
+    case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_SUCCESS: {
+      logger.info(`Editor Story Property Save Success`);
+      return {
+        ...state,
+        status: EDITOR_STATUS.Saved
+      };
+    }
+    case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_FAILURE: {
+      logger.info(`Editor Story Property Save Success`);
+      return {
+        ...state,
+        status: EDITOR_STATUS.NotSaved
       };
     }
     case EditorActionTypes.EDITOR_STORY_SAVE: {
@@ -105,7 +137,7 @@ export function reducer(state = initialState, action: All): State {
         status: EDITOR_STATUS.Saved,
       };
     }
-    case EditorActionTypes.EDITOR_STORY_PUBLISH: {
+    case EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH: {
       logger.info('Editor Story Publish Started', action.payload);
       return {
         ...state,

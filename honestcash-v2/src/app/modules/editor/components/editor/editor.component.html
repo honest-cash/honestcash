@@ -1,1 +1,6 @@
 <div id="editor"></div>
+<div class="editor-placeholder" *ngIf="!story.bodyJSON || (story.bodyJSON && story.bodyJSON.length === 0)">
+  <small class="text-muted"><b>
+    <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>&nbsp;Click above
+    to write your story.</b></small>
+</div>

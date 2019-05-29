@@ -17,10 +17,11 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
 import {HeaderInterceptor} from './core/http/header.interceptor';
 import {AppEffects} from './store/app/app.effects';
-import {FontAwesomeModule} from './shared/modules/font-awesome.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EditorEffects} from './store/editor/editor.effects';
 import {AppSharedModule} from './app.shared.module';
+import {ToastrModule} from 'ngx-toastr';
+import {SharedModule} from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,12 +34,13 @@ import {AppSharedModule} from './app.shared.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
+    SharedModule,
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
     EffectsModule.forRoot([AppEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects,]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
-    FontAwesomeModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     {
