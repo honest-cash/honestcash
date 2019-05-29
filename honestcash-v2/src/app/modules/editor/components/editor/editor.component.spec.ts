@@ -78,7 +78,7 @@ describe('EditorComponent', () => {
 
   describe('ngOnInit', () => {
     it('should set saveStatus', () => {
-      component.editorStateObservable = of(initialEditorState);
+      component.editor$ = of(initialEditorState);
       component.ngOnInit();
       expect(component.saveStatus).toEqual(EDITOR_STATUS.NotInitialized);
     });
@@ -87,7 +87,7 @@ describe('EditorComponent', () => {
       const blocks = editor.blocks;
       const clearSpy = spyOn(blocks, 'clear').and.callThrough();
       component.story = new Post();
-      component.editorStateObservable = of({
+      component.editor$ = of({
         ...initialEditorState,
         status: EDITOR_STATUS.Initialized,
       });
@@ -102,7 +102,7 @@ describe('EditorComponent', () => {
       const renderSpy = spyOn(blocks, 'render').and.callThrough();
       component.story = new Post();
       component.story.body = blankBody;
-      component.editorStateObservable = of({
+      component.editor$ = of({
         ...initialEditorState,
         status: EDITOR_STATUS.Initialized,
       });

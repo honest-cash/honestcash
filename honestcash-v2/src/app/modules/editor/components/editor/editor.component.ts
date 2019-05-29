@@ -66,9 +66,9 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
-  public editorStateObservable: Observable<EditorState>;
-  public editorState$: Subscription;
-  readonly editor: EditorJS;
+  public editor$: Observable<EditorState>;
+  public editorSub: Subscription;
+  public readonly editor: EditorJS;
   private editorConfig: HonestEditorConfig = {
     holder: 'editor',
     autofocus: true,
@@ -127,11 +127,11 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.store.dispatch(new EditorLoad());
       });
     }
-    this.editorStateObservable = this.store.select(selectEditorState);
+    this.editor$ = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
-    this.editorState$ = this.editorStateObservable
+  public ngOnInit() {
+    this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
       this.editor.isReady.then(() => {
@@ -143,7 +143,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEditorChange() {
+  public onEditorChange() {
     this.editor.saver.save()
     .then((outputData) => {
       this.story.bodyJSON = <Block[]>outputData.blocks;
@@ -151,7 +151,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  uploadImage(file: File) {
+  public uploadImage(file: File) {
     return this.editorService.uploadImage(file).toPromise().then((response) => {
       return {
         success: 1,
@@ -162,7 +162,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  downloadImageFromUrlAndUpload(url: string) {
+  public downloadImageFromUrlAndUpload(url: string) {
     return this.editorService.downloadImageFromUrl(url).toPromise().then(response => {
       return {
         success: 1,
@@ -173,13 +173,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.editor && this.editor.destroy) {
       this.editor.destroy();
       this.store.dispatch(new EditorUnload());
     }
-    if (this.editorState$) {
-      this.editorState$.unsubscribe();
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
     }
   }
 }
