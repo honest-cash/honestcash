@@ -24,7 +24,7 @@ export interface ResetPasswordForm extends NgForm {
 export class ResetPasswordVerifyComponent implements OnInit {
   @HostBinding('class') class = 'card mb-auto mt-auto';
 
-  public authState: Observable<AuthorizationState>;
+  public auth$: Observable<AuthorizationState>;
   public errorMessage: string;
   public isLoading = false;
   public values: ResetPasswordContext = {
@@ -39,7 +39,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.authState = this.store.select(selectAuthState);
+    this.auth$ = this.store.select(selectAuthState);
   }
 
   public ngOnInit() {
@@ -49,7 +49,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
       logger.info(`Password reset code: ${this.resetCode}`);
     });
 
-    this.authState.subscribe((state) => {
+    this.auth$.subscribe((state) => {
       if (state.newPasswordRequested || !state.errorMessage) {
         delete this.errorMessage;
       } else {

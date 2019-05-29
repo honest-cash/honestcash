@@ -152,7 +152,8 @@ export class AuthService {
     });
   }
 
-  public setWallet(payload: SetWalletContext): Observable<OkResponse> {
+  // @todo editor-v2 adjust type
+  public setWallet(payload: any /*SetWalletContext */): Observable<OkResponse> {
     return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
   }
 

@@ -89,7 +89,7 @@ describe('ResetPasswordVerifyComponent', () => {
     await fixture.whenStable();
     component = fixture.componentInstance;
 
-    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    const subscribeSpy = spyOn(component.auth$, 'subscribe');
     component.ngOnInit();
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
@@ -108,7 +108,7 @@ describe('ResetPasswordVerifyComponent', () => {
     await fixture.whenStable();
     component = fixture.componentInstance;
 
-    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    const subscribeSpy = spyOn(component.auth$, 'subscribe');
     component.ngOnInit();
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
@@ -133,7 +133,7 @@ describe('ResetPasswordVerifyComponent', () => {
     await fixture.whenStable();
     component = fixture.componentInstance;
 
-    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    const subscribeSpy = spyOn(component.auth$, 'subscribe');
     component.ngOnInit();
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
