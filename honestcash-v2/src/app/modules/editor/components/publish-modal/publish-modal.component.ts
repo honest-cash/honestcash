@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
@@ -9,6 +9,7 @@ import {EditorStoryPropertyChange, EditorStorySaveAndPublish} from '../../../../
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 import Hashtag from '../../../../shared/models/hashtag';
 import {ToastrService} from 'ngx-toastr';
+import {WindowToken} from '../../../../core/helpers/window';
 
 export interface INgxChipsTag {
   hashtag: string;
@@ -28,6 +29,7 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
   private editorState$: Subscription;
 
   constructor(
+    @Inject(WindowToken) private window,
     private store: Store<AppStates>,
     public activeModal: NgbActiveModal,
     private editorService: EditorService,
@@ -73,7 +75,7 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
 
   previewDraftStory() {
     this.editorService.savePostLocally(this.story);
-    window.open('/editor/story-preview', '_blank');
+    this.window.open('/editor/story-preview', '_blank');
   }
 
   onDismiss() {

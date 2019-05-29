@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import EditorJS, {EditorConfig} from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Link from '@editorjs/link';
@@ -18,6 +18,7 @@ import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/edit
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 import {Block} from '../../converters/json-to-html';
+import {isPlatformBrowser} from '@angular/common';
 
 export const EDITOR_AUTO_SAVE = {
   ON: false,
@@ -65,6 +66,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
+  public editorStateObservable: Observable<EditorState>;
+  public editorState$: Subscription;
   readonly editor: EditorJS;
   private editorConfig: HonestEditorConfig = {
     holder: 'editor',
@@ -105,10 +108,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     },
     onChange: this.onEditorChange.bind(this)
   };
-  public editorStateObservable: Observable<EditorState>;
-  public editorState$: Subscription;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private store: Store<AppStates>,
     private editorService: EditorService,
   ) {
@@ -118,10 +120,13 @@ export class EditorComponent implements OnInit, OnDestroy {
         uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
       }
     };
-    this.editor = new EditorJS(this.editorConfig);
-    this.editor.isReady.then(() => {
-      this.store.dispatch(new EditorLoad());
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      console.log('###############################------------------PLATFORM BORWSER');
+      this.editor = new EditorJS(this.editorConfig);
+      this.editor.isReady.then(() => {
+        this.store.dispatch(new EditorLoad());
+      });
+    }
     this.editorStateObservable = this.store.select(selectEditorState);
   }
 
