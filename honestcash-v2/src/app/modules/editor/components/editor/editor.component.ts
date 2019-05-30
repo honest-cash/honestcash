@@ -69,6 +69,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorStateObservable: Observable<EditorState>;
   public editorState$: Subscription;
   readonly editor: EditorJS;
+  readonly isPlatformBrowser: boolean;
   private editorConfig: HonestEditorConfig = {
     holder: 'editor',
     autofocus: true,
@@ -114,14 +115,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     private store: Store<AppStates>,
     private editorService: EditorService,
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.editorConfig.tools.image.config = {
       uploader: {
         uploadByFile: this.uploadImage.bind(this),
         uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
       }
     };
-    if (isPlatformBrowser(this.platformId)) {
-      console.log('###############################------------------PLATFORM BORWSER');
+    if (this.isPlatformBrowser) {
       this.editor = new EditorJS(this.editorConfig);
       this.editor.isReady.then(() => {
         this.store.dispatch(new EditorLoad());
@@ -134,21 +135,25 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
-      this.editor.isReady.then(() => {
-        if (editorState.status === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
-          this.editor.blocks.clear();
-          this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
-        }
-      });
+      if (this.isPlatformBrowser) {
+        this.editor.isReady.then(() => {
+          if (this.saveStatus === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
+            this.editor.blocks.clear();
+            this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
+          }
+        });
+      }
     });
   }
 
   onEditorChange() {
-    this.editor.saver.save()
-    .then((outputData) => {
-      this.story.bodyJSON = <Block[]>outputData.blocks;
-      this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
-    });
+    if (this.isPlatformBrowser) {
+      this.editor.saver.save()
+      .then((outputData) => {
+        this.story.bodyJSON = <Block[]>outputData.blocks;
+        this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
+      });
+    }
   }
 
   uploadImage(file: File) {
@@ -174,7 +179,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.editor && this.editor.destroy) {
+    if (this.isPlatformBrowser && this.editor && this.editor.destroy) {
       this.editor.destroy();
       this.store.dispatch(new EditorUnload());
     }
