@@ -33,7 +33,6 @@ describe('EditorEmbeddableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorEmbeddableComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
