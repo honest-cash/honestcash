@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
@@ -10,6 +10,7 @@ import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 import Hashtag from '../../../../shared/models/hashtag';
 import {ToastrService} from 'ngx-toastr';
 import {WindowToken} from '../../../../core/helpers/window';
+import {isPlatformBrowser} from '@angular/common';
 
 export interface INgxChipsTag {
   hashtag: string;
@@ -25,16 +26,19 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
   public _hashtags: Hashtag[] | INgxChipsTag[] | string;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
+  public isPlatformBrowser: boolean;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId,
     @Inject(WindowToken) private window,
     private store: Store<AppStates>,
     public activeModal: NgbActiveModal,
     private editorService: EditorService,
     private toastr: ToastrService,
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.editorStateObservable = this.store.select(selectEditorState);
   }
 
