@@ -9,8 +9,9 @@ import {metaReducers, reducers} from '../../../app.states';
 import {HttpService} from '../../../core';
 import Post from '../../../shared/models/post';
 import {RouterTestingModule} from '@angular/router/testing';
+import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
 
-xdescribe('EditorService', () => {
+describe('EditorService', () => {
   let editorService: EditorService;
   let httpServiceMock: HttpService;
 
@@ -24,7 +25,8 @@ xdescribe('EditorService', () => {
       ],
       providers: [
         EditorService,
-        {provide: HttpService, useValue: httpServiceMock}
+        {provide: HttpService, useValue: httpServiceMock},
+        {provide: LocalStorageToken, useFactory: localStorageProvider}
       ]
     });
     editorService = TestBed.get(EditorService);
@@ -168,6 +170,8 @@ xdescribe('EditorService', () => {
       },
       savePostPropertySuccess: new Post(),
     };
+    mocks.context.post.title = 'asdf';
+    mocks.context.post.id = 2;
     it('should make API request to the correct API endpoint with Post body', (done) => {
 
       (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.savePostPropertySuccess));
@@ -175,7 +179,7 @@ xdescribe('EditorService', () => {
       editorService.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.put)
-        .toHaveBeenCalledWith(API_ENDPOINTS.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title), mocks.context.post);
+        .toHaveBeenCalledWith(API_ENDPOINTS.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title), {title: mocks.context.post.title});
         done();
       });
 
