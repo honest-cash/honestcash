@@ -35,11 +35,11 @@ describe('EditorPaidSectionSelectionComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xdescribe('functions', () => {
+  describe('functions', () => {
     it('saveDraftStory should ', () => {
 
     });

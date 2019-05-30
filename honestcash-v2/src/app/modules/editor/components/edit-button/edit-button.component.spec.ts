@@ -25,14 +25,13 @@ describe('EditorEditButtonComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorEditButtonComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xdescribe('functions', () => {
+  describe('functions', () => {
     it('saveDraftStory should', () => {
     });
   });
