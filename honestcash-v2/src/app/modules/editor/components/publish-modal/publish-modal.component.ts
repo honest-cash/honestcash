@@ -44,8 +44,8 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
       this.story = editorState.story;
       this.saveStatus = editorState.status;
       if (this.saveStatus === EDITOR_STATUS.Loaded) {
-        if (!this._hashtags && this.story.userPostHashtags.length) {
-          this._hashtags = this.story.userPostHashtags;
+        if (!this._hashtags) {
+          this._hashtags = this.story.userPostHashtags || [];
         }
       }
 
@@ -83,6 +83,8 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editorState$.unsubscribe();
+    if (this.editorState$) {
+      this.editorState$.unsubscribe();
+    }
   }
 }

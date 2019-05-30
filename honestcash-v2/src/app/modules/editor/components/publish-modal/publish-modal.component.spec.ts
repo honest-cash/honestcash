@@ -11,6 +11,17 @@ import {initialState as initialUserState} from '../../../../store/user/user.stat
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 import {initialState as initialEditorState} from '../../../../store/editor/editor.state';
 import Post from '../../../../shared/models/post';
+import {WindowToken} from '../../../../core/helpers/window';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/localStorage';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ToastrModule, ToastrService} from 'ngx-toastr';
+import {EditorService} from '../../services/editor.service';
+
+const MockWindow = {
+  location: {
+    href: '',
+  }
+};
 
 describe('EditorPublishModalComponent', () => {
   let component: EditorPublishModalComponent;
@@ -39,13 +50,20 @@ describe('EditorPublishModalComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         FormsModule,
         NgbModule,
+        ToastrModule.forRoot(),
       ],
       declarations: [EditorPublishModalComponent],
       providers: [
         NgbActiveModal,
-        provideMockStore({initialState: initialAppStates})
+        ToastrService,
+        EditorService,
+        provideMockStore({initialState: initialAppStates}),
+        {provide: WindowToken, useValue: MockWindow},
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
       ],
       schemas: [
         NO_ERRORS_SCHEMA,
@@ -56,7 +74,6 @@ describe('EditorPublishModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorPublishModalComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
