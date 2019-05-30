@@ -76,7 +76,7 @@ describe('EditorComponent', () => {
 
   xdescribe('ngOnInit', () => {
     it('should set saveStatus', () => {
-      component.editorStateObservable = of(initialEditorState);
+      component.editor$ = of(initialEditorState);
       component.ngOnInit();
       expect(component.saveStatus).toEqual(EDITOR_STATUS.NotInitialized);
     });
@@ -84,7 +84,7 @@ describe('EditorComponent', () => {
       const editor = component.editor;
       component.story = new Post();
       component.story.bodyJSON = blankBody;
-      component.editorStateObservable = of({
+      component.editor$ = of({
         ...initialEditorState,
         status: EDITOR_STATUS.Loaded,
       });

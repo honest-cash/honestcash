@@ -11,6 +11,7 @@ import {isPlatformBrowser} from '@angular/common';
 import {ScriptService} from 'ngx-script-loader';
 import {concatMap} from 'rxjs/operators';
 
+// @todo editor-v2: get rid of the factory provider pattern, it should be immutable!
 export const EDITOR_AUTO_SAVE = {
   ON: false,
   INTERVAL: 10 * 1000,
@@ -34,11 +35,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
-  public editorStateObservable: Observable<EditorState>;
-  public editorState$: Subscription;
   readonly isPlatformBrowser: boolean;
   public editor: any;
   public editorConfig: any;
+  public editor$: Observable<EditorState>;
+  public editorSub: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -99,11 +100,11 @@ export class EditorComponent implements OnInit, OnDestroy {
       });
 
     }
-    this.editorStateObservable = this.store.select(selectEditorState);
+    this.editor$ = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
-    this.editorState$ = this.editorStateObservable
+  public ngOnInit() {
+    this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
       if (this.isPlatformBrowser && this.editor) {
@@ -127,7 +128,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  uploadImage(file: File) {
+  public uploadImage(file: File) {
     return this.editorService.uploadImage(file).toPromise().then((response) => {
       return {
         success: 1,
@@ -138,7 +139,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  downloadImageFromUrlAndUpload(url: string) {
+  public downloadImageFromUrlAndUpload(url: string) {
     return this.editorService.downloadImageFromUrl(url).toPromise().then(response => {
       return {
         success: 1,
@@ -149,13 +150,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.isPlatformBrowser && this.editor && this.editor.destroy) {
       this.editor.destroy();
       this.store.dispatch(new EditorUnload());
     }
-    if (this.editorState$) {
-      this.editorState$.unsubscribe();
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
     }
   }
 }
