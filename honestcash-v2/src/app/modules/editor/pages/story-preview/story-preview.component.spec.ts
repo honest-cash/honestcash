@@ -5,6 +5,7 @@ import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/localStorage';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 describe('EditorStoryPreviewComponent', () => {
   let component: EditorStoryPreviewComponent;
@@ -16,12 +17,14 @@ describe('EditorStoryPreviewComponent', () => {
         EditorStoryPreviewComponent
       ],
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        NgbModule
       ],
       providers: [
         provideMockStore({initialState: initialAppStates}),
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
+        NgbModal,
       ],
       schemas: [
         NO_ERRORS_SCHEMA
