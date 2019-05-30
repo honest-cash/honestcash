@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, QueryList, ViewChildren} from '@angular/core';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
@@ -6,10 +6,11 @@ import {forkJoin, Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
-import {Block} from '../../converters/json-to-html';
+import {Block, convertBlockToHtml, ELEMENT_TYPES, HeaderElement, ParagraphElement} from '../../converters/json-to-html';
 import {isPlatformBrowser} from '@angular/common';
 import {ScriptService} from 'ngx-script-loader';
 import {concatMap} from 'rxjs/operators';
+import {Slimdown} from '../../converters/markdown-text-to-html';
 
 // @todo editor-v2: get rid of the factory provider pattern, it should be immutable!
 export const EDITOR_AUTO_SAVE = {
@@ -33,6 +34,7 @@ declare var CodeTool: any;
 })
 export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
+  @ViewChildren('bodyJSON') bodyJSON: QueryList<ElementRef>;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
   readonly isPlatformBrowser: boolean;
@@ -40,6 +42,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorConfig: any;
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
+  public isPreviewEnabled = false;
+  private slimdown = new Slimdown();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -109,7 +113,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.saveStatus = editorState.status;
       if (this.isPlatformBrowser && this.editor) {
         this.editor.isReady.then(() => {
-          if (this.saveStatus === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
+          if (this.saveStatus === EDITOR_STATUS.Initialized && this.story.bodyJSON) {
             this.editor.blocks.clear();
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
           }
@@ -126,6 +130,10 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
       });
     }
+  }
+
+  public togglePreview() {
+    this.isPreviewEnabled = !this.isPreviewEnabled;
   }
 
   public uploadImage(file: File) {
@@ -157,6 +165,23 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
     if (this.editorSub) {
       this.editorSub.unsubscribe();
+    }
+  }
+
+  private convertBlockToHtml(block: Block) {
+    const _block = {...block};
+    switch (block.type) {
+      case ELEMENT_TYPES.Paragraph: {
+        (<ParagraphElement>_block).data.text = this.slimdown.render((<ParagraphElement>_block).data.text);
+        return convertBlockToHtml(_block);
+      }
+      case ELEMENT_TYPES.Header: {
+        (<HeaderElement>_block).data.text = this.slimdown.render((<HeaderElement>_block).data.text);
+        return convertBlockToHtml(_block);
+      }
+      default: {
+        return convertBlockToHtml(_block);
+      }
     }
   }
 }

@@ -10,7 +10,7 @@ const blankBody = [
     'type': 'paragraph',
     'data': {
       // tslint:disable-next-line:max-line-length
-      'text': 'You can start by adding blocks by clicking in the empty area after the last paragraph in the story then by clicking the plus icon that appears on the left.'
+      'text': 'You can __start__ by _adding_ blocks by *clicking* in the empty area after the last paragraph in the story then by clicking the plus icon that appears on the left.'
     }
   },
   {

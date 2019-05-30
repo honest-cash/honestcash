@@ -6,6 +6,79 @@
       color: black;
     }
 
+    .story-preview__wrapper {
+      width: 700px;
+      display: block;
+      margin: 0 auto;
+      word-break: break-word;
+      word-wrap: break-word;
+
+      h1, .story-title {
+        font-size: 2.5rem;
+      }
+
+      h2, .story-description {
+        font-size: 1.875rem;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+      }
+
+      h4 {
+        font-size: 1.2rem;
+
+      }
+
+      h5 {
+        font-size: 1rem;
+      }
+
+      h6 {
+        font-size: .8125rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+      }
+
+      blockquote {
+        font-size: 1.875rem;
+      }
+
+      ul, ol, li {
+        font-size: 1.2rem;
+      }
+
+      .story-body {
+        font-size: 1.2rem;
+      }
+
+      img:not(.honest-logo) {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        padding: 1em 0;
+        margin: 0;
+        margin-bottom: -0.9em;
+        line-height: 1.5em;
+      }
+
+      p, blockqupte, ul, ol, li {
+        padding: .7em 0;
+        margin: 0;
+        line-height: 1.6em;
+      }
+    }
+
+    #editor-preview-button {
+      position: fixed;
+      right: 20px;
+      z-index: 10;
+    }
+
     .editor-placeholder {
       max-width: 700px;
       margin: 0 auto;
