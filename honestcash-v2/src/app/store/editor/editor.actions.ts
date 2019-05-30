@@ -2,7 +2,6 @@ import {Action} from '@ngrx/store';
 import Post from '../../shared/models/post';
 import {FailedResponse} from '../../shared/models/authentication';
 import {STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
-import EditorJS from '@editorjs/editorjs';
 
 export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',
@@ -44,7 +43,7 @@ export class EditorUnload implements Action {
 export class EditorChange implements Action {
   readonly type = EditorActionTypes.EDITOR_CHANGE;
 
-  constructor(public payload: { story: Post, editor: EditorJS }) {
+  constructor(public payload: { story: Post }) {
   }
 }
 
