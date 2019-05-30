@@ -25,7 +25,6 @@ describe('EditorPaidSectionUnlockerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorPaidSectionUnlockerComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
