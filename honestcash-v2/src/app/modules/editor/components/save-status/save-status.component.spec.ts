@@ -4,6 +4,7 @@ import {EditorSaveStatusComponent} from './save-status.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {ToastrModule, ToastrService} from 'ngx-toastr';
 
 describe('EditorSaveStatusComponent', () => {
   let component: EditorSaveStatusComponent;
@@ -11,10 +12,13 @@ describe('EditorSaveStatusComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [
+        ToastrModule.forRoot(),
+      ],
       declarations: [EditorSaveStatusComponent],
       providers: [
-        provideMockStore({initialState: initialAppStates})
+        provideMockStore({initialState: initialAppStates}),
+        ToastrService,
       ],
       schemas: [
         NO_ERRORS_SCHEMA,
