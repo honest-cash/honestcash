@@ -30,7 +30,6 @@ describe('EditorWriteComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorWriteComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
