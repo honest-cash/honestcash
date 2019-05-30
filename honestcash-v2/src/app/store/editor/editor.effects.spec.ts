@@ -14,6 +14,7 @@ xdescribe('editor.effects', () => {
         HttpClientTestingModule,
       ],
       providers: [
+        EditorEffects,
         provideMockActions(() => actions),
       ],
     });
