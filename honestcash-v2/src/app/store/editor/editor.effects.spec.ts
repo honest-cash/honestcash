@@ -3,8 +3,10 @@ import {provideMockActions} from '@ngrx/effects/testing';
 import {Observable} from 'rxjs';
 import {EditorEffects} from './editor.effects';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {localStorageProvider, LocalStorageToken} from '../../core/helpers/localStorage';
+import {RouterTestingModule} from '@angular/router/testing';
 
-xdescribe('editor.effects', () => {
+describe('editor.effects', () => {
   let effects: EditorEffects;
   let actions: Observable<any>;
 
@@ -12,9 +14,11 @@ xdescribe('editor.effects', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        RouterTestingModule,
       ],
       providers: [
         EditorEffects,
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
         provideMockActions(() => actions),
       ],
     });
