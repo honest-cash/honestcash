@@ -35,6 +35,8 @@ export class EditorWriteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editorState$.unsubscribe();
+    if (this.editorState$) {
+      this.editorState$.unsubscribe();
+    }
   }
 }

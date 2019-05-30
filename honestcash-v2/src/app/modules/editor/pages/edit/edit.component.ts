@@ -36,6 +36,8 @@ export class EditorEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editorSub.unsubscribe();
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
+    }
   }
 }
