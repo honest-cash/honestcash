@@ -156,6 +156,13 @@ export const convertBlockToHtml = (block: Block): string | null => {
       return convertListBlockToHtml(<ListElement>block);
     }
     case 'image': {
+      // hide images that don't have a url so that it does not appear as broken
+      if (
+        !Object.keys((<ImageElement>block).data.file).length ||
+        (Object.keys((<ImageElement>block).data.file).length && (<ImageElement>block).data.file.url === '')
+      ) {
+        return null;
+      }
       return convertImageBlockToHtml(<ImageElement>block);
     }
     case 'quote': {
@@ -174,4 +181,8 @@ export const convertBlockToHtml = (block: Block): string | null => {
       return null;
     }
   }
+};
+
+export const getBlocksArrayLength = (blocks: Block[]): number => {
+  return blocks.filter(convertBlockToHtml).length;
 };
