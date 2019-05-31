@@ -9,7 +9,9 @@ const cachePersistenceKey = 'httpCache';
 const MockWindow = {
   location: {
     href: '',
-  }
+  },
+  sessionStorage: {},
+  localStorage: {},
 };
 
 describe('HttpCacheService', () => {
@@ -26,9 +28,6 @@ describe('HttpCacheService', () => {
     });
 
     componentWindow = TestBed.get(WindowToken);
-    // Start fresh
-    window.sessionStorage.removeItem(cachePersistenceKey);
-    window.localStorage.removeItem(cachePersistenceKey);
   });
 
   beforeEach(inject([HttpCacheService], (_httpCacheService: HttpCacheService) => {
@@ -186,21 +185,17 @@ describe('HttpCacheService', () => {
     });
 
     it('should persist cache to local storage', () => {
-      expect(localStorage.getItem(cachePersistenceKey)).toBeNull();
-
       httpCacheService.setPersistence('local');
       httpCacheService.setCacheData('/hoho', response);
 
-      expect(localStorage.getItem(cachePersistenceKey)).not.toBeNull();
+      expect(MockWindow.localStorage[cachePersistenceKey]).not.toBeNull();
     });
 
     it('should persist cache to session storage', () => {
-      expect(sessionStorage.getItem(cachePersistenceKey)).toBeNull();
-
       httpCacheService.setPersistence('session');
       httpCacheService.setCacheData('/hoho', response);
 
-      expect(sessionStorage.getItem(cachePersistenceKey)).not.toBeNull();
+      expect(MockWindow.sessionStorage[cachePersistenceKey]).not.toBeNull();
     });
   });
 });

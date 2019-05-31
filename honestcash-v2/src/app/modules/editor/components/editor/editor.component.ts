@@ -1,24 +1,15 @@
 import {Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
-import EditorJS, {EditorConfig} from '@editorjs/editorjs';
-import Header from '@editorjs/header';
-import Link from '@editorjs/link';
-import Image from '@editorjs/image';
-import List from '@editorjs/list';
-import Embed from '@editorjs/embed';
-import Quote from '@editorjs/quote';
-import Paragraph from '@editorjs/paragraph';
-import Code from '@editorjs/code';
-import Marker from '@editorjs/marker';
-import Delimiter from '@editorjs/delimiter';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {Observable, Subscription} from 'rxjs';
+import {forkJoin, Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
 import {Block} from '../../converters/json-to-html';
 import {isPlatformBrowser} from '@angular/common';
+import {ScriptService} from 'ngx-script-loader';
+import {concatMap} from 'rxjs/operators';
 
 // @todo editor-v2: get rid of the factory provider pattern, it should be immutable!
 export const EDITOR_AUTO_SAVE = {
@@ -26,37 +17,14 @@ export const EDITOR_AUTO_SAVE = {
   INTERVAL: 10 * 1000,
 };
 
-export interface HonestEditorConfig extends EditorConfig {
-  tools: {
-    header: {
-      class: Header,
-      inlineToolbar: boolean,
-    };
-    link: {
-      class: Link;
-      inlineToolbar: boolean;
-    };
-    image: {
-      class: Image;
-      inlineToolbar: boolean;
-      config: {} // needs to be populated in constructor for upload
-    };
-    list: {
-      class: List;
-      inlineToolbar: boolean;
-    };
-    embed: Embed;
-    quote: Quote;
-    paragraph: {
-      class: Paragraph;
-      inlineToolbar: boolean;
-    };
-    code: Code;
-    Marker: Marker;
-    delimiter: Delimiter;
-  };
-  onChange?: () => void;
-}
+declare var EditorJS: any;
+declare var EditorConfig: any;
+declare var LinkTool: any;
+declare var Embed: any;
+declare var ImageTool: any;
+declare var Header: any;
+declare var Paragraph: any;
+declare var CodeTool: any;
 
 @Component({
   selector: 'editor',
@@ -67,66 +35,70 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
+  readonly isPlatformBrowser: boolean;
+  public editor: any;
+  public editorConfig: any;
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
-  public readonly editor: EditorJS;
-  private editorConfig: HonestEditorConfig = {
-    holder: 'editor',
-    autofocus: true,
-    initialBlock: 'paragraph',
-    tools: {
-      header: {
-        class: Header,
-        inlineToolbar: true,
-      },
-      link: {
-        class: Link,
-        inlineToolbar: true,
-      },
-      image: {
-        class: Image,
-        inlineToolbar: true,
-        config: {} // needs to be populated in constructor for upload
-      },
-      /*checklist: {
-        class: Checklist,
-        inlineToolbar: true,
-      },*/
-      list: {
-        class: List,
-        inlineToolbar: true,
-      },
-      embed: Embed,
-      quote: Quote,
-      paragraph: {
-        class: Paragraph,
-        inlineToolbar: true,
-      },
-      code: Code,
-      Marker: Marker,
-      delimiter: Delimiter,
-      /*warning: Warning,*/
-    },
-    onChange: this.onEditorChange.bind(this)
-  };
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     private store: Store<AppStates>,
     private editorService: EditorService,
+    private scriptService: ScriptService,
   ) {
-    this.editorConfig.tools.image.config = {
-      uploader: {
-        uploadByFile: this.uploadImage.bind(this),
-        uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
-      }
-    };
-    if (isPlatformBrowser(this.platformId)) {
-      console.log('###############################------------------PLATFORM BORWSER');
-      this.editor = new EditorJS(this.editorConfig);
-      this.editor.isReady.then(() => {
-        this.store.dispatch(new EditorLoad());
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+
+    if (this.isPlatformBrowser) {
+      this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.13.0/dist/editor.min.js').pipe(
+        concatMap(() => forkJoin(
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.3/dist/bundle.min.js'),
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.0/dist/bundle.min.js'),
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/link@2.1.2/dist/bundle.min.js'),
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.0/dist/bundle.min.js'),
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/code@2.4.1/dist/bundle.min.js'),
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.0/dist/bundle.min.js'),
+        ))
+      ).subscribe(() => {
+        this.editorConfig = {
+          holder: 'editor',
+          autofocus: true,
+          initialBlock: 'paragraph',
+          tools: {
+            header: {
+              class: Header,
+              inlineToolbar: true,
+            },
+            link: {
+              class: LinkTool,
+              inlineToolbar: true,
+            },
+            image: {
+              class: ImageTool,
+              inlineToolbar: true,
+              config: {
+                uploader: {
+                  uploadByFile: this.uploadImage.bind(this),
+                  uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
+                }
+              }
+            },
+            embed: Embed,
+            paragraph: {
+              class: Paragraph,
+              inlineToolbar: true,
+            },
+            code: CodeTool,
+          },
+          onChange: this.onEditorChange.bind(this)
+        };
+
+        this.editor = new EditorJS(this.editorConfig);
+        this.editor.isReady.then(() => {
+          this.store.dispatch(new EditorLoad());
+        });
       });
+
     }
     this.editor$ = this.store.select(selectEditorState);
   }
@@ -135,21 +107,25 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
-      this.editor.isReady.then(() => {
-        if (editorState.status === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
-          this.editor.blocks.clear();
-          this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
-        }
-      });
+      if (this.isPlatformBrowser && this.editor) {
+        this.editor.isReady.then(() => {
+          if (this.saveStatus === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
+            this.editor.blocks.clear();
+            this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
+          }
+        });
+      }
     });
   }
 
-  public onEditorChange() {
-    this.editor.saver.save()
-    .then((outputData) => {
-      this.story.bodyJSON = <Block[]>outputData.blocks;
-      this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
-    });
+  onEditorChange() {
+    if (this.isPlatformBrowser && this.editor) {
+      this.editor.saver.save()
+      .then((outputData) => {
+        this.story.bodyJSON = <Block[]>outputData.blocks;
+        this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
+      });
+    }
   }
 
   public uploadImage(file: File) {
@@ -175,7 +151,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.editor && this.editor.destroy) {
+    if (this.isPlatformBrowser && this.editor && this.editor.destroy) {
       this.editor.destroy();
       this.store.dispatch(new EditorUnload());
     }

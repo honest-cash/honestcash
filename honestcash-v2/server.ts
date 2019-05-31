@@ -8,6 +8,21 @@ import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import {join} from 'path';
 
+import * as fs from 'fs';
+import * as domino from 'domino';
+
+const DIST_FOLDER = join(process.cwd(), 'dist/browser');
+
+// this block is to hide window is not defined error
+// some modules are externally lazy loaded (non Angular scripts)
+// however some angular modules that use window (for example ngx-chips and NgxChipsModule)
+// that cannot be bootstrapped on runtime and thus cannot be lazy loaded
+// this ensures packages that use window will now throw error
+const template = fs.readFileSync(join(DIST_FOLDER, 'index.html')).toString();
+const win = domino.createWindow(template);
+global['window'] = win;
+global['document'] = win.document;
+
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
 
@@ -15,7 +30,6 @@ enableProdMode();
 const app = express();
 
 const PORT = process.env.PORT || 4000;
-const DIST_FOLDER = join(process.cwd(), 'dist/browser');
 
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require('./dist/server/main');
@@ -40,7 +54,7 @@ app.get('*.*', express.static(DIST_FOLDER, {
 
 // All regular routes use the Universal engine
 app.get('*', (req, res) => {
-  res.render('index', { req });
+  res.render('index', {req});
 });
 
 // Start up the Node server

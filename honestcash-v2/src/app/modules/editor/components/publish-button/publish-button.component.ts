@@ -6,7 +6,6 @@ import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/edit
 import Post from '../../../../shared/models/post';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
-import {EditorEffects} from '../../../../store/editor/editor.effects';
 import {EditorPublishModalComponent} from '../publish-modal/publish-modal.component';
 import {WindowToken} from '../../../../core/helpers/window';
 import {EnvironmentToken} from '../../../../core/helpers/environment';
@@ -30,7 +29,6 @@ export class EditorPublishButtonComponent implements OnInit, OnDestroy {
     @Inject(WindowToken) private window,
     @Inject(EnvironmentToken) private environment: Environment,
     private store: Store<AppStates>,
-    private editorEffects: EditorEffects,
     private modalService: NgbModal,
     private toastr: ToastrService,
   ) {

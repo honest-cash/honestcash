@@ -54,6 +54,7 @@
             <div class="form-group">
               <label for="userPostHashtags" class="text-uppercase"><b>Tags</b></label>
               <tag-input
+                *ngIf="isPlatformBrowser"
                 theme="hc-theme"
                 id="userPostHashtags"
                 name="userPostHashtags"

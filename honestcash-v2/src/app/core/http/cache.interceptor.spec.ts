@@ -4,6 +4,13 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpResponse} from '@angular/common/http'
 
 import {CacheInterceptor} from './cache.interceptor';
 import {HttpCacheService} from './http-cache.service';
+import {WindowToken} from '../helpers/window';
+
+const MockWindow = {
+  location: {
+    href: '',
+  }
+};
 
 describe('CacheInterceptor', () => {
   let interceptorOptions: Object | null = {};
@@ -11,6 +18,7 @@ describe('CacheInterceptor', () => {
   let cacheInterceptor: CacheInterceptor;
   let http: HttpClient;
   let httpMock: HttpTestingController;
+  let componentWindow: Window;
 
   function createInterceptor(_httpCacheService: HttpCacheService) {
     cacheInterceptor = new CacheInterceptor(_httpCacheService).configure(interceptorOptions);
@@ -27,9 +35,11 @@ describe('CacheInterceptor', () => {
           useFactory: createInterceptor,
           deps: [HttpCacheService],
           multi: true
-        }
+        },
+        {provide: WindowToken, useValue: MockWindow},
       ]
     });
+    componentWindow = TestBed.get(WindowToken);
   });
 
   afterEach(() => {

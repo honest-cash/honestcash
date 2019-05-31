@@ -1,5 +1,5 @@
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import Post from '../../../../shared/models/post';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
@@ -10,6 +10,7 @@ import {EditorStoryLocalLoad, EditorStoryPropertyChange, EditorStorySaveAndPubli
 import Hashtag from '../../../../shared/models/hashtag';
 import {INgxChipsTag} from '../publish-modal/publish-modal.component';
 import {STORY_PROPERTIES} from '../../services/editor.service';
+import {isPlatformBrowser} from '@angular/common';
 
 type PaneType = 'first' | 'second';
 
@@ -31,13 +32,16 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   public saveStatus: EDITOR_STATUS;
   public story: Post;
   public _hashtags: Hashtag[] | INgxChipsTag[] | string;
+  public isPlatformBrowser: boolean;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId,
     private store: Store<AppStates>,
     public activeModal: NgbActiveModal,
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.editorStateObservable = this.store.select(selectEditorState);
   }
 

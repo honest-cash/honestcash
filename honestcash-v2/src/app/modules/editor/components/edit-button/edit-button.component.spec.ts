@@ -25,7 +25,6 @@ describe('EditorEditButtonComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorEditButtonComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

@@ -4,6 +4,15 @@ import {EditorPublishButtonComponent} from './publish-button.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {WindowToken} from '../../../../core/helpers/window';
+import {environmentProvider, EnvironmentToken} from '../../../../core/helpers/environment';
+import {ToastrModule, ToastrService} from 'ngx-toastr';
+
+const MockWindow = {
+  location: {
+    href: '',
+  }
+};
 
 describe('EditorPublishButtonComponent', () => {
   let component: EditorPublishButtonComponent;
@@ -11,10 +20,15 @@ describe('EditorPublishButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [
+        ToastrModule.forRoot(),
+      ],
       declarations: [EditorPublishButtonComponent],
       providers: [
-        provideMockStore({initialState: initialAppStates})
+        ToastrService,
+        provideMockStore({initialState: initialAppStates}),
+        {provide: WindowToken, useValue: MockWindow},
+        {provide: EnvironmentToken, useFactory: environmentProvider},
       ],
       schemas: [
         NO_ERRORS_SCHEMA,

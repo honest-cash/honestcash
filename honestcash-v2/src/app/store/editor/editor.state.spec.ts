@@ -5,7 +5,7 @@ import {Store, StoreModule} from '@ngrx/store';
 import {AppStates, metaReducers, reducers} from '../../app.states';
 import {initialState as initialEditorState, State as EditorState} from './editor.state';
 
-xdescribe('EditorState', () => {
+describe('EditorState', () => {
   let store: Store<AppStates>;
   beforeEach(() => {
     TestBed.configureTestingModule({

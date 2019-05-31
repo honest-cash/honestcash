@@ -61,7 +61,11 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editorState$.unsubscribe();
-    this.autoSaveInterval$.unsubscribe();
+    if (this.editorState$) {
+      this.editorState$.unsubscribe();
+    }
+    if (this.autoSaveInterval$) {
+      this.autoSaveInterval$.unsubscribe();
+    }
   }
 }
