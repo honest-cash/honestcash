@@ -90,7 +90,7 @@ export class EditorComponent implements OnInit, OnDestroy {
             },
             code: CodeTool,
           },
-          onChange: this.onEditorChange.bind(this)
+          onChange: this.onBodyChange.bind(this)
         };
 
         this.editor = new EditorJS(this.editorConfig);
@@ -118,13 +118,23 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEditorChange() {
+  onBodyChange() {
     if (this.isPlatformBrowser && this.editor) {
       this.editor.saver.save()
       .then((outputData) => {
         this.story.bodyJSON = <Block[]>outputData.blocks;
         this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
       });
+    }
+  }
+
+  onTitleChange(title: string) {
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
+  }
+
+  autoGrow(oField) {
+    if (oField.scrollHeight > oField.clientHeight) {
+      oField.style.height = oField.scrollHeight + 'px';
     }
   }
 

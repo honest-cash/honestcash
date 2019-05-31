@@ -1,5 +1,18 @@
+<div
+  id="editor-title"
+  class="mb-4"
+  contenteditable="true"
+  name="editor-title"
+  #editorTitle="ngModel"
+  [ngModel]="story.title"
+  (ngModelChange)="onTitleChange($event)"
+  placeholder="Title of your story"
+  ngDefaultControl
+>
+</div>
 <div id="editor"></div>
-<div class="editor-placeholder" *ngIf="!story.bodyJSON || (story.bodyJSON && story.bodyJSON.length === 0)">
+<div class="editor-placeholder"
+     *ngIf="!story.bodyJSON || (story.bodyJSON && story.bodyJSON.length === 0) || (story.bodyJSON && story.bodyJSON.length === 1 && story.bodyJSON[0].data.text && story.bodyJSON[0].data.text === '')">
   <small class="text-muted"><b>
     <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>&nbsp;Click above
     to write your story.</b></small>

@@ -6,6 +6,7 @@ import {HeaderProfileMenuComponent} from './components/header-profile-menu/heade
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HeaderComponent} from './components/header/header.component';
 import {HonestLogoComponent} from './components/honest-logo/honest-logo.component';
+import {ContenteditableModule} from 'ng-contenteditable';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import {HonestLogoComponent} from './components/honest-logo/honest-logo.componen
     CommonModule,
     FontAwesomeModule,
     NgbModule,
+    ContenteditableModule,
   ],
   exports: [
     AvatarComponent,
