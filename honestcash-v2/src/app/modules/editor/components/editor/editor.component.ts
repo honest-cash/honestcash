@@ -109,7 +109,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.saveStatus = editorState.status;
       if (this.isPlatformBrowser && this.editor) {
         this.editor.isReady.then(() => {
-          if (this.saveStatus === EDITOR_STATUS.Initialized && this.story.bodyJSON) {
+          if (this.saveStatus === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
             this.editor.blocks.clear();
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
           }
