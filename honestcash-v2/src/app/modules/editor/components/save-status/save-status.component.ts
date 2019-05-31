@@ -39,9 +39,9 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
       this.story = editorState.story;
 
       if (EDITOR_AUTO_SAVE.ON) {
+        // reset interval
+        this.autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
         if (this.saveStatus === EDITOR_STATUS.Saved) {
-          // reset interval if saved
-          this.autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
           // reset button clicked status
           this.isSaveButtonClicked = false;
         } else {
@@ -52,7 +52,6 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
           // if user saves prematurely while the interval is somehow half way through
           // we should cancel the previous action (or rather not fire at all with takeWhile)
           // hence the saveClicked check
-          this.autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
           this.autoSaveInterval$ = this.autosaveIntervalObservable.pipe(
             takeWhile(() => this.saveStatus === EDITOR_STATUS.NotSaved && !this.isSaveButtonClicked),
           ).subscribe(() => this.dispatchStoryPropertySave());
