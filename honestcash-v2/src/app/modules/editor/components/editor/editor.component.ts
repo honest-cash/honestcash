@@ -40,6 +40,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorConfig: any;
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
+  public shouldShowPlaceholder = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -107,6 +108,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
+
+      this.shouldShowPlaceholder = !this.story.bodyJSON ||
+        (this.story.bodyJSON && this.story.bodyJSON.length === 0) ||
+        (this.story.bodyJSON && this.story.bodyJSON.length === 1 && this.story.bodyJSON[0].data.text !== undefined && !this.story.bodyJSON[0].data.text.length);
+
       if (this.isPlatformBrowser && this.editor) {
         this.editor.isReady.then(() => {
           if (this.saveStatus === EDITOR_STATUS.Initialized && this.story.bodyJSON) {
@@ -128,14 +134,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTitleChange(title: string) {
+  onTitleChange($event: KeyboardEvent) {
+    const title = (<HTMLInputElement>$event.target).innerText;
+    this.story.title = title;
     this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
-  }
-
-  autoGrow(oField) {
-    if (oField.scrollHeight > oField.clientHeight) {
-      oField.style.height = oField.scrollHeight + 'px';
-    }
   }
 
   public uploadImage(file: File) {

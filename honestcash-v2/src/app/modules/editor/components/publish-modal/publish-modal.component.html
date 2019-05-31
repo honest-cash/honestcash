@@ -19,35 +19,6 @@
     <div class="form-row">
       <div class="col">
         <div class="form-group">
-          <label for="title" class="text-uppercase"><b>Title</b></label>
-          <input
-            required
-            id="title"
-            name="title"
-            #title="ngModel"
-            [ngModel]="story.title"
-            (ngModelChange)="onTitleChange($event)"
-            [ngClass]="{ 'is-invalid': f.submitted && title.invalid, 'is-valid': f.submitted && title.valid }"
-            class="form-control"
-            type="text"
-            placeholder="Title of your story"
-          >
-          <div
-            class="invalid-feedback"
-            *ngIf="f.submitted && title.invalid"
-          >
-          <span
-            *ngIf="title.errors.required"
-          >
-            Title is required.
-          </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col">
-        <div class="form-group">
           <label for="userPostHashtags" class="text-uppercase"><b>Tags</b></label>
           <tag-input
             *ngIf="isPlatformBrowser"
