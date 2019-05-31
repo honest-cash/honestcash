@@ -1,4 +1,4 @@
-<div [hidden]="!story.hasPaidSection && !isLoaded" class="form-row mt-3">
+<div [hidden]="!story.hasPaidSection && saveStatus === EDITOR_SAVE_STATUS.NotInitialized" class="form-row mt-3">
   <div class="col">
     <div class="text-uppercase"><b>Pay-to-read Section Cost</b></div>
     <div>
@@ -26,7 +26,7 @@
     />
   </div>
 </div>
-<div [hidden]="!story.hasPaidSection && !isLoaded" class="form-row mt-3">
+<div [hidden]="!story.hasPaidSection && saveStatus === EDITOR_SAVE_STATUS.NotInitialized" class="form-row mt-3">
   <div class="col">
     <div class="text-uppercase"><b>Pay-to-read Section</b></div>
     <div>

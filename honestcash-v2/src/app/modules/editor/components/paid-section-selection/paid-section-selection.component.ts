@@ -23,7 +23,8 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   @Input() form: NgForm;
   @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
-  public isLoaded: boolean;
+  public saveStatus: EDITOR_STATUS;
+  public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public paidSectionLineBreakTouched = false;
   public paidSectionLinebreakEnd: number;
   public story: Post;
@@ -39,24 +40,23 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
-      this.isLoaded = editorState.isLoaded;
+      this.saveStatus = editorState.status;
       this.story = editorState.story;
 
-      if (editorState.status === EDITOR_STATUS.Loaded) {
+      if (this.saveStatus === EDITOR_STATUS.Initialized) {
         if (!this.story.paidSectionLinebreak) {
           this.story.paidSectionLinebreak = 0;
         }
         if (!this.story.paidSectionCost) {
           this.story.paidSectionCost = 0.001;
         }
-        this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.bodyJSON).length) - 1);
       }
+      this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.bodyJSON).length) - 1);
     });
   }
 
   onSwitchLinebreak(action: LINEBREAK_ACTION) {
     this.paidSectionLineBreakTouched = true;
-    console.log('story', this.story, this.paidSectionLinebreakEnd);
     let element: ElementRef;
     switch (action) {
       case LINEBREAK_ACTION.MoveUp: {
