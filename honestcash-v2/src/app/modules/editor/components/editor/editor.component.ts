@@ -21,7 +21,7 @@ declare var EditorJS: any;
 declare var EditorConfig: any;
 declare var LinkTool: any;
 declare var Embed: any;
-declare var Image: any;
+declare var ImageTool: any;
 declare var Header: any;
 declare var Paragraph: any;
 declare var CodeTool: any;
@@ -74,7 +74,7 @@ export class EditorComponent implements OnInit, OnDestroy {
               inlineToolbar: true,
             },
             image: {
-              class: Image,
+              class: ImageTool,
               inlineToolbar: true,
               config: {
                 uploader: {
