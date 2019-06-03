@@ -40,6 +40,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorConfig: any;
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
+  public shouldShowPlaceholder = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -90,7 +91,7 @@ export class EditorComponent implements OnInit, OnDestroy {
             },
             code: CodeTool,
           },
-          onChange: this.onEditorChange.bind(this)
+          onChange: this.onBodyChange.bind(this)
         };
 
         this.editor = new EditorJS(this.editorConfig);
@@ -107,9 +108,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
+
+      this.shouldShowPlaceholder = !this.story.bodyJSON ||
+        (this.story.bodyJSON && this.story.bodyJSON.length === 0) ||
+        (this.story.bodyJSON && this.story.bodyJSON.length === 1 && this.story.bodyJSON[0].data.text !== undefined && !this.story.bodyJSON[0].data.text.length);
+
       if (this.isPlatformBrowser && this.editor) {
         this.editor.isReady.then(() => {
-          if (this.saveStatus === EDITOR_STATUS.Loaded && this.story.bodyJSON) {
+          if (this.saveStatus === EDITOR_STATUS.Initialized && this.story.bodyJSON) {
             this.editor.blocks.clear();
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
           }
@@ -118,7 +124,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEditorChange() {
+  onBodyChange() {
     if (this.isPlatformBrowser && this.editor) {
       this.editor.saver.save()
       .then((outputData) => {
@@ -126,6 +132,12 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
       });
     }
+  }
+
+  onTitleChange($event: KeyboardEvent) {
+    const title = (<HTMLInputElement>$event.target).innerText;
+    this.story.title = title;
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
   }
 
   public uploadImage(file: File) {
