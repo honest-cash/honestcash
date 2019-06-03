@@ -33,8 +33,9 @@ matrix:
     - npm run test
     # build V2 depending on the branch
     - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run build --prod -C ./honestcash-v2; fi
-    - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build --configuration development -C ./honestcash-v2; fi
-    - npm run build:ssr:prod -C ./honestcash-v2
+    - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build --configuration=development -C ./honestcash-v2; fi
+    - if [[ "$TRAVIS_BRANCH" == "master" ]]; - npm run build:ssr:prod -C ./honestcash-v2; fi
+    - if [[ "$TRAVIS_BRANCH" != "master" ]]; - npm run build:ssr:dev -C ./honestcash-v2; fi
     # tests go into the endless loop
     # - npm run test -C ./honestcash-v2
 
