@@ -1,14 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-@import './app/modules/welcome/directives/tooltip.directive.scss';
+@import "~bootstrap/scss/bootstrap";
 @import 'app/styles/_background-opacity';
 @import 'app/styles/_opacity';
+@import '~bootstrap/scss/_variables.scss';
+@import '~ngx-toastr/toastr-bs4-alert';
 
 .bg-image {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        rgba(0, 0, 0, 0.4),
-        rgba(0, 0, 0, 0.4)
-    ), url('https://github.com/honest-cash/honestcash/blob/redesign/hc-6/public/img/artwork-login.jpg?raw=true') no-repeat 50% fixed / cover;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.4)
+  ), url('https://github.com/honest-cash/honestcash/blob/redesign/hc-6/public/img/artwork-login.jpg?raw=true') no-repeat 50% fixed / cover;
 }
 

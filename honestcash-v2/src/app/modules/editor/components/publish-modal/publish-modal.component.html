@@ -1,0 +1,79 @@
+<ng-template #paywallPopContent>For more information about pay-to-read sections, please refer to <a
+  href="https://honest.cash/honest_cash/earn-more-money-for-your-content-paywalls-3552" target="_blank">Paywalls
+  Guide</a>.
+</ng-template>
+<ng-template #paywallLengthContent>Pay-to-read can only be enabled when you have more than one
+  sections.
+</ng-template>
+<ng-template #paywallPopTitle>About Pay-to-read Sections</ng-template>
+<div class="modal-header">
+  <h5 class="modal-title col text-uppercase text-center">Publish Story</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form name="form" class="p-4 needs-validation" #f="ngForm"
+      (ngSubmit)="(f.form.valid && ((story.hasPaidSection && story.paidSectionCost > 0 && story.paidSectionLinebreak <= story.bodyJSON.length - 1) || !story.hasPaidSection)) && onSubmit()"
+      novalidate>
+  <div class="modal-body">
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label for="userPostHashtags" class="text-uppercase"><b>Tags</b></label>
+          <tag-input
+            *ngIf="isPlatformBrowser"
+            theme="hc-theme"
+            id="userPostHashtags"
+            name="userPostHashtags"
+            #userPostHashtags="ngModel"
+            [(ngModel)]="_hashtags"
+            (ngModelChange)="onTagChange($event)"
+            [separatorKeyCodes]="[32, 188]"
+            [maxItems]="6"
+            [addOnBlur]="true"
+            [identifyBy]="'hashtag'"
+            [displayBy]="'hashtag'"
+            [placeholder]="'You can add up to 5 tags'"
+            ngDefaultControl
+          ></tag-input>
+          <small id="tagsHelpInline" class="text-muted">
+            Tags can be submitted by pressing enter
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col d-flex justify-content-center align-items-center">
+        <div class="btn-block btn-group-toggle">
+          <label class="btn-outline-dark" ngbButtonLabel placement="right"
+                 [ngbPopover]="story.bodyJSON.length < 2 ? paywallLengthContent : paywallPopContent"
+                 [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
+            <input type="checkbox" ngbButton id="hasPaidSection" #hasPaidSection="ngModel" name="hasPaidSection"
+                   #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"
+                   (ngModelChange)="onChangeHasPaidSection()" [disabled]="story.bodyJSON.length < 2"
+            > I have a pay-to-read section in my story
+          </label>
+        </div>
+      </div>
+    </div>
+    <editor-paid-section-selection [form]="f"
+                                   [hidden]="!story.hasPaidSection"></editor-paid-section-selection>
+  </div>
+  <div class="modal-footer px-0 pb-0">
+    <div class="col text-left">
+      <button type="button" class="btn btn-outline-dark" (click)="onDismiss()"
+              [disabled]="saveStatus === EDITOR_SAVE_STATUS.Publishing">Close
+      </button>
+    </div>
+    <div class="col text-center">
+      <button type="button" (click)="previewDraftStory()" class="btn btn-primary mr-2" placement="top"
+              ngbTooltip="Preview Story">
+        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+      </button>
+    </div>
+    <div class="col text-right">
+      <button type="submit" class="btn btn-success" [disabled]="saveStatus === EDITOR_SAVE_STATUS.Publishing">Publish
+      </button>
+    </div>
+  </div>
+</form>

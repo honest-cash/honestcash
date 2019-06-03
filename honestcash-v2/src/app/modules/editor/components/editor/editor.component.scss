@@ -1,0 +1,102 @@
+:host {
+  ::ng-deep {
+
+    [contenteditable=true]:empty:before {
+      content: attr(placeholder);
+      color: grey;
+      display: block; /* For Firefox */
+    }
+
+    #editor,
+    .editor-placeholder,
+    #editor-title {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    #editor-title {
+      border: none;
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: black;
+      width: 100%;
+      outline: none !important;
+    }
+
+    #editor {
+      color: black;
+    }
+
+    .cdx-settings-button[data-level='1'],
+    .cdx-settings-button[data-level='4'],
+    .cdx-settings-button[data-level='5'],
+    .cdx-settings-button[data-level='6'] {
+      display: none;
+    }
+
+    .ce-toolbar {
+      right: 50px
+    }
+
+    .ce-toolbox {
+      background-color: white;
+    }
+
+    .ce-toolbar__actions {
+      right: -50px;
+    }
+
+    .ce-block__content {
+      max-width: 700px;
+    }
+
+    .ce-header {
+      font-weight: normal;
+    }
+
+    h1.ce-header {
+      font-size: 2.5rem;
+    }
+
+    h2.ce-header {
+      font-size: 1.875rem;
+    }
+
+    h3.ce-header {
+      font-size: 1.5rem;
+    }
+
+    h5.ce-header {
+      font-size: 1rem;
+    }
+
+    h6.ce-header {
+      font-size: .8125rem;
+    }
+
+    .cdx-quote {
+      font-size: 1.875rem;
+    }
+
+    .cdx-checklist,
+    .cdx-list,
+    .cdx-input,
+    .ce-paragraph,
+    h4.ce-header,
+    .ce-delimiter:before {
+      font-size: 1.2rem;
+    }
+
+    .cdx-input.image-tool__caption {
+      font-size: 1rem;
+    }
+
+    .cdx-warning:before {
+      left: -40px;
+      background-size: 24px 24px;
+      width: 24px;
+      height: 24px;
+      margin-top: 16px;
+    }
+  }
+}

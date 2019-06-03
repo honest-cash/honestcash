@@ -1,0 +1,9 @@
+:host {
+  ::ng-deep {
+    .editor-header__save-status {
+      & > .save {
+        cursor: pointer;
+      }
+    }
+  }
+}

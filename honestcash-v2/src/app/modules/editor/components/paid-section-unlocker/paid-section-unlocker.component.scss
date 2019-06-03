@@ -1,0 +1,26 @@
+:host {
+
+  ::ng-deep {
+    .editor-paid-section-unlocker__wrapper {
+
+      background-color: #fafafa;
+
+      .editor-paid-section-unlocker {
+        border: 1px solid transparent;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        font-size: 14px;
+      }
+
+      & > .fadeout {
+        position: relative;
+        height: 2.5em;
+        background: -webkit-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: -moz-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: -o-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: -ms-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+      }
+    }
+  }
+}

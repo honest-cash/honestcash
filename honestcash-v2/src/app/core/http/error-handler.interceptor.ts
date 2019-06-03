@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
-import { Logger } from '../services/logger.service';
+import {environment} from '../../../environments/environment';
+import {Logger} from '../../shared/services/logger.service';
 
 const log = new Logger('ErrorHandlerInterceptor');
 

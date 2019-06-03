@@ -1,0 +1,9 @@
+<div class="nav-item editor-header__save-status btn-sm mr-3">
+  <u class="save text-warning"
+     *ngIf="saveStatus === EDITOR_SAVE_STATUS.NotSaved"
+     placement="bottom"
+     ngbTooltip="Click to save" (click)="onSaveClick()">Not saved</u>
+  <b class="text-success" *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saved" placement="bottom"
+     ngbTooltip="Last saved at {{story.updatedAt | date:'MMMM d, y, h:mm:ss'}}">Saved</b>
+  <i class="text-muted" *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saving">Saving...</i>
+</div>

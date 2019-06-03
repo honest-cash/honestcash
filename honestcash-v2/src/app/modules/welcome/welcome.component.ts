@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-welcome',
@@ -6,12 +6,13 @@ import { Component, OnInit, HostBinding } from '@angular/core';
   styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeContainerComponent implements OnInit {
-  @HostBinding('class') class = 'd-block bg-image text-white';
+  @HostBinding('class') class = 'd-block bg-image';
   @HostBinding('style.minHeight') minHeight = '100vh';
 
   constructor() {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

@@ -1,0 +1,16 @@
+.avatar {
+  border-style: solid;
+  border-color: #e7e7e7;
+  border-width: 1px;
+  border-radius: 50%;
+}
+
+.avatar.large {
+  height: 45px;
+  width: 45px;
+}
+
+.avatar.small {
+  height: 34px;
+  width: 34px;
+}
