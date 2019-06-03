@@ -1,5 +1,5 @@
 notifications:
-  slack: vqlabs:j71yKGBW4ipmLoWcJuteN83i
+  slack: $SLACK_TOKEN
 
 cache:
   directories:
