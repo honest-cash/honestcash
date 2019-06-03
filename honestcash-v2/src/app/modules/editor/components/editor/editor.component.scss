@@ -27,6 +27,13 @@
       color: black;
     }
 
+    .cdx-settings-button[data-level='1'],
+    .cdx-settings-button[data-level='4'],
+    .cdx-settings-button[data-level='5'],
+    .cdx-settings-button[data-level='6'] {
+      display: none;
+    }
+
     .ce-toolbar {
       right: 50px
     }

@@ -20,9 +20,10 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public story: Post;
   public saveStatus: EDITOR_STATUS;
+  public isSaveButtonClicked = false;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
-  private autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
+  private autosaveIntervalObservable: Observable<number>;
   private autoSaveInterval$: Subscription;
 
   constructor(
@@ -38,9 +39,23 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
       this.story = editorState.story;
 
       if (EDITOR_AUTO_SAVE.ON) {
-        this.autoSaveInterval$ = this.autosaveIntervalObservable.pipe(
-          takeWhile(() => this.saveStatus === EDITOR_STATUS.NotSaved),
-        ).subscribe(() => this.dispatchStoryPropertySave());
+        // reset interval
+        this.autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
+        if (this.saveStatus === EDITOR_STATUS.Saved) {
+          // reset button clicked status
+          this.isSaveButtonClicked = false;
+        } else {
+          // otherwise subscribe while status is not saved this dispatches an action that saves the body
+          // thus the above if part resets the interval
+          // if user keeps constantly writing and the status remains NotSaved for the set amount of interval in seconds
+          // it will dispatch the action to save and repeat
+          // if user saves prematurely while the interval is somehow half way through
+          // we should cancel the previous action (or rather not fire at all with takeWhile)
+          // hence the saveClicked check
+          this.autoSaveInterval$ = this.autosaveIntervalObservable.pipe(
+            takeWhile(() => this.saveStatus === EDITOR_STATUS.NotSaved && !this.isSaveButtonClicked),
+          ).subscribe(() => this.dispatchStoryPropertySave());
+        }
       }
     });
 
@@ -51,6 +66,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
       this.toastr.warning(`Write your story to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
       return;
     }
+    this.isSaveButtonClicked = true;
     this.dispatchStoryPropertySave();
   }
 
