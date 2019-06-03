@@ -232,7 +232,7 @@ app.get("/:username/:alias", async (req, res, next) => {
 	});
 });
 
-// Editor paths
+/**
 for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPostId" ]) {
 	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
 }
@@ -241,11 +241,13 @@ for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPost
 for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown/write/response/:parentPostId" ]) {
 	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
 }
+*/
 
 // PATHS MIGRATED TO V2
 
 app.get("/write", (_, res) => res.redirect(`/v2/editor/write`));
 app.get("/edit/:postId", (req, res) => res.redirect(`/v2/editor/edit/${req.params.postId}`));
+// @todo missing /write/response/:parentPostId path
 
 for (let v2Path of [ "/login", "/signup", "/thank-you", "/about" ]) {
   app.get(v2Path, (_, res) =>
