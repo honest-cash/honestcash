@@ -73,7 +73,7 @@
     "sanitize-html": "^1.20.0",
     "sha3": "^2.0.0",
     "showdown": "^1.9.0",
-    "simple-bitcoin-wallet": "0.0.6-alpha.1",
+    "simple-bitcoin-wallet": "0.0.7",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^7.32.2",
     "tippy.js": "^3.4.0",
