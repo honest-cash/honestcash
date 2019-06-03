@@ -6,6 +6,18 @@
     "codelyzer"
   ],
   "rules": {
+    "rxjs-finnish": {
+      "options": [
+        {
+          "functions": false,
+          "methods": false,
+          "parameters": false,
+          "properties": false,
+          "variables": true
+        }
+      ],
+      "severity": "error"
+    },
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
