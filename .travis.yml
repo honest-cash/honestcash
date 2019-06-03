@@ -26,7 +26,7 @@ matrix:
 
     script:
     - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run build:prod; fi
-    - if [[ "$TRAVIS_BRANCH" !== "master" ]]; then npm run build:dev; fi
+    - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build:dev; fi
     # enable it once all the linting errors are fixed:
     # - npm run lint
     - npm run transfer-libs
