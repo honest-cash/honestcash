@@ -1,14 +1,30 @@
 :host {
   ::ng-deep {
-    #editor {
-      max-width: 700px;
-      margin: 0 auto;
-      color: black;
+
+    [contenteditable=true]:empty:before {
+      content: attr(placeholder);
+      color: grey;
+      display: block; /* For Firefox */
     }
 
-    .editor-placeholder {
+    #editor,
+    .editor-placeholder,
+    #editor-title {
       max-width: 700px;
       margin: 0 auto;
+    }
+
+    #editor-title {
+      border: none;
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: black;
+      width: 100%;
+      outline: none !important;
+    }
+
+    #editor {
+      color: black;
     }
 
     .cdx-settings-button[data-level='1'],

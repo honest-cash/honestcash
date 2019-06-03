@@ -101,12 +101,12 @@ describe('EditorComponent', () => {
     });
   });
 
-  xdescribe('onEditorChange', () => {
+  xdescribe('onBodyChange', () => {
     it('should trigger save method on the editor', (done) => {
       const editor = component.editor;
       const saver = editor.saver;
       const saveSpy = spyOn(saver, 'save').and.callThrough();
-      component.onEditorChange();
+      component.onBodyChange();
       editor.isReady.then(() => {
         expect(saveSpy).toHaveBeenCalled();
         done();
@@ -117,7 +117,7 @@ describe('EditorComponent', () => {
       const editor = component.editor;
       const saver = editor.saver;
       spyOn(saver, 'save').and.returnValue(of({blocks: blankBody}).toPromise());
-      component.onEditorChange();
+      component.onBodyChange();
       fixture.detectChanges();
       editor.isReady.then(() => {
         expect(component.story.bodyJSON).toEqual(blankBody);
