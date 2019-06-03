@@ -25,14 +25,15 @@ matrix:
     - npm install -C ./honestcash-v2
 
     script:
-    - npm run build
+    - if [[ "$TRAVIS_BRANCH" === "master" ]]; npm run build:prod
+    - if [[ "$TRAVIS_BRANCH" !== "master" ]]; npm run build:dev
     # enable it once all the linting errors are fixed:
     # - npm run lint
     - npm run transfer-libs
     - npm run test
     - npm run build --prod -C ./honestcash-v2
     - npm run build:ssr -C ./honestcash-v2
-    # @todo: tests go into endless loop
+    # tests go into the endless loop
     # - npm run test -C ./honestcash-v2
 
     before_deploy:
