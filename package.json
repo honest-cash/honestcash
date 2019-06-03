@@ -116,7 +116,10 @@
   "scripts": {
     "start": "node app",
     "watch": "node ./node_modules/webpack/bin/webpack.js --watch",
-    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "build": "npm run build:local",
+    "build:local": "node ./node_modules/webpack/bin/webpack.js --env=local",
+    "build:dev": "node ./node_modules/webpack/bin/webpack.js --env=dev",
+    "build:prod": "node ./node_modules/webpack/bin/webpack.js --prod --env=prod",
     "transfer-libs": "cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./public/js/simple-bitcoin-wallet.min.js && cp ./node_modules/simple-bitcoin-wallet/dist/bitboxlight.min.js ./public/js/bitboxlight.min.js",
     "test": "./node_modules/ts-node/dist/bin.js -O '{\"module\": \"commonjs\"}' ./node_modules/jasmine/bin/jasmine",
     "lint": "./node_modules/tslint/bin/tslint --project ./tslint.json",
