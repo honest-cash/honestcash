@@ -3,12 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export interface Environment {
+  env: string;
   apiUrl: string;
   clientUrl: string;
   production: boolean;
 }
 
 export const ENVIRONMENT_DEFAULTS: Environment = {
+  env: 'dev',
   apiUrl: 'https://beta.honest.cash/api',
   clientUrl: 'https://beta.honest.cash/',
   production: false
@@ -20,6 +22,7 @@ export const environment: Environment = {
   // however during tests, you sometimes need to test based on environment
   // this ensures that environment is dynamic and can be changed
   // so that both production true and false values can be tested inside spec
+  env: 'dev',
   apiUrl: ENVIRONMENT_DEFAULTS.apiUrl,
   clientUrl: ENVIRONMENT_DEFAULTS.clientUrl,
   production: ENVIRONMENT_DEFAULTS.production,

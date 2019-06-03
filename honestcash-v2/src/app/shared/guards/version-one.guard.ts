@@ -26,7 +26,7 @@ export class VersionOneGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authenticationService.hasAuthorization() && this.walletService.getWalletMnemonic()) {
       log.debug('Already logged in, redirecting to v1');
-      if (this.environment.production) {
+      if (this.environment.env === 'prod' || this.environment.env === 'dev') {
         this.window.location.href = '/';
       } else {
         // or route to v1 port in localhost
