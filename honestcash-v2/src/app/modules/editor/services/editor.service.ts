@@ -41,6 +41,7 @@ export enum STORY_PROPERTIES {
   Title = 'title',
   Body = 'body',
   BodyJSON = 'bodyJSON',
+  BodyAndTitle = 'bodyAndTitle',
   Hashtags = 'hashtags',
   PaidSection = 'paidSection',
   HasPaidSection = 'hasPaidSection',
@@ -83,6 +84,10 @@ export class EditorService {
       body.hasPaidSection = true;
       body.paidSectionLinebreak = post.paidSectionLinebreak;
       body.paidSectionCost = post.paidSectionCost;
+    }
+    if (property === STORY_PROPERTIES.BodyAndTitle) {
+      body.title = post.title;
+      body.bodyJSON = post.bodyJSON;
     }
     return this.http.put<Post>(API_ENDPOINTS.savePostProperty(post, property), body);
   }

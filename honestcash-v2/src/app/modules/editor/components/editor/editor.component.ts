@@ -41,6 +41,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
   public shouldShowPlaceholder = false;
+  public updatedTitle = '';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -134,10 +135,16 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTitleChange($event: KeyboardEvent) {
-    const title = (<HTMLInputElement>$event.target).innerText;
-    this.story.title = title;
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
+  onTitleBlur() {
+    this.story.title = this.updatedTitle;
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
+  }
+
+  onTitleChange($event: any) {
+    // InputEvent interface is not yet introduced in Typescript
+    // it is required to install a third party types file @types/dom-inputevent
+    // hence the any type
+    this.updatedTitle = $event.target.innerText;
   }
 
   public uploadImage(file: File) {
