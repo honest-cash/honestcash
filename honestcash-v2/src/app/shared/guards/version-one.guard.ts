@@ -9,13 +9,14 @@ import {EnvironmentToken} from '../../core/helpers/environment';
 import {Environment} from '../../../environments/environment';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {isPlatformBrowser} from '@angular/common';
+import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
 const log = new Logger('VersionOneGuard');
 
 @Injectable({providedIn: 'root'})
 export class VersionOneGuard implements CanActivate {
-  private isPlatformBrowser: boolean;
+  readonly isPlatformBrowser: boolean;
+  readonly isPlatformServer: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -26,6 +27,7 @@ export class VersionOneGuard implements CanActivate {
     private walletService: WalletService,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+    this.isPlatformServer = isPlatformServer(this.platformId);
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -44,10 +46,12 @@ export class VersionOneGuard implements CanActivate {
       }
       return true;
     }
-    // during SSR, as localStorage is undefined and thus the user is not authenticated, it will always redirect user to login
-    // which will cause login page to appear until client rendering takes over
-    // by then localStorage is defined and if the user exists, user will see the correct route
-    return true;
+    if (this.isPlatformServer) {
+      // during SSR, as localStorage is undefined and thus the user is not authenticated, it will always redirect user to login
+      // which will cause login page to appear until client rendering takes over
+      // by then localStorage is defined and if the user exists, user will see the correct route
+      return true;
+    }
   }
 
   canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -62,8 +66,11 @@ export class VersionOneGuard implements CanActivate {
         }),
       );
     }
-    // to cheat SSR until client takes over
-    return of(true);
+
+    if (this.isPlatformServer) {
+      // to cheat SSR until client takes over
+      return of(true);
+    }
   }
 
 }

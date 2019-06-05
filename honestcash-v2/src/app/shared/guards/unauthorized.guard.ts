@@ -6,13 +6,14 @@ import {AuthService} from '../services/auth.service';
 import {WindowToken} from '../../core/helpers/window';
 import {EnvironmentToken} from '../../core/helpers/environment';
 import {Environment} from '../../../environments/environment';
-import {isPlatformBrowser} from '@angular/common';
+import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
 const log = new Logger('UnauthorizedGuard');
 
 @Injectable({providedIn: 'root'})
 export class UnauthorizedGuard implements CanActivate {
-  private isPlatformBrowser: boolean;
+  readonly isPlatformBrowser: boolean;
+  readonly isPlatformServer: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -22,6 +23,7 @@ export class UnauthorizedGuard implements CanActivate {
     private authenticationService: AuthService
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+    this.isPlatformServer = isPlatformServer(this.platformId);
   }
 
   canActivate(): boolean {
@@ -43,7 +45,9 @@ export class UnauthorizedGuard implements CanActivate {
 
       return false;
     }
-    // to cheat SSR until client takes over
-    return true;
+    if (this.isPlatformServer) {
+      // to cheat SSR until client takes over
+      return true;
+    }
   }
 }

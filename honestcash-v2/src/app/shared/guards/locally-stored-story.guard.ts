@@ -6,13 +6,14 @@ import {WindowToken} from '../../core/helpers/window';
 import {EnvironmentToken} from '../../core/helpers/environment';
 import {Environment} from '../../../environments/environment';
 import {EditorService} from '../../modules/editor/services/editor.service';
-import {isPlatformBrowser} from '@angular/common';
+import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
 const log = new Logger('LocallySavedStoryGuard');
 
 @Injectable({providedIn: 'root'})
 export class LocallySavedStoryGuard implements CanActivate {
-  private isPlatformBrowser: boolean;
+  readonly isPlatformBrowser: boolean;
+  readonly isPlatformServer: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -22,6 +23,7 @@ export class LocallySavedStoryGuard implements CanActivate {
     private editorService: EditorService,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+    this.isPlatformServer = isPlatformServer(this.platformId);
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -32,8 +34,10 @@ export class LocallySavedStoryGuard implements CanActivate {
       this.router.navigate(['/editor/write']);
       return false;
     }
-    // to cheat SSR until client takes over
-    return true;
+    if (this.isPlatformServer) {
+      // to cheat SSR until client takes over
+      return true;
+    }
   }
 
 }
