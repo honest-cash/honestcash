@@ -1,4 +1,8 @@
 :host {
+
+  display: flex;
+  height: 100%;
+
   ::ng-deep {
 
     [contenteditable=true]:empty:before {
