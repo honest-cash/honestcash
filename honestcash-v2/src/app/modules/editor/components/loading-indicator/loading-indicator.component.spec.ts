@@ -1,22 +1,22 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {LoadingIndicatorComponent} from './honest-logo.component';
+import {EditorLoadingIndicatorComponent} from './loading-indicator.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('HonestLogoComponent', () => {
-  let component: LoadingIndicatorComponent;
-  let fixture: ComponentFixture<LoadingIndicatorComponent>;
+  let component: EditorLoadingIndicatorComponent;
+  let fixture: ComponentFixture<EditorLoadingIndicatorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [LoadingIndicatorComponent],
+      declarations: [EditorLoadingIndicatorComponent],
       providers: [],
       schemas: [
         NO_ERRORS_SCHEMA,
       ]
     });
-    fixture = TestBed.createComponent(LoadingIndicatorComponent);
+    fixture = TestBed.createComponent(EditorLoadingIndicatorComponent);
     component = fixture.componentInstance;
   }));
 
