@@ -35,12 +35,13 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
-  readonly isPlatformBrowser: boolean;
   public editor: any;
   public editorConfig: any;
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
   public shouldShowPlaceholder = false;
+  public isLoaded = false;
+  readonly isPlatformBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -110,14 +111,23 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.saveStatus = editorState.status;
 
       this.shouldShowPlaceholder = !this.story.bodyJSON ||
-        (this.story.bodyJSON && this.story.bodyJSON.length === 0) ||
-        (this.story.bodyJSON && this.story.bodyJSON.length === 1 && this.story.bodyJSON[0].data.text !== undefined && !this.story.bodyJSON[0].data.text.length);
+        (
+          this.story.bodyJSON &&
+          this.story.bodyJSON.length === 0
+        ) ||
+        (
+          this.story.bodyJSON &&
+          this.story.bodyJSON.length === 1 &&
+          this.story.bodyJSON[0].data.text !== undefined &&
+          !this.story.bodyJSON[0].data.text.length
+        );
 
       if (this.isPlatformBrowser && this.editor) {
         this.editor.isReady.then(() => {
           if (this.saveStatus === EDITOR_STATUS.Initialized && this.story.bodyJSON) {
             this.editor.blocks.clear();
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
+            this.isLoaded = true;
           }
         });
       }

@@ -1,3 +1,4 @@
-.ng-touched.ng-invalid {
-  border-color: #dc3545;
+:host {
+  min-height: 100vh;
+  display: flex;
 }
