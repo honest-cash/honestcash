@@ -20,6 +20,7 @@ import {LocallySavedStoryGuard} from '../../shared/guards/locally-stored-story.g
 import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
 import {EditorEditButtonComponent} from './components/edit-button/edit-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
+import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,7 @@ const routes: Routes = [
     EditorEmbeddableComponent,
     EditorPaidSectionSelectionComponent,
     EditorPaidSectionUnlockerComponent,
+    EditorLoadingIndicatorComponent,
   ],
   entryComponents: [
     EditorComponent,
