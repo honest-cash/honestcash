@@ -26,11 +26,10 @@ const routes: Routes = [
     path: '',
     component: EditorContainerComponent,
     children: [
-      {path: 'write', pathMatch: 'full', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
-      {path: 'edit/:storyId', pathMatch: 'full', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
+      {path: 'write', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
+      {path: 'edit/:storyId', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
       {
         path: 'story-preview',
-        pathMatch: 'full',
         component: EditorStoryPreviewComponent,
         canActivate: [AuthorizedGuard, LocallySavedStoryGuard]
       },
