@@ -11,19 +11,21 @@
       <small><b>Cost in BCH:</b></small>
     </label>
     <input
-      class="form-control"
       name="elPaidSectionCostInBch"
       #elPaidSectionCostInBch="ngModel"
-      [type]="'number'"
+      [(ngModel)]="story.paidSectionCost"
+      (ngModelChange)="onChangePaidSectionCost()"
       [step]="0.001"
       [min]="0.001"
+      [max]="1"
       [value]="0.001"
       required
       id="elPaidSectionCostInBch"
-      [(ngModel)]="story.paidSectionCost"
-      (ngModelChange)="onChangePaidSectionCost()"
-      [ngClass]="{ 'is-invalid': form.submitted && elPaidSectionCostInBch.invalid, 'is-valid': form.submitted && elPaidSectionCostInBch.valid }"
-    />
+      type="range"
+      class="form-control-range">
+  </div>
+  <div id="elPaidSectionCostInBchValue" class="col-1">
+    <span class="text-danger">{{story.paidSectionCost}}</span>
   </div>
 </div>
 <div [hidden]="!story.hasPaidSection && saveStatus === EDITOR_SAVE_STATUS.NotInitialized" class="form-row mt-3">
