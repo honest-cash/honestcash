@@ -27,7 +27,6 @@ export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
   public paidBodyJSON: Block[];
   private user$: Observable<UserState>;
   private userSub: Subscription;
-  private editorSub: Subscription;
 
   constructor(
     @Inject(WindowToken) private window,
@@ -63,9 +62,6 @@ export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.userSub) {
       this.userSub.unsubscribe();
-    }
-    if (this.editorSub) {
-      this.editorSub.unsubscribe();
     }
   }
 }
