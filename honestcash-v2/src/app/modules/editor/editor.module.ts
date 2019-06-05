@@ -16,7 +16,6 @@ import {EditorEmbeddableComponent} from './components/embeddable-editor/embeddab
 import {EditorPaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
 import {EditorSaveStatusComponent} from './components/save-status/save-status.component';
 import {EditorComponent} from './components/editor/editor.component';
-import {LocallySavedStoryGuard} from '../../shared/guards/locally-stored-story.guard';
 import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
 import {EditorEditButtonComponent} from './components/edit-button/edit-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
@@ -32,7 +31,7 @@ const routes: Routes = [
         path: 'story-preview',
         pathMatch: 'full',
         component: EditorStoryPreviewComponent,
-        canActivate: [AuthorizedGuard, LocallySavedStoryGuard]
+        canActivate: [AuthorizedGuard]
       },
     ]
   }

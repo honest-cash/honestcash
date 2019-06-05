@@ -105,6 +105,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    // remove any leftover post in localstorage
+    this.editorService.removeLocallySavedPost();
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
@@ -118,6 +120,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           if (this.saveStatus === EDITOR_STATUS.Initialized && this.story.bodyJSON) {
             this.editor.blocks.clear();
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
+            this.editorService.savePostLocally(this.story);
           }
         });
       }

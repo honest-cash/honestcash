@@ -10,6 +10,7 @@ import {
   EditorStoryLoadSuccess,
   EditorStoryLocalLoadFailure,
   EditorStoryLocalLoadSuccess,
+  EditorStoryPropertyChange,
   EditorStoryPropertySave,
   EditorStoryPropertySaveFailure,
   EditorStoryPropertySaveSuccess,
@@ -93,6 +94,13 @@ export class EditorEffects {
       catchError((error) => of(new EditorStoryPublishFailure(error))
       ),
     ))
+  );
+
+  @Effect({dispatch: false})
+  EditorStoryPropertyChange: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE),
+    map((action: EditorStoryPropertyChange) => action.payload),
+    map((payload) => this.editorService.savePostPropertyLocally(payload.property, payload.value))
   );
 
   @Effect()

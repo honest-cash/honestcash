@@ -65,10 +65,6 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     this.store.dispatch(new EditorStorySaveAndPublish(this.story));
   }
 
-  onTitleChange(title: string) {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
-  }
-
   onTagChange(tags: INgxChipsTag[]) {
     this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
   }

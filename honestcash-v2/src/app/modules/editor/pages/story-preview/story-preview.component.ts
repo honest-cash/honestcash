@@ -1,14 +1,14 @@
-import {Component, ElementRef, HostBinding, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, HostBinding, Inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Block, convertBlockToHtml} from '../../converters/json-to-html';
 import {Store} from '@ngrx/store';
 import {AppStates, selectUserState} from '../../../../app.states';
-import {Observable, Subscription} from 'rxjs';
+import {fromEvent, Observable, Subscription} from 'rxjs';
 import {State as UserState} from '../../../../store/user/user.state';
 import Post from '../../../../shared/models/post';
 import User from '../../../../shared/models/user';
-import {EditorService} from '../../services/editor.service';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
+import {WindowToken} from '../../../../core/helpers/window';
+import {EditorService} from '../../services/editor.service';
 
 @Component({
   selector: 'editor-story-preview',
@@ -21,31 +21,29 @@ export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
   @ViewChildren('bodyJSONFree') bodyJSONFree: QueryList<ElementRef>;
   @ViewChildren('bodyJSONPaid') bodyJSONPaid: QueryList<ElementRef>;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
-  public story: Post;
+  public story: Post = new Post();
   public user: User;
-  public isLoading = true;
   public freeBodyJSON: Block[];
   public paidBodyJSON: Block[];
-  private userStateObservable: Observable<UserState>;
-  private userState$: Subscription;
+  private user$: Observable<UserState>;
+  private userSub: Subscription;
+  private editorSub: Subscription;
 
   constructor(
+    @Inject(WindowToken) private window,
     private store: Store<AppStates>,
-    private modalService: NgbModal,
     private editorService: EditorService,
   ) {
-    this.userStateObservable = this.store.select(selectUserState);
+    this.user$ = this.store.select(selectUserState);
   }
 
   ngOnInit() {
-    this.userState$ = this.userStateObservable.subscribe((userState: UserState) => {
+    this.userSub = this.user$.subscribe((userState: UserState) => {
       this.user = userState.user;
-      this.story = this.editorService.getLocallySavedPost();
-      if (this.story.hasPaidSection) {
-        this.freeBodyJSON = this.story.bodyJSON.filter((block: Block, index: number) => index <= this.story.paidSectionLinebreak);
-        this.paidBodyJSON = this.story.bodyJSON;
-      }
-      this.isLoading = false;
+    });
+    this.setStoryProperties();
+    fromEvent<StorageEvent>(this.window, 'storage').subscribe(() => {
+      this.setStoryProperties();
     });
   }
 
@@ -53,10 +51,21 @@ export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
     return convertBlockToHtml(block);
   }
 
-  ngOnDestroy() {
-    if (this.userState$) {
-      this.userState$.unsubscribe();
+  private setStoryProperties() {
+    this.story = this.editorService.getLocallySavedPost();
+    this.story.user = this.user;
+    if (this.story.hasPaidSection) {
+      this.freeBodyJSON = this.story.bodyJSON.filter((block: Block, index: number) => index <= this.story.paidSectionLinebreak);
+      this.paidBodyJSON = this.story.bodyJSON;
     }
-    this.editorService.removeLocallySavedPost();
+  }
+
+  ngOnDestroy() {
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
+    }
   }
 }
