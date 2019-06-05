@@ -80,7 +80,7 @@ export class EditorService {
       body.hashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
     }
     if (property === STORY_PROPERTIES.PaidSection) {
-      body.hasPaidSection = true;
+      body.hasPaidSection = post.hasPaidSection;
       body.paidSectionLinebreak = post.paidSectionLinebreak;
       body.paidSectionCost = post.paidSectionCost;
     }
