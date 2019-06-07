@@ -1,17 +1,23 @@
-<div
-  id="editor-title"
-  class="mb-4"
-  contenteditable="true"
-  name="title"
-  (keyup)="onTitleChange($event)"
-  placeholder="Title of your story"
-  ngDefaultControl
->
+<div [hidden]="!isLoaded" class="h-100 w-100">
+  <div
+    id="editor-title"
+    class="mb-4"
+    contenteditable="true"
+    name="title"
+    (keyup)="onTitleChange($event)"
+    placeholder="Title of your story"
+    ngDefaultControl
+  >
+  </div>
+  <div id="editor"></div>
+  <div class="editor-placeholder"
+       *ngIf="shouldShowPlaceholder">
+    <small class="text-muted"><b>
+      <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>&nbsp;Click above
+      to write your story.</b></small>
+  </div>
 </div>
-<div id="editor"></div>
-<div class="editor-placeholder"
-     *ngIf="shouldShowPlaceholder">
-  <small class="text-muted"><b>
-    <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>&nbsp;Click above
-    to write your story.</b></small>
+
+<div *ngIf="!isLoaded" class="d-flex justify-content-center align-items-center h-100 w-100">
+  <editor-loading-indicator></editor-loading-indicator>
 </div>
