@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
-import {Block, convertBlockToHtml, getBlocksArrayLength} from '../../converters/json-to-html';
+import {Block, convertBlockToHtml} from '../../converters/json-to-html';
 import {NgForm} from '@angular/forms';
 import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../services/editor.service';
@@ -51,7 +51,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
           this.story.paidSectionCost = 0.001;
         }
       }
-      this.paidSectionLinebreakEnd = getBlocksArrayLength(this.story.bodyJSON) - 1;
+      this.paidSectionLinebreakEnd = this.story.bodyJSON.filter(convertBlockToHtml).length - 1;
     });
   }
 
