@@ -1,22 +1,33 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { StoryTagsSelectionComponent } from './story-tags-selection.component';
+import {EditorStoryTagsSelectionComponent} from './story-tags-selection.component';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {TagInputModule} from 'ngx-chips';
+import {FormsModule} from '@angular/forms';
 
-describe('StoryTagsSelectionComponent', () => {
-  let component: StoryTagsSelectionComponent;
-  let fixture: ComponentFixture<StoryTagsSelectionComponent>;
+describe('EditorStoryTagsSelectionComponent', () => {
+  let component: EditorStoryTagsSelectionComponent;
+  let fixture: ComponentFixture<EditorStoryTagsSelectionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StoryTagsSelectionComponent ]
-    })
-    .compileComponents();
+      imports: [
+        FormsModule,
+        TagInputModule,
+      ],
+      providers: [
+        provideMockStore({initialState: initialAppStates})
+      ],
+      declarations: [
+        EditorStoryTagsSelectionComponent
+      ],
+    });
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StoryTagsSelectionComponent);
+    fixture = TestBed.createComponent(EditorStoryTagsSelectionComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

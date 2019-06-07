@@ -1,22 +1,32 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PaidSectionToggleButtonComponent } from './paid-section-toggle-button.component';
+import {EditorPaidSectionToggleButtonComponent} from './paid-section-toggle-button.component';
+import {provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {FormsModule} from '@angular/forms';
 
-describe('PaidSectionToggleButtonComponent', () => {
-  let component: PaidSectionToggleButtonComponent;
-  let fixture: ComponentFixture<PaidSectionToggleButtonComponent>;
+describe('EditorPaidSectionToggleButtonComponent', () => {
+  let component: EditorPaidSectionToggleButtonComponent;
+  let fixture: ComponentFixture<EditorPaidSectionToggleButtonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PaidSectionToggleButtonComponent ]
-    })
-    .compileComponents();
+      imports: [
+        FormsModule,
+        NgbModule,
+      ],
+      providers: [
+        provideMockStore({initialState: initialAppStates})
+      ],
+      declarations: [EditorPaidSectionToggleButtonComponent],
+    });
+
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PaidSectionToggleButtonComponent);
+    fixture = TestBed.createComponent(EditorPaidSectionToggleButtonComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
