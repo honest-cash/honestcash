@@ -7,8 +7,6 @@ import {Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {EditorStoryLocalLoad, EditorStoryPropertyChange, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
-import Hashtag from '../../../../shared/models/hashtag';
-import {INgxChipsTag} from '../publish-modal/publish-modal.component';
 import {STORY_PROPERTIES} from '../../services/editor.service';
 import {isPlatformBrowser} from '@angular/common';
 
@@ -31,7 +29,6 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   @ViewChild('modalBody') modalBody: ElementRef;
   public saveStatus: EDITOR_STATUS;
   public story: Post;
-  public _hashtags: Hashtag[] | INgxChipsTag[] | string;
   public isPlatformBrowser: boolean;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
@@ -50,11 +47,6 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
-      if (this.saveStatus === EDITOR_STATUS.Initialized) {
-        if (!this._hashtags && this.story.userPostHashtags.length) {
-          this._hashtags = this.story.userPostHashtags;
-        }
-      }
       this.story = editorState.story;
     });
   }
@@ -67,14 +59,6 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   onNext() {
     this.activePane = 'second';
     this.modalBody.nativeElement.scrollTop = 0;
-  }
-
-  onTitleChange(title: string) {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
-  }
-
-  onTagChange(tags: INgxChipsTag[]) {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
   }
 
   onChangeHasPaidSection() {

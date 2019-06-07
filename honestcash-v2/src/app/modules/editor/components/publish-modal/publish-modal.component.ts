@@ -7,14 +7,9 @@ import {Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorStoryPropertyChange, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
 import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
-import Hashtag from '../../../../shared/models/hashtag';
 import {ToastrService} from 'ngx-toastr';
 import {WindowToken} from '../../../../core/helpers/window';
 import {isPlatformBrowser} from '@angular/common';
-
-export interface INgxChipsTag {
-  hashtag: string;
-}
 
 @Component({
   selector: 'editor-publish-modal',
@@ -23,7 +18,6 @@ export interface INgxChipsTag {
 })
 export class EditorPublishModalComponent implements OnInit, OnDestroy {
   public story: Post;
-  public _hashtags: Hashtag[] | INgxChipsTag[] | string;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
   public isPlatformBrowser: boolean;
@@ -47,30 +41,17 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
       this.saveStatus = editorState.status;
-      if (this.saveStatus === EDITOR_STATUS.Loaded) {
-        if (!this._hashtags) {
-          this._hashtags = this.story.userPostHashtags || [];
-        }
-      }
 
       if (this.saveStatus === EDITOR_STATUS.Published) {
         this.toastr.success(`Story Saved`, undefined, {positionClass: 'toast-bottom-right'});
         this.editorService.removeLocallySavedPost();
-        this.activeModal.close();
+        this.onClose();
       }
     });
   }
 
   onSubmit() {
     this.store.dispatch(new EditorStorySaveAndPublish(this.story));
-  }
-
-  onTitleChange(title: string) {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: title}));
-  }
-
-  onTagChange(tags: INgxChipsTag[]) {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
   }
 
   onChangeHasPaidSection() {
@@ -82,8 +63,8 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     this.window.open('/editor/story-preview', '_blank');
   }
 
-  onDismiss() {
-    this.activeModal.dismiss();
+  onClose() {
+    this.activeModal.close();
   }
 
   ngOnDestroy() {
