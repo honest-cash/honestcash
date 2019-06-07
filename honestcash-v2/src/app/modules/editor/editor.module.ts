@@ -20,17 +20,17 @@ import {LocallySavedStoryGuard} from '../../shared/guards/locally-stored-story.g
 import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
 import {EditorEditButtonComponent} from './components/edit-button/edit-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
+import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
 
 const routes: Routes = [
   {
     path: '',
     component: EditorContainerComponent,
     children: [
-      {path: 'write', pathMatch: 'full', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
-      {path: 'edit/:storyId', pathMatch: 'full', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
+      {path: 'write', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
+      {path: 'edit/:storyId', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
       {
         path: 'story-preview',
-        pathMatch: 'full',
         component: EditorStoryPreviewComponent,
         canActivate: [AuthorizedGuard, LocallySavedStoryGuard]
       },
@@ -55,6 +55,7 @@ const routes: Routes = [
     EditorEmbeddableComponent,
     EditorPaidSectionSelectionComponent,
     EditorPaidSectionUnlockerComponent,
+    EditorLoadingIndicatorComponent,
   ],
   entryComponents: [
     EditorComponent,

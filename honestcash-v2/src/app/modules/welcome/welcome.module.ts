@@ -28,31 +28,32 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        pathMatch: 'full',
+        redirectTo: '/welcome',
+        pathMatch: 'full'
+      },
+      {
+        path: 'welcome',
         component: WelcomeComponent,
         canActivate: [UnauthorizedGuard]
       },
       {path: 'about', component: AboutComponent},
       {
         path: 'login',
-        pathMatch: 'full',
         component: LoginComponent,
         canActivate: [UnauthorizedGuard],
       },
-      {path: 'logout', pathMatch: 'full', component: LogoutComponent, canActivate: [AuthorizedGuard]},
+      {path: 'logout', component: LogoutComponent, canActivate: [AuthorizedGuard]},
       {
         path: 'signup',
-        pathMatch: 'full',
         component: SignupComponent,
         canActivate: [UnauthorizedGuard],
       },
       {
         path: 'reset-password-request/:resetCode',
-        pathMatch: 'full',
         component: ResetPasswordVerifyComponent,
         canActivate: [UnauthorizedGuard]
       },
-      {path: 'reset-password-request', pathMatch: 'full', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
+      {path: 'reset-password-request', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
       {path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard]},
     ]
   }

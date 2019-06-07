@@ -1,26 +1,32 @@
-<!--
-  The below contenteditable paragraph (tag does not matter) has to work with input and blur, please don't change
-  https://github.com/angular/angular/issues/9796#issuecomment-332566737
-  if we directly modify the value of the story title, the cursor jumps to the beginning thus creating bad UX
-  this is the workaround with a side variable called updatedTitle here
-  Title is changed when user defocuses (blurs) the input to update the value
--->
-<p
-  id="editor-title"
-  class="mb-4"
-  contenteditable="true"
-  name="title"
-  (input)="onTitleChange($event)"
-  (blur)="onTitleBlur()"
-  placeholder="Title of your story"
-  ngDefaultControl
->
-  {{story.title}}
-</p>
-<div id="editor"></div>
-<div class="editor-placeholder"
-     *ngIf="shouldShowPlaceholder">
-  <small class="text-muted"><b>
-    <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>&nbsp;Click above
-    to write your story.</b></small>
+<div [hidden]="!isLoaded" class="h-100 w-100">
+  <!--
+	  The below contenteditable paragraph (tag does not matter) has to work with input and blur, please don't change
+	  https://github.com/angular/angular/issues/9796#issuecomment-332566737
+	  if we directly modify the value of the story title, the cursor jumps to the beginning thus creating bad UX
+	  this is the workaround with a side variable called updatedTitle here
+	  Title is changed when user defocuses (blurs) the input to update the value
+	-->
+	<p
+	  id="editor-title"
+	  class="mb-4"
+	  contenteditable="true"
+	  name="title"
+	  (input)="onTitleChange($event)"
+	  (blur)="onTitleBlur()"
+	  placeholder="Title of your story"
+	  ngDefaultControl
+	>
+	  {{story.title}}
+	</p>
+  <div id="editor"></div>
+  <div class="editor-placeholder"
+       *ngIf="shouldShowPlaceholder">
+    <small class="text-muted"><b>
+      <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>&nbsp;Click above
+      to write your story.</b></small>
+  </div>
+</div>
+
+<div *ngIf="!isLoaded" class="d-flex justify-content-center align-items-center h-100 w-100">
+  <editor-loading-indicator></editor-loading-indicator>
 </div>
