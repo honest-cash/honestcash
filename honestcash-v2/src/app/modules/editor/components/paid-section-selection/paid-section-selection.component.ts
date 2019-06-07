@@ -9,6 +9,12 @@ import {NgForm} from '@angular/forms';
 import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../services/editor.service';
 
+export const PAID_SECTION_PRICE_SLIDER_SETTINGS = {
+  MIN: 0.005,
+  MAX: 0.1,
+  STEP: 0.005,
+};
+
 export enum LINEBREAK_ACTION {
   MoveUp = 'MOVE_UP',
   MoveDown = 'MOVE_DOWN',
@@ -28,6 +34,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   public paidSectionLineBreakTouched = false;
   public paidSectionLinebreakEnd: number;
   public story: Post;
+  public PAID_SECTION_PRICE_SLIDER_SETTINGS = PAID_SECTION_PRICE_SLIDER_SETTINGS;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
 
@@ -48,7 +55,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
           this.story.paidSectionLinebreak = 0;
         }
         if (!this.story.paidSectionCost) {
-          this.story.paidSectionCost = 0.001;
+          this.story.paidSectionCost = PAID_SECTION_PRICE_SLIDER_SETTINGS.MIN;
         }
       }
       this.paidSectionLinebreakEnd = ((<number>(<Block[]>this.story.bodyJSON).length) - 1);
