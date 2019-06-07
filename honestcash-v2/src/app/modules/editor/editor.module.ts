@@ -22,6 +22,7 @@ import {EditorEditButtonComponent} from './components/edit-button/edit-button.co
 import {ScriptLoaderModule} from 'ngx-script-loader';
 import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
 import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
+import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 
 const routes: Routes = [
   {
@@ -58,6 +59,7 @@ const routes: Routes = [
     EditorPaidSectionSelectionComponent,
     EditorPaidSectionUnlockerComponent,
     EditorLoadingIndicatorComponent,
+    EditorPaidSectionToggleButtonComponent,
   ],
   entryComponents: [
     EditorComponent,

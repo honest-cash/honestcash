@@ -21,19 +21,19 @@ export class EditorStoryTagsSelectionComponent implements OnInit {
 
   public isPlatformBrowser: boolean;
   public _hashtags: Hashtag[] | INgxChipsTag[] | string;
-  private editorStateObservable: Observable<EditorState>;
-  private editorState$: Subscription;
+  private editor$: Observable<EditorState>;
+  private editorSub: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId,
     private store: Store<AppStates>,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
-    this.editorStateObservable = this.store.select(selectEditorState);
+    this.editor$ = this.store.select(selectEditorState);
   }
 
   ngOnInit() {
-    this.editorState$ = this.editorStateObservable
+    this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       if (!this._hashtags) {
         this._hashtags = editorState.story.userPostHashtags || [];

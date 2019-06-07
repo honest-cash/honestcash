@@ -6,8 +6,7 @@ import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/edit
 import {Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
-import {EditorStoryLocalLoad, EditorStoryPropertyChange, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
-import {STORY_PROPERTIES} from '../../services/editor.service';
+import {EditorStoryLocalLoad, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
 import {isPlatformBrowser} from '@angular/common';
 
 type PaneType = 'first' | 'second';
@@ -59,10 +58,6 @@ export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   onNext() {
     this.activePane = 'second';
     this.modalBody.nativeElement.scrollTop = 0;
-  }
-
-  onChangeHasPaidSection() {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
   }
 
   onSubmit() {

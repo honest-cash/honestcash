@@ -1,11 +1,3 @@
-<ng-template #paywallPopContent>For more information about pay-to-read sections, please refer to <a
-  href="https://honest.cash/honest_cash/earn-more-money-for-your-content-paywalls-3552" target="_blank">Paywalls
-  Guide</a>.
-</ng-template>
-<ng-template #paywallLengthContent>Pay-to-read can only be enabled when you have more than one
-  sections.
-</ng-template>
-<ng-template #paywallPopTitle>About Pay-to-read Sections</ng-template>
 <div class="modal-header">
   <h5 class="modal-title col text-uppercase text-center">Publish Story</h5>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
@@ -17,20 +9,7 @@
       novalidate>
   <div class="modal-body">
     <editor-story-tags-selection></editor-story-tags-selection>
-    <div class="form-row">
-      <div class="col d-flex justify-content-center align-items-center">
-        <div class="btn-block btn-group-toggle">
-          <label class="btn-outline-dark" ngbButtonLabel placement="right"
-                 [ngbPopover]="story.bodyJSON.length < 2 ? paywallLengthContent : paywallPopContent"
-                 [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
-            <input type="checkbox" ngbButton id="hasPaidSection" #hasPaidSection="ngModel" name="hasPaidSection"
-                   #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"
-                   (ngModelChange)="onChangeHasPaidSection()" [disabled]="story.bodyJSON.length < 2"
-            > I have a pay-to-read section in my story
-          </label>
-        </div>
-      </div>
-    </div>
+    <editor-paid-section-toggle-button></editor-paid-section-toggle-button>
     <editor-paid-section-selection [form]="f"
                                    [hidden]="!story.hasPaidSection"></editor-paid-section-selection>
   </div>

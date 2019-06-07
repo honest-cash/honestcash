@@ -21,20 +21,7 @@
             (ngSubmit)="(f.form.valid && ((story.hasPaidSection && story.paidSectionCost > 0 && story.paidSectionLinebreak <= story.bodyJSON.length - 1) || !story.hasPaidSection)) && onSubmit()"
             novalidate>
         <editor-story-tags-selection></editor-story-tags-selection>
-        <div class="form-row">
-          <div class="col d-flex justify-content-center align-items-center">
-            <div class="btn-block btn-group-toggle">
-              <label class="btn-outline-dark" ngbButtonLabel placement="right"
-                     [ngbPopover]="story.bodyJSON.length < 2 ? paywallLengthContent : paywallPopContent"
-                     [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
-                <input type="checkbox" ngbButton id="hasPaidSection" #hasPaidSection="ngModel" name="hasPaidSection"
-                       #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"
-                       (ngModelChange)="onChangeHasPaidSection()" [disabled]="story.bodyJSON.length < 2"
-                > I have a pay-to-read section in my story
-              </label>
-            </div>
-          </div>
-        </div>
+        <editor-paid-section-toggle-button></editor-paid-section-toggle-button>
         <editor-paid-section-selection [hidden]="!story.hasPaidSection"
                                        [form]="f"></editor-paid-section-selection>
       </form>
