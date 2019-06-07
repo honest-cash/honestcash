@@ -43,8 +43,17 @@ export class EditorPublishButtonComponent implements OnInit, OnDestroy {
   }
 
   openPublishModal() {
+
+    if (!this.story.title || (this.story.title && !this.story.title.length)) {
+      this.toastr.warning(`Write a title to publish it`, `No title!`, {positionClass: 'toast-bottom-right'});
+      return;
+    }
     if (this.story.bodyJSON && this.story.bodyJSON.length === 0) {
       this.toastr.warning(`Write your story to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
+      return;
+    }
+    if (this.story.bodyJSON && this.story.bodyJSON.length === 1 && this.story.bodyJSON[0].data.text !== undefined && this.story.bodyJSON[0].data.text === '') {
+      this.toastr.warning(`Write something inside your story to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
       return;
     }
     if (this.saveStatus === EDITOR_STATUS.NotSaved) {
