@@ -7,6 +7,7 @@ import User from '../../../../shared/models/user';
 import {EditorService} from '../../services/editor.service';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 import {ActivatedRoute} from '@angular/router';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'editor-migration',
@@ -23,6 +24,7 @@ export class EditorMigrationComponent implements OnInit {
   public isLoading = true;
 
   constructor(
+    private sanitizer: DomSanitizer,
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
     private editorService: EditorService,

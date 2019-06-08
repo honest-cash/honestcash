@@ -4,14 +4,14 @@
     <div class="col story-body" *ngIf="story && story.body">
       <div
         #body
-        [innerHTML]="story.body">
+        [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.body)">
       </div>
     </div>
     <div class="col story-body" *ngIf="story && story.bodyJSON">
       <div
         #bodyJSON
         *ngFor="let block of story.bodyJSON; let index = index;"
-        [innerHTML]="convertBlockToHtml(block)">
+        [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
       </div>
     </div>
   </div>

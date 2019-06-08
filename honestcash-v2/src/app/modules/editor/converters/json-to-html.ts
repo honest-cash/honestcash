@@ -131,7 +131,7 @@ export const convertEmbedBlockToHtml = (block: EmbedElement): string => {
   return `
         <figure>
           <iframe frameborder="0" scrolling="no" allowfullscreen="" src="${embed}"></iframe>
-          <figcaption>${caption}</figcaption>
+          ${caption ? `<figcaption>${caption}</figcaption>` : ''}
         </figure>
       `;
 };

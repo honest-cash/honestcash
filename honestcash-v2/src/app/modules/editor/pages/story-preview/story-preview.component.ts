@@ -9,6 +9,7 @@ import User from '../../../../shared/models/user';
 import {EditorService} from '../../services/editor.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'editor-story-preview',
@@ -30,6 +31,7 @@ export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
   private userState$: Subscription;
 
   constructor(
+    private sanitizer: DomSanitizer,
     private store: Store<AppStates>,
     private modalService: NgbModal,
     private editorService: EditorService,
