@@ -89,6 +89,7 @@ export interface EmbedElement extends Block {
 }
 
 export const convertHeadingBlockToHtml = (block: HeaderElement): string => {
+  console.log('block', block);
   const {level, text} = block.data;
   return `<h${level}>${text}</h${level}>`;
 };
@@ -108,7 +109,7 @@ export const convertListBlockToHtml = (block: ListElement): string => {
 
 export const convertImageBlockToHtml = (block: ImageElement): string => {
   const {file, caption} = block.data;
-  return `<figure><img src="${file.url}" alt="${caption}"><figcaption>${caption}</figcaption></figure>`;
+  return `<figure><img src="${file.url}" ${caption ? `alt="${caption}"` : ''}>${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure>`;
 };
 
 export const convertQuoteBlockToHtml = (block: QuoteElement): string => {
