@@ -16,8 +16,8 @@ import {DomSanitizer} from '@angular/platform-browser';
 })
 export class EditorMigrationComponent implements OnInit {
   @HostBinding('class') class = 'mb-auto mt-auto';
+  @ViewChildren('bodyMarkdownHTML') bodyMarkdownHTML: QueryList<ElementRef>;
   @ViewChildren('body') body: QueryList<ElementRef>;
-  @ViewChildren('bodyJSON') bodyJSON: QueryList<ElementRef>;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   public story: Post;
   public user: User;
@@ -37,9 +37,5 @@ export class EditorMigrationComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  private convertBlockToHtml(block: Block) {
-    return convertBlockToHtml(block);
   }
 }

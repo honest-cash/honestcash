@@ -3,15 +3,14 @@
   <div class="row mb-5">
     <div class="col story-body" *ngIf="story && story.body">
       <div
-        #body
-        [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.body)">
+        #bodyMarkdownHTML
+        [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.bodyMarkdownHTML)">
       </div>
     </div>
-    <div class="col story-body" *ngIf="story && story.bodyJSON">
+    <div class="col story-body" *ngIf="story && story.body">
       <div
-        #bodyJSON
-        *ngFor="let block of story.bodyJSON; let index = index;"
-        [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
+        #body
+        [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.body)">
       </div>
     </div>
   </div>
