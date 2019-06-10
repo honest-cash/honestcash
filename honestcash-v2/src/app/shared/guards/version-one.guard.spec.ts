@@ -13,6 +13,7 @@ import {environmentProvider, EnvironmentToken} from '../../core/helpers/environm
 import {resetEnvironment, resetLocalStorage} from '../../core/helpers/tests';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../mocks/app.states.mock';
+import {Environment} from '../../../environments/environment';
 
 const MockWindow = {
   location: {
@@ -24,6 +25,7 @@ describe('VersionOneGuard', () => {
   let versionOneGuard: VersionOneGuard;
   let walletService: WalletService;
   let guardWindow: Window;
+  let guardEnvironment: Environment;
   let mockHttpService: HttpService;
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
@@ -57,6 +59,7 @@ describe('VersionOneGuard', () => {
     versionOneGuard = TestBed.get(VersionOneGuard);
     walletService = TestBed.get(WalletService);
     guardWindow = TestBed.get(WindowToken);
+    guardEnvironment = TestBed.get(EnvironmentToken);
   });
 
   afterEach(() => {
@@ -69,22 +72,11 @@ describe('VersionOneGuard', () => {
       expect(typeof versionOneGuard.canActivate).toBe('function');
     });
 
-    it('should redirect window.location to root if user is authenticated and environment is production', () => {
+    it('should redirect window.location to root if user is authenticated', () => {
       localStorage.setItem(LOCAL_TOKEN_KEY, 'asdf');
       localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, 'mnemonic');
-      const environment = environmentProvider();
-      environment.production = true;
       versionOneGuard.canActivate(null, mockSnapshot);
-      expect(guardWindow.location.href).toBe('/');
-      resetEnvironment();
-    });
-    it('should redirect window.location to http://localhost:3010 if user is authenticated and environment is NOT production', () => {
-      localStorage.setItem(LOCAL_TOKEN_KEY, 'asdf');
-      localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, 'mnemonic');
-      const environment = environmentProvider();
-      environment.production = false;
-      versionOneGuard.canActivate(null, mockSnapshot);
-      expect(guardWindow.location.href).toBe('http://localhost:3010/');
+      expect(guardWindow.location.href).toContain('/');
       resetEnvironment();
     });
     it('should NOT redirect but let the user pass to the page', () => {

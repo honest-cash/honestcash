@@ -20,46 +20,8 @@
       <form [hidden]="activePane === 'first'" name="form" class="p-4 needs-validation" #f="ngForm"
             (ngSubmit)="(f.form.valid && ((story.hasPaidSection && story.paidSectionCost > 0 && story.paidSectionLinebreak <= story.bodyJSON.length - 1) || !story.hasPaidSection)) && onSubmit()"
             novalidate>
-        <div class="form-row">
-          <div class="col">
-            <div class="form-group">
-              <label for="userPostHashtags" class="text-uppercase"><b>Tags</b></label>
-              <tag-input
-                *ngIf="isPlatformBrowser"
-                theme="hc-theme"
-                id="userPostHashtags"
-                name="userPostHashtags"
-                #userPostHashtags="ngModel"
-                [(ngModel)]="_hashtags"
-                (ngModelChange)="onTagChange($event)"
-                [separatorKeyCodes]="[32, 188]"
-                [maxItems]="6"
-                [addOnBlur]="true"
-                [identifyBy]="'hashtag'"
-                [displayBy]="'hashtag'"
-                [placeholder]="'You can add up to 5 tags'"
-                ngDefaultControl
-              ></tag-input>
-              <small id="tagsHelpInline" class="text-muted">
-                Tags can be submitted by pressing enter
-              </small>
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col d-flex justify-content-center align-items-center">
-            <div class="btn-block btn-group-toggle">
-              <label class="btn-outline-dark" ngbButtonLabel placement="right"
-                     [ngbPopover]="story.bodyJSON.length < 2 ? paywallLengthContent : paywallPopContent"
-                     [popoverTitle]="paywallPopTitle" triggers="mouseenter" [autoClose]="true">
-                <input type="checkbox" ngbButton id="hasPaidSection" #hasPaidSection="ngModel" name="hasPaidSection"
-                       #hasPaidSection="ngModel" [(ngModel)]="story.hasPaidSection"
-                       (ngModelChange)="onChangeHasPaidSection()" [disabled]="story.bodyJSON.length < 2"
-                > I have a pay-to-read section in my story
-              </label>
-            </div>
-          </div>
-        </div>
+        <editor-story-tags-selection></editor-story-tags-selection>
+        <editor-paid-section-toggle-button></editor-paid-section-toggle-button>
         <editor-paid-section-selection [hidden]="!story.hasPaidSection"
                                        [form]="f"></editor-paid-section-selection>
       </form>
