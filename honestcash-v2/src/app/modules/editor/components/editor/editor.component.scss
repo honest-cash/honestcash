@@ -39,7 +39,11 @@
     }
 
     .ce-toolbar {
-      right: 50px
+      right: 50px;
+
+      .image-tool__tune {
+        display: none;
+      }
     }
 
     .ce-toolbox {
