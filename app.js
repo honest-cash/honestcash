@@ -88,6 +88,7 @@ app.use("/img", express.static(__dirname + "/public/img"));
 app.use("/css", express.static(__dirname + "/public/css"));
 app.use("/templates", express.static(__dirname + "/public/templates"));
 app.use("/lib", express.static(__dirname + "/public/lib"));
+app.use("/assets", express.static(__dirname + "/public/assets"));
 app.use('/libs/', express.static(__dirname + '/node_modules'));
 app.use('/libs', express.static(__dirname + '/node_modules'));
 app.use("/", express.static(__dirname + "/public/"));

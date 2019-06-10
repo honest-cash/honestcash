@@ -89,6 +89,7 @@ export interface EmbedElement extends Block {
 }
 
 export const convertHeadingBlockToHtml = (block: HeaderElement): string => {
+  console.log('block', block);
   const {level, text} = block.data;
   return `<h${level}>${text}</h${level}>`;
 };
@@ -108,7 +109,7 @@ export const convertListBlockToHtml = (block: ListElement): string => {
 
 export const convertImageBlockToHtml = (block: ImageElement): string => {
   const {file, caption} = block.data;
-  return `<figure><img src="${file.url}" alt="${caption}"><figcaption>${caption}</figcaption></figure>`;
+  return `<figure><img src="${file.url}" ${caption ? `alt="${caption}"` : ''}>${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure>`;
 };
 
 export const convertQuoteBlockToHtml = (block: QuoteElement): string => {
@@ -130,7 +131,7 @@ export const convertEmbedBlockToHtml = (block: EmbedElement): string => {
   return `
         <figure>
           <iframe frameborder="0" scrolling="no" allowfullscreen="" src="${embed}"></iframe>
-          <figcaption>${caption}</figcaption>
+          ${caption ? `<figcaption>${caption}</figcaption>` : ''}
         </figure>
       `;
 };
@@ -147,28 +148,35 @@ export const convertBlocksArrayToHtml = (
 export const convertBlockToHtml = (block: Block): string | null => {
   switch (block.type) {
     case 'header': {
-      return convertHeadingBlockToHtml(<HeaderElement>block);
+      return convertHeadingBlockToHtml(block as HeaderElement);
     }
     case 'paragraph': {
-      return convertParagraphBlockToHtml(<ParagraphElement>block);
+      return convertParagraphBlockToHtml(block as ParagraphElement);
     }
     case 'list': {
-      return convertListBlockToHtml(<ListElement>block);
+      return convertListBlockToHtml(block as ListElement);
     }
     case 'image': {
-      return convertImageBlockToHtml(<ImageElement>block);
+      // hide images that don't have a url so that it does not appear as broken
+      if (
+        !Object.keys((block as ImageElement).data.file).length ||
+        (Object.keys((block as ImageElement).data.file).length && (block as ImageElement).data.file.url === '')
+      ) {
+        return null;
+      }
+      return convertImageBlockToHtml(block as ImageElement);
     }
     case 'quote': {
-      return convertQuoteBlockToHtml(<QuoteElement>block);
+      return convertQuoteBlockToHtml(block as QuoteElement);
     }
     case 'code': {
-      return convertCodeBlockToHtml(<CodeElement>block);
+      return convertCodeBlockToHtml(block as CodeElement);
     }
     case 'delimiter': {
-      return convertDelimiterBlockToHtml(<DelimiterElement>block);
+      return convertDelimiterBlockToHtml(block as DelimiterElement);
     }
     case 'embed': {
-      return convertEmbedBlockToHtml(<EmbedElement>block);
+      return convertEmbedBlockToHtml(block as EmbedElement);
     }
     default: {
       return null;

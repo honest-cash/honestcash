@@ -9,6 +9,7 @@ import User from '../../../../shared/models/user';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 import {WindowToken} from '../../../../core/helpers/window';
 import {EditorService} from '../../services/editor.service';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'editor-story-preview',
@@ -30,6 +31,7 @@ export class EditorStoryPreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(WindowToken) private window,
+    private sanitizer: DomSanitizer,
     private store: Store<AppStates>,
     private editorService: EditorService,
   ) {
