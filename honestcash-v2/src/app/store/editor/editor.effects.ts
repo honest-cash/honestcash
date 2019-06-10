@@ -23,7 +23,6 @@ import {catchError, concatMap, map, share, switchMap} from 'rxjs/operators';
 import Post from '../../shared/models/post';
 import {EditorService, STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
 import {EmptyResponse, FailedResponse} from '../../shared/models/authentication';
-import {Router} from '@angular/router';
 
 @Injectable()
 export class EditorEffects {
@@ -31,7 +30,6 @@ export class EditorEffects {
   constructor(
     private actions: Actions,
     private editorService: EditorService,
-    private router: Router,
   ) {
   }
 
@@ -75,8 +73,7 @@ export class EditorEffects {
     map((action: EditorStorySaveAndPublish) => action.payload),
     concatMap((post: Post) =>
       forkJoin(
-        this.editorService.savePostProperty(post, STORY_PROPERTIES.Title),
-        this.editorService.savePostProperty(post, STORY_PROPERTIES.BodyJSON),
+        this.editorService.savePostProperty(post, STORY_PROPERTIES.BodyAndTitle),
         this.editorService.savePostProperty(post, STORY_PROPERTIES.Hashtags),
         this.editorService.savePostProperty(post, STORY_PROPERTIES.PaidSection),
       )

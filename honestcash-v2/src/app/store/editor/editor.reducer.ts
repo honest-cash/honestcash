@@ -94,7 +94,10 @@ export function reducer(state = initialState, action: All): State {
           ...state.story,
           [property]: action.payload.value
         },
-        status: property === STORY_PROPERTIES.Body || property === STORY_PROPERTIES.BodyJSON ? EDITOR_STATUS.NotSaved : state.status,
+        status: property === STORY_PROPERTIES.Body ||
+        property === STORY_PROPERTIES.BodyJSON ||
+        property === STORY_PROPERTIES.Title ?
+          EDITOR_STATUS.NotSaved : state.status,
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE: {
