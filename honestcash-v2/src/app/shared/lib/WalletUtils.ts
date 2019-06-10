@@ -87,7 +87,7 @@ export class WalletUtils {
 
       // tslint:disable-next-line: no-shadowed-variable
       loadJS(
-        'https://honest.cash/js/simple-bitcoin-wallet.min.js',
+        '/assets/libs/simple-bitcoin-wallet.min.js',
         () => {
           logger.info('Lazy-loaded simple-bitcoin-wallet.');
 
