@@ -31,7 +31,7 @@
             <div
               #bodyJSON
               *ngFor="let block of story.bodyJSON; let index = index;"
-              [innerHTML]="convertBlockToHtml(block)">
+              [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
             </div>
           </div>
         </div>
@@ -77,7 +77,7 @@
             <div
               #bodyJSONFree
               *ngFor="let block of freeBodyJSON; let index = index;"
-              [innerHTML]="convertBlockToHtml(block)">
+              [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
             </div>
             <editor-paid-section-unlocker [story]="story"></editor-paid-section-unlocker>
           </div>
@@ -124,7 +124,7 @@
             <div
               #bodyJSONPaid
               *ngFor="let block of paidBodyJSON; let index = index;"
-              [innerHTML]="convertBlockToHtml(block)">
+              [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
             </div>
           </div>
         </div>
