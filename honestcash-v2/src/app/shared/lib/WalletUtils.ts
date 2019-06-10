@@ -87,7 +87,7 @@ export class WalletUtils {
 
       // tslint:disable-next-line: no-shadowed-variable
       loadJS(
-        '/assets/libs/simple-bitcoin-wallet.min.js',
+        '/assets/libs/simple-bitcoin-wallet.min.js', // https://unpkg.com/simple-bitcoin-wallet@0.0.7/dist/simplewallet.min.js
         () => {
           logger.info('Lazy-loaded simple-bitcoin-wallet.');
 

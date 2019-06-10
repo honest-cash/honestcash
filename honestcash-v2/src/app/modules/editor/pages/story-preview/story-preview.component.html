@@ -1,7 +1,10 @@
 <editor-header [editingMode]="EDITOR_EDITING_MODES.Edit"></editor-header>
-<div class="mt-5 story-preview__wrapper">
-  <ngb-tabset *ngIf="!isLoading && story && user">
-    <ngb-tab title="Author View">
+<div class="mt-5 mb-5 story-preview__wrapper">
+  <ngb-tabset justify="justified" *ngIf="story && user">
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <small>Full View of Story</small>
+      </ng-template>
       <ng-template ngbTabContent>
         <div class="row mb-2">
           <div class="col">
@@ -26,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div class="row mb-5">
+        <div *ngIf="story.bodyJSON" class="row mb-5">
           <div class="col story-body">
             <div
               #bodyJSON
@@ -35,19 +38,25 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div *ngIf="story.hashtags && story.hashtags.length" class="row">
           <div class="col">
-            <a *ngFor="let tag of story.userPostHashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
-               class="badge badge-light p-3 font-weight-normal small"
-               [routerLink]="['/feed', 'hashtag', tag.hashtag]">{{tag.hashtag}}</a>
-            <small class="badge badge-light p-3 font-weight-normal " *ngIf="!story.userPostHashtags.length">No tags
+            <a *ngFor="let tag of story.hashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
+               class="badge badge-light p-3 font-weight-normal small">{{tag.hashtag}}</a>
+          </div>
+        </div>
+        <div *ngIf="!story.hashtags || (story.hashtags && !story.hashtags.length)" class="row">
+          <div class="col">
+            <small class="badge badge-light p-3 font-weight-normal">No tags
               added
             </small>
           </div>
         </div>
       </ng-template>
     </ngb-tab>
-    <ngb-tab *ngIf="story.hasPaidSection" title="Locked View">
+    <ngb-tab *ngIf="story.hasPaidSection && user">
+      <ng-template ngbTabTitle>
+        <small>Locked View of Story</small>
+      </ng-template>
       <ng-template ngbTabContent>
         <div class="row mb-2">
           <div class="col">
@@ -72,7 +81,7 @@
             </div>
           </div>
         </div>
-        <div class="row mb-5">
+        <div *ngIf="story.bodyJSON" class="row mb-5">
           <div class="col story-body">
             <div
               #bodyJSONFree
@@ -82,58 +91,15 @@
             <editor-paid-section-unlocker [story]="story"></editor-paid-section-unlocker>
           </div>
         </div>
-        <div class="row">
+        <div *ngIf="story.hashtags && story.hashtags.length" class="row">
           <div class="col">
-            <a *ngFor="let tag of story.userPostHashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
-               class="badge badge-light p-3 font-weight-normal small"
-               [routerLink]="['/feed', 'hashtag', tag.hashtag]">{{tag.hashtag}}</a>
-            <small class="badge badge-light p-3 font-weight-normal " *ngIf="!story.userPostHashtags.length">No tags
-              added
-            </small>
+            <a *ngFor="let tag of story.hashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
+               class="badge badge-light p-3 font-weight-normal small">{{tag.hashtag}}</a>
           </div>
         </div>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab *ngIf="story.hasPaidSection" title="Unlocked View">
-      <ng-template ngbTabContent>
-        <div class="row mb-2">
+        <div *ngIf="!story.hashtags || (story.hashtags && !story.hashtags.length)" class="row">
           <div class="col">
-            <h1 class="story-title">{{story.title || "No title"}}</h1>
-          </div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-1 pr-0">
-            <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
-          </div>
-          <div class="col">
-            <div class="row">
-              <div class="col">
-                <a class="font-weight-bold">{{user.username}}</a>
-                <button type="button" class="btn btn-light btn-xs ml-2">Follow</button>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col text-muted">
-                {{story.updatedAt | date:'MMM d, yy'}}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row mb-5">
-          <div class="col story-body">
-            <div
-              #bodyJSONPaid
-              *ngFor="let block of paidBodyJSON; let index = index;"
-              [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <a *ngFor="let tag of story.userPostHashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
-               class="badge badge-light p-3 font-weight-normal small"
-               [routerLink]="['/feed', 'hashtag', tag.hashtag]">{{tag.hashtag}}</a>
-            <small class="badge badge-light p-3 font-weight-normal " *ngIf="!story.userPostHashtags.length">No tags
+            <small class="badge badge-light p-3 font-weight-normal">No tags
               added
             </small>
           </div>
@@ -141,5 +107,4 @@
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
-  <p *ngIf="isLoading"></p>
 </div>

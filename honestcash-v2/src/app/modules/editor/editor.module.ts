@@ -16,13 +16,12 @@ import {EditorEmbeddableComponent} from './components/embeddable-editor/embeddab
 import {EditorPaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
 import {EditorSaveStatusComponent} from './components/save-status/save-status.component';
 import {EditorComponent} from './components/editor/editor.component';
-import {LocallySavedStoryGuard} from '../../shared/guards/locally-stored-story.guard';
 import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
 import {EditorEditButtonComponent} from './components/edit-button/edit-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
 import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
-import {EditorRespondComponent} from './pages/respond/respond.component';
-import {EditorMigrationComponent} from './pages/editor-migration/migration.component';
+import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
+import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 
 const routes: Routes = [
   {
@@ -31,15 +30,9 @@ const routes: Routes = [
     children: [
       {path: 'write', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
       {path: 'edit/:storyId', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
-      {path: 'respond/:parentStoryId', component: EditorRespondComponent, canActivate: [AuthorizedGuard]},
       {
         path: 'story-preview',
         component: EditorStoryPreviewComponent,
-        canActivate: [AuthorizedGuard, LocallySavedStoryGuard]
-      },
-      {
-        path: 'migration/:storyId',
-        component: EditorMigrationComponent,
         canActivate: [AuthorizedGuard]
       },
     ]
@@ -52,12 +45,12 @@ const routes: Routes = [
     EditorHeaderComponent,
     EditorPublishModalComponent,
     EditorPublishButtonComponent,
+    EditorStoryTagsSelectionComponent,
     EditorEditButtonComponent,
     EditorSaveStatusComponent,
     EditorContainerComponent,
     EditorWriteComponent,
     EditorEditComponent,
-    EditorRespondComponent,
     EditorStoryPreviewComponent,
     EditorHeaderComponent,
     EditorStoryPreviewComponent,
@@ -65,7 +58,7 @@ const routes: Routes = [
     EditorPaidSectionSelectionComponent,
     EditorPaidSectionUnlockerComponent,
     EditorLoadingIndicatorComponent,
-    EditorMigrationComponent,
+    EditorPaidSectionToggleButtonComponent,
   ],
   entryComponents: [
     EditorComponent,

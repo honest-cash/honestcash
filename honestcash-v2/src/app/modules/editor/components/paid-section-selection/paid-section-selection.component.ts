@@ -50,15 +50,13 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
       this.saveStatus = editorState.status;
       this.story = editorState.story;
 
-      if (this.saveStatus === EDITOR_STATUS.Initialized) {
-        if (!this.story.paidSectionLinebreak) {
+      if (!this.story.paidSectionLinebreak) {
           this.story.paidSectionLinebreak = 0;
         }
         if (!this.story.paidSectionCost) {
           this.story.paidSectionCost = PAID_SECTION_PRICE_SLIDER_SETTINGS.MIN;
         }
-      }
-      this.paidSectionLinebreakEnd = this.story.bodyJSON.filter(convertBlockToHtml).length - 1;
+      this.paidSectionLinebreakEnd = this.story && this.story.bodyJSON && this.story.bodyJSON.filter(convertBlockToHtml).length - 1 || 1;
     });
   }
 

@@ -29,6 +29,7 @@ export default class Post {
   userPosts?: Post[];
   userPostRefs: any;
   userPostHashtags?: Hashtag[] | string;
+  hashtags?: Hashtag[];
   hasPaidSection?: boolean;
   paidSectionCost?: number;
   hasBeenPaidFor?: boolean;

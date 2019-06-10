@@ -92,6 +92,32 @@ export class EditorService {
     return this.http.put<Post>(API_ENDPOINTS.savePostProperty(post, property), body);
   }
 
+  savePostPropertyLocally(property: STORY_PROPERTIES, value: any): void {
+    if (!value) {
+      return;
+    }
+    const data = this.localStorage.getItem(STORY_PREVIEW_KEY);
+    if (data) {
+      const newData = JSON.parse(data);
+      newData[property] = value;
+      return this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(newData));
+    }
+    this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify({property: value}));
+  }
+
+  savePostLocally(story: Post) {
+    this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(story));
+  }
+
+  getLocallySavedPost(): Post {
+    const data = JSON.parse(this.localStorage.getItem(STORY_PREVIEW_KEY));
+    return data ? data : new Post();
+  }
+
+  removeLocallySavedPost() {
+    this.localStorage.removeItem(STORY_PREVIEW_KEY);
+  }
+
   publishPost(post: Post): Observable<Post> {
     return this.http.put<Post>(API_ENDPOINTS.publishPost(post), post);
   }
@@ -116,18 +142,6 @@ export class EditorService {
       ...story,
       body: blankBody,
     };
-  }
-
-  savePostLocally(body: Post) {
-    this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(body));
-  }
-
-  getLocallySavedPost(): Post {
-    return JSON.parse(this.localStorage.getItem(STORY_PREVIEW_KEY));
-  }
-
-  removeLocallySavedPost() {
-    this.localStorage.removeItem(STORY_PREVIEW_KEY);
   }
 
   private transformTags(tags: Hashtag[]): string {

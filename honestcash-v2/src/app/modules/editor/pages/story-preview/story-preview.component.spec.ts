@@ -6,6 +6,7 @@ import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/localStorage';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {windowProvider, WindowToken} from '../../../../core/helpers/window';
 
 describe('EditorStoryPreviewComponent', () => {
   let component: EditorStoryPreviewComponent;
@@ -23,6 +24,7 @@ describe('EditorStoryPreviewComponent', () => {
       providers: [
         provideMockStore({initialState: initialAppStates}),
         {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: WindowToken, useFactory: windowProvider},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
         NgbModal,
       ],
