@@ -21,26 +21,26 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   public story: Post;
   public saveStatus: EDITOR_STATUS;
   public isSaveButtonClicked = false;
-  private editorStateObservable: Observable<EditorState>;
-  private editorState$: Subscription;
-  private autosaveIntervalObservable: Observable<number>;
-  private autoSaveInterval$: Subscription;
+  private editor$: Observable<EditorState>;
+  private editorSub: Subscription;
+  private autoSave$: Observable<number>;
+  private autoSaveSub: Subscription;
 
   constructor(
     private store: Store<AppStates>,
     private toastr: ToastrService,
   ) {
-    this.editorStateObservable = this.store.select(selectEditorState);
+    this.editor$ = this.store.select(selectEditorState);
   }
 
   ngOnInit() {
-    this.editorState$ = this.editorStateObservable.subscribe((editorState: EditorState) => {
+    this.editorSub = this.editor$.subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
       this.story = editorState.story;
 
       if (EDITOR_AUTO_SAVE.ON) {
         // reset interval
-        this.autosaveIntervalObservable = interval(EDITOR_AUTO_SAVE.INTERVAL);
+        this.autoSave$ = interval(EDITOR_AUTO_SAVE.INTERVAL);
         if (this.saveStatus === EDITOR_STATUS.Saved) {
           // reset button clicked status
           this.isSaveButtonClicked = false;
@@ -52,7 +52,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
           // if user saves prematurely while the interval is somehow half way through
           // we should cancel the previous action (or rather not fire at all with takeWhile)
           // hence the saveClicked check
-          this.autoSaveInterval$ = this.autosaveIntervalObservable.pipe(
+          this.autoSaveSub = this.autoSave$.pipe(
             takeWhile(() => this.saveStatus === EDITOR_STATUS.NotSaved && !this.isSaveButtonClicked),
           ).subscribe(() => this.dispatchStoryPropertySave());
         }
@@ -63,7 +63,11 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
 
   onSaveClick() {
     if (this.story.bodyJSON && this.story.bodyJSON.length === 0) {
-      this.toastr.warning(`Write your story to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
+      this.toastr.warning(`Write your story to save it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
+      return;
+    }
+    if (!this.story.title || (this.story.title && this.story.title.length === 0)) {
+      this.toastr.warning(`The story needs a title to be saved`, `No title!`, {positionClass: 'toast-bottom-right'});
       return;
     }
     this.isSaveButtonClicked = true;
@@ -71,17 +75,21 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   }
 
   dispatchStoryPropertySave() {
-    if (this.saveStatus === EDITOR_STATUS.NotSaved && this.story.bodyJSON && this.story.bodyJSON.length !== 0) {
-      this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.BodyJSON}));
+    if (
+      this.saveStatus === EDITOR_STATUS.NotSaved &&
+      this.story.bodyJSON && this.story.bodyJSON.length !== 0 &&
+      this.story.title && this.story.title.length !== 0
+    ) {
+      this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.BodyAndTitle}));
     }
   }
 
   ngOnDestroy() {
-    if (this.editorState$) {
-      this.editorState$.unsubscribe();
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
     }
-    if (this.autoSaveInterval$) {
-      this.autoSaveInterval$.unsubscribe();
+    if (this.autoSaveSub) {
+      this.autoSaveSub.unsubscribe();
     }
   }
 }
