@@ -5,6 +5,7 @@ import {State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import Post from '../../../../shared/models/post';
 import {ActivatedRoute} from '@angular/router';
+import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 
 @Component({
   selector: 'editor-respond',
@@ -12,6 +13,8 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./respond.component.scss']
 })
 export class EditorRespondComponent implements OnInit, OnDestroy {
+
+  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   public story: Post;
   private editor$: Observable<EditorState>;
   private editorSub: Subscription;
