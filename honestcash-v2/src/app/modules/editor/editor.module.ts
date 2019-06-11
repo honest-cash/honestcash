@@ -22,6 +22,8 @@ import {ScriptLoaderModule} from 'ngx-script-loader';
 import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
 import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
+import {EditorRespondComponent} from './pages/respond/respond.component';
+import {EditorMigrationComponent} from './pages/editor-migration/migration.component';
 
 const routes: Routes = [
   {
@@ -30,9 +32,15 @@ const routes: Routes = [
     children: [
       {path: 'write', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
       {path: 'edit/:storyId', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
+      {path: 'respond/:parentStoryId', component: EditorRespondComponent, canActivate: [AuthorizedGuard]},
       {
         path: 'story-preview',
         component: EditorStoryPreviewComponent,
+        canActivate: [AuthorizedGuard]
+      },
+      {
+        path: 'migration/:storyId',
+        component: EditorMigrationComponent,
         canActivate: [AuthorizedGuard]
       },
     ]
@@ -51,6 +59,7 @@ const routes: Routes = [
     EditorContainerComponent,
     EditorWriteComponent,
     EditorEditComponent,
+    EditorRespondComponent,
     EditorStoryPreviewComponent,
     EditorHeaderComponent,
     EditorStoryPreviewComponent,
@@ -59,6 +68,7 @@ const routes: Routes = [
     EditorPaidSectionUnlockerComponent,
     EditorLoadingIndicatorComponent,
     EditorPaidSectionToggleButtonComponent,
+    EditorMigrationComponent,
   ],
   entryComponents: [
     EditorComponent,
