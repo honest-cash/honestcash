@@ -1,17 +1,27 @@
 <editor-header [editingMode]="EDITOR_EDITING_MODES.Edit"></editor-header>
 <div class="container">
-  <div class="row mb-5">
-    <div class="col story-body" *ngIf="story && story.body">
+  <div class="row mb-5" *ngIf="!isLoading">
+    <div class="col" *ngIf="story">{{story.id}}</div>
+    <div class="w-100"></div>
+    <div class="col">{{getBodyLength(story.bodyMD)}}</div>
+    <div class="col">{{getBodyLength(story.bodyJSON)}}</div>
+    <div class="w-100"></div>
+    <div class="col-6 story-body" *ngIf="story && story.bodyMarkdownHTML">
       <div
         #bodyMarkdownHTML
         [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.bodyMarkdownHTML)">
       </div>
     </div>
-    <div class="col story-body" *ngIf="story && story.body">
+    <div class="col-6 story-body" *ngIf="story && story.body">
       <div
         #body
         [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.body)">
       </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isLoading">
+    <div class="col">
+      <p>Loading...</p>
     </div>
   </div>
 </div>

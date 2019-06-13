@@ -6,6 +6,7 @@ import {Observable, Subscription} from 'rxjs';
 import Post from '../../../../shared/models/post';
 import {ActivatedRoute} from '@angular/router';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
+import {EditorParentStoryLoad, EditorStoryLoad} from '../../../../store/editor/editor.actions';
 
 @Component({
   selector: 'editor-respond',
@@ -28,8 +29,7 @@ export class EditorRespondComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      console.log(params.parentStoryId);
-      // this.store.dispatch(new EditorStoryLoad(params.parentStoryId));
+      this.store.dispatch(new EditorParentStoryLoad(params.parentStoryId));
     });
 
     this.editorSub = this.editor$

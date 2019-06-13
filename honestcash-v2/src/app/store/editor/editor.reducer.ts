@@ -37,10 +37,15 @@ export function reducer(state = initialState, action: All): State {
       logger.info('Editor Story Load Success', action.payload);
       return {
         ...state,
-        story: {
-          ...action.payload,
-          bodyJSON: action.payload.bodyJSON
-        },
+        story: action.payload,
+        status: EDITOR_STATUS.Loaded
+      };
+    }
+    case EditorActionTypes.EDITOR_PARENT_STORY_LOAD_SUCCESS: {
+      logger.info('Editor Parent Story Load Success', action.payload);
+      return {
+        ...state,
+        story: action.payload,
         status: EDITOR_STATUS.Loaded
       };
     }

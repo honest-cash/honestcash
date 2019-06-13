@@ -51,15 +51,24 @@
     }
 
     blockquote {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
+      padding-left: 10px;
+      border-left: 3px solid #f8f9fa;
     }
 
     ul, ol, li {
       font-size: 1.2rem;
     }
 
+    code {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
     .story-body {
       font-size: 1.2rem;
+      word-break: break-word;
     }
 
     img:not(.honest-logo) {
@@ -67,19 +76,18 @@
       width: 100%;
     }
 
-    figure>iframe {
+    figure.embed {
       position: relative;
       padding-bottom: 56.25%; /* 16:9 */
       padding-top: 25px;
       height: 0;
-
-      iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
+    }
+    figure > iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
 
     iframe {

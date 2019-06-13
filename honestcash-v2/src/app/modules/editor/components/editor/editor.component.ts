@@ -10,6 +10,7 @@ import {Block} from '../../converters/json-to-html';
 import {isPlatformBrowser} from '@angular/common';
 import {ScriptService} from 'ngx-script-loader';
 import {concatMap} from 'rxjs/operators';
+import {EDITOR_EDITING_MODES} from '../header/header.component';
 
 // @todo editor-v2: get rid of the factory provider pattern, it should be immutable!
 export const EDITOR_AUTO_SAVE = {
@@ -33,6 +34,7 @@ declare var CodeTool: any;
 })
 export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
+  @Input() public editingMode: EDITOR_EDITING_MODES;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
   public editor: any;
@@ -127,9 +129,11 @@ export class EditorComponent implements OnInit, OnDestroy {
 
       if (this.isPlatformBrowser && this.editor) {
         this.editor.isReady.then(() => {
-          if (this.saveStatus === EDITOR_STATUS.Initialized && this.story.bodyJSON) {
+          if (this.saveStatus === EDITOR_STATUS.Initialized && this.story) {
             this.editor.blocks.clear();
-            this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
+            if (this.story.bodyJSON) {
+              this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
+            }
             this.editorService.savePostLocally(this.story);
             this.isLoaded = true;
           }

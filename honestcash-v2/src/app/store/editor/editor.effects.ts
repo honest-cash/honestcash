@@ -4,7 +4,7 @@ import {forkJoin, Observable, of} from 'rxjs';
 import {
   EditorActionTypes,
   EditorDraftLoadFailure,
-  EditorDraftLoadSuccess,
+  EditorDraftLoadSuccess, EditorParentStoryLoad, EditorParentStoryLoadFailure, EditorParentStoryLoadSuccess,
   EditorStoryLoad,
   EditorStoryLoadFailure,
   EditorStoryLoadSuccess,
@@ -53,6 +53,18 @@ export class EditorEffects {
       .pipe(
         map((story: Post) => new EditorStoryLoadSuccess(story)),
         catchError(error => of(new EditorStoryLoadFailure(error))),
+      ),
+    ),
+  );
+
+  @Effect()
+  EditorParentStoryLoad: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_PARENT_STORY_LOAD),
+    map((action: EditorParentStoryLoad) => action.storyId),
+    switchMap((parentPostId: number) => this.editorService.loadPostDraft({parentPostId})
+      .pipe(
+        map((story: Post) => new EditorParentStoryLoadSuccess(story)),
+        catchError(error => of(new EditorParentStoryLoadFailure(error))),
       ),
     ),
   );

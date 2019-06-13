@@ -27,6 +27,7 @@ export interface UploadImageEditorExpectedResponse {
 
 export const API_ENDPOINTS = {
   getPost: (id: number) => `/v2/post/${id}`,
+  getRelativePost: (id: number) => `/v2/post/relative/${id}`,
   draft: (c: DraftContext = {}) =>
     c.parentPostId ? `/v2/draft?parentPostId=${c.parentPostId}` : c.postId ? `/v2/post/${c.postId}` : '/v2/draft',
   newDraft: () => `/v2/draft`,
@@ -63,6 +64,10 @@ export class EditorService {
 
   getPost(id: number): Observable<Post> {
     return this.http.get<Post>(API_ENDPOINTS.getPost(id));
+  }
+
+  getRelativePost(id: number) {
+    return this.http.get<Post>(API_ENDPOINTS.getRelativePost(id));
   }
 
   loadPostDraft(draftContext?: DraftContext): Observable<Post> {

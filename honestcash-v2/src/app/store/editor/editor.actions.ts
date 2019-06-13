@@ -10,6 +10,9 @@ export enum EditorActionTypes {
   EDITOR_DRAFT_LOAD = '[Editor] Editor Draft Load',
   EDITOR_DRAFT_LOAD_SUCCESS = '[Editor] Editor Draft Load Success',
   EDITOR_DRAFT_LOAD_FAILURE = '[Editor] Editor Draft Load Failure',
+  EDITOR_PARENT_STORY_LOAD = '[Editor] Editor Parent Story Load',
+  EDITOR_PARENT_STORY_LOAD_SUCCESS = '[Editor] Editor Parent Story Load Success',
+  EDITOR_PARENT_STORY_LOAD_FAILURE = '[Editor] Editor Parent Story Load Failure',
   EDITOR_STORY_LOAD = '[Editor] Editor Story Load',
   EDITOR_STORY_LOAD_SUCCESS = '[Editor] Editor Story Load Success',
   EDITOR_STORY_LOAD_FAILURE = '[Editor] Editor Story Load Failure',
@@ -20,6 +23,7 @@ export enum EditorActionTypes {
   EDITOR_STORY_PROPERTY_SAVE = '[Editor] Story Property Save',
   EDITOR_STORY_PROPERTY_SAVE_SUCCESS = '[Editor] Story Property Save Success',
   EDITOR_STORY_PROPERTY_SAVE_FAILURE = '[Editor] Story Property Save Failure',
+  EDITOR_STORY_CHANGE = '[Editor] Story Change',
   EDITOR_STORY_SAVE = '[Editor] Story Save',
   EDITOR_STORY_SAVE_SUCCESS = '[Editor] Story Save Success',
   EDITOR_STORY_SAVE_FAILURE = '[Editor] Story Save Failure',
@@ -35,9 +39,6 @@ export class EditorLoad implements Action {
 
 export class EditorUnload implements Action {
   readonly type = EditorActionTypes.EDITOR_UNLOAD;
-
-  constructor() {
-  }
 }
 
 export class EditorChange implements Action {
@@ -60,6 +61,27 @@ export class EditorDraftLoadSuccess implements Action {
 
 export class EditorDraftLoadFailure implements Action {
   readonly type = EditorActionTypes.EDITOR_DRAFT_LOAD_FAILURE;
+
+  constructor(public payload: FailedResponse) {
+  }
+}
+
+export class EditorParentStoryLoad implements Action {
+  readonly type = EditorActionTypes.EDITOR_PARENT_STORY_LOAD;
+
+  constructor(public storyId: number) {
+  }
+}
+
+export class EditorParentStoryLoadSuccess implements Action {
+  readonly type = EditorActionTypes.EDITOR_PARENT_STORY_LOAD_SUCCESS;
+
+  constructor(public payload: Post) {
+  }
+}
+
+export class EditorParentStoryLoadFailure implements Action {
+  readonly type = EditorActionTypes.EDITOR_PARENT_STORY_LOAD_FAILURE;
 
   constructor(public payload: FailedResponse) {
   }
@@ -126,11 +148,17 @@ export class EditorStoryPropertySaveFailure implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_FAILURE;
 }
 
+export class EditorStoryChange implements Action {
+  readonly type = EditorActionTypes.EDITOR_STORY_CHANGE;
+
+  constructor(public payload: number) {
+  }
+}
+
+
+
 export class EditorStorySave implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE;
-
-  constructor() {
-  }
 }
 
 export class EditorStorySaveSuccess implements Action {
@@ -182,6 +210,9 @@ export type All =
   | EditorDraftLoad
   | EditorDraftLoadSuccess
   | EditorDraftLoadFailure
+  | EditorParentStoryLoad
+  | EditorParentStoryLoadSuccess
+  | EditorParentStoryLoadFailure
   | EditorStoryLoad
   | EditorStoryLoadSuccess
   | EditorStoryLoadFailure
@@ -192,6 +223,7 @@ export type All =
   | EditorStoryPropertySave
   | EditorStoryPropertySaveSuccess
   | EditorStoryPropertySaveFailure
+  | EditorStoryChange
   | EditorStorySave
   | EditorStorySaveSuccess
   | EditorStorySaveFailure
