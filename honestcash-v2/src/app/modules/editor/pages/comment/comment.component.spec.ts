@@ -3,19 +3,19 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
-import {EditorRespondComponent} from './comment.component';
+import {EditorCommentComponent} from './comment.component';
 import {ActivatedRoute} from '@angular/router';
 import {of} from 'rxjs';
 
-describe('EditorRespondComponent', () => {
-  let component: EditorRespondComponent;
-  let fixture: ComponentFixture<EditorRespondComponent>;
+describe('EditorCommentComponent', () => {
+  let component: EditorCommentComponent;
+  let fixture: ComponentFixture<EditorCommentComponent>;
   let mockActivatedRoute: ActivatedRoute;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [EditorRespondComponent],
+      declarations: [EditorCommentComponent],
       providers: [
         provideMockStore({initialState: initialAppStates}),
         {provide: ActivatedRoute, useValue: {params: of({parentStoryId: 2})}}
@@ -28,7 +28,7 @@ describe('EditorRespondComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorRespondComponent);
+    fixture = TestBed.createComponent(EditorCommentComponent);
     component = fixture.componentInstance;
   });
 
