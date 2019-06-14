@@ -6,13 +6,6 @@
 
   ::ng-deep {
 
-    .nav-tabs {
-      .nav-item {
-        .nav-link {
-          padding: 0;
-        }
-      }
-    }
 
     .story-preview__wrapper {
       width: 700px;
@@ -83,19 +76,18 @@
       width: 100%;
     }
 
-    figure {
+    figure.embed {
       position: relative;
       padding-bottom: 56.25%; /* 16:9 */
       padding-top: 25px;
       height: 0;
-
-      iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
+    }
+    figure > iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
 
     iframe {

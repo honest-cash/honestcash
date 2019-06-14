@@ -18,6 +18,7 @@ export default class Post {
   status: 'draft' | 'published' | 'archived';
   postTypeId: TPostTypeId;
   parentPostId: number;
+  parentPost: Post;
   createdAt: string;
   createdAtFormatted: string;
   updatedAt: string;

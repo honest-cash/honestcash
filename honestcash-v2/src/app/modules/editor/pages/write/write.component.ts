@@ -6,6 +6,7 @@ import {Observable, Subscription} from 'rxjs';
 import {EDITOR_AUTO_SAVE} from '../../components/editor/editor.component';
 import Post from '../../../../shared/models/post';
 import {EditorDraftLoad} from '../../../../store/editor/editor.actions';
+import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 
 @Component({
   selector: 'editor-write',
@@ -14,6 +15,7 @@ import {EditorDraftLoad} from '../../../../store/editor/editor.actions';
 })
 export class EditorWriteComponent implements OnInit, OnDestroy {
   public story: Post;
+  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
 

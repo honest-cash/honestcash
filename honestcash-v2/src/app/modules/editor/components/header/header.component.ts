@@ -7,7 +7,8 @@ import {State as UserState} from '../../../../store/user/user.state';
 
 export enum EDITOR_EDITING_MODES {
   Write = 'WRITE',
-  Edit = 'EDIT'
+  Edit = 'EDIT',
+  Comment = 'Comment',
 }
 
 @Component({

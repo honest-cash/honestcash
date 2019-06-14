@@ -3,8 +3,14 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {forkJoin, Observable, of} from 'rxjs';
 import {
   EditorActionTypes,
+  EditorCommentSaveAndPublish,
+  EditorCommentSaveAndPublishFailure,
+  EditorCommentSaveAndPublishSuccess,
   EditorDraftLoadFailure,
   EditorDraftLoadSuccess,
+  EditorParentStoryLoad,
+  EditorParentStoryLoadFailure,
+  EditorParentStoryLoadSuccess,
   EditorStoryLoad,
   EditorStoryLoadFailure,
   EditorStoryLoadSuccess,
@@ -58,6 +64,18 @@ export class EditorEffects {
   );
 
   @Effect()
+  EditorParentStoryLoad: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_PARENT_STORY_LOAD),
+    map((action: EditorParentStoryLoad) => action.storyId),
+    switchMap((parentPostId: number) => this.editorService.loadPostDraft({parentPostId})
+      .pipe(
+        map((story: Post) => new EditorParentStoryLoadSuccess(story)),
+        catchError(error => of(new EditorParentStoryLoadFailure(error))),
+      ),
+    ),
+  );
+
+  @Effect()
   EditorStoryLocalLoad: Observable<any> = this.actions.pipe(
     ofType(EditorActionTypes.EDITOR_STORY_LOCAL_LOAD),
     switchMap((storyId: number) => of(this.editorService.getLocallySavedPost())
@@ -85,6 +103,29 @@ export class EditorEffects {
     ),
     ofType(EditorActionTypes.EDITOR_STORY_SAVE_SUCCESS),
     map((action: EditorStorySaveSuccess) => action.payload),
+    switchMap((post: Post) => this.editorService.publishPost(post)
+    .pipe(
+      map((publishPostResponse: Post) => new EditorStoryPublishSuccess(publishPostResponse)),
+      catchError((error) => of(new EditorStoryPublishFailure(error))
+      ),
+    ))
+  );
+
+  @Effect()
+  EditorCommentAndPublish: Observable<any> = this.actions.pipe(
+    ofType(EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH),
+    map((action: EditorCommentSaveAndPublish) => action.payload),
+    concatMap((post: Post) =>
+      forkJoin(
+        this.editorService.savePostProperty(post, STORY_PROPERTIES.BodyAndTitle),
+      )
+      .pipe(
+        map((savePostPropertyResponse: EmptyResponse[]) => new EditorCommentSaveAndPublishSuccess(post)),
+        catchError((error) => of(new EditorCommentSaveAndPublishFailure(error))),
+      )
+    ),
+    ofType(EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH_SUCCESS),
+    map((action: EditorCommentSaveAndPublishSuccess) => action.payload),
     switchMap((post: Post) => this.editorService.publishPost(post)
     .pipe(
       map((publishPostResponse: Post) => new EditorStoryPublishSuccess(publishPostResponse)),

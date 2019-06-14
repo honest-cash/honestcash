@@ -4,18 +4,19 @@ import {AppStates, selectEditorState} from '../../../../app.states';
 import {State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import Post from '../../../../shared/models/post';
-import {EditorStoryLoad} from '../../../../store/editor/editor.actions';
 import {ActivatedRoute} from '@angular/router';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
+import {EditorParentStoryLoad} from '../../../../store/editor/editor.actions';
 
 @Component({
-  selector: 'editor-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.scss']
+  selector: 'editor-comment',
+  templateUrl: './comment.component.html',
+  styleUrls: ['./comment.component.scss']
 })
-export class EditorEditComponent implements OnInit, OnDestroy {
-  public story: Post;
+export class EditorCommentComponent implements OnInit, OnDestroy {
+
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
+  public story: Post;
   private editor$: Observable<EditorState>;
   private editorSub: Subscription;
 
@@ -28,7 +29,7 @@ export class EditorEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.store.dispatch(new EditorStoryLoad(params.storyId));
+      this.store.dispatch(new EditorParentStoryLoad(params.parentStoryId));
     });
 
     this.editorSub = this.editor$

@@ -38,6 +38,16 @@
       display: none;
     }
 
+    #editor.comment-mode {
+      .ce-block--focused {
+        background-image: none;
+      }
+
+      .ce-toolbar {
+        display: none;
+      }
+    }
+
     .ce-toolbar {
       right: 50px;
 
