@@ -34,7 +34,7 @@ export class UnauthorizedGuard implements CanActivate {
 
       // @ todo change when feed is introduced
       log.debug('Already logged in, redirecting to v1');
-      if (this.environment.production) {
+      if (this.environment.env === 'dev' || this.environment.env === 'prod') {
         this.window.location.href = '/';
       } else {
         // or route to v1 port in localhost
