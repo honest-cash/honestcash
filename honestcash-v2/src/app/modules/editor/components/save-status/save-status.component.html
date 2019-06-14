@@ -1,6 +1,6 @@
 <div class="nav-item editor-header__save-status btn-sm mr-3">
   <u class="save text-warning"
-     *ngIf="saveStatus === EDITOR_SAVE_STATUS.NotSaved"
+     *ngIf="saveStatus === EDITOR_SAVE_STATUS.NotSaved || saveStatus === EDITOR_SAVE_STATUS.Saving"
      placement="bottom"
      ngbTooltip="Click to save" (click)="onSaveClick()">Not saved</u>
   <b class="text-success" *ngIf="saveStatus === EDITOR_SAVE_STATUS.Saved" placement="bottom"

@@ -5,9 +5,16 @@
     </a>
     <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
       <div class="navbar-nav ml-auto">
-        <editor-edit-button *ngIf="editingMode === EDITOR_EDITING_MODE.Edit"></editor-edit-button>
-        <editor-save-status *ngIf="editingMode === EDITOR_EDITING_MODE.Write"></editor-save-status>
-        <editor-publish-button *ngIf="editingMode === EDITOR_EDITING_MODE.Write"></editor-publish-button>
+        <!--
+          Save button is commont for all editing modes
+        -->
+        <editor-save-status [editingMode]="editingMode"></editor-save-status>
+        <!--
+          Publish button is only for write and edit modes
+        -->
+        <editor-publish-button
+          *ngIf="editingMode === EDITOR_EDITING_MODE.Write || editingMode === EDITOR_EDITING_MODE.Edit"></editor-publish-button>
+        <editor-comment-button *ngIf="editingMode === EDITOR_EDITING_MODE.Comment"></editor-comment-button>
         <app-header-profile-menu [user]="user"></app-header-profile-menu>
       </div>
     </div>

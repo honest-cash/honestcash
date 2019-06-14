@@ -89,7 +89,6 @@ export interface EmbedElement extends Block {
 }
 
 export const convertHeadingBlockToHtml = (block: HeaderElement): string => {
-  console.log('block', block);
   const {level, text} = block.data;
   return `<h${level}>${text}</h${level}>`;
 };

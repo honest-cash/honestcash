@@ -161,6 +161,22 @@ export function reducer(state = initialState, action: All): State {
         status: EDITOR_STATUS.Published,
       };
     }
+    case EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH: {
+      logger.info('Editor Comment Publish Started', action.payload);
+      return {
+        ...state,
+        story: action.payload,
+        status: EDITOR_STATUS.Publishing,
+      };
+    }
+    case EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH_SUCCESS: {
+      logger.info('Editor Comment Publish Success', action.payload);
+      return {
+        ...state,
+        story: action.payload,
+        status: EDITOR_STATUS.Published,
+      };
+    }
     default: {
       return state;
     }

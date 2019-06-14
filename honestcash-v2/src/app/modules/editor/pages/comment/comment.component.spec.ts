@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
-import {EditorRespondComponent} from './respond.component';
+import {EditorRespondComponent} from './comment.component';
 import {ActivatedRoute} from '@angular/router';
 import {of} from 'rxjs';
 

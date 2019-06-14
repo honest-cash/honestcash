@@ -6,6 +6,7 @@ import {Observable, Subscription} from 'rxjs';
 import Post from '../../../../shared/models/post';
 import {EditorStoryLoad} from '../../../../store/editor/editor.actions';
 import {ActivatedRoute} from '@angular/router';
+import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 
 @Component({
   selector: 'editor-edit',
@@ -14,6 +15,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class EditorEditComponent implements OnInit, OnDestroy {
   public story: Post;
+  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   private editor$: Observable<EditorState>;
   private editorSub: Subscription;
 

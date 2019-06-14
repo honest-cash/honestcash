@@ -17,13 +17,14 @@ import {EditorPaidSectionSelectionComponent} from './components/paid-section-sel
 import {EditorSaveStatusComponent} from './components/save-status/save-status.component';
 import {EditorComponent} from './components/editor/editor.component';
 import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
-import {EditorEditButtonComponent} from './components/edit-button/edit-button.component';
+import {EditorEditButtonComponent} from './components/comment-button/comment-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
 import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
 import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
-import {EditorRespondComponent} from './pages/respond/respond.component';
+import {EditorCommentComponent} from './pages/comment/comment.component';
 import {EditorMigrationComponent} from './pages/editor-migration/migration.component';
+import {EditorParentPostBodyComponent} from './components/editor-parent-post-body/editor-parent-post-body.component';
 
 const routes: Routes = [
   {
@@ -32,7 +33,7 @@ const routes: Routes = [
     children: [
       {path: 'write', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
       {path: 'edit/:storyId', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
-      {path: 'respond/:parentStoryId', component: EditorRespondComponent, canActivate: [AuthorizedGuard]},
+      {path: 'comment/:parentStoryId', component: EditorCommentComponent, canActivate: [AuthorizedGuard]},
       {
         path: 'story-preview',
         component: EditorStoryPreviewComponent,
@@ -59,7 +60,7 @@ const routes: Routes = [
     EditorContainerComponent,
     EditorWriteComponent,
     EditorEditComponent,
-    EditorRespondComponent,
+    EditorCommentComponent,
     EditorStoryPreviewComponent,
     EditorHeaderComponent,
     EditorStoryPreviewComponent,
@@ -69,6 +70,7 @@ const routes: Routes = [
     EditorLoadingIndicatorComponent,
     EditorPaidSectionToggleButtonComponent,
     EditorMigrationComponent,
+    EditorParentPostBodyComponent,
   ],
   entryComponents: [
     EditorComponent,

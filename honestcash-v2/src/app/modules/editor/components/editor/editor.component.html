@@ -6,25 +6,20 @@
 	  this is the workaround with a side variable called updatedTitle here
 	  Title is changed when user defocuses (blurs) the input to update the value
 	-->
-	<p
-	  id="editor-title"
-	  class="mb-4"
-	  contenteditable="true"
-	  name="title"
-	  (input)="onTitleChange($event)"
-	  (blur)="onTitleBlur()"
-	  placeholder="Title of your story"
-	  ngDefaultControl
-	>
-	  {{story.title}}
-	</p>
-  <div id="editor"></div>
-  <div class="editor-placeholder"
-       *ngIf="shouldShowPlaceholder">
-    <small class="text-muted"><b>
-      <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>&nbsp;Click above
-      to write your story.</b></small>
-  </div>
+  <p
+    *ngIf="editingMode === EDITOR_EDITING_MODES.Write || editingMode === EDITOR_EDITING_MODES.Edit"
+    id="editor-title"
+    class="mb-4"
+    contenteditable="true"
+    name="title"
+    (input)="onTitleChange($event)"
+    (blur)="onTitleBlur()"
+    placeholder="Title of your story"
+    ngDefaultControl
+  >
+    {{story.title}}
+  </p>
+  <div id="editor" [ngClass]="{'comment-mode': editingMode === EDITOR_EDITING_MODES.Comment}"></div>
 </div>
 
 <div *ngIf="!isLoaded" class="d-flex justify-content-center align-items-center h-100 w-100">

@@ -9,7 +9,6 @@ export enum EDITOR_EDITING_MODES {
   Write = 'WRITE',
   Edit = 'EDIT',
   Comment = 'Comment',
-  Respond = 'Respond',
 }
 
 @Component({

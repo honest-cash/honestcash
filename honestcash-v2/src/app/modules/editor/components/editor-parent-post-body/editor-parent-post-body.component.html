@@ -1,0 +1,9 @@
+<div *ngIf="story && story.parentPost" id="parent-post" class="card">
+  <div class="card-header">
+    Commenting on: <strong>{{story.parentPost.title}}</strong> by <strong>{{story.parentPost.user.username}}</strong>
+  </div>
+  <div class="card-body" [innerHTML]="story.parentPost.body" [ngClass]="{'open': isBodyOpen}"></div>
+  <div class="card-footer" (click)="toggleBody()">
+    <hr class="hr-text" [attr.data-content]="isBodyOpen ? 'collapse' : 'expand'">
+  </div>
+</div>

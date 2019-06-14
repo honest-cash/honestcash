@@ -31,6 +31,9 @@ export enum EditorActionTypes {
   EDITOR_STORY_PUBLISH = '[Editor] Story Publish',
   EDITOR_STORY_PUBLISH_SUCCESS = '[Editor] Story Publish Success',
   EDITOR_STORY_PUBLISH_FAILURE = '[Editor] Story Publish Failure',
+  EDITOR_COMMENT_SAVE_AND_PUBLISH = '[Editor] Comment Publish',
+  EDITOR_COMMENT_SAVE_AND_PUBLISH_SUCCESS = '[Editor] Comment Publish Success',
+  EDITOR_COMMENT_SAVE_AND_PUBLISH_FAILURE = '[Editor] Comment Publish Failure',
 }
 
 export class EditorLoad implements Action {
@@ -155,8 +158,6 @@ export class EditorStoryChange implements Action {
   }
 }
 
-
-
 export class EditorStorySave implements Action {
   readonly type = EditorActionTypes.EDITOR_STORY_SAVE;
 }
@@ -203,6 +204,27 @@ export class EditorStoryPublishFailure implements Action {
   }
 }
 
+export class EditorCommentSaveAndPublish implements Action {
+  readonly type = EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH;
+
+  constructor(public payload: Post) {
+  }
+}
+
+export class EditorCommentSaveAndPublishSuccess implements Action {
+  readonly type = EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH_SUCCESS;
+
+  constructor(public payload: Post) {
+  }
+}
+
+export class EditorCommentSaveAndPublishFailure implements Action {
+  readonly type = EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH_FAILURE;
+
+  constructor(public payload: FailedResponse) {
+  }
+}
+
 export type All =
   | EditorLoad
   | EditorUnload
@@ -230,4 +252,7 @@ export type All =
   | EditorStorySaveAndPublish
   | EditorStoryPublish
   | EditorStoryPublishSuccess
-  | EditorStoryPublishFailure;
+  | EditorStoryPublishFailure
+  | EditorCommentSaveAndPublish
+  | EditorCommentSaveAndPublishSuccess
+  | EditorCommentSaveAndPublishFailure;

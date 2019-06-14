@@ -1,2 +1,2 @@
-<editor-header></editor-header>
-<editor *ngIf="story.bodyJSON" [story]="story"></editor>
+<editor-header [editingMode]="EDITOR_EDITING_MODES.Write"></editor-header>
+<editor *ngIf="story" [editingMode]="EDITOR_EDITING_MODES.Write" [story]="story"></editor>

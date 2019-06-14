@@ -1,4 +1,4 @@
-import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostBinding, Input, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {interval, Observable, Subscription} from 'rxjs';
@@ -9,6 +9,7 @@ import {STORY_PROPERTIES} from '../../services/editor.service';
 import {EDITOR_AUTO_SAVE} from '../editor/editor.component';
 import {takeWhile} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
+import {EDITOR_EDITING_MODES} from '../header/header.component';
 
 @Component({
   selector: 'editor-save-status',
@@ -17,6 +18,7 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'd-flex align-items-center';
+  @Input() editingMode: EDITOR_EDITING_MODES;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public story: Post;
   public saveStatus: EDITOR_STATUS;
@@ -38,7 +40,10 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
       this.saveStatus = editorState.status;
       this.story = editorState.story;
 
-      if (EDITOR_AUTO_SAVE.ON) {
+      /*
+        disable autosave for comments
+       */
+      if (EDITOR_AUTO_SAVE.ON && this.editingMode !== EDITOR_EDITING_MODES.Comment) {
         // reset interval
         this.autoSave$ = interval(EDITOR_AUTO_SAVE.INTERVAL);
         if (this.saveStatus === EDITOR_STATUS.Saved) {
@@ -62,12 +67,12 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   }
 
   onSaveClick() {
-    if (this.story.bodyJSON && this.story.bodyJSON.length === 0) {
-      this.toastr.warning(`Write your story to save it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
+    if (this.editingMode !== EDITOR_EDITING_MODES.Comment && (!this.story.title || (this.story.title && this.story.title.length === 0))) {
+      this.toastr.warning(`The story needs a title to be saved`, `No title!`, {positionClass: 'toast-bottom-right'});
       return;
     }
-    if (!this.story.title || (this.story.title && this.story.title.length === 0)) {
-      this.toastr.warning(`The story needs a title to be saved`, `No title!`, {positionClass: 'toast-bottom-right'});
+    if (this.story.bodyJSON && this.story.bodyJSON.length === 0) {
+      this.toastr.warning(`Write your story to save it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
       return;
     }
     this.isSaveButtonClicked = true;
@@ -78,7 +83,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
     if (
       this.saveStatus === EDITOR_STATUS.NotSaved &&
       this.story.bodyJSON && this.story.bodyJSON.length !== 0 &&
-      this.story.title && this.story.title.length !== 0
+      (this.editingMode === EDITOR_EDITING_MODES.Comment || (this.story.title && this.story.title.length !== 0))
     ) {
       this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.BodyAndTitle}));
     }
