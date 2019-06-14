@@ -53,77 +53,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     private scriptService: ScriptService,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
-
-    if (this.isPlatformBrowser) {
-      const editorToolsToLoad = [
-        this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.1/dist/bundle.min.js'),
-      ];
-
-      if (this.editingMode === EDITOR_EDITING_MODES.Write || this.editingMode === EDITOR_EDITING_MODES.Edit) {
-        editorToolsToLoad.push(
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/link@2.1.3/dist/bundle.min.js'),
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/code@2.4.1/dist/bundle.min.js'),
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.1/dist/bundle.min.js'),
-        );
-      }
-
-      this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.14.0/dist/editor.min.js').pipe(
-        concatMap(() => forkJoin(
-          editorToolsToLoad
-        ))
-      ).subscribe(() => {
-        this.editorConfig = {
-          holder: 'editor',
-          initialBlock: 'paragraph',
-          onChange: this.onBodyChange.bind(this),
-          placeholder: this.editingMode !== EDITOR_EDITING_MODES.Comment ? 'Write your story...' : 'Write your comment...',
-          tools: {
-            paragraph: { // this is shared by all modes
-              class: Paragraph,
-              inlineToolbar: true,
-            },
-          }
-        };
-
-        if (this.editingMode === EDITOR_EDITING_MODES.Write || this.editingMode === EDITOR_EDITING_MODES.Edit) {
-          this.editorConfig.tools = {
-            ...this.editorConfig.tools,
-            header: {
-              class: Header,
-              inlineToolbar: true,
-            },
-            link: {
-              class: LinkTool,
-              inlineToolbar: true,
-            },
-            image: {
-              class: ImageTool,
-              inlineToolbar: true,
-              config: {
-                uploader: {
-                  uploadByFile: this.uploadImage.bind(this),
-                  uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
-                }
-              }
-            },
-            embed: Embed,
-            code: CodeTool,
-          };
-        }
-
-        this.editor = new EditorJS(this.editorConfig);
-        this.editor.isReady.then(() => {
-          this.store.dispatch(new EditorLoad());
-        });
-      });
-
-    }
     this.editor$ = this.store.select(selectEditorState);
   }
 
   public ngOnInit() {
+    this.initEditor();
     // remove any leftover post in localstorage
     this.editorService.removeLocallySavedPost();
     this.editorSub = this.editor$
@@ -197,6 +131,75 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
     if (this.editorSub) {
       this.editorSub.unsubscribe();
+    }
+  }
+
+  private initEditor() {
+    if (this.isPlatformBrowser) {
+      const editorToolsToLoad = [
+        this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.1/dist/bundle.min.js'),
+      ];
+
+      if (this.editingMode === EDITOR_EDITING_MODES.Write || this.editingMode === EDITOR_EDITING_MODES.Edit) {
+        editorToolsToLoad.push(
+          ...[this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
+            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
+            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/link@2.1.3/dist/bundle.min.js'),
+            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/code@2.4.1/dist/bundle.min.js'),
+            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.1/dist/bundle.min.js')]
+        );
+      }
+
+      this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.14.0/dist/editor.min.js').pipe(
+        concatMap(() => forkJoin(
+          editorToolsToLoad
+        ))
+      ).subscribe(() => {
+        this.editorConfig = {
+          holder: 'editor',
+          initialBlock: 'paragraph',
+          onChange: this.onBodyChange.bind(this),
+          placeholder: this.editingMode !== EDITOR_EDITING_MODES.Comment ? 'Write your story...' : 'Write your comment...',
+          tools: {
+            paragraph: { // this is shared by all modes
+              class: Paragraph,
+              inlineToolbar: true,
+            },
+          }
+        };
+
+        if (this.editingMode === EDITOR_EDITING_MODES.Write || this.editingMode === EDITOR_EDITING_MODES.Edit) {
+          this.editorConfig.tools = {
+            ...this.editorConfig.tools,
+            header: {
+              class: Header,
+              inlineToolbar: true,
+            },
+            link: {
+              class: LinkTool,
+              inlineToolbar: true,
+            },
+            image: {
+              class: ImageTool,
+              inlineToolbar: true,
+              config: {
+                uploader: {
+                  uploadByFile: this.uploadImage.bind(this),
+                  uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
+                }
+              }
+            },
+            embed: Embed,
+            code: CodeTool,
+          };
+        }
+
+        this.editor = new EditorJS(this.editorConfig);
+        this.editor.isReady.then(() => {
+          this.store.dispatch(new EditorLoad());
+        });
+      });
+
     }
   }
 }

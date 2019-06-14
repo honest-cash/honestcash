@@ -8,6 +8,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {EditorStoryLocalLoad, EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
 import {isPlatformBrowser} from '@angular/common';
+import {EDITOR_EDITING_MODES} from '../header/header.component';
 
 type PaneType = 'first' | 'second';
 
@@ -26,6 +27,7 @@ type PaneType = 'first' | 'second';
 export class EditorEmbeddableComponent implements OnInit, OnDestroy {
   @Input() activePane: PaneType = 'first';
   @ViewChild('modalBody') modalBody: ElementRef;
+  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   public saveStatus: EDITOR_STATUS;
   public story: Post;
   public isPlatformBrowser: boolean;
