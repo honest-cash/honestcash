@@ -48,7 +48,10 @@
           <div
             #paidSectionElements
             *ngFor="let block of this.story.bodyJSON; let index = index;"
-            [ngClass]="{'paid-section__dashed-underline': index === this.story.paidSectionLinebreak}"
+            class="paid-section__line-wrapper"
+            [ngClass]="{'paid-section__locked_section-top': index === story.paidSectionLinebreak,
+              'paid-section__locked_section-middle': index > story.paidSectionLinebreak && index < paidSectionLinebreakEnd,
+              'paid-section__locked_section-bottom': index === paidSectionLinebreakEnd}"
             [innerHTML]="convertBlockToHtml(block)">
           </div>
         </article>

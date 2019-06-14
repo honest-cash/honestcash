@@ -67,6 +67,13 @@
        */
       font-size: 12px;
 
+      padding: 10px;
+
+      .paid-section__line-wrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
       h1,
       h2,
       h3,
@@ -74,6 +81,8 @@
       h5,
       h6 {
         font-weight: normal;
+        margin: 0;
+        padding-bottom: 0.5rem;
       }
 
       /*
@@ -118,6 +127,17 @@
         font-size: 1em;
       }
 
+      p {
+        margin: 0;
+        padding-bottom: 1rem;
+      }
+
+
+      figure {
+        margin: 0px;
+        padding-bottom: 1rem;
+      }
+
       figure > img {
         max-width: 100%;
       }
@@ -127,6 +147,24 @@
       border-bottom: 2px dashed #dc3545;
       margin-bottom: 5px;
     }
+
+    .paid-section__locked_section-top {
+      border-top: 1px solid green;
+      border-right: 1px solid green;
+      border-left: 1px solid green;
+    }
+
+    .paid-section__locked_section-middle {
+      border-left: 1px solid green;
+      border-right: 1px solid green;
+    }
+
+    .paid-section__locked_section-bottom {
+      border-bottom: 1px solid green;
+      border-right: 1px solid green;
+      border-left: 1px solid green;
+    }
+
   }
 }
 
