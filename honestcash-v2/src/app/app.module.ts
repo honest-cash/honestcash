@@ -1,30 +1,27 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { EffectsModule } from '@ngrx/effects';
-import { HttpClientModule } from '@angular/common/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {EffectsModule} from '@ngrx/effects';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
-import { FormsModule } from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { StoreModule } from '@ngrx/store';
-import { AuthEffects } from './core/store/auth/auth.effects';
-import { WalletEffects } from './core/store/wallet/wallet.effects';
-import { UserEffects } from './core/store/user/user.effects';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {StoreModule} from '@ngrx/store';
+import {AuthEffects} from './store/auth/auth.effects';
+import {WalletEffects} from './store/wallet/wallet.effects';
+import {UserEffects} from './store/user/user.effects';
 
-import { reducers, metaReducers } from './app.states';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
-import { TokenInterceptor } from './core/http/token.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AppEffects } from './core/store/app/app.effects';
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {faEnvelope, faUser} from '@fortawesome/free-regular-svg-icons';
-import {faKey} from '@fortawesome/free-solid-svg-icons/faKey';
-import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
-import {faComments, faGlobe, faHeart, faRetweet, faShareAlt, faSpinner, faTerminal} from '@fortawesome/free-solid-svg-icons';
-import {faBitcoin} from '@fortawesome/free-brands-svg-icons';
-import {FontAwesomeModule} from './core/modules/font-awesome.module';
+import {metaReducers, reducers} from './app.states';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {environment} from '../environments/environment';
+import {HeaderInterceptor} from './core/http/header.interceptor';
+import {AppEffects} from './store/app/app.effects';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {EditorEffects} from './store/editor/editor.effects';
+import {AppSharedModule} from './app.shared.module';
+import {ToastrModule} from 'ngx-toastr';
+import {SharedModule} from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -34,23 +31,27 @@ import {FontAwesomeModule} from './core/modules/font-awesome.module';
     BrowserModule.withServerTransition({
       appId: 'honestcash-v2'
     }),
+    BrowserAnimationsModule,
     AppRoutingModule,
+    AppSharedModule,
+    SharedModule,
     FormsModule,
     HttpClientModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([ AppEffects, AuthEffects, UserEffects, WalletEffects ]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    FontAwesomeModule,
+    StoreModule.forRoot(reducers, {metaReducers}),
+    EffectsModule.forRoot([AppEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects,]),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
+    ToastrModule.forRoot(),
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: HeaderInterceptor,
       multi: true
     }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor() {}
+  constructor() {
+  }
 }

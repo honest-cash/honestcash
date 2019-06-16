@@ -1,5 +1,7 @@
 # Honest
-[![Build Status](https://travis-ci.org/honest-cash/honestcash.svg?branch=master)](https://travis-ci.org/honest-cash/honestcash)
+- master: [![Build Status](https://travis-ci.org/honest-cash/honestcash.svg?branch=master)](https://travis-ci.org/honest-cash/honestcash)
+
+- dev: [![Build Status](https://travis-ci.org/honest-cash/honestcash.svg?branch=dev)](https://travis-ci.org/honest-cash/honestcash)
 
 **Honest** is the social media network where you can earn Bitcoin if you create value.
 

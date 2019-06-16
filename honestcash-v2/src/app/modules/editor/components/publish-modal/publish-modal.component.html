@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h5 class="modal-title col text-uppercase text-center">Publish Story</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form name="form" class="p-4 needs-validation" #f="ngForm"
+      (ngSubmit)="(f.form.valid && ((story.hasPaidSection && story.paidSectionCost > 0 && story.paidSectionLinebreak <= story.bodyJSON.length - 1) || !story.hasPaidSection)) && onSubmit()"
+      novalidate>
+  <div class="modal-body">
+    <editor-story-tags-selection></editor-story-tags-selection>
+    <editor-paid-section-toggle-button></editor-paid-section-toggle-button>
+    <editor-paid-section-selection [form]="f"
+                                   [hidden]="!story.hasPaidSection"></editor-paid-section-selection>
+  </div>
+  <div class="modal-footer px-0 pb-0">
+    <div class="col text-left">
+      <button type="button" class="btn btn-outline-dark" (click)="onClose()"
+              [disabled]="saveStatus === EDITOR_SAVE_STATUS.Publishing">Close
+      </button>
+    </div>
+    <div class="col text-center">
+      <button type="button" (click)="previewDraftStory()" class="btn btn-primary mr-2" placement="top"
+              ngbTooltip="Preview Story">
+        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+      </button>
+    </div>
+    <div class="col text-right">
+      <button type="submit" class="btn btn-success" [disabled]="saveStatus === EDITOR_SAVE_STATUS.Publishing">Publish
+      </button>
+    </div>
+  </div>
+</form>

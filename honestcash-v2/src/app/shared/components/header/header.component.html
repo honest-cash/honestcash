@@ -1,0 +1,12 @@
+<header>
+  <nav class="navbar navbar-light navbar-expand">
+    <a class="navbar-brand" href="/">
+      <app-honest-logo></app-honest-logo>
+    </a>
+    <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
+      <div class="navbar-nav ml-auto">
+        <app-header-profile-menu [user]="user"></app-header-profile-menu>
+      </div>
+    </div>
+  </nav>
+</header>

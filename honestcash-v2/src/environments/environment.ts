@@ -2,9 +2,31 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  apiUrl: 'https://honest.cash/api',
-  production: false
+export interface Environment {
+  env: string;
+  apiUrl: string;
+  clientUrl: string;
+  production: boolean;
+}
+
+// @todo: no need to repeat the default
+export const ENVIRONMENT_DEFAULTS: Environment = {
+  env: 'local',
+  apiUrl: 'http://localhost:8080/api', // https://honest.cash/api
+  clientUrl: 'http://localhost:3010/', // https://honest.cash/
+  production: true
+};
+
+export const environment: Environment = {
+  // this format is explicitly written like this
+  // the environment is injected into services
+  // however during tests, you sometimes need to test based on environment
+  // this ensures that environment is dynamic and can be changed
+  // so that both production true and false values can be tested inside spec
+  env: 'local',
+  apiUrl: ENVIRONMENT_DEFAULTS.apiUrl,
+  clientUrl: ENVIRONMENT_DEFAULTS.clientUrl,
+  production: ENVIRONMENT_DEFAULTS.production,
 };
 
 /*

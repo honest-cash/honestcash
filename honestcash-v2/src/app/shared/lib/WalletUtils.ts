@@ -1,6 +1,6 @@
-import { Logger } from 'app/core';
-
 // @todo shift to simple-bitcoin-wallet package
+import {Logger} from '../services/logger.service';
+
 export interface ISimpleBitcoinWallet {
   cashAddress: string;
   mnemonic: string;
@@ -11,10 +11,13 @@ export interface ISimpleBitcoinWallet {
   mnemonicEncrypted: string;
 
   getBalance(): any;
+
   send(): any;
+
   getWalletInfo(): any;
 
   download(): any;
+
   upload(): any;
 }
 
@@ -22,7 +25,7 @@ declare var SimpleWallet: ISimpleBitcoinWallet;
 
 const logger = new Logger('WalletUtils');
 
-const loadJS = function(url: string, implementationCode: () => void, location: HTMLElement) {
+const loadJS = function (url: string, implementationCode: () => void, location: HTMLElement) {
   // url is URL of external file, implementationCode is the code
   // to be called from the file, location is the location to
   // insert the <script> element
@@ -36,18 +39,19 @@ const loadJS = function(url: string, implementationCode: () => void, location: H
   location.appendChild(scriptTag);
 };
 
+/* istanbul ignore next */
 export class WalletUtils {
   static generateNewWallet = async (password: string): Promise<ISimpleBitcoinWallet> => {
     const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
 
-    return new SimpleBitcoinWallet(null, { password });
-  }
+    return new SimpleBitcoinWallet(null, {password});
+  };
 
   static encrypt = async (mnemonic: string, password: string): Promise<string> => {
     const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
 
     return SimpleBitcoinWallet.encrypt(mnemonic, password);
-  }
+  };
 
   static generateWalletWithEncryptedRecoveryPhrase = async (
     encryptedRecoveryPhrase: string,
@@ -55,8 +59,16 @@ export class WalletUtils {
   ): Promise<ISimpleBitcoinWallet> => {
     const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
 
-    return new SimpleBitcoinWallet(encryptedRecoveryPhrase, { password });
-  }
+    return new SimpleBitcoinWallet(encryptedRecoveryPhrase, {password});
+  };
+
+  static generateWalletWithDecryptedRecoveryPhrase = async (
+    recoveryPhrase: string,
+  ): Promise<ISimpleBitcoinWallet> => {
+    const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
+
+    return new SimpleBitcoinWallet(recoveryPhrase, {password: null});
+  };
 
   // @todo add typings to SimpleBitcoinWallet
   // @todo these typings below are a little bit off
@@ -65,7 +77,7 @@ export class WalletUtils {
     return new Promise(((resolve, reject) => {
 
       if (typeof (window as any).SimpleWallet !== 'undefined') {
-          return resolve((window as any).SimpleWallet);
+        return resolve((window as any).SimpleWallet);
       }
 
       /**
@@ -75,19 +87,19 @@ export class WalletUtils {
 
       // tslint:disable-next-line: no-shadowed-variable
       loadJS(
-        'https://honest.cash/js/simple-bitcoin-wallet.min.js',
+        '/assets/libs/simple-bitcoin-wallet.min.js', // https://unpkg.com/simple-bitcoin-wallet@0.0.7/dist/simplewallet.min.js
         () => {
-        logger.info('Lazy-loaded simple-bitcoin-wallet.');
+          logger.info('Lazy-loaded simple-bitcoin-wallet.');
 
-        if (typeof (window as any).SimpleWallet !== 'undefined') {
-          return resolve((window as any).SimpleWallet);
-        } else {
-          logger.error('Could not resolve SimpleBitcoinWallet.');
+          if (typeof (window as any).SimpleWallet !== 'undefined') {
+            return resolve((window as any).SimpleWallet);
+          } else {
+            logger.error('Could not resolve SimpleBitcoinWallet.');
 
-          return reject('Could not resolve SimpleBitcoinWallet');
-        }
-      },
-      document.body);
+            return reject('Could not resolve SimpleBitcoinWallet');
+          }
+        },
+        document.body);
     }));
   }
 }

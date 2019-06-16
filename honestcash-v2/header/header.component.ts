@@ -1,20 +1,20 @@
 /**
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+ import { Component, OnInit } from '@angular/core';
+ import { Router } from '@angular/router';
 
-import { AuthenticationService, I18nService } from '@app/core';
+ import { AuthService, I18nService } from '@app/core';
 
-@Component({
+ @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class WelcomeCardHeader implements OnInit {
+ export class WelcomeCardHeader implements OnInit {
   menuHidden = true;
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
     private i18nService: I18nService
   ) {}
 
@@ -45,4 +45,4 @@ export class WelcomeCardHeader implements OnInit {
     return credentials ? credentials.username : null;
   }
 }
-*/
+ */

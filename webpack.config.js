@@ -1,6 +1,17 @@
+const webpack = require("webpack");
+
 require('dotenv').config();
 
-module.exports = {
+const API_URLS = {
+  prod: "https://honest.cash/api",
+  dev: "https://beta.honest.cash/api",
+  local: "http://localhost:8080/api"
+};
+
+module.exports = (env, argv) => {
+  console.log(`BUILDING MODE: "${argv.env}"`);
+
+  return {
     entry: {
       app: "./src/app/app.ts",
       editor: "./src/editor/editor.ts",
@@ -53,6 +64,11 @@ module.exports = {
       ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            __ENV__: JSON.stringify(argv.env),
+            __API_URL__: JSON.stringify(API_URLS[argv.env])
+        })
+
         /**
         new Uglify({
             uglifyOptions: {
@@ -83,4 +99,4 @@ module.exports = {
     resolve: {
         extensions: [ ".tsx", ".ts", ".js" ]
     }
-};
+}};

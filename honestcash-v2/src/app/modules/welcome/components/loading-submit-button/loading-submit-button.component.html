@@ -1,10 +1,9 @@
 <button
-  id="submit-btn"
-  type="submit"
-  class="btn btn-block text-uppercase font-weight-bold {{btnClass}}"
-  [disabled]="isLoading"
->
-  <span *ngIf="isLoading"><span id="loading-text">{{loadingText}}</span>&nbsp;<fa-icon [icon]="['fas', 'spinner']"
-                                                                                       [spin]="true"></fa-icon></span>
+    id="submit-btn"
+    type="submit"
+    class="btn btn-block text-uppercase font-weight-bold {{btnClass}}"
+    [disabled]="isLoading"
+  >
+  <span *ngIf="isLoading"><span id="loading-text">{{loadingText}}</span>&nbsp;<fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon></span>
   <span id="text" *ngIf="!isLoading">{{text}}</span>
 </button>
