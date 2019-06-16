@@ -43,9 +43,9 @@ matrix:
     - npm prune --production
     - du -d 1 -h
     - mkdir deployments
-    - mv ./honestcash-v2/dist ./hc-v2
-    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then zip -r deployments/honestcash-prod.zip public hc-v2 node_modules server views app.js package.json .env appspec.yml scripts -q; fi
-    - if [[ "$TRAVIS_BRANCH" == "dev" ]]; then zip -r deployments/honestcash-dev.zip public hc-v2 node_modules server views app.js package.json .env appspec.yml scripts -q; fi 
+    - mv ./honestcash-v2/dist ./dist
+    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then zip -r deployments/honestcash-prod.zip public dist node_modules server views app.js package.json .env appspec.yml scripts -q; fi
+    - if [[ "$TRAVIS_BRANCH" == "dev" ]]; then zip -r deployments/honestcash-dev.zip public dist node_modules server views app.js package.json .env appspec.yml scripts -q; fi 
 
     # The deployment process is triggered for both master and dev
     deploy:
