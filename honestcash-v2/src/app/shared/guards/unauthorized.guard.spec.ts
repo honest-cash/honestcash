@@ -8,6 +8,7 @@ import {resetLocalStorage} from '../../core/helpers/tests';
 import {WindowToken} from '../../core/helpers/window';
 import {localStorageProvider, LocalStorageToken} from '../../core/helpers/localStorage';
 import {environmentProvider, EnvironmentToken} from '../../core/helpers/environment';
+import {Environment} from '../../../environments/environment';
 
 const MockWindow = {
   location: {
@@ -21,6 +22,7 @@ describe('UnauthorizedGuard', () => {
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
   let guardWindow: Window;
+  let guardEnvironment: Environment;
 
   beforeEach(() => {
     mockRouter = {
@@ -42,6 +44,7 @@ describe('UnauthorizedGuard', () => {
     authenticationGuard = TestBed.get(UnauthorizedGuard);
     authService = TestBed.get(AuthService);
     guardWindow = TestBed.get(WindowToken);
+    guardEnvironment = TestBed.get(EnvironmentToken);
   });
 
   afterEach(() => {
@@ -62,9 +65,7 @@ describe('UnauthorizedGuard', () => {
     it('should return false and redirect to root if user is already authenticated and the environment is production', () => {
       // Arrange
       authService.isAuthenticated = true;
-
-      const environment = environmentProvider();
-      environment.production = true;
+      guardEnvironment.env = 'prod';
 
       // Act
       const result = authenticationGuard.canActivate();
@@ -77,8 +78,7 @@ describe('UnauthorizedGuard', () => {
     it('should return false and redirect to localhost root if user is already authenticated and the environment is NOT production', () => {
       // Arrange
       authService.isAuthenticated = true;
-      const environment = environmentProvider();
-      environment.production = false;
+      guardEnvironment.env = 'local';
 
       // Act
       const result = authenticationGuard.canActivate();

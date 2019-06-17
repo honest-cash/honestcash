@@ -15,7 +15,7 @@ import {Environment} from '../../../../../environments/environment';
   templateUrl: './comment-button.component.html',
   styleUrls: ['./comment-button.component.scss']
 })
-export class EditorEditButtonComponent implements OnInit, OnDestroy {
+export class EditorCommentButtonComponent implements OnInit, OnDestroy {
   @HostBinding('class') public class = 'd-flex align-items-center mr-4';
   public story: Post;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;

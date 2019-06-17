@@ -17,7 +17,7 @@ import {EditorPaidSectionSelectionComponent} from './components/paid-section-sel
 import {EditorSaveStatusComponent} from './components/save-status/save-status.component';
 import {EditorComponent} from './components/editor/editor.component';
 import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
-import {EditorEditButtonComponent} from './components/comment-button/comment-button.component';
+import {EditorCommentButtonComponent} from './components/comment-button/comment-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
 import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
 import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
@@ -49,7 +49,7 @@ const routes: Routes = [
     EditorPublishModalComponent,
     EditorPublishButtonComponent,
     EditorStoryTagsSelectionComponent,
-    EditorEditButtonComponent,
+    EditorCommentButtonComponent,
     EditorSaveStatusComponent,
     EditorContainerComponent,
     EditorWriteComponent,
