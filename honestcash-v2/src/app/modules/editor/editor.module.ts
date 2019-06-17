@@ -23,7 +23,6 @@ import {EditorLoadingIndicatorComponent} from './components/loading-indicator/lo
 import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 import {EditorCommentComponent} from './pages/comment/comment.component';
-import {EditorMigrationComponent} from './pages/editor-migration/migration.component';
 import {EditorParentPostBodyComponent} from './components/editor-parent-post-body/editor-parent-post-body.component';
 
 const routes: Routes = [
@@ -37,11 +36,6 @@ const routes: Routes = [
       {
         path: 'story-preview',
         component: EditorStoryPreviewComponent,
-        canActivate: [AuthorizedGuard]
-      },
-      {
-        path: 'migration/:storyId',
-        component: EditorMigrationComponent,
         canActivate: [AuthorizedGuard]
       },
     ]
@@ -69,7 +63,6 @@ const routes: Routes = [
     EditorPaidSectionUnlockerComponent,
     EditorLoadingIndicatorComponent,
     EditorPaidSectionToggleButtonComponent,
-    EditorMigrationComponent,
     EditorParentPostBodyComponent,
   ],
   entryComponents: [
