@@ -75,6 +75,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
           }
           this.editorService.savePostLocally(this.story);
+          if (this.story.title && this.story.title !== '') {
+            this.updatedTitle = this.story.title;
+            this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+          }
           this.isLoaded = true;
         });
       }
@@ -92,11 +96,9 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public onTitleBlur() {
-    if (this.updatedTitle && this.updatedTitle !== '') {
-      this.story.title = this.updatedTitle;
-      this.titleElement.nativeElement.innerHTML = this.updatedTitle;
-      this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
-    }
+    this.story.title = this.updatedTitle;
+    this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
   }
 
   public onTitleChange($event: any) {
