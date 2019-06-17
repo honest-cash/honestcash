@@ -24,7 +24,7 @@ import {EditorStoryTagsSelectionComponent} from './components/story-tags-selecti
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 import {EditorCommentComponent} from './pages/comment/comment.component';
 import {EditorMigrationComponent} from './pages/editor-migration/migration.component';
-import {EditorParentPostBodyComponent} from './components/editor-parent-post-body/editor-parent-post-body.component';
+import {EditorParentPostBodyComponent} from './components/parent-post-body/parent-post-body.component';
 
 const routes: Routes = [
   {
