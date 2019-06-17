@@ -2,7 +2,6 @@ import {All, EditorActionTypes} from './editor.actions';
 import {EDITOR_STATUS, initialState, State} from './editor.state';
 import {STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
 import {Logger} from '../../shared/services/logger.service';
-import blankBody from './editor.story.body.initial-value';
 
 const logger = new Logger();
 
@@ -28,7 +27,7 @@ export function reducer(state = initialState, action: All): State {
           ...action.payload,
           // DraftLoadSuccess is only called on write page
           // so we can inject a blankBody to guide user through
-          bodyJSON: action.payload.bodyJSON ? action.payload.bodyJSON : blankBody,
+          bodyJSON: action.payload.bodyJSON
         },
         status: EDITOR_STATUS.Loaded
       };
