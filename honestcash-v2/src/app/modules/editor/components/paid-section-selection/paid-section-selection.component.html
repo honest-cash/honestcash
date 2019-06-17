@@ -7,12 +7,12 @@
   </div>
   <div class="w-100"></div>
   <div class="col-4">
-    <label for="elPaidSectionCostInBch">
-      <small><b>Cost in BCH:</b></small>
+    <label for="elPaidSectionCostInUsd">
+      <small><b>Cost in USD:</b></small>
     </label>
     <input
-      name="elPaidSectionCostInBch"
-      #elPaidSectionCostInBch="ngModel"
+      name="elPaidSectionCostInUsd"
+      #elPaidSectionCostInUsd="ngModel"
       [(ngModel)]="story.paidSectionCost"
       (ngModelChange)="onChangePaidSectionCost()"
       [step]="PAID_SECTION_PRICE_SLIDER_SETTINGS.STEP"
@@ -20,11 +20,11 @@
       [max]="PAID_SECTION_PRICE_SLIDER_SETTINGS.MAX"
       [value]="story.paidSectionCost"
       required
-      id="elPaidSectionCostInBch"
+      id="elPaidSectionCostInUsd"
       type="range"
       class="form-control-range">
   </div>
-  <div id="elPaidSectionCostInBchValue" class="col-1">
+  <div id="elPaidSectionCostInUsdValue" class="col-1">
     <span class="text-danger">{{story.paidSectionCost}}</span>
   </div>
 </div>

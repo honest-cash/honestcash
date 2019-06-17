@@ -10,9 +10,9 @@ import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions
 import {STORY_PROPERTIES} from '../../services/editor.service';
 
 export const PAID_SECTION_PRICE_SLIDER_SETTINGS = {
-  MIN: 0.005,
-  MAX: 0.1,
-  STEP: 0.005,
+  MIN: 0.5,
+  MAX: 5,
+  STEP: 0.5,
 };
 
 export enum LINEBREAK_ACTION {
