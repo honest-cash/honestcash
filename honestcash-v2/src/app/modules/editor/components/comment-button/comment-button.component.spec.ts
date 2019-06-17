@@ -1,19 +1,27 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {EditorEditButtonComponent} from './comment-button.component';
+import {EditorCommentButtonComponent} from './comment-button.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
+import {windowProvider, WindowToken} from '../../../../core/helpers/window';
+import {environmentProvider, EnvironmentToken} from '../../../../core/helpers/environment';
+import {ToastrModule} from 'ngx-toastr';
 
-describe('EditorEditButtonComponent', () => {
-  let component: EditorEditButtonComponent;
-  let fixture: ComponentFixture<EditorEditButtonComponent>;
+describe('EditorCommentButtonComponent', () => {
+  let component: EditorCommentButtonComponent;
+  let fixture: ComponentFixture<EditorCommentButtonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [],
-      declarations: [EditorEditButtonComponent],
+      imports: [
+        ToastrModule.forRoot(),
+      ],
+      declarations: [EditorCommentButtonComponent],
       providers: [
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: WindowToken, useFactory: windowProvider},
+        {provide: EnvironmentToken, useFactory: environmentProvider},
         provideMockStore({initialState: initialAppStates})
       ],
       schemas: [
@@ -23,7 +31,7 @@ describe('EditorEditButtonComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorEditButtonComponent);
+    fixture = TestBed.createComponent(EditorCommentButtonComponent);
     component = fixture.componentInstance;
   });
 

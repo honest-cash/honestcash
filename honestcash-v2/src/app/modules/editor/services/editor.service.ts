@@ -6,7 +6,6 @@ import {EmptyResponse} from '../../../shared/models/authentication';
 import Hashtag from '../../../shared/models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
-import blankBody from '../../../store/editor/editor.story.body.initial-value';
 import {LocalStorageToken} from '../../../core/helpers/localStorage';
 
 export interface DraftContext {
@@ -82,7 +81,7 @@ export class EditorService {
     const body = {
       [property]: post[property]
     };
-    if (property === STORY_PROPERTIES.Hashtags && post.userPostHashtags.length > 0) {
+    if (property === STORY_PROPERTIES.Hashtags) {
       body.hashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
     }
     if (property === STORY_PROPERTIES.PaidSection) {
@@ -140,13 +139,6 @@ export class EditorService {
 
   downloadImageFromUrl(url: string) {
     return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadRemoteImage(), url);
-  }
-
-  setBlankBody(story: Post): Post {
-    return {
-      ...story,
-      body: blankBody,
-    };
   }
 
   private transformTags(tags: Hashtag[]): string {
