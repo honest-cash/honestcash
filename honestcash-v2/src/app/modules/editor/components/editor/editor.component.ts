@@ -91,8 +91,10 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   onTitleBlur() {
-    this.story.title = this.updatedTitle;
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
+    if (this.updatedTitle && this.updatedTitle !== '') {
+      this.story.title = this.updatedTitle;
+      this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
+    }
   }
 
   onTitleChange($event: any) {
