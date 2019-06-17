@@ -14,7 +14,7 @@ export const ENVIRONMENT_DEFAULTS: Environment = {
   env: 'local',
   apiUrl: 'http://localhost:8080/api', // https://honest.cash/api
   clientUrl: 'http://localhost:3010/', // https://honest.cash/
-  production: false
+  production: true
 };
 
 export const environment: Environment = {

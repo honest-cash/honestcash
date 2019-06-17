@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "npm run transfer-libs && ng serve",
+    "start:prod": "npm run transfer-libs && ng serve -c production",
+    "start:dev": "npm run transfer-libs && ng serve -c development",
     "build": "ng build",
     "test": "ng test",
     "test:dev": "ng test --code-coverage --source-map",

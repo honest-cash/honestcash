@@ -1,18 +1,18 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {EditorEditButtonComponent} from './comment-button.component';
+import {EditorCommentButtonComponent} from './comment-button.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 
-describe('EditorEditButtonComponent', () => {
-  let component: EditorEditButtonComponent;
-  let fixture: ComponentFixture<EditorEditButtonComponent>;
+describe('EditorCommentButtonComponent', () => {
+  let component: EditorCommentButtonComponent;
+  let fixture: ComponentFixture<EditorCommentButtonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [EditorEditButtonComponent],
+      declarations: [EditorCommentButtonComponent],
       providers: [
         provideMockStore({initialState: initialAppStates})
       ],
@@ -23,7 +23,7 @@ describe('EditorEditButtonComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorEditButtonComponent);
+    fixture = TestBed.createComponent(EditorCommentButtonComponent);
     component = fixture.componentInstance;
   });
 

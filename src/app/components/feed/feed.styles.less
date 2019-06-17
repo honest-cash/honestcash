@@ -4,6 +4,10 @@
   color: #444 !important;
 }
 
+.list-unstyled {
+  margin: 0;
+}
+
 .post-feed-body {
   width: 100%;
   font-family: 'Helvetica', sans-serif;
@@ -113,7 +117,8 @@
   cursor: pointer;
 }
 
-.feed-body article > * {
+.feed-body article.feed-article,
+.feed-body article.feed-article > * {
   font-size: 14px;
   cursor: pointer;
   padding-left: 10px;
