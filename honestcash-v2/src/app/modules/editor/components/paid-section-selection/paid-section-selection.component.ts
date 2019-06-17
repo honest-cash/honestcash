@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
@@ -28,6 +28,7 @@ export enum LINEBREAK_ACTION {
 export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   @Input() form: NgForm;
   @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
+  @ViewChild('paidSectionElementsWrapperElement') paidSectionElementsWrapperElement: ElementRef;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
   public saveStatus: EDITOR_STATUS;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
@@ -80,6 +81,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
       }
     }
     element.nativeElement.scrollIntoView({behavior: 'smooth'});
+    // this.paidSectionElementsWrapperElement.nativeElement.scrollTop -= 20;
     this.store.dispatch(
       new EditorStoryPropertyChange(
         {property: STORY_PROPERTIES.PaidSectionLinebreak, value: this.story.paidSectionLinebreak}

@@ -43,12 +43,15 @@
   <div class="col">
     <div class="row">
       <div class="col-10">
-        <article class="editor-publish-modal__paid-section hide-scrollbar p-3"
-                 [ngClass]="{ 'invalid': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2) }">
+        <article
+          #paidSectionElementsWrapperElement
+          class="editor-publish-modal__paid-section hide-scrollbar p-3"
+          [ngClass]="{ 'invalid': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2) }">
           <div
             #paidSectionElements
             *ngFor="let block of this.story.bodyJSON; let index = index;"
             class="paid-section__line-wrapper"
+            [ngStyle]="{}"
             [ngClass]="{'paid-section__locked_section-top': index === story.paidSectionLinebreak,
               'paid-section__locked_section-middle': index > story.paidSectionLinebreak && index < paidSectionLinebreakEnd,
               'paid-section__locked_section-bottom': index === paidSectionLinebreakEnd}"
