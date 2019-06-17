@@ -126,7 +126,8 @@ class UnlockButtonController {
     let tx;
 
     const HONEST_CASH_PAYWALL_SHARE = 0.2;
-    const paidSectionCostInSatoshis = bitbox.BitcoinCash.toSatoshi(this.post.paidSectionCost);
+    const paidSectionCostInBch = await this.walletService.convertUSDtoBCH(this.post.paidSectionCost);
+    const paidSectionCostInSatoshis = bitbox.BitcoinCash.toSatoshi(paidSectionCostInBch);
     const honestCashShare = paidSectionCostInSatoshis * HONEST_CASH_PAYWALL_SHARE;
     const authorShare = paidSectionCostInSatoshis - honestCashShare;
 
