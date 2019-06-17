@@ -150,8 +150,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         editorToolsToLoad.push(
           ...[this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
             this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
-            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/link@2.1.3/dist/bundle.min.js'),
-            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/code@2.4.1/dist/bundle.min.js'),
             this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.1/dist/bundle.min.js')]
         );
       }
@@ -181,10 +179,6 @@ export class EditorComponent implements OnInit, OnDestroy {
               class: Header,
               inlineToolbar: true,
             },
-            link: {
-              class: LinkTool,
-              inlineToolbar: true,
-            },
             image: {
               class: ImageTool,
               inlineToolbar: true,
@@ -196,7 +190,6 @@ export class EditorComponent implements OnInit, OnDestroy {
               }
             },
             embed: Embed,
-            code: CodeTool,
           };
         }
 
