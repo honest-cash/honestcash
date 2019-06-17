@@ -81,7 +81,7 @@ export class EditorService {
     const body = {
       [property]: post[property]
     };
-    if (property === STORY_PROPERTIES.Hashtags && post.userPostHashtags.length > 0) {
+    if (property === STORY_PROPERTIES.Hashtags) {
       body.hashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
     }
     if (property === STORY_PROPERTIES.PaidSection) {
