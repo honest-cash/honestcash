@@ -23,7 +23,7 @@ import {EditorLoadingIndicatorComponent} from './components/loading-indicator/lo
 import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 import {EditorCommentComponent} from './pages/comment/comment.component';
-import {EditorParentPostBodyComponent} from './components/editor-parent-post-body/editor-parent-post-body.component';
+import {EditorParentPostBodyComponent} from './components/parent-post-body/parent-post-body.component';
 
 const routes: Routes = [
   {

@@ -8,8 +8,8 @@ import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'editor-parent-post-body',
-  templateUrl: './editor-parent-post-body.component.html',
-  styleUrls: ['./editor-parent-post-body.component.scss']
+  templateUrl: './parent-post-body.component.html',
+  styleUrls: ['./parent-post-body.component.scss']
 })
 export class EditorParentPostBodyComponent implements OnInit, OnDestroy {
 

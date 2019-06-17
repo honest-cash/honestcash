@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditorParentPostBodyComponent } from './editor-parent-post-body.component';
+import { EditorParentPostBodyComponent } from './parent-post-body.component';
 
 describe('EditorParentPostBodyComponent', () => {
   let component: EditorParentPostBodyComponent;
