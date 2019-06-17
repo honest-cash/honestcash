@@ -14,7 +14,7 @@ import {EDITOR_STATUS, initialState as initialEditorState} from '../../../../sto
 import {EditorLoad, EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
 import {of} from 'rxjs';
 import Post from '../../../../shared/models/post';
-import blankBody from '../../../../store/editor/editor.story.body.initial-value';
+import {ELEMENT_TYPES} from '../../converters/json-to-html';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -81,9 +81,17 @@ describe('EditorComponent', () => {
       expect(component.saveStatus).toEqual(EDITOR_STATUS.NotInitialized);
     });
     it('should clear editor blocks, set the body if provided post via Input has a body', (done) => {
+      const body = [
+        {
+          type: ELEMENT_TYPES.Paragraph,
+          data: {
+            text: 'asdf'
+          }
+        }
+      ];
       const editor = component.editor;
       component.story = new Post();
-      component.story.bodyJSON = blankBody;
+      component.story.bodyJSON = body;
       component.editor$ = of({
         ...initialEditorState,
         status: EDITOR_STATUS.Loaded,
@@ -95,7 +103,7 @@ describe('EditorComponent', () => {
 
       editor.isReady.then(() => {
         expect(clearSpy).toHaveBeenCalled();
-        expect(renderSpy).toHaveBeenCalledWith({blocks: blankBody});
+        expect(renderSpy).toHaveBeenCalledWith({blocks: body});
         done();
       });
     });
@@ -113,15 +121,23 @@ describe('EditorComponent', () => {
       });
     });
     it('should dispatch EditorChange with story and editor', (done) => {
+      const body = [
+        {
+          type: ELEMENT_TYPES.Paragraph,
+          data: {
+            text: 'asdf'
+          }
+        }
+      ];
       component.story = new Post();
       const editor = component.editor;
       const saver = editor.saver;
-      spyOn(saver, 'save').and.returnValue(of({blocks: blankBody}).toPromise());
+      spyOn(saver, 'save').and.returnValue(of({blocks: body}).toPromise());
       component.onBodyChange();
       fixture.detectChanges();
       editor.isReady.then(() => {
-        expect(component.story.bodyJSON).toEqual(blankBody);
-        expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: blankBody}));
+        expect(component.story.bodyJSON).toEqual(body);
+        expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: body}));
         done();
       });
     });

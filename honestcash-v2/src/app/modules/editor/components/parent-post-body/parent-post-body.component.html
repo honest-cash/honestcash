@@ -1,6 +1,11 @@
 <div *ngIf="story && story.parentPost" id="parent-post" class="card">
   <div class="card-header">
-    Commenting on: <strong>{{story.parentPost.title}}</strong> by <strong>{{story.parentPost.user.username}}</strong>
+    Commenting on:
+    <a
+      target="_blank"
+      href="/{{ story.parentPost.user.username }}/{{story.parentPost.alias}}">
+      <strong>{{story.parentPost.title}}</strong> by <strong>{{story.parentPost.user.username}}</strong>
+    </a>
   </div>
   <div class="card-body" [innerHTML]="story.parentPost.body" [ngClass]="{'open': isBodyOpen}"></div>
   <div class="card-footer" (click)="toggleBody()">
