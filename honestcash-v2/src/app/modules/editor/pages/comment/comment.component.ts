@@ -13,34 +13,19 @@ import {EditorParentStoryLoad} from '../../../../store/editor/editor.actions';
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss']
 })
-export class EditorCommentComponent implements OnInit, OnDestroy {
+export class EditorCommentComponent implements OnInit {
 
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
-  public story: Post;
-  private editor$: Observable<EditorState>;
-  private editorSub: Subscription;
 
   constructor(
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.editor$ = this.store.select(selectEditorState);
   }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.store.dispatch(new EditorParentStoryLoad(params.parentStoryId));
     });
-
-    this.editorSub = this.editor$
-    .subscribe((editorState: EditorState) => {
-      this.story = editorState.story;
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.editorSub) {
-      this.editorSub.unsubscribe();
-    }
   }
 }
