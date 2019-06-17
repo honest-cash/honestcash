@@ -25,8 +25,6 @@ export function reducer(state = initialState, action: All): State {
         ...state,
         story: {
           ...action.payload,
-          // DraftLoadSuccess is only called on write page
-          // so we can inject a blankBody to guide user through
           bodyJSON: action.payload.bodyJSON
         },
         status: EDITOR_STATUS.Loaded
