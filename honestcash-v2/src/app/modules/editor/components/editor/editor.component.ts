@@ -106,12 +106,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.updatedTitle = $event.target.innerText;
   }
 
-  public getStoryTitle() {
-    console.log('title', this.story.title);
-    // return undefined to have the placeholder functioning
-    return this.story.title !== null && this.story.title !== '' ? this.story.title : undefined;
-  }
-
   public uploadImage(file: File) {
     return this.editorService.uploadImage(file).toPromise().then((response) => {
       return {
