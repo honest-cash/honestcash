@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
@@ -35,6 +35,7 @@ declare var CodeTool: any;
 export class EditorComponent implements OnInit, OnDestroy {
   @Input() public story: Post;
   @Input() public editingMode: EDITOR_EDITING_MODES;
+  @ViewChild('titleElement') titleElement: ElementRef;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitialized = false;
@@ -80,7 +81,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  onBodyChange() {
+  public onBodyChange() {
     if (this.isPlatformBrowser && this.editor) {
       this.editor.saver.save()
       .then((outputData) => {
@@ -90,18 +91,25 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTitleBlur() {
+  public onTitleBlur() {
     if (this.updatedTitle && this.updatedTitle !== '') {
       this.story.title = this.updatedTitle;
+      this.titleElement.nativeElement.innerHTML = this.updatedTitle;
       this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
     }
   }
 
-  onTitleChange($event: any) {
+  public onTitleChange($event: any) {
     // InputEvent interface is not yet introduced in Typescript
     // it is required to install a third party types file @types/dom-inputevent
     // hence the any type
     this.updatedTitle = $event.target.innerText;
+  }
+
+  public getStoryTitle() {
+    console.log('title', this.story.title);
+    // return undefined to have the placeholder functioning
+    return this.story.title !== null && this.story.title !== '' ? this.story.title : undefined;
   }
 
   public uploadImage(file: File) {

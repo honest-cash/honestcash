@@ -7,6 +7,7 @@
 	  Title is changed when user defocuses (blurs) the input to update the value
 	-->
   <p
+    #titleElement
     *ngIf="editingMode === EDITOR_EDITING_MODES.Write || editingMode === EDITOR_EDITING_MODES.Edit"
     id="editor-title"
     class="mb-4"
@@ -17,7 +18,6 @@
     placeholder="Title of your story"
     ngDefaultControl
   >
-    {{story.title}}
   </p>
   <div id="editor" [ngClass]="{'comment-mode': editingMode === EDITOR_EDITING_MODES.Comment}"></div>
 </div>
