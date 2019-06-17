@@ -150,21 +150,30 @@
       margin-bottom: 5px;
     }
 
+    $borderWidth: 2px;
+    $borderStyle: solid;
+    $borderColor: #28a745; // green of bootstrap to match
+    $borderRadius: .25rem; // radius of bootstrap to match
+
     .paid-section__locked_section-top {
-      border-top: 1px solid green;
-      border-right: 1px solid green;
-      border-left: 1px solid green;
+      border-top: $borderWidth $borderStyle $borderColor;
+      border-right: $borderWidth $borderStyle $borderColor;
+      border-left: $borderWidth $borderStyle $borderColor;
+      border-top-left-radius: $borderRadius;
+      border-top-right-radius: $borderRadius;
     }
 
     .paid-section__locked_section-middle {
-      border-left: 1px solid green;
-      border-right: 1px solid green;
+      border-left: $borderWidth $borderStyle $borderColor;
+      border-right: $borderWidth $borderStyle $borderColor;
     }
 
     .paid-section__locked_section-bottom {
-      border-bottom: 1px solid green;
-      border-right: 1px solid green;
-      border-left: 1px solid green;
+      border-bottom: $borderWidth $borderStyle $borderColor;
+      border-right: $borderWidth $borderStyle $borderColor;
+      border-left: $borderWidth $borderStyle $borderColor;
+      border-bottom-left-radius: $borderRadius;
+      border-bottom-right-radius: $borderRadius;
     }
 
   }

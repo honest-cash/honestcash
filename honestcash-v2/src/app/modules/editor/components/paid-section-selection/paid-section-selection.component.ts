@@ -80,8 +80,10 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
         break;
       }
     }
-    element.nativeElement.scrollIntoView({behavior: 'smooth'});
-    // this.paidSectionElementsWrapperElement.nativeElement.scrollTop -= 20;
+    element.nativeElement.scrollIntoView();
+    if (this.story.paidSectionLinebreak !== this.paidSectionLinebreakEnd) {
+      this.paidSectionElementsWrapperElement.nativeElement.scrollTop -= 20;
+    }
     this.store.dispatch(
       new EditorStoryPropertyChange(
         {property: STORY_PROPERTIES.PaidSectionLinebreak, value: this.story.paidSectionLinebreak}

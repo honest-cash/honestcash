@@ -51,7 +51,6 @@
             #paidSectionElements
             *ngFor="let block of this.story.bodyJSON; let index = index;"
             class="paid-section__line-wrapper"
-            [ngStyle]="{}"
             [ngClass]="{'paid-section__locked_section-top': index === story.paidSectionLinebreak,
               'paid-section__locked_section-middle': index > story.paidSectionLinebreak && index < paidSectionLinebreakEnd,
               'paid-section__locked_section-bottom': index === paidSectionLinebreakEnd}"
@@ -75,7 +74,7 @@
             type="button"
             class="btn btn-block btn-outline-dark"
             (click)="onSwitchLinebreak(LINEBREAK_ACTION.MoveDown)"
-            [disabled]="story.paidSectionLinebreak === paidSectionLinebreakEnd - 1"
+            [disabled]="story.paidSectionLinebreak === paidSectionLinebreakEnd"
           >
             <fa-icon [icon]="['fas', 'chevron-down']"></fa-icon>
           </button>
