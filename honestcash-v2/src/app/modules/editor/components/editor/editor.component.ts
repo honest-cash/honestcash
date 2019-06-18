@@ -75,6 +75,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
           }
           this.editorService.savePostLocally(this.story);
+          if (this.story.title && this.story.title !== '') {
+            this.updatedTitle = this.story.title;
+            this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+          }
           this.isLoaded = true;
         });
       }
@@ -92,11 +96,9 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public onTitleBlur() {
-    if (this.updatedTitle && this.updatedTitle !== '') {
-      this.story.title = this.updatedTitle;
-      this.titleElement.nativeElement.innerHTML = this.updatedTitle;
-      this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
-    }
+    this.story.title = this.updatedTitle;
+    this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
   }
 
   public onTitleChange($event: any) {
@@ -148,8 +150,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         editorToolsToLoad.push(
           ...[this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
             this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
-            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/link@2.1.3/dist/bundle.min.js'),
-            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/code@2.4.1/dist/bundle.min.js'),
             this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.1/dist/bundle.min.js')]
         );
       }
@@ -179,10 +179,6 @@ export class EditorComponent implements OnInit, OnDestroy {
               class: Header,
               inlineToolbar: true,
             },
-            link: {
-              class: LinkTool,
-              inlineToolbar: true,
-            },
             image: {
               class: ImageTool,
               inlineToolbar: true,
@@ -194,7 +190,6 @@ export class EditorComponent implements OnInit, OnDestroy {
               }
             },
             embed: Embed,
-            code: CodeTool,
           };
         }
 
