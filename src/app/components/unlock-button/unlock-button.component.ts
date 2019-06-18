@@ -9,7 +9,7 @@ import * as simpleWalletProvider from "../../../core/lib/simpleWalletProvider";
 import { Post } from "../../../core/models/models";
 import PostService from "../../../core/services/PostService";
 import ScopeService from "../../../core/services/ScopeService";
-import WalletService from "../../../core/services/WalletService";
+import WalletService, {ICurrencyConversion} from "../../../core/services/WalletService";
 import { IModalElement } from "../../../core/lib/dependency-interfaces";
 
 declare const toastr;
@@ -43,6 +43,7 @@ class UnlockButtonController {
   private isUnlocking: boolean;
   private isDisabled: boolean;
   private post: Post;
+  private paidSectionCostCurrencies: ICurrencyConversion;
 
   constructor(
     private $rootScope: IGlobalScope,
@@ -55,13 +56,14 @@ class UnlockButtonController {
     this.ngOnInit();
   }
 
-  private ngOnInit() {
-    this.text = `GET ACCESS FOR ${this.$scope.post.paidSectionCost} BCH`;
+  private async ngOnInit() {
+    this.paidSectionCostCurrencies = await this.walletService.convertUSDtoBCH(this.$scope.post.paidSectionCost);
+    this.text = `GET ACCESS FOR ${this.paidSectionCostCurrencies.usd} USD`;
     this.hoverText = `UNLOCK NOW`;
     this.loadingText = `UNLOCKING...`;
 
     this.post = this.$scope.post;
-    this.amount = this.$scope.post.paidSectionCost;
+    this.amount = this.paidSectionCostCurrencies.usd;
     this.isUnlocking = defaultOptions.isUnlocking;
     this.isDisabled = !this.$rootScope.user || this.post.userId === this.$rootScope.user.id;
 
@@ -83,7 +85,7 @@ class UnlockButtonController {
     const confirmationResult = await sweetalert({
       title: "Confirm your purchase",
       text: `You will be unlocking the full version of this story` +
-        ` for ${this.post.paidSectionCost} BCH. Are you sure?`,
+        ` for ${this.paidSectionCostCurrencies.usd} USD (${this.paidSectionCostCurrencies.bch} BCH). Are you sure?`,
       icon: "warning",
       buttons: true,
       dangerMode: false,
@@ -126,8 +128,8 @@ class UnlockButtonController {
     let tx;
 
     const HONEST_CASH_PAYWALL_SHARE = 0.2;
-    const paidSectionCostInBch = await this.walletService.convertUSDtoBCH(this.post.paidSectionCost);
-    const paidSectionCostInSatoshis = bitbox.BitcoinCash.toSatoshi(paidSectionCostInBch);
+
+    const paidSectionCostInSatoshis = bitbox.BitcoinCash.toSatoshi(this.paidSectionCostCurrencies.bch);
     const honestCashShare = paidSectionCostInSatoshis * HONEST_CASH_PAYWALL_SHARE;
     const authorShare = paidSectionCostInSatoshis - honestCashShare;
 
@@ -204,7 +206,7 @@ class UnlockButtonController {
     const amountEl = document.getElementById(
       "unlockSuccessModalAmount",
     ) as HTMLAnchorElement;
-    amountEl.innerHTML = this.post.paidSectionCost.toString();
+    amountEl.innerHTML = this.paidSectionCostCurrencies.bch.toString();
 
     ($("#unlockSuccessModal") as IModalElement).modal("show");
 
