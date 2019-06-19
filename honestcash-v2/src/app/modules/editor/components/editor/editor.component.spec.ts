@@ -6,7 +6,7 @@ import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
+import {EditorService} from '../../services/editor.service';
 import {mock} from '../../../../../../mock';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
@@ -15,6 +15,7 @@ import {EditorLoad, EditorStoryPropertyChange} from '../../../../store/editor/ed
 import {of} from 'rxjs';
 import Post from '../../../../shared/models/post';
 import {ELEMENT_TYPES} from '../../converters/json-to-html';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;

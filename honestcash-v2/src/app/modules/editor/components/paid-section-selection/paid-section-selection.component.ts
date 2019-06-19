@@ -7,7 +7,7 @@ import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/edit
 import {Block, convertBlockToHtml} from '../../converters/json-to-html';
 import {NgForm} from '@angular/forms';
 import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
-import {STORY_PROPERTIES} from '../../services/editor.service';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 export const PAID_SECTION_PRICE_SLIDER_SETTINGS = {
   MIN: 0.5,

@@ -28,8 +28,9 @@ import {
 } from './editor.actions';
 import {catchError, concatMap, map, share, switchMap} from 'rxjs/operators';
 import Post from '../../shared/models/post';
-import {EditorService, STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
+import {EditorService} from '../../modules/editor/services/editor.service';
 import {EmptyResponse, FailedResponse} from '../../shared/models/authentication';
+import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
 
 @Injectable()
 export class EditorEffects {
