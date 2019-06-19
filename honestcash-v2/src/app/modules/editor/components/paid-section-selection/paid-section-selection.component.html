@@ -7,12 +7,12 @@
   </div>
   <div class="w-100"></div>
   <div class="col-4">
-    <label for="elPaidSectionCostInBch">
-      <small><b>Cost in BCH:</b></small>
+    <label for="elPaidSectionCostInUsd">
+      <small><b>Cost in USD:</b></small>
     </label>
     <input
-      name="elPaidSectionCostInBch"
-      #elPaidSectionCostInBch="ngModel"
+      name="elPaidSectionCostInUsd"
+      #elPaidSectionCostInUsd="ngModel"
       [(ngModel)]="story.paidSectionCost"
       (ngModelChange)="onChangePaidSectionCost()"
       [step]="PAID_SECTION_PRICE_SLIDER_SETTINGS.STEP"
@@ -20,11 +20,11 @@
       [max]="PAID_SECTION_PRICE_SLIDER_SETTINGS.MAX"
       [value]="story.paidSectionCost"
       required
-      id="elPaidSectionCostInBch"
+      id="elPaidSectionCostInUsd"
       type="range"
       class="form-control-range">
   </div>
-  <div id="elPaidSectionCostInBchValue" class="col-1">
+  <div id="elPaidSectionCostInUsdValue" class="col-1">
     <span class="text-danger">{{story.paidSectionCost}}</span>
   </div>
 </div>
@@ -43,12 +43,17 @@
   <div class="col">
     <div class="row">
       <div class="col-10">
-        <article class="editor-publish-modal__paid-section hide-scrollbar p-3"
-                 [ngClass]="{ 'invalid': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2) }">
+        <article
+          #paidSectionElementsWrapperElement
+          class="editor-publish-modal__paid-section hide-scrollbar p-3"
+          [ngClass]="{ 'invalid': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2) }">
           <div
             #paidSectionElements
             *ngFor="let block of this.story.bodyJSON; let index = index;"
-            [ngClass]="{'paid-section__dashed-underline': index === this.story.paidSectionLinebreak}"
+            class="paid-section__line-wrapper"
+            [ngClass]="{'paid-section__locked_section-top': index === story.paidSectionLinebreak,
+              'paid-section__locked_section-middle': index > story.paidSectionLinebreak && index < paidSectionLinebreakEnd,
+              'paid-section__locked_section-bottom': index === paidSectionLinebreakEnd}"
             [innerHTML]="convertBlockToHtml(block)">
           </div>
         </article>
@@ -69,7 +74,7 @@
             type="button"
             class="btn btn-block btn-outline-dark"
             (click)="onSwitchLinebreak(LINEBREAK_ACTION.MoveDown)"
-            [disabled]="story.paidSectionLinebreak === paidSectionLinebreakEnd - 1"
+            [disabled]="story.paidSectionLinebreak === paidSectionLinebreakEnd"
           >
             <fa-icon [icon]="['fas', 'chevron-down']"></fa-icon>
           </button>
