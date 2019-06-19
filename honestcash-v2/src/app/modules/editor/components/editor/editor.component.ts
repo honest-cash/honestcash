@@ -120,7 +120,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public downloadImageFromUrlAndUpload(url: string) {
-    return this.editorService.downloadImageFromUrl(url).toPromise().then(response => {
+    return this.editorService.uploadRemoteImage(url).toPromise().then(response => {
       return {
         success: 1,
         file: {

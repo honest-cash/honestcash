@@ -17,7 +17,7 @@ export interface UploadImageResponse {
   files: [{ url: string; }];
 }
 
-export interface UploadImageEditorExpectedResponse {
+export interface UploadRemoteImageResponse {
   success: number;
   file: {
     url: string;
@@ -34,7 +34,7 @@ export const API_ENDPOINTS = {
   saveDraft: (p: Post) => `/v2/draft/${p.id}/body`,
   publishPost: (p: Post) => `/v2/draft/${p.id}/publish`,
   uploadImage: () => `/upload/image`,
-  uploadRemoteImage: () => `/v2/upload/image/remote`
+  uploadRemoteImage: () => `/upload/image/remote`
 };
 
 export enum STORY_PROPERTIES {
@@ -137,8 +137,8 @@ export class EditorService {
     return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadImage(), formData, httpOptions);
   }
 
-  downloadImageFromUrl(url: string) {
-    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadRemoteImage(), url);
+  uploadRemoteImage(url: string) {
+    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadRemoteImage(), {url});
   }
 
   private transformTags(tags: Hashtag[]): string {
