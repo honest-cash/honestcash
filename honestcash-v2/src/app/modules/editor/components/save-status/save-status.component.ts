@@ -5,11 +5,11 @@ import {interval, Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import Post from '../../../../shared/models/post';
 import {EditorStoryPropertySave} from '../../../../store/editor/editor.actions';
-import {STORY_PROPERTIES} from '../../services/editor.service';
 import {EDITOR_AUTO_SAVE} from '../editor/editor.component';
 import {takeWhile} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 @Component({
   selector: 'editor-save-status',
