@@ -6,7 +6,7 @@ import Hashtag from '../../../../shared/models/hashtag';
 import {State as EditorState} from '../../../../store/editor/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
-import {STORY_PROPERTIES} from '../../services/editor.service';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 export interface INgxChipsTag {
   hashtag: string;
