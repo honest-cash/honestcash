@@ -17,7 +17,7 @@ describe('EditorParentPostBodyComponent', () => {
         provideMockStore({initialState: initialAppStates})
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

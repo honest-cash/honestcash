@@ -34,7 +34,6 @@ declare var CodeTool: any;
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit, OnDestroy {
-  @Input() public story: Post;
   @Input() public editingMode: EDITOR_EDITING_MODES;
   @ViewChild('titleElement') titleElement: ElementRef;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
@@ -46,6 +45,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorSub: Subscription;
   public isLoaded = false;
   public updatedTitle = '';
+  public story: Post;
   readonly isPlatformBrowser: boolean;
 
   constructor(
@@ -65,8 +65,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
+      this.story = editorState.story;
 
-      if (this.isPlatformBrowser && this.editor && !this.isLoaded && this.saveStatus === EDITOR_STATUS.Initialized && this.story) {
+      if (this.isPlatformBrowser && this.editor && !this.isLoaded && Object.keys(this.story).length) {
         if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
           this.story.title = `RE: ${this.story.parentPost.title}`;
         }
