@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
@@ -7,12 +7,12 @@ import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/edit
 import {Block, convertBlockToHtml} from '../../converters/json-to-html';
 import {NgForm} from '@angular/forms';
 import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
-import {STORY_PROPERTIES} from '../../services/editor.service';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 export const PAID_SECTION_PRICE_SLIDER_SETTINGS = {
-  MIN: 0.005,
-  MAX: 0.1,
-  STEP: 0.005,
+  MIN: 0.5,
+  MAX: 5,
+  STEP: 0.5,
 };
 
 export enum LINEBREAK_ACTION {
@@ -28,6 +28,7 @@ export enum LINEBREAK_ACTION {
 export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   @Input() form: NgForm;
   @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
+  @ViewChild('paidSectionElementsWrapperElement') paidSectionElementsWrapperElement: ElementRef;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
   public saveStatus: EDITOR_STATUS;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
@@ -51,11 +52,11 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
       this.story = editorState.story;
 
       if (!this.story.paidSectionLinebreak) {
-          this.story.paidSectionLinebreak = 0;
-        }
-        if (!this.story.paidSectionCost) {
-          this.story.paidSectionCost = PAID_SECTION_PRICE_SLIDER_SETTINGS.MIN;
-        }
+        this.story.paidSectionLinebreak = 1;
+      }
+      if (!this.story.paidSectionCost) {
+        this.story.paidSectionCost = PAID_SECTION_PRICE_SLIDER_SETTINGS.MIN;
+      }
       this.paidSectionLinebreakEnd = this.story && this.story.bodyJSON && this.story.bodyJSON.filter(convertBlockToHtml).length - 1 || 1;
     });
   }
@@ -79,7 +80,10 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
         break;
       }
     }
-    element.nativeElement.scrollIntoView({behavior: 'smooth'});
+    element.nativeElement.scrollIntoView();
+    if (this.story.paidSectionLinebreak !== this.paidSectionLinebreakEnd) {
+      this.paidSectionElementsWrapperElement.nativeElement.scrollTop -= 20;
+    }
     this.store.dispatch(
       new EditorStoryPropertyChange(
         {property: STORY_PROPERTIES.PaidSectionLinebreak, value: this.story.paidSectionLinebreak}

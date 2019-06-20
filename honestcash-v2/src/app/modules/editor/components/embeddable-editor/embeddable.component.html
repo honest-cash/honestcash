@@ -14,7 +14,7 @@
 <div #modalBody class="modal-body">
   <div class="panes" [@slide]="activePane">
     <div class="pane">
-      <editor class="p-4" [story]="story" [editingMode]="EDITOR_EDITING_MODES.Write"></editor>
+      <editor class="p-4" [editingMode]="EDITOR_EDITING_MODES.Write"></editor>
     </div>
     <div class="pane">
       <form [hidden]="activePane === 'first'" name="form" class="p-4 needs-validation" #f="ngForm"

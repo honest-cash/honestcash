@@ -3,13 +3,15 @@ import {TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {mock} from '../../../../../mock';
 import {of} from 'rxjs';
-import {API_ENDPOINTS, EditorService, STORY_PROPERTIES} from './editor.service';
+import {EditorService} from './editor.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../../app.states';
 import {HttpService} from '../../../core';
 import Post from '../../../shared/models/post';
 import {RouterTestingModule} from '@angular/router/testing';
 import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
+import {API_ENDPOINTS} from '../shared/editor.endpoints';
+import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 
 describe('EditorService', () => {
   let editorService: EditorService;
