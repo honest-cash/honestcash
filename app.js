@@ -248,7 +248,7 @@ for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown
 
 app.get("/write", (_, res) => res.redirect(`/v2/editor/write`));
 app.get("/edit/:postId", (req, res) => res.redirect(`/v2/editor/edit/${req.params.postId}`));
-app.get("/write/response/:parentPostId", (req, res) => res.redirect(`/v2/editor/comment/${req.params.postId}`));
+app.get("/write/response/:parentPostId", (req, res) => res.redirect(`/v2/editor/comment/${req.params.parentPostId}`));
 
 for (let v2Path of [ "/login", "/signup", "/thank-you", "/about" ]) {
   app.get(v2Path, (_, res) =>
