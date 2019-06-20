@@ -79,7 +79,9 @@ export class EditorComponent implements OnInit, OnDestroy {
           this.editorService.savePostLocally(this.story);
           if (this.story.title && this.story.title !== '') {
             this.updatedTitle = this.story.title;
-            this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+            if (this.titleElement && this.titleElement.nativeElement) {
+              this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+            }
           }
           this.isLoaded = true;
         });
