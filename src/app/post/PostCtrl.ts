@@ -103,20 +103,20 @@ export default class PostCtrl {
     this.initTippy();
   }
 
-  private redirectUserToComments() {
-    if (!this.$rootScope.user || (this.$rootScope.user && !this.$rootScope.user.id)) {
+  public redirectUserToComments() {
+    if (!this.$rootScope.user) {
       location.href = "/signup";
       return;
     }
     location.href = `/editor/comment/${this.post.id}`;
   }
 
-  private sortResponses(order: "upvoteCount" | "createdAt") {
+  public sortResponses(order: "upvoteCount" | "createdAt") {
     this.responseSortOrder = order;
     this.scopeService.safeApply(this.$scope);
   }
 
-  private async createPost() {
+  public async createPost() {
     if (!this.newResponse || this.newResponse.length < 10) {
       return toastr.error("Comments need to be at least 10 characters.");
     }
@@ -134,7 +134,7 @@ export default class PostCtrl {
     this.scopeService.safeApply(this.$scope);
   }
 
-  private async editPost() {
+  public async editPost() {
     window.location.href = `/edit/${this.post.id}`;
   }
 
@@ -143,7 +143,7 @@ export default class PostCtrl {
     tippyJs(".user-follower-count");
   }
 
-  private displayFeedBody(html: string): string {
+  public displayFeedBody(html: string): string {
     return this.postService.displayHTML(html);
   }
 }
