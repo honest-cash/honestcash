@@ -10,6 +10,7 @@ import {EditorPublishModalComponent} from '../publish-modal/publish-modal.compon
 import {WindowToken} from '../../../../core/helpers/window';
 import {EnvironmentToken} from '../../../../core/helpers/environment';
 import {Environment} from '../../../../../environments/environment';
+import {ELEMENT_TYPES, ParagraphElement} from '../../converters/json-to-html';
 
 @Component({
   selector: 'editor-publish-button',
@@ -52,7 +53,12 @@ export class EditorPublishButtonComponent implements OnInit, OnDestroy {
       this.toastr.warning(`Write your story to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
       return;
     }
-    if (this.story.bodyJSON && this.story.bodyJSON.length === 1 && this.story.bodyJSON[0].data.text !== undefined && this.story.bodyJSON[0].data.text === '') {
+    if (
+      this.story.bodyJSON &&
+      this.story.bodyJSON.length === 1 &&
+      this.story.bodyJSON[0].type ===  ELEMENT_TYPES.Paragraph &&
+      (this.story.bodyJSON[0] as ParagraphElement).data.text !== undefined &&
+      (this.story.bodyJSON[0] as ParagraphElement).data.text === '') {
       this.toastr.warning(`Write something inside your story to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
       return;
     }
