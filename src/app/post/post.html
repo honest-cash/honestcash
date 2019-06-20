@@ -201,9 +201,7 @@
                   ng-class="{'bold': postCtrl.responseSortOrder === 'createdAt'}">chronologically</a>
               </span>
             </div>
-            <a ng-if="postCtrl.post.status !== 'archived'" target="_self" ng-href="{{
-                user.id ? '/editor/comment/' + postCtrl.post.id : '/signup'
-              }}">
+            <a ng-if="postCtrl.post.status !== 'archived'" target="_self" ng-click="postCtrl.redirectUserToComments()">
               <ul style="margin-top: 10px;" class="list-unstyled list-inline">
                 <li>
                   <img ng-if="user.imageUrl" ng-src="{{ user.imageUrl }}"

@@ -103,6 +103,14 @@ export default class PostCtrl {
     this.initTippy();
   }
 
+  private redirectUserToComments() {
+    if (!this.$rootScope.user || (this.$rootScope.user && !this.$rootScope.user.id)) {
+      location.href = "/signup";
+      return;
+    }
+    location.href = `/editor/comment/${this.post.id}`;
+  }
+
   private sortResponses(order: "upvoteCount" | "createdAt") {
     this.responseSortOrder = order;
     this.scopeService.safeApply(this.$scope);
