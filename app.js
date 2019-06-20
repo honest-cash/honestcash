@@ -53,12 +53,12 @@ const isBot = (userAgent, push) => {
 
 app.get('/*', function(req, res, next) {
 	if (!req.headers.host) {
-		 next();   
+		 next();
 	} else {
 	  	if (req.headers.host.match(/^www/) !== null ) {
     		res.redirect('https://' + req.headers.host.replace(/^www\./, '') + req.url);
 		} else {
-    		next();     
+    		next();
 		}
 	}
 });
@@ -67,7 +67,7 @@ app.use(compression({ filter: function(req,res) { return true; }} ));
 app.use(cors({}));
 app.use((req, res, next) => {
     res._uglifyMangle = true;
-	
+
     next();
 });
 
@@ -80,8 +80,8 @@ app.set('view engine', 'ejs');
 
 app.use(expressLayouts);
 
-app.use(cookieParser()); 
-app.use(bodyParser()); 
+app.use(cookieParser());
+app.use(bodyParser());
 app.use(flash());
 app.use("/js", express.static(__dirname + "/public/js"));
 app.use("/img", express.static(__dirname + "/public/img"));
@@ -174,7 +174,7 @@ app.get("/profile/:username", async (req, res, next) => {
 
 		if (!profile) {
 			res.status(404).render("Not found");
-	
+
 			return;
 		}
 
@@ -209,7 +209,7 @@ app.get("/:username/:alias", async (req, res, next) => {
 
   const postBaseUrl = "https://honest.cash/api/post";
   const url = `${postBaseUrl}/${req.params.alias}`;
-  
+
 	const post = preparePost((await axios.get(url)).data);
   const responses = (await axios.get(`${postBaseUrl}/${post.id}/responses`)).data
     .map(preparePost);
@@ -248,7 +248,7 @@ for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown
 
 app.get("/write", (_, res) => res.redirect(`/v2/editor/write`));
 app.get("/edit/:postId", (req, res) => res.redirect(`/v2/editor/edit/${req.params.postId}`));
-// @todo missing /write/response/:parentPostId path
+app.get("/write/response/:parentPostId", (req, res) => res.redirect(`/v2/editor/comment/${req.params.parentPostId}`));
 
 for (let v2Path of [ "/login", "/signup", "/thank-you", "/about" ]) {
   app.get(v2Path, (_, res) =>
