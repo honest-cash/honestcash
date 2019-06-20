@@ -5,12 +5,13 @@ import {AppStates, selectEditorState} from '../../../../app.states';
 import {forkJoin, Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
-import {EditorService, STORY_PROPERTIES} from '../../services/editor.service';
+import {EditorService} from '../../services/editor.service';
 import {Block} from '../../converters/json-to-html';
 import {isPlatformBrowser} from '@angular/common';
 import {ScriptService} from 'ngx-script-loader';
 import {concatMap} from 'rxjs/operators';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 // @todo editor-v2: get rid of the factory provider pattern, it should be immutable!
 export const EDITOR_AUTO_SAVE = {
@@ -33,7 +34,6 @@ declare var CodeTool: any;
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit, OnDestroy {
-  @Input() public story: Post;
   @Input() public editingMode: EDITOR_EDITING_MODES;
   @ViewChild('titleElement') titleElement: ElementRef;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
@@ -45,6 +45,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorSub: Subscription;
   public isLoaded = false;
   public updatedTitle = '';
+  public story: Post;
   readonly isPlatformBrowser: boolean;
 
   constructor(
@@ -64,8 +65,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
+      this.story = editorState.story;
 
-      if (this.isPlatformBrowser && this.editor && !this.isLoaded && this.saveStatus === EDITOR_STATUS.Initialized && this.story) {
+      if (this.isPlatformBrowser && this.editor && !this.isLoaded && Object.keys(this.story).length) {
         if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
           this.story.title = `RE: ${this.story.parentPost.title}`;
         }
@@ -77,7 +79,9 @@ export class EditorComponent implements OnInit, OnDestroy {
           this.editorService.savePostLocally(this.story);
           if (this.story.title && this.story.title !== '') {
             this.updatedTitle = this.story.title;
-            this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+            if (this.titleElement && this.titleElement.nativeElement) {
+              this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+            }
           }
           this.isLoaded = true;
         });
@@ -120,14 +124,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public downloadImageFromUrlAndUpload(url: string) {
-    return this.editorService.downloadImageFromUrl(url).toPromise().then(response => {
-      return {
-        success: 1,
-        file: {
-          url: response.files[0].url
-        }
-      };
-    });
+    return this.editorService.uploadRemoteImage(url).toPromise();
   }
 
   public ngOnDestroy() {

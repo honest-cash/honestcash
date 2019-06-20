@@ -15,7 +15,7 @@ import {
 import Post from '../../shared/models/post';
 import User from '../../shared/models/user';
 import Wallet from '../../shared/models/wallet';
-import {STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
+import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
 
 const SHARED_MOCKS = {
   username: 'toto',

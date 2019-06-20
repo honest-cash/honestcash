@@ -26,6 +26,15 @@
       padding-top: 2rem;
     }
 
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 2rem;
+    }
+
     h1, .story-title {
       font-size: 2.5rem;
     }
@@ -83,19 +92,18 @@
       width: 100%;
     }
 
-    figure {
+    figure.embed {
       position: relative;
       padding-bottom: 56.25%; /* 16:9 */
       padding-top: 25px;
       height: 0;
-
-      iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
+    }
+    figure > iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
 
     iframe {

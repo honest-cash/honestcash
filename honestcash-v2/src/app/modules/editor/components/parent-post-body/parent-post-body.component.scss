@@ -1,91 +1,98 @@
 :host {
-  #parent-post {
-    max-width: 700px;
-    margin: 0 auto;
-    max-height: 100vh;
-    border: none;
-
-    .hr-text {
-      line-height: 1em;
-      position: relative;
-      cursor: pointer;
-      outline: 0;
-      border: 0;
-      color: black;
-      text-align: center;
-      height: 1.5em;
-      opacity: 0.5;
-    }
-
-    .hr-text:before {
-      content: "";
-      background: linear-gradient(to right, transparent, #818078, transparent);
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 100%;
-      height: 1px;
-    }
-
-    .hr-text:after {
-      content: attr(data-content);
-      position: relative;
-      display: inline-block;
-      color: black;
-      padding: 0 0.5em;
-      line-height: 1.5em;
-      color: #000;
-      background-color: #fcfcfa;
-    }
-
-    .card-header,
-    .card-body,
-    .card-footer {
-      border: none;
-    }
-
-    .card-header {
-      background-color: #fff;
-      padding-left: 0px;
-      padding-right: 0px;
-      color: #000;
-    }
-
-    .card-body {
-      max-height: 30vh;
-      overflow-y: hidden;
-      position: relative;
-      padding-left: 0px;
-      padding-right: 0px;
-      padding-bottom: 0px;
-    }
-
-    .card-body:not(.open):before {
-      content: '';
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
-      background: linear-gradient(transparent 0%, white);
-      z-index: 1;
-    }
-
-    .card-body.open {
+  ::ng-deep {
+    #parent-post {
+      max-width: 700px;
+      margin: 0 auto;
       max-height: 100vh;
-    }
+      border: none;
 
-    .card-footer {
-      padding-bottom: 0px;
-      padding-top: 0px;
-      background-color: #fff;
-      text-align: center;
-    }
+      .hr-text {
+        line-height: 1em;
+        position: relative;
+        cursor: pointer;
+        outline: 0;
+        border: 0;
+        color: black;
+        text-align: center;
+        height: 1.5em;
+        opacity: 0.5;
+      }
 
-    .open .card-body {
-      height: 100%;
-      padding-bottom: 15px;
-    }
+      .hr-text:before {
+        content: "";
+        background: linear-gradient(to right, transparent, #818078, transparent);
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+      }
 
+      .hr-text:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        color: black;
+        padding: 0 0.5em;
+        line-height: 1.5em;
+        color: #000;
+        background-color: #fcfcfa;
+      }
+
+      .card-header,
+      .card-body,
+      .card-footer {
+        border: none;
+      }
+
+      .card-header {
+        background-color: #fff;
+        padding-left: 0px;
+        padding-right: 0px;
+        color: #000;
+      }
+
+      .card-body {
+        max-height: 30vh;
+        overflow-y: hidden;
+        position: relative;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-bottom: 0px;
+
+        img {
+          max-width: 100%;
+        }
+
+      }
+
+      .card-body:not(.open):before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: linear-gradient(transparent 0%, white);
+        z-index: 1;
+      }
+
+      .card-body.open {
+        max-height: 100vh;
+      }
+
+      .card-footer {
+        padding-bottom: 0px;
+        padding-top: 0px;
+        background-color: #fff;
+        text-align: center;
+      }
+
+      .open .card-body {
+        height: 100%;
+        padding-bottom: 15px;
+      }
+
+    }
   }
 }
