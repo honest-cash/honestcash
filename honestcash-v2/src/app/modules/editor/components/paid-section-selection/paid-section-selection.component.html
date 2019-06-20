@@ -33,7 +33,7 @@
     <div class="text-uppercase"><b>Pay-to-read Section</b></div>
     <div>
       <small
-        [ngClass]="{ 'text-danger': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2), 'text-muted': !form.submitted }"
+        [ngClass]="{ 'text-danger': form.submitted && !story.bodyJSON.length > 2, 'text-muted': !form.submitted }"
       >Choose where your paid section starts by moving the up and down arrows. The red line indicates where the free
         section ends and the paid section starts.
       </small>
@@ -46,7 +46,7 @@
         <article
           #paidSectionElementsWrapperElement
           class="editor-publish-modal__paid-section hide-scrollbar p-3"
-          [ngClass]="{ 'invalid': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2) }">
+          [ngClass]="{ 'invalid': form.submitted && story.bodyJSON.length > 2 }">
           <div
             #paidSectionElements
             *ngFor="let block of this.story.bodyJSON; let index = index;"
