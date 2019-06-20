@@ -25,7 +25,7 @@
       class="form-control-range">
   </div>
   <div id="elPaidSectionCostInUsdValue" class="col-1">
-    <span class="text-danger">{{story.paidSectionCost}}</span>
+    <span class="text-success">{{story.paidSectionCost}}$</span>
   </div>
 </div>
 <div [hidden]="!story.hasPaidSection && saveStatus === EDITOR_SAVE_STATUS.NotInitialized" class="form-row mt-3">
