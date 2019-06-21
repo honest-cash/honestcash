@@ -17,8 +17,8 @@
     "build:ssr:prod": "npm run transfer-libs && npm run build:client-and-server-bundles:prod && npm run compile:server",
     "build:ssr:dev": "npm run transfer-libs && npm run build:client-and-server-bundles:dev && npm run compile:server",
     "build:ssr:local": "npm run transfer-libs && npm run build:client-and-server-bundles:local && npm run compile:server",
-    "build:client-and-server-bundles:prod": "ng build --prod --base-href /v2/ --deploy-url /v2/ && ng run honestcash-v2:server:production",
-    "build:client-and-server-bundles:dev": "ng build --configuration development --base-href /v2/ --deploy-url /v2/ && ng run honestcash-v2:server:development",
+    "build:client-and-server-bundles:prod": "ng build --prod --base-href /v2/ --deploy-url /v2/ --serve-url /v2/ && ng run honestcash-v2:server:production",
+    "build:client-and-server-bundles:dev": "ng build --configuration development --base-href /v2/ --deploy-url /v2/ --serve-url /v2/ && ng run honestcash-v2:server:development",
     "build:client-and-server-bundles:local": "ng build --configuration development && ng run honestcash-v2:server:development"
   },
   "private": true,
