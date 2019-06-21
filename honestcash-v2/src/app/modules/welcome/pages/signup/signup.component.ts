@@ -1,4 +1,4 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
+import {Component, HostBinding, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {NgForm} from '@angular/forms';
 import {AppStates, selectAuthState} from '../../../../app.states';
@@ -7,6 +7,7 @@ import User from '../../../../shared/models/user';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../store/auth/auth.state';
 import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {isPlatformBrowser} from '@angular/common';
 
 export interface SignupForm extends NgForm {
   value: {
@@ -25,18 +26,21 @@ declare let grecaptcha: any;
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-  @HostBinding('class') class = 'card mb-auto mt-auto';
+  @HostBinding('class') public class = 'card mb-auto mt-auto';
 
-  isLoading = false;
-  authState: Observable<AuthorizationState>;
-  errorMessage: string;
-  isCaptchaRendered = false;
-  isCaptchaValid = true;
-  user: User = new User();
+  public isLoading = false;
+  public authState: Observable<AuthorizationState>;
+  public errorMessage: string;
+  public user: User = new User();
+  public isCaptchaValid = true;
+  public isCaptchaRendered = false;
+  protected isPlatformBrowser: boolean;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private store: Store<AppStates>
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.authState = this.store.select(selectAuthState);
   }
 
@@ -52,7 +56,9 @@ export class SignupComponent implements OnInit {
       this.isLoading = state.isLoading;
     });
 
-    this.renderCaptcha();
+    if (this.isPlatformBrowser) {
+      this.renderCaptcha();
+    }
   }
 
   public onSubmit(form: SignupForm): void {
