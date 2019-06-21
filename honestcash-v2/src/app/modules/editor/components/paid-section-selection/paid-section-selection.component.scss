@@ -67,6 +67,15 @@
        */
       font-size: 12px;
 
+      padding: 10px;
+
+      .paid-section__line-wrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+        word-break: break-word;
+        word-wrap: break-word;
+      }
+
       h1,
       h2,
       h3,
@@ -74,6 +83,8 @@
       h5,
       h6 {
         font-weight: normal;
+        margin: 0;
+        padding-bottom: 0.5rem;
       }
 
       /*
@@ -118,6 +129,17 @@
         font-size: 1em;
       }
 
+      p {
+        margin: 0;
+        padding-bottom: 1rem;
+      }
+
+
+      figure {
+        margin: 0px;
+        padding-bottom: 1rem;
+      }
+
       figure > img {
         max-width: 100%;
       }
@@ -127,6 +149,33 @@
       border-bottom: 2px dashed #dc3545;
       margin-bottom: 5px;
     }
+
+    $borderWidth: 2px;
+    $borderStyle: solid;
+    $borderColor: #28a745; // green of bootstrap to match
+    $borderRadius: .25rem; // radius of bootstrap to match
+
+    .paid-section__locked_section-top {
+      border-top: $borderWidth $borderStyle $borderColor;
+      border-right: $borderWidth $borderStyle $borderColor;
+      border-left: $borderWidth $borderStyle $borderColor;
+      border-top-left-radius: $borderRadius;
+      border-top-right-radius: $borderRadius;
+    }
+
+    .paid-section__locked_section-middle {
+      border-left: $borderWidth $borderStyle $borderColor;
+      border-right: $borderWidth $borderStyle $borderColor;
+    }
+
+    .paid-section__locked_section-bottom {
+      border-bottom: $borderWidth $borderStyle $borderColor;
+      border-right: $borderWidth $borderStyle $borderColor;
+      border-left: $borderWidth $borderStyle $borderColor;
+      border-bottom-left-radius: $borderRadius;
+      border-bottom-right-radius: $borderRadius;
+    }
+
   }
 }
 

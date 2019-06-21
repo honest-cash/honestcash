@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import Post from '../../shared/models/post';
 import {FailedResponse} from '../../shared/models/authentication';
-import {STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
+import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
 
 export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',

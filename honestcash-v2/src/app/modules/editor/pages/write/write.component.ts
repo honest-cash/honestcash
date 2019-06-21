@@ -13,16 +13,12 @@ import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
   templateUrl: './write.component.html',
   styleUrls: ['./write.component.scss']
 })
-export class EditorWriteComponent implements OnInit, OnDestroy {
-  public story: Post;
+export class EditorWriteComponent implements OnInit {
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
-  private editorStateObservable: Observable<EditorState>;
-  private editorState$: Subscription;
 
   constructor(
     private store: Store<AppStates>,
   ) {
-    this.editorStateObservable = this.store.select(selectEditorState);
     // explicitly turn autosave on write mode
     // so that on edit mode it is default by default even if forgotten
     EDITOR_AUTO_SAVE.ON = true;
@@ -30,15 +26,5 @@ export class EditorWriteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new EditorDraftLoad());
-    this.editorState$ = this.editorStateObservable
-    .subscribe((editorState: EditorState) => {
-      this.story = editorState.story;
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.editorState$) {
-      this.editorState$.unsubscribe();
-    }
   }
 }

@@ -1,7 +1,7 @@
 import {All, EditorActionTypes} from './editor.actions';
 import {EDITOR_STATUS, initialState, State} from './editor.state';
-import {STORY_PROPERTIES} from '../../modules/editor/services/editor.service';
 import {Logger} from '../../shared/services/logger.service';
+import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
 
 const logger = new Logger();
 
