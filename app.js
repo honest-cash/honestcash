@@ -250,11 +250,10 @@ app.get("/write", (_, res) => res.redirect(`/v2/editor/write`));
 app.get("/edit/:postId", (req, res) => res.redirect(`/v2/editor/edit/${req.params.postId}`));
 app.get("/write/response/:parentPostId", (req, res) => res.redirect(`/v2/editor/comment/${req.params.parentPostId}`));
 
-for (let v2Path of [ "/login", "/signup", "/thank-you", "/about" ]) {
-  app.get(v2Path, (_, res) =>
-    res.redirect(`/v2${v2Path}`)
-  );
-}
+app.get("/login", (_, res) => res.redirect(`/v2/login`));
+app.get("/signup", (_, res) => res.redirect(`/v2/signup`));
+app.get("/thank-you", (_, res) => res.redirect(`/v2/thank-you`));
+app.get("/about", (_, res) => res.redirect(`/v2/about`));
 
 // Welcome paths
 app.get("/*", (_, res) => res.sendfile("app.html", { root: __dirname + "/public" }));
