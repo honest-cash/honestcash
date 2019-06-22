@@ -45,9 +45,6 @@
     }
 
     #editor.comment-mode {
-      .ce-block--focused {
-        background-image: none;
-      }
 
       .ce-toolbar {
         display: none;
@@ -62,12 +59,16 @@
       }
     }
 
+    .ce-block--focused {
+      background-image: none;
+    }
+
     .ce-toolbox {
       background-color: white;
     }
 
     .ce-toolbar__actions {
-      right: -50px;
+      right: -45px;
     }
 
     .ce-block__content {

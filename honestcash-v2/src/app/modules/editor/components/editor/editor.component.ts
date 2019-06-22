@@ -164,7 +164,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           tools: {
             paragraph: { // this is shared by all modes
               class: Paragraph,
-              inlineToolbar: true,
+              inlineToolbar: false,
             },
           }
         };
@@ -174,11 +174,11 @@ export class EditorComponent implements OnInit, OnDestroy {
             ...this.editorConfig.tools,
             header: {
               class: Header,
-              inlineToolbar: true,
+              inlineToolbar: false,
             },
             image: {
               class: ImageTool,
-              inlineToolbar: true,
+              inlineToolbar: false,
               config: {
                 uploader: {
                   uploadByFile: this.uploadImage.bind(this),
@@ -186,7 +186,10 @@ export class EditorComponent implements OnInit, OnDestroy {
                 }
               }
             },
-            embed: Embed,
+            embed: {
+              class: Embed,
+              inlineToolbar: false,
+            },
           };
         }
 
