@@ -33,7 +33,6 @@
     <div class="text-uppercase"><b>Pay-to-read Section</b></div>
     <div>
       <small
-        [ngClass]="{ 'text-danger': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2), 'text-muted': !form.submitted }"
       >Choose your paywall content by selecting what's inside the green outline using the up and down arrows.
       </small>
     </div>
@@ -44,8 +43,7 @@
       <div class="col-10">
         <article
           #paidSectionElementsWrapperElement
-          class="editor-publish-modal__paid-section hide-scrollbar p-3"
-          [ngClass]="{ 'invalid': form.submitted && (!paidSectionLineBreakTouched && story.bodyJSON.length > 2) }">
+          class="editor-publish-modal__paid-section hide-scrollbar p-3">
           <div
             #paidSectionElements
             *ngFor="let block of this.story.bodyJSON; let index = index;"

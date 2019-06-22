@@ -36,7 +36,7 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     this.editorStateObservable = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
@@ -50,20 +50,20 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSubmit() {
+  public onSubmit() {
     this.store.dispatch(new EditorStorySaveAndPublish(this.story));
   }
 
-  previewDraftStory() {
+  public previewDraftStory() {
     this.editorService.savePostLocally(this.story);
     this.window.open('/editor/story-preview', '_blank');
   }
 
-  onClose() {
+  public onClose() {
     this.activeModal.close();
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.editorState$) {
       this.editorState$.unsubscribe();
     }

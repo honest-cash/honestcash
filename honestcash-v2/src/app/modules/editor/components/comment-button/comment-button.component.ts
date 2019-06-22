@@ -9,6 +9,7 @@ import {EditorCommentSaveAndPublish} from '../../../../store/editor/editor.actio
 import {WindowToken} from '../../../../core/helpers/window';
 import {EnvironmentToken} from '../../../../core/helpers/environment';
 import {Environment} from '../../../../../environments/environment';
+import {ELEMENT_TYPES, ParagraphElement} from '../../converters/json-to-html';
 
 @Component({
   selector: 'editor-comment-button',
@@ -32,7 +33,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     this.editor$ = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editorSub = this.editor$.subscribe((editorState: EditorState) => {
       this.story = editorState.story;
       this.saveStatus = editorState.status;
@@ -43,12 +44,17 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCommentClicked() {
-    if (this.story.bodyJSON && this.story.bodyJSON.length === 0) {
+  public onCommentClicked() {
+    if (!this.story.bodyJSON || (this.story.bodyJSON && this.story.bodyJSON.length === 0)) {
       this.toastr.warning(`Write your comment to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
       return;
     }
-    if (this.story.bodyJSON && this.story.bodyJSON.length === 1 && this.story.bodyJSON[0].data.text !== undefined && this.story.bodyJSON[0].data.text === '') {
+    if (
+      this.story.bodyJSON &&
+      this.story.bodyJSON.length === 1 &&
+      this.story.bodyJSON[0].type ===  ELEMENT_TYPES.Paragraph &&
+      (this.story.bodyJSON[0] as ParagraphElement).data.text !== undefined &&
+      (this.story.bodyJSON[0] as ParagraphElement).data.text === '') {
       this.toastr.warning(`Write something inside your comment to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
       return;
     }
@@ -57,7 +63,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.editorSub) {
       this.editorSub.unsubscribe();
     }
