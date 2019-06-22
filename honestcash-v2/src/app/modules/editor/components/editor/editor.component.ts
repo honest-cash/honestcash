@@ -72,7 +72,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           this.story.title = `RE: ${this.story.parentPost.title}`;
         }
         this.editor.isReady.then(() => {
-          if (this.story.bodyJSON && this.story.bodyJSON.length) {
+          if (this.story.bodyJSON && this.story.bodyJSON.length && !this.isLoaded) {
             this.editor.blocks.clear();
             this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
           }

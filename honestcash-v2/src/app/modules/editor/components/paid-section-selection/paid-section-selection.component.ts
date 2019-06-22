@@ -26,13 +26,12 @@ export enum LINEBREAK_ACTION {
   styleUrls: ['./paid-section-selection.component.scss'],
 })
 export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
-  @Input() form: NgForm;
-  @ViewChildren('paidSectionElements') paidSectionElements: QueryList<ElementRef>;
-  @ViewChild('paidSectionElementsWrapperElement') paidSectionElementsWrapperElement: ElementRef;
+  @Input() public form: NgForm;
+  @ViewChildren('paidSectionElements') public paidSectionElements: QueryList<ElementRef>;
+  @ViewChild('paidSectionElementsWrapperElement') public paidSectionElementsWrapperElement: ElementRef;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
   public saveStatus: EDITOR_STATUS;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
-  public paidSectionLineBreakTouched = false;
   public paidSectionLinebreakEnd: number;
   public story: Post;
   public PAID_SECTION_PRICE_SLIDER_SETTINGS = PAID_SECTION_PRICE_SLIDER_SETTINGS;
@@ -45,7 +44,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
     this.editorStateObservable = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editorState$ = this.editorStateObservable
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
@@ -61,8 +60,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSwitchLinebreak(action: LINEBREAK_ACTION) {
-    this.paidSectionLineBreakTouched = true;
+  public onSwitchLinebreak(action: LINEBREAK_ACTION) {
     let element: ElementRef;
     switch (action) {
       case LINEBREAK_ACTION.MoveUp: {
@@ -91,7 +89,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
     );
   }
 
-  onChangePaidSectionCost() {
+  public onChangePaidSectionCost() {
     this.store.dispatch(
       new EditorStoryPropertyChange(
         {property: STORY_PROPERTIES.PaidSectionCost, value: this.story.paidSectionCost}
@@ -99,7 +97,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.editorState$) {
       this.editorState$.unsubscribe();
     }
