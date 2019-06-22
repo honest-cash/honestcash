@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
 import Post from '../../../shared/models/post';
 import {HttpService} from '../../../core';
@@ -10,15 +10,19 @@ import {LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PREVIEW_KEY, STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {DraftContext, UploadImageResponse, UploadRemoteImageResponse} from '../interfaces';
+import {isPlatformBrowser} from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditorService {
+  private isPlatformBrowser: boolean;
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     @Inject(LocalStorageToken) private localStorage: Storage,
     private http: HttpService
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
   public getPost(id: number): Observable<Post> {
@@ -57,29 +61,37 @@ export class EditorService {
   }
 
   public savePostPropertyLocally(property: STORY_PROPERTIES, value: any): void {
-    if (!value) {
-      return;
+    if (this.isPlatformBrowser) {
+      if (!value) {
+        return;
+      }
+      const data = this.localStorage.getItem(STORY_PREVIEW_KEY);
+      if (data) {
+        const newData = JSON.parse(data);
+        newData[property] = value;
+        return this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(newData));
+      }
+      this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify({property: value}));
     }
-    const data = this.localStorage.getItem(STORY_PREVIEW_KEY);
-    if (data) {
-      const newData = JSON.parse(data);
-      newData[property] = value;
-      return this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(newData));
-    }
-    this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify({property: value}));
   }
 
   public savePostLocally(story: Post) {
-    this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(story));
+    if (this.isPlatformBrowser) {
+      this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(story));
+    }
   }
 
   public getLocallySavedPost(): Post {
-    const data = JSON.parse(this.localStorage.getItem(STORY_PREVIEW_KEY));
-    return data ? data : new Post();
+    if (this.isPlatformBrowser) {
+      const data = JSON.parse(this.localStorage.getItem(STORY_PREVIEW_KEY));
+      return data ? data : new Post();
+    }
   }
 
   public removeLocallySavedPost() {
-    this.localStorage.removeItem(STORY_PREVIEW_KEY);
+    if (this.isPlatformBrowser) {
+      this.localStorage.removeItem(STORY_PREVIEW_KEY);
+    }
   }
 
   public publishPost(post: Post): Observable<Post> {
