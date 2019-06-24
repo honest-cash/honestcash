@@ -11,8 +11,7 @@ import {EditorStoryLoad} from '../../../../store/editor/editor.actions';
   styleUrls: ['./comment.component.scss']
 })
 export class EditorCommentComponent implements OnInit {
-
-  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
+  public editingMode = EDITOR_EDITING_MODES.Comment;
 
   constructor(
     private store: Store<AppStates>,

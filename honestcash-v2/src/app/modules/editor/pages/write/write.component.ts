@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
-import {EDITOR_AUTO_SAVE} from '../../components/editor/editor.component';
 import {EditorStoryLoad} from '../../../../store/editor/editor.actions';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 
@@ -11,14 +10,12 @@ import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
   styleUrls: ['./write.component.scss']
 })
 export class EditorWriteComponent implements OnInit {
-  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
+  public editingMode = EDITOR_EDITING_MODES.Write;
+  public isAutosaveEnabled = true;
 
   constructor(
     private store: Store<AppStates>,
   ) {
-    // explicitly turn autosave on write mode
-    // so that on edit mode it is default by default even if forgotten
-    EDITOR_AUTO_SAVE.ON = true;
   }
 
   public ngOnInit() {

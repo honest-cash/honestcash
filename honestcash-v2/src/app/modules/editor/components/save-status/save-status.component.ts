@@ -5,7 +5,7 @@ import {interval, Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import Post from '../../../../shared/models/post';
 import {EditorStoryPropertySave} from '../../../../store/editor/editor.actions';
-import {EDITOR_AUTO_SAVE} from '../editor/editor.component';
+import {EDITOR_AUTO_SAVE_INTERVAL} from '../editor/editor.component';
 import {takeWhile} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
@@ -17,8 +17,9 @@ import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
   styleUrls: ['./save-status.component.scss']
 })
 export class EditorSaveStatusComponent implements OnInit, OnDestroy {
-  @HostBinding('class') class = 'd-flex align-items-center';
-  @Input() editingMode: EDITOR_EDITING_MODES;
+  @HostBinding('class') public class = 'd-flex align-items-center';
+  @Input() public editingMode: EDITOR_EDITING_MODES;
+  @Input() public isAutosaveEnabled: boolean;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public story: Post;
   public saveStatus: EDITOR_STATUS;
@@ -35,7 +36,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
     this.editor$ = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editorSub = this.editor$.subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
       this.story = editorState.story;
@@ -43,9 +44,9 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
       /*
         disable autosave for comments
        */
-      if (EDITOR_AUTO_SAVE.ON && this.editingMode !== EDITOR_EDITING_MODES.Comment) {
+      if (this.isAutosaveEnabled) {
         // reset interval
-        this.autoSave$ = interval(EDITOR_AUTO_SAVE.INTERVAL);
+        this.autoSave$ = interval(EDITOR_AUTO_SAVE_INTERVAL);
         if (this.saveStatus === EDITOR_STATUS.Saved) {
           // reset button clicked status
           this.isSaveButtonClicked = false;
@@ -66,7 +67,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
 
   }
 
-  onSaveClick() {
+  public onSaveClick() {
     if (this.editingMode !== EDITOR_EDITING_MODES.Comment && (!this.story.title || (this.story.title && this.story.title.length === 0))) {
       this.toastr.warning(`The story needs a title to be saved`, `No title!`, {positionClass: 'toast-bottom-right'});
       return;
@@ -79,7 +80,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
     this.dispatchStoryPropertySave();
   }
 
-  dispatchStoryPropertySave() {
+  public dispatchStoryPropertySave() {
     if (
       this.saveStatus === EDITOR_STATUS.NotSaved &&
       this.story.bodyJSON && this.story.bodyJSON.length !== 0 &&
@@ -89,7 +90,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.editorSub) {
       this.editorSub.unsubscribe();
     }

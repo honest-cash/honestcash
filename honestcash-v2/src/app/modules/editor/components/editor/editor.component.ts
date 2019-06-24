@@ -13,11 +13,8 @@ import {concatMap} from 'rxjs/operators';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
-// @todo editor-v2: get rid of the factory provider pattern, it should be immutable!
-export const EDITOR_AUTO_SAVE = {
-  ON: false,
-  INTERVAL: 10 * 1000,
-};
+// ON attribute is used as fallback
+export const EDITOR_AUTO_SAVE_INTERVAL = 10 * 1000; // 10 mins
 
 interface EditorConfig {
   holder: string;

@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {EDITOR_AUTO_SAVE, EditorComponent} from './editor.component';
+import {EditorComponent} from './editor.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
@@ -52,9 +52,6 @@ describe('EditorComponent', () => {
   });
 
   xdescribe('constructor', () => {
-    it('should have EDITOR_AUTO_SAVE.ON set to false', () => {
-      expect(EDITOR_AUTO_SAVE.ON).toBeFalsy();
-    });
     it('should have story UNDEFINED when not provided via Input', () => {
       expect(component.story).toBeUndefined();
     });

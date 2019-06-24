@@ -11,7 +11,7 @@ import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
   styleUrls: ['./edit.component.scss']
 })
 export class EditorEditComponent implements OnInit {
-  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
+  public editingMode = EDITOR_EDITING_MODES.Edit;
 
   constructor(
     private store: Store<AppStates>,
@@ -21,7 +21,7 @@ export class EditorEditComponent implements OnInit {
 
   public ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.store.dispatch(new EditorStoryLoad(params.storyId));
+      this.store.dispatch(new EditorStoryLoad({postId: params.storyId}));
     });
   }
 }
