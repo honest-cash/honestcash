@@ -4,10 +4,6 @@ export interface StoryLoadContext {
 }
 
 export interface UploadImageResponse {
-  files: [{ url: string; }];
-}
-
-export interface UploadRemoteImageResponse {
   success: number;
   file: {
     url: string;

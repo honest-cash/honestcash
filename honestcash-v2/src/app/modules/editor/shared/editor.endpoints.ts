@@ -4,7 +4,6 @@ import {StoryLoadContext} from '../interfaces';
 
 export const API_ENDPOINTS = {
   getPost: (id: number) => `/v2/post/${id}`,
-  getRelativePost: (id: number) => `/v2/post/relative/${id}`,
   postDraft: (id: number) => `/v2/post/${id}`,
   commentDraft: (id: number) => `/v2/draft?parentPostId=${id}`,
   draft: () => `/v2/draft`,

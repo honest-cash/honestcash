@@ -111,18 +111,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public uploadImage(file: File) {
-    return this.editorService.uploadImage(file).toPromise().then((response) => {
-      return {
-        success: 1,
-        file: {
-          url: response.files[0].url
-        }
-      };
-    });
+    return this.editorService.uploadImage(file);
   }
 
   public downloadImageFromUrlAndUpload(url: string) {
-    return this.editorService.uploadRemoteImage(url).toPromise();
+    return this.editorService.uploadRemoteImage(url);
   }
 
   public ngOnDestroy() {

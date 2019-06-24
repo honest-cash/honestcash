@@ -12,12 +12,15 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {ELEMENT_TYPES} from '../converters/json-to-html';
+import {HttpHeaders} from '@angular/common/http';
+import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 
 describe('EditorService', () => {
   let editorService: EditorService;
   let httpServiceMock: HttpService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     httpServiceMock = mock(HttpService);
     TestBed.configureTestingModule({
       imports: [
@@ -27,10 +30,12 @@ describe('EditorService', () => {
       ],
       providers: [
         EditorService,
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
         {provide: HttpService, useValue: httpServiceMock},
-        {provide: LocalStorageToken, useFactory: localStorageProvider}
       ]
     });
+    httpServiceMock = TestBed.get(HttpService);
     editorService = TestBed.get(EditorService);
   });
 
@@ -58,177 +63,232 @@ describe('EditorService', () => {
         .toHaveBeenCalledWith(API_ENDPOINTS.getPost(mocks.id));
         done();
       });
-
     });
+  });
 
-    it('should get a Post as a response', (done) => {
+  describe('loadPostDraft', () => {
+    it('should make API request to postDraft endpoint if context has postId provided', (done) => {
       const mocks = {
         id: 1,
         getPostSuccess: new Post(),
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      editorService.getPost(mocks.id).subscribe((response: Post) => {
+      editorService.loadPostDraft({postId: mocks.id}).subscribe((response: Post) => {
         // Assert
-        expect(response).toBe(mocks.getPostSuccess);
+        expect(httpServiceMock.get)
+          .toHaveBeenCalledWith(API_ENDPOINTS.postDraft(mocks.id));
         done();
       });
-
     });
-  });
-
-  describe('loadPostDraft', () => {
-    const mocks = {
-      context: {
-        parentPostId: 2,
-        postId: 1
-      },
-      loadPostDraftSuccess: new Post(),
-    };
-    /*it('should make API request to the correct API endpoint if NO context is provided', (done) => {
-
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
+    it('should make API request to commentDraft endpoint if context has parentPostId provided', (done) => {
+      const mocks = {
+        id: 1,
+        getPostSuccess: new Post(),
+      };
+      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      editorService.loadPostDraft({}).subscribe((response: Post) => {
+      editorService.loadPostDraft({parentPostId: mocks.id}).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.get)
-        .toHaveBeenCalledWith(API_ENDPOINTS.draft({}));
+          .toHaveBeenCalledWith(API_ENDPOINTS.commentDraft(mocks.id));
         done();
       });
-
-    });*/
-
-    /*it('should make API request to the correct API endpoint if ONLY parentPostId is provided in context', (done) => {
-
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
-      // Act
-      editorService.loadPostDraft({parentPostId: mocks.context.parentPostId}).subscribe((response: Post) => {
-        // Assert
-        expect(httpServiceMock.get)
-        .toHaveBeenCalledWith(API_ENDPOINTS.draft({parentPostId: mocks.context.parentPostId}));
-        done();
-      });
-
-    });*/
-
-    /*it('should make API request to the correct API endpoint if BOTH parentPostId and postId are provided in context', (done) => {
-
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
-      // Act
-      editorService.loadPostDraft(mocks.context).subscribe((response: Post) => {
-        // Assert
-        expect(httpServiceMock.get)
-        .toHaveBeenCalledWith(API_ENDPOINTS.draft(mocks.context));
-        done();
-      });
-
-    });*/
-
-    it('should get a Post as a response NO matter the context', (done) => {
-      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
-      // Act
-      editorService.loadPostDraft({}).subscribe((response: Post) => {
-        // Assert
-        expect(response).toBe(mocks.loadPostDraftSuccess);
-        done();
-      });
-
     });
-  });
-
-  describe('loadNewPostDraft', () => {
-    const mocks = {
-      loadNewPostDraftSuccess: new Post(),
-    };
-    /*it('should make API request to the correct API endpoint with EMPTY body', (done) => {
-
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loadNewPostDraftSuccess));
+    it('should make API request to draft endpoint if NO id is provided', (done) => {
+      const mocks = {
+        getPostSuccess: new Post(),
+      };
+      (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      editorService.loadNewPostDraft().subscribe((response: Post) => {
+      editorService.loadPostDraft().subscribe((response: Post) => {
         // Assert
-        expect(httpServiceMock.post)
-        .toHaveBeenCalledWith(API_ENDPOINTS.newDraft(), {});
+        expect(httpServiceMock.get)
+          .toHaveBeenCalledWith(API_ENDPOINTS.draft());
         done();
       });
-
-    });*/
-
-    /*it('should get a Post as a response NO matter the context', (done) => {
-      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loadNewPostDraftSuccess));
-      // Act
-      editorService.loadNewPostDraft().subscribe((response: Post) => {
-        // Assert
-        expect(response).toBe(mocks.loadNewPostDraftSuccess);
-        done();
-      });
-
-    });*/
+    });
   });
 
   describe('savePostProperty', () => {
-    const mocks = {
-      context: {
-        post: new Post(),
-      },
-      savePostPropertySuccess: new Post(),
-    };
-    mocks.context.post.title = 'asdf';
-    mocks.context.post.id = 2;
-    it('should make API request to the correct API endpoint with Post body', (done) => {
-
-      (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.savePostPropertySuccess));
-      // Act
-      editorService.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title).subscribe((response: Post) => {
-        // Assert
-        expect(httpServiceMock.put)
-        .toHaveBeenCalledWith(
-          API_ENDPOINTS.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title),
-          {title: mocks.context.post.title}
-          );
-        done();
+    describe('should successfully', () => {
+      it('make API request to savePostProperty endpoint with correct property when property is BodyAndTitle', (done) => {
+        const mocks = {
+          getPostSuccess: {
+            ...new Post(),
+            id: 1,
+            title: 'test',
+            bodyJSON: [
+              {
+                type: ELEMENT_TYPES.Paragraph,
+                data: {
+                  text: 'asdf',
+                }
+              }
+            ]
+          },
+          property: STORY_PROPERTIES.BodyAndTitle,
+        };
+        (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
+        // Act
+        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Post) => {
+          // Assert
+          expect(httpServiceMock.put)
+            .toHaveBeenCalledWith(
+              API_ENDPOINTS.savePostProperty(mocks.getPostSuccess, mocks.property),
+              {title: mocks.getPostSuccess.title, bodyJSON: mocks.getPostSuccess.bodyJSON}
+            );
+          done();
+        });
       });
-
-    });
-
-    it('should get a Post as a response', (done) => {
-      (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.savePostPropertySuccess));
-      // Act
-      editorService.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title).subscribe((response: Post) => {
-        // Assert
-        expect(response).toBe(mocks.savePostPropertySuccess);
-        done();
+      it('make API request to savePostProperty endpoint with correct property when property is Hashtags', (done) => {
+        const mocks = {
+          getPostSuccess: {
+            ...new Post(),
+            id: 1,
+            userPostHashtags: [
+              {
+                id: 1,
+                hashtag: 'test',
+                createdAt: (new Date()).toISOString(),
+                updatedAt: (new Date()).toISOString(),
+                userPostId: 43,
+              }
+            ]
+          },
+          property: STORY_PROPERTIES.Hashtags,
+        };
+        (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
+        // Act
+        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Post) => {
+          // Assert
+          expect(httpServiceMock.put)
+            .toHaveBeenCalledWith(
+              API_ENDPOINTS.savePostProperty(mocks.getPostSuccess, mocks.property),
+              {hashtags: editorService.transformTags(mocks.getPostSuccess.userPostHashtags)}
+            );
+          done();
+        });
       });
-
+      it('make API request to savePostProperty endpoint with correct property when property is PaidSection', (done) => {
+        const mocks = {
+          getPostSuccess: {
+            ...new Post(),
+            id: 1,
+            hasPaidSection: true,
+            paidSectionCost: 1,
+            paidSectionLinebreak: 2
+          },
+          property: STORY_PROPERTIES.PaidSection,
+        };
+        (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
+        // Act
+        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Post) => {
+          // Assert
+          expect(httpServiceMock.put)
+            .toHaveBeenCalledWith(
+              API_ENDPOINTS.savePostProperty(mocks.getPostSuccess, mocks.property),
+              {
+                hasPaidSection: mocks.getPostSuccess.hasPaidSection,
+                paidSectionCost: mocks.getPostSuccess.paidSectionCost,
+                paidSectionLinebreak: mocks.getPostSuccess.paidSectionLinebreak,
+              }
+            );
+          done();
+        });
+      });
     });
   });
 
   describe('publishPost', () => {
-    const mocks = {
-      context: {
-        post: new Post(),
-      },
-      publishPostSuccess: new Post(),
-    };
-    it('should make API request to the correct API endpoint with Post as request body', (done) => {
-      (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.publishPostSuccess));
+    it('should make API request to the correct API endpoint with post as the body', (done) => {
+      const mocks = {
+        id: 1,
+        putPostSuccess: new Post(),
+      };
+      (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.putPostSuccess));
       // Act
-      editorService.publishPost(mocks.context.post).subscribe((response: Post) => {
+      editorService.publishPost(mocks.putPostSuccess).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.put)
-        .toHaveBeenCalledWith(API_ENDPOINTS.publishPost(mocks.context.post), mocks.context.post);
+          .toHaveBeenCalledWith(API_ENDPOINTS.publishPost(mocks.putPostSuccess), mocks.putPostSuccess);
         done();
       });
-
     });
+  });
 
-    it('should get a Post as a response', (done) => {
-      (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.publishPostSuccess));
+  describe('uploadImage', () => {
+    it('should make API request to the correct API endpoint with the file in formData and ContentTypeFormDataHeader in httpOptions', (done) => {
+      const mocks = {
+        file: new File([''], 'test', { type: 'image/jpeg' }),
+        postSuccess: {
+          files: [
+            {
+              url: 'asdf.com'
+            }
+          ]
+        }
+      };
+      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.postSuccess));
       // Act
-      editorService.publishPost(mocks.context.post).subscribe((response: Post) => {
+      editorService.uploadImage(mocks.file).then((response: any) => {
+        const formData = new FormData();
+        formData.append('files[]', mocks.file, mocks.file.name);
+        const httpOptions = {
+          headers: new HttpHeaders().set(ContentTypeFormDataHeader, '')
+        };
         // Assert
-        expect(response).toBe(mocks.publishPostSuccess);
+        expect(httpServiceMock.post)
+          .toHaveBeenCalledWith(API_ENDPOINTS.uploadImage(), formData, httpOptions);
         done();
       });
+    });
+  });
+
+  describe('uploadRemoteImage', () => {
+    it('should make API request to the correct API endpoint with the url as request body', (done) => {
+      const url = 'test';
+      const mocks = {
+        postSuccess: {
+          success: 1,
+          file: {
+            url,
+          }
+        }
+      };
+      (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.postSuccess));
+      // Act
+      editorService.uploadRemoteImage(url).then((response: any) => {
+        // Assert
+        expect(httpServiceMock.post)
+          .toHaveBeenCalledWith(API_ENDPOINTS.uploadRemoteImage(), {url});
+        done();
+      });
+    });
+  });
+
+  describe('transformTags', () => {
+    it('should join tags by comma', () => {
+      const hashtag1 = 'test 1';
+      const hashtag2 = 'test 2';
+      const userPostHashtags = [
+        {
+          id: 1,
+          hashtag: hashtag1,
+          createdAt: (new Date()).toISOString(),
+          updatedAt: (new Date()).toISOString(),
+          userPostId: 43,
+        },
+        {
+          id: 2,
+          hashtag: hashtag2,
+          createdAt: (new Date()).toISOString(),
+          updatedAt: (new Date()).toISOString(),
+          userPostId: 45,
+        }
+      ];
+
+      expect(editorService.transformTags(userPostHashtags)).toBe(`${hashtag1},${hashtag2}`);
 
     });
   });

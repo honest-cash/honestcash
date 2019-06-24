@@ -8,15 +8,16 @@ import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 import {LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
-import {STORY_PREVIEW_KEY, STORY_PROPERTIES} from '../shared/editor.story-properties';
-import {StoryLoadContext, UploadImageResponse, UploadRemoteImageResponse} from '../interfaces';
+import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {StoryLoadContext, UploadImageResponse} from '../interfaces';
 import {isPlatformBrowser} from '@angular/common';
+import {Block} from '../converters/json-to-html';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditorService {
-  private isPlatformBrowser: boolean;
+  private readonly isPlatformBrowser: boolean;
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(LocalStorageToken) private localStorage: Storage,
@@ -29,24 +30,27 @@ export class EditorService {
     return this.http.get<Post>(API_ENDPOINTS.getPost(id));
   }
 
-  public getRelativePost(id: number) {
-    return this.http.get<Post>(API_ENDPOINTS.getRelativePost(id));
-  }
-
   public loadPostDraft(storyLoadContext?: StoryLoadContext): Observable<Post> {
-    if (storyLoadContext.postId) {
-      return this.http.get<Post>(API_ENDPOINTS.postDraft(storyLoadContext.postId));
-    }
-    if (storyLoadContext.parentPostId) {
-      return this.http.get<Post>(API_ENDPOINTS.commentDraft(storyLoadContext.parentPostId));
+    if (storyLoadContext) {
+      if (storyLoadContext.postId) {
+        return this.http.get<Post>(API_ENDPOINTS.postDraft(storyLoadContext.postId));
+      }
+      if (storyLoadContext.parentPostId) {
+        return this.http.get<Post>(API_ENDPOINTS.commentDraft(storyLoadContext.parentPostId));
+      }
     }
     return this.http.get<Post>(API_ENDPOINTS.draft());
   }
 
   public savePostProperty(post: Post, property: STORY_PROPERTIES): Observable<EmptyResponse | FailedResponse> {
-    const body = {
-      [property]: post[property]
-    };
+    const body: {
+      hashtags?: string;
+      hasPaidSection?: boolean;
+      paidSectionLinebreak?: number;
+      paidSectionCost?: number;
+      title?: string;
+      bodyJSON?: Block[];
+    } = {};
     if (property === STORY_PROPERTIES.Hashtags) {
       body.hashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
     }
@@ -66,7 +70,7 @@ export class EditorService {
     return this.http.put<Post>(API_ENDPOINTS.publishPost(post), post);
   }
 
-  public uploadImage(image: File): Observable<UploadImageResponse> {
+  public uploadImage(image: File): Promise<UploadImageResponse> {
     const formData = new FormData();
     formData.append('files[]', image, image.name);
 
@@ -74,14 +78,23 @@ export class EditorService {
       headers: new HttpHeaders().set(ContentTypeFormDataHeader, '')
     };
 
-    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadImage(), formData, httpOptions);
+    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadImage(), formData, httpOptions)
+      .toPromise()
+      .then((response: any) => {
+        return {
+          success: 1,
+          file: {
+            url: response.files[0].url
+          }
+        } as UploadImageResponse;
+      });
   }
 
-  public uploadRemoteImage(url: string): Observable<UploadRemoteImageResponse> {
-    return this.http.post<UploadRemoteImageResponse>(API_ENDPOINTS.uploadRemoteImage(), {url});
+  public uploadRemoteImage(url: string): Promise<UploadImageResponse> {
+    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadRemoteImage(), {url}).toPromise();
   }
 
-  private transformTags(tags: Hashtag[]): string {
+  public transformTags(tags: Hashtag[]): string {
     return tags.map(h => h.hashtag).join(',');
   }
 }
