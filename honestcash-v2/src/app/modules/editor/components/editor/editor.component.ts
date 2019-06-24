@@ -64,7 +64,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorSub: Subscription;
   public updatedTitle = '';
   public story: Post;
-  protected isPlatformBrowser: boolean;
+  private readonly isPlatformBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
