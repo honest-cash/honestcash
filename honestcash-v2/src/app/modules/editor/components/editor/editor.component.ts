@@ -40,6 +40,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public saveStatus: EDITOR_STATUS;
   public hasEditorInitStarted = false;
   public hasEditorInitialized = false;
+  public shouldEditorAllowTitleAndCustomElements = false;
   public editor: any;
   public editorConfig: any;
   public editorScripts: any;
@@ -120,20 +121,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setupTitle() {
-    if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
-      this.story.title = `RE: ${this.story.parentPost.title}`;
-    }
-    if (this.story.title && this.story.title !== '') {
-      this.updatedTitle = this.story.title;
-      if (this.titleElement && this.titleElement.nativeElement) {
-        this.titleElement.nativeElement.innerHTML = this.updatedTitle;
-      }
-    }
-  }
-
   private initEditor() {
     if (this.isPlatformBrowser && !this.hasEditorInitStarted && !this.hasEditorInitialized) {
+      this.shouldEditorAllowTitleAndCustomElements = (
+          this.editingMode === EDITOR_EDITING_MODES.Write ||
+          this.editingMode === EDITOR_EDITING_MODES.Edit
+        ) &&
+        this.story &&
+        !this.story.parentPostId;
       this.hasEditorInitStarted = true;
       this.setupEditorScripts();
 
@@ -144,6 +139,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       ).subscribe(() => {
         this.setupEditorConfig();
         this.editor = new EditorJS(this.editorConfig);
+        this.setupEditorTitle();
       });
 
     }
@@ -152,7 +148,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   private onEditorReady() {
     this.editorService.savePostLocally(this.story);
     this.store.dispatch(new EditorLoad());
-    this.setupTitle();
     this.hasEditorInitialized = true;
   }
 
@@ -161,7 +156,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.1/dist/bundle.min.js'),
     ];
 
-    if (this.editorShouldAllowAllElements) {
+    if (this.shouldEditorAllowTitleAndCustomElements) {
       this.editorScripts.push(
         ...[
           this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
@@ -190,7 +185,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       }
     };
 
-    if (this.editorShouldAllowAllElements) {
+    if (this.shouldEditorAllowTitleAndCustomElements) {
       this.editorConfig.tools = {
         ...this.editorConfig.tools,
         header: {
@@ -215,13 +210,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  private editorShouldAllowAllElements() {
-    return (
-        this.editingMode === EDITOR_EDITING_MODES.Write ||
-        this.editingMode === EDITOR_EDITING_MODES.Edit
-      ) &&
-      this.story &&
-      !this.story.parentPostId;
+  private setupEditorTitle() {
+    if (this.story.title && this.story.title !== '') {
+      this.updatedTitle = this.story.title;
+      if (this.titleElement && this.titleElement.nativeElement) {
+        this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+      }
+    } else if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
+      this.story.title = `RE: ${this.story.parentPost.title}`;
+    }
   }
 }
 
