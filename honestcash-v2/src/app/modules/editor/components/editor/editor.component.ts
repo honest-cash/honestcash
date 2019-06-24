@@ -19,8 +19,26 @@ export const EDITOR_AUTO_SAVE = {
   INTERVAL: 10 * 1000,
 };
 
+interface EditorConfig {
+  holder: string;
+  initialBlock: string;
+  onChange: () => any;
+  onReady: () => any;
+  data: {
+    blocks: Block[]
+  };
+  placeholder: string;
+  tools: {
+    [element: string]: {
+      class: string;
+      inlineToolbar?: boolean;
+      placeholder?: string;
+      config?: any;
+    }
+  };
+}
+
 declare var EditorJS: any;
-declare var EditorConfig: any;
 declare var LinkTool: any;
 declare var Embed: any;
 declare var ImageTool: any;
@@ -35,18 +53,18 @@ declare var CodeTool: any;
 })
 export class EditorComponent implements OnInit, OnDestroy {
   @Input() public editingMode: EDITOR_EDITING_MODES;
-  @ViewChild('titleElement') titleElement: ElementRef;
+  @ViewChild('titleElement') public titleElement: ElementRef;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   public saveStatus: EDITOR_STATUS;
+  public hasEditorInitStarted = false;
   public hasEditorInitialized = false;
+  public shouldEditorAllowTitleAndCustomElements = false;
   public editor: any;
-  public editorConfig: any;
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
-  public isLoaded = false;
   public updatedTitle = '';
   public story: Post;
-  readonly isPlatformBrowser: boolean;
+  private readonly isPlatformBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -59,29 +77,14 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.initEditor();
+    // remove any leftover post in localstorage
+    this.editorService.removeLocallySavedPost();
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.saveStatus = editorState.status;
       this.story = editorState.story;
-
-      if (this.isPlatformBrowser && this.editor && !this.isLoaded && Object.keys(this.story).length) {
-        if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
-          this.story.title = `RE: ${this.story.parentPost.title}`;
-        }
-        this.editor.isReady.then(() => {
-          if (this.story.bodyJSON && this.story.bodyJSON.length && !this.isLoaded) {
-            this.editor.blocks.clear();
-            this.editor.blocks.render({blocks: <Block[]>this.story.bodyJSON});
-          }
-          if (this.story.title && this.story.title !== '') {
-            this.updatedTitle = this.story.title;
-            if (this.titleElement && this.titleElement.nativeElement) {
-              this.titleElement.nativeElement.innerHTML = this.updatedTitle;
-            }
-          }
-          this.isLoaded = true;
-        });
+      if (Object.keys(this.story).length) {
+        this.initEditor();
       }
     });
   }
@@ -135,67 +138,107 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private initEditor() {
-    if (this.isPlatformBrowser) {
-      const editorToolsToLoad = [
-        this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.1/dist/bundle.min.js'),
-      ];
-
-      if (this.editingMode === EDITOR_EDITING_MODES.Write || this.editingMode === EDITOR_EDITING_MODES.Edit) {
-        editorToolsToLoad.push(
-          ...[this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
-            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
-            this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.1/dist/bundle.min.js')]
-        );
-      }
+    if (this.isPlatformBrowser && !this.hasEditorInitStarted && !this.hasEditorInitialized) {
+      this.shouldEditorAllowTitleAndCustomElements = (
+          this.editingMode === EDITOR_EDITING_MODES.Write ||
+          this.editingMode === EDITOR_EDITING_MODES.Edit
+        ) &&
+        this.story &&
+        !this.story.parentPostId;
+      this.hasEditorInitStarted = true;
 
       this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.14.0/dist/editor.min.js').pipe(
         concatMap(() => forkJoin(
-          editorToolsToLoad
+          this.getEditorScripts()
         ))
       ).subscribe(() => {
-        this.editorConfig = {
-          holder: 'editor',
-          initialBlock: 'paragraph',
-          onChange: this.onBodyChange.bind(this),
-          placeholder: this.editingMode !== EDITOR_EDITING_MODES.Comment ? 'Write your story...' : 'Write your comment...',
-          tools: {
-            paragraph: { // this is shared by all modes
-              class: Paragraph,
-              inlineToolbar: false,
-            },
-          }
-        };
-
-        if (this.editingMode === EDITOR_EDITING_MODES.Write || this.editingMode === EDITOR_EDITING_MODES.Edit) {
-          this.editorConfig.tools = {
-            ...this.editorConfig.tools,
-            header: {
-              class: Header,
-              inlineToolbar: false,
-            },
-            image: {
-              class: ImageTool,
-              inlineToolbar: false,
-              config: {
-                uploader: {
-                  uploadByFile: this.uploadImage.bind(this),
-                  uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
-                }
-              }
-            },
-            embed: {
-              class: Embed,
-              inlineToolbar: false,
-            },
-          };
-        }
-
-        this.editor = new EditorJS(this.editorConfig);
-        this.editor.isReady.then(() => {
-          this.store.dispatch(new EditorLoad());
-        });
+        const editorConfig = this.getEditorConfig();
+        this.editor = new EditorJS(editorConfig);
+        this.setupEditorTitle();
       });
 
     }
   }
+
+  private onEditorReady() {
+    this.editorService.savePostLocally(this.story);
+    this.store.dispatch(new EditorLoad());
+    this.hasEditorInitialized = true;
+  }
+
+  private getEditorScripts(): Observable<Event>[] {
+    const editorScripts = [
+      this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.1/dist/bundle.min.js'),
+    ];
+
+    if (this.shouldEditorAllowTitleAndCustomElements) {
+      editorScripts.push(
+        ...[
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
+          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.1/dist/bundle.min.js')
+        ]
+      );
+    }
+
+    return editorScripts;
+  }
+
+  private getEditorConfig(): EditorConfig {
+    const editorConfig: EditorConfig = {
+      holder: 'editor',
+      initialBlock: 'paragraph',
+      onChange: this.onBodyChange.bind(this),
+      onReady: this.onEditorReady.bind(this),
+      data: {
+        blocks: this.story.bodyJSON
+      },
+      placeholder: this.editingMode !== EDITOR_EDITING_MODES.Comment ? 'Write your story...' : 'Write your comment...',
+      tools: {
+        paragraph: { // this is shared by all modes
+          class: Paragraph,
+          inlineToolbar: true,
+        },
+      }
+    };
+
+    if (this.shouldEditorAllowTitleAndCustomElements) {
+      editorConfig.tools = {
+        ...editorConfig.tools,
+        header: {
+          class: Header,
+          inlineToolbar: false,
+        },
+        image: {
+          class: ImageTool,
+          inlineToolbar: false,
+          config: {
+            uploader: {
+              uploadByFile: this.uploadImage.bind(this),
+              uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
+            }
+          }
+        },
+        embed: {
+          class: Embed,
+          inlineToolbar: false,
+        },
+      };
+    }
+
+    return editorConfig;
+  }
+
+  private setupEditorTitle() {
+    if (this.story.title && this.story.title !== '') {
+      this.updatedTitle = this.story.title;
+      if (this.titleElement && this.titleElement.nativeElement) {
+        this.titleElement.nativeElement.innerHTML = this.updatedTitle;
+      }
+    } else if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
+      this.story.title = `RE: ${this.story.parentPost.title}`;
+    }
+  }
 }
+
+
