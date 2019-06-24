@@ -19,8 +19,26 @@ export const EDITOR_AUTO_SAVE = {
   INTERVAL: 10 * 1000,
 };
 
+interface EditorConfig {
+  holder: string;
+  initialBlock: string;
+  onChange: () => any;
+  onReady: () => any;
+  data: {
+    blocks: Block[]
+  };
+  placeholder: string;
+  tools: {
+    [element: string]: {
+      class: string;
+      inlineToolbar?: boolean;
+      placeholder?: string;
+      config?: any;
+    }
+  };
+}
+
 declare var EditorJS: any;
-declare var EditorConfig: any;
 declare var LinkTool: any;
 declare var Embed: any;
 declare var ImageTool: any;
@@ -42,8 +60,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   public hasEditorInitialized = false;
   public shouldEditorAllowTitleAndCustomElements = false;
   public editor: any;
-  public editorConfig: any;
-  public editorScripts: any;
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
   public updatedTitle = '';
@@ -130,15 +146,14 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.story &&
         !this.story.parentPostId;
       this.hasEditorInitStarted = true;
-      this.setupEditorScripts();
 
       this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.14.0/dist/editor.min.js').pipe(
         concatMap(() => forkJoin(
-          this.editorScripts
+          this.getEditorScripts()
         ))
       ).subscribe(() => {
-        this.setupEditorConfig();
-        this.editor = new EditorJS(this.editorConfig);
+        const editorConfig = this.getEditorConfig();
+        this.editor = new EditorJS(editorConfig);
         this.setupEditorTitle();
       });
 
@@ -151,13 +166,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.hasEditorInitialized = true;
   }
 
-  private setupEditorScripts() {
-    this.editorScripts = [
+  private getEditorScripts(): Observable<Event>[] {
+    const editorScripts = [
       this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.1/dist/bundle.min.js'),
     ];
 
     if (this.shouldEditorAllowTitleAndCustomElements) {
-      this.editorScripts.push(
+      editorScripts.push(
         ...[
           this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
           this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
@@ -165,10 +180,12 @@ export class EditorComponent implements OnInit, OnDestroy {
         ]
       );
     }
+
+    return editorScripts;
   }
 
-  private setupEditorConfig() {
-    this.editorConfig = {
+  private getEditorConfig(): EditorConfig {
+    const editorConfig: EditorConfig = {
       holder: 'editor',
       initialBlock: 'paragraph',
       onChange: this.onBodyChange.bind(this),
@@ -186,8 +203,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     };
 
     if (this.shouldEditorAllowTitleAndCustomElements) {
-      this.editorConfig.tools = {
-        ...this.editorConfig.tools,
+      editorConfig.tools = {
+        ...editorConfig.tools,
         header: {
           class: Header,
           inlineToolbar: false,
@@ -208,6 +225,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         },
       };
     }
+
+    return editorConfig;
   }
 
   private setupEditorTitle() {
