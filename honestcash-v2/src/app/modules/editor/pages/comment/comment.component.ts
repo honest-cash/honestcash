@@ -20,7 +20,7 @@ export class EditorCommentComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.store.dispatch(new EditorStoryLoad({parentPostId: params.parentStoryId}));
     });

@@ -11,7 +11,6 @@ import {EditorService} from '../../modules/editor/services/editor.service';
 import {mock} from '../../../../mock';
 import Post from '../../shared/models/post';
 import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
-import {StoryLoadContext} from '../../modules/editor/interfaces';
 
 const SHARED_MOCKS = {
   codedErrorResponse: {

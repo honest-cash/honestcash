@@ -95,7 +95,7 @@ describe('EditorComponent', () => {
       component.story.bodyJSON = body;
       component.editor$ = of({
         ...initialEditorState,
-        status: EDITOR_STATUS.Loaded,
+        status: EDITOR_STATUS.StoryLoaded,
       });
       component.ngOnInit();
       const blocks = editor.blocks;

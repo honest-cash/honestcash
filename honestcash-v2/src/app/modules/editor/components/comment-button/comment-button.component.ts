@@ -68,7 +68,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
       return;
     }
     if (
-      this.saveStatus === EDITOR_STATUS.Initialized ||
+      this.saveStatus === EDITOR_STATUS.EditorLoaded ||
       this.saveStatus === EDITOR_STATUS.Saved ||
       this.saveStatus === EDITOR_STATUS.NotSaved
     ) {

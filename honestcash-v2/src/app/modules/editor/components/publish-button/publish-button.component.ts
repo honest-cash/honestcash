@@ -66,7 +66,7 @@ export class EditorPublishButtonComponent implements OnInit, OnDestroy {
       this.toastr.warning(`Save your story first!`, undefined, {positionClass: 'toast-bottom-right'});
     }
 
-    if (this.saveStatus === EDITOR_STATUS.Initialized || this.saveStatus === EDITOR_STATUS.Saved) {
+    if (this.saveStatus === EDITOR_STATUS.EditorLoaded || this.saveStatus === EDITOR_STATUS.Saved) {
       this.openModal();
     }
 

@@ -1,8 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {AppStates, selectEditorState} from '../../../../app.states';
-import {State as EditorState} from '../../../../store/editor/editor.state';
-import {Observable, Subscription} from 'rxjs';
+import {AppStates} from '../../../../app.states';
 import {EditorStoryLoad} from '../../../../store/editor/editor.actions';
 import {ActivatedRoute} from '@angular/router';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
@@ -21,7 +19,7 @@ export class EditorEditComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.store.dispatch(new EditorStoryLoad(params.storyId));
     });
