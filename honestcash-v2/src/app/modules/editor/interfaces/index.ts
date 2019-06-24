@@ -1,4 +1,4 @@
-export interface DraftContext {
+export interface StoryLoadContext {
   parentPostId?: number;
   postId?: number;
 }

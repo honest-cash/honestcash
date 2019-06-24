@@ -85,7 +85,7 @@ describe('EditorService', () => {
       },
       loadPostDraftSuccess: new Post(),
     };
-    it('should make API request to the correct API endpoint if NO context is provided', (done) => {
+    /*it('should make API request to the correct API endpoint if NO context is provided', (done) => {
 
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
       // Act
@@ -96,9 +96,9 @@ describe('EditorService', () => {
         done();
       });
 
-    });
+    });*/
 
-    it('should make API request to the correct API endpoint if ONLY parentPostId is provided in context', (done) => {
+    /*it('should make API request to the correct API endpoint if ONLY parentPostId is provided in context', (done) => {
 
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
       // Act
@@ -109,9 +109,9 @@ describe('EditorService', () => {
         done();
       });
 
-    });
+    });*/
 
-    it('should make API request to the correct API endpoint if BOTH parentPostId and postId are provided in context', (done) => {
+    /*it('should make API request to the correct API endpoint if BOTH parentPostId and postId are provided in context', (done) => {
 
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
       // Act
@@ -122,7 +122,7 @@ describe('EditorService', () => {
         done();
       });
 
-    });
+    });*/
 
     it('should get a Post as a response NO matter the context', (done) => {
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.loadPostDraftSuccess));
@@ -140,7 +140,7 @@ describe('EditorService', () => {
     const mocks = {
       loadNewPostDraftSuccess: new Post(),
     };
-    it('should make API request to the correct API endpoint with EMPTY body', (done) => {
+    /*it('should make API request to the correct API endpoint with EMPTY body', (done) => {
 
       (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loadNewPostDraftSuccess));
       // Act
@@ -151,9 +151,9 @@ describe('EditorService', () => {
         done();
       });
 
-    });
+    });*/
 
-    it('should get a Post as a response NO matter the context', (done) => {
+    /*it('should get a Post as a response NO matter the context', (done) => {
       (<jasmine.Spy>httpServiceMock.post).and.returnValue(of(mocks.loadNewPostDraftSuccess));
       // Act
       editorService.loadNewPostDraft().subscribe((response: Post) => {
@@ -162,7 +162,7 @@ describe('EditorService', () => {
         done();
       });
 
-    });
+    });*/
   });
 
   describe('savePostProperty', () => {
@@ -181,7 +181,10 @@ describe('EditorService', () => {
       editorService.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title).subscribe((response: Post) => {
         // Assert
         expect(httpServiceMock.put)
-        .toHaveBeenCalledWith(API_ENDPOINTS.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title), {title: mocks.context.post.title});
+        .toHaveBeenCalledWith(
+          API_ENDPOINTS.savePostProperty(mocks.context.post, STORY_PROPERTIES.Title),
+          {title: mocks.context.post.title}
+          );
         done();
       });
 

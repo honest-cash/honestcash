@@ -10,6 +10,7 @@ import {EditorService} from '../../services/editor.service';
 import {ToastrService} from 'ngx-toastr';
 import {WindowToken} from '../../../../core/helpers/window';
 import {isPlatformBrowser} from '@angular/common';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 @Component({
   selector: 'editor-publish-modal',
@@ -44,18 +45,21 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
 
       if (this.saveStatus === EDITOR_STATUS.Published) {
         this.toastr.success(`Story Saved`, undefined, {positionClass: 'toast-bottom-right'});
-        this.editorService.removeLocallySavedPost();
         this.onClose();
       }
     });
   }
 
   public onSubmit() {
-    this.store.dispatch(new EditorStorySaveAndPublish(this.story));
+    this.store.dispatch(
+      new EditorStorySaveAndPublish(
+        this.story,
+        [STORY_PROPERTIES.BodyAndTitle, STORY_PROPERTIES.Hashtags, STORY_PROPERTIES.PaidSection]
+      )
+    );
   }
 
   public previewDraftStory() {
-    this.editorService.savePostLocally(this.story);
     this.window.open('/editor/story-preview', '_blank');
   }
 

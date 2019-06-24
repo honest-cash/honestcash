@@ -2,14 +2,14 @@ import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
 import Post from '../../../shared/models/post';
 import {HttpService} from '../../../core';
-import {EmptyResponse} from '../../../shared/models/authentication';
+import {EmptyResponse, FailedResponse} from '../../../shared/models/authentication';
 import Hashtag from '../../../shared/models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 import {LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PREVIEW_KEY, STORY_PROPERTIES} from '../shared/editor.story-properties';
-import {DraftContext, UploadImageResponse, UploadRemoteImageResponse} from '../interfaces';
+import {StoryLoadContext, UploadImageResponse, UploadRemoteImageResponse} from '../interfaces';
 import {isPlatformBrowser} from '@angular/common';
 
 @Injectable({
@@ -33,15 +33,17 @@ export class EditorService {
     return this.http.get<Post>(API_ENDPOINTS.getRelativePost(id));
   }
 
-  public loadPostDraft(draftContext?: DraftContext): Observable<Post> {
-    return this.http.get<Post>(API_ENDPOINTS.draft(draftContext));
+  public loadPostDraft(storyLoadContext?: StoryLoadContext): Observable<Post> {
+    if (storyLoadContext.postId) {
+      return this.http.get<Post>(API_ENDPOINTS.postDraft(storyLoadContext.postId));
+    }
+    if (storyLoadContext.parentPostId) {
+      return this.http.get<Post>(API_ENDPOINTS.commentDraft(storyLoadContext.parentPostId));
+    }
+    return this.http.get<Post>(API_ENDPOINTS.draft());
   }
 
-  public loadNewPostDraft(): Observable<Post> {
-    return this.http.post<Post>(API_ENDPOINTS.newDraft(), {});
-  }
-
-  public savePostProperty(post: Post, property: STORY_PROPERTIES): Observable<EmptyResponse> {
+  public savePostProperty(post: Post, property: STORY_PROPERTIES): Observable<EmptyResponse | FailedResponse> {
     const body = {
       [property]: post[property]
     };
@@ -60,41 +62,7 @@ export class EditorService {
     return this.http.put<Post>(API_ENDPOINTS.savePostProperty(post, property), body);
   }
 
-  public savePostPropertyLocally(property: STORY_PROPERTIES, value: any): void {
-    if (this.isPlatformBrowser) {
-      if (!value) {
-        return;
-      }
-      const data = this.localStorage.getItem(STORY_PREVIEW_KEY);
-      if (data) {
-        const newData = JSON.parse(data);
-        newData[property] = value;
-        return this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(newData));
-      }
-      this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify({property: value}));
-    }
-  }
-
-  public savePostLocally(story: Post) {
-    if (this.isPlatformBrowser) {
-      this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(story));
-    }
-  }
-
-  public getLocallySavedPost(): Post {
-    if (this.isPlatformBrowser) {
-      const data = JSON.parse(this.localStorage.getItem(STORY_PREVIEW_KEY));
-      return data ? data : new Post();
-    }
-  }
-
-  public removeLocallySavedPost() {
-    if (this.isPlatformBrowser) {
-      this.localStorage.removeItem(STORY_PREVIEW_KEY);
-    }
-  }
-
-  public publishPost(post: Post): Observable<Post> {
+  public publishPost(post: Post): Observable<Post | FailedResponse> {
     return this.http.put<Post>(API_ENDPOINTS.publishPost(post), post);
   }
 

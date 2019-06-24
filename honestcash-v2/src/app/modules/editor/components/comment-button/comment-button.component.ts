@@ -5,11 +5,12 @@ import {Store} from '@ngrx/store';
 import Post from '../../../../shared/models/post';
 import {ToastrService} from 'ngx-toastr';
 import {Observable, Subscription} from 'rxjs';
-import {EditorCommentSaveAndPublish} from '../../../../store/editor/editor.actions';
+import {EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
 import {WindowToken} from '../../../../core/helpers/window';
 import {EnvironmentToken} from '../../../../core/helpers/environment';
 import {Environment} from '../../../../../environments/environment';
 import {ELEMENT_TYPES, ParagraphElement} from '../../converters/json-to-html';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 @Component({
   selector: 'editor-comment-button',
@@ -46,7 +47,11 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
 
   public onCommentClicked() {
     if (!this.story.bodyJSON || (this.story.bodyJSON && this.story.bodyJSON.length === 0)) {
-      this.toastr.warning(`Write your comment to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
+      this.toastr.warning(
+        `Write your comment to publish it`,
+        `Nothing written yet!`,
+        {positionClass: 'toast-bottom-right'}
+        );
       return;
     }
     if (
@@ -55,11 +60,24 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
       this.story.bodyJSON[0].type ===  ELEMENT_TYPES.Paragraph &&
       (this.story.bodyJSON[0] as ParagraphElement).data.text !== undefined &&
       (this.story.bodyJSON[0] as ParagraphElement).data.text === '') {
-      this.toastr.warning(`Write something inside your comment to publish it`, `Nothing written yet!`, {positionClass: 'toast-bottom-right'});
+      this.toastr.warning(
+        `Write something inside your comment to publish it`,
+        `Nothing written yet!`,
+        {positionClass: 'toast-bottom-right'}
+        );
       return;
     }
-    if (this.saveStatus === EDITOR_STATUS.Initialized || this.saveStatus === EDITOR_STATUS.Saved || this.saveStatus === EDITOR_STATUS.NotSaved) {
-      this.store.dispatch(new EditorCommentSaveAndPublish(this.story));
+    if (
+      this.saveStatus === EDITOR_STATUS.Initialized ||
+      this.saveStatus === EDITOR_STATUS.Saved ||
+      this.saveStatus === EDITOR_STATUS.NotSaved
+    ) {
+      this.store.dispatch(
+        new EditorStorySaveAndPublish(
+          this.story,
+          [STORY_PROPERTIES.BodyAndTitle]
+        )
+      );
     }
   }
 

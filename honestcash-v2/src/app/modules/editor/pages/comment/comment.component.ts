@@ -3,7 +3,7 @@ import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
 import {ActivatedRoute} from '@angular/router';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
-import {EditorParentStoryLoad} from '../../../../store/editor/editor.actions';
+import {EditorStoryLoad} from '../../../../store/editor/editor.actions';
 
 @Component({
   selector: 'editor-comment',
@@ -22,7 +22,7 @@ export class EditorCommentComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.store.dispatch(new EditorParentStoryLoad(params.parentStoryId));
+      this.store.dispatch(new EditorStoryLoad({parentPostId: params.parentStoryId}));
     });
   }
 }
