@@ -43,6 +43,16 @@ declare var Header: any;
 declare var Paragraph: any;
 declare var CodeTool: any;
 
+const editorScriptPaths = {
+  core: 'assets/libs/editorjs/editor.min.js',
+  plugins: {
+    paragraph: 'assets/libs/editorjs/paragraph.min.js',
+    header: 'assets/libs/editorjs/header.min.js',
+    image: 'assets/libs/editorjs/image.min.js',
+    embed: 'assets/libs/editorjs/embed.min.js',
+  }
+};
+
 @Component({
   selector: 'editor',
   templateUrl: './editor.component.html',
@@ -135,7 +145,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         !this.story.parentPostId;
       this.hasEditorInitStarted = true;
 
-      this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.14.0/dist/editor.min.js').pipe(
+      this.scriptService.loadScript(editorScriptPaths.core).pipe(
         concatMap(() => forkJoin(
           this.getEditorScripts()
         ))
@@ -155,15 +165,15 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private getEditorScripts(): Observable<Event>[] {
     const editorScripts = [
-      this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.5.1/dist/bundle.min.js'),
+      this.scriptService.loadScript(editorScriptPaths.plugins.paragraph), // do not disable, must have!
     ];
 
     if (this.shouldEditorAllowTitleAndCustomElements) {
       editorScripts.push(
         ...[
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/header@2.2.4/dist/bundle.min.js'),
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.1/dist/bundle.min.js'),
-          this.scriptService.loadScript('https://cdn.jsdelivr.net/npm/@editorjs/embed@2.2.1/dist/bundle.min.js')
+          this.scriptService.loadScript(editorScriptPaths.plugins.header),
+          this.scriptService.loadScript(editorScriptPaths.plugins.image),
+          this.scriptService.loadScript(editorScriptPaths.plugins.embed)
         ]
       );
     }
