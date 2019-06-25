@@ -14,7 +14,6 @@ import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {editorScriptPaths} from '../../shared/editor.scripts-path';
 
-// ON attribute is used as fallback
 export const EDITOR_AUTO_SAVE_INTERVAL = 10 * 1000; // 10 mins
 
 interface EditorConfig {
