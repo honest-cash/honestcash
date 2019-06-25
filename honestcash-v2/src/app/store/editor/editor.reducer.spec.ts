@@ -28,7 +28,7 @@ const SHARED_MOCKS = {
 
 describe('editor.reducer', () => {
   describe('initialState', () => {
-    it('should have isLoaded: false, status: NotInitialized, story: new Post()', () => {
+    it('should have isLoaded: false, status: NotInitialized, story: new Story()', () => {
       const state: EditorState = reducer(undefined, {} as EditorLoad);
 
       expect(state).toBe(initialState);

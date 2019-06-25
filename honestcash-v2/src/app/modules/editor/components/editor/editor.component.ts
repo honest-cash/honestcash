@@ -12,6 +12,7 @@ import {ScriptService} from 'ngx-script-loader';
 import {concatMap} from 'rxjs/operators';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {editorScriptPaths} from '../../shared/editor.scripts-path';
 
 // ON attribute is used as fallback
 export const EDITOR_AUTO_SAVE_INTERVAL = 10 * 1000; // 10 mins
@@ -19,8 +20,8 @@ export const EDITOR_AUTO_SAVE_INTERVAL = 10 * 1000; // 10 mins
 interface EditorConfig {
   holder: string;
   initialBlock: string;
-  onChange: () => any;
-  onReady: () => any;
+  onChange?: () => any;
+  onReady?: () => any;
   data: {
     blocks: Block[]
   };
@@ -43,16 +44,6 @@ declare var Header: any;
 declare var Paragraph: any;
 declare var CodeTool: any;
 
-const editorScriptPaths = {
-  core: 'assets/libs/editorjs/editor.min.js',
-  plugins: {
-    paragraph: 'assets/libs/editorjs/paragraph.min.js',
-    header: 'assets/libs/editorjs/header.min.js',
-    image: 'assets/libs/editorjs/image.min.js',
-    embed: 'assets/libs/editorjs/embed.min.js',
-  }
-};
-
 @Component({
   selector: 'editor',
   templateUrl: './editor.component.html',
@@ -62,7 +53,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() public editingMode: EDITOR_EDITING_MODES;
   @ViewChild('titleElement') public titleElement: ElementRef;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
-  public saveStatus: EDITOR_STATUS;
   public hasEditorInitStarted = false;
   public hasEditorInitialized = false;
   public shouldEditorAllowTitleAndCustomElements = false;
@@ -71,6 +61,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorSub: Subscription;
   public updatedTitle = '';
   public story: Post;
+  public editorPlaceholder = this.editingMode !== EDITOR_EDITING_MODES.Comment ? 'Write your story...' : 'Write your comment...';
   private readonly isPlatformBrowser: boolean;
 
   constructor(
@@ -86,7 +77,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
-      this.saveStatus = editorState.status;
       this.story = editorState.story;
       if (Object.keys(this.story).length) {
         this.initEditor();
@@ -121,21 +111,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     return this.editorService.uploadImage(file);
   }
 
-  public downloadImageFromUrlAndUpload(url: string) {
+  public uploadRemoteImage(url: string) {
     return this.editorService.uploadRemoteImage(url);
   }
 
-  public ngOnDestroy() {
-    if (this.isPlatformBrowser && this.editor && this.editor.destroy) {
-      this.editor.destroy();
-      this.store.dispatch(new EditorUnload());
-    }
-    if (this.editorSub) {
-      this.editorSub.unsubscribe();
-    }
-  }
-
-  private initEditor() {
+  public initEditor() {
     if (this.isPlatformBrowser && !this.hasEditorInitStarted && !this.hasEditorInitialized) {
       this.shouldEditorAllowTitleAndCustomElements = (
           this.editingMode === EDITOR_EDITING_MODES.Write ||
@@ -158,12 +138,12 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onEditorReady() {
+  public onEditorReady() {
     this.store.dispatch(new EditorLoad());
     this.hasEditorInitialized = true;
   }
 
-  private getEditorScripts(): Observable<Event>[] {
+  public getEditorScripts(): Observable<Event>[] {
     const editorScripts = [
       this.scriptService.loadScript(editorScriptPaths.plugins.paragraph), // do not disable, must have!
     ];
@@ -181,7 +161,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     return editorScripts;
   }
 
-  private getEditorConfig(): EditorConfig {
+  public getEditorConfig(): EditorConfig {
     const editorConfig: EditorConfig = {
       holder: 'editor',
       initialBlock: 'paragraph',
@@ -190,7 +170,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       data: {
         blocks: this.story.bodyJSON
       },
-      placeholder: this.editingMode !== EDITOR_EDITING_MODES.Comment ? 'Write your story...' : 'Write your comment...',
+      placeholder: this.editorPlaceholder,
       tools: {
         paragraph: { // this is shared by all modes
           class: Paragraph,
@@ -212,7 +192,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           config: {
             uploader: {
               uploadByFile: this.uploadImage.bind(this),
-              uploadByUrl: this.downloadImageFromUrlAndUpload.bind(this)
+              uploadByUrl: this.uploadRemoteImage.bind(this)
             }
           }
         },
@@ -226,7 +206,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     return editorConfig;
   }
 
-  private setupEditorTitle() {
+  public setupEditorTitle() {
     if (this.story.title && this.story.title !== '') {
       this.updatedTitle = this.story.title;
       if (this.titleElement && this.titleElement.nativeElement) {
@@ -234,6 +214,16 @@ export class EditorComponent implements OnInit, OnDestroy {
       }
     } else if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
       this.story.title = `RE: ${this.story.parentPost.title}`;
+    }
+  }
+
+  public ngOnDestroy() {
+    if (this.isPlatformBrowser && this.editor && this.editor.destroy) {
+      this.editor.destroy();
+      this.store.dispatch(new EditorUnload());
+    }
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
     }
   }
 }
