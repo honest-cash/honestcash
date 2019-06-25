@@ -22,6 +22,8 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
   public story: Post;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
+  public isBodyEmpty = true;
+  public canPublishComment = false;
   private editor$: Observable<EditorState>;
   private editorSub: Subscription;
 
@@ -38,6 +40,8 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     this.editorSub = this.editor$.subscribe((editorState: EditorState) => {
       this.story = editorState.story;
       this.saveStatus = editorState.status;
+      this.setIsBodyEmpty();
+      this.setCanPublishComment();
 
       if (this.saveStatus === EDITOR_STATUS.Published) {
         this.window.location.href = `${this.environment.clientUrl}${this.story.user.username}/${this.story.alias}`;
@@ -46,7 +50,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
   }
 
   public onCommentClicked() {
-    if (!this.story.bodyJSON || (this.story.bodyJSON && this.story.bodyJSON.length === 0)) {
+    if (this.isBodyEmpty) {
       this.toastr.warning(
         `Write your comment to publish it`,
         `Nothing written yet!`,
@@ -54,24 +58,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
         );
       return;
     }
-    if (
-      this.story.bodyJSON &&
-      this.story.bodyJSON.length === 1 &&
-      this.story.bodyJSON[0].type ===  ELEMENT_TYPES.Paragraph &&
-      (this.story.bodyJSON[0] as ParagraphElement).data.text !== undefined &&
-      (this.story.bodyJSON[0] as ParagraphElement).data.text === '') {
-      this.toastr.warning(
-        `Write something inside your comment to publish it`,
-        `Nothing written yet!`,
-        {positionClass: 'toast-bottom-right'}
-        );
-      return;
-    }
-    if (
-      this.saveStatus === EDITOR_STATUS.EditorLoaded ||
-      this.saveStatus === EDITOR_STATUS.Saved ||
-      this.saveStatus === EDITOR_STATUS.NotSaved
-    ) {
+    if (this.canPublishComment) {
       this.store.dispatch(
         new EditorStorySaveAndPublish(
           this.story,
@@ -85,5 +72,25 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     if (this.editorSub) {
       this.editorSub.unsubscribe();
     }
+  }
+
+  private setIsBodyEmpty() {
+    this.isBodyEmpty = !this.story.bodyJSON ||
+      (this.story.bodyJSON && this.story.bodyJSON.length === 0) ||
+      (
+        this.story.bodyJSON &&
+        this.story.bodyJSON.length === 1 &&
+        this.story.bodyJSON[0].type ===  ELEMENT_TYPES.Paragraph &&
+        (
+          (this.story.bodyJSON[0] as ParagraphElement).data.text === undefined ||
+          (this.story.bodyJSON[0] as ParagraphElement).data.text === ''
+        )
+      );
+  }
+
+  private setCanPublishComment() {
+    this.canPublishComment = this.saveStatus === EDITOR_STATUS.EditorLoaded ||
+      this.saveStatus === EDITOR_STATUS.Saved ||
+      this.saveStatus === EDITOR_STATUS.NotSaved;
   }
 }

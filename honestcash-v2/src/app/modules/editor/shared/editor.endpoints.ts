@@ -1,6 +1,5 @@
 import Post from '../../../shared/models/post';
 import {STORY_PROPERTIES} from './editor.story-properties';
-import {StoryLoadContext} from '../interfaces';
 
 export const API_ENDPOINTS = {
   getPost: (id: number) => `/v2/post/${id}`,

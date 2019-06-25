@@ -9,7 +9,7 @@ import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 import {LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
-import {StoryLoadContext, UploadImageResponse} from '../interfaces';
+import {StoryLoadContext, UploadImageResponse} from '../shared/interfaces';
 import {isPlatformBrowser} from '@angular/common';
 import {Block} from '../shared/json-to-html';
 
