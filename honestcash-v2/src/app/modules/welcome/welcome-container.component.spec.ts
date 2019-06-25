@@ -2,7 +2,7 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {WelcomeContainerComponent} from './welcome.component';
+import {WelcomeContainerComponent} from './welcome-container.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('WelcomeContainerComponent', () => {

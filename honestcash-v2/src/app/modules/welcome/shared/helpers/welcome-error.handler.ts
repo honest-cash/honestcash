@@ -1,4 +1,4 @@
-import {CodedErrorResponse} from '../../../shared/models/authentication';
+import {CodedErrorResponse} from '../../../../shared/models/authentication';
 
 /* istanbul ignore next */
 export class WelcomeErrorHandler {

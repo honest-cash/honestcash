@@ -7,7 +7,7 @@ import User from '../../../../shared/models/user';
 import {Observable} from 'rxjs';
 import {LogIn} from '../../../../store/auth/auth.actions';
 import {FailedResponse} from '../../../../shared/models/authentication';
-import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
 
 export interface LoginForm extends NgForm {
   value: {

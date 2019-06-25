@@ -6,7 +6,7 @@ import {SignUp} from '../../../../store/auth/auth.actions';
 import User from '../../../../shared/models/user';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../store/auth/auth.state';
-import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
 import {isPlatformBrowser} from '@angular/common';
 
 export interface SignupForm extends NgForm {
