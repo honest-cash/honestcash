@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
-import {Block, convertBlockToHtml} from '../../converters/json-to-html';
+import {Block, convertBlockToHtml} from '../../shared/json-to-html';
 import {NgForm} from '@angular/forms';
 import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';

@@ -14,7 +14,7 @@ import {EDITOR_STATUS, initialState as initialEditorState} from '../../../../sto
 import {EditorLoad, EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
 import {of} from 'rxjs';
 import Post from '../../../../shared/models/post';
-import {ELEMENT_TYPES} from '../../converters/json-to-html';
+import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 describe('EditorComponent', () => {

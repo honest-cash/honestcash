@@ -12,7 +12,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
-import {ELEMENT_TYPES} from '../converters/json-to-html';
+import {ELEMENT_TYPES} from '../shared/json-to-html';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 

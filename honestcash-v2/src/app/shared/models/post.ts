@@ -1,6 +1,6 @@
 import User from './user';
 import Hashtag from './hashtag';
-import {Block} from '../../modules/editor/converters/json-to-html';
+import {Block} from '../../modules/editor/shared/json-to-html';
 
 export type TPostTypeId = 'comment' | 'article' | 'response';
 

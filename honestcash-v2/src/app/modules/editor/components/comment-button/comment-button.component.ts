@@ -9,7 +9,7 @@ import {EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions
 import {WindowToken} from '../../../../core/helpers/window';
 import {EnvironmentToken} from '../../../../core/helpers/environment';
 import {Environment} from '../../../../../environments/environment';
-import {ELEMENT_TYPES, ParagraphElement} from '../../converters/json-to-html';
+import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 @Component({

@@ -15,7 +15,7 @@ import {
 import {EDITOR_STATUS, initialState, State as EditorState} from './editor.state';
 import Post from '../../shared/models/post';
 import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
-import {ELEMENT_TYPES} from '../../modules/editor/converters/json-to-html';
+import {ELEMENT_TYPES} from '../../modules/editor/shared/json-to-html';
 
 const SHARED_MOCKS = {
   story: new Post(),

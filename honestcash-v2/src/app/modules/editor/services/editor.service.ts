@@ -11,7 +11,7 @@ import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext, UploadImageResponse} from '../interfaces';
 import {isPlatformBrowser} from '@angular/common';
-import {Block} from '../converters/json-to-html';
+import {Block} from '../shared/json-to-html';
 
 @Injectable({
   providedIn: 'root'

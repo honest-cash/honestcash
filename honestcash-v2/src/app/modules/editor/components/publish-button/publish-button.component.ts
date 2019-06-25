@@ -10,7 +10,7 @@ import {EditorPublishModalComponent} from '../publish-modal/publish-modal.compon
 import {WindowToken} from '../../../../core/helpers/window';
 import {EnvironmentToken} from '../../../../core/helpers/environment';
 import {Environment} from '../../../../../environments/environment';
-import {ELEMENT_TYPES, ParagraphElement} from '../../converters/json-to-html';
+import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
 
 @Component({
   selector: 'editor-publish-button',

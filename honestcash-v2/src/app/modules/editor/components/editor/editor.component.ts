@@ -6,7 +6,7 @@ import {forkJoin, Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService} from '../../services/editor.service';
-import {Block} from '../../converters/json-to-html';
+import {Block} from '../../shared/json-to-html';
 import {isPlatformBrowser} from '@angular/common';
 import {ScriptService} from 'ngx-script-loader';
 import {concatMap} from 'rxjs/operators';
