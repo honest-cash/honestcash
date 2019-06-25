@@ -14,13 +14,15 @@ import {initialState as initialEditorState} from '../../../../store/editor/edito
 import Story from '../../../../shared/models/post';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
-import {EditorLoad, EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
+import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
-import {of} from 'rxjs';
+import {concat, forkJoin, merge, of} from 'rxjs';
 import {ScriptService} from 'ngx-script-loader';
 import {editorScriptPaths} from '../../shared/editor.scripts-path';
-import {EditorConfig} from '@editorjs/editorjs/types/configs';
 import Paragraph from '@editorjs/paragraph';
+import Header from '@editorjs/header';
+import ImageTool from '@editorjs/image';
+import Embed from '@editorjs/embed';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -79,11 +81,15 @@ describe('EditorComponent', () => {
     it('should have EditorJS variable UNDEFINED', () => {
       expect(component.editor).toBeUndefined();
     });
+    it('should have editorPlaceholder as \'Write your story...\'', () => {
+      expect(component.editorPlaceholder).toEqual('Write your story...');
+    });
   });
 
   describe('ngOnInit', () => {
-    it('should call initEditor if story provided by store has properties', () => {
-      const initEditorSpy = spyOn(component, 'initEditor');
+    it('should call loadEditor if story provided by store has properties and editor has NOT yet started initializing and has NOT yet initialized', () => {
+      const loadEditorSpy = spyOn(component, 'loadEditor').and.returnValue(of(true));
+      const initEditorSpy = spyOn(component, 'initEditor').and.returnValue({});
       store.setState({
         ...initialAppStates,
         editor: {
@@ -95,7 +101,42 @@ describe('EditorComponent', () => {
         }
       });
       component.ngOnInit();
+      expect(loadEditorSpy).toHaveBeenCalled();
       expect(initEditorSpy).toHaveBeenCalled();
+    });
+    it('should NOT call loadEditor if story provided by store has properties BUT editor has started initializing', () => {
+      component.hasEditorInitStarted = true;
+      component.initEditor = () => {};
+      const loadEditorSpy = spyOn(component, 'loadEditor').and.returnValue(of());
+      store.setState({
+        ...initialAppStates,
+        editor: {
+          ...initialEditorState,
+          story: {
+            ...new Story(),
+            title: 'test'
+          }
+        }
+      });
+      component.ngOnInit();
+      expect(loadEditorSpy).not.toHaveBeenCalled();
+    });
+    it('should NOT call loadEditor if story provided by store has properties BUT editor is already initialized', () => {
+      component.hasEditorInitialized = true;
+      component.initEditor = () => {};
+      const loadEditorSpy = spyOn(component, 'loadEditor').and.returnValue(of());
+      store.setState({
+        ...initialAppStates,
+        editor: {
+          ...initialEditorState,
+          story: {
+            ...new Story(),
+            title: 'test'
+          }
+        }
+      });
+      component.ngOnInit();
+      expect(loadEditorSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -126,28 +167,6 @@ describe('EditorComponent', () => {
         done();
       });
     });
-    /*it('should dispatch EditorPropertyChange property and value', (done) => {
-      const body = [
-        {
-          type: ELEMENT_TYPES.Paragraph,
-          data: {
-            text: 'asdf'
-          }
-        }
-      ];
-      component.story = new Story();
-      component.initEditor();
-      const editor = component.editor;
-      const saver = editor.saver;
-      spyOn(saver, 'save').and.returnValue(of({blocks: body}).toPromise());
-      component.onBodyChange();
-      fixture.detectChanges();
-      editor.isReady.then(() => {
-        expect(component.story.bodyJSON).toEqual(body);
-        expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: body}));
-        done();
-      });
-    });*/
   });
 
   describe('onTitleBlur', () => {
@@ -177,6 +196,7 @@ describe('EditorComponent', () => {
       expect(component.updatedTitle).toBe(innerText);
     });
   });
+
   describe('uploadImage', () => {
     it('should call editorService.uploadImage with provided file', () => {
       const file = new File([''], 'test', { type: 'image/jpeg' });
@@ -184,6 +204,7 @@ describe('EditorComponent', () => {
       expect(mockEditorService.uploadImage).toHaveBeenCalledWith(file);
     });
   });
+
   describe('uploadRemoteImage', () => {
     it('should call editorService.uploadRemoteImage with provided file', () => {
       const url = 'http://test.com/a.jpeg';
@@ -191,9 +212,103 @@ describe('EditorComponent', () => {
       expect(mockEditorService.uploadRemoteImage).toHaveBeenCalledWith(url);
     });
   });
-  describe('initEditor', () => {
 
+  describe('initEditor', () => {
+    it('should call getEditorConfig and initialize editor with that config and also setup title', (done) =>  {
+      component.story = {
+        ...new Story(),
+        bodyJSON: [
+          {
+            type: ELEMENT_TYPES.Paragraph,
+            data: {
+              text: 'test'
+            }
+          }
+        ]
+      };
+      const getEditorConfigSpy = spyOn(component, 'getEditorConfig').and.returnValue({
+        holder: 'editor',
+        initialBlock: 'paragraph',
+        onChange: component.onBodyChange.bind(component),
+        onReady: component.onEditorReady.bind(component),
+        data: {
+          blocks: component.story.bodyJSON
+        },
+        placeholder: component.editorPlaceholder,
+        tools: {
+          paragraph: { // this is shared by all modes
+            class: Paragraph,
+            inlineToolbar: true,
+          },
+        }
+      });
+      const setupEditorTitleSpy = spyOn(component, 'setupEditorTitle').and.callThrough();
+      component.story = {
+        ...new Story(),
+        bodyJSON: [
+          {
+            type: ELEMENT_TYPES.Paragraph,
+            data: {
+              text: 'test'
+            }
+          }
+        ]
+      };
+      scriptService.loadScript(editorScriptPaths.core).subscribe(() => {
+        component.initEditor();
+        expect(getEditorConfigSpy).toHaveBeenCalled();
+        expect(setupEditorTitleSpy).toHaveBeenCalled();
+        expect(component.editor).toBeDefined();
+        done();
+      });
+    });
   });
+
+  describe('loadEditor', () => {
+    it('should set hasEditorInitStarted to true', (done) => {
+      const loadScriptSpy = spyOn(scriptService, 'loadScript').and.callThrough();
+      component.loadEditor().subscribe(() => {
+        expect(loadScriptSpy).toHaveBeenCalledWith(editorScriptPaths.core);
+        expect(component.hasEditorInitStarted).toBeTruthy();
+        done();
+      });
+    });
+    it('should call setShouldEditorAllowTitleAndCustomElements', () => {
+      component.story = {
+        ...new Story(),
+        bodyJSON: [
+          {
+            type: ELEMENT_TYPES.Paragraph,
+            data: {
+              text: 'test'
+            }
+          }
+        ]
+      };
+      const setShouldEditorAllowTitleAndCustomElementsSpy = spyOn(component, 'setShouldEditorAllowTitleAndCustomElements').and.callThrough();
+      component.loadEditor();
+      expect(setShouldEditorAllowTitleAndCustomElementsSpy).toHaveBeenCalled();
+    });
+    it('should call getEditorScripts', (done) => {
+      component.story = {
+        ...new Story(),
+        bodyJSON: [
+          {
+            type: ELEMENT_TYPES.Paragraph,
+            data: {
+              text: 'test'
+            }
+          }
+        ]
+      };
+      const getEditorScriptsSpy = spyOn(component, 'getEditorScripts').and.callThrough();
+      component.loadEditor().subscribe(() => {
+        expect(getEditorScriptsSpy).toHaveBeenCalled();
+        done();
+      });
+    });
+  });
+
   describe('onEditorReady', () => {
     it('should dispatch EditorLoad and set hasEditorInitialized to true', () => {
       component.onEditorReady();
@@ -201,6 +316,32 @@ describe('EditorComponent', () => {
       expect(store.dispatch).toHaveBeenCalledWith(new EditorLoad());
     });
   });
+
+  describe('setShouldEditorAllowTitleAndCustomElements', () => {
+    beforeEach(() => {
+      component.shouldEditorAllowTitleAndCustomElements = false;
+    });
+    it('should NOT set shouldEditorAllowTitleAndCustomElements to true story is set with parentPost', () => {
+      component.story = new Story();
+      component.story.parentPostId = 50;
+      component.editingMode = EDITOR_EDITING_MODES.Write;
+      component.setShouldEditorAllowTitleAndCustomElements();
+      expect(component.shouldEditorAllowTitleAndCustomElements).toBeFalsy();
+    });
+    it('should set shouldEditorAllowTitleAndCustomElements to true if mode is write and story is set with no parentPost', () => {
+      component.story = new Story();
+      component.editingMode = EDITOR_EDITING_MODES.Write;
+      component.setShouldEditorAllowTitleAndCustomElements();
+      expect(component.shouldEditorAllowTitleAndCustomElements).toBeTruthy();
+    });
+    it('should set shouldEditorAllowTitleAndCustomElements to true if mode is edit and story is set with no parentPost', () => {
+      component.story = new Story();
+      component.editingMode = EDITOR_EDITING_MODES.Edit;
+      component.setShouldEditorAllowTitleAndCustomElements();
+      expect(component.shouldEditorAllowTitleAndCustomElements).toBeTruthy();
+    });
+  });
+
   describe('getEditorScripts', () => {
     it('should return scripts with ONLY paragraph if shouldEditorAllowTitleAndCustomElements is NOT enabled', () => {
       const scripts = component.getEditorScripts();
@@ -208,6 +349,8 @@ describe('EditorComponent', () => {
       expect(scripts[0]).toEqual(scriptService.loadScript(editorScriptPaths.plugins.paragraph));
     });
     it('should return scripts with with paragraph, header, image, embed if shouldEditorAllowTitleAndCustomElements is enabled', () => {
+      component.story = new Story();
+      component.editingMode = EDITOR_EDITING_MODES.Write;
       component.shouldEditorAllowTitleAndCustomElements = true;
       const scripts = component.getEditorScripts();
       expect(scripts.length).toEqual(4);
@@ -219,8 +362,9 @@ describe('EditorComponent', () => {
       ]);
     });
   });
+
   describe('getEditorConfig', () => {
-    it('should have the correct config', (done) => {
+    it('should have the correct config and call setupEditorPlaceholder when title and custom elements are DISABLED', (done) => {
       component.story = {
         ...new Story(),
         bodyJSON: [
@@ -233,26 +377,28 @@ describe('EditorComponent', () => {
         ]
       };
 
-      component.editorPlaceholder = 'test';
-
-      const expectedConfig = {
-        holder: 'editor',
-        initialBlock: 'paragraph',
-        onChange: component.onBodyChange.bind(component),
-        onReady: component.onEditorReady.bind(component),
-        data: {
-          blocks: component.story.bodyJSON
-        },
-        placeholder: component.editorPlaceholder,
-        tools: {
-          paragraph: {
-            class: Paragraph,
-            inlineToolbar: true,
-          }
-        }
-      };
       scriptService.loadScript(editorScriptPaths.plugins.paragraph).subscribe(() => {
+        const setupEditorPlaceholderSpy = spyOn(component, 'setupEditorPlaceholder');
         const config = component.getEditorConfig();
+
+        const expectedConfig = {
+          holder: 'editor',
+          initialBlock: 'paragraph',
+          onChange: component.onBodyChange.bind(component),
+          onReady: component.onEditorReady.bind(component),
+          data: {
+            blocks: component.story.bodyJSON
+          },
+          placeholder: component.editorPlaceholder,
+          tools: {
+            paragraph: {
+              class: Paragraph,
+              inlineToolbar: true,
+            }
+          }
+        };
+
+        expect(setupEditorPlaceholderSpy).toHaveBeenCalled();
         expect(config.holder).toEqual(expectedConfig.holder);
         expect(config.initialBlock).toEqual(expectedConfig.initialBlock);
         expect(config.onChange.toString).toEqual(expectedConfig.onChange.toString);
@@ -263,7 +409,95 @@ describe('EditorComponent', () => {
         done();
       });
     });
+    it('should have the correct config and call setupEditorPlaceholder when title and custom elements are ENABLED', (done) => {
+      component.shouldEditorAllowTitleAndCustomElements = true;
+      component.story = {
+        ...new Story(),
+        bodyJSON: [
+          {
+            type: ELEMENT_TYPES.Paragraph,
+            data: {
+              text: 'test'
+            }
+          }
+        ]
+      };
+
+      const scripts = component.getEditorScripts();
+
+      forkJoin(...scripts).subscribe(() => {
+        const setupEditorPlaceholderSpy = spyOn(component, 'setupEditorPlaceholder');
+        const config = component.getEditorConfig();
+
+        const expectedConfig = {
+          holder: 'editor',
+          initialBlock: 'paragraph',
+          onChange: component.onBodyChange.bind(component),
+          onReady: component.onEditorReady.bind(component),
+          data: {
+            blocks: component.story.bodyJSON
+          },
+          placeholder: component.editorPlaceholder,
+          tools: {
+            paragraph: {
+              class: Paragraph,
+              inlineToolbar: true, // must have
+            },
+            header: {
+              class: Header,
+              inlineToolbar: false
+            },
+            image: {
+              class: ImageTool,
+              inlineToolbar: false,
+              config: {
+                uploader: {
+                  uploadByFile: component.uploadImage.bind(component),
+                  uploadByUrl: component.uploadRemoteImage.bind(component),
+                }
+              }
+            },
+            embed: {
+              class: Embed,
+              inlineToolbar: false,
+            }
+          }
+        };
+
+        expect(setupEditorPlaceholderSpy).toHaveBeenCalled();
+        expect(config.holder).toEqual(expectedConfig.holder);
+        expect(config.initialBlock).toEqual(expectedConfig.initialBlock);
+        expect(config.onChange.toString).toEqual(expectedConfig.onChange.toString);
+        expect(config.onReady.toString).toEqual(expectedConfig.onReady.toString);
+        expect(config.data).toEqual(expectedConfig.data);
+        expect(config.placeholder).toEqual(expectedConfig.placeholder);
+        expect(config.tools.paragraph.class.toString()).toEqual(expectedConfig.tools.paragraph.class.toString());
+        expect(config.tools.header.class.toString()).toEqual(expectedConfig.tools.header.class.toString());
+        expect(config.tools.image.class.toString()).toEqual(expectedConfig.tools.image.class.toString());
+        expect(config.tools.embed.class.toString()).toEqual(expectedConfig.tools.embed.class.toString());
+        done();
+      });
+    });
   });
+
+  describe('setupEditorPlaceholder', () => {
+    it('should set placeholder to \'Write your story...\' if editingMode is Write', () => {
+      component.editingMode = EDITOR_EDITING_MODES.Write;
+      component.setupEditorPlaceholder();
+      expect(component.editorPlaceholder).toEqual('Write your story...');
+    });
+    it('should set placeholder to \'Revise your story...\' if editingMode is Edit', () => {
+      component.editingMode = EDITOR_EDITING_MODES.Edit;
+      component.setupEditorPlaceholder();
+      expect(component.editorPlaceholder).toEqual('Revise your story...');
+    });
+    it('should set placeholder to \'Write your comment...\' if editingMode is Comment', () => {
+      component.editingMode = EDITOR_EDITING_MODES.Comment;
+      component.setupEditorPlaceholder();
+      expect(component.editorPlaceholder).toEqual('Write your comment...');
+    });
+  });
+
   describe('setupEditorTitle', () => {
     describe('when story is defined, it', () => {
       it('should NOT set updatedTitle to story title if story title is empty', () => {
@@ -303,4 +537,16 @@ describe('EditorComponent', () => {
       });
     });
   });
+
+  describe('ngOnDestroy', () => {
+    it('should destroy editor instance and dispatch editorUnload', () => {
+      component.editor = {
+        destroy: () => {}
+      };
+      const destroySpy = spyOn(component.editor, 'destroy');
+      component.ngOnDestroy();
+      expect(destroySpy).toHaveBeenCalled();
+      expect(store.dispatch).toHaveBeenCalledWith(new EditorUnload());
+    });
+  })
 });

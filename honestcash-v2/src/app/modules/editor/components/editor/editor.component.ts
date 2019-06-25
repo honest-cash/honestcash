@@ -3,7 +3,7 @@ import Post from '../../../../shared/models/post';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {forkJoin, Observable, Subscription} from 'rxjs';
-import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
+import {State as EditorState} from '../../../../store/editor/editor.state';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';
 import {EditorService} from '../../services/editor.service';
 import {Block} from '../../shared/json-to-html';
@@ -61,7 +61,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editorSub: Subscription;
   public updatedTitle = '';
   public story: Post;
-  public editorPlaceholder = this.editingMode !== EDITOR_EDITING_MODES.Comment ? 'Write your story...' : 'Write your comment...';
+  public editorPlaceholder = 'Write your story...';
   private readonly isPlatformBrowser: boolean;
 
   constructor(
@@ -78,8 +78,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
-      if (Object.keys(this.story).length) {
-        this.initEditor();
+      if (Object.keys(this.story).length && !this.hasEditorInitStarted && !this.hasEditorInitialized) {
+        const loadSub = this.loadEditor();
+        if (loadSub) {
+          loadSub.subscribe(() => {
+            this.initEditor();
+          });
+        }
       }
     });
   }
@@ -116,31 +121,40 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public initEditor() {
-    if (this.isPlatformBrowser && !this.hasEditorInitStarted && !this.hasEditorInitialized) {
-      this.shouldEditorAllowTitleAndCustomElements = (
-          this.editingMode === EDITOR_EDITING_MODES.Write ||
-          this.editingMode === EDITOR_EDITING_MODES.Edit
-        ) &&
-        this.story &&
-        !this.story.parentPostId;
+    const editorConfig = this.getEditorConfig();
+    this.editor = new EditorJS(editorConfig);
+    this.setupEditorTitle();
+  }
+
+  public loadEditor() {
+    if (this.isPlatformBrowser) {
       this.hasEditorInitStarted = true;
+      this.setShouldEditorAllowTitleAndCustomElements();
 
-      this.scriptService.loadScript(editorScriptPaths.core).pipe(
-        concatMap(() => forkJoin(
-          this.getEditorScripts()
-        ))
-      ).subscribe(() => {
-        const editorConfig = this.getEditorConfig();
-        this.editor = new EditorJS(editorConfig);
-        this.setupEditorTitle();
-      });
-
+      return this.scriptService
+        .loadScript(editorScriptPaths.core)
+        .pipe(
+          concatMap(() => forkJoin
+            (
+              this.getEditorScripts()
+            )
+          )
+      );
     }
   }
 
   public onEditorReady() {
     this.store.dispatch(new EditorLoad());
     this.hasEditorInitialized = true;
+  }
+
+  public setShouldEditorAllowTitleAndCustomElements() {
+    this.shouldEditorAllowTitleAndCustomElements = (
+        this.editingMode === EDITOR_EDITING_MODES.Write ||
+        this.editingMode === EDITOR_EDITING_MODES.Edit
+      ) &&
+      this.story &&
+      !this.story.parentPostId;
   }
 
   public getEditorScripts(): Observable<Event>[] {
@@ -162,6 +176,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public getEditorConfig(): EditorConfig {
+    this.setupEditorPlaceholder();
     const editorConfig: EditorConfig = {
       holder: 'editor',
       initialBlock: 'paragraph',
@@ -204,6 +219,17 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     return editorConfig;
+  }
+
+  public setupEditorPlaceholder() {
+    if (this.editingMode === EDITOR_EDITING_MODES.Write) {
+      this.editorPlaceholder = `Write your story...`;
+    } else if (this.editingMode === EDITOR_EDITING_MODES.Edit) {
+      this.editorPlaceholder = `Revise your story...`;
+    } else if (this.editingMode === EDITOR_EDITING_MODES.Comment) {
+      this.editorPlaceholder = `Write your comment...`;
+    }
+
   }
 
   public setupEditorTitle() {
