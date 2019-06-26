@@ -6,7 +6,7 @@ import {AppStates, selectAuthState} from '../../../../app.states';
 import {State as AuthState} from '../../../../store/auth/auth.state';
 import {ResetPasswordRequest} from '../../../../store/auth/auth.actions';
 import {NgForm} from '@angular/forms';
-import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
 
 export interface ResetPasswordRequestForm extends NgForm {
   value: {

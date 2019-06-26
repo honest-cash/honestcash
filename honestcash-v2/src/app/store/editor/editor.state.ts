@@ -1,24 +1,22 @@
-import Post from '../../shared/models/post';
+import Story from '../../shared/models/story';
 
 export enum EDITOR_STATUS {
-  Loaded = 'LOADED',
+  NotInitialized = 'NOT_INITIALIZED',
+  StoryLoaded = 'STORY_LOADED',
+  EditorLoaded = 'EDITOR_LOADED',
   NotSaved = 'NOT_SAVED',
   Saved = 'SAVED',
   Saving = 'SAVING',
   Publishing = 'PUBLISHING',
   Published = 'PUBLISHED',
-  Initialized = 'INITIALIZED',
-  NotInitialized = 'NOT_INITIALIZED',
 }
 
 export interface State {
-  isLoaded: boolean;
   status: EDITOR_STATUS;
-  story: Post;
+  story: Story;
 }
 
 export const initialState: State = {
-  isLoaded: false,
   status: EDITOR_STATUS.NotInitialized,
-  story: new Post(),
+  story: new Story(),
 };

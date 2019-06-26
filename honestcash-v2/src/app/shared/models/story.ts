@@ -1,10 +1,10 @@
 import User from './user';
 import Hashtag from './hashtag';
-import {Block} from '../../modules/editor/converters/json-to-html';
+import {Block} from '../../modules/editor/shared/json-to-html';
 
 export type TPostTypeId = 'comment' | 'article' | 'response';
 
-export default class Post {
+export default class Story {
   public id: number;
   public title: string;
   public alias: string;
@@ -18,7 +18,7 @@ export default class Post {
   public status: 'draft' | 'published' | 'archived';
   public postTypeId: TPostTypeId;
   public parentPostId: number;
-  public parentPost: Post;
+  public parentPost: Story;
   public createdAt: string;
   public createdAtFormatted: string;
   public updatedAt: string;
@@ -27,7 +27,7 @@ export default class Post {
   public publishedAtFormatted: string;
   public deletedAt: string;
   public archivedAtFormatted: string;
-  public userPosts?: Post[];
+  public userPosts?: Story[];
   public userPostRefs: any;
   public userPostHashtags?: Hashtag[] | string;
   public hashtags?: Hashtag[];
@@ -39,5 +39,5 @@ export default class Post {
 }
 
 export interface PostSaveSuccessResponse {
-  story: Post;
+  story: Story;
 }

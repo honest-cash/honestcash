@@ -6,17 +6,14 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {AuthorizedGuard} from '../../shared/guards/authorized.guard';
 import {TagInputModule} from 'ngx-chips';
-import {EditorStoryPreviewComponent} from './pages/story-preview/story-preview.component';
 import {EditorWriteComponent} from './pages/write/write.component';
 import {EditorEditComponent} from './pages/edit/edit.component';
 import {EditorPublishModalComponent} from './components/publish-modal/publish-modal.component';
 import {EditorPublishButtonComponent} from './components/publish-button/publish-button.component';
 import {EditorHeaderComponent} from './components/header/header.component';
-import {EditorEmbeddableComponent} from './components/embeddable-editor/embeddable.component';
 import {EditorPaidSectionSelectionComponent} from './components/paid-section-selection/paid-section-selection.component';
 import {EditorSaveStatusComponent} from './components/save-status/save-status.component';
 import {EditorComponent} from './components/editor/editor.component';
-import {EditorPaidSectionUnlockerComponent} from './components/paid-section-unlocker/paid-section-unlocker.component';
 import {EditorCommentButtonComponent} from './components/comment-button/comment-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
 import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
@@ -33,11 +30,6 @@ const routes: Routes = [
       {path: 'write', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
       {path: 'edit/:storyId', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
       {path: 'comment/:parentStoryId', component: EditorCommentComponent, canActivate: [AuthorizedGuard]},
-      {
-        path: 'story-preview',
-        component: EditorStoryPreviewComponent,
-        canActivate: [AuthorizedGuard]
-      },
     ]
   }
 ];
@@ -55,12 +47,8 @@ const routes: Routes = [
     EditorWriteComponent,
     EditorEditComponent,
     EditorCommentComponent,
-    EditorStoryPreviewComponent,
     EditorHeaderComponent,
-    EditorStoryPreviewComponent,
-    EditorEmbeddableComponent,
     EditorPaidSectionSelectionComponent,
-    EditorPaidSectionUnlockerComponent,
     EditorLoadingIndicatorComponent,
     EditorPaidSectionToggleButtonComponent,
     EditorParentPostBodyComponent,
@@ -70,7 +58,6 @@ const routes: Routes = [
     EditorPublishModalComponent,
     EditorPublishButtonComponent,
     EditorSaveStatusComponent,
-    EditorEmbeddableComponent
   ],
   imports: [
     FormsModule,

@@ -15,7 +15,7 @@ export function reducer(state = initialState, action: All): State {
       return initialState;
     }
     case UserActionTypes.USER_LOADED: {
-      logger.info('User Loaded', action.payload.user);
+      logger.info('User StoryLoaded', action.payload.user);
       return {
         ...state,
         user: action.payload.user

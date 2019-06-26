@@ -11,50 +11,19 @@ export function reducer(state = initialState, action: All): State {
       logger.info('Editor Load Success');
       return {
         ...state,
-        isLoaded: true,
-        status: EDITOR_STATUS.Initialized,
+        status: EDITOR_STATUS.EditorLoaded,
       };
     }
     case EditorActionTypes.EDITOR_UNLOAD: {
       logger.info('Editor Unload Success');
       return initialState;
     }
-    case EditorActionTypes.EDITOR_DRAFT_LOAD_SUCCESS: {
-      logger.info('Editor Draft Load Success', action.payload);
-      return {
-        ...state,
-        story: {
-          ...action.payload,
-          bodyJSON: action.payload.bodyJSON
-        },
-        status: EDITOR_STATUS.Loaded
-      };
-    }
     case EditorActionTypes.EDITOR_STORY_LOAD_SUCCESS: {
       logger.info('Editor Story Load Success', action.payload);
       return {
         ...state,
         story: action.payload,
-        status: EDITOR_STATUS.Loaded
-      };
-    }
-    case EditorActionTypes.EDITOR_PARENT_STORY_LOAD_SUCCESS: {
-      logger.info('Editor Parent Story Load Success', action.payload);
-      return {
-        ...state,
-        story: action.payload,
-        status: EDITOR_STATUS.Loaded
-      };
-    }
-    case EditorActionTypes.EDITOR_STORY_LOCAL_LOAD_SUCCESS: {
-      logger.info('Editor Story Local Load Success', action.payload);
-      return {
-        ...state,
-        story: {
-          ...action.payload,
-          bodyJSON: action.payload.bodyJSON
-        },
-        status: EDITOR_STATUS.Loaded
+        status: EDITOR_STATUS.StoryLoaded
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE: {
@@ -62,10 +31,6 @@ export function reducer(state = initialState, action: All): State {
       switch (action.payload.property) {
         case STORY_PROPERTIES.Title: {
           property = 'title';
-          break;
-        }
-        case STORY_PROPERTIES.Body: {
-          property = 'body';
           break;
         }
         case STORY_PROPERTIES.BodyJSON: {
@@ -96,8 +61,7 @@ export function reducer(state = initialState, action: All): State {
           ...state.story,
           [property]: action.payload.value
         },
-        status: property === STORY_PROPERTIES.Body ||
-        property === STORY_PROPERTIES.BodyJSON ||
+        status: property === STORY_PROPERTIES.BodyJSON ||
         property === STORY_PROPERTIES.Title ?
           EDITOR_STATUS.NotSaved : state.status,
       };
@@ -142,6 +106,13 @@ export function reducer(state = initialState, action: All): State {
         status: EDITOR_STATUS.Saved,
       };
     }
+    case EditorActionTypes.EDITOR_STORY_SAVE_FAILURE: {
+      logger.info('Editor Story Save Failure');
+      return {
+        ...state,
+        status: EDITOR_STATUS.NotSaved,
+      };
+    }
     case EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH: {
       logger.info('Editor Story Publish Started', action.payload);
       return {
@@ -152,22 +123,6 @@ export function reducer(state = initialState, action: All): State {
     }
     case EditorActionTypes.EDITOR_STORY_PUBLISH_SUCCESS: {
       logger.info('Editor Story Publish Success', action.payload);
-      return {
-        ...state,
-        story: action.payload,
-        status: EDITOR_STATUS.Published,
-      };
-    }
-    case EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH: {
-      logger.info('Editor Comment Publish Started', action.payload);
-      return {
-        ...state,
-        story: action.payload,
-        status: EDITOR_STATUS.Publishing,
-      };
-    }
-    case EditorActionTypes.EDITOR_COMMENT_SAVE_AND_PUBLISH_SUCCESS: {
-      logger.info('Editor Comment Publish Success', action.payload);
       return {
         ...state,
         story: action.payload,

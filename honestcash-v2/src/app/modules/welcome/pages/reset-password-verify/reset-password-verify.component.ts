@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AppStates, selectAuthState} from '../../../../app.states';
 import {State as AuthorizationState} from '../../../../store/auth/auth.state';
-import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
 import {ResetPasswordContext} from '../../../../shared/models/authentication';
 import {Logger} from '../../../../shared/services/logger.service';
 

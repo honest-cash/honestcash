@@ -18,6 +18,7 @@ export enum EDITOR_EDITING_MODES {
 })
 export class EditorHeaderComponent implements OnInit, OnDestroy {
   @Input() public editingMode: EDITOR_EDITING_MODES = EDITOR_EDITING_MODES.Write;
+  @Input() public isAutosaveEnabled = false;
   public user: User;
   private EDITOR_EDITING_MODE = EDITOR_EDITING_MODES;
   private userState$: Subscription;
@@ -27,11 +28,11 @@ export class EditorHeaderComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.userState$ = this.store.select(selectUserState).subscribe((userState: UserState) => this.user = userState.user);
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.userState$) {
       this.userState$.unsubscribe();
     }

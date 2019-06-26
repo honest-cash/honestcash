@@ -10,7 +10,7 @@ import {initialState as initialWalletState} from '../../../../store/wallet/walle
 import {initialState as initialUserState} from '../../../../store/user/user.state';
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 import {initialState as initialEditorState} from '../../../../store/editor/editor.state';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {WindowToken} from '../../../../core/helpers/window';
 import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/localStorage';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
@@ -34,7 +34,7 @@ describe('EditorPublishModalComponent', () => {
     auth: initialAuthState,
     editor: {
       ...initialEditorState,
-      story: new Post(),
+      story: new Story(),
     },
   };
   initialAppStates.editor.story.userPostHashtags = [

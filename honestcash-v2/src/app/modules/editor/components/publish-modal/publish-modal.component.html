@@ -10,19 +10,12 @@
   <div class="modal-body">
     <editor-story-tags-selection></editor-story-tags-selection>
     <editor-paid-section-toggle-button></editor-paid-section-toggle-button>
-    <editor-paid-section-selection [form]="f"
-                                   [hidden]="!story.hasPaidSection"></editor-paid-section-selection>
+    <editor-paid-section-selection [hidden]="!story.hasPaidSection"></editor-paid-section-selection>
   </div>
   <div class="modal-footer px-0 pb-0">
     <div class="col text-left">
       <button type="button" class="btn btn-outline-dark" (click)="onClose()"
               [disabled]="saveStatus === EDITOR_SAVE_STATUS.Publishing">Close
-      </button>
-    </div>
-    <div class="col text-center d-none">
-      <button type="button" (click)="previewDraftStory()" class="btn btn-primary mr-2" placement="top"
-              ngbTooltip="Preview Story">
-        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
       </button>
     </div>
     <div class="col text-right">

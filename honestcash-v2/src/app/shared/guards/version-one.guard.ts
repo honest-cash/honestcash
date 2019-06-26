@@ -15,13 +15,13 @@ const log = new Logger('VersionOneGuard');
 
 @Injectable({providedIn: 'root'})
 export class VersionOneGuard implements CanActivate {
-  readonly isPlatformBrowser: boolean;
-  readonly isPlatformServer: boolean;
+  private readonly isPlatformBrowser: boolean;
+  private readonly isPlatformServer: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(WindowToken) private window: Window,
-    @Inject(EnvironmentToken) private environment: Environment,
+    @Inject(EnvironmentToken) public environment: Environment,
     private router: Router,
     private authenticationService: AuthService,
     private walletService: WalletService,
@@ -30,7 +30,7 @@ export class VersionOneGuard implements CanActivate {
     this.isPlatformServer = isPlatformServer(this.platformId);
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.isPlatformBrowser) {
       if (this.authenticationService.hasAuthorization() && this.walletService.getWalletMnemonic()) {
         log.debug('Already logged in, redirecting to v1');
@@ -50,11 +50,12 @@ export class VersionOneGuard implements CanActivate {
       // during SSR, as localStorage is undefined and thus the user is not authenticated, it will always redirect user to login
       // which will cause login page to appear until client rendering takes over
       // by then localStorage is defined and if the user exists, user will see the correct route
+      /* istanbul ignore next*/
       return true;
     }
   }
 
-  canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+  public canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     if (this.isPlatformBrowser) {
       return this.walletService.getWalletSetupStatus()
       .pipe(
@@ -69,6 +70,7 @@ export class VersionOneGuard implements CanActivate {
 
     if (this.isPlatformServer) {
       // to cheat SSR until client takes over
+      /* istanbul ignore next*/
       return of(true);
     }
   }

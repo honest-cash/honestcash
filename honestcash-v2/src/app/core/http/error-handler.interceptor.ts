@@ -23,6 +23,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   private errorHandler(response: HttpEvent<any>): Observable<HttpEvent<any>> {
     if (!environment.production) {
       // Do something with the error
+      /* istanbul ignore next*/
       log.error('Request error', response);
     }
     throw response;

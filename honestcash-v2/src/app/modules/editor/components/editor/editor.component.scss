@@ -20,9 +20,6 @@
       word-wrap: break-word;
     }
 
-    #editor-title {
-      padding-right: 50px;
-    }
 
     #editor-title {
       border: none;
@@ -31,6 +28,7 @@
       color: black;
       width: 100%;
       outline: none !important;
+      padding-right: 50px;
     }
 
     #editor {
@@ -45,9 +43,6 @@
     }
 
     #editor.comment-mode {
-      .ce-block--focused {
-        background-image: none;
-      }
 
       .ce-toolbar {
         display: none;
@@ -62,12 +57,16 @@
       }
     }
 
+    .ce-block--focused {
+      background-image: none;
+    }
+
     .ce-toolbox {
       background-color: white;
     }
 
     .ce-toolbar__actions {
-      right: -50px;
+      right: -45px;
     }
 
     .ce-block__content {
@@ -115,8 +114,14 @@
       font-size: 1.2rem;
     }
 
+    .cdx-input.embed-tool__caption,
     .cdx-input.image-tool__caption {
       font-size: 1rem;
+      height: 50px;
+    }
+
+    .cdx-block {
+      white-space: pre-line;
     }
 
     .cdx-warning:before {

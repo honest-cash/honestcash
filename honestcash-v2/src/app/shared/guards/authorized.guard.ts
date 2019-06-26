@@ -35,6 +35,7 @@ export class AuthorizedGuard implements CanActivate {
       // during SSR, as localStorage is undefined and thus the user is not authenticated, it will always redirect user to login
       // which will cause login page to appear until client rendering takes over
       // by then localStorage is defined and if the user exists, user will see the correct route
+      /* istanbul ignore next*/
       return true;
     }
 

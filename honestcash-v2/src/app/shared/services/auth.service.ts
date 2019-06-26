@@ -52,7 +52,7 @@ export class AuthService {
   private token = '';
   private userId: number;
   private isAuthenticated = false;
-  readonly isPlatformBrowser: boolean;
+  private readonly isPlatformBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -150,11 +150,6 @@ export class AuthService {
       password: passwordHash,
       captcha: payload.captcha
     });
-  }
-
-  // @todo editor-v2 adjust type
-  public setWallet(payload: any /*SetWalletContext */): Observable<OkResponse> {
-    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, payload.mnemonicEncrypted);
   }
 
   public getEmails(): Observable<string[]> {

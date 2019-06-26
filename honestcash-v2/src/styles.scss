@@ -19,7 +19,10 @@ body {
   background: linear-gradient(
       rgba(0, 0, 0, 0.4),
       rgba(0, 0, 0, 0.4)
-  ), url('https://github.com/honest-cash/honestcash/blob/redesign/hc-6/public/img/artwork-login.jpg?raw=true') no-repeat 50% fixed / cover;
+  ), url('/assets/images/artwork-login.jpg');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
 }
 
 .ng-touched.ng-invalid {

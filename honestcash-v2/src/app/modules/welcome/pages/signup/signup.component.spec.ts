@@ -9,7 +9,7 @@ import {SignUp} from '../../../../store/auth/auth.actions';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {CodedErrorResponse} from '../../../../shared/models/authentication';
-import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 
 const SHARED_MOCKS = {

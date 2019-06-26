@@ -3,7 +3,7 @@ import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
 import {ActivatedRoute} from '@angular/router';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
-import {EditorParentStoryLoad} from '../../../../store/editor/editor.actions';
+import {EditorStoryLoad} from '../../../../store/editor/editor.actions';
 
 @Component({
   selector: 'editor-comment',
@@ -11,8 +11,7 @@ import {EditorParentStoryLoad} from '../../../../store/editor/editor.actions';
   styleUrls: ['./comment.component.scss']
 })
 export class EditorCommentComponent implements OnInit {
-
-  public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
+  public editingMode = EDITOR_EDITING_MODES.Comment;
 
   constructor(
     private store: Store<AppStates>,
@@ -20,9 +19,9 @@ export class EditorCommentComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.store.dispatch(new EditorParentStoryLoad(params.parentStoryId));
+      this.store.dispatch(new EditorStoryLoad({parentPostId: params.parentStoryId}));
     });
   }
 }

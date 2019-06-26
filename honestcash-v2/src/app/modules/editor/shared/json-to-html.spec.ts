@@ -1,5 +1,6 @@
 import * as converter from './json-to-html';
 import {Block} from './json-to-html';
+import {mock} from '../../../../../mock';
 
 interface MockElements {
   heading: converter.HeaderElement;
@@ -89,71 +90,82 @@ const mockElements: MockElements = {
 
 describe('converter', () => {
   describe('individual block converter', () => {
-    describe('convertHeadingBlockToHtml', () => {
-      it('should convert block to html with correct text and heading level', () => {
+    describe('convertHeadingBlockToHtml should', () => {
+      it('convert block to html with correct text and heading level', () => {
         const heading = converter.convertHeadingBlockToHtml(mockElements.heading);
         expect(heading).toContain(`</h${mockElements.heading.data.level}>`);
         expect(heading).toContain(`>${mockElements.heading.data.text}<`);
       });
     });
-    describe('convertParagraphBlockToHtml', () => {
-      it('should convert block to html with a paragraph tag containing the text', () => {
+    describe('convertParagraphBlockToHtml should', () => {
+      it('convert block to html with a paragraph tag containing the text', () => {
         const paragraph = converter.convertParagraphBlockToHtml(mockElements.paragraph);
         expect(paragraph).toContain(`</p>`);
         expect(paragraph).toContain(`>${mockElements.paragraph.data.text}<`);
       });
     });
-    describe('convertListBlockToHtml', () => {
-      it('should convert block to html with a ordered list tag containing the list items', () => {
+    describe('convertListBlockToHtml should', () => {
+      it('convert block to html with a ordered list tag containing the list items', () => {
         const list = converter.convertListBlockToHtml(mockElements.orderedList);
         expect(list).toContain(`</ol>`);
         mockElements.orderedList.data.items.map(item => expect(list).toContain(`<li>${item}</li>`));
       });
-      it('should convert block to html with a unordered list tag containing the list items', () => {
+      it('convert block to html with a unordered list tag containing the list items', () => {
         const list = converter.convertListBlockToHtml(mockElements.unorderedList);
         expect(list).toContain(`</ul>`);
         mockElements.unorderedList.data.items.map(item => expect(list).toContain(`<li>${item}</li>`));
       });
     });
-    describe('convertImageBlockToHtml', () => {
-      it('should convert block to html with a img tag containing the src of the image tag and the caption as the alt', () => {
+    describe('convertImageBlockToHtml should', () => {
+      it('convert block to html with a img tag containing the src of the image tag and the caption as the alt', () => {
         const image = converter.convertImageBlockToHtml(mockElements.image);
         expect(image).toContain(`<img`);
         expect(image).toContain(`src="${mockElements.image.data.file.url}"`);
         expect(image).toContain(`alt="${mockElements.image.data.caption}"`);
       });
-      it('should convert block to html with a figcaption tag and an image tag inside of a figure tag', () => {
+      it('convert block to html with a figcaption tag and an image tag inside of a figure tag IF caption exists inside image ', () => {
         const image = converter.convertImageBlockToHtml(mockElements.image);
-        expect(image).toContain(`</figcaption></figure>`);
-        expect(image).toContain(`<figure><img`);
+        expect(image).toContain(`</figcaption>`);
+        expect(image).toContain(`<figure>`);
       });
-      it('should convert block to html with a figcaption tag with caption of the image', () => {
+      it('convert block to html WITHOUT a caption IF caption DOES NOT exist inside image', () => {
+        const captionlessImage: MockElements['image'] = {
+          ...mockElements.image,
+          data: {
+            ...mockElements.image.data,
+            caption: ''
+          }
+        };
+        const image = converter.convertImageBlockToHtml(captionlessImage);
+        expect(image).not.toContain(`</figcaption>`);
+      });
+      it('convert block to html with a figcaption tag with caption of the image', () => {
         const image = converter.convertImageBlockToHtml(mockElements.image);
         expect(image).toContain(`<figcaption>${mockElements.image.data.caption}</figcaption>`);
       });
     });
-    describe('convertQuoteBlockToHtml', () => {
-      it('should convert block to html with a blockquote tag containing the text and the caption as cite', () => {
+    describe('convertQuoteBlockToHtml should', () => {
+      it('convert block to html with a blockquote tag containing the text and the caption as cite', () => {
         const quote = converter.convertQuoteBlockToHtml(mockElements.quote);
         expect(quote).toContain(`</blockquote>`);
         expect(quote).toContain(`cite="${mockElements.quote.data.caption}"`);
         expect(quote).toContain(`>${mockElements.quote.data.text}</`);
       });
     });
-    describe('convertCodeBlockToHtml', () => {
-      it('should convert block to html with a code tag', () => {
+    describe('convertCodeBlockToHtml should', () => {
+      it('convert block to html with a code tag', () => {
         const code = converter.convertCodeBlockToHtml(mockElements.code);
         expect(code).toContain(`<code>${mockElements.code.data.code}</code>`);
       });
     });
     describe('convertDelimiterBlockToHtml', () => {
-      it('should convert block to html with a delimiter tag', () => {
+      it('convert block to html with a delimiter tag', () => {
         const delimiter = converter.convertDelimiterBlockToHtml(mockElements.delimiter);
         expect(delimiter).toContain(`<delimiter></delimiter>`);
       });
     });
-    describe('convertEmbedBlockToHtml', () => {
-      it('should convert block to html with a figcaption tag and a iframe tag inside a figure tag', () => {
+    describe('convertEmbedBlockToHtml should', () => {
+      it('convert block to html with a figcaption tag and a iframe tag inside a figure tag IF caption is defined inside embed', () => {
         const embed = converter.convertEmbedBlockToHtml(mockElements.embed);
         expect(embed).toContain(`<figure>`);
         expect(embed).toContain(`<figcaption>`);
@@ -162,11 +174,22 @@ describe('converter', () => {
         expect(embed).toContain(`</iframe`);
         expect(embed).toContain(`</figure>`);
       });
-      it('should convert block to html with a figcaption tag with caption inside', () => {
+      it('convert block to html with a figcaption tag with caption inside', () => {
         const embed = converter.convertEmbedBlockToHtml(mockElements.embed);
         expect(embed).toContain(`<figcaption>${mockElements.embed.data.caption}</figcaption>`);
       });
-      it('should convert block to html with a iframe tag with embed as the src', () => {
+      it('convert block to html WITHOUT a caption IF caption DOES NOT exist inside embed', () => {
+        const captionlessEmbed: MockElements['embed'] = {
+          ...mockElements.embed,
+          data: {
+            ...mockElements.embed.data,
+            caption: ''
+          }
+        };
+        const image = converter.convertEmbedBlockToHtml(captionlessEmbed);
+        expect(image).not.toContain(`</figcaption>`);
+      });
+      it('convert block to html with a iframe tag with embed as the src', () => {
         const embed = converter.convertEmbedBlockToHtml(mockElements.embed);
         expect(embed).toContain(`src="${mockElements.embed.data.embed}"></iframe>`);
       });
@@ -174,46 +197,62 @@ describe('converter', () => {
   });
 
   describe('general purpose converter', () => {
-    describe('convertBlockToHtml', () => {
-      it('should convert heading element', () => {
+    describe('convertBlockToHtml should', () => {
+      it('convert heading element', () => {
         expect(converter.convertBlockToHtml(mockElements.heading).length).not.toEqual(0);
       });
-      it('should convert paragraph element', () => {
+      it('convert paragraph element', () => {
         expect(converter.convertBlockToHtml(mockElements.paragraph).length).not.toEqual(0);
       });
-      it('should convert orderedList element', () => {
+      it('convert orderedList element', () => {
         expect(converter.convertBlockToHtml(mockElements.orderedList).length).not.toEqual(0);
       });
-      it('should convert unorderedList element', () => {
+      it('convert unorderedList element', () => {
         expect(converter.convertBlockToHtml(mockElements.unorderedList).length).not.toEqual(0);
       });
-      it('should convert image element', () => {
+      it('convert image element', () => {
         expect(converter.convertBlockToHtml(mockElements.image).length).not.toEqual(0);
       });
-      it('should convert quote element', () => {
+      it('convert quote element', () => {
         expect(converter.convertBlockToHtml(mockElements.quote).length).not.toEqual(0);
       });
-      it('should convert code element', () => {
+      it('convert code element', () => {
         expect(converter.convertBlockToHtml(mockElements.code).length).not.toEqual(0);
       });
-      it('should convert delimiter element', () => {
+      it('convert delimiter element', () => {
         expect(converter.convertBlockToHtml(mockElements.delimiter).length).not.toEqual(0);
       });
-      it('should convert embed element', () => {
+      it('convert embed element', () => {
         expect(converter.convertBlockToHtml(mockElements.embed).length).not.toEqual(0);
       });
-      it('should NOT convert an unknown element', () => {
+      it('NOT convert an unknown element', () => {
         expect(converter.convertBlockToHtml(<Block>mockElements.unknown)).toBeNull();
       });
     });
 
-    describe('convertBlocksArrayToHtml', () => {
-      it('should convert an array of blocks to html', () => {
+    describe('removeUnwantedBlock should', () => {
+      it('remove images that have empty URLs', () => {
+        const emptyImage = {
+          ...mockElements.image,
+          data: {
+            ...mockElements.image.data,
+            file: {
+              ...mockElements.image.data.file,
+              url: ''
+            }
+          }
+        };
+        expect(converter.removeUnwantedBlock(emptyImage)).toBeFalsy();
+      });
+    });
+
+    describe('convertBlocksArrayToHtml should', () => {
+      it('convert an array of blocks to html', () => {
         const html = converter.convertBlocksArrayToHtml([mockElements.heading, mockElements.paragraph]);
         expect(html).toContain(`</h${mockElements.heading.data.level}>`);
         expect(html).toContain(`</p>`);
       });
-      it('should convert an single block to html', () => {
+      it('convert an single block to html', () => {
         const html = converter.convertBlocksArrayToHtml(mockElements.heading);
         expect(html).toContain(`</h${mockElements.heading.data.level}>`);
       });

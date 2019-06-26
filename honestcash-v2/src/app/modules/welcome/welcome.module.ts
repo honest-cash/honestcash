@@ -4,7 +4,7 @@ import {LogoutComponent} from './pages/logout/logout.component';
 import {SignupComponent} from './pages/signup/signup.component';
 import {ResetPasswordRequestComponent} from './pages/reset-password-request/reset-password-request.component';
 import {WelcomeComponent} from './pages/welcome/welcome.component';
-import {WelcomeContainerComponent} from './welcome.component';
+import {WelcomeContainerComponent} from './welcome-container.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
@@ -16,7 +16,7 @@ import {LoadingSubmitButtonComponent} from './components/loading-submit-button/l
 import {AuthorizedGuard} from 'app/shared/guards/authorized.guard';
 import {UnauthorizedGuard} from 'app/shared/guards/unauthorized.guard';
 import {ThankYouComponent} from './pages/thank-you/thank-you.component';
-import {ForbiddenUsernameValidatorDirective} from './directives/forbidden-username.directive';
+import {ForbiddenUsernameValidatorDirective} from './shared/directives/forbidden-username.directive';
 import {ResetPasswordVerifyComponent} from './pages/reset-password-verify/reset-password-verify.component';
 import {AboutComponent} from './pages/about/about.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';

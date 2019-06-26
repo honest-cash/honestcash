@@ -29,4 +29,19 @@ describe('EditorParentPostBodyComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('functions', () => {
+    describe('toggleBody', () => {
+     it('should set isBodyOpen to true when isBodyOpen is false', () => {
+       component.isBodyOpen = false;
+       component.toggleBody();
+       expect(component.isBodyOpen).toBeTruthy();
+     });
+      it('should set isBodyOpen to false when isBodyOpen is true', () => {
+        component.isBodyOpen = true;
+        component.toggleBody();
+        expect(component.isBodyOpen).toBeFalsy();
+      });
+    });
+  });
 });

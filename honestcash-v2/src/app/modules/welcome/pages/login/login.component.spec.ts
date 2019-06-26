@@ -9,7 +9,7 @@ import {LogIn} from '../../../../store/auth/auth.actions';
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 import {CodedErrorResponse} from '../../../../shared/models/authentication';
 import {AppStates} from '../../../../app.states';
-import {WelcomeErrorHandler} from '../../helpers/welcome-error.handler';
+import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 
 describe('LoginComponent', () => {

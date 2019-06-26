@@ -1,22 +1,23 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
-import Post from '../../../shared/models/post';
+import Story from '../../../shared/models/story';
 import {HttpService} from '../../../core';
-import {EmptyResponse} from '../../../shared/models/authentication';
+import {EmptyResponse, FailedResponse} from '../../../shared/models/authentication';
 import Hashtag from '../../../shared/models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 import {LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
-import {STORY_PREVIEW_KEY, STORY_PROPERTIES} from '../shared/editor.story-properties';
-import {DraftContext, UploadImageResponse, UploadRemoteImageResponse} from '../interfaces';
+import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {StoryLoadContext, UploadImageResponse} from '../shared/interfaces';
 import {isPlatformBrowser} from '@angular/common';
+import {Block} from '../shared/json-to-html';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditorService {
-  private isPlatformBrowser: boolean;
+  private readonly isPlatformBrowser: boolean;
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(LocalStorageToken) private localStorage: Storage,
@@ -25,26 +26,31 @@ export class EditorService {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
-  public getPost(id: number): Observable<Post> {
-    return this.http.get<Post>(API_ENDPOINTS.getPost(id));
+  public getPost(id: number): Observable<Story> {
+    return this.http.get<Story>(API_ENDPOINTS.getPost(id));
   }
 
-  public getRelativePost(id: number) {
-    return this.http.get<Post>(API_ENDPOINTS.getRelativePost(id));
+  public loadPostDraft(storyLoadContext?: StoryLoadContext): Observable<Story> {
+    if (storyLoadContext) {
+      if (storyLoadContext.postId) {
+        return this.http.get<Story>(API_ENDPOINTS.postDraft(storyLoadContext.postId));
+      }
+      if (storyLoadContext.parentPostId) {
+        return this.http.get<Story>(API_ENDPOINTS.commentDraft(storyLoadContext.parentPostId));
+      }
+    }
+    return this.http.get<Story>(API_ENDPOINTS.draft());
   }
 
-  public loadPostDraft(draftContext?: DraftContext): Observable<Post> {
-    return this.http.get<Post>(API_ENDPOINTS.draft(draftContext));
-  }
-
-  public loadNewPostDraft(): Observable<Post> {
-    return this.http.post<Post>(API_ENDPOINTS.newDraft(), {});
-  }
-
-  public savePostProperty(post: Post, property: STORY_PROPERTIES): Observable<EmptyResponse> {
-    const body = {
-      [property]: post[property]
-    };
+  public savePostProperty(post: Story, property: STORY_PROPERTIES): Observable<EmptyResponse | FailedResponse> {
+    const body: {
+      hashtags?: string;
+      hasPaidSection?: boolean;
+      paidSectionLinebreak?: number;
+      paidSectionCost?: number;
+      title?: string;
+      bodyJSON?: Block[];
+    } = {};
     if (property === STORY_PROPERTIES.Hashtags) {
       body.hashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
     }
@@ -57,48 +63,14 @@ export class EditorService {
       body.title = post.title;
       body.bodyJSON = post.bodyJSON;
     }
-    return this.http.put<Post>(API_ENDPOINTS.savePostProperty(post, property), body);
+    return this.http.put<Story>(API_ENDPOINTS.savePostProperty(post, property), body);
   }
 
-  public savePostPropertyLocally(property: STORY_PROPERTIES, value: any): void {
-    if (this.isPlatformBrowser) {
-      if (!value) {
-        return;
-      }
-      const data = this.localStorage.getItem(STORY_PREVIEW_KEY);
-      if (data) {
-        const newData = JSON.parse(data);
-        newData[property] = value;
-        return this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(newData));
-      }
-      this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify({property: value}));
-    }
+  public publishPost(post: Story): Observable<Story | FailedResponse> {
+    return this.http.put<Story>(API_ENDPOINTS.publishPost(post), post);
   }
 
-  public savePostLocally(story: Post) {
-    if (this.isPlatformBrowser) {
-      this.localStorage.setItem(STORY_PREVIEW_KEY, JSON.stringify(story));
-    }
-  }
-
-  public getLocallySavedPost(): Post {
-    if (this.isPlatformBrowser) {
-      const data = JSON.parse(this.localStorage.getItem(STORY_PREVIEW_KEY));
-      return data ? data : new Post();
-    }
-  }
-
-  public removeLocallySavedPost() {
-    if (this.isPlatformBrowser) {
-      this.localStorage.removeItem(STORY_PREVIEW_KEY);
-    }
-  }
-
-  public publishPost(post: Post): Observable<Post> {
-    return this.http.put<Post>(API_ENDPOINTS.publishPost(post), post);
-  }
-
-  public uploadImage(image: File): Observable<UploadImageResponse> {
+  public uploadImage(image: File): Promise<UploadImageResponse> {
     const formData = new FormData();
     formData.append('files[]', image, image.name);
 
@@ -106,14 +78,23 @@ export class EditorService {
       headers: new HttpHeaders().set(ContentTypeFormDataHeader, '')
     };
 
-    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadImage(), formData, httpOptions);
+    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadImage(), formData, httpOptions)
+      .toPromise()
+      .then((response: any) => {
+        return {
+          success: 1,
+          file: {
+            url: response.files[0].url
+          }
+        } as UploadImageResponse;
+      });
   }
 
-  public uploadRemoteImage(url: string): Observable<UploadRemoteImageResponse> {
-    return this.http.post<UploadRemoteImageResponse>(API_ENDPOINTS.uploadRemoteImage(), {url});
+  public uploadRemoteImage(url: string): Promise<UploadImageResponse> {
+    return this.http.post<UploadImageResponse>(API_ENDPOINTS.uploadRemoteImage(), {url}).toPromise();
   }
 
-  private transformTags(tags: Hashtag[]): string {
+  public transformTags(tags: Hashtag[]): string {
     return tags.map(h => h.hashtag).join(',');
   }
 }

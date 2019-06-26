@@ -1,6 +1,5 @@
 export enum STORY_PROPERTIES {
   Title = 'title',
-  Body = 'body',
   BodyJSON = 'bodyJSON',
   BodyAndTitle = 'bodyAndTitle',
   Hashtags = 'hashtags',
