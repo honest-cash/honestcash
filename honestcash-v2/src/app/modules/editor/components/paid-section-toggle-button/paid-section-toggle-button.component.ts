@@ -24,14 +24,14 @@ export class EditorPaidSectionToggleButtonComponent implements OnInit {
     this.editor$ = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
     });
   }
 
-  onChangeHasPaidSection() {
+  public onChangeHasPaidSection() {
     this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
   }
 

@@ -1,14 +1,21 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EditorPaidSectionToggleButtonComponent} from './paid-section-toggle-button.component';
-import {provideMockStore} from '@ngrx/store/testing';
+import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
+import {AppStates} from '../../../../app.states';
+import {Store} from '@ngrx/store';
+import {initialState as initialEditorState} from '../../../../store/editor/editor.state';
+import Story from '../../../../shared/models/story';
+import {EditorStoryPropertyChange} from '../../../../store/editor/editor.actions';
+import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 describe('EditorPaidSectionToggleButtonComponent', () => {
   let component: EditorPaidSectionToggleButtonComponent;
   let fixture: ComponentFixture<EditorPaidSectionToggleButtonComponent>;
+  let store: MockStore<AppStates>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -22,14 +29,44 @@ describe('EditorPaidSectionToggleButtonComponent', () => {
       declarations: [EditorPaidSectionToggleButtonComponent],
     });
 
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(EditorPaidSectionToggleButtonComponent);
     component = fixture.componentInstance;
-  });
+    store = TestBed.get(Store);
+    spyOn(store, 'dispatch').and.callThrough();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('functions', () => {
+    describe('ngOnInit should', () => {
+      it('set story', () => {
+        const title = 'test';
+        store.setState({
+          ...initialAppStates,
+          editor: {
+            ...initialEditorState,
+            story: {
+              ...new Story(),
+              title
+            }
+          }
+        });
+        component.ngOnInit();
+        expect(component.story.title).toEqual(title);
+      });
+    });
+    describe('onChangeHasPaidSection should', () => {
+      it('dispatch EditorStoryPropertyChange with HasPaidSection has property and story.hasPaidSection as value', () => {
+        const hasPaidSection = true;
+        component.story = {
+          ...new Story(),
+          hasPaidSection
+        };
+        component.onChangeHasPaidSection();
+        expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.HasPaidSection, value: hasPaidSection}));
+      });
+    });
   });
 });
