@@ -32,6 +32,18 @@
           <input type="checkbox" ng-model="settings.email.weeklyDigest" ng-checked="settings.email.weeklyDigest" ng-change="updateSetting('weeklyDigest')"> Weekly digest e-mails
         </label>
       </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="settings.email.marketingEmails" ng-checked="settings.email.marketingEmails" ng-change="updateSetting('marketingEmails')"> Marketing emails
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="settings.email.productDigest" ng-checked="settings.email.productDigest" ng-change="updateSetting('productDigest')"> New product features on Honest
+        </label>
+      </div>
     </div>
   </div>
 </div>
