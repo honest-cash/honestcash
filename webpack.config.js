@@ -14,8 +14,6 @@ module.exports = (env, argv) => {
   return {
     entry: {
       app: "./src/app/app.ts",
-      editor: "./src/editor/editor.ts",
-      welcome: "./src/welcome/welcome.ts"
     },
     mode: process.env.MODE || "production",
     output: {
@@ -44,13 +42,6 @@ module.exports = (env, argv) => {
         }, {
             test: /\.html$/,
             use: [ "html-loader" ],
-        }, {
-            test: require.resolve("blueimp-file-upload"),
-            loader: "imports-loader?define=>false"
-        },
-        {
-            test: require.resolve("medium-editor-insert-plugin"),
-            loader: "imports-loader?define=>false"
         }, {
           test: /\.ts$/,
           enforce: 'pre',
