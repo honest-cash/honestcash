@@ -12,9 +12,6 @@ import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
-import Jasmine = jasmine.Jasmine;
-import Spy = jasmine.Spy;
-import {before} from 'selenium-webdriver/testing';
 
 const MockWindow = {
   location: {
@@ -25,6 +22,12 @@ const MockWindow = {
 const MockEnvironment = {
   clientUrl: 'http://mockUrl.com/'
 };
+
+const MockToastr = {
+  warning: (message: string, title: string, override: {positionClass: string}) => {
+  }
+};
+
 
 const bodyJSON = [
   {
@@ -90,12 +93,6 @@ const initialState = {
     }
   }
 };
-
-const MockToastr = {
-  warning: (message: string, title: string, override: {positionClass: string}) => {
-  }
-};
-
 describe('EditorCommentButtonComponent', () => {
   let component: EditorCommentButtonComponent;
   let fixture: ComponentFixture<EditorCommentButtonComponent>;
@@ -158,6 +155,17 @@ describe('EditorCommentButtonComponent', () => {
         fixture.detectChanges();
 
         expect(window.location.href).toEqual(`${MockEnvironment.clientUrl}${initialState.editor.story.user.username}/${initialState.editor.story.alias}`);
+      });
+
+      it('should call setShouldDisablePublish', () => {
+        const setShouldDisablePublishSpy = spyOn(component, 'setCanPublishComment');
+        component.ngOnInit();
+        expect(setShouldDisablePublishSpy).toHaveBeenCalled();
+      });
+      it('should call setIsBodyEmpty', () => {
+        const setIsBodyEmptySpy = spyOn(component, 'setIsBodyEmpty');
+        component.ngOnInit();
+        expect(setIsBodyEmptySpy).toHaveBeenCalled();
       });
     });
     describe('onCommentClicked', () => {

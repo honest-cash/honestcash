@@ -1,6 +1,6 @@
 <div class="nav-item editor-header__publish-button mr-3">
-  <button type="button" class="btn btn-sm btn-success" (click)="openPublishModal()"
-          [disabled]="saveStatus === EDITOR_SAVE_STATUS.Saving || saveStatus === EDITOR_SAVE_STATUS.NotInitialized || saveStatus === EDITOR_SAVE_STATUS.Publishing || saveStatus === EDITOR_SAVE_STATUS.NotSaved">
+  <button type="button" class="btn btn-sm btn-success" (click)="onPublishClicked()"
+          [disabled]="shouldDisablePublish">
     Publish
   </button>
 </div>

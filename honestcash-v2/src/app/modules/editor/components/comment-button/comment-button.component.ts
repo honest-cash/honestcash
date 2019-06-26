@@ -74,7 +74,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setIsBodyEmpty() {
+  public setIsBodyEmpty() {
     this.isBodyEmpty = !this.story.bodyJSON ||
       (this.story.bodyJSON && this.story.bodyJSON.length === 0) ||
       (
@@ -88,7 +88,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
       );
   }
 
-  private setCanPublishComment() {
+  public setCanPublishComment() {
     this.canPublishComment = this.saveStatus === EDITOR_STATUS.EditorLoaded ||
       this.saveStatus === EDITOR_STATUS.Saved ||
       this.saveStatus === EDITOR_STATUS.NotSaved;
