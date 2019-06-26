@@ -33,6 +33,7 @@ interface IScopeWalletCtrl extends ng.IScope {
   connect: (privateKey: string, hdPath: string) => void;
   importNewWallet: (newMnemonic, hdPath) => Promise<any>;
   onDepositClick: () => void;
+  onBuyClick: () => void;
   disconnect: () => void;
   saveRecoveryPhraseBackupProp: () => void;
   checkRecoveryBackup: () => void;
@@ -384,6 +385,35 @@ export default class WalletCtrl {
           container.innerHTML = "";
 
           new QRCode(container, simpleWalletProvider.get().address);
+        },
+        50);
+    };
+
+    $scope.onBuyClick = () => {
+      setTimeout(
+        () => {
+          const container = document.getElementById("buy");
+
+          const iframe = document.createElement("iframe") as HTMLIFrameElement;
+
+          const merchantId = "b060bpq7t8cpkk4h";
+          const currencies = "btc,bch,eth";
+          const usdAmount = 20;
+
+          // tslint:disable-next-line: max-line-length
+          iframe.src = `https://widget.changelly.com?currencies=${currencies}&from=usd&to=bch&amount=${usdAmount}&address=${$scope.addressBCH}&fiat=true&fixedTo=true&theme=default&merchant_id=${merchantId}`;
+          iframe.width = "80%";
+          iframe.height = "600";
+          iframe.classList.add("changelly");
+          iframe.scrolling = "no";
+          // tslint:disable-next-line: max-line-length
+          iframe.setAttribute("style", "min-width: 100%; width: 100px; overflow-y: hidden; border: none");
+          // tslint:disable-next-line: max-line-length
+          iframe.setAttribute("onLoad", "function A(e){var t=e.target,n=t.parentNode,r=t.contentWindow,a=function(){return r.postMessage({width:n.offsetWidth},g.url)};window.addEventListener('resize',a),a()};A.apply(this, arguments);");
+          iframe.innerText = "Can't load widget";
+          container.innerHTML = "";
+
+          container.appendChild(iframe);
         },
         50);
     };
