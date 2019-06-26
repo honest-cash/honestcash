@@ -9,6 +9,7 @@
     "build": "ng build",
     "test": "ng test",
     "test:dev": "ng test --code-coverage --source-map",
+    "test:dev:single-file": "ng test --main ./src/test-single.ts",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "transfer-libs": "bash scripts/transfer-libs.sh",
