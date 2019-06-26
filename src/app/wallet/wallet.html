@@ -29,6 +29,10 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link" id="buy-tab" data-toggle="tab" href="#buy" role="tab" aria-controls="buy" aria-selected="false">Buy BCH</a>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link" id="withdrawal-tab" data-toggle="tab" href="#withdrawal" role="tab" aria-controls="withdrawal" aria-selected="false">Withdrawal</a>
         </li>
 
@@ -44,6 +48,11 @@
     </ul>
 
     <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade" id="buy" role="tabpanel" aria-labelledby="buy-tab">
+            <script src="https://widget.changelly.com/affiliate.js"></script>
+            <iframe src="https://widget.changelly.com?currencies=btc,bch,eth&from=btc&to=bch&amount=20&address={{addressBCH}}&fiat=true&fixedTo=true&theme=default&merchant_id=b060bpq7t8cpkk4h" width="80%" height="600" class="changelly" scrolling="no" onLoad="function A(e){var t=e.target,n=t.parentNode,r=t.contentWindow,a=function(){return r.postMessage({width:n.offsetWidth},g.url)};window.addEventListener('resize',a),a()};A.apply(this, arguments);" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Can't load widget</iframe>
+        </div>
+
         <div class="tab-pane fade in active" id="deposit" role="tabpanel" aria-labelledby="wallet-tab">
             <div style="margin-top:15px;" class="form-group">
                 <label for="addressBCH">Address for sending tips</label>
