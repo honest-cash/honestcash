@@ -1,7 +1,7 @@
 export default class Hashtag {
-  id: number;
-  hashtag: string;
-  createdAt: string;
-  updatedAt: string;
-  userPostId: number;
+  public id: number;
+  public hashtag: string;
+  public createdAt: string;
+  public updatedAt: string;
+  public userPostId: number;
 }

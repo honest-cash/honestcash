@@ -21,6 +21,7 @@ export class EditorStoryTagsSelectionComponent implements OnInit {
 
   public isPlatformBrowser: boolean;
   public _hashtags: Hashtag[] | INgxChipsTag[] | string;
+  public userPostHashtagsKey = 'hashtag';
   private editor$: Observable<EditorState>;
   private editorSub: Subscription;
 
@@ -32,7 +33,7 @@ export class EditorStoryTagsSelectionComponent implements OnInit {
     this.editor$ = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       if (!this._hashtags) {
@@ -41,7 +42,7 @@ export class EditorStoryTagsSelectionComponent implements OnInit {
     });
   }
 
-  onTagChange(tags: INgxChipsTag[]) {
+  public onTagChange(tags: INgxChipsTag[]) {
     this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
   }
 
