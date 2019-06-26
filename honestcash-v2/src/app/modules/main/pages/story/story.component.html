@@ -1,110 +1,231 @@
-<editor-header [editingMode]="EDITOR_EDITING_MODES.Edit"></editor-header>
-<div class="mt-5 mb-5 story-preview__wrapper">
-  <ngb-tabset justify="justified" *ngIf="story && user">
-    <ngb-tab>
-      <ng-template ngbTabTitle>
-        <small>Full View of Story</small>
-      </ng-template>
-      <ng-template ngbTabContent>
-        <div class="row mb-2">
-          <div class="col">
-            <h1 class="story-title">{{story.title || "No title"}}</h1>
+<app-header></app-header>
+<div *ngIf="story && user" class="mt-5 mb-5 story-preview__wrapper">
+  <div class="row mb-2">
+    <div class="col">
+      <h1 class="story-title">{{story.title || "No title"}}</h1>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-1 pr-0">
+      <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
+    </div>
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <a class="font-weight-bold">{{user.username}}</a>
+          <button type="button" class="btn btn-light btn-xs ml-2">Follow</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-muted">
+          {{story.updatedAt | date:'MMM d, yy'}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="story.body" class="row mb-5">
+    <div class="col story-body" [innerHTML]="story.body"><</div>
+  </div>
+  <div *ngIf="story.hashtags && story.hashtags.length" class="row">
+    <div class="col">
+      <a *ngFor="let tag of story.hashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
+         class="badge badge-light p-3 font-weight-normal small">{{tag.hashtag}}</a>
+    </div>
+  </div>
+  <div *ngIf="!story.hashtags || (story.hashtags && !story.hashtags.length)" class="row mb-4">
+    <div class="col">
+      <small class="badge badge-light p-3 font-weight-normal">No tags
+        added
+      </small>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col">
+      <div class="row mb-4">
+        <div class="col-1 pr-0">
+          <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <a class="font-weight-bold">{{user.username}}</a>
+              <button type="button" class="btn btn-light btn-xs ml-2">Follow</button>
+            </div>
           </div>
         </div>
-        <div class="row mb-2">
-          <div class="col-1 pr-0">
-            <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <div class="btn-group btn-group-sm">
+            <button type="button" class="text-white font-weight-bold btn btn-warning text-uppercase">Upvote for </button>
+            <button class="text-white font-weight-bold btn btn-warning">10¢</button>
           </div>
+        </div>
+        <div class="col-1">
+          <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'facebook']"></fa-icon></button>
+            <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row mb-2">
+    <h3 class="col font-weight-bold text-uppercase"><u>Upvotes ({{story.upvoteCount}})</u></h3>
+  </div>
+  <div class="row mb-4">
+    <div class="col">upvotes</div>
+  </div>
+  <div class="row mb-2">
+    <h3 class="col font-weight-bold text-uppercase"><u>Unlocks ({{story.unlockCount}})</u></h3>
+  </div>
+  <div class="row mb-4">
+    <div class="col">unlocks</div>
+  </div>
+  <div class="row mb-2">
+    <h3 class="col font-weight-bold text-uppercase">Comments ({{story.responseCount}})</h3>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <div class="card">
+        <div id="story-comment-wrapper" style="padding: 1.25rem;">
+          <div class="row">
+            <div class="col-1 pr-0">
+              <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
+            </div>
+            <div class="col">
+              <p
+                #commentElement
+                id="story-comment"
+                contenteditable="true"
+                name="title"
+                (input)="onCommentChange($event)"
+                (blur)="onCommentBlur()"
+                placeholder="Write a comment..."
+                ngDefaultControl
+              >
+              </p>
+            </div>
+          </div>
+          <button id="story-comment-button" type="button" class="font-weight-bold btn btn-sm btn-success text-uppercase">Comment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card">
+        <div style="padding: 1.25rem;">
+          <div class="row mb-2">
+            <div class="col-1 pr-0">
+              <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
+            </div>
+            <div class="col">
+              <div class="row">
+                <div class="col">
+                  <a class="font-weight-bold">{{user.username}}</a><br>
+                  <span class="text-muted">
+                    {{story.updatedAt | date:'MMM d, yy'}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="row" style="padding: 0rem 1.25rem 1.25rem 1.25rem;">
           <div class="col">
+            <div class="btn-group btn-group-sm">
+              <button type="button" class="text-white font-weight-bold btn btn-warning text-uppercase">Upvote for </button>
+              <button class="text-white font-weight-bold btn btn-warning">10¢</button>
+            </div>
+            <div class="btn-group btn-group-sm ml-4">
+              <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'facebook']"></fa-icon></button>
+              <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card ml-2 mt-3" style="border-left-width: 2px;">
+        <div style="padding: 1.25rem;">
+          <div class="row mb-2">
+            <div class="col-1 pr-0">
+              <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
+            </div>
+            <div class="col">
+              <div class="row">
+                <div class="col">
+                  <a class="font-weight-bold">{{user.username}}</a><br>
+                  <span class="text-muted">
+                    {{story.updatedAt | date:'MMM d, yy'}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding: 0rem 1.25rem 1.25rem 1.25rem;">
+          <div class="col">
+            <div class="btn-group btn-group-sm">
+              <button type="button" class="text-white font-weight-bold btn btn-warning text-uppercase">Upvote for </button>
+              <button class="text-white font-weight-bold btn btn-warning">10¢</button>
+            </div>
+            <div class="btn-group btn-group-sm ml-4">
+              <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'facebook']"></fa-icon></button>
+              <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ml-3">
+        <div class="card ml-2 mt-3" style="border-left-width: 2px;">
+          <div style="padding: 1.25rem;">
+            <div class="row mb-2">
+              <div class="col-1 pr-0">
+                <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
+              </div>
+              <div class="col">
+                <div class="row">
+                  <div class="col">
+                    <a class="font-weight-bold">{{user.username}}</a><br>
+                    <span class="text-muted">
+                    {{story.updatedAt | date:'MMM d, yy'}}
+                  </span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col">
-                <a class="font-weight-bold">{{user.username}}</a>
-                <button type="button" class="btn btn-light btn-xs ml-2">Follow</button>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col text-muted">
-                {{story.updatedAt | date:'MMM d, yy'}}
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="story.bodyJSON" class="row mb-5">
-          <div class="col story-body">
-            <div
-              #bodyJSON
-              *ngFor="let block of story.bodyJSON; let index = index;"
-              [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
-            </div>
-          </div>
-        </div>
-        <div *ngIf="story.hashtags && story.hashtags.length" class="row">
-          <div class="col">
-            <a *ngFor="let tag of story.hashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
-               class="badge badge-light p-3 font-weight-normal small">{{tag.hashtag}}</a>
-          </div>
-        </div>
-        <div *ngIf="!story.hashtags || (story.hashtags && !story.hashtags.length)" class="row">
-          <div class="col">
-            <small class="badge badge-light p-3 font-weight-normal">No tags
-              added
-            </small>
-          </div>
-        </div>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab *ngIf="story.hasPaidSection && user">
-      <ng-template ngbTabTitle>
-        <small>Locked View of Story</small>
-      </ng-template>
-      <ng-template ngbTabContent>
-        <div class="row mb-2">
-          <div class="col">
-            <h1 class="story-title">{{story.title || "No title"}}</h1>
-          </div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-1 pr-0">
-            <app-avatar [src]="user.imageUrl" large="true"></app-avatar>
-          </div>
-          <div class="col">
-            <div class="row">
-              <div class="col">
-                <a class="font-weight-bold">{{user.username}}</a>
-                <button type="button" class="btn btn-light btn-xs ml-2">Follow</button>
+          <div class="row" style="padding: 0rem 1.25rem 1.25rem 1.25rem;">
+            <div class="col">
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="text-white font-weight-bold btn btn-warning text-uppercase">Upvote for </button>
+                <button class="text-white font-weight-bold btn btn-warning">10¢</button>
               </div>
-            </div>
-            <div class="row">
-              <div class="col text-muted">
-                {{story.updatedAt | date:'MMM d, yy'}}
+              <div class="btn-group btn-group-sm ml-4">
+                <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'facebook']"></fa-icon></button>
+                <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></button>
               </div>
             </div>
           </div>
         </div>
-        <div *ngIf="story.bodyJSON" class="row mb-5">
-          <div class="col story-body">
-            <div
-              #bodyJSONFree
-              *ngFor="let block of freeBodyJSON; let index = index;"
-              [innerHTML]="sanitizer.bypassSecurityTrustHtml(convertBlockToHtml(block))">
-            </div>
-            <editor-paid-section-unlocker [story]="story"></editor-paid-section-unlocker>
-          </div>
-        </div>
-        <div *ngIf="story.hashtags && story.hashtags.length" class="row">
-          <div class="col">
-            <a *ngFor="let tag of story.hashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
-               class="badge badge-light p-3 font-weight-normal small">{{tag.hashtag}}</a>
-          </div>
-        </div>
-        <div *ngIf="!story.hashtags || (story.hashtags && !story.hashtags.length)" class="row">
-          <div class="col">
-            <small class="badge badge-light p-3 font-weight-normal">No tags
-              added
-            </small>
-          </div>
-        </div>
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+      </div>
+    </div>
+  </div>
 </div>

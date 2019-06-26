@@ -8,7 +8,6 @@ import {MainContainerComponent} from './main-container.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
 import {HeadingComponent} from './components/heading/heading.component';
 import {CardFooterComponent} from './components/card/footer/footer.component';
@@ -20,6 +19,9 @@ import {ForbiddenUsernameValidatorDirective} from './shared/directives/forbidden
 import {ResetPasswordVerifyComponent} from './pages/reset-password-verify/reset-password-verify.component';
 import {AboutComponent} from './pages/about/about.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {StoryComponent} from './pages/story/story.component';
+import {WelcomeHeaderComponent} from './components/welcome-header/welcome-header.component';
+import {SharedModule} from '../../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -56,14 +58,15 @@ const routes: Routes = [
       {path: 'reset-password-request', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
       {path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard]},
     ]
-  }
+  },
+  {path: ':username/:storyId', component: StoryComponent}
 ];
 
 @NgModule({
   declarations: [
     HeadingComponent,
     LoadingSubmitButtonComponent,
-    HeaderComponent,
+    WelcomeHeaderComponent,
     FooterComponent,
     CardFooterComponent,
     LoginComponent,
@@ -75,12 +78,14 @@ const routes: Routes = [
     ResetPasswordVerifyComponent,
     MainContainerComponent,
     ThankYouComponent,
+    StoryComponent,
     ForbiddenUsernameValidatorDirective,
   ],
   imports: [
     FormsModule,
     RouterModule.forChild(routes),
     CommonModule,
+    SharedModule,
     FontAwesomeModule
   ],
   providers: [],
