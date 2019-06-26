@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import Post from '../../shared/models/post';
+import Story from '../../shared/models/story';
 import {FailedResponse} from '../../shared/models/authentication';
 import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
 import {StoryLoadContext} from '../../modules/editor/shared/interfaces';
@@ -36,7 +36,7 @@ export class EditorUnload implements Action {
 export class EditorChange implements Action {
   public readonly type = EditorActionTypes.EDITOR_CHANGE;
 
-  constructor(public payload: { story: Post }) {
+  constructor(public payload: { story: Story }) {
   }
 }
 
@@ -50,7 +50,7 @@ export class EditorStoryLoad implements Action {
 export class EditorStoryLoadSuccess implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_LOAD_SUCCESS;
 
-  constructor(public payload: Post) {
+  constructor(public payload: Story) {
   }
 }
 
@@ -71,7 +71,7 @@ export class EditorStoryPropertyChange implements Action {
 export class EditorStoryPropertySave implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE;
 
-  constructor(public payload: { story: Post, property: STORY_PROPERTIES }) {
+  constructor(public payload: { story: Story, property: STORY_PROPERTIES }) {
   }
 }
 
@@ -97,14 +97,14 @@ export class EditorStorySave implements Action {
 export class EditorStorySaveSuccess implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_SAVE_SUCCESS;
 
-  constructor(public payload: Post) {
+  constructor(public payload: Story) {
   }
 }
 
 export class EditorStorySaveAndPublish implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH;
 
-  constructor(public payload: Post, public properties: STORY_PROPERTIES[]) {
+  constructor(public payload: Story, public properties: STORY_PROPERTIES[]) {
   }
 }
 
@@ -118,14 +118,14 @@ export class EditorStorySaveFailure implements Action {
 export class EditorStoryPublish implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH;
 
-  constructor(public payload: Post) {
+  constructor(public payload: Story) {
   }
 }
 
 export class EditorStoryPublishSuccess implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH_SUCCESS;
 
-  constructor(public payload: Post) {
+  constructor(public payload: Story) {
   }
 }
 

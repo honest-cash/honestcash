@@ -13,12 +13,12 @@ import {
   EditorUnload
 } from './editor.actions';
 import {EDITOR_STATUS, initialState, State as EditorState} from './editor.state';
-import Post from '../../shared/models/post';
+import Story from '../../shared/models/story';
 import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
 import {ELEMENT_TYPES} from '../../modules/editor/shared/json-to-html';
 
 const SHARED_MOCKS = {
-  story: new Post(),
+  story: new Story(),
   codedErrorResponse: {
     code: 400,
     desc: 'EXAMPLE_FAILURE',
@@ -146,7 +146,7 @@ describe('editor.reducer', () => {
     it('should return Saving status', () => {
       const state: EditorState = reducer(
         undefined,
-        new EditorStoryPropertySave({story: new Post(), property: STORY_PROPERTIES.Title}));
+        new EditorStoryPropertySave({story: new Story(), property: STORY_PROPERTIES.Title}));
 
       expect(state.status).toBe(EDITOR_STATUS.Saving);
     });
@@ -189,7 +189,7 @@ describe('editor.reducer', () => {
     it('should return Saved status', () => {
       const state: EditorState = reducer(
         undefined,
-        new EditorStorySaveSuccess(new Post())
+        new EditorStorySaveSuccess(new Story())
       );
 
       expect(state.status).toBe(EDITOR_STATUS.Saved);
@@ -211,7 +211,7 @@ describe('editor.reducer', () => {
     it('should return Publishing status', () => {
       const state: EditorState = reducer(
         undefined,
-        new EditorStorySaveAndPublish(new Post(), [STORY_PROPERTIES.Title])
+        new EditorStorySaveAndPublish(new Story(), [STORY_PROPERTIES.Title])
       );
 
       expect(state.status).toBe(EDITOR_STATUS.Publishing);
@@ -221,7 +221,7 @@ describe('editor.reducer', () => {
     it('should return Published status with the updated story', () => {
       const state: EditorState = reducer(
         undefined,
-        new EditorStoryPublishSuccess({...new Post(), title: 'test'})
+        new EditorStoryPublishSuccess({...new Story(), title: 'test'})
       );
 
       expect(state.status).toBe(EDITOR_STATUS.Published);

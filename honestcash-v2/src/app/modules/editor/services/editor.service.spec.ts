@@ -7,7 +7,7 @@ import {EditorService} from './editor.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../../app.states';
 import {HttpService} from '../../../core';
-import Post from '../../../shared/models/post';
+import Story from '../../../shared/models/story';
 import {RouterTestingModule} from '@angular/router/testing';
 import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
@@ -53,11 +53,11 @@ describe('EditorService', () => {
     it('should make API request to the correct API endpoint with id of the post', (done) => {
       const mocks = {
         id: 1,
-        getPostSuccess: new Post(),
+        getPostSuccess: new Story(),
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      editorService.getPost(mocks.id).subscribe((response: Post) => {
+      editorService.getPost(mocks.id).subscribe((response: Story) => {
         // Assert
         expect(httpServiceMock.get)
         .toHaveBeenCalledWith(API_ENDPOINTS.getPost(mocks.id));
@@ -70,11 +70,11 @@ describe('EditorService', () => {
     it('should make API request to postDraft endpoint if context has postId provided', (done) => {
       const mocks = {
         id: 1,
-        getPostSuccess: new Post(),
+        getPostSuccess: new Story(),
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      editorService.loadPostDraft({postId: mocks.id}).subscribe((response: Post) => {
+      editorService.loadPostDraft({postId: mocks.id}).subscribe((response: Story) => {
         // Assert
         expect(httpServiceMock.get)
           .toHaveBeenCalledWith(API_ENDPOINTS.postDraft(mocks.id));
@@ -84,11 +84,11 @@ describe('EditorService', () => {
     it('should make API request to commentDraft endpoint if context has parentPostId provided', (done) => {
       const mocks = {
         id: 1,
-        getPostSuccess: new Post(),
+        getPostSuccess: new Story(),
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      editorService.loadPostDraft({parentPostId: mocks.id}).subscribe((response: Post) => {
+      editorService.loadPostDraft({parentPostId: mocks.id}).subscribe((response: Story) => {
         // Assert
         expect(httpServiceMock.get)
           .toHaveBeenCalledWith(API_ENDPOINTS.commentDraft(mocks.id));
@@ -97,11 +97,11 @@ describe('EditorService', () => {
     });
     it('should make API request to draft endpoint if NO id is provided', (done) => {
       const mocks = {
-        getPostSuccess: new Post(),
+        getPostSuccess: new Story(),
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getPostSuccess));
       // Act
-      editorService.loadPostDraft().subscribe((response: Post) => {
+      editorService.loadPostDraft().subscribe((response: Story) => {
         // Assert
         expect(httpServiceMock.get)
           .toHaveBeenCalledWith(API_ENDPOINTS.draft());
@@ -115,7 +115,7 @@ describe('EditorService', () => {
       it('make API request to savePostProperty endpoint with correct property when property is BodyAndTitle', (done) => {
         const mocks = {
           getPostSuccess: {
-            ...new Post(),
+            ...new Story(),
             id: 1,
             title: 'test',
             bodyJSON: [
@@ -131,7 +131,7 @@ describe('EditorService', () => {
         };
         (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
         // Act
-        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Post) => {
+        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Story) => {
           // Assert
           expect(httpServiceMock.put)
             .toHaveBeenCalledWith(
@@ -144,7 +144,7 @@ describe('EditorService', () => {
       it('make API request to savePostProperty endpoint with correct property when property is Hashtags', (done) => {
         const mocks = {
           getPostSuccess: {
-            ...new Post(),
+            ...new Story(),
             id: 1,
             userPostHashtags: [
               {
@@ -160,7 +160,7 @@ describe('EditorService', () => {
         };
         (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
         // Act
-        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Post) => {
+        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Story) => {
           // Assert
           expect(httpServiceMock.put)
             .toHaveBeenCalledWith(
@@ -173,7 +173,7 @@ describe('EditorService', () => {
       it('make API request to savePostProperty endpoint with correct property when property is PaidSection', (done) => {
         const mocks = {
           getPostSuccess: {
-            ...new Post(),
+            ...new Story(),
             id: 1,
             hasPaidSection: true,
             paidSectionCost: 1,
@@ -183,7 +183,7 @@ describe('EditorService', () => {
         };
         (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
         // Act
-        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Post) => {
+        editorService.savePostProperty(mocks.getPostSuccess, mocks.property).subscribe((response: Story) => {
           // Assert
           expect(httpServiceMock.put)
             .toHaveBeenCalledWith(
@@ -204,11 +204,11 @@ describe('EditorService', () => {
     it('should make API request to the correct API endpoint with post as the body', (done) => {
       const mocks = {
         id: 1,
-        putPostSuccess: new Post(),
+        putPostSuccess: new Story(),
       };
       (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.putPostSuccess));
       // Act
-      editorService.publishPost(mocks.putPostSuccess).subscribe((response: Post) => {
+      editorService.publishPost(mocks.putPostSuccess).subscribe((response: Story) => {
         // Assert
         expect(httpServiceMock.put)
           .toHaveBeenCalledWith(API_ENDPOINTS.publishPost(mocks.putPostSuccess), mocks.putPostSuccess);

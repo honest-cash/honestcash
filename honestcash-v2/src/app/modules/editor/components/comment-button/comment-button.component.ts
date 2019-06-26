@@ -2,7 +2,7 @@ import {Component, HostBinding, Inject, OnDestroy, OnInit} from '@angular/core';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Store} from '@ngrx/store';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {ToastrService} from 'ngx-toastr';
 import {Observable, Subscription} from 'rxjs';
 import {EditorStorySaveAndPublish} from '../../../../store/editor/editor.actions';
@@ -19,7 +19,7 @@ import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 })
 export class EditorCommentButtonComponent implements OnInit, OnDestroy {
   @HostBinding('class') public class = 'd-flex align-items-center mr-4';
-  public story: Post;
+  public story: Story;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
   public isBodyEmpty = true;

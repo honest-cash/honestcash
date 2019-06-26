@@ -1,5 +1,5 @@
 import {Component, HostBinding, Input, OnInit} from '@angular/core';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 
 @Component({
   selector: 'editor-paid-section-unlocker',
@@ -8,7 +8,7 @@ import Post from '../../../../shared/models/post';
 })
 export class EditorPaidSectionUnlockerComponent implements OnInit {
   @HostBinding('class') class = 'd-flex align-items-center';
-  @Input() public story: Post;
+  @Input() public story: Story;
 
   constructor() {
   }

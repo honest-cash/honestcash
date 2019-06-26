@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {Observable, Subscription} from 'rxjs';
 import {State as EditorState} from '../../../../store/editor/editor.state';
@@ -13,7 +13,7 @@ import {Store} from '@ngrx/store';
 })
 export class EditorParentPostBodyComponent implements OnInit, OnDestroy {
 
-  public story: Post;
+  public story: Story;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
   public isBodyOpen = false;
   private editor$: Observable<EditorState>;

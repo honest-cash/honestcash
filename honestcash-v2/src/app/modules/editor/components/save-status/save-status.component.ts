@@ -3,7 +3,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {interval, Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {EditorStoryPropertySave} from '../../../../store/editor/editor.actions';
 import {EDITOR_AUTO_SAVE_INTERVAL} from '../editor/editor.component';
 import {takeWhile} from 'rxjs/operators';
@@ -21,7 +21,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
   @Input() public editingMode: EDITOR_EDITING_MODES;
   @Input() public isAutosaveEnabled: boolean;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
-  public story: Post;
+  public story: Story;
   public saveStatus: EDITOR_STATUS;
   public isSaveButtonClicked = false;
   private editor$: Observable<EditorState>;

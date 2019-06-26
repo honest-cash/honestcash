@@ -9,7 +9,7 @@ import * as EditorActions from './editor.actions';
 import {cold, hot} from 'jasmine-marbles';
 import {EditorService} from '../../modules/editor/services/editor.service';
 import {mock} from '../../../../mock';
-import Post from '../../shared/models/post';
+import Story from '../../shared/models/story';
 import {STORY_PROPERTIES} from '../../modules/editor/shared/editor.story-properties';
 
 const SHARED_MOCKS = {
@@ -64,11 +64,11 @@ describe('editor.effects', () => {
         postContext: {
           postId: 2
         },
-        loadSuccess: new Post(),
+        loadSuccess: new Story(),
         loadFailure: SHARED_MOCKS.codedErrorResponse
       };
       it('should correctly call editorService.loadPostDraft with NO context when context is NOT provided', () => {
-        (<jasmine.Spy>mockEditorService.loadPostDraft).and.returnValue(of(new Post()));
+        (<jasmine.Spy>mockEditorService.loadPostDraft).and.returnValue(of(new Story()));
         actions = cold('a', {a: new EditorActions.EditorStoryLoad()});
 
         effects.EditorStoryLoad.subscribe(() => {
@@ -76,7 +76,7 @@ describe('editor.effects', () => {
         });
       });
       it('should correctly call editorService.loadPostDraft with context when context is provided with storyId', () => {
-        (<jasmine.Spy>mockEditorService.loadPostDraft).and.returnValue(of(new Post()));
+        (<jasmine.Spy>mockEditorService.loadPostDraft).and.returnValue(of(new Story()));
         actions = cold('a', {a: new EditorActions.EditorStoryLoad(mocks.postContext)});
 
         effects.EditorStoryLoad.subscribe(() => {
@@ -84,7 +84,7 @@ describe('editor.effects', () => {
         });
       });
       it('should correctly call editorService.loadPostDraft with context when context is provided with parentPostId', () => {
-        (<jasmine.Spy>mockEditorService.loadPostDraft).and.returnValue(of(new Post()));
+        (<jasmine.Spy>mockEditorService.loadPostDraft).and.returnValue(of(new Story()));
         actions = cold('a', {a: new EditorActions.EditorStoryLoad(mocks.commentContext)});
 
         effects.EditorStoryLoad.subscribe(() => {
@@ -117,7 +117,7 @@ describe('editor.effects', () => {
     describe('PropertySave', () => {
       const mocks = {
         story: {
-          ...new Post(),
+          ...new Story(),
           title: '123'
         },
         property: STORY_PROPERTIES.Title,
@@ -159,7 +159,7 @@ describe('editor.effects', () => {
     describe('SaveAndPublish', () => {
       const mocks = {
         story: {
-          ...new Post(),
+          ...new Story(),
           title: '123'
         },
         property: STORY_PROPERTIES.Title,
@@ -214,7 +214,7 @@ describe('editor.effects', () => {
     describe('SaveSuccess', () => {
       const mocks: any = {
         story: {
-          ...new Post(),
+          ...new Story(),
           title: '123'
         },
         property: STORY_PROPERTIES.Title,

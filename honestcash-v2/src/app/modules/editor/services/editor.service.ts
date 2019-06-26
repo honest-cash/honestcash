@@ -1,6 +1,6 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
-import Post from '../../../shared/models/post';
+import Story from '../../../shared/models/story';
 import {HttpService} from '../../../core';
 import {EmptyResponse, FailedResponse} from '../../../shared/models/authentication';
 import Hashtag from '../../../shared/models/hashtag';
@@ -26,23 +26,23 @@ export class EditorService {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
-  public getPost(id: number): Observable<Post> {
-    return this.http.get<Post>(API_ENDPOINTS.getPost(id));
+  public getPost(id: number): Observable<Story> {
+    return this.http.get<Story>(API_ENDPOINTS.getPost(id));
   }
 
-  public loadPostDraft(storyLoadContext?: StoryLoadContext): Observable<Post> {
+  public loadPostDraft(storyLoadContext?: StoryLoadContext): Observable<Story> {
     if (storyLoadContext) {
       if (storyLoadContext.postId) {
-        return this.http.get<Post>(API_ENDPOINTS.postDraft(storyLoadContext.postId));
+        return this.http.get<Story>(API_ENDPOINTS.postDraft(storyLoadContext.postId));
       }
       if (storyLoadContext.parentPostId) {
-        return this.http.get<Post>(API_ENDPOINTS.commentDraft(storyLoadContext.parentPostId));
+        return this.http.get<Story>(API_ENDPOINTS.commentDraft(storyLoadContext.parentPostId));
       }
     }
-    return this.http.get<Post>(API_ENDPOINTS.draft());
+    return this.http.get<Story>(API_ENDPOINTS.draft());
   }
 
-  public savePostProperty(post: Post, property: STORY_PROPERTIES): Observable<EmptyResponse | FailedResponse> {
+  public savePostProperty(post: Story, property: STORY_PROPERTIES): Observable<EmptyResponse | FailedResponse> {
     const body: {
       hashtags?: string;
       hasPaidSection?: boolean;
@@ -63,11 +63,11 @@ export class EditorService {
       body.title = post.title;
       body.bodyJSON = post.bodyJSON;
     }
-    return this.http.put<Post>(API_ENDPOINTS.savePostProperty(post, property), body);
+    return this.http.put<Story>(API_ENDPOINTS.savePostProperty(post, property), body);
   }
 
-  public publishPost(post: Post): Observable<Post | FailedResponse> {
-    return this.http.put<Post>(API_ENDPOINTS.publishPost(post), post);
+  public publishPost(post: Story): Observable<Story | FailedResponse> {
+    return this.http.put<Story>(API_ENDPOINTS.publishPost(post), post);
   }
 
   public uploadImage(image: File): Promise<UploadImageResponse> {

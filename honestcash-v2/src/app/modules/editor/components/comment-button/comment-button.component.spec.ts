@@ -7,7 +7,7 @@ import {initialAppStates} from '../../../../shared/mocks/app.states.mock';
 import {EDITOR_STATUS, initialState as initialEditorState} from '../../../../store/editor/editor.state';
 import {WindowToken} from '../../../../core/helpers/window';
 import {EnvironmentToken} from '../../../../core/helpers/environment';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
@@ -60,7 +60,7 @@ const initialState = {
       bodyJSON,
       parentPostId: 55,
       parentPost: {
-        ...new Post(),
+        ...new Story(),
         id: 55,
         title: 'parent post',
         bodyJSON: [

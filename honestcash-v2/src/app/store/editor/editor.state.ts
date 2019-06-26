@@ -1,4 +1,4 @@
-import Post from '../../shared/models/post';
+import Story from '../../shared/models/story';
 
 export enum EDITOR_STATUS {
   NotInitialized = 'NOT_INITIALIZED',
@@ -13,10 +13,10 @@ export enum EDITOR_STATUS {
 
 export interface State {
   status: EDITOR_STATUS;
-  story: Post;
+  story: Story;
 }
 
 export const initialState: State = {
   status: EDITOR_STATUS.NotInitialized,
-  story: new Post(),
+  story: new Story(),
 };

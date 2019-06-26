@@ -3,7 +3,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {EDITOR_STATUS, State as EditorState} from '../../../../store/editor/editor.state';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {EditorPublishModalComponent} from '../publish-modal/publish-modal.component';
@@ -21,7 +21,7 @@ export class EditorPublishButtonComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'd-flex align-items-center';
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
-  public story: Post;
+  public story: Story;
   private editorStateObservable: Observable<EditorState>;
   private editorState$: Subscription;
   private modalRef: NgbModalRef;

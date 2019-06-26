@@ -11,7 +11,7 @@ import {mock} from '../../../../../../mock';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app.states';
 import {initialState as initialEditorState} from '../../../../store/editor/editor.state';
-import Story from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../../../store/editor/editor.actions';

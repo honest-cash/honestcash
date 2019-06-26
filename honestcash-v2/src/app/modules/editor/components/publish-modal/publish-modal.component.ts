@@ -1,6 +1,6 @@
 import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {Observable, Subscription} from 'rxjs';
@@ -18,7 +18,7 @@ import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
   styleUrls: ['./publish-modal.component.scss'],
 })
 export class EditorPublishModalComponent implements OnInit, OnDestroy {
-  public story: Post;
+  public story: Story;
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
   public isPlatformBrowser: boolean;

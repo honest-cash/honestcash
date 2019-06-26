@@ -1,5 +1,5 @@
 import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import Post from '../../../../shared/models/post';
+import Story from '../../../../shared/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../../app.states';
 import {forkJoin, Observable, Subscription} from 'rxjs';
@@ -59,7 +59,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editor$: Observable<EditorState>;
   public editorSub: Subscription;
   public updatedTitle = '';
-  public story: Post;
+  public story: Story;
   public editorPlaceholder = 'Write your story...';
   private readonly isPlatformBrowser: boolean;
 
