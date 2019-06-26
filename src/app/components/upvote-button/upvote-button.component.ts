@@ -189,6 +189,12 @@ class UpvoteButtonController {
       tx = await simpleWallet.send(receivers);
     } catch (err) {
       if (err.message && err.message.indexOf("Insufficient") > -1) {
+        toastr.warning("Insufficient balance on your BCH account.");
+
+        this.isUpvoting = false;
+
+        this.scopeService.safeApply(this.$scope);
+
         const addressContainer = document.getElementById(
           "load-wallet-modal-address",
         ) as HTMLInputElement;
@@ -208,10 +214,9 @@ class UpvoteButtonController {
         // replace with sweetalert
         ($("#loadWalletModal") as IModalElement).modal("show");
 
-        this.isUpvoting = false;
-        this.scopeService.safeApply(this.$scope, () => {});
+        this.scopeService.safeApply(this.$scope);
 
-        return toastr.warning("Insufficient balance on your BCH account.");
+        return;
       }
 
       if (err.message && err.message.indexOf("has no matching Script") > -1) {

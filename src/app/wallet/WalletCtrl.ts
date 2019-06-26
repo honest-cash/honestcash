@@ -398,7 +398,7 @@ export default class WalletCtrl {
 
           const merchantId = "b060bpq7t8cpkk4h";
           const currencies = "btc,bch,eth";
-          const usdAmount = 20;
+          const usdAmount = 50;
 
           // tslint:disable-next-line: max-line-length
           iframe.src = `https://widget.changelly.com?currencies=${currencies}&from=usd&to=bch&amount=${usdAmount}&address=${$scope.addressBCH}&fiat=true&fixedTo=true&theme=default&merchant_id=${merchantId}`;
