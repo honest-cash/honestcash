@@ -4,7 +4,7 @@ import {LogoutComponent} from './pages/logout/logout.component';
 import {SignupComponent} from './pages/signup/signup.component';
 import {ResetPasswordRequestComponent} from './pages/reset-password-request/reset-password-request.component';
 import {WelcomeComponent} from './pages/welcome/welcome.component';
-import {WelcomeContainerComponent} from './welcome-container.component';
+import {MainContainerComponent} from './main-container.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
@@ -24,7 +24,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 const routes: Routes = [
   {
     path: '',
-    component: WelcomeContainerComponent,
+    component: MainContainerComponent,
     children: [
       {
         path: '',
@@ -73,7 +73,7 @@ const routes: Routes = [
     WelcomeComponent,
     ResetPasswordRequestComponent,
     ResetPasswordVerifyComponent,
-    WelcomeContainerComponent,
+    MainContainerComponent,
     ThankYouComponent,
     ForbiddenUsernameValidatorDirective,
   ],
@@ -84,7 +84,7 @@ const routes: Routes = [
     FontAwesomeModule
   ],
   providers: [],
-  bootstrap: [WelcomeContainerComponent]
+  bootstrap: [MainContainerComponent]
 })
-export class WelcomeModule {
+export class MainModule {
 }

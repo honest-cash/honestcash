@@ -2,16 +2,16 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {WelcomeContainerComponent} from './welcome-container.component';
+import {MainContainerComponent} from './main-container.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('WelcomeContainerComponent', () => {
-  let component: WelcomeContainerComponent;
+  let component: MainContainerComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        WelcomeContainerComponent
+        MainContainerComponent
       ],
       imports: [
       ],
@@ -19,7 +19,7 @@ describe('WelcomeContainerComponent', () => {
         NO_ERRORS_SCHEMA
       ],
     });
-    component = new WelcomeContainerComponent();
+    component = new MainContainerComponent();
   }));
 
   it('should create', () => {
