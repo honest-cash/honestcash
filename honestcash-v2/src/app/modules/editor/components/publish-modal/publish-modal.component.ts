@@ -22,8 +22,8 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
   public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
   public isPlatformBrowser: boolean;
-  private editorStateObservable: Observable<EditorState>;
-  private editorState$: Subscription;
+  private editor$: Observable<EditorState>;
+  public editorSub: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId,
@@ -34,11 +34,11 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
-    this.editorStateObservable = this.store.select(selectEditorState);
+    this.editor$ = this.store.select(selectEditorState);
   }
 
   public ngOnInit() {
-    this.editorState$ = this.editorStateObservable
+    this.editorSub = this.editor$
     .subscribe((editorState: EditorState) => {
       this.story = editorState.story;
       this.saveStatus = editorState.status;
@@ -59,17 +59,13 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     );
   }
 
-  public previewDraftStory() {
-    this.window.open('/editor/story-preview', '_blank');
-  }
-
   public onClose() {
     this.activeModal.close();
   }
 
   public ngOnDestroy() {
-    if (this.editorState$) {
-      this.editorState$.unsubscribe();
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
     }
   }
 }
