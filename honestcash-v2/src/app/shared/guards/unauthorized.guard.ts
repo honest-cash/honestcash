@@ -47,6 +47,7 @@ export class UnauthorizedGuard implements CanActivate {
     }
     if (this.isPlatformServer) {
       // to cheat SSR until client takes over
+      /* istanbul ignore next*/
       return true;
     }
   }

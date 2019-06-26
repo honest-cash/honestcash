@@ -7,7 +7,6 @@ import {StoryLoadContext} from '../../modules/editor/shared/interfaces';
 export enum EditorActionTypes {
   EDITOR_LOAD = '[Editor] Editor Load',
   EDITOR_UNLOAD = '[Editor] Editor Unload',
-  EDITOR_CHANGE = '[Editor] Editor Change',
   EDITOR_STORY_LOAD = '[Editor] Editor Story Load',
   EDITOR_STORY_LOAD_SUCCESS = '[Editor] Editor Story Load Success',
   EDITOR_STORY_LOAD_FAILURE = '[Editor] Editor Story Load Failure',
@@ -15,12 +14,10 @@ export enum EditorActionTypes {
   EDITOR_STORY_PROPERTY_SAVE = '[Editor] Story Property Save',
   EDITOR_STORY_PROPERTY_SAVE_SUCCESS = '[Editor] Story Property Save Success',
   EDITOR_STORY_PROPERTY_SAVE_FAILURE = '[Editor] Story Property Save Failure',
-  EDITOR_STORY_CHANGE = '[Editor] Story Change',
   EDITOR_STORY_SAVE = '[Editor] Story Save',
   EDITOR_STORY_SAVE_SUCCESS = '[Editor] Story Save Success',
   EDITOR_STORY_SAVE_FAILURE = '[Editor] Story Save Failure',
   EDITOR_STORY_SAVE_AND_PUBLISH = '[Editor] Story Save and Publish',
-  EDITOR_STORY_PUBLISH = '[Editor] Story Publish',
   EDITOR_STORY_PUBLISH_SUCCESS = '[Editor] Story Publish Success',
   EDITOR_STORY_PUBLISH_FAILURE = '[Editor] Story Publish Failure',
 }
@@ -31,13 +28,6 @@ export class EditorLoad implements Action {
 
 export class EditorUnload implements Action {
   public readonly type = EditorActionTypes.EDITOR_UNLOAD;
-}
-
-export class EditorChange implements Action {
-  public readonly type = EditorActionTypes.EDITOR_CHANGE;
-
-  constructor(public payload: { story: Story }) {
-  }
 }
 
 export class EditorStoryLoad implements Action {
@@ -83,13 +73,6 @@ export class EditorStoryPropertySaveFailure implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_FAILURE;
 }
 
-export class EditorStoryChange implements Action {
-  public readonly type = EditorActionTypes.EDITOR_STORY_CHANGE;
-
-  constructor(public payload: number) {
-  }
-}
-
 export class EditorStorySave implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_SAVE;
 }
@@ -115,13 +98,6 @@ export class EditorStorySaveFailure implements Action {
   }
 }
 
-export class EditorStoryPublish implements Action {
-  public readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH;
-
-  constructor(public payload: Story) {
-  }
-}
-
 export class EditorStoryPublishSuccess implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_PUBLISH_SUCCESS;
 
@@ -139,7 +115,6 @@ export class EditorStoryPublishFailure implements Action {
 export type All =
   | EditorLoad
   | EditorUnload
-  | EditorChange
   | EditorStoryLoad
   | EditorStoryLoadSuccess
   | EditorStoryLoadFailure
@@ -147,11 +122,9 @@ export type All =
   | EditorStoryPropertySave
   | EditorStoryPropertySaveSuccess
   | EditorStoryPropertySaveFailure
-  | EditorStoryChange
   | EditorStorySave
   | EditorStorySaveSuccess
   | EditorStorySaveFailure
   | EditorStorySaveAndPublish
-  | EditorStoryPublish
   | EditorStoryPublishSuccess
   | EditorStoryPublishFailure;
