@@ -7,7 +7,6 @@ export const API_ENDPOINTS = {
   commentDraft: (id: number) => `/v2/draft?parentPostId=${id}`,
   draft: () => `/v2/draft`,
   savePostProperty: (p: Story, property: STORY_PROPERTIES) => `/v2/draft/${p.id}/${property}`,
-  saveDraft: (p: Story) => `/v2/draft/${p.id}/body`,
   publishPost: (p: Story) => `/v2/draft/${p.id}/publish`,
   uploadImage: () => `/upload/image`,
   uploadRemoteImage: () => `/upload/image/remote`

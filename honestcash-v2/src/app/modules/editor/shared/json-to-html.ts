@@ -108,7 +108,12 @@ export const convertListBlockToHtml = (block: ListElement): string => {
 
 export const convertImageBlockToHtml = (block: ImageElement): string => {
   const {file, caption} = block.data;
-  return `<figure><img src="${file.url}" ${caption ? `alt="${caption}"` : ''}>${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure>`;
+  return `
+      <figure>
+        <img src="${file.url}" ${caption ? `alt="${caption}"` : ''}>
+        ${caption && caption !== '' ? `<figcaption>${caption}</figcaption>` : ''}
+      </figure>
+    `;
 };
 
 export const convertQuoteBlockToHtml = (block: QuoteElement): string => {
@@ -130,7 +135,7 @@ export const convertEmbedBlockToHtml = (block: EmbedElement): string => {
   return `
         <figure>
           <iframe frameborder="0" scrolling="no" allowfullscreen="" src="${embed}"></iframe>
-          ${caption ? `<figcaption>${caption}</figcaption>` : ''}
+          ${caption && caption !== '' ? `<figcaption>${caption}</figcaption>` : ''}
         </figure>
       `;
 };
@@ -139,9 +144,23 @@ export const convertBlocksArrayToHtml = (
   blockOrBlocks: Block | Block[]
 ): string | null => {
   if (Array.isArray(blockOrBlocks)) {
-    return blockOrBlocks.map(convertBlockToHtml).join('');
+    return blockOrBlocks.filter(removeUnwantedBlock).map(convertBlockToHtml).join('');
   }
   return convertBlockToHtml(blockOrBlocks);
+};
+
+export const removeUnwantedBlock = (block: Block) => {
+  // hide images that don't have a url so that it does not appear as broken
+  if (
+    block.type === ELEMENT_TYPES.Image &&
+    (
+      !Object.keys((block as ImageElement).data.file).length ||
+      (Object.keys((block as ImageElement).data.file).length && (block as ImageElement).data.file.url === '')
+    )
+  ) {
+    return false;
+  }
+  return true;
 };
 
 export const convertBlockToHtml = (block: Block): string | null => {
@@ -156,13 +175,6 @@ export const convertBlockToHtml = (block: Block): string | null => {
       return convertListBlockToHtml(block as ListElement);
     }
     case 'image': {
-      // hide images that don't have a url so that it does not appear as broken
-      if (
-        !Object.keys((block as ImageElement).data.file).length ||
-        (Object.keys((block as ImageElement).data.file).length && (block as ImageElement).data.file.url === '')
-      ) {
-        return null;
-      }
       return convertImageBlockToHtml(block as ImageElement);
     }
     case 'quote': {
