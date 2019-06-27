@@ -21,7 +21,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EditorEffects} from './editor/store/editor.effects';
 import {AppSharedModule} from './app.shared.module';
 import {ToastrModule} from 'ngx-toastr';
-import {SharedModule} from '../core/shared/shared.module';
+import {SharedModule} from '../core/shared.module';
 
 @NgModule({
   declarations: [

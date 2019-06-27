@@ -6,7 +6,7 @@ import {MainActionTypes} from './main.actions';
 import {UserCleanup, UserSetup} from '../../user/store/user.actions';
 import {WalletCleanup, WalletSetup} from '../../wallet/store/wallet.actions';
 import {AuthService} from 'app/auth/services/auth.service';
-import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {UserService} from '../../user/services/user.service';
 import {WalletService} from '../../wallet/services/wallet.service';
 

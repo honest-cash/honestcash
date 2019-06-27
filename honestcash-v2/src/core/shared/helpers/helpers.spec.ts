@@ -1,5 +1,5 @@
 import {environmentProvider} from './environment.helper';
-import {environment} from '../../environments/environment';
+import {environment} from '../../../environments/environment';
 import {localStorageProvider} from './local-storage.helper';
 import {windowProvider} from './window.helper';
 

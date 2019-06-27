@@ -7,7 +7,7 @@ import {HttpCacheService} from './http-cache.service';
 import {ErrorHandlerInterceptor} from './error-handler.interceptor';
 import {CacheInterceptor} from './cache.interceptor';
 import {ApiPrefixInterceptor} from './api-prefix.interceptor';
-import {WindowToken} from '../helpers/window.helper';
+import {WindowToken} from '../shared/helpers/window.helper';
 
 const MockWindow = {
   location: {

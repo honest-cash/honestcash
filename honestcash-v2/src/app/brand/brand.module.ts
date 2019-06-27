@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {AboutComponent} from './pages/about/about.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {SharedModule} from '../../core/shared/shared.module';
+import {SharedModule} from '../../core/shared.module';
 
 const routes: Routes = [
   {
@@ -25,7 +25,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     CommonModule,
     SharedModule,
-    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [BrandContainerComponent]

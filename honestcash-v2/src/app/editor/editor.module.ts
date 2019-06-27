@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {EditorContainerComponent} from './editor-container.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
-import {SharedModule} from '../../core/shared/shared.module';
+import {SharedModule} from '../../core/shared.module';
 import {AuthorizedGuard} from '../../core/shared/guards/authorized.guard';
 import {TagInputModule} from 'ngx-chips';
 import {EditorWriteComponent} from './pages/write/write.component';

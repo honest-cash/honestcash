@@ -2,7 +2,7 @@ import {NgModule, Optional, SkipSelf} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {RouteReuseStrategy, RouterModule} from '@angular/router';
-import {RouteReusableStrategy} from './route-reusable-strategy';
+import {RouteReusableStrategy} from './route-strategy/route-reusable-strategy';
 import {HttpService} from './http/http.service';
 import {HttpCacheService} from './http/http-cache.service';
 import {ApiPrefixInterceptor} from './http/api-prefix.interceptor';

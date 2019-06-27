@@ -19,7 +19,7 @@ import {ForbiddenUsernameValidatorDirective} from '../auth/shared/directives/for
 import {ResetPasswordVerifyComponent} from '../auth/pages/reset-password-verify/reset-password-verify.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {WelcomeHeaderComponent} from '../auth/components/welcome-header/welcome-header.component';
-import {SharedModule} from '../../core/shared/shared.module';
+import {SharedModule} from '../../core/shared.module';
 
 const routes: Routes = [
   {
@@ -75,7 +75,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     CommonModule,
     SharedModule,
-    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AuthContainerComponent]

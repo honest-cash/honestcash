@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {WelcomeComponent} from '../auth/pages/welcome/welcome.component';
-import {WalletContainerComponent} from './wallet-container.component';
+import {UserContainerComponent} from './user-container.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
@@ -10,10 +10,10 @@ import {SharedModule} from '../../core/shared.module';
 const routes: Routes = [
   {
     path: '',
-    component: WalletContainerComponent,
+    component: UserContainerComponent,
     children: [
       {
-        path: 'wallet',
+        path: 'profile',
         component: WelcomeComponent,
         canActivate: [UnauthorizedGuard]
       },
@@ -23,7 +23,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    WalletContainerComponent,
+    UserContainerComponent,
     WelcomeComponent,
   ],
   imports: [
@@ -33,7 +33,7 @@ const routes: Routes = [
     SharedModule,
   ],
   providers: [],
-  bootstrap: [WalletContainerComponent]
+  bootstrap: [UserContainerComponent]
 })
-export class WalletModule {
+export class UserModule {
 }
