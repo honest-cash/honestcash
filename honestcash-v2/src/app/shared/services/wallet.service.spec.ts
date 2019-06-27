@@ -85,21 +85,6 @@ describe('WalletService', () => {
       });
     });
 
-    it('should return a SimpleBitcoinWallet if there is a payload and payload is a SignupSuccessResponse with NO wallet attached', (done) => {
-      const signupSuccessResponse: SignupSuccessResponse = {
-        user: mocks.setupWalletContext.user,
-        token: mocks.setupWalletContext.token,
-        password: mocks.setupWalletContext.password,
-      };
-
-      // Act
-      walletService.setupWallet(signupSuccessResponse).subscribe((wallet: ISimpleBitcoinWallet) => {
-        // Assert
-        expect(wallet).toBeDefined();
-        done();
-      });
-    });
-
     it('should return a SimpleBitcoinWallet if there is NO payload but a token and decrypted mnemonic exists in localStorage', (done) => {
       localStorage.setItem(LOCAL_TOKEN_KEY, mocks.setupWalletContext.token);
       localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, SHARED_MOCKS.mnemonic);
@@ -146,7 +131,7 @@ describe('WalletService', () => {
       ).subscribe((response: OkResponse) => {
         // Assert
         expect(mockHttpService.post)
-        .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, mocks.setWalletContext.wallet.mnemonicEncrypted);
+        .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, {mnemonicEncrypted: mocks.setWalletContext.wallet.mnemonicEncrypted});
         done();
       });
     });

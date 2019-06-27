@@ -30,7 +30,7 @@ export class WalletEffects {
   WalletSetup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP),
     map((action: WalletSetup) => action.payload),
-    switchMap((payload?: LoginSuccessResponse | SignupSuccessResponse) => this.walletService.setupWallet(payload)
+    switchMap((payload?: LoginSuccessResponse) => this.walletService.setupWallet(payload)
       .pipe(
         map((wallet: ISimpleBitcoinWallet) => new WalletGenerated({wallet})),
         catchError(() => of(new WalletSetupFailed()))

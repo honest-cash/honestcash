@@ -235,7 +235,7 @@ describe('auth.effects', () => {
         expect(effects.SignUp).toBeObservable(expected);
       });
     });
-    describe('SignUpSuccess', () => {
+    /*describe('SignUpSuccess', () => {
       it('should correctly return UserSetup with and password', () => {
         const action = new AuthActions.SignUpSuccess(mocks.signUpSuccess);
 
@@ -257,7 +257,7 @@ describe('auth.effects', () => {
           done();
         });
       });
-    });
+    });*/
   });
 
   describe('ResetPassword Effects', () => {
