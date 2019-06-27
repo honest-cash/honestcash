@@ -51,6 +51,20 @@ export class WalletService {
     this.isSettingUpWallet.next(WALLET_SETUP_STATUS.NotInitialized);
   }
 
+  public static calculateSHA3Hash(message: string): string {
+    return sha3_512(message);
+  }
+
+  public static determineMessageForHashing(salt: string, password: string): string {
+    return `${salt}:${password}`;
+  }
+
+  public static calculatePasswordHash(email: string, password: string): string {
+    return WalletService.calculateSHA3Hash(
+      WalletService.determineMessageForHashing(email, password)
+    );
+  }
+
   public createWallet(password: string): ISimpleWallet {
     return new SimpleWallet(null, {password});
   }
@@ -75,20 +89,6 @@ export class WalletService {
   ): ISimpleWallet {
     return new SimpleWallet(recoveryPhrase, {password: null});
   }
-
-  public calculateSHA3Hash = (message: string): string => {
-    return sha3_512(message);
-  };
-
-  public determineMessageForHashing = (salt: string, password: string): string => {
-    return `${salt}:${password}`;
-  };
-
-  public calculatePasswordHash = (email: string, password: string): string => {
-    return this.calculateSHA3Hash(
-      this.determineMessageForHashing(email, password)
-    );
-  };
 
   public loadWallet(payload?: LoginSuccessResponse): Observable<ISimpleWallet | WALLET_SETUP_STATUS> {
     return defer(

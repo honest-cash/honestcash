@@ -3,7 +3,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {HTTP_INTERCEPTORS, HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {ContentTypeFormDataHeader, HeaderInterceptor} from './header.interceptor';
-import {MockAuthenticationService} from '../../app/auth/services/authentication.service.mock';
+import {MockAuthenticationService} from '../../app/auth/services/auth.service.mock';
 import {AuthService} from '../../app/auth/services/auth.service';
 
 describe('TokenInterceptor', () => {

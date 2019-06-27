@@ -2,16 +2,16 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {HeaderComponent} from './header.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {AuthHeaderComponent} from './header.component';
 
-describe('CoreHeaderComponent', () => {
-  let component: HeaderComponent;
+describe('AuthHeaderComponent', () => {
+  let component: AuthHeaderComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HeaderComponent
+        AuthHeaderComponent
       ],
       imports: [
       ],
@@ -19,7 +19,7 @@ describe('CoreHeaderComponent', () => {
         NO_ERRORS_SCHEMA
       ],
     });
-    component = new HeaderComponent();
+    component = new AuthHeaderComponent();
   }));
 
   it('should create', () => {

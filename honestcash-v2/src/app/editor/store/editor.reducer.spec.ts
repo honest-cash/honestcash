@@ -12,10 +12,10 @@ import {
   EditorStorySaveSuccess,
   EditorUnload
 } from './editor.actions';
-import {EDITOR_STATUS, initialState, State as EditorState} from './editor.state';
 import Story from '../../main/models/story';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {ELEMENT_TYPES} from '../shared/json-to-html';
+import {EDITOR_STATUS, EditorState, initialEditorState} from './editor.state';
 
 const SHARED_MOCKS = {
   story: new Story(),
@@ -27,11 +27,11 @@ const SHARED_MOCKS = {
 };
 
 describe('editor.reducer', () => {
-  describe('initialState', () => {
+  describe('initialEditorState', () => {
     it('should have isLoaded: false, status: NotInitialized, story: new Story()', () => {
       const state: EditorState = reducer(undefined, {} as EditorLoad);
 
-      expect(state).toBe(initialState);
+      expect(state).toBe(initialEditorState);
     });
   });
   describe('EditorLoad', () => {

@@ -3,16 +3,15 @@ import {TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../../../core';
 import {mock} from '../../../../mock';
-import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.service';
-import Wallet from '../models/wallet';
+import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WALLET_SETUP_STATUS, WalletService} from './wallet.service';
 import {of} from 'rxjs';
-import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../../auth/models/authentication';
+import {LoginSuccessResponse, OkResponse} from '../../auth/models/authentication';
 import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import User from '../../user/models/user';
-import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
 import {LOCAL_TOKEN_KEY} from '../../auth/services/auth.service';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../app.states.mock';
+import {ISimpleWallet, SimpleWallet} from '../models/simple-wallet';
 
 const SHARED_MOCKS = {
   mnemonic: 'test1 test2 test3 test4 test5 test6 test7 test8',
@@ -22,6 +21,7 @@ const SHARED_MOCKS = {
   // in order to test simpleWallets match the one the service returns
   mnemonicEncrypted: 'U2FsdGVkX19s2+ZuTD0IAQ8Asf/ShwBsLHkMzXzHOvh3sgggyfR8KpIPv9OcET65wnzjMv85LiUjYZoh4859hQ==',
 };
+
 
 describe('WalletService', () => {
   let walletService: WalletService;
@@ -55,11 +55,11 @@ describe('WalletService', () => {
     });
   });
 
-  describe('setupWallet', () => {
+  describe('loadWallet', () => {
     const mocks = {
       setupWalletContext: {
         user: new User(),
-        wallet: new Wallet(),
+        wallet: new SimpleWallet(),
         token: 'adf',
         password: SHARED_MOCKS.password,
       },
@@ -78,22 +78,7 @@ describe('WalletService', () => {
       loginSuccessResponse.wallet.mnemonicEncrypted = SHARED_MOCKS.mnemonicEncrypted;
 
       // Act
-      walletService.setupWallet(loginSuccessResponse).subscribe((wallet: ISimpleBitcoinWallet) => {
-        // Assert
-        expect(wallet).toBeDefined();
-        done();
-      });
-    });
-
-    it('should return a SimpleBitcoinWallet if there is a payload and payload is a SignupSuccessResponse with NO wallet attached', (done) => {
-      const signupSuccessResponse: SignupSuccessResponse = {
-        user: mocks.setupWalletContext.user,
-        token: mocks.setupWalletContext.token,
-        password: mocks.setupWalletContext.password,
-      };
-
-      // Act
-      walletService.setupWallet(signupSuccessResponse).subscribe((wallet: ISimpleBitcoinWallet) => {
+      walletService.loadWallet(loginSuccessResponse).subscribe((wallet: ISimpleWallet) => {
         // Assert
         expect(wallet).toBeDefined();
         done();
@@ -104,18 +89,9 @@ describe('WalletService', () => {
       localStorage.setItem(LOCAL_TOKEN_KEY, mocks.setupWalletContext.token);
       localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, SHARED_MOCKS.mnemonic);
       // Act
-      walletService.setupWallet().subscribe((wallet: ISimpleBitcoinWallet) => {
+      walletService.loadWallet().subscribe((wallet: ISimpleWallet) => {
         // Assert
         expect(wallet).toBeDefined();
-        done();
-      });
-    });
-
-    it('should NOT return a SimpleBitcoinWallet if there is NO payload and NO token and NO decrypted mnemonic exists in localStorage', (done) => {
-      // Act
-      walletService.setupWallet().subscribe((wallet: ISimpleBitcoinWallet | Error) => {
-        // Assert
-        expect(wallet).toEqual(new Error());
         done();
       });
     });
@@ -124,7 +100,7 @@ describe('WalletService', () => {
   describe('setWallet', () => {
     const mocks = {
       setWalletContext: {
-        wallet: new Wallet(),
+        wallet: new SimpleWallet,
       },
       setWalletSuccess: {
         ok: true
@@ -164,7 +140,7 @@ describe('WalletService', () => {
 
   describe('getWalletMnemonic', () => {
     it('should get the mnemonic', () => {
-      const wallet = new Wallet();
+      const wallet = new SimpleWallet();
       wallet.mnemonic = 'asdf';
       // Act
       walletService.setWallet(wallet);

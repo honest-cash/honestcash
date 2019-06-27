@@ -9,6 +9,8 @@ import User from '../models/user';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../app.states';
 import {RouterTestingModule} from '@angular/router/testing';
+import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
+import {AuthService} from '../../auth/services/auth.service';
 
 const SHARED_MOCKS = {
   mnemonic: 'test test2 test3 test4',
@@ -28,6 +30,9 @@ describe('UserService', () => {
       ],
       providers: [
         UserService,
+        AuthService,
+        {provide: 'PLATFORM_ID', useValue: 'browser'},
+        {provide: LocalStorageToken, useFactory: localStorageProvider},
         {provide: HttpService, useValue: httpServiceMock}
       ]
     });
@@ -51,10 +56,10 @@ describe('UserService', () => {
       };
       (<jasmine.Spy>httpServiceMock.get).and.returnValue(of(mocks.getMeSuccess));
       // Act
-      userService.getMe().subscribe((response: User) => {
+      userService.getCurrentUser().subscribe((response: User) => {
         // Assert
         expect(httpServiceMock.get)
-        .toHaveBeenCalledWith(API_ENDPOINTS.status);
+        .toHaveBeenCalledWith(API_ENDPOINTS.getCurrentUser);
         done();
       });
 

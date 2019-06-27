@@ -8,21 +8,22 @@ import {localStorageProvider, LocalStorageToken} from '../../../core/shared/help
 import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {UserEffects} from './user.effects';
 import {LoginSuccessResponse} from '../../auth/models/authentication';
-import Wallet from '../../wallet/models/wallet';
 import User from '../models/user';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../app.states.mock';
 import {Router} from '@angular/router';
 import {cold} from 'jasmine-marbles';
 import {mock} from '../../../../mock';
+import {SimpleWallet} from '../../wallet/models/simple-wallet';
+import {UserService} from '../services/user.service';
 
 describe('user.effects', () => {
   let effects: UserEffects;
   let actions: Observable<any>;
-  let mockAuthService: AuthService;
+  let mockUserService: UserService;
 
   beforeEach(() => {
-    mockAuthService = mock(AuthService);
+    mockUserService = mock(UserService);
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -39,14 +40,14 @@ describe('user.effects', () => {
           }
         },
         UserEffects,
-        {provide: AuthService, useValue: mockAuthService},
+        {provide: UserService, useValue: mockUserService},
         provideMockStore({initialState: initialAppStates}),
         provideMockActions(() => actions),
       ],
     });
 
     effects = TestBed.get(UserEffects);
-    mockAuthService = TestBed.get(AuthService);
+    mockUserService = TestBed.get(UserService);
   });
 
   afterEach(() => {
@@ -61,17 +62,10 @@ describe('user.effects', () => {
   });
 
   describe('UserSetup', () => {
-    it('should correctly call authService.init WITHOUT arguments when there is NO payload', () => {
-      actions = cold('a', {a: new UserActions.UserSetup()});
-
-      effects.UserSetup.subscribe(() => {
-        expect(mockAuthService.init).toHaveBeenCalledWith();
-      });
-    });
 
     it('should correctly call authService.init WITH arguments when there is payload', () => {
       const payload: LoginSuccessResponse = {
-        wallet: new Wallet(),
+        wallet: new SimpleWallet(),
         user: new User(),
         token: 'asdf',
         password: '123',
@@ -80,7 +74,7 @@ describe('user.effects', () => {
       actions = cold('a', {a: new UserActions.UserSetup(payload)});
 
       effects.UserSetup.subscribe(() => {
-        expect(mockAuthService.init).toHaveBeenCalledWith(payload.token, payload.user);
+        expect(mockUserService.init).toHaveBeenCalledWith(payload.token, payload.user);
       });
     });
   });
@@ -90,7 +84,7 @@ describe('user.effects', () => {
       actions = cold('a', {a: new UserActions.UserCleanup()});
 
       effects.UserCleanup.subscribe(() => {
-        expect(mockAuthService.unsetTokenAndUnAuthenticate).toHaveBeenCalled();
+        expect(mockUserService.unsetUser).toHaveBeenCalled();
       });
     });
   });

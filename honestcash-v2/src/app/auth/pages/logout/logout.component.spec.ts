@@ -3,7 +3,7 @@ import {AuthLogoutComponent} from './logout.component';
 import {Store, StoreModule} from '@ngrx/store';
 import {AppStates, metaReducers, reducers} from '../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {LogOut} from '../../../../store/auth/auth.actions';
+import {LogOut} from '../../store/auth.actions';
 
 describe('AuthLogoutComponent', () => {
   let component: AuthLogoutComponent;

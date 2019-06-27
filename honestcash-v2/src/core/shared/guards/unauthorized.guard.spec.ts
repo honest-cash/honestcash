@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {Router, RouterStateSnapshot} from '@angular/router';
 
 import {AuthService} from '../../../app/auth/services/auth.service';
-import {MockAuthenticationService} from '../../../app/auth/services/authentication.service.mock';
+import {MockAuthenticationService} from '../../../app/auth/services/auth.service.mock';
 import {UnauthorizedGuard} from './unauthorized.guard';
 import {resetLocalStorage} from '../helpers/tests.helper';
 import {WindowToken} from '../helpers/window.helper';

@@ -1,20 +1,17 @@
 import {TestBed} from '@angular/core/testing';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {cold, hot} from 'jasmine-marbles';
-import {forkJoin, Observable, of, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
-import {LogInSuccess, RootRedirect} from './auth.actions';
+import {AuthSetup, LogInSuccess, RootRedirect} from './auth.actions';
 import {AuthEffects} from './auth.effects';
 import {Store, StoreModule} from '@ngrx/store';
 import {Router} from '@angular/router';
 
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {ofType} from '@ngrx/effects';
-import {first} from 'rxjs/operators';
 import {provideMockStore} from '@ngrx/store/testing';
 import User from '../../user/models/user';
-import Wallet from '../../wallet/models/wallet';
 import {AuthService} from '../services/auth.service';
 import {WindowToken} from '../../../core/shared/helpers/window.helper';
 import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
@@ -23,9 +20,10 @@ import {initialAppStates} from '../../app.states.mock';
 import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../models/authentication';
 import {AppStates, metaReducers, reducers} from '../../app.states';
-import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup} from '../../wallet/store/wallet.actions';
-import {UserActionTypes, UserCleanup, UserLoaded, UserSetup} from '../../user/store/user.actions';
+import {WalletCleanup, WalletSetup} from '../../wallet/store/wallet.actions';
+import {UserCleanup, UserSetup} from '../../user/store/user.actions';
 import {mock} from '../../../../mock';
+import {SimpleWallet} from '../../wallet/models/simple-wallet';
 
 const MockWindow = {
   location: {
@@ -40,7 +38,7 @@ const SHARED_MOCKS = {
   captcha: 'asdfasdf123',
   token: 'asdfasdf',
   user: new User(),
-  wallet: new Wallet(),
+  wallet: new SimpleWallet(),
   mnemonic: 'test1 test2 test3',
   codedErrorResponse: {
     code: 400,
@@ -150,13 +148,14 @@ describe('auth.effects', () => {
       });
     });
     describe('LogInSuccess', () => {
-      it('should correctly return UserSetup and WalletSetup with mnemonicEncrypted and password', () => {
+      it('should correctly return UserSetup, WalletSetup and AuthSetup with mnemonicEncrypted and password', () => {
         const action = new AuthActions.LogInSuccess(mocks.logInSuccess);
 
         actions = hot('-a', {a: action});
-        const expected = cold('-(bc)', {
+        const expected = cold('-(bcd)', {
           b: new UserSetup(mocks.logInSuccess),
           c: new WalletSetup(mocks.logInSuccess),
+          d: new AuthSetup(),
         });
 
         expect(effects.LogInSuccess).toBeObservable(expected);
@@ -211,17 +210,6 @@ describe('auth.effects', () => {
       });
     });
     describe('SignUpSuccess', () => {
-      it('should correctly return UserSetup with and password', () => {
-        const action = new AuthActions.SignUpSuccess(mocks.signUpSuccess);
-
-        actions = hot('-a', {a: action});
-        const expected = cold('-b', {
-          b: new UserSetup(mocks.signUpSuccess),
-        });
-
-        expect(effects.SignUpSuccess).toBeObservable(expected);
-
-      });
       it('should correctly redirect to thank-you route', (done) => {
 
         const action = new AuthActions.SignUpSuccess(mocks.signUpSuccess);

@@ -4,14 +4,14 @@ import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {ResetPassword} from '../../../../store/auth/auth.actions';
 import {ActivatedRoute, Params} from '@angular/router';
 import {of} from 'rxjs';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
 import {CodedErrorResponse} from '../../models/authentication';
 import {AuthErrorHelper} from '../../helpers/auth-error.helper';
-import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
+import {ResetPassword} from '../../store/auth.actions';
+import {initialAuthState} from '../../store/auth.state';
 
 const SHARED_MOCKS = {
   password: '123',

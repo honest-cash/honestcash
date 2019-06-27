@@ -1,9 +1,9 @@
 import {reducer} from './user.reducer';
 import {UserCleanup, UserLoaded, UserSetup} from './user.actions';
-import {initialState as initialUserState} from './user.state';
 import {LoginSuccessResponse} from '../../auth/models/authentication';
 import User from '../models/user';
-import Wallet from '../../wallet/models/wallet';
+import {initialUserState} from './user.state';
+import {SimpleWallet} from '../../wallet/models/simple-wallet';
 
 describe('user.reducer', () => {
   it('UserLoaded', () => {
@@ -19,7 +19,7 @@ describe('user.reducer', () => {
   it('UserSetup', () => {
     const payload: LoginSuccessResponse = {
       user: new User(),
-      wallet: new Wallet(),
+      wallet: new SimpleWallet(),
       token: 'asdf',
       password: 'asdf',
     };

@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   public logIn(payload: LoginContext): Observable<LoginResponse> {
-    const passwordHash = this.walletService.calculatePasswordHash(payload.email, payload.password);
+    const passwordHash = WalletService.calculatePasswordHash(payload.email, payload.password);
 
     return this.http.post<LoginResponse>(API_ENDPOINTS.login, {email: payload.email, password: passwordHash});
   }
@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   public signUp(payload: SignupContext): Observable<SignupResponse> {
-    const passwordHash = this.walletService.calculatePasswordHash(payload.email, payload.password);
+    const passwordHash = WalletService.calculatePasswordHash(payload.email, payload.password);
 
     return this.http.post<SignupSuccessResponse>(API_ENDPOINTS.signup, {
       username: payload.username,
@@ -108,8 +108,8 @@ export class AuthService {
       const payload: ChangePasswordPayload = {
         email: context.email,
         code: context.code,
-        newPassword: this.walletService.calculatePasswordHash(context.email, context.newPassword),
-        repeatNewPassword: this.walletService.calculatePasswordHash(context.email, context.repeatNewPassword),
+        newPassword: WalletService.calculatePasswordHash(context.email, context.newPassword),
+        repeatNewPassword: WalletService.calculatePasswordHash(context.email, context.repeatNewPassword),
         mnemonicEncrypted,
       };
 

@@ -13,16 +13,16 @@ import {
   SignUpFailure,
   SignUpSuccess
 } from './auth.actions';
-import {initialState as initialAuthState} from './auth.state';
 import User from '../../user/models/user';
-import Wallet from '../../wallet/models/wallet';
+import {initialAuthState} from './auth.state';
+import {SimpleWallet} from '../../wallet/models/simple-wallet';
 
 const SHARED_MOCKS = {
   email: 'toto@toto.com',
   password: '123',
   username: 'toto',
   user: new User(),
-  wallet: new Wallet(),
+  wallet: new SimpleWallet(),
   token: 'asdf',
   captcha: '123asdf',
   codedErrorResponse: {

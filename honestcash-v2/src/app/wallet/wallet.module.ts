@@ -11,13 +11,13 @@ const routes: Routes = [
   {
     path: '',
     component: WalletContainerComponent,
-    children: [
-      /*{
+/*    children: [
+      /!*{
         path: '',
         component: AuthWelcomeComponent,
         canActivate: [UnauthorizedGuard]
-      },*/
-    ]
+      },*!/
+    ]*/
   },
 ];
 

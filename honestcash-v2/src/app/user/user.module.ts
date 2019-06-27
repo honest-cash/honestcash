@@ -11,13 +11,13 @@ const routes: Routes = [
   {
     path: '',
     component: UserContainerComponent,
-    children: [
-      /*{
+    /*children: [
+      /!*{
         path: 'profile',
         component: AuthWelcomeComponent,
         canActivate: [UnauthorizedGuard]
-      },*/
-    ]
+      },*!/
+    ]*/
   },
 ];
 

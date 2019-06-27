@@ -7,10 +7,10 @@ import {localStorageProvider, LocalStorageToken} from '../../../core/shared/help
 import {RouterTestingModule} from '@angular/router/testing';
 import * as EditorActions from './editor.actions';
 import {cold, hot} from 'jasmine-marbles';
-import {EditorService} from '../../services/editor.service';
-import {mock} from '../../../../../mock';
 import Story from '../../main/models/story';
-import {STORY_PROPERTIES} from '../../../core/shared/editor.story-properties';
+import {EditorService} from '../services/editor.service';
+import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {mock} from '../../../../mock';
 
 const SHARED_MOCKS = {
   codedErrorResponse: {
@@ -170,7 +170,8 @@ describe('editor.effects', () => {
         saveSuccess: SHARED_MOCKS.emptyResponse,
         saveFailure: SHARED_MOCKS.codedErrorResponse
       };
-      it('should correctly call editorService.savePostProperty as many times of properties.length with the property and with the story', () => {
+      it('should correctly call editorService.savePostProperty as many times of properties.length' +
+        'with the property and with the story', () => {
         (<jasmine.Spy>mockEditorService.savePostProperty).and.returnValue(of(mocks.saveSuccess));
 
         actions = cold('a', {
