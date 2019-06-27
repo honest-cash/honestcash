@@ -46,7 +46,7 @@ export class WalletService {
     this.isSettingUpWallet.next(WALLET_SETUP_STATUS.NotInitialized);
   }
 
-  public setupWallet(payload?: LoginSuccessResponse | SignupSuccessResponse): Observable<ISimpleBitcoinWallet | Error> {
+  public setupWallet(payload?: LoginSuccessResponse): Observable<ISimpleBitcoinWallet | Error> {
     return defer(
       async () => {
         this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Started);
@@ -81,7 +81,7 @@ export class WalletService {
           return new Error();
         }
 
-        await this.setWallet(simpleWallet).toPromise();
+        this.setWallet(simpleWallet);
         this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Initialized);
         this.isSettingUpWallet.complete();
         return simpleWallet;

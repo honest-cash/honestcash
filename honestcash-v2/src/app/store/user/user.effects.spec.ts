@@ -61,13 +61,13 @@ describe('user.effects', () => {
   });
 
   describe('UserSetup', () => {
-    it('should correctly call authService.init WITHOUT arguments when there is NO payload', () => {
+    /*it('should correctly call authService.init WITHOUT arguments when there is NO payload', () => {
       actions = cold('a', {a: new UserActions.UserSetup()});
 
       effects.UserSetup.subscribe(() => {
         expect(mockAuthService.init).toHaveBeenCalledWith();
       });
-    });
+    });*/
 
     it('should correctly call authService.init WITH arguments when there is payload', () => {
       const payload: LoginSuccessResponse = {
