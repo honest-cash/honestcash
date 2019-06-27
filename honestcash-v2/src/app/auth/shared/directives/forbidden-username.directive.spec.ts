@@ -1,5 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import { ForbiddenUsernameValidatorDirective} from './forbidden-username.directive';
+import { AuthForbiddenUsernameValidatorDirective} from './forbidden-username.directive';
 import {Component, DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import { FormsModule, NgForm} from '@angular/forms';
@@ -13,7 +13,7 @@ class TestForbiddenUsernameComponent {
   username: string;
 }
 
-describe('ForbiddenUsernameValidatorDirective', () => {
+describe('AuthForbiddenUsernameValidatorDirective', () => {
   let component: TestForbiddenUsernameComponent;
   let fixture: ComponentFixture<TestForbiddenUsernameComponent>;
   let inputEl: DebugElement;
@@ -24,7 +24,7 @@ describe('ForbiddenUsernameValidatorDirective', () => {
       ],
       declarations: [
         TestForbiddenUsernameComponent,
-        ForbiddenUsernameValidatorDirective
+        AuthForbiddenUsernameValidatorDirective
       ],
       providers: [
         NgForm

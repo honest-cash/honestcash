@@ -1,8 +1,7 @@
 import {Component, HostBinding, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
-import {forkJoin, Observable, Subscription} from 'rxjs';
-import {EDITOR_STATUS, State as EditorState} from '../../store/editor.state';
+import {Observable, Subscription} from 'rxjs';
 import Story from '../../../main/models/story';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
@@ -14,6 +13,7 @@ import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
 import {EditorService} from '../../services/editor.service';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {Logger} from '../../../../core/shared/services/logger.service';
+import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 const logger = new Logger();
 

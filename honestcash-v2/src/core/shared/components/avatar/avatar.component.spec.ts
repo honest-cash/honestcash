@@ -1,21 +1,21 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {AVATAR_DEFAULT_THUMBNAIL, AvatarComponent} from './avatar.component';
+import {AVATAR_DEFAULT_THUMBNAIL, CoreAvatarComponent} from './avatar.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('AvatarComponent', () => {
-  let component: AvatarComponent;
-  let fixture: ComponentFixture<AvatarComponent>;
+describe('CoreAvatarComponent', () => {
+  let component: CoreAvatarComponent;
+  let fixture: ComponentFixture<CoreAvatarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [AvatarComponent],
+      declarations: [CoreAvatarComponent],
       providers: [],
       schemas: [
         NO_ERRORS_SCHEMA,
       ]
     });
-    fixture = TestBed.createComponent(AvatarComponent);
+    fixture = TestBed.createComponent(CoreAvatarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

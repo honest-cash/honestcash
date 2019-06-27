@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {EditorLoadingIndicatorComponent} from './loading-indicator.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('HonestLogoComponent', () => {
+describe('CoreHonestLogoComponent', () => {
   let component: EditorLoadingIndicatorComponent;
   let fixture: ComponentFixture<EditorLoadingIndicatorComponent>;
 

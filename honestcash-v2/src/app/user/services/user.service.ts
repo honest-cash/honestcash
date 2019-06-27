@@ -8,7 +8,7 @@ import {AppStates} from '../../app.states';
 import User from '../models/user';
 import {AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from '../../auth/services/auth.service';
 import {isPlatformBrowser} from '@angular/common';
-import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {UserLoaded} from '../store/user.actions';
 
 export const API_ENDPOINTS = {

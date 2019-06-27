@@ -20,8 +20,6 @@ import {
   SignUpFailure,
   SignUpSuccess,
 } from './auth.actions';
-import {WalletActionTypes, WalletCleanup, WalletSetup} from '../../../wallet/store/wallet/wallet.actions';
-import {UserActionTypes, UserCleanup, UserSetup} from '../../../user/store/user/user.actions';
 import {AuthService} from '../services/auth.service';
 import {
   LoginContext,
@@ -33,9 +31,11 @@ import {
 } from '../models/authentication';
 import {UserService} from 'app/user/services/user.service';
 import {WalletService} from 'app/wallet/services/wallet.service';
-import {WindowToken} from '../../../core/helpers/window.helper';
+import {WindowToken} from '../../../core/shared/helpers/window.helper';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../app.states';
+import {WalletActionTypes, WalletCleanup, WalletSetup} from '../../wallet/store/wallet.actions';
+import {AppStates} from '../../app.states';
+import {UserActionTypes, UserCleanup, UserSetup} from '../../user/store/user.actions';
 
 @Injectable()
 export class AuthEffects {

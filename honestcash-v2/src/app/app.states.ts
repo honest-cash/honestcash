@@ -1,20 +1,17 @@
 import {ActionReducerMap, createFeatureSelector, MetaReducer} from '@ngrx/store';
 import {environment} from '../environments/environment';
 
-import {State as MainState} from './main/store/main.state';
+
 import {reducer as MainReducer} from './main/store/main.reducer';
-
-import {State as AuthState} from './auth/store/auth.state';
 import {reducer as AuthReducer} from './auth/store/auth.reducer';
-
-import {State as UserState} from './user/store/user.state';
 import {reducer as UserReducer} from './user/store/user.reducer';
-
-import {State as WalletState} from './wallet/store/wallet.state';
 import {reducer as WalletReducer} from './wallet/store/wallet.reducer';
-
-import {State as EditorState} from './editor/store/editor.state';
 import {reducer as EditorReducer} from './editor/store/editor.reducer';
+import {WalletState} from './wallet/store/wallet.state';
+import {UserState} from './user/store/user.state';
+import {AuthState} from './auth/store/auth.state';
+import {EditorState} from './editor/store/editor.state';
+import {MainState} from './main/store/main.state';
 
 export interface AppStates {
   main: MainState;

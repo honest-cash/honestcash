@@ -7,10 +7,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
-import {initialState as initialEditorState} from '../../store/editor.state';
 import Story from '../../../main/models/story';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {initialEditorState} from '../../store/editor.state';
 
 describe('EditorPaidSectionToggleButtonComponent', () => {
   let component: EditorPaidSectionToggleButtonComponent;

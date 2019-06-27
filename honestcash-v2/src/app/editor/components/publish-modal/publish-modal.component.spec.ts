@@ -5,14 +5,9 @@ import {EditorPublishModalComponent} from './publish-modal.component';
 import {FormsModule} from '@angular/forms';
 import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppStates} from '../../../app.states';
-import {initialState as initialAppState} from '../../../main/store/main.state';
-import {initialState as initialWalletState} from '../../../wallet/store/wallet.state';
-import {initialState as initialUserState} from '../../../user/store/user.state';
-import {initialState as initialAuthState} from '../../../auth/store/auth.state';
-import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor.state';
 import Story from '../../../main/models/story';
-import {WindowToken} from '../../../../core/helpers/window.helper';
-import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/local-storage.helper';
+import {WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/shared/helpers/local-storage.helper';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {EditorService} from '../../services/editor.service';
@@ -20,6 +15,7 @@ import {EditorStorySaveAndPublish} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {Store} from '@ngrx/store';
 import {initialAppStates} from '../../../app.states.mock';
+import {EDITOR_STATUS, initialEditorState} from '../../store/editor.state';
 
 const MockWindow = {
   location: {

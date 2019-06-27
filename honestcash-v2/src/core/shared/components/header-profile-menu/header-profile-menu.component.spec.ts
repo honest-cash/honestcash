@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {GOTO_PATHS, HeaderProfileMenuComponent} from './header-profile-menu.component';
+import {GOTO_PATHS, CoreHeaderProfileMenuComponent} from './header-profile-menu.component';
 import {Router} from '@angular/router';
-import {WindowToken} from '../../../../core/helpers/window.helper';
-import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/local-storage.helper';
+import {WindowToken} from '../../helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../helpers/local-storage.helper';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../app.states.mock';
-import {AuthEffects} from '../../../auth/store/auth.effects';
+import {initialAppStates} from '../../../../app/app.states.mock';
+import {AuthEffects} from '../../../../app/auth/store/auth.effects';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../app.states';
+import {AppStates} from '../../../../app/app.states';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {cold} from 'jasmine-marbles';
-import {LogOut} from '../../../auth/store/auth.actions';
-import User from '../../../user/models/user';
+import {LogOut} from '../../../../app/auth/store/auth.actions';
+import User from '../../../../app/user/models/user';
 
 const MockWindow = {
   location: {
@@ -25,8 +25,8 @@ const MockWindow = {
 describe('HeaderProfileMenu', () => {
   let effects: AuthEffects;
   let actions: Observable<any>;
-  let component: HeaderProfileMenuComponent;
-  let fixture: ComponentFixture<HeaderProfileMenuComponent>;
+  let component: CoreHeaderProfileMenuComponent;
+  let fixture: ComponentFixture<CoreHeaderProfileMenuComponent>;
   let router: Router;
   let store: Store<AppStates>;
   let componentWindow: Window;
@@ -34,7 +34,7 @@ describe('HeaderProfileMenu', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HeaderProfileMenuComponent
+        CoreHeaderProfileMenuComponent
       ],
       imports: [
         HttpClientTestingModule,
@@ -59,7 +59,7 @@ describe('HeaderProfileMenu', () => {
         provideMockStore({initialState: initialAppStates})
       ]
     });
-    fixture = TestBed.createComponent(HeaderProfileMenuComponent);
+    fixture = TestBed.createComponent(CoreHeaderProfileMenuComponent);
     component = fixture.componentInstance;
 
     router = TestBed.get(Router);

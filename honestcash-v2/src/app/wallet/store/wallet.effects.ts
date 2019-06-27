@@ -5,7 +5,7 @@ import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup, WalletSetupFailed} from './wallet.actions';
 import {WalletService} from '../services/wallet.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
-import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
 import {UserCleanup} from '../../user/store/user.actions';
 

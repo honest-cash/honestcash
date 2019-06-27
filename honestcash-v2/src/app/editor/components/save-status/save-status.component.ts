@@ -2,7 +2,6 @@ import {Component, HostBinding, Input, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {interval, Observable, Subscription} from 'rxjs';
-import {EDITOR_STATUS, State as EditorState} from '../../store/editor.state';
 import Story from '../../../main/models/story';
 import {EditorStoryPropertySave} from '../../store/editor.actions';
 import {EDITOR_AUTO_SAVE_INTERVAL} from '../editor/editor.component';
@@ -11,6 +10,7 @@ import {ToastrService} from 'ngx-toastr';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
+import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 @Component({
   selector: 'editor-save-status',

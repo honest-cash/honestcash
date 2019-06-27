@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
-import {State as EditorState} from '../../store/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import Story from '../../../main/models/story';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EditorState} from '../../store/editor.state';
 
 @Component({
   selector: 'editor-paid-section-toggle-button',

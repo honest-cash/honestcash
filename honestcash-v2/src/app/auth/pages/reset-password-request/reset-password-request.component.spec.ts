@@ -1,5 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {ResetPasswordRequestComponent, ResetPasswordRequestForm} from './reset-password-request.component';
+import {AuthResetPasswordRequestComponent, ResetPasswordRequestForm} from './reset-password-request.component';
 import User from '../../../user/models/user';
 import {Store, StoreModule} from '@ngrx/store';
 import {AppStates, metaReducers, reducers} from '../../../app.states';
@@ -12,15 +12,15 @@ import {CodedErrorResponse} from '../../models/authentication';
 import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 
-describe('ResetPasswordRequestComponent', () => {
-  let component: ResetPasswordRequestComponent;
+describe('AuthResetPasswordRequestComponent', () => {
+  let component: AuthResetPasswordRequestComponent;
   let store: MockStore<AppStates>;
-  let fixture: ComponentFixture<ResetPasswordRequestComponent>;
+  let fixture: ComponentFixture<AuthResetPasswordRequestComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ResetPasswordRequestComponent
+        AuthResetPasswordRequestComponent
       ],
       imports: [
         FormsModule,
@@ -34,7 +34,7 @@ describe('ResetPasswordRequestComponent', () => {
       ]
     });
     store = TestBed.get(Store);
-    fixture = TestBed.createComponent(ResetPasswordRequestComponent);
+    fixture = TestBed.createComponent(AuthResetPasswordRequestComponent);
     component = fixture.componentInstance;
   }));
 
@@ -70,7 +70,7 @@ describe('ResetPasswordRequestComponent', () => {
       }
     });
 
-    fixture = TestBed.createComponent(ResetPasswordRequestComponent);
+    fixture = TestBed.createComponent(AuthResetPasswordRequestComponent);
     fixture.detectChanges();
     await fixture.whenStable();
     component = fixture.componentInstance;

@@ -3,7 +3,6 @@ import Story from '../../../main/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {forkJoin, Observable, Subscription} from 'rxjs';
-import {State as EditorState} from '../../store/editor.state';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../store/editor.actions';
 import {EditorService} from '../../services/editor.service';
 import {Block} from '../../shared/json-to-html';
@@ -13,6 +12,7 @@ import {concatMap} from 'rxjs/operators';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {editorScriptPaths} from '../../shared/editor.scripts-path';
+import {EditorState} from '../../store/editor.state';
 
 export const EDITOR_AUTO_SAVE_INTERVAL = 10 * 1000; // 10 mins
 

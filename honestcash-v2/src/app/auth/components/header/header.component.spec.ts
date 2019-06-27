@@ -5,7 +5,7 @@ import {
 import {HeaderComponent} from './header.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('HeaderComponent', () => {
+describe('CoreHeaderComponent', () => {
   let component: HeaderComponent;
 
   beforeEach(async(() => {

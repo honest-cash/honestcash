@@ -1,24 +1,23 @@
 import {NgModule} from '@angular/core';
-import {LoginComponent} from '../auth/pages/login/login.component';
-import {LogoutComponent} from '../auth/pages/logout/logout.component';
-import {SignupComponent} from '../auth/pages/signup/signup.component';
-import {ResetPasswordRequestComponent} from '../auth/pages/reset-password-request/reset-password-request.component';
-import {WelcomeComponent} from '../auth/pages/welcome/welcome.component';
+import {AuthLoginComponent} from '../auth/pages/login/login.component';
+import {AuthLogoutComponent} from '../auth/pages/logout/logout.component';
+import {AuthSignupComponent} from '../auth/pages/signup/signup.component';
+import {AuthResetPasswordRequestComponent} from '../auth/pages/reset-password-request/reset-password-request.component';
+import {AuthWelcomeComponent} from '../auth/pages/welcome/welcome.component';
 import {AuthContainerComponent} from './auth-container.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {FooterComponent} from '../auth/components/footer/footer.component';
-import {HeadingComponent} from '../auth/components/heading/heading.component';
-import {CardFooterComponent} from '../auth/components/card/footer/footer.component';
-import {LoadingSubmitButtonComponent} from '../auth/components/loading-submit-button/loading-submit-button.component';
+import {AuthFooterComponent} from '../auth/components/footer/footer.component';
+import {AuthHeadingComponent} from '../auth/components/heading/heading.component';
+import {AuthCardFooterComponent} from '../auth/components/card/footer/footer.component';
+import {AuthLoadingSubmitButtonComponent} from '../auth/components/loading-submit-button/loading-submit-button.component';
 import {AuthorizedGuard} from 'core/shared/guards/authorized.guard';
 import {UnauthorizedGuard} from 'core/shared/guards/unauthorized.guard';
-import {ThankYouComponent} from '../auth/pages/thank-you/thank-you.component';
-import {ForbiddenUsernameValidatorDirective} from '../auth/shared/directives/forbidden-username.directive';
-import {ResetPasswordVerifyComponent} from '../auth/pages/reset-password-verify/reset-password-verify.component';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {WelcomeHeaderComponent} from '../auth/components/welcome-header/welcome-header.component';
+import {AuthThankYouComponent} from '../auth/pages/thank-you/thank-you.component';
+import {AuthForbiddenUsernameValidatorDirective} from '../auth/shared/directives/forbidden-username.directive';
+import {AuthResetPasswordVerifyComponent} from '../auth/pages/reset-password-verify/reset-password-verify.component';
+import {AuthHeaderComponent} from './components/header/header.component';
 import {SharedModule} from '../../core/shared.module';
 
 const routes: Routes = [
@@ -28,47 +27,47 @@ const routes: Routes = [
     children: [
       {
         path: 'welcome',
-        component: WelcomeComponent,
+        component: AuthWelcomeComponent,
         canActivate: [UnauthorizedGuard]
       },
       {
         path: 'login',
-        component: LoginComponent,
+        component: AuthLoginComponent,
         canActivate: [UnauthorizedGuard],
       },
-      {path: 'logout', component: LogoutComponent, canActivate: [AuthorizedGuard]},
+      {path: 'logout', component: AuthLogoutComponent, canActivate: [AuthorizedGuard]},
       {
         path: 'signup',
-        component: SignupComponent,
+        component: AuthSignupComponent,
         canActivate: [UnauthorizedGuard],
       },
       {
         path: 'reset-password-request/:resetCode',
-        component: ResetPasswordVerifyComponent,
+        component: AuthResetPasswordVerifyComponent,
         canActivate: [UnauthorizedGuard]
       },
-      {path: 'reset-password-request', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
-      {path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard]},
+      {path: 'reset-password-request', component: AuthResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
+      {path: 'thank-you', component: AuthThankYouComponent, canActivate: [AuthorizedGuard]},
     ]
   },
 ];
 
 @NgModule({
   declarations: [
-    HeadingComponent,
-    LoadingSubmitButtonComponent,
-    WelcomeHeaderComponent,
-    FooterComponent,
-    CardFooterComponent,
-    LoginComponent,
-    LogoutComponent,
-    SignupComponent,
-    WelcomeComponent,
-    ResetPasswordRequestComponent,
-    ResetPasswordVerifyComponent,
+    AuthHeadingComponent,
+    AuthLoadingSubmitButtonComponent,
+    AuthHeaderComponent,
+    AuthFooterComponent,
+    AuthCardFooterComponent,
+    AuthLoginComponent,
+    AuthLogoutComponent,
+    AuthSignupComponent,
+    AuthWelcomeComponent,
+    AuthResetPasswordRequestComponent,
+    AuthResetPasswordVerifyComponent,
     AuthContainerComponent,
-    ThankYouComponent,
-    ForbiddenUsernameValidatorDirective,
+    AuthThankYouComponent,
+    AuthForbiddenUsernameValidatorDirective,
   ],
   imports: [
     FormsModule,

@@ -1,30 +1,24 @@
-import {
-  TestBed,
-  async,
-} from '@angular/core/testing';
-import {WelcomeComponent} from './welcome.component';
+import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
+import {AuthWelcomeComponent} from './welcome.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {Store, StoreModule} from '@ngrx/store';
-import {AppStates, metaReducers, reducers} from '../../../app.states';
 
-describe('WelcomeComponent', () => {
-  let component: WelcomeComponent;
-  let store: Store<AppStates>;
+describe('AuthWelcomeComponent', () => {
+  let fixture: ComponentFixture<AuthWelcomeComponent>;
+  let component: AuthWelcomeComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        WelcomeComponent
+        AuthWelcomeComponent
       ],
       imports: [
-        StoreModule.forRoot(reducers, { metaReducers }),
       ],
       schemas: [
         NO_ERRORS_SCHEMA
       ],
     });
-    store = TestBed.get(Store);
-    component = new WelcomeComponent(store);
+    fixture = TestBed.createComponent(AuthWelcomeComponent);
+    component = fixture.componentInstance;
   }));
 
   it('should create', () => {

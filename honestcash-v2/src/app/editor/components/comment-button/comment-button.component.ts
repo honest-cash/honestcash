@@ -1,16 +1,16 @@
 import {Component, HostBinding, Inject, OnDestroy, OnInit} from '@angular/core';
-import {EDITOR_STATUS, State as EditorState} from '../../store/editor.state';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {Store} from '@ngrx/store';
 import Story from '../../../main/models/story';
 import {ToastrService} from 'ngx-toastr';
 import {Observable, Subscription} from 'rxjs';
 import {EditorStorySaveAndPublish} from '../../store/editor.actions';
-import {WindowToken} from '../../../../core/helpers/window.helper';
-import {EnvironmentToken} from '../../../../core/helpers/environment.helper';
+import {WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {EnvironmentToken} from '../../../../core/shared/helpers/environment.helper';
 import {Environment} from '../../../../environments/environment';
 import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 @Component({
   selector: 'editor-comment-button',

@@ -1,22 +1,21 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EditorPublishButtonComponent} from './publish-button.component';
 import {Component, NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
-import {WindowToken} from '../../../../core/helpers/window.helper';
-import {environmentProvider, EnvironmentToken} from '../../../../core/helpers/environment.helper';
+import {WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {EnvironmentToken} from '../../../../core/shared/helpers/environment.helper';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
 import Story from '../../../main/models/story';
-import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor.state';
 import {EditorService} from '../../services/editor.service';
 import {mock} from '../../../../../mock';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {of} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STATUS, initialEditorState} from '../../store/editor.state';
 
 const MockWindow = {
   location: {
@@ -267,7 +266,8 @@ describe('EditorPublishButtonComponent', () => {
         component.onPublishClicked();
         expect(warningSpy).toHaveBeenCalled();
       });
-      it('call toastr.warning if story.bodyJSON is NOT empty but there is only one paragraph element and its text is undefined or empty', () => {
+      it('call toastr.warning if story.bodyJSON is NOT empty but there is only one paragraph element' +
+        'and its text is undefined or empty', () => {
         const _updatedState = JSON.parse(JSON.stringify(initialState));
         _updatedState.editor.story.bodyJSON = [
           {

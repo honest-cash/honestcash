@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {WelcomeComponent} from '../auth/pages/welcome/welcome.component';
+import {AuthWelcomeComponent} from '../auth/pages/welcome/welcome.component';
 import {UserContainerComponent} from './user-container.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
@@ -12,11 +12,11 @@ const routes: Routes = [
     path: '',
     component: UserContainerComponent,
     children: [
-      {
+      /*{
         path: 'profile',
-        component: WelcomeComponent,
+        component: AuthWelcomeComponent,
         canActivate: [UnauthorizedGuard]
-      },
+      },*/
     ]
   },
 ];
@@ -24,7 +24,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     UserContainerComponent,
-    WelcomeComponent,
   ],
   imports: [
     FormsModule,

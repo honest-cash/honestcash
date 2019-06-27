@@ -4,7 +4,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../../../core/http/http.service';
 import {CryptoHelper} from '../../wallet/helpers/crypto.helper';
 import {mock} from '../../../../mock';
-import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import User from '../../user/models/user';
 import Wallet from '../../wallet/models/wallet';
 import {of} from 'rxjs';
@@ -16,7 +16,7 @@ import {
   OkResponse,
   SignupSuccessResponse
 } from '../models/authentication';
-import {resetLocalStorage} from '../../../core/helpers/tests.helper';
+import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../app.states.mock';
 

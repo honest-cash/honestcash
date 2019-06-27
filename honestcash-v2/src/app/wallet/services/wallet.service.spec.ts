@@ -7,7 +7,7 @@ import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.s
 import Wallet from '../models/wallet';
 import {of} from 'rxjs';
 import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../../auth/models/authentication';
-import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import User from '../../user/models/user';
 import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
 import {LOCAL_TOKEN_KEY} from '../../auth/services/auth.service';

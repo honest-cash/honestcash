@@ -4,14 +4,14 @@ import {EditorCommentButtonComponent} from './comment-button.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
-import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor.state';
-import {WindowToken} from '../../../../core/helpers/window.helper';
-import {EnvironmentToken} from '../../../../core/helpers/environment.helper';
+import {WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {EnvironmentToken} from '../../../../core/shared/helpers/environment.helper';
 import Story from '../../../main/models/story';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
+import {EDITOR_STATUS, initialEditorState} from '../../store/editor.state';
 
 const MockWindow = {
   location: {

@@ -1,6 +1,6 @@
 import {FailedResponse} from '../models/authentication';
 
-export interface State {
+export interface AuthState {
   // is a user authenticated?
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -10,7 +10,7 @@ export interface State {
   newPasswordSet: boolean;
 }
 
-export const initialState: State = {
+export const initialAuthState: AuthState = {
   isAuthenticated: false,
   isLoading: false,
   token: null,

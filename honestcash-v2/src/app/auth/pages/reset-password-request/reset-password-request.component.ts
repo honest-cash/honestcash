@@ -3,10 +3,10 @@ import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import User from '../../../user/models/user';
 import {AppStates, selectAuthState} from '../../../app.states';
-import {State as AuthState} from '../../../../store/auth/auth.state';
-import {ResetPasswordRequest} from '../../../../store/auth/auth.actions';
 import {NgForm} from '@angular/forms';
 import {AuthErrorHelper} from '../../helpers/auth-error.helper';
+import {ResetPasswordRequest} from '../../store/auth.actions';
+import {AuthState} from '../../store/auth.state';
 
 export interface ResetPasswordRequestForm extends NgForm {
   value: {
@@ -15,12 +15,12 @@ export interface ResetPasswordRequestForm extends NgForm {
 }
 
 @Component({
-  selector: 'app-welcome-page-reset-password-request',
+  selector: 'auth-page-reset-password-request',
   templateUrl: './reset-password-request.component.html',
   styleUrls: ['./reset-password-request.component.scss']
 })
-export class ResetPasswordRequestComponent implements OnInit {
-  @HostBinding('class') class = 'card mb-auto mt-auto';
+export class AuthResetPasswordRequestComponent implements OnInit {
+  @HostBinding('class') public class = 'card mb-auto mt-auto';
 
   public authState: Observable<AuthState>;
   public isLoading = false;

@@ -1,26 +1,26 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {LoginComponent, LoginForm} from './login.component';
+import {AuthLoginComponent, LoginForm} from './login.component';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import User from '../../../user/models/user';
 import {Store} from '@ngrx/store';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {LogIn} from '../../../../store/auth/auth.actions';
-import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 import {CodedErrorResponse} from '../../models/authentication';
 import {AppStates} from '../../../app.states';
-import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 import {initialAppStates} from '../../../app.states.mock';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
+import {initialAuthState} from '../../store/auth.state';
+import {LogIn} from '../../store/auth.actions';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
+describe('AuthLoginComponent', () => {
+  let component: AuthLoginComponent;
   let store: MockStore<AppStates>;
-  let fixture: ComponentFixture<LoginComponent>;
+  let fixture: ComponentFixture<AuthLoginComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        LoginComponent
+        AuthLoginComponent
       ],
       imports: [
         FormsModule,
@@ -33,7 +33,7 @@ describe('LoginComponent', () => {
       ]
     });
     store = TestBed.get(Store);
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(AuthLoginComponent);
     component = fixture.componentInstance;
   }));
 
@@ -69,7 +69,7 @@ describe('LoginComponent', () => {
       }
     });
 
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(AuthLoginComponent);
     fixture.detectChanges();
     await fixture.whenStable();
     component = fixture.componentInstance;

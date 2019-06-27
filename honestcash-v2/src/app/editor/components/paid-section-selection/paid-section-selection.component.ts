@@ -3,10 +3,10 @@ import Story from '../../../main/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {EDITOR_STATUS, State as EditorState} from '../../store/editor.state';
 import {Block, convertBlockToHtml} from '../../shared/json-to-html';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 export const PAID_SECTION_PRICE_SLIDER_SETTINGS = {
   MIN: 0.5,

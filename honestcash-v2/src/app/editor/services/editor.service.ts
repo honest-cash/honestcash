@@ -6,7 +6,7 @@ import {EmptyResponse, FailedResponse} from '../../auth/models/authentication';
 import Hashtag from '../models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
-import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext, UploadImageResponse} from '../shared/interfaces';

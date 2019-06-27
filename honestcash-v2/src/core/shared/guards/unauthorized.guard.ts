@@ -3,8 +3,8 @@ import {CanActivate, Router} from '@angular/router';
 
 import {Logger} from '../services/logger.service';
 import {AuthService} from '../../../app/auth/services/auth.service';
-import {WindowToken} from '../../helpers/window.helper';
-import {EnvironmentToken} from '../../helpers/environment.helper';
+import {WindowToken} from '../helpers/window.helper';
+import {EnvironmentToken} from '../helpers/environment.helper';
 import {Environment} from '../../../environments/environment';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 

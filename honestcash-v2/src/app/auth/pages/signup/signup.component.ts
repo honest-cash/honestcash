@@ -2,12 +2,12 @@ import {Component, HostBinding, Inject, OnInit, PLATFORM_ID} from '@angular/core
 import {Store} from '@ngrx/store';
 import {NgForm} from '@angular/forms';
 import {AppStates, selectAuthState} from '../../../app.states';
-import {SignUp} from '../../../../store/auth/auth.actions';
 import User from '../../../user/models/user';
 import {Observable} from 'rxjs';
-import {State as AuthorizationState} from '../../../../store/auth/auth.state';
 import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 import {isPlatformBrowser} from '@angular/common';
+import {AuthState} from '../../store/auth.state';
+import {SignUp} from '../../store/auth.actions';
 
 export interface SignupForm extends NgForm {
   value: {
@@ -21,15 +21,15 @@ export interface SignupForm extends NgForm {
 declare let grecaptcha: any;
 
 @Component({
-  selector: 'app-welcome-page-signup',
+  selector: 'auth-page-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class AuthSignupComponent implements OnInit {
   @HostBinding('class') public class = 'card mb-auto mt-auto';
 
   public isLoading = false;
-  public authState: Observable<AuthorizationState>;
+  public authState: Observable<AuthState>;
   public errorMessage: string;
   public user: User = new User();
   public isCaptchaValid = true;

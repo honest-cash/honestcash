@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 
 @Component({
-  selector: 'app-honest-logo',
+  selector: 'core-honest-logo',
   templateUrl: './honest-logo.component.html',
   styleUrls: ['./honest-logo.component.scss']
 })
-export class HonestLogoComponent {
+export class CoreHonestLogoComponent {
 }

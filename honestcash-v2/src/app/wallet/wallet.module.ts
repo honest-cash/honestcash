@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {WelcomeComponent} from '../auth/pages/welcome/welcome.component';
+import {AuthWelcomeComponent} from '../auth/pages/welcome/welcome.component';
 import {WalletContainerComponent} from './wallet-container.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
@@ -12,11 +12,11 @@ const routes: Routes = [
     path: '',
     component: WalletContainerComponent,
     children: [
-      {
-        path: 'wallet',
-        component: WelcomeComponent,
+      /*{
+        path: '',
+        component: AuthWelcomeComponent,
         canActivate: [UnauthorizedGuard]
-      },
+      },*/
     ]
   },
 ];
@@ -24,7 +24,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     WalletContainerComponent,
-    WelcomeComponent,
   ],
   imports: [
     FormsModule,

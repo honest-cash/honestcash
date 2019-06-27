@@ -1,14 +1,14 @@
 import {Component, HostBinding, Input} from '@angular/core';
 
 @Component({
-  selector: 'app-welcome-card-footer',
+  selector: 'auth-card-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class CardFooterComponent {
+export class AuthCardFooterComponent {
   /* istanbul ignore next*/
-  @HostBinding('class') class = 'card-footer';
-  @Input() text;
-  @Input() anchor;
-  @Input() to;
+  @HostBinding('class') public class = 'card-footer';
+  @Input() public text;
+  @Input() public anchor;
+  @Input() public to;
 }

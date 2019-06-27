@@ -4,7 +4,7 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpResponse} from '@angular/common/http'
 
 import {CacheInterceptor} from './cache.interceptor';
 import {HttpCacheService} from './http-cache.service';
-import {WindowToken} from '../helpers/window.helper';
+import {WindowToken} from '../shared/helpers/window.helper';
 
 const MockWindow = {
   location: {

@@ -2,12 +2,12 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {NgForm} from '@angular/forms';
 import {AppStates, selectAuthState} from '../../../app.states';
-import {State as AuthorizationState} from '../../../../store/auth/auth.state';
 import User from '../../../user/models/user';
 import {Observable} from 'rxjs';
-import {LogIn} from '../../../../store/auth/auth.actions';
 import {FailedResponse} from '../../models/authentication';
+import {AuthState} from '../../store/auth.state';
 import {AuthErrorHelper} from '../../helpers/auth-error.helper';
+import {LogIn} from '../../store/auth.actions';
 
 export interface LoginForm extends NgForm {
   value: {
@@ -17,15 +17,15 @@ export interface LoginForm extends NgForm {
 }
 
 @Component({
-  selector: 'app-welcome-page-login',
+  selector: 'auth-page-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
-  @HostBinding('class') class = 'card mb-auto mt-auto';
+export class AuthLoginComponent implements OnInit {
+  @HostBinding('class') public class = 'card mb-auto mt-auto';
 
   public isLoading = false;
-  public authState: Observable<AuthorizationState>;
+  public authState: Observable<AuthState>;
   public errorMessage: FailedResponse;
   public user = new User();
 

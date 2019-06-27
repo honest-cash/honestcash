@@ -3,11 +3,11 @@ import {Component, Input} from '@angular/core';
 export const AVATAR_DEFAULT_THUMBNAIL = 'https://png.pngtree.com/svg/20161027/631929649c.svg';
 
 @Component({
-  selector: 'app-avatar',
+  selector: 'core-avatar',
   templateUrl: `./avatar.component.html`,
   styleUrls: ['./avatar.component.scss'],
 })
-export class AvatarComponent {
+export class CoreAvatarComponent {
   public _src = '';
   @Input() public large = false;
 

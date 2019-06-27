@@ -21,6 +21,7 @@ import {EditorStoryTagsSelectionComponent} from './components/story-tags-selecti
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 import {EditorCommentComponent} from './pages/comment/comment.component';
 import {EditorParentPostBodyComponent} from './components/parent-post-body/parent-post-body.component';
+import {CoreHonestLogoComponent} from '../../core/shared/components/honest-logo/honest-logo.component';
 
 const routes: Routes = [
   {

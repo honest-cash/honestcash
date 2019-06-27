@@ -1,5 +1,5 @@
 import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
-import {ResetPasswordForm, ResetPasswordVerifyComponent} from './reset-password-verify.component';
+import {ResetPasswordForm, AuthResetPasswordVerifyComponent} from './reset-password-verify.component';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
@@ -18,16 +18,16 @@ const SHARED_MOCKS = {
   resetCode: 'asdf',
 };
 
-describe('ResetPasswordVerifyComponent', () => {
-  let component: ResetPasswordVerifyComponent;
+describe('AuthResetPasswordVerifyComponent', () => {
+  let component: AuthResetPasswordVerifyComponent;
   let store: MockStore<AppStates>;
   let mockActivatedRoute: ActivatedRoute;
-  let fixture: ComponentFixture<ResetPasswordVerifyComponent>;
+  let fixture: ComponentFixture<AuthResetPasswordVerifyComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ResetPasswordVerifyComponent
+        AuthResetPasswordVerifyComponent
       ],
       imports: [
         FormsModule,
@@ -41,7 +41,7 @@ describe('ResetPasswordVerifyComponent', () => {
       ]
     });
     store = TestBed.get(Store);
-    fixture = TestBed.createComponent(ResetPasswordVerifyComponent);
+    fixture = TestBed.createComponent(AuthResetPasswordVerifyComponent);
     component = fixture.componentInstance;
     mockActivatedRoute = TestBed.get(ActivatedRoute);
   }));
@@ -84,7 +84,7 @@ describe('ResetPasswordVerifyComponent', () => {
       }
     });
 
-    fixture = TestBed.createComponent(ResetPasswordVerifyComponent);
+    fixture = TestBed.createComponent(AuthResetPasswordVerifyComponent);
     fixture.detectChanges();
     await fixture.whenStable();
     component = fixture.componentInstance;

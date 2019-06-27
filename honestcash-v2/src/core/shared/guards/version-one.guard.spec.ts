@@ -3,14 +3,14 @@ import {Router, RouterStateSnapshot} from '@angular/router';
 
 import {AuthService, LOCAL_TOKEN_KEY} from '../../../app/auth/services/auth.service';
 import {VersionOneGuard} from './version-one.guard';
-import {localStorageProvider, LocalStorageToken} from '../../helpers/local-storage.helper';
+import {localStorageProvider, LocalStorageToken} from '../helpers/local-storage.helper';
 import {HttpService} from '../../index';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {mock} from '../../../../mock';
 import {WALLET_LOCALSTORAGE_KEYS, WALLET_SETUP_STATUS, WalletService} from '../../../app/wallet/services/wallet.service';
-import {WindowToken} from '../../helpers/window.helper';
-import {environmentProvider, EnvironmentToken} from '../../helpers/environment.helper';
-import {resetLocalStorage} from '../../helpers/tests.helper';
+import {WindowToken} from '../helpers/window.helper';
+import {environmentProvider, EnvironmentToken} from '../helpers/environment.helper';
+import {resetLocalStorage} from '../helpers/tests.helper';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app/app.states.mock';
 import {Environment} from '../../../environments/environment';

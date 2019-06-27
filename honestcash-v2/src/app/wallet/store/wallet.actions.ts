@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
-import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
 import Wallet from '../models/wallet';
+import {ISimpleBitcoinWallet} from '../models/simple-bitcoin-wallet';
 
 export enum WalletActionTypes {
   WALLET_SETUP = '[Wallet] Wallet setup',
@@ -11,22 +11,22 @@ export enum WalletActionTypes {
 }
 
 export class WalletSetup implements Action {
-  readonly type = WalletActionTypes.WALLET_SETUP;
+  public readonly type = WalletActionTypes.WALLET_SETUP;
 
   constructor(public payload?: LoginSuccessResponse | SignupSuccessResponse) {
   }
 }
 
 export class WalletSetupFailed implements Action {
-  readonly type = WalletActionTypes.WALLET_SETUP_FAILED;
+  public readonly type = WalletActionTypes.WALLET_SETUP_FAILED;
 }
 
 export class WalletCleanup implements Action {
-  readonly type = WalletActionTypes.WALLET_CLEANUP;
+  public readonly type = WalletActionTypes.WALLET_CLEANUP;
 }
 
 export class WalletGenerated implements Action {
-  readonly type = WalletActionTypes.WALLET_GENERATED;
+  public readonly type = WalletActionTypes.WALLET_GENERATED;
 
   constructor(public payload: { wallet: ISimpleBitcoinWallet | Wallet }) {
   }

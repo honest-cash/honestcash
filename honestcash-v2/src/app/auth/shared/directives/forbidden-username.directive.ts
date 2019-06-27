@@ -11,9 +11,9 @@ export function forbiddenUsernameValidator(): ValidatorFn {
 
 @Directive({
   selector: '[appForbiddenUsername]',
-  providers: [{provide: NG_VALIDATORS, useExisting: ForbiddenUsernameValidatorDirective, multi: true}]
+  providers: [{provide: NG_VALIDATORS, useExisting: AuthForbiddenUsernameValidatorDirective, multi: true}]
 })
-export class ForbiddenUsernameValidatorDirective implements Validator {
+export class AuthForbiddenUsernameValidatorDirective implements Validator {
   validate(control: AbstractControl): {[key: string]: any} {
     return forbiddenUsernameValidator()(control);
   }

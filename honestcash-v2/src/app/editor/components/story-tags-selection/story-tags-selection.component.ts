@@ -3,10 +3,10 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {isPlatformBrowser} from '@angular/common';
 import Hashtag from '../../models/hashtag';
-import {State as EditorState} from '../../store/editor.state';
 import {Observable, Subscription} from 'rxjs';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EditorState} from '../../store/editor.state';
 
 export interface INgxChipsTag {
   hashtag: string;

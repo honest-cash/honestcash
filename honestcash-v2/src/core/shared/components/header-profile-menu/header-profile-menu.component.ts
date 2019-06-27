@@ -1,9 +1,9 @@
 import {Component, Inject, Input} from '@angular/core';
-import User from '../../../user/models/user';
+import User from '../../../../app/user/models/user';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../app.states';
-import {LogOut} from '../../../auth/store/auth.actions';
-import {WindowToken} from '../../../../core/helpers/window.helper';
+import {AppStates} from '../../../../app/app.states';
+import {LogOut} from '../../../../app/auth/store/auth.actions';
+import {WindowToken} from '../../helpers/window.helper';
 
 export const GOTO_PATHS = {
   profile: (username) => `/profile/${username}`,
@@ -15,11 +15,11 @@ export const GOTO_PATHS = {
 };
 
 @Component({
-  selector: 'app-header-profile-menu',
+  selector: 'core-header-profile-menu',
   templateUrl: './header-profile-menu.component.html',
   styleUrls: ['./header-profile-menu.component.scss']
 })
-export class HeaderProfileMenuComponent {
+export class CoreHeaderProfileMenuComponent {
   public menuHidden = true;
   @Input() public user: User;
 

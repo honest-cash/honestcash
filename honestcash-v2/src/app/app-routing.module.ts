@@ -11,12 +11,12 @@ const routes: Routes = [
     loadChildren: './editor/editor.module#EditorModule'
   },
   {
-    path: '',
-    loadChildren: './main/main.module#MainModule'
+    path: 'wallet',
+    loadChildren: './wallet/wallet.module#WalletModule'
   },
   {
     path: '',
-    loadChildren: './brand/brand.module#BrandModule'
+    loadChildren: './main/main.module#MainModule'
   },
   {
     path: '',

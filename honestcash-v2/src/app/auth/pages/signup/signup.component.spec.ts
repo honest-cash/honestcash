@@ -1,16 +1,16 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {SignupComponent, SignupForm} from './signup.component';
+import {AuthSignupComponent, SignupForm} from './signup.component';
 import User from '../../../user/models/user';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {SignUp} from '../../../../store/auth/auth.actions';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
 import {CodedErrorResponse} from '../../models/authentication';
 import {AuthErrorHelper} from '../../helpers/auth-error.helper';
-import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
+import {SignUp} from '../../store/auth.actions';
+import {initialAuthState} from '../../store/auth.state';
 
 const SHARED_MOCKS = {
   username: 'toto',
@@ -20,15 +20,15 @@ const SHARED_MOCKS = {
   captcha: 'asdf',
 };
 
-describe('SignupComponent', () => {
-  let component: SignupComponent;
+describe('AuthSignupComponent', () => {
+  let component: AuthSignupComponent;
   let store: MockStore<AppStates>;
-  let fixture: ComponentFixture<SignupComponent>;
+  let fixture: ComponentFixture<AuthSignupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        SignupComponent
+        AuthSignupComponent
       ],
       imports: [
         FormsModule,
@@ -47,7 +47,7 @@ describe('SignupComponent', () => {
       render: (id: string) => {
       }
     };
-    fixture = TestBed.createComponent(SignupComponent);
+    fixture = TestBed.createComponent(AuthSignupComponent);
     component = fixture.componentInstance;
     store = TestBed.get(Store);
   }));
@@ -81,7 +81,7 @@ describe('SignupComponent', () => {
       }
     });
 
-    fixture = TestBed.createComponent(SignupComponent);
+    fixture = TestBed.createComponent(AuthSignupComponent);
     fixture.detectChanges();
     await fixture.whenStable();
     component = fixture.componentInstance;

@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { LoadingSubmitButtonComponent} from './loading-submit-button.component';
+import { AuthLoadingSubmitButtonComponent} from './loading-submit-button.component';
 import {By} from '@angular/platform-browser';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
-describe('LoadingSubmitButtonComponent', () => {
-  let component: LoadingSubmitButtonComponent;
-  let fixture: ComponentFixture<LoadingSubmitButtonComponent>;
+describe('AuthLoadingSubmitButtonComponent', () => {
+  let component: AuthLoadingSubmitButtonComponent;
+  let fixture: ComponentFixture<AuthLoadingSubmitButtonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -15,7 +15,7 @@ describe('LoadingSubmitButtonComponent', () => {
         FontAwesomeModule
       ],
       declarations: [
-        LoadingSubmitButtonComponent
+        AuthLoadingSubmitButtonComponent
       ],
     }).compileComponents().then(() => {
       library.add(faSpinner);
@@ -23,7 +23,7 @@ describe('LoadingSubmitButtonComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoadingSubmitButtonComponent);
+    fixture = TestBed.createComponent(AuthLoadingSubmitButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

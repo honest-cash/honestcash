@@ -9,8 +9,8 @@ import * as UserActions from '../../../user/store/user/user.actions';
 import * as WalletActions from '../../../wallet/store/wallet/wallet.actions';
 import {WalletService} from '../../wallet/services/wallet.service';
 import {AuthService, LOCAL_TOKEN_KEY} from '../../auth/services/auth.service';
-import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
-import {resetLocalStorage} from '../../../core/helpers/tests.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
+import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../app.states.mock';
 

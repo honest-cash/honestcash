@@ -1,10 +1,10 @@
 import {All, MainActionTypes} from './main.actions';
-import {initialState, State} from './main.state';
+import {initialMainState, MainState} from './main.state';
 import {Logger} from '../../../core';
 
 const logger = new Logger();
 
-export function reducer(state = initialState, action: All): State {
+export function reducer(state = initialMainState, action: All): MainState {
   switch (action.type) {
     case MainActionTypes.MAIN_LOAD: {
       logger.info('Main Loaded');

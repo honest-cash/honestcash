@@ -8,8 +8,7 @@ import {LogInSuccess, RootRedirect} from './auth.actions';
 import {AuthEffects} from './auth.effects';
 import {Store, StoreModule} from '@ngrx/store';
 import {Router} from '@angular/router';
-import {UserActionTypes, UserCleanup, UserLoaded, UserSetup} from '../../../user/store/user/user.actions';
-import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup} from '../../../wallet/store/wallet/wallet.actions';
+
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ofType} from '@ngrx/effects';
 import {first} from 'rxjs/operators';
@@ -17,14 +16,16 @@ import {provideMockStore} from '@ngrx/store/testing';
 import User from '../../user/models/user';
 import Wallet from '../../wallet/models/wallet';
 import {AuthService} from '../services/auth.service';
-import {AppStates, metaReducers, reducers} from '../../../app.states';
-import {mock} from '../../../../../mock';
-import {WindowToken} from '../../../core/helpers/window.helper';
-import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {WindowToken} from '../../../core/shared/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {UserService} from '../../user/services/user.service';
 import {initialAppStates} from '../../app.states.mock';
-import {resetLocalStorage} from '../../../core/helpers/tests.helper';
+import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../models/authentication';
+import {AppStates, metaReducers, reducers} from '../../app.states';
+import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup} from '../../wallet/store/wallet.actions';
+import {UserActionTypes, UserCleanup, UserLoaded, UserSetup} from '../../user/store/user.actions';
+import {mock} from '../../../../mock';
 
 const MockWindow = {
   location: {
@@ -160,32 +161,6 @@ describe('auth.effects', () => {
 
         expect(effects.LogInSuccess).toBeObservable(expected);
 
-      });
-      it('should correctly redirect to root after UserLoaded and WalletGenerated are completed', () => {
-        (<jasmine.Spy>mockAuthenticationService.getStatus).and.returnValue(of(new User()));
-        actions = cold('a(bc)', {
-          a: new LogInSuccess(mocks.logInSuccess),
-          b: new UserLoaded({user: new User()}),
-          c: new WalletGenerated({wallet: new Wallet()}),
-        });
-
-        const firstActionSuccess$ = actions.pipe(
-          ofType(UserActionTypes.USER_LOADED),
-          first(),
-        );
-
-        const secondActionsSuccess$ = actions.pipe(
-          ofType(WalletActionTypes.WALLET_GENERATED),
-          first(),
-        );
-
-        effects.LogInSuccess.subscribe(() => {
-          forkJoin(firstActionSuccess$, secondActionsSuccess$)
-          .pipe(first())
-          .subscribe(() => {
-            expect(store.dispatch).toHaveBeenCalledWith(new RootRedirect());
-          });
-        });
       });
     });
   });
@@ -360,18 +335,6 @@ describe('auth.effects', () => {
           d: new RootRedirect(),
         });
         expect(effects.LogOut).toBeObservable(expected);
-      });
-    });
-  });
-  describe('GetStatus Effects', () => {
-    describe('GetStatus', () => {
-      it('should correctly call getStatus on authenticationService', () => {
-        (<jasmine.Spy>mockAuthenticationService.getStatus).and.returnValue(of(new User()));
-        actions = cold('a', {a: new AuthActions.GetStatus()});
-
-        effects.GetStatus.subscribe(() => {
-          expect(mockAuthenticationService.getStatus).toHaveBeenCalled();
-        });
       });
     });
   });

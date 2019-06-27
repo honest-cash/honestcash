@@ -1,7 +1,7 @@
-<app-welcome-heading
+<auth-heading
   title="Sign in to Honest."
   description="Enter your details below"
-></app-welcome-heading>
+></auth-heading>
 <div class="card-body">
   <form name="form" class="needs-validation" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
     <div class="input-group form-group">
@@ -81,17 +81,17 @@
     </p>
 
     <div class="form-group">
-      <app-welcome-loading-submit-button
+      <auth-loading-submit-button
         text="Sign In"
         loadingText="Signing In"
         [isLoading]="isLoading"
         btnClass="btn-dark"
-      ></app-welcome-loading-submit-button>
+      ></auth-loading-submit-button>
     </div>
   </form>
 </div>
-<app-welcome-card-footer
+<auth-card-footer
   to="signup"
   text="Don't have an account?"
   anchor="Sign Up"
-></app-welcome-card-footer>
+></auth-card-footer>

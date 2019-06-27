@@ -1,11 +1,11 @@
 import {All, EditorActionTypes} from './editor.actions';
-import {EDITOR_STATUS, initialState, State} from './editor.state';
 import {Logger} from '../../../core/shared/services/logger.service';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STATUS, EditorState, initialEditorState} from './editor.state';
 
 const logger = new Logger();
 
-export function reducer(state = initialState, action: All): State {
+export function reducer(state = initialEditorState, action: All): EditorState {
   switch (action.type) {
     case EditorActionTypes.EDITOR_LOAD: {
       logger.info('Editor Load Success');
@@ -16,7 +16,7 @@ export function reducer(state = initialState, action: All): State {
     }
     case EditorActionTypes.EDITOR_UNLOAD: {
       logger.info('Editor Unload Success');
-      return initialState;
+      return initialEditorState;
     }
     case EditorActionTypes.EDITOR_STORY_LOAD_SUCCESS: {
       logger.info('Editor Story Load Success', action.payload);

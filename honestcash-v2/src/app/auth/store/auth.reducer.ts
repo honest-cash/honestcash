@@ -1,22 +1,22 @@
 import {All, AuthActionTypes} from './auth.actions';
-import {initialState, State} from './auth.state';
 import {Logger} from '../../../core/shared/services/logger.service';
+import {AuthState, initialAuthState} from './auth.state';
 
 const logger = new Logger();
 
-export function reducer(state = initialState, action: All): State {
+export function reducer(state = initialAuthState, action: All): AuthState {
   switch (action.type) {
     case AuthActionTypes.LOGIN: {
       logger.info('LogIn Started');
       return {
-        ...initialState,
+        ...initialAuthState,
         isLoading: true,
       };
     }
     case AuthActionTypes.LOGIN_SUCCESS: {
       logger.info('LogIn Success');
       return {
-        ...initialState,
+        ...initialAuthState,
         isLoading: false,
         token: action.payload.token,
         isAuthenticated: true,
@@ -25,21 +25,21 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.LOGIN_FAILURE: {
       logger.error('LogIn Failed', action.payload);
       return {
-        ...initialState,
+        ...initialAuthState,
         errorMessage: action.payload
       };
     }
     case AuthActionTypes.SIGNUP: {
       logger.info('SignUp Started');
       return {
-        ...initialState,
+        ...initialAuthState,
         isLoading: true,
       };
     }
     case AuthActionTypes.SIGNUP_SUCCESS: {
       logger.info('SignUp Success');
       return {
-        ...initialState,
+        ...initialAuthState,
         token: action.payload.token,
         isAuthenticated: true,
       };
@@ -47,7 +47,7 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.SIGNUP_FAILURE: {
       logger.error('SignUp Failed', action.payload);
       return {
-        ...initialState,
+        ...initialAuthState,
         errorMessage: action.payload
       };
     }
@@ -61,21 +61,21 @@ export function reducer(state = initialState, action: All): State {
     case AuthActionTypes.RESET_PASSWORD_FAILURE: {
       logger.error('Reset Password Failed', action.payload);
       return {
-        ...initialState,
+        ...initialAuthState,
         errorMessage: action.payload
       };
     }
     case AuthActionTypes.RESET_PASSWORD_REQUEST_FAILURE: {
       logger.error('Reset Password Request Failed', action.payload);
       return {
-        ...initialState,
+        ...initialAuthState,
         errorMessage: action.payload
       };
     }
     case AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS: {
       logger.info('Reset Password Request Success');
       return {
-        ...initialState,
+        ...initialAuthState,
         newPasswordRequested: true
       };
     }
@@ -85,7 +85,7 @@ export function reducer(state = initialState, action: All): State {
     }
     case AuthActionTypes.LOGOUT: {
       logger.info('LogOut Success');
-      return initialState;
+      return initialAuthState;
     }
     default: {
       return state;

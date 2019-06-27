@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar navbar-light navbar-expand">
     <a class="navbar-brand" href="/">
-      <app-honest-logo></app-honest-logo>
+      <core-honest-logo></core-honest-logo>
     </a>
     <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
       <div class="navbar-nav ml-auto">
@@ -15,7 +15,7 @@
         <editor-publish-button
           *ngIf="editingMode === EDITOR_EDITING_MODE.Write || editingMode === EDITOR_EDITING_MODE.Edit"></editor-publish-button>
         <editor-comment-button *ngIf="editingMode === EDITOR_EDITING_MODE.Comment"></editor-comment-button>
-        <app-header-profile-menu [user]="user"></app-header-profile-menu>
+        <core-header-profile-menu [user]="user"></core-header-profile-menu>
       </div>
     </div>
   </nav>

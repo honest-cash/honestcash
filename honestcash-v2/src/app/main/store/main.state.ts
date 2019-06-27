@@ -1,7 +1,7 @@
-export interface State {
+export interface MainState {
   isLoaded: boolean;
 }
 
-export const initialState: State = {
+export const initialMainState: MainState = {
   isLoaded: false,
 };

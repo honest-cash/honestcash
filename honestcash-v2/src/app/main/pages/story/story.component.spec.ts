@@ -1,21 +1,21 @@
 import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
-import {EditorStoryPreviewComponent} from './story-preview.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
-import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/local-storage.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/shared/helpers/local-storage.helper';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {windowProvider, WindowToken} from '../../../../core/helpers/window.helper';
+import {windowProvider, WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {StoryComponent} from './story.component';
 
-describe('EditorStoryPreviewComponent', () => {
-  let component: EditorStoryPreviewComponent;
-  let fixture: ComponentFixture<EditorStoryPreviewComponent>;
+describe('StoryComponent', () => {
+  let component: StoryComponent;
+  let fixture: ComponentFixture<StoryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        EditorStoryPreviewComponent
+        StoryComponent
       ],
       imports: [
         HttpClientTestingModule,
@@ -35,7 +35,7 @@ describe('EditorStoryPreviewComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorStoryPreviewComponent);
+    fixture = TestBed.createComponent(StoryComponent);
     component = fixture.componentInstance;
   });
 

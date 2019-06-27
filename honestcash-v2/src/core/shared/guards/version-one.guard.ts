@@ -4,8 +4,8 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {Logger} from '../services/logger.service';
 import {AuthService} from '../../../app/auth/services/auth.service';
 import {WALLET_SETUP_STATUS, WalletService} from '../../../app/wallet/services/wallet.service';
-import {WindowToken} from '../../helpers/window.helper';
-import {EnvironmentToken} from '../../helpers/environment.helper';
+import {WindowToken} from '../helpers/window.helper';
+import {EnvironmentToken} from '../helpers/environment.helper';
 import {Environment} from '../../../environments/environment';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';

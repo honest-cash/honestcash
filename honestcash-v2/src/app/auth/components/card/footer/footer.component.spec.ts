@@ -1,21 +1,21 @@
 import {async, TestBed,} from '@angular/core/testing';
-import {CardFooterComponent} from './footer.component';
+import {AuthCardFooterComponent} from './footer.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('CardFooterComponent', () => {
-  let component: CardFooterComponent;
+describe('AuthCardFooterComponent', () => {
+  let component: AuthCardFooterComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        CardFooterComponent
+        AuthCardFooterComponent
       ],
       imports: [],
       schemas: [
         NO_ERRORS_SCHEMA
       ],
     });
-    component = new CardFooterComponent();
+    component = new AuthCardFooterComponent();
   }));
 
   it('should create', () => {

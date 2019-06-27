@@ -1,10 +1,10 @@
 import {All, WalletActionTypes} from './wallet.actions';
-import {initialState, State} from './wallet.state';
+import {initialWalletState, WalletState} from './wallet.state';
 import {Logger} from '../../../core';
 
 const logger = new Logger();
 
-export function reducer(state = initialState, action: All): State {
+export function reducer(state = initialWalletState, action: All): WalletState {
   switch (action.type) {
     case WalletActionTypes.WALLET_SETUP: {
       logger.info('Wallet Setup Started');
@@ -21,7 +21,7 @@ export function reducer(state = initialState, action: All): State {
     }
     case WalletActionTypes.WALLET_CLEANUP: {
       logger.info('Wallet Cleanup Success');
-      return initialState;
+      return initialWalletState;
     }
     default: {
       return state;

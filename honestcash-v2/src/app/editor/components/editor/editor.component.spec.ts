@@ -10,19 +10,19 @@ import {EditorService} from '../../services/editor.service';
 import {mock} from '../../../../../mock';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
-import {initialState as initialEditorState} from '../../store/editor.state';
 import Story from '../../../main/models/story';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
-import {concat, forkJoin, merge, of} from 'rxjs';
+import {forkJoin, of} from 'rxjs';
 import {ScriptService} from 'ngx-script-loader';
 import {editorScriptPaths} from '../../shared/editor.scripts-path';
 import Paragraph from '@editorjs/paragraph';
 import Header from '@editorjs/header';
 import ImageTool from '@editorjs/image';
 import Embed from '@editorjs/embed';
+import {initialEditorState} from '../../store/editor.state';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -87,7 +87,8 @@ describe('EditorComponent', () => {
   });
 
   describe('ngOnInit', () => {
-    it('should call loadEditor if story provided by store has properties and editor has NOT yet started initializing and has NOT yet initialized', () => {
+    it('should call loadEditor if story provided by store has properties and editor has NOT yet started initializing' +
+      'and has NOT yet initialized', () => {
       const loadEditorSpy = spyOn(component, 'loadEditor').and.returnValue(of(true));
       const initEditorSpy = spyOn(component, 'initEditor').and.returnValue({});
       store.setState({
@@ -141,7 +142,8 @@ describe('EditorComponent', () => {
   });
 
   describe('onBodyChange', () => {
-    it('should trigger save method on the editor and dispatch EditorPropertyChange with property BodyJSON and bodyJSON as value', (done) => {
+    it('should trigger save method on the editor and dispatch EditorPropertyChange with property BodyJSON' +
+      'and bodyJSON as value', (done) => {
       component.story = {
         ...new Story(),
         bodyJSON: [
@@ -163,7 +165,12 @@ describe('EditorComponent', () => {
       component.onBodyChange();
       expect(saveSpy).toHaveBeenCalled();
       component.editor.saver.save().then(() => {
-        expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: component.story.bodyJSON}));
+        expect(store.dispatch).toHaveBeenCalledWith(
+          new EditorStoryPropertyChange({
+            property: STORY_PROPERTIES.BodyJSON,
+            value: component.story.bodyJSON
+          })
+        );
         done();
       });
     });
@@ -177,7 +184,7 @@ describe('EditorComponent', () => {
         nativeElement: {
           innerHTML: ''
         }
-      }
+      };
       component.onTitleBlur();
     });
     it('should set story.title and titleElement.nativeElement.innerHTML to updatedTitle', () => {
@@ -185,7 +192,12 @@ describe('EditorComponent', () => {
       expect(component.titleElement.nativeElement.innerHTML).toBe(component.updatedTitle);
     });
     it('should dispatch EditorStoryPropertyChange with Title as property and title as value', () => {
-      expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: component.story.title}));
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new EditorStoryPropertyChange({
+          property: STORY_PROPERTIES.Title,
+          value: component.story.title
+        })
+      );
     });
   });
 
@@ -285,7 +297,10 @@ describe('EditorComponent', () => {
           }
         ]
       };
-      const setShouldEditorAllowTitleAndCustomElementsSpy = spyOn(component, 'setShouldEditorAllowTitleAndCustomElements').and.callThrough();
+      const setShouldEditorAllowTitleAndCustomElementsSpy = spyOn(
+        component,
+        'setShouldEditorAllowTitleAndCustomElements'
+      ).and.callThrough();
       component.loadEditor();
       expect(setShouldEditorAllowTitleAndCustomElementsSpy).toHaveBeenCalled();
     });
@@ -548,5 +563,5 @@ describe('EditorComponent', () => {
       expect(destroySpy).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(new EditorUnload());
     });
-  })
+  });
 });

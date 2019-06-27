@@ -3,8 +3,6 @@ import {NgModule} from '@angular/core';
 import {EffectsModule} from '@ngrx/effects';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
-import {FormsModule} from '@angular/forms';
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {StoreModule} from '@ngrx/store';
@@ -22,6 +20,10 @@ import {EditorEffects} from './editor/store/editor.effects';
 import {AppSharedModule} from './app.shared.module';
 import {ToastrModule} from 'ngx-toastr';
 import {SharedModule} from '../core/shared.module';
+import {EditorModule} from './editor/editor.module';
+import {MainModule} from './main/main.module';
+import {AuthModule} from './auth/auth.module';
+import {WalletModule} from './wallet/wallet.module';
 
 @NgModule({
   declarations: [
@@ -34,11 +36,14 @@ import {SharedModule} from '../core/shared.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
+    EditorModule,
+    MainModule,
+    AuthModule,
+    WalletModule,
     SharedModule,
-    FormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([MainEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects,]),
+    EffectsModule.forRoot([MainEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
     ToastrModule.forRoot(),
   ],
@@ -51,7 +56,4 @@ import {SharedModule} from '../core/shared.module';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor() {
-  }
-}
+export class AppModule {}

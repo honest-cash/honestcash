@@ -2,16 +2,16 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {FooterComponent} from './footer.component';
+import {AuthFooterComponent} from './footer.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('FooterComponent', () => {
-  let component: FooterComponent;
+describe('AuthFooterComponent', () => {
+  let component: AuthFooterComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        FooterComponent
+        AuthFooterComponent
       ],
       imports: [
       ],
@@ -19,7 +19,7 @@ describe('FooterComponent', () => {
         NO_ERRORS_SCHEMA
       ],
     });
-    component = new FooterComponent();
+    component = new AuthFooterComponent();
   }));
 
   it('should create', () => {

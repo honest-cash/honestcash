@@ -11,12 +11,12 @@ export enum EDITOR_STATUS {
   Published = 'PUBLISHED',
 }
 
-export interface State {
+export interface EditorState {
   status: EDITOR_STATUS;
   story: Story;
 }
 
-export const initialState: State = {
+export const initialEditorState: EditorState = {
   status: EDITOR_STATUS.NotInitialized,
   story: new Story(),
 };

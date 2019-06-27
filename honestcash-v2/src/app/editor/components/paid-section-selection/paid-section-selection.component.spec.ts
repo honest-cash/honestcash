@@ -72,7 +72,7 @@ describe('EditorPaidSectionSelectionComponent', () => {
         component.story = {
           ...new Story(),
           hasPaidSection: false,
-        }
+        };
         component.setShouldHideElements(EDITOR_STATUS.NotInitialized);
         expect(component.shouldHideElements).toBeTruthy();
       });
@@ -80,7 +80,7 @@ describe('EditorPaidSectionSelectionComponent', () => {
         component.story = {
           ...new Story(),
           hasPaidSection: true,
-        }
+        };
         component.setShouldHideElements(EDITOR_STATUS.NotInitialized);
         expect(component.shouldHideElements).toBeTruthy();
       });
@@ -223,7 +223,8 @@ describe('EditorPaidSectionSelectionComponent', () => {
         component.onSwitchLinebreak(LINEBREAK_ACTION.MoveDown);
         expect(component.story.paidSectionLinebreak).toEqual(paidSectionLinebreak + 1);
       });
-      it('NOT increment story.paidSectionLinebreak by one if action is MoveDown and story.paidSectionLinebreak is equal to paidSectionLinebreakEnd', () => {
+      it('NOT increment story.paidSectionLinebreak by one if action is MoveDown and' +
+        'story.paidSectionLinebreak is equal to paidSectionLinebreakEnd', () => {
         const _paidSectionLinebreak = story.bodyJSON.length - 1;
         component.paidSectionElements = paidSectionElements as any;
         component.story = {
@@ -263,7 +264,12 @@ describe('EditorPaidSectionSelectionComponent', () => {
         component.story = {...story};
         component.setPaidSectionDefaults();
         component.onSwitchLinebreak(LINEBREAK_ACTION.MoveDown);
-        expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.PaidSectionLinebreak, value: paidSectionLinebreak + 1}));
+        expect(store.dispatch).toHaveBeenCalledWith(
+          new EditorStoryPropertyChange({
+            property: STORY_PROPERTIES.PaidSectionLinebreak,
+            value: paidSectionLinebreak + 1
+          })
+        );
       });
     });
 
@@ -274,7 +280,12 @@ describe('EditorPaidSectionSelectionComponent', () => {
           paidSectionCost: 3
         };
         component.onChangePaidSectionCost();
-        expect(store.dispatch).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.PaidSectionCost, value: component.story.paidSectionCost}));
+        expect(store.dispatch).toHaveBeenCalledWith(
+          new EditorStoryPropertyChange({
+            property: STORY_PROPERTIES.PaidSectionCost,
+            value: component.story.paidSectionCost
+          })
+        );
       });
     });
 
