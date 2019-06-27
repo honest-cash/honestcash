@@ -6,8 +6,8 @@ import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup, WalletSe
 import {WalletService} from '../services/wallet.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
-import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
 import {UserCleanup} from '../../user/store/user.actions';
+import {ISimpleWallet} from '../models/simple-wallet';
 
 @Injectable()
 export class WalletEffects {
@@ -27,25 +27,25 @@ export class WalletEffects {
    * This needs to be booletproof code! @todo 100% tests coverage.
    */
   @Effect()
-  WalletSetup: Observable<any> = this.actions.pipe(
+  public WalletSetup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP),
     map((action: WalletSetup) => action.payload),
-    switchMap((payload?: LoginSuccessResponse | SignupSuccessResponse) => this.walletService.setupWallet(payload)
+    switchMap((payload?: LoginSuccessResponse) => this.walletService.loadWallet(payload)
       .pipe(
-        map((wallet: ISimpleBitcoinWallet) => new WalletGenerated({wallet})),
+        map((wallet: ISimpleWallet) => new WalletGenerated({wallet})),
         catchError(() => of(new WalletSetupFailed()))
       )
     ),
   );
 
   @Effect()
-  WalletSetupFailed: Observable<any> = this.actions.pipe(
+  public WalletSetupFailed: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP_FAILED),
     switchMap(() => [new UserCleanup(), new WalletCleanup()]),
   );
 
   @Effect({dispatch: false})
-  WalletCleanup: Observable<any> = this.actions.pipe(
+  public WalletCleanup: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_CLEANUP),
     tap(() => {
       this.walletService.unsetWallet();

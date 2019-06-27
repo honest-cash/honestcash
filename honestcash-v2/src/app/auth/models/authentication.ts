@@ -1,5 +1,5 @@
 import User from '../../user/models/user';
-import Wallet from '../../wallet/models/wallet';
+import {ISimpleWallet} from '../../wallet/models/simple-wallet';
 
 export type FailedResponse = CodedErrorResponse | string;
 export type LoginResponse = LoginSuccessResponse | FailedResponse;
@@ -7,18 +7,18 @@ export type SignupResponse = SignupSuccessResponse | FailedResponse;
 export type CheckPasswordResponse = CheckPasswordSuccessResponse | FailedResponse;
 
 export abstract class CodedErrorResponse {
-  code: string | number;
-  desc: string;
-  httpCode: number;
-  codeNo?: number;
+  public code: string | number;
+  public desc: string;
+  public httpCode: number;
+  public codeNo?: number;
 }
 
 export abstract class OkResponse {
-  ok: boolean;
+  public ok: boolean;
 }
 
 export abstract class DataResponse {
-  data: any;
+  public data: any;
 }
 
 export abstract class EmptyResponse {
@@ -31,7 +31,7 @@ export interface LoginContext {
 
 export interface LoginSuccessResponse {
   user: User;
-  wallet: Wallet;
+  wallet: ISimpleWallet;
   token: string;
   password?: string;
 }

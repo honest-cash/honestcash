@@ -1,14 +1,12 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import Wallet from '../models/wallet';
 import {isPlatformBrowser} from '@angular/common';
 import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../../auth/models/authentication';
 import {Logger} from '../../../core/shared/services/logger.service';
-import {AsyncSubject, defer, Observable, Subject} from 'rxjs';
-import {AuthService} from '../../auth/services/auth.service';
+import {AsyncSubject, defer, Observable, of, Subject, throwError} from 'rxjs';
 import {HttpService} from '../../../core';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {sha3_512} from 'js-sha3';
-import {ISimpleBitcoinWallet} from '../models/simple-bitcoin-wallet';
+import {ISimpleWallet} from '../models/simple-wallet';
 import {ScriptService} from 'ngx-script-loader';
 
 export const API_ENDPOINTS = {
@@ -27,17 +25,18 @@ const simpleBitcoinWalletAssetPath = 'assets/libs/simple-bitcoin-wallet.min.js';
 
 export enum WALLET_SETUP_STATUS {
   NotInitialized = 'NOT_INITIALIZED',
+  Loaded = 'LOADED',
+  Errored = 'ERRORED',
   Started = 'STARTED',
   Initialized = 'INITIALIZED',
 }
 
+declare var SimpleWallet: any;
+
 @Injectable({providedIn: 'root'})
 export class WalletService {
-  public _wallet: Wallet = null;
-  public wallet: Wallet = null;
-
+  public wallet: ISimpleWallet;
   public isSettingUpWallet: Subject<WALLET_SETUP_STATUS> = new AsyncSubject<WALLET_SETUP_STATUS>();
-
   private logger: Logger;
   private readonly isPlatformBrowser: boolean;
 
@@ -52,40 +51,29 @@ export class WalletService {
     this.isSettingUpWallet.next(WALLET_SETUP_STATUS.NotInitialized);
   }
 
-  public generateNewWallet = async (password: string): Promise<ISimpleBitcoinWallet> => {
-    const SimpleBitcoinWallet: any = await this.loadSimpleBitcoinWallet();
+  public createWallet(password: string): ISimpleWallet {
+    return new SimpleWallet(null, {password});
+  }
 
-    return new SimpleBitcoinWallet(null, {password});
-  };
+  public encrypt(mnemonic: string, password: string): string {
+    return SimpleWallet.encrypt(mnemonic, password);
+  }
 
-  public encrypt = async (mnemonic: string, password: string): Promise<string> => {
-    const SimpleBitcoinWallet: any = await this.loadSimpleBitcoinWallet();
+  public decrypt(mnemonicEncrypted: string, password: string): string {
+    return SimpleWallet.decrypt(mnemonicEncrypted, password);
+  }
 
-    return SimpleBitcoinWallet.encrypt(mnemonic, password);
-  };
-
-  public generateWalletWithEncryptedRecoveryPhrase = async (
+  public loadWalletWithEncryptedRecoveryPhrase(
     encryptedRecoveryPhrase: string,
     password: string
-  ): Promise<ISimpleBitcoinWallet> => {
-    const SimpleBitcoinWallet: any = await this.loadSimpleBitcoinWallet();
+  ): ISimpleWallet {
+    return new SimpleWallet(encryptedRecoveryPhrase, {password});
+  }
 
-    return new SimpleBitcoinWallet(encryptedRecoveryPhrase, {password});
-  };
-
-  public generateWalletWithDecryptedRecoveryPhrase = async (
+  public loadWalletWithDecryptedRecoveryPhrase(
     recoveryPhrase: string,
-  ): Promise<ISimpleBitcoinWallet> => {
-    const SimpleBitcoinWallet: any = await this.loadSimpleBitcoinWallet();
-
-    return new SimpleBitcoinWallet(recoveryPhrase, {password: null});
-  };
-
-  // @todo add typings to SimpleBitcoinWallet
-  // @todo these typings below are a little bit off
-  // simple-bitcoin-wallet is lazy loaded as it is a >1MB package and it is not needed for server side rendering.
-  public loadSimpleBitcoinWallet() {
-    return this.scriptService.loadScript(simpleBitcoinWalletAssetPath);
+  ): ISimpleWallet {
+    return new SimpleWallet(recoveryPhrase, {password: null});
   }
 
   public calculateSHA3Hash = (message: string): string => {
@@ -102,17 +90,18 @@ export class WalletService {
     );
   };
 
-  public setupWallet(payload?: LoginSuccessResponse | SignupSuccessResponse): Observable<ISimpleBitcoinWallet | Error> {
+  public loadWallet(payload?: LoginSuccessResponse): Observable<ISimpleWallet | WALLET_SETUP_STATUS> {
     return defer(
       async () => {
         this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Started);
-        let simpleWallet: ISimpleBitcoinWallet;
+        await this.scriptService.loadScript(simpleBitcoinWalletAssetPath).toPromise();
+        let simpleWallet: ISimpleWallet;
         if (payload) {
           if ((<LoginSuccessResponse>payload).wallet && (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted) {
             // if there is a payload and a wallet attached
             // it means it is a login action
             this.logger.info('Setting up an already existing wallet from payload');
-            simpleWallet = await this.generateWalletWithEncryptedRecoveryPhrase(
+            simpleWallet = this.loadWalletWithEncryptedRecoveryPhrase(
               (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted,
               payload.password
             );
@@ -120,7 +109,7 @@ export class WalletService {
             // if there is a payload but NO wallet attached
             // it means it is a signup action with only the password
             this.logger.info('Creating new wallet.');
-            simpleWallet = await this.generateNewWallet(payload.password);
+            simpleWallet = this.createWallet(payload.password);
           }
         } else {
           if (this.getWalletMnemonic()) {
@@ -128,12 +117,12 @@ export class WalletService {
             // but there is a decrypted mnemonic and a token in the localstorage
             // it means the app loads wallet from localStorage
             this.logger.info('Setting up an already existing wallet from local storage');
-            simpleWallet = await this.generateWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
+            simpleWallet = this.loadWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
           }
         }
 
         if (!simpleWallet) {
-          return new Error();
+          throwError(WALLET_SETUP_STATUS.Errored);
         }
 
         this.setWallet(simpleWallet);
@@ -154,10 +143,11 @@ export class WalletService {
     }
   }
 
-  public setWallet(wallet: ISimpleBitcoinWallet | Wallet): Observable<OkResponse> {
+  public setWallet(wallet: ISimpleWallet): Observable<OkResponse> {
     if (this.isPlatformBrowser) {
       this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
     }
+    this.wallet = wallet;
     return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, wallet.mnemonicEncrypted);
   }
 
