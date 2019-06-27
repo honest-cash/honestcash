@@ -54,7 +54,7 @@ const routes: Routes = [
         canActivate: [UnauthorizedGuard]
       },
       {path: 'reset-password-request', component: ResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
-      {path: 'thank-you', component: ThankYouComponent, canActivate: [AuthorizedGuard]},
+      {path: 'thank-you', component: ThankYouComponent, canActivate: [UnauthorizedGuard]},
     ]
   }
 ];

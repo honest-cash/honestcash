@@ -17,12 +17,12 @@ import {
   SignupSuccessResponse
 } from '../models/authentication';
 import {WalletUtils} from 'app/shared/lib/WalletUtils';
-import {mergeMap} from 'rxjs/operators';
 import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageToken} from '../../core/helpers/localStorage';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';
 import {UserLoaded} from '../../store/user/user.actions';
+import {WALLET_LOCALSTORAGE_KEYS} from './wallet.service';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 export const LOCAL_USER_ID_KEY = 'HC_USER_ID';
@@ -71,6 +71,16 @@ export class AuthService {
     return this.token;
   }
 
+  // @todo: is already being refactored into another service
+  public doesMnemonicExist(): boolean {
+    if (this.isPlatformBrowser) {
+      const mnemonicExists = this.localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC) !== undefined &&
+        this.localStorage.getItem('HC_BCH_MNEMONIC') !== '';
+      return mnemonicExists;
+    }
+    return false;
+  }
+
   public setToken(token: string) {
     this.token = token;
     if (this.isPlatformBrowser) {
@@ -108,7 +118,7 @@ export class AuthService {
     // to determine whether a user is logged in
     // if the token exists via this instance or via localStorage
     // the user is considered as authenticated
-    if (!this.isAuthenticated && this.getToken()) {
+    if (!this.isAuthenticated && this.getToken() && this.doesMnemonicExist()) {
       this.isAuthenticated = true;
     }
     return this.isAuthenticated;

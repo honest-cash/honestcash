@@ -5,7 +5,6 @@ import {ISimpleBitcoinWallet, WalletUtils} from '../lib/WalletUtils';
 import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../models/authentication';
 import {Logger} from './logger.service';
 import {AsyncSubject, defer, Observable, Subject} from 'rxjs';
-import {AuthService} from './auth.service';
 import {HttpService} from '../../core';
 import {LocalStorageToken} from '../../core/helpers/localStorage';
 
@@ -35,13 +34,12 @@ export class WalletService {
   public isSettingUpWallet: Subject<WALLET_SETUP_STATUS> = new AsyncSubject<WALLET_SETUP_STATUS>();
 
   private logger: Logger;
-  readonly isPlatformBrowser: boolean;
+  private readonly isPlatformBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(LocalStorageToken) private localStorage: Storage,
     private http: HttpService,
-    private authenticationService: AuthService,
   ) {
     this.logger = new Logger('WalletService');
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
@@ -68,8 +66,9 @@ export class WalletService {
             this.logger.info('Creating new wallet.');
             simpleWallet = await WalletUtils.generateNewWallet(payload.password);
           }
+
         } else {
-          if (this.authenticationService.getToken() && this.getWalletMnemonic()) {
+          if (this.getUserToken() && this.getWalletMnemonic()) {
             // if there is no payload
             // but there is a decrypted mnemonic and a token in the localstorage
             // it means the app loads wallet from localStorage
@@ -82,7 +81,7 @@ export class WalletService {
           return new Error();
         }
 
-        this.setWallet(simpleWallet);
+        await this.setWallet(simpleWallet).toPromise();
         this.isSettingUpWallet.next(WALLET_SETUP_STATUS.Initialized);
         this.isSettingUpWallet.complete();
         return simpleWallet;
@@ -92,6 +91,13 @@ export class WalletService {
 
   public getWalletSetupStatus(): Observable<WALLET_SETUP_STATUS> {
     return this.isSettingUpWallet.asObservable();
+  }
+
+  // todo: already being refactored into another service
+  public getUserToken(): string | void {
+    if (this.isPlatformBrowser) {
+      return this.localStorage.getItem('HC_USER_TOKEN');
+    }
   }
 
   public getWalletMnemonic(): string | void {
@@ -104,7 +110,7 @@ export class WalletService {
     if (this.isPlatformBrowser) {
       this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
     }
-    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, wallet.mnemonicEncrypted);
+    return this.http.post<OkResponse>(API_ENDPOINTS.setWallet, {mnemonicEncrypted: wallet.mnemonicEncrypted});
   }
 
   public unsetWallet(): void {
