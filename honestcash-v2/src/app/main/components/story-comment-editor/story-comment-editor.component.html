@@ -1,0 +1,33 @@
+<div *ngIf="user" class="card">
+  <div id="story-comment-wrapper" style="padding: 1.25rem;">
+    <div class="row">
+      <div class="col-1 pr-0">
+        <core-avatar [src]="user && user.imageUrl" large="true"></core-avatar>
+      </div>
+      <div class="col">
+        <p
+          #commentElement
+          id="story-comment"
+          contenteditable="true"
+          name="title"
+          (input)="onCommentChange($event)"
+          (blur)="onCommentBlur()"
+          placeholder="Write a comment..."
+          ngDefaultControl
+        >
+        </p>
+      </div>
+    </div>
+    <button id="story-comment-button" type="button" class="font-weight-bold btn btn-sm btn-success text-uppercase">Comment</button>
+  </div>
+</div>
+<div *ngIf="!user" class="card" >
+  <div style="padding: 1.25rem;">
+    <div class="row">
+      <div class="col">
+        <p> Write a comment...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

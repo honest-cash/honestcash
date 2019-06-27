@@ -1,0 +1,18 @@
+:host {
+  ::ng-deep {
+    .comment-body {
+      p,
+      span,
+      div,
+      blockquote,
+      figcaption,
+      h1, h2, h3, h4, h5, h6,
+      ul, ol, li,
+      code {
+        font-size: 1rem !important;
+        line-height: 1.2rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+    }
+  }
+}

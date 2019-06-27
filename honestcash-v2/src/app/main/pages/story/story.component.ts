@@ -4,19 +4,22 @@ import {AppStates, selectUserState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import User from '../../../user/models/user';
 import Story from '../../models/story';
-import {EditorService} from '../../../editor/services/editor.service';
 import {UserState} from '../../../user/store/user.state';
+import {StoryService} from '../../services/story.service';
+import {Upvote} from '../../models/upvote';
+import {Unlock} from '../../models/unlock';
 
 @Component({
   selector: 'main-page-story',
   templateUrl: './story.component.html',
   styleUrls: ['./story.component.scss']
 })
-export class StoryComponent implements OnInit, OnDestroy {
+export class MainStoryComponent implements OnInit, OnDestroy {
   @HostBinding('class') public class = 'w-100 mb-auto mt-auto';
-  @ViewChild('commentElement') public commentElement: ElementRef;
-  public updatedComment = '';
   public story: Story;
+  public comments: Story[];
+  public upvotes: Upvote[];
+  public unlocks: Unlock[];
   public user: User;
   public isLoading = true;
   private user$: Observable<UserState>;
@@ -24,11 +27,18 @@ export class StoryComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStates>,
-    private editorService: EditorService,
+    private storyService: StoryService,
   ) {
     this.user$ = this.store.select(selectUserState);
-    this.editorService.getPost(56).subscribe((story: Story) => {
+    this.storyService.getStoryWithDetails(1824).subscribe((completeStory: any) => {
+      const story = completeStory[0];
+      const comments = completeStory[1];
+      const upvotes = completeStory[2];
+      const unlocks = completeStory[3];
       this.story = story;
+      this.comments = comments;
+      this.upvotes = upvotes;
+      this.unlocks = unlocks;
       this.isLoading = false;
     });
   }
@@ -37,17 +47,6 @@ export class StoryComponent implements OnInit, OnDestroy {
     this.userSub = this.user$.subscribe((userState: UserState) => {
       this.user = userState.user;
     });
-  }
-
-  public onCommentBlur() {
-    this.commentElement.nativeElement.innerHTML = this.updatedComment;
-  }
-
-  public onCommentChange($event: any) {
-    // InputEvent interface is not yet introduced in Typescript
-    // it is required to install a third party types file @types/dom-inputevent
-    // hence the any type
-    this.updatedComment = $event.target.innerText;
   }
 
   public ngOnDestroy() {

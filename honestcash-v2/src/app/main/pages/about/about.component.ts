@@ -6,6 +6,6 @@ import { Component, HostBinding } from '@angular/core';
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent {
+export class MainAboutComponent {
   @HostBinding('class') public class = 'card m-auto';
 }

@@ -1,0 +1,7 @@
+<div class="row mb-2">
+  <h4 class="col font-weight-bold text-uppercase"><u>Unlocks ({{story.unlockCount}})</u></h4>
+</div>
+<div class="row">
+  <main-story-payer-badge *ngFor="let transaction of unlocks" [transaction]="transaction"></main-story-payer-badge>
+  <p *ngIf="!unlocks.length">No unlocks yet</p>
+</div>

@@ -6,16 +6,16 @@ import {localStorageProvider, LocalStorageToken} from '../../../../core/shared/h
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {windowProvider, WindowToken} from '../../../../core/shared/helpers/window.helper';
-import {StoryComponent} from './story.component';
+import {MainStoryComponent} from './story.component';
 
-describe('StoryComponent', () => {
-  let component: StoryComponent;
-  let fixture: ComponentFixture<StoryComponent>;
+describe('MainStoryComponent', () => {
+  let component: MainStoryComponent;
+  let fixture: ComponentFixture<MainStoryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        StoryComponent
+        MainStoryComponent
       ],
       imports: [
         HttpClientTestingModule,
@@ -35,7 +35,7 @@ describe('StoryComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StoryComponent);
+    fixture = TestBed.createComponent(MainStoryComponent);
     component = fixture.componentInstance;
   });
 

@@ -13,13 +13,7 @@ export class CoreAvatarComponent {
 
   @Input()
   public set src(src: string) {
-    src = src.trim();
-    console.log('sdrc', src);
-    if (src && src !== '') {
-      this._src = src;
-    } else {
-      this._src = AVATAR_DEFAULT_THUMBNAIL;
-    }
+    this._src = (src && src.trim()) || AVATAR_DEFAULT_THUMBNAIL;
   }
 
   public get src(): string {

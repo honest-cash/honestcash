@@ -2,16 +2,16 @@ import {
   TestBed,
   async,
 } from '@angular/core/testing';
-import {AboutComponent} from './about.component';
+import {MainAboutComponent} from './about.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('AboutComponent', () => {
-  let component: AboutComponent;
+describe('MainAboutComponent', () => {
+  let component: MainAboutComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AboutComponent
+        MainAboutComponent
       ],
       imports: [
       ],
@@ -22,7 +22,7 @@ describe('AboutComponent', () => {
   }));
 
   beforeEach(() => {
-    component = new AboutComponent();
+    component = new MainAboutComponent();
   });
 
   afterEach(() => {

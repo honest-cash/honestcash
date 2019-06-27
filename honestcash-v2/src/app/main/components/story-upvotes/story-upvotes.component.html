@@ -1,0 +1,7 @@
+<div class="row mb-2">
+  <h4 class="col font-weight-bold text-uppercase">Upvotes ({{story.upvoteCount}})</h4>
+</div>
+<div class="row">
+  <main-story-payer-badge *ngFor="let transaction of upvotes" [transaction]="transaction"></main-story-payer-badge>
+  <p *ngIf="!upvotes.length">No upvotes yet</p>
+</div>

@@ -1,0 +1,9 @@
+<div class="row mb-2">
+   <h4 class="col font-weight-bold text-uppercase">Comments ({{story.responseCount}})</h4>
+ </div>
+<div class="row mb-3">
+  <main-story-comment-editor></main-story-comment-editor>
+</div>
+ <div class="row mb-4">
+     <main-story-comment-card *ngFor="let comment of comments" [comment]="comment"></main-story-comment-card>
+ </div>
