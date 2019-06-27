@@ -1,4 +1,17 @@
-<core-header></core-header>
-<div class="container-fluid">
-  <router-outlet></router-outlet>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <auth-header></auth-header>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col d-flex justify-content-center h-100">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <auth-footer></auth-footer>
+    </div>
+  </div>
 </div>

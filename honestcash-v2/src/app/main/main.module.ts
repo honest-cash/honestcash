@@ -9,11 +9,17 @@ import {AboutComponent} from './pages/about/about.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/welcome',
-    pathMatch: 'full'
-  },
-  {path: 'about', component: AboutComponent},
-  {path: ':username/:storyId', component: StoryComponent}
+    component: MainContainerComponent,
+    children: [
+      {path: 'about', component: AboutComponent},
+      {path: ':username/:storyId', component: StoryComponent},
+      {
+        path: '',
+        redirectTo: '/welcome',
+        pathMatch: 'full'
+      },
+    ]
+  }
 ];
 
 @NgModule({

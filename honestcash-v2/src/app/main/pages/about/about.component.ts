@@ -7,5 +7,5 @@ import { Component, HostBinding } from '@angular/core';
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent {
-  @HostBinding('class') public class = 'card mb-auto mt-auto';
+  @HostBinding('class') public class = 'card m-auto';
 }

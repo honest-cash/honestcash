@@ -22,6 +22,7 @@ import {CoreHeaderProfileMenuComponent} from './shared/components/header-profile
   exports: [
     CommonModule,
     FontAwesomeModule,
+    NgbModule,
     CoreAvatarComponent,
     CoreHeaderComponent,
     CoreHeaderProfileMenuComponent,
