@@ -22,7 +22,7 @@ import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageToken} from '../../core/helpers/localStorage';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';
-import {UserLoaded} from '../../store/user/user.actions';
+import {UserLoaded} from '../../user/store/user/user.actions';
 import {WalletService} from './wallet.service';
 import {UserService} from './user.service';
 

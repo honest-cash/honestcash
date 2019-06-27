@@ -7,13 +7,13 @@ import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/loc
 import {provideMockActions} from '@ngrx/effects/testing';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../mocks/app.states.mock';
-import {AuthEffects} from '../../../store/auth/auth.effects';
+import {AuthEffects} from '../../../auth/store/auth/auth.effects';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {cold} from 'jasmine-marbles';
-import {LogOut} from '../../../store/auth/auth.actions';
+import {LogOut} from '../../../auth/store/auth/auth.actions';
 import User from '../../models/user';
 
 const MockWindow = {

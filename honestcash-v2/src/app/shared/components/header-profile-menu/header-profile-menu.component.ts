@@ -2,7 +2,7 @@ import {Component, Inject, Input} from '@angular/core';
 import User from '../../models/user';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
-import {LogOut} from '../../../store/auth/auth.actions';
+import {LogOut} from '../../../auth/store/auth/auth.actions';
 import {WindowToken} from '../../../core/helpers/window';
 
 export const GOTO_PATHS = {

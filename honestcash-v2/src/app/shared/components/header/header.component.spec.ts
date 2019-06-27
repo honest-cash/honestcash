@@ -5,7 +5,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../mocks/app.states.mock';
 import {cold} from 'jasmine-marbles';
-import {LogOut} from '../../../store/auth/auth.actions';
+import {LogOut} from '../../../auth/store/auth/auth.actions';
 import User from '../../models/user';
 import {GOTO_PATHS} from '../header-profile-menu/header-profile-menu.component';
 import {Store} from '@ngrx/store';
