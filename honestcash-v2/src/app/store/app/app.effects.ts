@@ -7,6 +7,8 @@ import {UserCleanup, UserSetup} from '../user/user.actions';
 import {WalletCleanup, WalletSetup} from '../wallet/wallet.actions';
 import {AuthService} from 'app/shared/services/auth.service';
 import {LocalStorageToken} from '../../core/helpers/localStorage';
+import {UserService} from '../../shared/services/user.service';
+import {WalletService} from '../../shared/services/wallet.service';
 
 @Injectable()
 export class AppEffects {
@@ -15,14 +17,15 @@ export class AppEffects {
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject(LocalStorageToken) private localStorage: Storage,
     private actions: Actions,
-    private authenticationService: AuthService,
+    private userService: UserService,
+    private walletService: WalletService,
   ) {
   }
 
   @Effect()
-  AppLoad: Observable<any> = this.actions.pipe(
+  public AppLoad: Observable<any> = this.actions.pipe(
     ofType(AppActionTypes.APP_LOAD),
-    map(() => this.authenticationService.hasAuthorization()),
+    map(() => this.userService.getToken() && this.walletService.getWalletMnemonic() !== ''),
     mergeMap((hasAuthorization: boolean) => {
         let actions = [];
         if (hasAuthorization) {

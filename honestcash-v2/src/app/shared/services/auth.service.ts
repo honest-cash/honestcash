@@ -23,6 +23,8 @@ import {LocalStorageToken} from '../../core/helpers/localStorage';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';
 import {UserLoaded} from '../../store/user/user.actions';
+import {WalletService} from './wallet.service';
+import {UserService} from './user.service';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 export const LOCAL_USER_ID_KEY = 'HC_USER_ID';
@@ -49,8 +51,7 @@ export const API_ENDPOINTS = {
 })
 export class AuthService {
 
-  private token = '';
-  private userId: number;
+
   private isAuthenticated = false;
   private readonly isPlatformBrowser: boolean;
 
@@ -63,72 +64,16 @@ export class AuthService {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
-  public getToken(): string {
-    let token;
-    if (!this.token && this.isPlatformBrowser && (token = this.localStorage.getItem(LOCAL_TOKEN_KEY))) {
-      this.token = token;
-    }
-    return this.token;
-  }
-
-  public setToken(token: string) {
-    this.token = token;
-    if (this.isPlatformBrowser) {
-      this.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-    }
-  }
-
-  // needed for the v1 integration, @todo, review its use after.
-  public setUserId(userId: number) {
-    this.userId = userId;
-
-    if (this.isPlatformBrowser) {
-      this.localStorage.setItem(LOCAL_USER_ID_KEY, String(userId));
-    }
-  }
-
-  public getUserId(): number | undefined {
-    if (this.isPlatformBrowser && !this.userId) {
-      return parseInt(this.localStorage.getItem(LOCAL_USER_ID_KEY), 10);
-    }
-    return this.userId;
-  }
-
-  public unsetTokenAndUnAuthenticate(): void {
-    this.token = '';
+  public unauthenticate(): void {
     this.isAuthenticated = false;
-    this.userId = undefined;
-    if (this.isPlatformBrowser) {
-      this.localStorage.removeItem(LOCAL_TOKEN_KEY);
-    }
+  }
+
+  public authenticate() {
+    this.isAuthenticated = true;
   }
 
   public hasAuthorization(): boolean {
-    // this function is used throughout the app
-    // to determine whether a user is logged in
-    // if the token exists via this instance or via localStorage
-    // the user is considered as authenticated
-    if (!this.isAuthenticated && this.getToken()) {
-      this.isAuthenticated = true;
-    }
     return this.isAuthenticated;
-  }
-
-  public init(token?: string, _user?: User) {
-    if (token) {
-      this.setToken(token);
-      if (_user) {
-        this.setUserId(_user.id);
-        this.store.dispatch(new UserLoaded({user: _user}));
-      }
-      this.isAuthenticated = true;
-    } else if (this.getToken()) {
-      this.getStatus().subscribe((user: User) => {
-        this.store.dispatch(new UserLoaded({user}));
-        this.setUserId(user.id);
-        this.isAuthenticated = true;
-      });
-    }
   }
 
   public logIn(payload: LoginContext): Observable<LoginResponse> {
@@ -138,6 +83,7 @@ export class AuthService {
   }
 
   public logOut(): Observable<EmptyResponse> {
+    this.unauthenticate();
     return this.http.post(API_ENDPOINTS.logout, {});
   }
 
@@ -185,9 +131,5 @@ export class AuthService {
     // @todo hash passwords before sending
     // and add hash tests
     return this.http.post<CheckPasswordResponse>(API_ENDPOINTS.checkPassword, payload);
-  }
-
-  public getStatus(): Observable<User> {
-    return this.http.get<User>(API_ENDPOINTS.status);
   }
 }

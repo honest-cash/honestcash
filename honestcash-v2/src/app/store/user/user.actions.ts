@@ -6,30 +6,33 @@ export enum UserActionTypes {
   USER_SETUP = '[User] User setup',
   USER_CLEANUP = '[User] User cleanup',
   USER_LOADED = '[User] User loaded',
+  USER_GET_CURRENT = '[User] User Get Current',
 }
 
 export class UserSetup implements Action {
-  readonly type = UserActionTypes.USER_SETUP;
+  public readonly type = UserActionTypes.USER_SETUP;
 
   constructor(public payload?: LoginSuccessResponse | SignupSuccessResponse) {
   }
 }
 
 export class UserCleanup implements Action {
-  readonly type = UserActionTypes.USER_CLEANUP;
-
-  constructor() {
-  }
+  public readonly type = UserActionTypes.USER_CLEANUP;
 }
 
 export class UserLoaded implements Action {
-  readonly type = UserActionTypes.USER_LOADED;
+  public readonly type = UserActionTypes.USER_LOADED;
 
   constructor(public payload: { user: User }) {
   }
 }
 
+export class UserGetCurrent implements Action {
+  public readonly type = UserActionTypes.USER_GET_CURRENT;
+}
+
 export type All =
   | UserSetup
   | UserLoaded
-  | UserCleanup;
+  | UserCleanup
+  | UserGetCurrent;

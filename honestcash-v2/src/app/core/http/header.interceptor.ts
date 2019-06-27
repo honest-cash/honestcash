@@ -2,19 +2,20 @@ import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AuthService} from '../../shared/services/auth.service';
+import {UserService} from '../../shared/services/user.service';
 
 export const ContentTypeFormDataHeader = 'X-Multipart-Formdata';
 
 @Injectable()
 export class HeaderInterceptor implements HttpInterceptor {
-  private authService: AuthService;
+  private userService: UserService;
 
   constructor(private injector: Injector) {
   }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.authService = this.injector.get(AuthService);
-    const token: string = this.authService.getToken();
+  public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.userService = this.injector.get(UserService);
+    const token: string = this.userService.getToken();
     let hasFormDataHeader: boolean;
     const cloneOptions = {
       setHeaders: {

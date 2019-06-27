@@ -23,99 +23,98 @@ export enum AuthActionTypes {
   RESET_PASSWORD_REQUEST_SUCCESS = '[Auth] Reset Password Request Success',
   RESET_PASSWORD_REQUEST_FAILURE = '[Auth] Reset Password Request Failure',
   LOGOUT = '[Auth] Logout',
-  GET_STATUS = '[Auth] GetStatus',
   ROOT_REDIRECT = '[Auth] Root Redirect',
-  AUTH_CLEANUP = '[Auth] Auth cleanup'
+  AUTH_SETUP = '[Auth] Auth setup',
 }
 
 export class LogIn implements Action {
-  readonly type = AuthActionTypes.LOGIN;
+  public readonly type = AuthActionTypes.LOGIN;
 
   constructor(public payload: LoginContext) {
   }
 }
 
 export class LogInSuccess implements Action {
-  readonly type = AuthActionTypes.LOGIN_SUCCESS;
+  public readonly type = AuthActionTypes.LOGIN_SUCCESS;
 
   constructor(public payload: LoginSuccessResponse) {
   }
 }
 
 export class LogInFailure implements Action {
-  readonly type = AuthActionTypes.LOGIN_FAILURE;
+  public readonly type = AuthActionTypes.LOGIN_FAILURE;
 
   constructor(public payload: FailedResponse) {
   }
 }
 
 export class SignUp implements Action {
-  readonly type = AuthActionTypes.SIGNUP;
+  public readonly type = AuthActionTypes.SIGNUP;
 
   constructor(public payload: SignupContext) {
   }
 }
 
 export class SignUpSuccess implements Action {
-  readonly type = AuthActionTypes.SIGNUP_SUCCESS;
+  public readonly type = AuthActionTypes.SIGNUP_SUCCESS;
 
   constructor(public payload: SignupSuccessResponse) {
   }
 }
 
 export class SignUpFailure implements Action {
-  readonly type = AuthActionTypes.SIGNUP_FAILURE;
+  public readonly type = AuthActionTypes.SIGNUP_FAILURE;
 
   constructor(public payload: FailedResponse) {
   }
 }
 
 export class ResetPassword implements Action {
-  readonly type = AuthActionTypes.RESET_PASSWORD;
+  public readonly type = AuthActionTypes.RESET_PASSWORD;
 
   constructor(public payload: ResetPasswordContext) {
   }
 }
 
 export class ResetPasswordSuccess implements Action {
-  readonly type = AuthActionTypes.RESET_PASSWORD_SUCCESS;
+  public readonly type = AuthActionTypes.RESET_PASSWORD_SUCCESS;
 }
 
 export class ResetPasswordFailure implements Action {
-  readonly type = AuthActionTypes.RESET_PASSWORD_FAILURE;
+  public readonly type = AuthActionTypes.RESET_PASSWORD_FAILURE;
 
   constructor(public payload: FailedResponse) {
   }
 }
 
 export class ResetPasswordRequest implements Action {
-  readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST;
+  public readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST;
 
   constructor(public payload: ResetPasswordRequestContext) {
   }
 }
 
 export class ResetPasswordRequestSuccess implements Action {
-  readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS;
+  public readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST_SUCCESS;
 }
 
 export class ResetPasswordRequestFailure implements Action {
-  readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST_FAILURE;
+  public readonly type = AuthActionTypes.RESET_PASSWORD_REQUEST_FAILURE;
 
   constructor(public payload: FailedResponse) {
   }
 }
 
-export class LogOut implements Action {
-  readonly type = AuthActionTypes.LOGOUT;
+export class AuthSetup implements Action {
+  public readonly type = AuthActionTypes.AUTH_SETUP;
 }
 
-export class GetStatus implements Action {
-  readonly type = AuthActionTypes.GET_STATUS;
+export class LogOut implements Action {
+  public readonly type = AuthActionTypes.LOGOUT;
 }
 
 export class RootRedirect implements Action {
-  readonly type = AuthActionTypes.ROOT_REDIRECT;
+  public readonly type = AuthActionTypes.ROOT_REDIRECT;
 }
 
 export type All =
@@ -130,7 +129,7 @@ export type All =
   | ResetPasswordFailure
   | ResetPasswordRequest
   | ResetPasswordRequestSuccess
+  | AuthSetup
   | ResetPasswordRequestFailure
   | LogOut
-  | GetStatus
   | RootRedirect;

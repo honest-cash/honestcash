@@ -5,6 +5,7 @@ import {forkJoin, Observable, of} from 'rxjs';
 import {catchError, first, map, mergeMap, switchMap, tap} from 'rxjs/operators';
 import {
   AuthActionTypes,
+  AuthSetup,
   LogIn,
   LogInFailure,
   LogInSuccess,
@@ -51,7 +52,7 @@ export class AuthEffects {
   }
 
   @Effect()
-  LogIn: Observable<any> = this.actions.pipe(
+  public LogIn: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
     switchMap((payload: LoginContext) =>
@@ -65,7 +66,7 @@ export class AuthEffects {
   );
 
   @Effect()
-  LogInSuccess: Observable<any> = this.actions.pipe(
+  public LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LogInSuccess) => action.payload),
     mergeMap((payload) => {
@@ -88,12 +89,13 @@ export class AuthEffects {
       return [
         new UserSetup(payload),
         new WalletSetup(payload),
+        new AuthSetup(),
       ];
     }),
   );
 
   @Effect()
-  SignUp: Observable<any> = this.actions.pipe(
+  public SignUp: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
     switchMap((payload: SignupContext) =>
@@ -107,15 +109,14 @@ export class AuthEffects {
   );
 
   @Effect()
-  SignUpSuccess: Observable<any> = this.actions.pipe(
+  public SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     map((action: SignUpSuccess) => action.payload),
-    switchMap(payload => of(new UserSetup(payload))),
     tap(() => this.router.navigateByUrl('/thank-you'))
   );
 
   @Effect()
-  ResetPassword: Observable<any> = this.actions.pipe(
+  public ResetPassword: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.RESET_PASSWORD),
     map((action: ResetPassword) => action.payload),
     switchMap((payload: ResetPasswordContext) =>
@@ -127,7 +128,7 @@ export class AuthEffects {
   );
 
   @Effect()
-  ResetPasswordRequest: Observable<any> = this.actions.pipe(
+  public ResetPasswordRequest: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.RESET_PASSWORD_REQUEST),
     map((action: ResetPasswordRequest) => action.payload),
     switchMap((payload: ResetPasswordRequestContext) =>
@@ -139,23 +140,20 @@ export class AuthEffects {
   );
 
   @Effect()
-  LogOut: Observable<any> = this.actions.pipe(
+  public LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
     tap(() => this.authService.logOut()),
     switchMap(() => [new UserCleanup(), new WalletCleanup(), new RootRedirect()]),
   );
 
   @Effect({dispatch: false})
-  GetStatus: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.GET_STATUS),
-    switchMap(
-      /* istanbul ignore next: functionality is tested but istanbul has incorrect coverage */
-      () => this.authService.getStatus()
-    ),
+  public AuthSetup: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.AUTH_SETUP),
+    tap(() => this.authService.authenticate()),
   );
 
   @Effect({dispatch: false})
-  RootRedirect: Observable<any> = this.actions.pipe(
+  public RootRedirect: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.ROOT_REDIRECT),
     tap(() => {
       this.router.navigateByUrl('/');

@@ -35,7 +35,7 @@ export class WalletService {
   public isSettingUpWallet: Subject<WALLET_SETUP_STATUS> = new AsyncSubject<WALLET_SETUP_STATUS>();
 
   private logger: Logger;
-  readonly isPlatformBrowser: boolean;
+  private readonly isPlatformBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -69,7 +69,7 @@ export class WalletService {
             simpleWallet = await WalletUtils.generateNewWallet(payload.password);
           }
         } else {
-          if (this.authenticationService.getToken() && this.getWalletMnemonic()) {
+          if (this.authenticationService.hasAuthorization()) {
             // if there is no payload
             // but there is a decrypted mnemonic and a token in the localstorage
             // it means the app loads wallet from localStorage
