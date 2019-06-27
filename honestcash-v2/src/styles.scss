@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/scss/bootstrap";
-@import 'app/shared/styles/_background-opacity';
-@import 'app/shared/styles/_opacity';
+@import 'core/shared/styles/_background-opacity';
+@import 'core/shared/styles/_opacity';
 @import '~bootstrap/scss/_variables.scss';
 @import '~ngx-toastr/toastr-bs4-alert';
 

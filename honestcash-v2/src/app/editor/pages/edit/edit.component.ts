@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
-import {EditorStoryLoad} from '../../store/editor/editor.actions';
+import {EditorStoryLoad} from '../../store/editor.actions';
 import {ActivatedRoute} from '@angular/router';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 

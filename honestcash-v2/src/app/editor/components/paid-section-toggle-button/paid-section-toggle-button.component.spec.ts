@@ -2,14 +2,14 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EditorPaidSectionToggleButtonComponent} from './paid-section-toggle-button.component';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
-import {initialState as initialEditorState} from '../../store/editor/editor.state';
-import Story from '../../../shared/models/story';
-import {EditorStoryPropertyChange} from '../../store/editor/editor.actions';
+import {initialState as initialEditorState} from '../../store/editor.state';
+import Story from '../../../main/models/story';
+import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 describe('EditorPaidSectionToggleButtonComponent', () => {

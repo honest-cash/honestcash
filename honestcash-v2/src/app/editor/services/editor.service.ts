@@ -1,12 +1,12 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
-import Story from '../../shared/models/story';
-import {HttpService} from '../../core';
-import {EmptyResponse, FailedResponse} from '../../shared/models/authentication';
-import Hashtag from '../../shared/models/hashtag';
+import Story from '../../main/models/story';
+import {HttpService} from '../../../core';
+import {EmptyResponse, FailedResponse} from '../../auth/models/authentication';
+import Hashtag from '../models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
-import {ContentTypeFormDataHeader} from '../../core/http/header.interceptor';
-import {LocalStorageToken} from '../../core/helpers/localStorage';
+import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
+import {LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext, UploadImageResponse} from '../shared/interfaces';

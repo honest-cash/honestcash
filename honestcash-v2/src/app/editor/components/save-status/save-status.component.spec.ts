@@ -3,14 +3,14 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {EditorSaveStatusComponent} from './save-status.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
-import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor/editor.state';
-import Story from '../../../shared/models/story';
+import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor.state';
+import Story from '../../../main/models/story';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
-import {EditorStoryPropertySave} from '../../store/editor/editor.actions';
+import {EditorStoryPropertySave} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 const MockToastr = {

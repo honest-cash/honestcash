@@ -1,14 +1,14 @@
 import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import Story from '../../../shared/models/story';
+import Story from '../../../main/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {EDITOR_STATUS, State as EditorState} from '../../store/editor/editor.state';
-import {EditorStorySaveAndPublish} from '../../store/editor/editor.actions';
+import {EDITOR_STATUS, State as EditorState} from '../../store/editor.state';
+import {EditorStorySaveAndPublish} from '../../store/editor.actions';
 import {EditorService} from '../../services/editor.service';
 import {ToastrService} from 'ngx-toastr';
-import {WindowToken} from '../../../core/helpers/window';
+import {WindowToken} from '../../../../core/helpers/window';
 import {isPlatformBrowser} from '@angular/common';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 

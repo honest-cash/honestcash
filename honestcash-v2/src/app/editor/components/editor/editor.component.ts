@@ -1,10 +1,10 @@
 import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import Story from '../../../shared/models/story';
+import Story from '../../../main/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {forkJoin, Observable, Subscription} from 'rxjs';
-import {State as EditorState} from '../../store/editor/editor.state';
-import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../store/editor/editor.actions';
+import {State as EditorState} from '../../store/editor.state';
+import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../store/editor.actions';
 import {EditorService} from '../../services/editor.service';
 import {Block} from '../../shared/json-to-html';
 import {isPlatformBrowser} from '@angular/common';

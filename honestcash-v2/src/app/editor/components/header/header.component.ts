@@ -1,9 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import User from '../../../shared/models/user';
+import User from '../../../user/models/user';
 import {Store} from '@ngrx/store';
 import {AppStates, selectUserState} from '../../../app.states';
 import {Subscription} from 'rxjs';
-import {State as UserState} from '../../../user/store/user/user.state';
+import {State as UserState} from '../../../user/store/user.state';
 
 export enum EDITOR_EDITING_MODES {
   Write = 'WRITE',

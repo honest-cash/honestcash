@@ -3,8 +3,8 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectUserState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {State as UserState} from '../../../../store/user/user.state';
-import User from '../../../shared/models/user';
-import Story from '../../../shared/models/story';
+import User from '../../../user/models/user';
+import Story from '../../models/story';
 import {EditorService} from '../../../editor/services/editor.service';
 
 @Component({

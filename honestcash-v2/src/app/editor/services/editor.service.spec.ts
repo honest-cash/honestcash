@@ -6,15 +6,15 @@ import {of} from 'rxjs';
 import {EditorService} from './editor.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../app.states';
-import {HttpService} from '../../core';
-import Story from '../../shared/models/story';
+import {HttpService} from '../../../core';
+import Story from '../../main/models/story';
 import {RouterTestingModule} from '@angular/router/testing';
-import {localStorageProvider, LocalStorageToken} from '../../core/helpers/localStorage';
+import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {ELEMENT_TYPES} from '../shared/json-to-html';
 import {HttpHeaders} from '@angular/common/http';
-import {ContentTypeFormDataHeader} from '../../core/http/header.interceptor';
+import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 
 describe('EditorService', () => {
   let editorService: EditorService;

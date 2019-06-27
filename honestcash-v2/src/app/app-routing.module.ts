@@ -13,7 +13,15 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: './main/main.module#MainModule'
-  }
+  },
+  {
+    path: '',
+    loadChildren: './brand/brand.module#BrandModule'
+  },
+  {
+    path: '',
+    loadChildren: './auth/auth.module#AuthModule'
+  },
 ];
 
 @NgModule({

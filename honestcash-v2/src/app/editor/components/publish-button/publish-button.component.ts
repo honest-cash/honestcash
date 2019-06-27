@@ -2,18 +2,18 @@ import {Component, HostBinding, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {forkJoin, Observable, Subscription} from 'rxjs';
-import {EDITOR_STATUS, State as EditorState} from '../../store/editor/editor.state';
-import Story from '../../../shared/models/story';
+import {EDITOR_STATUS, State as EditorState} from '../../store/editor.state';
+import Story from '../../../main/models/story';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {EditorPublishModalComponent} from '../publish-modal/publish-modal.component';
-import {WindowToken} from '../../../core/helpers/window';
-import {EnvironmentToken} from '../../../core/helpers/environment';
+import {WindowToken} from '../../../../core/helpers/window';
+import {EnvironmentToken} from '../../../../core/helpers/environment';
 import {Environment} from '../../../../environments/environment';
 import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
 import {EditorService} from '../../services/editor.service';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
-import {Logger} from '../../../shared/services/logger.service';
+import {Logger} from '../../../../core/shared/services/logger.service';
 
 const logger = new Logger();
 

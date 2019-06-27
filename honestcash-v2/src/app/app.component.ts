@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates} from './app.states';
-import {AppLoad} from './app/store/app/app.actions';
+import {MainLoad} from './main/store/main.actions';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +14,6 @@ export class AppComponent {
   constructor(
     private store: Store<AppStates>
   ) {
-    this.store.dispatch(new AppLoad());
+    this.store.dispatch(new MainLoad());
   }
 }

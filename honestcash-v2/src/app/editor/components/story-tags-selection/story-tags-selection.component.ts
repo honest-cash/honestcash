@@ -2,10 +2,10 @@ import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {isPlatformBrowser} from '@angular/common';
-import Hashtag from '../../../shared/models/hashtag';
-import {State as EditorState} from '../../store/editor/editor.state';
+import Hashtag from '../../models/hashtag';
+import {State as EditorState} from '../../store/editor.state';
 import {Observable, Subscription} from 'rxjs';
-import {EditorStoryPropertyChange} from '../../store/editor/editor.actions';
+import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 export interface INgxChipsTag {

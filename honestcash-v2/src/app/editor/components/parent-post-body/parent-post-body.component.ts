@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import Story from '../../../shared/models/story';
+import Story from '../../../main/models/story';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {Observable, Subscription} from 'rxjs';
-import {State as EditorState} from '../../store/editor/editor.state';
+import {State as EditorState} from '../../store/editor.state';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {Store} from '@ngrx/store';
 

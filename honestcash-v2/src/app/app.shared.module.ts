@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
-import {localStorageProvider, LocalStorageToken} from './core/helpers/localStorage';
-import {windowProvider, WindowToken} from './core/helpers/window';
-import {environmentProvider, EnvironmentToken} from './core/helpers/environment';
+import {localStorageProvider, LocalStorageToken} from '../core/helpers/localStorage';
+import {windowProvider, WindowToken} from '../core/helpers/window';
+import {environmentProvider, EnvironmentToken} from '../core/helpers/environment';
 
 @NgModule({
   declarations: [],

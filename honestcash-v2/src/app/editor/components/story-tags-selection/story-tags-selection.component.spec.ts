@@ -2,14 +2,14 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EditorStoryTagsSelectionComponent} from './story-tags-selection.component';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
 import {TagInputModule} from 'ngx-chips';
 import {FormsModule} from '@angular/forms';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
-import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor/editor.state';
-import Hashtag from '../../../shared/models/hashtag';
-import {EditorStoryPropertyChange} from '../../store/editor/editor.actions';
+import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor.state';
+import Hashtag from '../../models/hashtag';
+import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 const initialState = {

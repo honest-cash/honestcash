@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditorParentPostBodyComponent } from './parent-post-body.component';
-import {initialAppStates} from '../../../shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
 import {provideMockStore} from '@ngrx/store/testing';
-import {environmentProvider, EnvironmentToken} from '../../../core/helpers/environment';
-import {windowProvider, WindowToken} from '../../../core/helpers/window';
+import {environmentProvider, EnvironmentToken} from '../../../../core/helpers/environment';
+import {windowProvider, WindowToken} from '../../../../core/helpers/window';
 
 describe('EditorParentPostBodyComponent', () => {
   let component: EditorParentPostBodyComponent;

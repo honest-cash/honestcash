@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {EditorStoryPropertyChange} from '../../store/editor/editor.actions';
+import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
-import {State as EditorState} from '../../store/editor/editor.state';
+import {State as EditorState} from '../../store/editor.state';
 import {Observable, Subscription} from 'rxjs';
-import Story from '../../../shared/models/story';
+import Story from '../../../main/models/story';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 @Component({

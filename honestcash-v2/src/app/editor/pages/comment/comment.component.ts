@@ -3,7 +3,7 @@ import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
 import {ActivatedRoute} from '@angular/router';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
-import {EditorStoryLoad} from '../../store/editor/editor.actions';
+import {EditorStoryLoad} from '../../store/editor.actions';
 
 @Component({
   selector: 'editor-comment',

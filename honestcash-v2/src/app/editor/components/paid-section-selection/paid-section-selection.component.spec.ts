@@ -1,21 +1,21 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
 import {
   EditorPaidSectionSelectionComponent,
   LINEBREAK_ACTION,
   PAID_SECTION_PRICE_SLIDER_SETTINGS
 } from './paid-section-selection.component';
 import {FormsModule} from '@angular/forms';
-import {EDITOR_STATUS} from '../../store/editor/editor.state';
-import Story from '../../../shared/models/story';
+import {EDITOR_STATUS} from '../../store/editor.state';
+import Story from '../../../main/models/story';
 import * as converter from '../../shared/json-to-html';
 import {convertBlockToHtml, ELEMENT_TYPES} from '../../shared/json-to-html';
 import {Subscription} from 'rxjs';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
-import {EditorStoryPropertyChange} from '../../store/editor/editor.actions';
+import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 describe('EditorPaidSectionSelectionComponent', () => {

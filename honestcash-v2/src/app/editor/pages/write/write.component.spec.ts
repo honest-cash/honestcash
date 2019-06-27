@@ -3,12 +3,12 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {EditorWriteComponent} from './write.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {EDITOR_EDITING_MODES} from '../../components/header/header.component';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
-import {EditorStoryLoad} from '../../store/editor/editor.actions';
+import {EditorStoryLoad} from '../../store/editor.actions';
 
 describe('EditorWriteComponent', () => {
   let component: EditorWriteComponent;

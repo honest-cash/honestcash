@@ -8,20 +8,20 @@ import {FormsModule} from '@angular/forms';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {StoreModule} from '@ngrx/store';
-import {AuthEffects} from './auth/store/auth/auth.effects';
-import {WalletEffects} from './wallet/store/wallet/wallet.effects';
-import {UserEffects} from './user/store/user/user.effects';
+import {AuthEffects} from './auth/store/auth.effects';
+import {WalletEffects} from './wallet/store/wallet.effects';
+import {UserEffects} from './user/store/user.effects';
 
 import {metaReducers, reducers} from './app.states';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
-import {HeaderInterceptor} from './core/http/header.interceptor';
-import {AppEffects} from './app/store/app/app.effects';
+import {HeaderInterceptor} from '../core/http/header.interceptor';
+import {MainEffects} from './main/store/main.effects';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {EditorEffects} from './editor/store/editor/editor.effects';
+import {EditorEffects} from './editor/store/editor.effects';
 import {AppSharedModule} from './app.shared.module';
 import {ToastrModule} from 'ngx-toastr';
-import {SharedModule} from './shared/shared.module';
+import {SharedModule} from '../core/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import {SharedModule} from './shared/shared.module';
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([AppEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects,]),
+    EffectsModule.forRoot([MainEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects,]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
     ToastrModule.forRoot(),
   ],
