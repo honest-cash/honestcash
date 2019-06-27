@@ -1,41 +1,49 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {ResetPasswordRequestComponent, ResetPasswordRequestForm} from './reset-password-request.component';
-import User from '../../../shared/models/user';
-import {Store, StoreModule} from '@ngrx/store';
-import {AppStates, metaReducers, reducers} from '../../../app.states';
+import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
+import {ResetPasswordForm, ResetPasswordVerifyComponent} from './reset-password-verify.component';
+import {Store} from '@ngrx/store';
+import {AppStates} from '../../../app.states';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {ResetPasswordRequest} from '../../../auth/store/auth/auth.actions';
+import {ResetPassword} from '../../../../store/auth/auth.actions';
+import {ActivatedRoute, Params} from '@angular/router';
+import {of} from 'rxjs';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../shared/mocks/app.states.mock';
 import {CodedErrorResponse} from '../../../shared/models/authentication';
 import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
-import {initialState as initialAuthState} from '../../../auth/store/auth/auth.state';
+import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 
-describe('ResetPasswordRequestComponent', () => {
-  let component: ResetPasswordRequestComponent;
+const SHARED_MOCKS = {
+  password: '123',
+  resetCode: 'asdf',
+};
+
+describe('ResetPasswordVerifyComponent', () => {
+  let component: ResetPasswordVerifyComponent;
   let store: MockStore<AppStates>;
-  let fixture: ComponentFixture<ResetPasswordRequestComponent>;
+  let mockActivatedRoute: ActivatedRoute;
+  let fixture: ComponentFixture<ResetPasswordVerifyComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ResetPasswordRequestComponent
+        ResetPasswordVerifyComponent
       ],
       imports: [
         FormsModule,
-        StoreModule.forRoot(reducers, {metaReducers}),
       ],
       schemas: [
         NO_ERRORS_SCHEMA
       ],
       providers: [
-        provideMockStore({initialState: initialAppStates})
+        provideMockStore({initialState: initialAppStates}),
+        {provide: ActivatedRoute, useValue: {params: of({resetCode: SHARED_MOCKS.resetCode})}}
       ]
     });
     store = TestBed.get(Store);
-    fixture = TestBed.createComponent(ResetPasswordRequestComponent);
+    fixture = TestBed.createComponent(ResetPasswordVerifyComponent);
     component = fixture.componentInstance;
+    mockActivatedRoute = TestBed.get(ActivatedRoute);
   }));
 
   afterEach(() => {
@@ -46,10 +54,16 @@ describe('ResetPasswordRequestComponent', () => {
   });
 
   it('should have isLoading false, errorMessage undefined and an empty User as initial on construct', () => {
+    const initialState = {
+      email: '',
+      code: '',
+      newPassword: '',
+      repeatNewPassword: '',
+    };
     component.ngOnInit();
     expect(component.isLoading).toBeFalsy();
     expect(component.errorMessage).toBeUndefined();
-    expect(component.user).toEqual(new User());
+    expect(component.values).toEqual(initialState);
   });
 
   it('should subscribe to authState and set errorMessage and isLoading correctly if they are specified in store', async () => {
@@ -70,12 +84,12 @@ describe('ResetPasswordRequestComponent', () => {
       }
     });
 
-    fixture = TestBed.createComponent(ResetPasswordRequestComponent);
+    fixture = TestBed.createComponent(ResetPasswordVerifyComponent);
     fixture.detectChanges();
     await fixture.whenStable();
     component = fixture.componentInstance;
 
-    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    const subscribeSpy = spyOn(component.auth$, 'subscribe');
     component.ngOnInit();
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
@@ -94,7 +108,7 @@ describe('ResetPasswordRequestComponent', () => {
     await fixture.whenStable();
     component = fixture.componentInstance;
 
-    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    const subscribeSpy = spyOn(component.auth$, 'subscribe');
     component.ngOnInit();
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
@@ -119,7 +133,7 @@ describe('ResetPasswordRequestComponent', () => {
     await fixture.whenStable();
     component = fixture.componentInstance;
 
-    const subscribeSpy = spyOn(component.authState, 'subscribe');
+    const subscribeSpy = spyOn(component.auth$, 'subscribe');
     component.ngOnInit();
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
@@ -129,15 +143,27 @@ describe('ResetPasswordRequestComponent', () => {
 
   });
 
-  it('should dispatch LogIn action onSubmit and set isLoading to true', () => {
+  it('should get resetCode as param via ActivatedRoute and set it to instance variable', (done) => {
+    component.ngOnInit();
+    mockActivatedRoute.params.subscribe((params: Params) => {
+      expect(component.resetCode).toEqual(SHARED_MOCKS.resetCode);
+      done();
+    });
+  });
+
+  it('should dispatch ResetPassword action onSubmit and set isLoading to true', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     const payload = {
       value: {
         email: 'toto@toto.com',
+        code: SHARED_MOCKS.resetCode,
+        newPassword: SHARED_MOCKS.password,
+        repeatNewPassword: SHARED_MOCKS.password,
       },
     };
-    const action = new ResetPasswordRequest(payload.value);
-    component.onSubmit(<ResetPasswordRequestForm>payload);
+    const action = new ResetPassword(payload.value);
+    component.ngOnInit();
+    component.onSubmit(<ResetPasswordForm>payload);
     expect(component.isLoading).toBeTruthy();
     expect(dispatchSpy).toHaveBeenCalledWith(action);
 

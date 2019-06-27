@@ -36,8 +36,7 @@ export default class Story {
   public hasBeenPaidFor?: boolean;
   public paidSectionLinebreak?: number;
   public isOwner?: boolean;
-}
-
-export interface PostSaveSuccessResponse {
-  story: Story;
+  public upvoteCount: number;
+  public unlockCount: number;
+  public responseCount: number;
 }

@@ -218,7 +218,8 @@ describe('EditorService', () => {
   });
 
   describe('uploadImage', () => {
-    it('should make API request to the correct API endpoint with the file in formData and ContentTypeFormDataHeader in httpOptions', (done) => {
+    it('should make API request to the correct API endpoint with the file in formData' +
+      'and ContentTypeFormDataHeader in httpOptions', (done) => {
       const mocks = {
         file: new File([''], 'test', { type: 'image/jpeg' }),
         postSuccess: {

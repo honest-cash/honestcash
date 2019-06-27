@@ -2,10 +2,10 @@ import {Component, HostBinding, Inject, OnInit, PLATFORM_ID} from '@angular/core
 import {Store} from '@ngrx/store';
 import {NgForm} from '@angular/forms';
 import {AppStates, selectAuthState} from '../../../app.states';
-import {SignUp} from '../../../auth/store/auth/auth.actions';
+import {SignUp} from '../../../../store/auth/auth.actions';
 import User from '../../../shared/models/user';
 import {Observable} from 'rxjs';
-import {State as AuthorizationState} from '../../../auth/store/auth/auth.state';
+import {State as AuthorizationState} from '../../../../store/auth/auth.state';
 import {WelcomeErrorHandler} from '../../shared/helpers/welcome-error.handler';
 import {isPlatformBrowser} from '@angular/common';
 

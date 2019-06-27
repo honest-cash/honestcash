@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: './welcome/welcome.module#WelcomeModule'
+    loadChildren: './main/main.module#MainModule'
   }
 ];
 

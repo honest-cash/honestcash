@@ -21,7 +21,7 @@ export class EditorHeaderComponent implements OnInit, OnDestroy {
   @Input() public isAutosaveEnabled = false;
   public user: User;
   private EDITOR_EDITING_MODE = EDITOR_EDITING_MODES;
-  private userState$: Subscription;
+  private userSub: Subscription;
 
   constructor(
     private store: Store<AppStates>,
@@ -29,12 +29,14 @@ export class EditorHeaderComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.userState$ = this.store.select(selectUserState).subscribe((userState: UserState) => this.user = userState.user);
+    this.userSub = this.store.select(selectUserState).subscribe((userState: UserState) => {
+      this.user = userState.user;
+    });
   }
 
   public ngOnDestroy() {
-    if (this.userState$) {
-      this.userState$.unsubscribe();
+    if (this.userSub) {
+      this.userSub.unsubscribe();
     }
   }
 }

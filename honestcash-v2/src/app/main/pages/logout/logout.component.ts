@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
-import {LogOut} from '../../../auth/store/auth/auth.actions';
+import {LogOut} from '../../../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-welcome-page-logout',
