@@ -6,7 +6,7 @@ import {SignUp} from '../../../../store/auth/auth.actions';
 import User from '../../../user/models/user';
 import {Observable} from 'rxjs';
 import {State as AuthorizationState} from '../../../../store/auth/auth.state';
-import {WelcomeErrorHandler} from '../../../../core/shared/helpers/welcome-error.handler';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 import {isPlatformBrowser} from '@angular/common';
 
 export interface SignupForm extends NgForm {
@@ -52,7 +52,7 @@ export class SignupComponent implements OnInit {
         return;
       }
 
-      this.errorMessage = WelcomeErrorHandler.getErrorDesc(state.errorMessage);
+      this.errorMessage = AuthErrorHelper.getErrorDesc(state.errorMessage);
       this.isLoading = state.isLoading;
     });
 

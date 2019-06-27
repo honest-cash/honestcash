@@ -2,11 +2,11 @@ import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
 import {EditorStoryPreviewComponent} from './story-preview.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
-import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/localStorage';
+import {initialAppStates} from '../../../app.states.mock';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/local-storage.helper';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {windowProvider, WindowToken} from '../../../../core/helpers/window';
+import {windowProvider, WindowToken} from '../../../../core/helpers/window.helper';
 
 describe('EditorStoryPreviewComponent', () => {
   let component: EditorStoryPreviewComponent;

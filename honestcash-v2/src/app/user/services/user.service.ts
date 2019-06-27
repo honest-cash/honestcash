@@ -1,15 +1,15 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpService} from '../../index';
+import {HttpService} from '../../../core';
 import {Router} from '@angular/router';
-import {LoginSuccessResponse, SignupSuccessResponse} from '../../../app/auth/models/authentication';
+import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../app/app.states';
-import User from '../../../app/user/models/user';
-import {AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
+import {AppStates} from '../../app.states';
+import User from '../models/user';
+import {AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from '../../auth/services/auth.service';
 import {isPlatformBrowser} from '@angular/common';
-import {LocalStorageToken} from '../../helpers/localStorage';
-import {UserLoaded} from '../../../app/user/store/user.actions';
+import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {UserLoaded} from '../store/user.actions';
 
 export const API_ENDPOINTS = {
   getCurrentUser: `/me`,

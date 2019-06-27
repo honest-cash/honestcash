@@ -22,7 +22,7 @@ import {
 } from './auth.actions';
 import {WalletActionTypes, WalletCleanup, WalletSetup} from '../../../wallet/store/wallet/wallet.actions';
 import {UserActionTypes, UserCleanup, UserSetup} from '../../../user/store/user/user.actions';
-import {AuthService} from '../../../core/shared/services/auth.service';
+import {AuthService} from '../services/auth.service';
 import {
   LoginContext,
   LoginSuccessResponse,
@@ -31,9 +31,9 @@ import {
   SignupContext,
   SignupSuccessResponse
 } from '../models/authentication';
-import {UserService} from 'core/shared/services/user.service';
-import {WalletService} from 'core/shared/services/wallet.service';
-import {WindowToken} from '../../../core/helpers/window';
+import {UserService} from 'app/user/services/user.service';
+import {WalletService} from 'app/wallet/services/wallet.service';
+import {WindowToken} from '../../../core/helpers/window.helper';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
 

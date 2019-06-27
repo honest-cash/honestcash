@@ -1,13 +1,13 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import Wallet from '../../../app/wallet/models/wallet';
+import Wallet from '../models/wallet';
 import {isPlatformBrowser} from '@angular/common';
-import {ISimpleBitcoinWallet, WalletUtils} from '../lib/WalletUtils';
-import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../../../app/auth/models/authentication';
-import {Logger} from './logger.service';
+import {ISimpleBitcoinWallet, WalletHelper} from '../helpers/wallet.helper';
+import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../../auth/models/authentication';
+import {Logger} from '../../../core/shared/services/logger.service';
 import {AsyncSubject, defer, Observable, Subject} from 'rxjs';
-import {AuthService} from './auth.service';
-import {HttpService} from '../../index';
-import {LocalStorageToken} from '../../helpers/localStorage';
+import {AuthService} from '../../auth/services/auth.service';
+import {HttpService} from '../../../core';
+import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
 
 export const API_ENDPOINTS = {
   setWallet: `/auth/set-wallet`,
@@ -58,7 +58,7 @@ export class WalletService {
             // if there is a payload and a wallet attached
             // it means it is a login action
             this.logger.info('Setting up an already existing wallet from payload');
-            simpleWallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+            simpleWallet = await WalletHelper.generateWalletWithEncryptedRecoveryPhrase(
               (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted,
               payload.password
             );
@@ -66,7 +66,7 @@ export class WalletService {
             // if there is a payload but NO wallet attached
             // it means it is a signup action with only the password
             this.logger.info('Creating new wallet.');
-            simpleWallet = await WalletUtils.generateNewWallet(payload.password);
+            simpleWallet = await WalletHelper.generateNewWallet(payload.password);
           }
         } else {
           if (this.authenticationService.hasAuthorization()) {
@@ -74,7 +74,7 @@ export class WalletService {
             // but there is a decrypted mnemonic and a token in the localstorage
             // it means the app loads wallet from localStorage
             this.logger.info('Setting up an already existing wallet from local storage');
-            simpleWallet = await WalletUtils.generateWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
+            simpleWallet = await WalletHelper.generateWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
           }
         }
 

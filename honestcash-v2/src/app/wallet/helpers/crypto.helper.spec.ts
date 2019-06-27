@@ -1,9 +1,9 @@
-import { CryptoUtils } from './CryptoUtils';
+import { CryptoHelper } from './crypto.helper';
 
-describe('CryptoUtils', () => {
+describe('CryptoHelper', () => {
   it('calculates correct hashes', () => {
-    const hash = CryptoUtils.calculatePasswordHash('test@email.com', 'testpassord');
-    const hash2 = CryptoUtils.calculatePasswordHash('test@email.com', 'testpassord2');
+    const hash = CryptoHelper.calculatePasswordHash('test@email.com', 'testpassord');
+    const hash2 = CryptoHelper.calculatePasswordHash('test@email.com', 'testpassord2');
 
     expect(hash)
     .toBe(

@@ -16,14 +16,14 @@ import {first} from 'rxjs/operators';
 import {provideMockStore} from '@ngrx/store/testing';
 import User from '../../user/models/user';
 import Wallet from '../../wallet/models/wallet';
-import {AuthService} from '../../../core/shared/services/auth.service';
+import {AuthService} from '../services/auth.service';
 import {AppStates, metaReducers, reducers} from '../../../app.states';
 import {mock} from '../../../../../mock';
-import {WindowToken} from '../../../core/helpers/window';
-import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
-import {UserService} from '../../../core/shared/services/user.service';
-import {initialAppStates} from '../../../core/shared/mocks/app.states.mock';
-import {resetLocalStorage} from '../../../core/helpers/tests';
+import {WindowToken} from '../../../core/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {UserService} from '../../user/services/user.service';
+import {initialAppStates} from '../../app.states.mock';
+import {resetLocalStorage} from '../../../core/helpers/tests.helper';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../models/authentication';
 
 const MockWindow = {

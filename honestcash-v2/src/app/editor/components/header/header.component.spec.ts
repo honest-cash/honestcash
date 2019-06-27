@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {EditorHeaderComponent} from './header.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 
 describe('HeaderComponent', () => {
   let component: EditorHeaderComponent;

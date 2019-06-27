@@ -1,12 +1,12 @@
 import {TestBed} from '@angular/core/testing';
 import {API_ENDPOINTS, AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {HttpService} from '../../http/http.service';
-import {CryptoUtils} from '../lib/CryptoUtils';
+import {HttpService} from '../../../core/http/http.service';
+import {CryptoHelper} from '../../wallet/helpers/crypto.helper';
 import {mock} from '../../../../mock';
-import {localStorageProvider, LocalStorageToken} from '../../helpers/localStorage';
-import User from '../../../app/user/models/user';
-import Wallet from '../../../app/wallet/models/wallet';
+import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import User from '../../user/models/user';
+import Wallet from '../../wallet/models/wallet';
 import {of} from 'rxjs';
 import {
   CheckPasswordResponse,
@@ -15,10 +15,10 @@ import {
   LoginSuccessResponse,
   OkResponse,
   SignupSuccessResponse
-} from '../../../app/auth/models/authentication';
-import {resetLocalStorage} from '../../helpers/tests';
+} from '../models/authentication';
+import {resetLocalStorage} from '../../../core/helpers/tests.helper';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../mocks/app.states.mock';
+import {initialAppStates} from '../../app.states.mock';
 
 const SHARED_MOCKS = {
   token: '123',
@@ -30,7 +30,7 @@ const SHARED_MOCKS = {
   hashedPassword: '',
 };
 
-SHARED_MOCKS.hashedPassword = CryptoUtils.calculatePasswordHash(SHARED_MOCKS.email, SHARED_MOCKS.password);
+SHARED_MOCKS.hashedPassword = CryptoHelper.calculatePasswordHash(SHARED_MOCKS.email, SHARED_MOCKS.password);
 
 describe('AuthService', () => {
   let authenticationService: AuthService;

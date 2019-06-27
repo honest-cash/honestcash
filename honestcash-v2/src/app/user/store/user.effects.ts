@@ -4,9 +4,9 @@ import {Observable} from 'rxjs';
 import {map, switchMap, tap} from 'rxjs/operators';
 
 import {UserActionTypes, UserSetup} from './user.actions';
-import {AuthService} from '../../../core/shared/services/auth.service';
+import {AuthService} from '../../auth/services/auth.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
-import {UserService} from '../../../core/shared/services/user.service';
+import {UserService} from '../services/user.service';
 import {AuthActionTypes} from '../../auth/store/auth.actions';
 
 @Injectable()

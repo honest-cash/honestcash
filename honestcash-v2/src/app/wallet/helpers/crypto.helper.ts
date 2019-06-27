@@ -1,6 +1,6 @@
 import { sha3_512 } from 'js-sha3';
 
-export class CryptoUtils {
+export class CryptoHelper {
   public static calculateSHA3Hash = (message: string): string =>
     sha3_512(message)
 
@@ -8,7 +8,7 @@ export class CryptoUtils {
     `${salt}:${password}`
 
   public static calculatePasswordHash = (email: string, password: string): string =>
-    CryptoUtils.calculateSHA3Hash(
-      CryptoUtils.determineMessageForHashing(email, password)
+    CryptoHelper.calculateSHA3Hash(
+      CryptoHelper.determineMessageForHashing(email, password)
     )
 }

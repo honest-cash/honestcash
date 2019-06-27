@@ -9,8 +9,8 @@ import {LogIn} from '../../../../store/auth/auth.actions';
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 import {CodedErrorResponse} from '../../models/authentication';
 import {AppStates} from '../../../app.states';
-import {WelcomeErrorHandler} from '../../../../core/shared/helpers/welcome-error.handler';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
+import {initialAppStates} from '../../../app.states.mock';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -79,7 +79,7 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
 
-    const expectedErrorMessage = WelcomeErrorHandler.getErrorDesc(errorMessage);
+    const expectedErrorMessage = AuthErrorHelper.getErrorDesc(errorMessage);
 
     expect(component.isLoading).toBeTruthy();
     expect(component.errorMessage).toEqual(expectedErrorMessage);

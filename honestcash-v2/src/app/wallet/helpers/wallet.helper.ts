@@ -1,5 +1,5 @@
 // @todo shift to simple-bitcoin-wallet package
-import {Logger} from '../services/logger.service';
+import {Logger} from '../../../core/shared/services/logger.service';
 
 export interface ISimpleBitcoinWallet {
   cashAddress: string;
@@ -40,15 +40,15 @@ const loadJS = function (url: string, implementationCode: () => void, location: 
 };
 
 /* istanbul ignore next */
-export class WalletUtils {
+export class WalletHelper {
   static generateNewWallet = async (password: string): Promise<ISimpleBitcoinWallet> => {
-    const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
+    const SimpleBitcoinWallet: any = await WalletHelper.getWallet();
 
     return new SimpleBitcoinWallet(null, {password});
   };
 
   static encrypt = async (mnemonic: string, password: string): Promise<string> => {
-    const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
+    const SimpleBitcoinWallet: any = await WalletHelper.getWallet();
 
     return SimpleBitcoinWallet.encrypt(mnemonic, password);
   };
@@ -57,7 +57,7 @@ export class WalletUtils {
     encryptedRecoveryPhrase: string,
     password: string
   ): Promise<ISimpleBitcoinWallet> => {
-    const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
+    const SimpleBitcoinWallet: any = await WalletHelper.getWallet();
 
     return new SimpleBitcoinWallet(encryptedRecoveryPhrase, {password});
   };
@@ -65,7 +65,7 @@ export class WalletUtils {
   static generateWalletWithDecryptedRecoveryPhrase = async (
     recoveryPhrase: string,
   ): Promise<ISimpleBitcoinWallet> => {
-    const SimpleBitcoinWallet: any = await WalletUtils.getWallet();
+    const SimpleBitcoinWallet: any = await WalletHelper.getWallet();
 
     return new SimpleBitcoinWallet(recoveryPhrase, {password: null});
   };

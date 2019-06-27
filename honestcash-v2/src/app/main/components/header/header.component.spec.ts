@@ -3,15 +3,15 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {HeaderComponent} from './header.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 import {cold} from 'jasmine-marbles';
-import {LogOut} from '../../../../app/auth/store/auth.actions';
-import User from '../../../../app/user/models/user';
+import {LogOut} from '../../../auth/store/auth.actions';
+import User from '../../../user/models/user';
 import {GOTO_PATHS} from '../header-profile-menu/header-profile-menu.component';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../../app/app.states';
-import {WindowToken} from '../../../helpers/window';
-import {localStorageProvider, LocalStorageToken} from '../../../helpers/localStorage';
+import {AppStates} from '../../../app.states';
+import {WindowToken} from '../../../../core/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/local-storage.helper';
 
 const MockWindow = {
   location: {

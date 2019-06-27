@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppComponent} from './app.component';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../core/shared/mocks/app.states.mock';
+import {initialAppStates} from './app.states.mock';
 
 describe('AppComponent', () => {
   beforeEach((() => {

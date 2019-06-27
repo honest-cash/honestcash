@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AppStates, selectAuthState} from '../../../app.states';
 import {State as AuthorizationState} from '../../../../store/auth/auth.state';
-import {WelcomeErrorHandler} from '../../../../core/shared/helpers/welcome-error.handler';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 import {ResetPasswordContext} from '../../models/authentication';
 import {Logger} from '../../../../core/shared/services/logger.service';
 
@@ -53,7 +53,7 @@ export class ResetPasswordVerifyComponent implements OnInit {
       if (state.newPasswordRequested || !state.errorMessage) {
         delete this.errorMessage;
       } else {
-        this.errorMessage = WelcomeErrorHandler.getErrorDesc(state.errorMessage);
+        this.errorMessage = AuthErrorHelper.getErrorDesc(state.errorMessage);
       }
 
       this.isLoading = state.isLoading;

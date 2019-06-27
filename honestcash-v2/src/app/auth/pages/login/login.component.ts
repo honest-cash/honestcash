@@ -7,7 +7,7 @@ import User from '../../../user/models/user';
 import {Observable} from 'rxjs';
 import {LogIn} from '../../../../store/auth/auth.actions';
 import {FailedResponse} from '../../models/authentication';
-import {WelcomeErrorHandler} from '../../../../core/shared/helpers/welcome-error.handler';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 
 export interface LoginForm extends NgForm {
   value: {
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
         return;
       }
 
-      this.errorMessage = WelcomeErrorHandler.getErrorDesc(state.errorMessage);
+      this.errorMessage = AuthErrorHelper.getErrorDesc(state.errorMessage);
 
       this.isLoading = state.isLoading;
     });

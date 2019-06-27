@@ -1,16 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import User from '../../../../app/user/models/user';
+import User from '../../../user/models/user';
 import {Store} from '@ngrx/store';
 <<<<<<< HEAD
-import {AppStates, selectAuthState, selectUserState} from '../../../../app/app.states';
-import {LogOut} from '../../../../app/auth/store/auth.actions';
+import {AppStates, selectAuthState, selectUserState} from '../../../app.states';
+import {LogOut} from '../../../auth/store/auth.actions';
 import {Observable} from 'rxjs';
-import {State as AuthorizationState} from '../../../../app/auth/store/auth.state';
-import {State as UserState} from '../../../../app/user/store/user.state';
-import {WindowToken} from '../../../helpers/window';
+import {State as AuthorizationState} from '../../../auth/store/auth.state';
+import {State as UserState} from '../../../user/store/user.state';
+import {WindowToken} from '../../../../core/helpers/window.helper';
 import {GOTO_PATHS} from '../header-profile-menu/header-profile-menu.component';
 =======
-import {AppStates, selectUserState} from '../../../../app/app.states';
+import {AppStates, selectUserState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {State as UserState} from '../../../store/user/user.state';
 >>>>>>> redesign/story-page-1

@@ -2,19 +2,19 @@ import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {GOTO_PATHS, HeaderProfileMenuComponent} from './header-profile-menu.component';
 import {Router} from '@angular/router';
-import {WindowToken} from '../../../helpers/window';
-import {localStorageProvider, LocalStorageToken} from '../../../helpers/localStorage';
+import {WindowToken} from '../../../../core/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/local-storage.helper';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../mocks/app.states.mock';
-import {AuthEffects} from '../../../../app/auth/store/auth.effects';
+import {initialAppStates} from '../../../app.states.mock';
+import {AuthEffects} from '../../../auth/store/auth.effects';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../../app/app.states';
+import {AppStates} from '../../../app.states';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {cold} from 'jasmine-marbles';
-import {LogOut} from '../../../../app/auth/store/auth.actions';
-import User from '../../../../app/user/models/user';
+import {LogOut} from '../../../auth/store/auth.actions';
+import User from '../../../user/models/user';
 
 const MockWindow = {
   location: {

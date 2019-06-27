@@ -11,15 +11,15 @@ import {initialState as initialUserState} from '../../../user/store/user.state';
 import {initialState as initialAuthState} from '../../../auth/store/auth.state';
 import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor.state';
 import Story from '../../../main/models/story';
-import {WindowToken} from '../../../../core/helpers/window';
-import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/localStorage';
+import {WindowToken} from '../../../../core/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/helpers/local-storage.helper';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {EditorService} from '../../services/editor.service';
 import {EditorStorySaveAndPublish} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {Store} from '@ngrx/store';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 
 const MockWindow = {
   location: {

@@ -1,18 +1,18 @@
 import {TestBed} from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {HttpService} from '../../index';
+import {HttpService} from '../../../core';
 import {mock} from '../../../../mock';
 import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.service';
-import Wallet from '../../../app/wallet/models/wallet';
+import Wallet from '../models/wallet';
 import {of} from 'rxjs';
-import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../../../app/auth/models/authentication';
-import {localStorageProvider, LocalStorageToken} from '../../helpers/localStorage';
-import User from '../../../app/user/models/user';
-import {ISimpleBitcoinWallet} from '../lib/WalletUtils';
-import {LOCAL_TOKEN_KEY} from './auth.service';
+import {LoginSuccessResponse, OkResponse, SignupSuccessResponse} from '../../auth/models/authentication';
+import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import User from '../../user/models/user';
+import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
+import {LOCAL_TOKEN_KEY} from '../../auth/services/auth.service';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../mocks/app.states.mock';
+import {initialAppStates} from '../../app.states.mock';
 
 const SHARED_MOCKS = {
   mnemonic: 'test1 test2 test3 test4 test5 test6 test7 test8',

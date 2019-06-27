@@ -8,9 +8,9 @@ import {ResetPassword} from '../../../../store/auth/auth.actions';
 import {ActivatedRoute, Params} from '@angular/router';
 import {of} from 'rxjs';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 import {CodedErrorResponse} from '../../models/authentication';
-import {WelcomeErrorHandler} from '../../../../core/shared/helpers/welcome-error.handler';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 
 const SHARED_MOCKS = {
@@ -94,7 +94,7 @@ describe('ResetPasswordVerifyComponent', () => {
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
 
-    const expectedErrorMessage = WelcomeErrorHandler.getErrorDesc(errorMessage);
+    const expectedErrorMessage = AuthErrorHelper.getErrorDesc(errorMessage);
 
     expect(component.isLoading).toBeTruthy();
     expect(component.errorMessage).toEqual(expectedErrorMessage);

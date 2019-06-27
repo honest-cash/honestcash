@@ -3,9 +3,9 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {EditorPublishButtonComponent} from './publish-button.component';
 import {Component, NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
-import {WindowToken} from '../../../../core/helpers/window';
-import {environmentProvider, EnvironmentToken} from '../../../../core/helpers/environment';
+import {initialAppStates} from '../../../app.states.mock';
+import {WindowToken} from '../../../../core/helpers/window.helper';
+import {environmentProvider, EnvironmentToken} from '../../../../core/helpers/environment.helper';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';

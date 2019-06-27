@@ -1,9 +1,9 @@
 import {Component, Inject, Input} from '@angular/core';
-import User from '../../../../app/user/models/user';
+import User from '../../../user/models/user';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../../app/app.states';
-import {LogOut} from '../../../../app/auth/store/auth.actions';
-import {WindowToken} from '../../../helpers/window';
+import {AppStates} from '../../../app.states';
+import {LogOut} from '../../../auth/store/auth.actions';
+import {WindowToken} from '../../../../core/helpers/window.helper';
 
 export const GOTO_PATHS = {
   profile: (username) => `/profile/${username}`,

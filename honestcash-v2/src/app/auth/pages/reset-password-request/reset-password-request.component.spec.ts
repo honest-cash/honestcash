@@ -7,9 +7,9 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {ResetPasswordRequest} from '../../../../store/auth/auth.actions';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 import {CodedErrorResponse} from '../../models/authentication';
-import {WelcomeErrorHandler} from '../../../../core/shared/helpers/welcome-error.handler';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 import {initialState as initialAuthState} from '../../../../store/auth/auth.state';
 
 describe('ResetPasswordRequestComponent', () => {
@@ -80,7 +80,7 @@ describe('ResetPasswordRequestComponent', () => {
     fixture.detectChanges();
     expect(subscribeSpy).toHaveBeenCalled();
 
-    const expectedErrorMessage = WelcomeErrorHandler.getErrorDesc(errorMessage);
+    const expectedErrorMessage = AuthErrorHelper.getErrorDesc(errorMessage);
 
     expect(component.isLoading).toBeTruthy();
     expect(component.errorMessage).toEqual(expectedErrorMessage);

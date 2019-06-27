@@ -5,10 +5,10 @@ import {map, mergeMap} from 'rxjs/operators';
 import {MainActionTypes} from './main.actions';
 import {UserCleanup, UserSetup} from '../../user/store/user.actions';
 import {WalletCleanup, WalletSetup} from '../../wallet/store/wallet.actions';
-import {AuthService} from 'core/shared/services/auth.service';
-import {LocalStorageToken} from '../../../core/helpers/localStorage';
-import {UserService} from '../../../core/shared/services/user.service';
-import {WalletService} from '../../../core/shared/services/wallet.service';
+import {AuthService} from 'app/auth/services/auth.service';
+import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {UserService} from '../../user/services/user.service';
+import {WalletService} from '../../wallet/services/wallet.service';
 
 @Injectable()
 export class MainEffects {

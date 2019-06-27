@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 import {EditorCommentComponent} from './comment.component';
 import {ActivatedRoute} from '@angular/router';
 import {of} from 'rxjs';

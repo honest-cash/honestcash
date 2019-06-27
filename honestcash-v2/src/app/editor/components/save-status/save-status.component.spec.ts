@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {EditorSaveStatusComponent} from './save-status.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {EDITOR_STATUS, initialState as initialEditorState} from '../../store/editor.state';
 import Story from '../../../main/models/story';

@@ -3,7 +3,7 @@ import {provideMockActions} from '@ngrx/effects/testing';
 import {Observable, of, throwError} from 'rxjs';
 import {EditorEffects} from './editor.effects';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/localStorage';
+import {localStorageProvider, LocalStorageToken} from '../../../core/helpers/local-storage.helper';
 import {RouterTestingModule} from '@angular/router/testing';
 import * as EditorActions from './editor.actions';
 import {cold, hot} from 'jasmine-marbles';

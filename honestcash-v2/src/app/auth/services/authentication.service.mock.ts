@@ -13,12 +13,12 @@ import {
   SignupContext,
   SignupResponse,
   SignupSuccessResponse
-} from '../../../app/auth/models/authentication';
-import User from '../../../app/user/models/user';
-import {CryptoUtils} from '../lib/CryptoUtils';
-import {LOCAL_TOKEN_KEY} from '../services/auth.service';
-import Wallet from '../../../app/wallet/models/wallet';
-import {ISimpleBitcoinWallet} from '../lib/WalletUtils';
+} from '../models/authentication';
+import User from '../../user/models/user';
+import {CryptoHelper} from '../../wallet/helpers/crypto.helper';
+import {LOCAL_TOKEN_KEY} from './auth.service';
+import Wallet from '../../wallet/models/wallet';
+import {ISimpleBitcoinWallet} from '../../wallet/helpers/wallet.helper';
 
 export class MockAuthenticationService {
 
@@ -76,7 +76,7 @@ export class MockAuthenticationService {
       };
     },
     get hashedPassword() {
-      return CryptoUtils.calculatePasswordHash(this.email, this.password);
+      return CryptoHelper.calculatePasswordHash(this.email, this.password);
     }
   };
   public isAuthenticated = false;

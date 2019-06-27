@@ -3,10 +3,10 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable, of} from 'rxjs';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup, WalletSetupFailed} from './wallet.actions';
-import {WalletService} from '../../../core/shared/services/wallet.service';
+import {WalletService} from '../services/wallet.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
-import {LocalStorageToken} from '../../../core/helpers/localStorage';
-import {ISimpleBitcoinWallet} from '../../../core/shared/lib/WalletUtils';
+import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
+import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
 import {UserCleanup} from '../../user/store/user.actions';
 
 @Injectable()

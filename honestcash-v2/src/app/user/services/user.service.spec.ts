@@ -1,13 +1,13 @@
 import {TestBed} from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {HttpService} from '../../index';
+import {HttpService} from '../../../core';
 import {mock} from '../../../../mock';
 import {API_ENDPOINTS, UserService} from './user.service';
 import {of} from 'rxjs';
-import User from '../../../app/user/models/user';
+import User from '../models/user';
 import {StoreModule} from '@ngrx/store';
-import {metaReducers, reducers} from '../../../app/app.states';
+import {metaReducers, reducers} from '../../app.states';
 import {RouterTestingModule} from '@angular/router/testing';
 
 const SHARED_MOCKS = {

@@ -1,6 +1,6 @@
 import {Action} from '@ngrx/store';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
-import {ISimpleBitcoinWallet} from '../../../core/shared/lib/WalletUtils';
+import {ISimpleBitcoinWallet} from '../helpers/wallet.helper';
 import Wallet from '../models/wallet';
 
 export enum WalletActionTypes {

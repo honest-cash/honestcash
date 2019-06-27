@@ -3,7 +3,7 @@ import {HttpResponse} from '@angular/common/http';
 import {each} from 'lodash';
 
 import {Logger} from '../shared/services/logger.service';
-import {WindowToken} from '../helpers/window';
+import {WindowToken} from '../helpers/window.helper';
 
 const log = new Logger('HttpCacheService');
 const cachePersistenceKey = 'httpCache';

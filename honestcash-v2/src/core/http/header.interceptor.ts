@@ -1,8 +1,8 @@
 import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AuthService} from '../shared/services/auth.service';
-import {UserService} from '../shared/services/user.service';
+import {AuthService} from '../../app/auth/services/auth.service';
+import {UserService} from '../../app/user/services/user.service';
 
 export const ContentTypeFormDataHeader = 'X-Multipart-Formdata';
 

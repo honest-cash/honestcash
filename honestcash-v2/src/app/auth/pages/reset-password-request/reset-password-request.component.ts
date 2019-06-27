@@ -6,7 +6,7 @@ import {AppStates, selectAuthState} from '../../../app.states';
 import {State as AuthState} from '../../../../store/auth/auth.state';
 import {ResetPasswordRequest} from '../../../../store/auth/auth.actions';
 import {NgForm} from '@angular/forms';
-import {WelcomeErrorHandler} from '../../../../core/shared/helpers/welcome-error.handler';
+import {AuthErrorHelper} from '../../helpers/auth-error.helper';
 
 export interface ResetPasswordRequestForm extends NgForm {
   value: {
@@ -38,7 +38,7 @@ export class ResetPasswordRequestComponent implements OnInit {
       if (state.newPasswordRequested || !state.errorMessage) {
         delete this.errorMessage;
       } else {
-        this.errorMessage = WelcomeErrorHandler.getErrorDesc(state.errorMessage);
+        this.errorMessage = AuthErrorHelper.getErrorDesc(state.errorMessage);
       }
 
       this.isLoading = state.isLoading;

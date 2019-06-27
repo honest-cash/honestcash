@@ -1,7 +1,7 @@
-import {CodedErrorResponse} from '../../../app/auth/models/authentication';
+import {CodedErrorResponse} from '../models/authentication';
 
 /* istanbul ignore next */
-export class WelcomeErrorHandler {
+export class AuthErrorHelper {
   // @todo extract to i18n service
   private static ERROR_MESSAGES = {
     USER_NOT_FOUND: 'Incorrect email address and / or password.',
@@ -26,14 +26,14 @@ export class WelcomeErrorHandler {
     if (typeof errorMessage === 'string') {
       return errorMessage;
     } else if (errorMessage instanceof CodedErrorResponse) {
-      return WelcomeErrorHandler.ERROR_MESSAGES[errorMessage.code] || errorMessage.desc || errorMessage.code;
+      return AuthErrorHelper.ERROR_MESSAGES[errorMessage.code] || errorMessage.desc || errorMessage.code;
     } else if (typeof errorMessage.error === 'string') {
-      return WelcomeErrorHandler.ERROR_MESSAGES[errorMessage.error] || errorMessage.error;
+      return AuthErrorHelper.ERROR_MESSAGES[errorMessage.error] || errorMessage.error;
     } else if (errorMessage.error) {
-      return WelcomeErrorHandler.ERROR_MESSAGES[errorMessage.error.code] || errorMessage.error.desc || errorMessage.error.code;
+      return AuthErrorHelper.ERROR_MESSAGES[errorMessage.error.code] || errorMessage.error.desc || errorMessage.error.code;
     }
 
-    return WelcomeErrorHandler.UNKNOWN_ERROR;
+    return AuthErrorHelper.UNKNOWN_ERROR;
   }
 
 }

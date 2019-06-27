@@ -8,7 +8,7 @@ import {EDITOR_STATUS, State as EditorState} from '../../store/editor.state';
 import {EditorStorySaveAndPublish} from '../../store/editor.actions';
 import {EditorService} from '../../services/editor.service';
 import {ToastrService} from 'ngx-toastr';
-import {WindowToken} from '../../../../core/helpers/window';
+import {WindowToken} from '../../../../core/helpers/window.helper';
 import {isPlatformBrowser} from '@angular/common';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 

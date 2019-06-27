@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EditorStoryTagsSelectionComponent} from './story-tags-selection.component';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../core/shared/mocks/app.states.mock';
+import {initialAppStates} from '../../../app.states.mock';
 import {TagInputModule} from 'ngx-chips';
 import {FormsModule} from '@angular/forms';
 import {AppStates} from '../../../app.states';

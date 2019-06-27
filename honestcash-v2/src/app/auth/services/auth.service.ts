@@ -1,8 +1,8 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {defer, Observable} from 'rxjs';
-import User from '../../../app/user/models/user';
-import {CryptoUtils} from '../lib/CryptoUtils';
-import {HttpService} from '../../index';
+import User from '../../user/models/user';
+import {CryptoHelper} from '../../wallet/helpers/crypto.helper';
+import {HttpService} from '../../../core';
 import {
   CheckPasswordContext,
   CheckPasswordResponse,
@@ -15,16 +15,16 @@ import {
   SignupContext,
   SignupResponse,
   SignupSuccessResponse
-} from '../../../app/auth/models/authentication';
-import {WalletUtils} from 'core/shared/lib/WalletUtils';
+} from '../models/authentication';
+import {WalletHelper} from 'app/wallet/helpers/wallet.helper';
 import {mergeMap} from 'rxjs/operators';
 import {isPlatformBrowser} from '@angular/common';
-import {LocalStorageToken} from '../../helpers/localStorage';
+import {LocalStorageToken} from '../../../core/helpers/local-storage.helper';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../app/app.states';
-import {UserLoaded} from '../../../app/user/store/user.actions';
-import {WalletService} from './wallet.service';
-import {UserService} from './user.service';
+import {AppStates} from '../../app.states';
+import {UserLoaded} from '../../user/store/user.actions';
+import {WalletService} from '../../wallet/services/wallet.service';
+import {UserService} from '../../user/services/user.service';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 export const LOCAL_USER_ID_KEY = 'HC_USER_ID';
@@ -77,7 +77,7 @@ export class AuthService {
   }
 
   public logIn(payload: LoginContext): Observable<LoginResponse> {
-    const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
+    const passwordHash = CryptoHelper.calculatePasswordHash(payload.email, payload.password);
 
     return this.http.post<LoginResponse>(API_ENDPOINTS.login, {email: payload.email, password: passwordHash});
   }
@@ -88,7 +88,7 @@ export class AuthService {
   }
 
   public signUp(payload: SignupContext): Observable<SignupResponse> {
-    const passwordHash = CryptoUtils.calculatePasswordHash(payload.email, payload.password);
+    const passwordHash = CryptoHelper.calculatePasswordHash(payload.email, payload.password);
 
     return this.http.post<SignupSuccessResponse>(API_ENDPOINTS.signup, {
       username: payload.username,
@@ -108,13 +108,13 @@ export class AuthService {
 
   public changePassword(context: ResetPasswordContext): Observable<OkResponse> {
     return defer(async () => {
-      const mnemonic = (await WalletUtils.generateNewWallet(context.newPassword)).mnemonic;
-      const mnemonicEncrypted = await WalletUtils.encrypt(mnemonic, context.newPassword);
+      const mnemonic = (await WalletHelper.generateNewWallet(context.newPassword)).mnemonic;
+      const mnemonicEncrypted = await WalletHelper.encrypt(mnemonic, context.newPassword);
       const payload: ChangePasswordPayload = {
         email: context.email,
         code: context.code,
-        newPassword: CryptoUtils.calculatePasswordHash(context.email, context.newPassword),
-        repeatNewPassword: CryptoUtils.calculatePasswordHash(context.email, context.repeatNewPassword),
+        newPassword: CryptoHelper.calculatePasswordHash(context.email, context.newPassword),
+        repeatNewPassword: CryptoHelper.calculatePasswordHash(context.email, context.repeatNewPassword),
         mnemonicEncrypted,
       };
 

@@ -1,8 +1,8 @@
-import {WalletUtils} from './WalletUtils';
+import {WalletHelper} from './wallet.helper';
 
-describe('WalletUtils', () => {
+describe('WalletHelper', () => {
   it('creates a new wallet with password', async () => {
-    const wallet = await WalletUtils.generateNewWallet('testpassword');
+    const wallet = await WalletHelper.generateNewWallet('testpassword');
 
     expect(wallet).toBeDefined();
   });
@@ -12,7 +12,7 @@ describe('WalletUtils', () => {
       // tslint:disable-next-line: max-line-length
       'U2FsdGVkX1/Eo5CUy/rXWwzjmIaBXdCUzwmVZrp7a8pl4QEmKA/WkYn1zNVNC1nI+tEa58OYiMRqqcE3Iwv3RUay4a++F7AjlfhkaHG2PH7kvtjqrLqU1IuwSevZ73o2QcTjuvnmfgP4oDNpovsbNg==';
 
-    const wallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+    const wallet = await WalletHelper.generateWalletWithEncryptedRecoveryPhrase(
       mnemonicEncrypted,
       'testpassword'
     );
@@ -31,7 +31,7 @@ describe('WalletUtils', () => {
     let wallet: any, err: any;
 
     try {
-      wallet = await WalletUtils.generateWalletWithEncryptedRecoveryPhrase(
+      wallet = await WalletHelper.generateWalletWithEncryptedRecoveryPhrase(
         mnemonicEncrypted,
         'wrongpassword'
       );
@@ -46,7 +46,7 @@ describe('WalletUtils', () => {
   it('encrypt a wallet (loose test)', async () => {
     const mnemonic = 'yard current warrior merry despair sweet wise round acquire equal hollow mansion';
 
-    const mnemonicEncrypted = await WalletUtils.encrypt(
+    const mnemonicEncrypted = await WalletHelper.encrypt(
       mnemonic,
       'testpassword'
     );
