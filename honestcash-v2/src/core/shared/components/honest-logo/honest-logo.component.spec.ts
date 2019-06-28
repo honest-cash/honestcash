@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {CoreHonestLogoComponent} from './honest-logo.component';
+import {SharedHonestLogoComponent} from './honest-logo.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 const MockWindow = {
@@ -9,20 +9,20 @@ const MockWindow = {
   }
 };
 
-describe('CoreHonestLogoComponent', () => {
-  let component: CoreHonestLogoComponent;
-  let fixture: ComponentFixture<CoreHonestLogoComponent>;
+describe('SharedHonestLogoComponent', () => {
+  let component: SharedHonestLogoComponent;
+  let fixture: ComponentFixture<SharedHonestLogoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [CoreHonestLogoComponent],
+      declarations: [SharedHonestLogoComponent],
       providers: [],
       schemas: [
         NO_ERRORS_SCHEMA,
       ]
     });
-    fixture = TestBed.createComponent(CoreHonestLogoComponent);
+    fixture = TestBed.createComponent(SharedHonestLogoComponent);
     component = fixture.componentInstance;
   }));
 

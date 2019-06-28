@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {GOTO_PATHS, CoreHeaderProfileMenuComponent} from './header-profile-menu.component';
+import {GOTO_PATHS, ShardHeaderProfileMenuComponent} from './header-profile-menu.component';
 import {Router} from '@angular/router';
 import {WindowToken} from '../../helpers/window.helper';
 import {localStorageProvider, LocalStorageToken} from '../../helpers/local-storage.helper';
@@ -25,8 +25,8 @@ const MockWindow = {
 describe('HeaderProfileMenu', () => {
   let effects: AuthEffects;
   let actions: Observable<any>;
-  let component: CoreHeaderProfileMenuComponent;
-  let fixture: ComponentFixture<CoreHeaderProfileMenuComponent>;
+  let component: ShardHeaderProfileMenuComponent;
+  let fixture: ComponentFixture<ShardHeaderProfileMenuComponent>;
   let router: Router;
   let store: Store<AppStates>;
   let componentWindow: Window;
@@ -34,7 +34,7 @@ describe('HeaderProfileMenu', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        CoreHeaderProfileMenuComponent
+        ShardHeaderProfileMenuComponent
       ],
       imports: [
         HttpClientTestingModule,
@@ -59,7 +59,7 @@ describe('HeaderProfileMenu', () => {
         provideMockStore({initialState: initialAppStates})
       ]
     });
-    fixture = TestBed.createComponent(CoreHeaderProfileMenuComponent);
+    fixture = TestBed.createComponent(ShardHeaderProfileMenuComponent);
     component = fixture.componentInstance;
 
     router = TestBed.get(Router);

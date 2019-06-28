@@ -2,17 +2,19 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FontAwesomeModule} from './shared/modules/font-awesome.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {CoreHonestLogoComponent} from './shared/components/honest-logo/honest-logo.component';
-import {CoreAvatarComponent} from './shared/components/avatar/avatar.component';
-import {CoreHeaderComponent} from './shared/components/header/header.component';
-import {CoreHeaderProfileMenuComponent} from './shared/components/header-profile-menu/header-profile-menu.component';
+import {SharedHonestLogoComponent} from './shared/components/honest-logo/honest-logo.component';
+import {SharedAvatarComponent} from './shared/components/avatar/avatar.component';
+import {SharedHeaderComponent} from './shared/components/header/header.component';
+import {ShardHeaderProfileMenuComponent} from './shared/components/header-profile-menu/header-profile-menu.component';
+import {SharedNotFoundComponent} from './shared/pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
-    CoreAvatarComponent,
-    CoreHeaderComponent,
-    CoreHeaderProfileMenuComponent,
-    CoreHonestLogoComponent
+    SharedAvatarComponent,
+    SharedHeaderComponent,
+    ShardHeaderProfileMenuComponent,
+    SharedHonestLogoComponent,
+    SharedNotFoundComponent,
   ],
   imports: [
     CommonModule,
@@ -23,10 +25,10 @@ import {CoreHeaderProfileMenuComponent} from './shared/components/header-profile
     CommonModule,
     FontAwesomeModule,
     NgbModule,
-    CoreAvatarComponent,
-    CoreHeaderComponent,
-    CoreHeaderProfileMenuComponent,
-    CoreHonestLogoComponent,
+    SharedAvatarComponent,
+    SharedHeaderComponent,
+    ShardHeaderProfileMenuComponent,
+    SharedHonestLogoComponent,
   ]
 })
 export class SharedModule {

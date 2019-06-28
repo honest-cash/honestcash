@@ -1,6 +1,6 @@
 <div class="nav-item" ngbDropdown placement="bottom-right">
   <a id="user-dropdown" class="nav-link" ngbDropdownToggle>
-    <core-avatar [src]="user.imageUrl"></core-avatar>
+    <shared-avatar [src]="user.imageUrl"></shared-avatar>
   </a>
   <div ngbDropdownMenu aria-labelledby="user-dropdown">
     <button class="dropdown-item" (click)="goTo('profile')" translate>my profile</button>

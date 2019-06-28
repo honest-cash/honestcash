@@ -1,21 +1,21 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {AVATAR_DEFAULT_THUMBNAIL, CoreAvatarComponent} from './avatar.component';
+import {AVATAR_DEFAULT_THUMBNAIL, SharedAvatarComponent} from './avatar.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('CoreAvatarComponent', () => {
-  let component: CoreAvatarComponent;
-  let fixture: ComponentFixture<CoreAvatarComponent>;
+describe('SharedAvatarComponent', () => {
+  let component: SharedAvatarComponent;
+  let fixture: ComponentFixture<SharedAvatarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [CoreAvatarComponent],
+      declarations: [SharedAvatarComponent],
       providers: [],
       schemas: [
         NO_ERRORS_SCHEMA,
       ]
     });
-    fixture = TestBed.createComponent(CoreAvatarComponent);
+    fixture = TestBed.createComponent(SharedAvatarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
