@@ -8,6 +8,8 @@ import {UserState} from '../../../user/store/user.state';
 import {StoryService} from '../../services/story.service';
 import {Upvote} from '../../models/upvote';
 import {Unlock} from '../../models/unlock';
+import {ActivatedRoute} from '@angular/router';
+import {EditorStoryLoad} from '../../../editor/store/editor.actions';
 
 @Component({
   selector: 'main-page-story',
@@ -27,19 +29,22 @@ export class MainStoryComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStates>,
+    private activatedRoute: ActivatedRoute,
     private storyService: StoryService,
   ) {
     this.user$ = this.store.select(selectUserState);
-    this.storyService.getStoryWithDetails(1824).subscribe((completeStory: any) => {
-      const story = completeStory[0];
-      const comments = completeStory[1];
-      const upvotes = completeStory[2];
-      const unlocks = completeStory[3];
-      this.story = story;
-      this.comments = comments;
-      this.upvotes = upvotes;
-      this.unlocks = unlocks;
-      this.isLoading = false;
+    this.activatedRoute.params.subscribe(params => {
+      this.storyService.getStoryWithDetails(params.storyId).subscribe((completeStory: any) => {
+        const story = completeStory[0];
+        const comments = completeStory[1];
+        const upvotes = completeStory[2];
+        const unlocks = completeStory[3];
+        this.story = story;
+        this.comments = comments;
+        this.upvotes = upvotes;
+        this.unlocks = unlocks;
+        this.isLoading = false;
+      });
     });
   }
 

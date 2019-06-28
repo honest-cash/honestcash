@@ -1,5 +1,6 @@
 <div class="row mb-2">
-  <h4 class="col font-weight-bold text-uppercase"><u>Unlocks ({{story.unlockCount}})</u></h4>
+  <h4 class="col font-weight-bold text-uppercase" click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed" aria-controls="collapseUnlocks"><u>Unlocks ({{story.unlockCount}})</u></h4>
 </div>
 <div class="row">
   <main-story-payer-badge *ngFor="let transaction of unlocks" [transaction]="transaction"></main-story-payer-badge>

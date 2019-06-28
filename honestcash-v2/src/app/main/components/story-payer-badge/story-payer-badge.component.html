@@ -1,1 +1,6 @@
-<core-avatar [ngbTooltip]="transaction.user.username" placement="bottom" [src]="transaction.user.imageUrl"></core-avatar>
+
+<shared-avatar
+  [ngbTooltip]="transaction.user ? transaction.user.username : 'unknown'"
+  placement="bottom"
+  [src]="transaction.user ? transaction.user.imageUrl : ''">
+</shared-avatar>

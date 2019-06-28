@@ -7,12 +7,7 @@ import {Unlock} from '../../models/unlock';
   templateUrl: './story-payer-badge.component.html',
   styleUrls: ['./story-payer-badge.component.scss']
 })
-export class MainStoryPayerBadgeComponent implements OnInit {
-  @HostBinding('class') public class = 'col';
+export class MainStoryPayerBadgeComponent {
+  @HostBinding('class') public class = 'col-1 mb-2 p-2';
   @Input() public transaction: Upvote | Unlock;
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

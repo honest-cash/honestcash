@@ -15,11 +15,11 @@ export const GOTO_PATHS = {
 };
 
 @Component({
-  selector: 'core-header-profile-menu',
+  selector: 'shared-header-profile-menu',
   templateUrl: './header-profile-menu.component.html',
   styleUrls: ['./header-profile-menu.component.scss']
 })
-export class CoreHeaderProfileMenuComponent {
+export class ShardHeaderProfileMenuComponent {
   public menuHidden = true;
   @Input() public user: User;
 

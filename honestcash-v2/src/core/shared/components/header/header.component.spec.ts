@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {CoreHeaderComponent} from './header.component';
+import {SharedHeaderComponent} from './header.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../app/app.states.mock';
@@ -19,16 +19,16 @@ const MockWindow = {
   }
 };
 
-describe('CoreHeaderComponent', () => {
-  let component: CoreHeaderComponent;
-  let fixture: ComponentFixture<CoreHeaderComponent>;
+describe('SharedHeaderComponent', () => {
+  let component: SharedHeaderComponent;
+  let fixture: ComponentFixture<SharedHeaderComponent>;
   let store: Store<AppStates>;
   let componentWindow: Window;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [CoreHeaderComponent],
+      declarations: [SharedHeaderComponent],
       providers: [
         {provide: WindowToken, useValue: MockWindow},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
@@ -40,7 +40,7 @@ describe('CoreHeaderComponent', () => {
       ]
     });
     store = TestBed.get(Store);
-    fixture = TestBed.createComponent(CoreHeaderComponent);
+    fixture = TestBed.createComponent(SharedHeaderComponent);
     component = fixture.componentInstance;
     componentWindow = TestBed.get(WindowToken);
 

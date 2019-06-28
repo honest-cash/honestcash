@@ -7,12 +7,8 @@ import {Unlock} from '../../models/unlock';
   templateUrl: './story-unlocks.component.html',
   styleUrls: ['./story-unlocks.component.scss']
 })
-export class MainStoryUnlocksComponent implements OnInit {
+export class MainStoryUnlocksComponent{
   @Input() public story: Story;
   @Input() public unlocks: Unlock[];
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  public isCollapsed = true;
 }

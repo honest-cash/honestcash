@@ -7,12 +7,9 @@ import Story from '../../models/story';
   templateUrl: './story-upvotes.component.html',
   styleUrls: ['./story-upvotes.component.scss']
 })
-export class MainStoryUpvotesComponent implements OnInit {
+export class MainStoryUpvotesComponent {
   @Input() public story: Story;
   @Input() public upvotes: Upvote[];
-  constructor() { }
 
-  ngOnInit() {
-  }
-
+  public isCollapsed = true;
 }
