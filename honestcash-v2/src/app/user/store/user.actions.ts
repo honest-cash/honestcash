@@ -12,7 +12,7 @@ export enum UserActionTypes {
 export class UserSetup implements Action {
   public readonly type = UserActionTypes.USER_SETUP;
 
-  constructor(public payload?: LoginSuccessResponse | SignupSuccessResponse) {
+  constructor(public payload?: LoginSuccessResponse) {
   }
 }
 

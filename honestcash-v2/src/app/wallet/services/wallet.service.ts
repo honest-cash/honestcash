@@ -111,6 +111,7 @@ export class WalletService {
             this.logger.info('Creating new wallet.');
             simpleWallet = this.createWallet(payload.password);
           }
+
         } else {
           if (this.getWalletMnemonic()) {
             // if there is no payload
@@ -135,6 +136,13 @@ export class WalletService {
 
   public getWalletSetupStatus(): Observable<WALLET_SETUP_STATUS> {
     return this.isSettingUpWallet.asObservable();
+  }
+
+  // todo: already being refactored into another service
+  public getUserToken(): string | void {
+    if (this.isPlatformBrowser) {
+      return this.localStorage.getItem('HC_USER_TOKEN');
+    }
   }
 
   public getWalletMnemonic(): string | void {

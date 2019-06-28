@@ -220,7 +220,7 @@ describe('auth.effects', () => {
           done();
         });
       });
-    });
+    });*/
   });
 
   describe('ResetPassword Effects', () => {

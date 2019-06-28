@@ -122,7 +122,7 @@ describe('WalletService', () => {
       ).subscribe((response: OkResponse) => {
         // Assert
         expect(mockHttpService.post)
-        .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, mocks.setWalletContext.wallet.mnemonicEncrypted);
+        .toHaveBeenCalledWith(API_ENDPOINTS.setWallet, {mnemonicEncrypted: mocks.setWalletContext.wallet.mnemonicEncrypted});
         done();
       });
     });
