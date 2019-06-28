@@ -108,9 +108,14 @@ export class AuthService {
     // to determine whether a user is logged in
     // if the token exists via this instance or via localStorage
     // the user is considered as authenticated
-    if (!this.isAuthenticated && this.getToken()) {
-      this.isAuthenticated = true;
+
+    // @todo hack -> fix of empty wallets on login -> users will have to log in if they do not have a valid wallet!
+    if (this.isPlatformBrowser) {
+      if (!this.isAuthenticated && this.getToken() && this.localStorage.getItem('HC_BCH_MNEMONIC')) {
+        this.isAuthenticated = true;
+      }
     }
+
     return this.isAuthenticated;
   }
 
