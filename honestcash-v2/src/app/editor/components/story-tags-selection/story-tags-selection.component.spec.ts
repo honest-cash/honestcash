@@ -9,7 +9,7 @@ import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
 import Hashtag from '../../models/hashtag';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {EDITOR_STATUS, initialEditorState} from '../../store/editor.state';
 
 const initialState = {
@@ -127,7 +127,7 @@ describe('EditorStoryTagsSelectionComponent', () => {
         ];
         component.onTagChange(tags);
 
-        expect(dispatchSpy).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
+        expect(dispatchSpy).toHaveBeenCalledWith(new EditorStoryPropertyChange({property: EDITOR_STORY_PROPERTIES.Hashtags, value: tags}));
       });
     });
   });

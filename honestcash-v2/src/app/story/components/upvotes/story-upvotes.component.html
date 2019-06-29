@@ -4,5 +4,5 @@
 </div>
 <div class="row" [ngbCollapse]="isCollapsed">
   <story-payer-badge *ngFor="let transaction of upvotes" [transaction]="transaction"></story-payer-badge>
-  <div *ngIf="!upvotes.length" class="col"><small>No upvotes yet</small></div>
+  <div *ngIf="!upvotes || (upvotes && !upvotes.length)" class="col"><small>No upvotes yet</small></div>
 </div>

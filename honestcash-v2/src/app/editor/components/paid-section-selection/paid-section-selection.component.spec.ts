@@ -16,7 +16,7 @@ import {Subscription} from 'rxjs';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 
 describe('EditorPaidSectionSelectionComponent', () => {
   let component: EditorPaidSectionSelectionComponent;
@@ -266,7 +266,7 @@ describe('EditorPaidSectionSelectionComponent', () => {
         component.onSwitchLinebreak(LINEBREAK_ACTION.MoveDown);
         expect(store.dispatch).toHaveBeenCalledWith(
           new EditorStoryPropertyChange({
-            property: STORY_PROPERTIES.PaidSectionLinebreak,
+            property: EDITOR_STORY_PROPERTIES.PaidSectionLinebreak,
             value: paidSectionLinebreak + 1
           })
         );
@@ -282,7 +282,7 @@ describe('EditorPaidSectionSelectionComponent', () => {
         component.onChangePaidSectionCost();
         expect(store.dispatch).toHaveBeenCalledWith(
           new EditorStoryPropertyChange({
-            property: STORY_PROPERTIES.PaidSectionCost,
+            property: EDITOR_STORY_PROPERTIES.PaidSectionCost,
             value: component.story.paidSectionCost
           })
         );

@@ -11,6 +11,7 @@ import {SharedLoadingIndicatorComponent} from './shared/components/loading-indic
 import {WalletSharedModule} from '../app/wallet/wallet-shared.module';
 import {SharedReceiptComponent} from './shared/components/receipt/receipt.component';
 import {QRCodeModule} from 'angularx-qrcode';
+import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
 
 @NgModule({
   declarations: [

@@ -11,7 +11,7 @@ import Story from '../../story/models/story';
 import {RouterTestingModule} from '@angular/router/testing';
 import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
-import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {ELEMENT_TYPES} from '../shared/json-to-html';
 import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
@@ -127,7 +127,7 @@ describe('EditorService', () => {
               }
             ]
           },
-          property: STORY_PROPERTIES.BodyAndTitle,
+          property: EDITOR_STORY_PROPERTIES.BodyAndTitle,
         };
         (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
         // Act
@@ -156,7 +156,7 @@ describe('EditorService', () => {
               }
             ]
           },
-          property: STORY_PROPERTIES.Hashtags,
+          property: EDITOR_STORY_PROPERTIES.Hashtags,
         };
         (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
         // Act
@@ -179,7 +179,7 @@ describe('EditorService', () => {
             paidSectionCost: 1,
             paidSectionLinebreak: 2
           },
-          property: STORY_PROPERTIES.PaidSection,
+          property: EDITOR_STORY_PROPERTIES.PaidSection,
         };
         (<jasmine.Spy>httpServiceMock.put).and.returnValue(of(mocks.getPostSuccess));
         // Act

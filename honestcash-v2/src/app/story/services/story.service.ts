@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
-import {forkJoin, Observable} from 'rxjs';
+import {forkJoin, Observable, of} from 'rxjs';
 import {HttpService} from '../../../core';
+import {ITransaction} from '../../../core/shared/models/transaction';
+import {STORY_PROPERTIES, StoryPropertySaveContext} from '../store/story.actions';
 
 export const API_ENDPOINTS = {
   getStory: (id: number) => `/v2/post/${id}`,
@@ -44,18 +46,14 @@ export class StoryService {
     return this.http.get(API_ENDPOINTS.getStoryUnlocks(id));
   }
 
-  public upvoteStory(id: number, txId: number) {
-    return this.http.post(API_ENDPOINTS.upvoteStory(id), {
-      postId: id,
-      txId,
-    });
-  }
-
-  public unlockStory(id: number, txId: number) {
-    return this.http.post(API_ENDPOINTS.unlockStory(id), {
-      postId: id,
-      txId,
-    });
+  public saveProperty(payload: StoryPropertySaveContext) {
+    if (payload.property === STORY_PROPERTIES.Upvote) {
+      return this.http.post(API_ENDPOINTS.upvoteStory(payload.transaction.postId), payload.transaction);
+    } else if (payload.property === STORY_PROPERTIES.Unlock) {
+      return this.http.post(API_ENDPOINTS.unlockStory(payload.transaction.postId), payload.transaction);
+    } else if (payload.property === STORY_PROPERTIES.Comment) {
+      return of(payload.data);
+    }
   }
 
 }

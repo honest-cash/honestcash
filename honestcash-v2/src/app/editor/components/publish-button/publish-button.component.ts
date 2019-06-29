@@ -11,7 +11,7 @@ import {EnvironmentToken} from '../../../../core/shared/helpers/environment.help
 import {Environment} from '../../../../environments/environment';
 import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
 import {EditorService} from '../../services/editor.service';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {Logger} from '../../../../core/shared/services/logger.service';
 import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
@@ -64,7 +64,7 @@ export class EditorPublishButtonComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.saveStatus === EDITOR_STATUS.NotSaved) {
-      this.editorService.savePostProperty(this.story, STORY_PROPERTIES.BodyAndTitle).subscribe(this.openModal);
+      this.editorService.savePostProperty(this.story, EDITOR_STORY_PROPERTIES.BodyAndTitle).subscribe(this.openModal);
     } else {
       this.openModal();
     }

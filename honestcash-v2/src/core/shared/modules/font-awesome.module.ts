@@ -3,12 +3,12 @@ import {FontAwesomeModule as OriginalFontAwesomeModule} from '@fortawesome/angul
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEnvelope, faPaperPlane, faUser,} from '@fortawesome/free-regular-svg-icons';
 import {
-  faAlignLeft,
+  faAlignLeft, faAt,
   faChevronDown,
   faChevronLeft,
   faChevronRight,
   faChevronUp,
-  faComments,
+  faComments, faCreditCard,
   faExclamationCircle,
   faExclamationTriangle,
   faEye,
@@ -16,8 +16,8 @@ import {
   faHeading,
   faHeart,
   faImage,
-  faKey,
-  faPenAlt,
+  faKey, faLevelUpAlt,
+  faPenAlt, faRedoAlt,
   faRetweet,
   faShareAlt,
   faSpinner,
@@ -50,6 +50,7 @@ export class FontAwesomeModule {
     library.add(faUser);
     library.add(faKey);
     library.add(faExclamationCircle);
+    library.add(faExclamationTriangle);
     library.add(faPenAlt);
     library.add(faPaperPlane);
     library.add(faWindowClose);
@@ -65,5 +66,10 @@ export class FontAwesomeModule {
     library.add(faEye);
     library.add(faFacebook);
     library.add(faReddit);
+    library.add(faCreditCard);
+    library.add(faLevelUpAlt);
+    library.add(faKey);
+    library.add(faAt);
+    library.add(faRedoAlt);
   }
 }

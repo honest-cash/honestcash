@@ -11,6 +11,7 @@ import {Observable, Subscription} from 'rxjs';
 import {WalletState} from '../../../app/wallet/store/wallet.state';
 import {ISimpleWallet} from '../../../app/wallet/models/simple-wallet';
 import {UpvoteTransactionStrategy} from './upvote.transaction.strategy';
+import {STORY_PROPERTIES} from '../../../app/story/store/story.actions';
 
 declare var bitbox: any;
 
@@ -115,14 +116,20 @@ export class TransactionService {
 
     this.logger.info(`Upvote transaction: ${url}`);
 
-    this.storyService.upvoteStory(storyId, tx.txid);
-    this.walletService.updateWalletBalance();
+    const upvote = {
+      txId: tx.txid,
+      userPostId: story.id,
+      userId: upvoter.id,
+      user: upvoter,
+    };
+
+    this.storyService.saveProperty({property: STORY_PROPERTIES.Upvote, data: upvote, transaction: {postId: storyId, txId: tx.txid}});
   }
 
   /**
    * Unlocks a section in the post and saves a transaction reference in Honest database
    */
-  private async unlock(story: Story, user: User) {
+  private async unlock(story: Story, unlocker: User) {
     if (!story.user.addressBCH) {
       this.toastr.error(
         'Unlocking is not possible because the author does not have a Bitcoin address to receive',
@@ -132,7 +139,7 @@ export class TransactionService {
 
     const storyId = story.id;
 
-    if (story.userId === user.id) {
+    if (story.userId === unlocker.id) {
       this.toastr.error(
         'Unlocking is not possible because you cannot unlock your own posts and responses',
       );
@@ -183,12 +190,14 @@ export class TransactionService {
 
     console.log(`Unlock transaction: ${url}`);
 
-    await this.storyService.unlockStory(
-      storyId,
-      tx.txid,
-    );
+    const unlock = {
+      txId: tx.txid,
+      userPostId: story.id,
+      userId: unlocker.id,
+      user: unlocker,
+    }
 
-    this.walletService.updateWalletBalance();
+    this.storyService.saveProperty({property: STORY_PROPERTIES.Unlock, data: unlock, transaction: {postId: storyId, txId: tx.txid}});
   }
 
 }

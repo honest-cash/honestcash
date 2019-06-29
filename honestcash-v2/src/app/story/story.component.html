@@ -1,5 +1,5 @@
 <shared-header></shared-header>
-<div *ngIf="story" class="mb-5 story">
+<div *ngIf="!isLoading" class="mb-5 story">
   <story-title [story]="story"></story-title>
   <story-details [story]="story"></story-details>
   <story-body *ngIf="story.paidSectionCost === 0" [story]="story"></story-body>
@@ -13,4 +13,4 @@
   <hr class="my-5">
   <story-comments [comments]="comments" [story]="story"></story-comments>
 </div>
-<shared-loading-indicator *ngIf="!story"></shared-loading-indicator>
+<shared-loading-indicator *ngIf="isLoading"></shared-loading-indicator>

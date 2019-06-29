@@ -1,5 +1,5 @@
 <div *ngIf="user" class="card">
-  <div id="story-comment-wrapper" style="padding: 1.25rem;">
+  <div id="story-comment-wrapper" class="p-3 pb-5">
     <div class="row">
       <div class="col-1 pr-0">
         <shared-avatar [src]="user && user.imageUrl" large="true"></shared-avatar>
@@ -11,18 +11,21 @@
           contenteditable="true"
           name="title"
           (input)="onCommentChange($event)"
-          (blur)="onCommentBlur()"
+          (blur)="onCommentBlur($event)"
           placeholder="Write a comment..."
           ngDefaultControl
         >
         </p>
       </div>
     </div>
-    <button id="story-comment-button" type="button" class="font-weight-bold btn btn-sm btn-success text-uppercase">Comment</button>
+    <button [id]="commentButtonId" type="button" (click)="onCommentClicked()" class="font-weight-bold btn btn-sm btn-success text-uppercase" [disabled]="isSaving">
+      <span *ngIf="!isSaving">Comment</span>
+      <span *ngIf="isSaving">Commenting...</span>
+    </button>
   </div>
 </div>
 <div *ngIf="!user" class="card" >
-  <div style="padding: 1.25rem;">
+  <div class="p-3">
     <div class="row">
       <div class="col">
         <p> Write a comment...

@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import Story from '../../story/models/story';
 import {FailedResponse} from '../../auth/models/authentication';
-import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext} from '../shared/interfaces';
 
 export enum EditorActionTypes {
@@ -54,14 +54,14 @@ export class EditorStoryLoadFailure implements Action {
 export class EditorStoryPropertyChange implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE;
 
-  constructor(public payload: { property: STORY_PROPERTIES; value: any; }) {
+  constructor(public payload: { property: EDITOR_STORY_PROPERTIES; value: any; }) {
   }
 }
 
 export class EditorStoryPropertySave implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE;
 
-  constructor(public payload: { story: Story, property: STORY_PROPERTIES }) {
+  constructor(public payload: { story: Story, property: EDITOR_STORY_PROPERTIES }) {
   }
 }
 
@@ -87,7 +87,7 @@ export class EditorStorySaveSuccess implements Action {
 export class EditorStorySaveAndPublish implements Action {
   public readonly type = EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH;
 
-  constructor(public payload: Story, public properties: STORY_PROPERTIES[]) {
+  constructor(public payload: Story, public properties: EDITOR_STORY_PROPERTIES[]) {
   }
 }
 

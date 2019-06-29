@@ -8,7 +8,7 @@ import {HttpHeaders} from '@angular/common/http';
 import {ContentTypeFormDataHeader} from '../../../core/http/header.interceptor';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';
-import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext, UploadImageResponse} from '../shared/interfaces';
 import {isPlatformBrowser} from '@angular/common';
 import {Block} from '../shared/json-to-html';
@@ -42,7 +42,7 @@ export class EditorService {
     return this.http.get<Story>(API_ENDPOINTS.draft());
   }
 
-  public savePostProperty(post: Story, property: STORY_PROPERTIES): Observable<EmptyResponse | FailedResponse> {
+  public savePostProperty(post: Story, property: EDITOR_STORY_PROPERTIES): Observable<EmptyResponse | FailedResponse> {
     const body: {
       hashtags?: string;
       hasPaidSection?: boolean;
@@ -51,15 +51,15 @@ export class EditorService {
       title?: string;
       bodyJSON?: Block[];
     } = {};
-    if (property === STORY_PROPERTIES.Hashtags) {
+    if (property === EDITOR_STORY_PROPERTIES.Hashtags) {
       body.hashtags = this.transformTags(<Hashtag[]>post.userPostHashtags);
     }
-    if (property === STORY_PROPERTIES.PaidSection) {
+    if (property === EDITOR_STORY_PROPERTIES.PaidSection) {
       body.hasPaidSection = post.hasPaidSection;
       body.paidSectionLinebreak = post.paidSectionLinebreak;
       body.paidSectionCost = post.paidSectionCost;
     }
-    if (property === STORY_PROPERTIES.BodyAndTitle) {
+    if (property === EDITOR_STORY_PROPERTIES.BodyAndTitle) {
       body.title = post.title;
       body.bodyJSON = post.bodyJSON;
     }

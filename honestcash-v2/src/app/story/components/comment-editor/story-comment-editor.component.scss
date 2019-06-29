@@ -2,6 +2,7 @@
   content: attr(placeholder);
   color: grey;
   display: block; /* For Firefox */
+  height: 100%;
 }
 
 #story-comment-wrapper {
@@ -10,7 +11,7 @@
     border: none;
     color: black;
     width: 100%;
-    margin: 0px 0px 2rem 0px;
+    margin: 0px;
     padding: 0;
     outline: none !important;
     word-break: break-word;
@@ -19,6 +20,7 @@
     line-height: 1.2rem;
     white-space: pre-line;
     height: 100%;
+    cursor: text;
   }
 
   #story-comment-button {

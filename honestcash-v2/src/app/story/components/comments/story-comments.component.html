@@ -2,8 +2,8 @@
    <h5 class="col font-weight-bold text-uppercase">Comments ({{story.responseCount}})</h5>
  </div>
 <div class="row mb-3">
-  <story-comment-editor></story-comment-editor>
+  <story-comment-editor [parentStory]="story"></story-comment-editor>
 </div>
  <div class="row mb-4">
-     <story-comment-card *ngFor="let comment of comments" [comment]="comment"></story-comment-card>
+     <story-comment-card [@simpleFadeAnimation]="'in'" *ngFor="let comment of comments" [comment]="comment"></story-comment-card>
  </div>

@@ -1,0 +1,27 @@
+:host {
+  padding-top: 70px;
+  display: flex;
+  min-width: 100vw;
+  width: 100%;
+}
+
+#wallet-anchors-wrapper {
+  position: relative;
+  #wallet-anchors {
+    position: fixed;
+    top: 100px;
+
+    ul {
+      list-style: none; /* Remove default bullets */
+    }
+
+    ul li::before {
+      content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+      color: #007bff; /* Change the color */
+      font-weight: bold; /* If you want it to be bold */
+      display: inline-block; /* Needed to add space between the bullet and the text */
+      width: 1em; /* Also needed for space (tweak if needed) */
+      margin-left: -1em; /* Also needed for space (tweak if needed) */
+    }
+  }
+}

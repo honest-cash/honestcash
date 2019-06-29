@@ -9,7 +9,7 @@ import {WindowToken} from '../../../../core/shared/helpers/window.helper';
 import {EnvironmentToken} from '../../../../core/shared/helpers/environment.helper';
 import {Environment} from '../../../../environments/environment';
 import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 @Component({
@@ -62,7 +62,7 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         new EditorStorySaveAndPublish(
           this.story,
-          [STORY_PROPERTIES.BodyAndTitle]
+          [EDITOR_STORY_PROPERTIES.BodyAndTitle]
         )
       );
     }

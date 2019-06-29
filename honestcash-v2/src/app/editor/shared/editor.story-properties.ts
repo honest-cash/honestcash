@@ -1,5 +1,6 @@
-export enum STORY_PROPERTIES {
+export enum EDITOR_STORY_PROPERTIES {
   Title = 'title',
+  Body = 'body',
   BodyJSON = 'bodyJSON',
   BodyAndTitle = 'bodyAndTitle',
   Hashtags = 'hashtags',

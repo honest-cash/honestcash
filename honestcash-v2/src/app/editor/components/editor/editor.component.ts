@@ -10,7 +10,7 @@ import {isPlatformBrowser} from '@angular/common';
 import {ScriptService} from 'ngx-script-loader';
 import {concatMap} from 'rxjs/operators';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {editorScriptPaths} from '../../shared/editor.scripts-path';
 import {EditorState} from '../../store/editor.state';
 
@@ -93,7 +93,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.editor.saver.save()
       .then((outputData) => {
         this.story.bodyJSON = <Block[]>outputData.blocks;
-        this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
+        this.store.dispatch(new EditorStoryPropertyChange({property: EDITOR_STORY_PROPERTIES.BodyJSON, value: this.story.bodyJSON}));
       });
     }
   }
@@ -101,7 +101,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public onTitleBlur() {
     this.story.title = this.updatedTitle;
     this.titleElement.nativeElement.innerHTML = this.updatedTitle;
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Title, value: this.story.title}));
+    this.store.dispatch(new EditorStoryPropertyChange({property: EDITOR_STORY_PROPERTIES.Title, value: this.story.title}));
   }
 
   public onTitleChange($event: any) {

@@ -1,83 +1,88 @@
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-top: 2rem;
-}
+:host {
+  ::ng-deep {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 2rem;
+    }
 
-h1 {
-  font-size: 2.5rem;
-}
+    h1 {
+      font-size: 2.5rem;
+    }
 
-.story-body {
-  font-size: 1.2rem;
-  word-break: break-word;
-}
+    .story-body {
+      font-size: 1.2rem;
+      word-break: break-word;
+    }
 
-h2, .story-description {
-  font-size: 1.875rem;
-}
+    h2, .story-description {
+      font-size: 1.875rem;
+    }
 
-h3 {
-  font-size: 1.5rem;
-}
+    h3 {
+      font-size: 1.5rem;
+    }
 
-h4 {
-  font-size: 1.2rem;
+    h4 {
+      font-size: 1.2rem;
 
-}
+    }
 
-h5 {
-  font-size: 1rem;
-}
+    h5 {
+      font-size: 1rem;
+    }
 
-h6 {
-  font-size: .8125rem;
-}
+    h6 {
+      font-size: .8125rem;
+    }
 
-p {
-  font-size: 1.2rem;
-  line-height: 1.8rem;
-  white-space: pre-line;
-}
+    p {
+      font-size: 1.2rem;
+      line-height: 1.8rem;
+      white-space: pre-line;
+    }
 
-blockquote {
-  font-size: 1.2rem;
-  padding-left: 10px;
-  border-left: 3px solid #f8f9fa;
-}
+    blockquote {
+      font-size: 1.2rem;
+      padding-left: 10px;
+      border-left: 3px solid #f8f9fa;
+    }
 
-ul, ol, li {
-  font-size: 1.2rem;
-}
+    ul, ol, li {
+      font-size: 1.2rem;
+    }
 
-code {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  display: block;
-}
+    code {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
 
-img:not(.honest-logo) {
-  max-width: 100%;
-  width: 100%;
-}
+    img:not(.honest-logo) {
+      max-width: 100%;
+      width: 100%;
+    }
 
-figure.embed {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  padding-top: 25px;
-  height: 0;
-}
-figure > iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
+    figure.embed {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      padding-top: 25px;
+      height: 0;
+    }
+    figure > iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
 
-iframe {
-  max-width: 100%;
+    iframe {
+      max-width: 100%;
+    }
+
+  }
 }

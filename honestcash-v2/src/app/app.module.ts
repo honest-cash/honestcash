@@ -19,6 +19,8 @@ import {AppSharedModule} from './app.shared.module';
 import {ToastrModule} from 'ngx-toastr';
 import {SharedModule} from '../core/shared.module';
 import {CoreEffects} from '../core/store/core.effects';
+import {StoryEffects} from './story/store/story.effects';
+import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import {CoreEffects} from '../core/store/core.effects';
     SharedModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects]),
+    EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, EditorEffects, StoryEffects, WalletEffects]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
     ToastrModule.forRoot(),
   ],

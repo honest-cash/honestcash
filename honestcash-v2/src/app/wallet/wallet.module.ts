@@ -5,6 +5,8 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../core/shared.module';
 import {WalletRoutingModule} from './wallet-routing.module';
 import {WalletSharedModule} from './wallet-shared.module';
+import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
+import {QRCodeModule} from 'angularx-qrcode';
 
 
 @NgModule({
@@ -17,6 +19,8 @@ import {WalletSharedModule} from './wallet-shared.module';
     WalletSharedModule,
     CommonModule,
     SharedModule,
+    ScrollToModule.forRoot(),
+    QRCodeModule,
   ],
   providers: [],
   bootstrap: [WalletContainerComponent]

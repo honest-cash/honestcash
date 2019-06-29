@@ -9,7 +9,7 @@ import {EditorService} from '../../services/editor.service';
 import {ToastrService} from 'ngx-toastr';
 import {WindowToken} from '../../../../core/shared/helpers/window.helper';
 import {isPlatformBrowser} from '@angular/common';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 @Component({
@@ -54,7 +54,7 @@ export class EditorPublishModalComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       new EditorStorySaveAndPublish(
         this.story,
-        [STORY_PROPERTIES.BodyAndTitle, STORY_PROPERTIES.Hashtags, STORY_PROPERTIES.PaidSection]
+        [EDITOR_STORY_PROPERTIES.BodyAndTitle, EDITOR_STORY_PROPERTIES.Hashtags, EDITOR_STORY_PROPERTIES.PaidSection]
       )
     );
   }

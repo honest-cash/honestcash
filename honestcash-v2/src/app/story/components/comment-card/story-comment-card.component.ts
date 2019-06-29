@@ -4,7 +4,7 @@ import Story from '../../models/story';
 @Component({
   selector: 'story-comment-card',
   templateUrl: './story-comment-card.component.html',
-  styleUrls: ['./story-comment-card.component.scss']
+  styleUrls: ['./story-comment-card.component.scss'],
 })
 export class StoryCommentCardComponent implements OnInit {
   @Input() public comment: Story;

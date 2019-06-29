@@ -5,7 +5,7 @@ import {isPlatformBrowser} from '@angular/common';
 import Hashtag from '../../models/hashtag';
 import {Observable, Subscription} from 'rxjs';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {EditorState} from '../../store/editor.state';
 
 export interface INgxChipsTag {
@@ -43,7 +43,7 @@ export class EditorStoryTagsSelectionComponent implements OnInit {
   }
 
   public onTagChange(tags: INgxChipsTag[]) {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.Hashtags, value: tags}));
+    this.store.dispatch(new EditorStoryPropertyChange({property: EDITOR_STORY_PROPERTIES.Hashtags, value: tags}));
   }
 
 }

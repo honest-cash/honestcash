@@ -9,7 +9,7 @@ import * as EditorActions from './editor.actions';
 import {cold, hot} from 'jasmine-marbles';
 import Story from '../../story/models/story';
 import {EditorService} from '../services/editor.service';
-import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {mock} from '../../../../mock';
 
 const SHARED_MOCKS = {
@@ -120,7 +120,7 @@ describe('editor.effects', () => {
           ...new Story(),
           title: '123'
         },
-        property: STORY_PROPERTIES.Title,
+        property: EDITOR_STORY_PROPERTIES.Title,
         saveSuccess: SHARED_MOCKS.emptyResponse,
         saveFailure: SHARED_MOCKS.codedErrorResponse
       };
@@ -162,10 +162,10 @@ describe('editor.effects', () => {
           ...new Story(),
           title: '123'
         },
-        property: STORY_PROPERTIES.Title,
+        property: EDITOR_STORY_PROPERTIES.Title,
         properties: [
-          STORY_PROPERTIES.Title,
-          STORY_PROPERTIES.PaidSection
+          EDITOR_STORY_PROPERTIES.Title,
+          EDITOR_STORY_PROPERTIES.PaidSection
         ],
         saveSuccess: SHARED_MOCKS.emptyResponse,
         saveFailure: SHARED_MOCKS.codedErrorResponse
@@ -218,10 +218,10 @@ describe('editor.effects', () => {
           ...new Story(),
           title: '123'
         },
-        property: STORY_PROPERTIES.Title,
+        property: EDITOR_STORY_PROPERTIES.Title,
         properties: [
-          STORY_PROPERTIES.Title,
-          STORY_PROPERTIES.PaidSection
+          EDITOR_STORY_PROPERTIES.Title,
+          EDITOR_STORY_PROPERTIES.PaidSection
         ],
         publishFailure: SHARED_MOCKS.codedErrorResponse
       };

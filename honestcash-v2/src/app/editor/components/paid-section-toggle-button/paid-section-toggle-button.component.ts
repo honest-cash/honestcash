@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import Story from '../../../story/models/story';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {EditorState} from '../../store/editor.state';
 
 @Component({
@@ -32,7 +32,7 @@ export class EditorPaidSectionToggleButtonComponent implements OnInit {
   }
 
   public onChangeHasPaidSection() {
-    this.store.dispatch(new EditorStoryPropertyChange({property: STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
+    this.store.dispatch(new EditorStoryPropertyChange({property: EDITOR_STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
   }
 
 }

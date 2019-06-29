@@ -10,7 +10,7 @@ import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {EditorStoryPropertySave} from '../../store/editor.actions';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {EDITOR_STATUS, initialEditorState} from '../../store/editor.state';
 
 const MockToastr = {
@@ -167,7 +167,7 @@ describe('EditorSaveStatusComponent', () => {
         component.story = new Story();
         component.story.title = 'test';
         component.saveStory();
-        expect(dispatchSpy).toHaveBeenCalledWith(new EditorStoryPropertySave({story: component.story, property: STORY_PROPERTIES.BodyAndTitle}));
+        expect(dispatchSpy).toHaveBeenCalledWith(new EditorStoryPropertySave({story: component.story, property: EDITOR_STORY_PROPERTIES.BodyAndTitle}));
       });
       it('NOT call dispatch EditorStoryPropertySave when saveStatus is something other than NotSaved', () => {
         const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
@@ -183,7 +183,7 @@ describe('EditorSaveStatusComponent', () => {
         component.story = new Story();
         component.story.title = 'test';
         component.saveStory();
-        expect(dispatchSpy).toHaveBeenCalledWith(new EditorStoryPropertySave({story: component.story, property: STORY_PROPERTIES.BodyAndTitle}));
+        expect(dispatchSpy).toHaveBeenCalledWith(new EditorStoryPropertySave({story: component.story, property: EDITOR_STORY_PROPERTIES.BodyAndTitle}));
       });
       it('NOT call dispatch EditorStoryPropertySave if story.title is empty', () => {
         const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();

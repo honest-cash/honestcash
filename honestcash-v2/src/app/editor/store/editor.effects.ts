@@ -18,7 +18,7 @@ import {catchError, concatMap, map, share, switchMap} from 'rxjs/operators';
 import Story from '../../story/models/story';
 import {EditorService} from '../services/editor.service';
 import {EmptyResponse, FailedResponse} from '../../auth/models/authentication';
-import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext} from '../shared/interfaces';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class EditorEffects {
   public EditorStorySaveAndPublish: Observable<any> = this.actions.pipe(
     ofType(EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH),
     map((action: EditorStorySaveAndPublish) => ({post: action.payload, properties: action.properties})),
-    concatMap((context: {post: Story, properties: STORY_PROPERTIES[]}) =>
+    concatMap((context: {post: Story, properties: EDITOR_STORY_PROPERTIES[]}) =>
       forkJoin(
         ...context.properties.map(property => this.editorService.savePostProperty(context.post, property))
       )

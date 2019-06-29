@@ -8,7 +8,7 @@ import {EDITOR_AUTO_SAVE_INTERVAL} from '../editor/editor.component';
 import {takeWhile} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {ELEMENT_TYPES, ParagraphElement} from '../../shared/json-to-html';
 import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
@@ -69,7 +69,7 @@ export class EditorSaveStatusComponent implements OnInit, OnDestroy {
       this.story.title &&
       this.story.title !== ''
     ) {
-      this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: STORY_PROPERTIES.BodyAndTitle}));
+      this.store.dispatch(new EditorStoryPropertySave({story: this.story, property: EDITOR_STORY_PROPERTIES.BodyAndTitle}));
     }
   }
 

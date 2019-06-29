@@ -1,6 +1,6 @@
 import {All, EditorActionTypes} from './editor.actions';
 import {Logger} from '../../../core/shared/services/logger.service';
-import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {EDITOR_STATUS, EditorState, initialEditorState} from './editor.state';
 
 const logger = new Logger();
@@ -29,27 +29,31 @@ export function reducer(state = initialEditorState, action: All): EditorState {
     case EditorActionTypes.EDITOR_STORY_PROPERTY_CHANGE: {
       let property: string;
       switch (action.payload.property) {
-        case STORY_PROPERTIES.Title: {
+        case EDITOR_STORY_PROPERTIES.Title: {
           property = 'title';
           break;
         }
-        case STORY_PROPERTIES.BodyJSON: {
+        case EDITOR_STORY_PROPERTIES.Body: {
+          property = 'body';
+          break;
+        }
+        case EDITOR_STORY_PROPERTIES.BodyJSON: {
           property = 'bodyJSON';
           break;
         }
-        case STORY_PROPERTIES.Hashtags: {
+        case EDITOR_STORY_PROPERTIES.Hashtags: {
           property = 'userPostHashtags';
           break;
         }
-        case STORY_PROPERTIES.PaidSectionCost: {
+        case EDITOR_STORY_PROPERTIES.PaidSectionCost: {
           property = 'paidSectionCost';
           break;
         }
-        case STORY_PROPERTIES.PaidSectionLinebreak: {
+        case EDITOR_STORY_PROPERTIES.PaidSectionLinebreak: {
           property = 'paidSectionLinebreak';
           break;
         }
-        case STORY_PROPERTIES.HasPaidSection: {
+        case EDITOR_STORY_PROPERTIES.HasPaidSection: {
           property = 'hasPaidSection';
           break;
         }
@@ -61,8 +65,8 @@ export function reducer(state = initialEditorState, action: All): EditorState {
           ...state.story,
           [property]: action.payload.value
         },
-        status: property === STORY_PROPERTIES.BodyJSON ||
-        property === STORY_PROPERTIES.Title ?
+        status: property === EDITOR_STORY_PROPERTIES.BodyJSON ||
+        property === EDITOR_STORY_PROPERTIES.Title ?
           EDITOR_STATUS.NotSaved : state.status,
       };
     }

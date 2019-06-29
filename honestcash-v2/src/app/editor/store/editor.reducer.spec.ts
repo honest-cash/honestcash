@@ -13,7 +13,7 @@ import {
   EditorUnload
 } from './editor.actions';
 import Story from '../../story/models/story';
-import {STORY_PROPERTIES} from '../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {ELEMENT_TYPES} from '../shared/json-to-html';
 import {EDITOR_STATUS, EditorState, initialEditorState} from './editor.state';
 
@@ -60,7 +60,7 @@ describe('editor.reducer', () => {
     describe('should return state with updated', function () {
       it('title and status NotSaved', () => {
         const payload = {
-          property: STORY_PROPERTIES.Title,
+          property: EDITOR_STORY_PROPERTIES.Title,
           value: 'test'
         };
         const state: EditorState = reducer(undefined, new EditorStoryPropertyChange(payload));
@@ -70,7 +70,7 @@ describe('editor.reducer', () => {
       });
       it('title and status NotSaved', () => {
         const payload = {
-          property: STORY_PROPERTIES.Title,
+          property: EDITOR_STORY_PROPERTIES.Title,
           value: 'test'
         };
         const state: EditorState = reducer(undefined, new EditorStoryPropertyChange(payload));
@@ -80,7 +80,7 @@ describe('editor.reducer', () => {
       });
       it('bodyJSON and status NotSaved', () => {
         const payload = {
-          property: STORY_PROPERTIES.BodyJSON,
+          property: EDITOR_STORY_PROPERTIES.BodyJSON,
           value: [
             {
               type: ELEMENT_TYPES.Paragraph,
@@ -97,7 +97,7 @@ describe('editor.reducer', () => {
       });
       it('hashtags', () => {
         const payload = {
-          property: STORY_PROPERTIES.Hashtags,
+          property: EDITOR_STORY_PROPERTIES.Hashtags,
           value: [
             {
               id: 1,
@@ -114,7 +114,7 @@ describe('editor.reducer', () => {
       });
       it('paidSectionCost', () => {
         const payload = {
-          property: STORY_PROPERTIES.PaidSectionCost,
+          property: EDITOR_STORY_PROPERTIES.PaidSectionCost,
           value: 1
         };
         const state: EditorState = reducer(undefined, new EditorStoryPropertyChange(payload));
@@ -123,7 +123,7 @@ describe('editor.reducer', () => {
       });
       it('paidSectionLinebreak', () => {
         const payload = {
-          property: STORY_PROPERTIES.PaidSectionLinebreak,
+          property: EDITOR_STORY_PROPERTIES.PaidSectionLinebreak,
           value: 2
         };
         const state: EditorState = reducer(undefined, new EditorStoryPropertyChange(payload));
@@ -132,7 +132,7 @@ describe('editor.reducer', () => {
       });
       it('hasPaidSection', () => {
         const payload = {
-          property: STORY_PROPERTIES.HasPaidSection,
+          property: EDITOR_STORY_PROPERTIES.HasPaidSection,
           value: true
         };
         const state: EditorState = reducer(undefined, new EditorStoryPropertyChange(payload));
@@ -146,7 +146,7 @@ describe('editor.reducer', () => {
     it('should return Saving status', () => {
       const state: EditorState = reducer(
         undefined,
-        new EditorStoryPropertySave({story: new Story(), property: STORY_PROPERTIES.Title}));
+        new EditorStoryPropertySave({story: new Story(), property: EDITOR_STORY_PROPERTIES.Title}));
 
       expect(state.status).toBe(EDITOR_STATUS.Saving);
     });
@@ -211,7 +211,7 @@ describe('editor.reducer', () => {
     it('should return Publishing status', () => {
       const state: EditorState = reducer(
         undefined,
-        new EditorStorySaveAndPublish(new Story(), [STORY_PROPERTIES.Title])
+        new EditorStorySaveAndPublish(new Story(), [EDITOR_STORY_PROPERTIES.Title])
       );
 
       expect(state.status).toBe(EDITOR_STATUS.Publishing);

@@ -14,7 +14,7 @@ import Story from '../../../story/models/story';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../store/editor.actions';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {forkJoin, of} from 'rxjs';
 import {ScriptService} from 'ngx-script-loader';
 import {editorScriptPaths} from '../../shared/editor.scripts-path';
@@ -167,7 +167,7 @@ describe('EditorComponent', () => {
       component.editor.saver.save().then(() => {
         expect(store.dispatch).toHaveBeenCalledWith(
           new EditorStoryPropertyChange({
-            property: STORY_PROPERTIES.BodyJSON,
+            property: EDITOR_STORY_PROPERTIES.BodyJSON,
             value: component.story.bodyJSON
           })
         );
@@ -194,7 +194,7 @@ describe('EditorComponent', () => {
     it('should dispatch EditorStoryPropertyChange with Title as property and title as value', () => {
       expect(store.dispatch).toHaveBeenCalledWith(
         new EditorStoryPropertyChange({
-          property: STORY_PROPERTIES.Title,
+          property: EDITOR_STORY_PROPERTIES.Title,
           value: component.story.title
         })
       );

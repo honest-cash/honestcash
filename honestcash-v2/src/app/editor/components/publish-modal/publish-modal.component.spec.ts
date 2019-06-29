@@ -12,7 +12,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {EditorService} from '../../services/editor.service';
 import {EditorStorySaveAndPublish} from '../../store/editor.actions';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {Store} from '@ngrx/store';
 import {initialAppStates} from '../../../app.states.mock';
 import {EDITOR_STATUS, initialEditorState} from '../../store/editor.state';
@@ -200,9 +200,9 @@ describe('EditorPublishModalComponent', () => {
         component.onSubmit();
 
         expect(dispatchSpy).toHaveBeenCalledWith(new EditorStorySaveAndPublish(component.story, [
-          STORY_PROPERTIES.BodyAndTitle,
-          STORY_PROPERTIES.Hashtags,
-          STORY_PROPERTIES.PaidSection
+          EDITOR_STORY_PROPERTIES.BodyAndTitle,
+          EDITOR_STORY_PROPERTIES.Hashtags,
+          EDITOR_STORY_PROPERTIES.PaidSection
         ]));
       });
     });

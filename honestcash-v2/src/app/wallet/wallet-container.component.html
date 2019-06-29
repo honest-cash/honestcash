@@ -1,4 +1,173 @@
 <shared-header></shared-header>
-<div class="container-fluid">
-  <router-outlet></router-outlet>
+<div *ngIf="status === WALLET_SETUP_STATUS.Generated" class="row w-100">
+  <div class="col-2 offset-3" id="wallet-anchors-wrapper">
+    <div id="wallet-anchors">
+      <ul>
+        <li><button class="btn btn-link" [ngx-scroll-to]="'#deposit'">Deposit</button></li>
+        <li><button class="btn btn-link" [ngx-scroll-to]="'#withdraw'">Withdraw</button></li>
+        <li><button class="btn btn-link" [ngx-scroll-to]="'#wallet-details'">Wallet Details</button></li>
+        <li><button class="btn btn-link" [ngx-scroll-to]="'#restore-wallet'">Restore Wallet</button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-4">
+    <div class="row" id="deposit">
+      <div class="col">
+        <div class="card-body">
+          <h4 class="card-title">Deposit</h4>
+          <div class="card-text">
+            <p>
+              <b>Tipping Address: </b>
+            </p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="wallet-deposit-tipping-address">
+                  <fa-icon [icon]="['fas', 'at']"></fa-icon>
+                </span>
+              </div>
+              <input type="text" class="form-control" [value]="wallet.address" aria-label="Wallet Tipping Address" aria-describedby="wallet-deposit-tipping-address">
+            </div>
+            <p>
+              <b>Tipping Address (Legacy): </b>
+            </p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="wallet-deposit-tipping-address-legacy">
+                  <fa-icon [icon]="['fas', 'at']"></fa-icon>
+                </span>
+              </div>
+              <input type="text" class="form-control" [value]="wallet.address" aria-label="Wallet Legacy Tipping Address" aria-describedby="wallet-deposit-tipping-address-legacy">
+            </div>
+            <p>
+              <b>QR Code: </b>
+              <br><qrcode [qrdata]="wallet.cashAddress"></qrcode>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row" id="withdraw">
+      <div class="col">
+        <div class="card-body">
+          <h4 class="card-title">Withdraw</h4>
+          <div class="card-text">
+            <p>
+              You can withdraw the balance by importing your Honest wallet into other wallets or you can transfer the funds directly using the form below.
+            </p>
+            <p>Check our How-to Guides:</p>
+            <ul>
+              <li><a href="https://honest.cash/honest_cash/how-to-import-your-honest-wallet-into-bitcoincom-wallet-1690" target="_blank">Importing Honest Wallet into Bitcoin.Com Wallet</a></li>
+              <li><a href="https://honest.cash/honest_cash/how-to-import-your-honest-wallet-into-electron-cash-134" target="_blank">Importing Honest Wallet into Electron Cash</a></li>
+            </ul>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="wallet-withdraw-address">
+                  <fa-icon [icon]="['fas', 'credit-card']"></fa-icon>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Receiving BitcoinCash Wallet Address" aria-label="Receiving BitcoinCash Wallet Address" aria-describedby="wallet-withdraw-address">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="wallet-withdraw-amount">
+                  <fa-icon [icon]="['fab', 'bitcoin']"></fa-icon>
+                </span>
+              </div>
+              <input type="number" class="form-control" placeholder="Transfer Amount" aria-label="Transfer Amount" aria-describedby="wallet-withdraw-amount">
+            </div>
+            <button type="button" class="btn btn-success">Set Current Balance <fa-icon [icon]="['fas', 'level-up-alt']"></fa-icon></button> <button type="button" class="btn btn-warning ml-3">Transfer <fa-icon [icon]="['far', 'paper-plane']"></fa-icon></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row" id="wallet-details">
+      <div class="col">
+        <div class="card-body">
+          <h4 class="card-title">Wallet Details</h4>
+          <div class="card-text">
+            <p>
+              <b>Recovery Phrase: </b>
+            </p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="wallet-details-recovery-phrase">
+                  <fa-icon [icon]="['fab', 'bitcoin']"></fa-icon>
+                </span>
+              </div>
+              <input type="text" class="form-control" [value]="wallet.mnemonic" aria-label="Wallet Recovery Phrase" aria-describedby="wallet-details-recovery-phrase">
+            </div>
+            <p>
+              <b>Private Key (WIF): </b>
+            </p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="wallet-details-private-key">
+                  <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                </span>
+              </div>
+              <input type="text" class="form-control" [value]="wallet.privateKey" aria-label="Wallet Private Key" aria-describedby="wallet-details-private-key">
+            </div>
+            <p>
+              <b>Derivation Path:</b>
+              <br>{{derivationPath}}
+            </p>
+            <p>Check our How-to Guides:</p>
+            <ul>
+              <li><a href="https://honest.cash/honest_cash/how-to-import-your-honest-wallet-into-bitcoincom-wallet-1690" target="_blank">Importing Honest Wallet into Bitcoin.Com Wallet</a></li>
+              <li><a href="https://honest.cash/honest_cash/how-to-import-your-honest-wallet-into-electron-cash-134" target="_blank">Importing Honest Wallet into Electron Cash</a></li>
+            </ul>
+            <p>
+              <small>
+                <span>
+                  <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon> Ownership and control over the private key is the root of user control over all funds associated with the corresponding Bitcoin Cash address. The private key is used to create signatures that are required to spend bitcoins by proving ownership of funds used in a transaction.
+                </span>
+                <br>
+                <span class="text-warning">
+                  <b>
+                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon> The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the bitcoins secured by that key. The private key must also be backed up and protected from accidental loss, because if it’s lost it cannot be recovered and the funds secured by it are forever lost, too.
+                  </b>
+                </span>
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row" id="restore-wallet">
+      <div class="col">
+        <div class="card-body">
+          <h4 class="card-title">Restore Wallet</h4>
+          <div class="card-text">
+            <p>
+              Your private key never leaves the browser. All transactions are signed within your browser and keys are not exposed over the internet. Do not connect wallets with bigger amounts! We recommend to generate a new wallet and transfer a small amount for the upvotes.
+            </p>
+            <p>
+              <b>
+                Beware of scams! Ensure that the domain is <span class="text-warning">https://honest.cash</span> with a secure connection.
+              </b>
+            </p>
+            <p>Recovery Phrase (Mnemonic):</p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="wallet-recovery-phrase">
+                  <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Enter your wallet mnemonic or seed" aria-label="Wallet Recovery Phrase Key" aria-describedby="wallet-recovery-phrase">
+              <small class="form-text text-muted">Usually 12 words. Your keys will never leave your browser The following path will be used for derivation of the key-pair: m/44'/0'/0'/0/0.</small>
+              <button type="button" class="btn btn-danger mt-3">Restore Wallet <fa-icon [icon]="['fas', 'redo-alt']"></fa-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row w-100" *ngIf="status !== WALLET_SETUP_STATUS.Generated">
+  <div class="col d-flex justify-content-center align-items-center">
+    <shared-loading-indicator ></shared-loading-indicator>
+  </div>
 </div>

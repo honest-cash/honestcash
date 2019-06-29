@@ -5,7 +5,7 @@ import {AppStates, selectEditorState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {Block, convertBlockToHtml} from '../../shared/json-to-html';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
-import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
+import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 export const PAID_SECTION_PRICE_SLIDER_SETTINGS = {
@@ -99,7 +99,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
       }
       this.store.dispatch(
         new EditorStoryPropertyChange(
-          {property: STORY_PROPERTIES.PaidSectionLinebreak, value: this.story.paidSectionLinebreak}
+          {property: EDITOR_STORY_PROPERTIES.PaidSectionLinebreak, value: this.story.paidSectionLinebreak}
         )
       );
     }
@@ -108,7 +108,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   public onChangePaidSectionCost() {
     this.store.dispatch(
       new EditorStoryPropertyChange(
-        {property: STORY_PROPERTIES.PaidSectionCost, value: this.story.paidSectionCost}
+        {property: EDITOR_STORY_PROPERTIES.PaidSectionCost, value: this.story.paidSectionCost}
       )
     );
   }

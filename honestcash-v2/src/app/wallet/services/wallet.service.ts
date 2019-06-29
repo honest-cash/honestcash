@@ -2,7 +2,7 @@ import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {LoginSuccessResponse} from '../../auth/models/authentication';
 import {Logger} from '../../../core/shared/services/logger.service';
-import {AsyncSubject, defer, forkJoin, Observable, Subject, throwError} from 'rxjs';
+import {AsyncSubject, defer, forkJoin, Observable, of, Subject, throwError} from 'rxjs';
 import {HttpService} from '../../../core';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {sha3_512} from 'js-sha3';
@@ -80,12 +80,12 @@ export class WalletService {
     );
   }
 
-  public convertCurrency(amount: number, sourceCurrency: string, targetCurrency: string) {
+  public convertCurrency(amount: number, sourceCurrency: string, targetCurrency: string): Observable<number> {
     return this.http.get(`https://api.coinbase.com/v2/exchange-rates?currency=${sourceCurrency.toUpperCase()}`)
       .pipe(
         map((response: CoinbaseExchangeResponse) => {
           const rate = response.data.rates[targetCurrency.toUpperCase()];
-          return Number((Number(rate) * Number(amount)).toFixed(2));
+          return Number(((Number(rate) * Number(amount))).toFixed(2));
         })
       );
   }
@@ -93,6 +93,7 @@ export class WalletService {
   public updateWalletBalance() {
     this.wallet.getWalletInfo().then(res => {
       this.convertCurrency(res.balance, 'bch', 'usd').subscribe((balance: number) => {
+        console.log('balance2', balance);
         this.store.dispatch(new WalletBalanceUpdated(balance));
       });
     });
@@ -158,8 +159,7 @@ export class WalletService {
           throwError(WALLET_SETUP_STATUS.Errored);
         }
 
-        const balance = (await simpleWallet.getWalletInfo()).balance;
-        await this.setWallet(simpleWallet, balance, shouldMakeRequest);
+        await this.setWallet(simpleWallet, shouldMakeRequest);
         this.store.dispatch(new WalletStatusUpdated(WALLET_SETUP_STATUS.Loaded));
         return simpleWallet;
       }
@@ -176,9 +176,9 @@ export class WalletService {
     }
   }
 
-  public setWallet(wallet: ISimpleWallet, balance: number, shouldMakeRequest: boolean) {
+  public setWallet(wallet: ISimpleWallet, shouldMakeRequest: boolean) {
     const requests: any = [
-      this.convertCurrency(balance, 'bch', 'usd')
+      of({}) // do not remove for forkJoin to succeed
     ];
 
     if (shouldMakeRequest) {
@@ -192,7 +192,7 @@ export class WalletService {
       }
       this.wallet = wallet;
       this.mnemonicEncrypted = wallet.mnemonicEncrypted;
-      this.store.dispatch(new WalletBalanceUpdated(balance));
+      this.updateWalletBalance();
     });
   }
 
