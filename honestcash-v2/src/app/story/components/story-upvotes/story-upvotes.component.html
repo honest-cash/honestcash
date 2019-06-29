@@ -1,8 +1,0 @@
-<div class="row mb-2">
-  <h4 class="col font-weight-bold text-uppercase cursor-pointer" (click)="isCollapsed = !isCollapsed"
-      [attr.aria-expanded]="!isCollapsed" aria-controls="collapseUpvotes"><u>Upvotes</u> ({{story.upvoteCount}})</h4>
-</div>
-<div class="row" [ngbCollapse]="isCollapsed">
-  <main-story-payer-badge *ngFor="let transaction of upvotes" [transaction]="transaction"></main-story-payer-badge>
-  <p *ngIf="!upvotes.length">No upvotes yet</p>
-</div>

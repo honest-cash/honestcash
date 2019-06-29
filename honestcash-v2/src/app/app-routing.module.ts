@@ -17,11 +17,11 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: './story/story.module#StoryModule'
+    loadChildren: './main/main.module#MainModule'
   },
   {
     path: '',
-    loadChildren: './main/main.module#MainModule'
+    loadChildren: './story/story.module#StoryModule'
   },
   {
     path: '',

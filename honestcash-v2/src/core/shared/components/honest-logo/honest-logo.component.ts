@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'shared-honest-logo',
@@ -6,4 +6,6 @@ import {Component} from '@angular/core';
   styleUrls: ['./honest-logo.component.scss']
 })
 export class SharedHonestLogoComponent {
+  @Input() public width: number;
+  @Input() public height: number;
 }

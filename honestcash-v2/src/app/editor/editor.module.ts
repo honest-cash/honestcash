@@ -16,7 +16,6 @@ import {EditorSaveStatusComponent} from './components/save-status/save-status.co
 import {EditorComponent} from './components/editor/editor.component';
 import {EditorCommentButtonComponent} from './components/comment-button/comment-button.component';
 import {ScriptLoaderModule} from 'ngx-script-loader';
-import {EditorLoadingIndicatorComponent} from './components/loading-indicator/loading-indicator.component';
 import {EditorStoryTagsSelectionComponent} from './components/story-tags-selection/story-tags-selection.component';
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 import {EditorCommentComponent} from './pages/comment/comment.component';
@@ -37,7 +36,6 @@ import {EditorRoutingModule} from './editor-routing.module';
     EditorCommentComponent,
     EditorHeaderComponent,
     EditorPaidSectionSelectionComponent,
-    EditorLoadingIndicatorComponent,
     EditorPaidSectionToggleButtonComponent,
     EditorParentPostBodyComponent,
   ],

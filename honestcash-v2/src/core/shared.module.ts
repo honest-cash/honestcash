@@ -7,6 +7,7 @@ import {SharedAvatarComponent} from './shared/components/avatar/avatar.component
 import {SharedHeaderComponent} from './shared/components/header/header.component';
 import {ShardHeaderProfileMenuComponent} from './shared/components/header-profile-menu/header-profile-menu.component';
 import {SharedNotFoundComponent} from './shared/pages/not-found/not-found.component';
+import {SharedLoadingIndicatorComponent} from './shared/components/loading-indicator/loading-indicator.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import {SharedNotFoundComponent} from './shared/pages/not-found/not-found.compon
     SharedHeaderComponent,
     ShardHeaderProfileMenuComponent,
     SharedHonestLogoComponent,
+    SharedLoadingIndicatorComponent,
     SharedNotFoundComponent,
   ],
   imports: [
@@ -29,6 +31,7 @@ import {SharedNotFoundComponent} from './shared/pages/not-found/not-found.compon
     SharedHeaderComponent,
     ShardHeaderProfileMenuComponent,
     SharedHonestLogoComponent,
+    SharedLoadingIndicatorComponent,
   ]
 })
 export class SharedModule {

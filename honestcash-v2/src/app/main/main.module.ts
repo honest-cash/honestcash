@@ -4,16 +4,20 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../../core/shared.module';
 import {MainAboutComponent} from './pages/about/about.component';
 import {MainRoutingModule} from './main-routing.module';
+import {MainTermsOfServiceComponent} from './pages/terms-of-service/terms-of-service.component';
+import {StorySharedModule} from '../story/story-shared.module';
 
 @NgModule({
   declarations: [
     MainContainerComponent,
     MainAboutComponent,
+    MainTermsOfServiceComponent,
   ],
   imports: [
     MainRoutingModule,
     CommonModule,
     SharedModule,
+    StorySharedModule,
   ],
   providers: [],
   bootstrap: [MainContainerComponent]
