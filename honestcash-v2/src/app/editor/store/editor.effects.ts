@@ -15,7 +15,7 @@ import {
   EditorStorySaveSuccess,
 } from './editor.actions';
 import {catchError, concatMap, map, share, switchMap} from 'rxjs/operators';
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 import {EditorService} from '../services/editor.service';
 import {EmptyResponse, FailedResponse} from '../../auth/models/authentication';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';

@@ -7,7 +7,7 @@ import {localStorageProvider, LocalStorageToken} from '../../../core/shared/help
 import {RouterTestingModule} from '@angular/router/testing';
 import * as EditorActions from './editor.actions';
 import {cold, hot} from 'jasmine-marbles';
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 import {EditorService} from '../services/editor.service';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {mock} from '../../../../mock';

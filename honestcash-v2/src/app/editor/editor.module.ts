@@ -21,19 +21,7 @@ import {EditorStoryTagsSelectionComponent} from './components/story-tags-selecti
 import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-toggle-button/paid-section-toggle-button.component';
 import {EditorCommentComponent} from './pages/comment/comment.component';
 import {EditorParentPostBodyComponent} from './components/parent-post-body/parent-post-body.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: EditorContainerComponent,
-    children: [
-      {path: 'write', component: EditorWriteComponent, canActivate: [AuthorizedGuard]},
-      {path: 'edit/:storyId', component: EditorEditComponent, canActivate: [AuthorizedGuard]},
-      {path: 'comment/:parentStoryId', component: EditorCommentComponent, canActivate: [AuthorizedGuard]},
-    ]
-  }
-];
-
+import {EditorRoutingModule} from './editor-routing.module';
 @NgModule({
   declarations: [
     EditorComponent,
@@ -61,7 +49,7 @@ const routes: Routes = [
   ],
   imports: [
     FormsModule,
-    RouterModule.forChild(routes),
+    EditorRoutingModule,
     SharedModule,
     TagInputModule,
     ScriptLoaderModule,

@@ -7,7 +7,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {initialEditorState} from '../../store/editor.state';

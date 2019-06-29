@@ -1,6 +1,6 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 import {HttpService} from '../../../core';
 import {EmptyResponse, FailedResponse} from '../../auth/models/authentication';
 import Hashtag from '../models/hashtag';

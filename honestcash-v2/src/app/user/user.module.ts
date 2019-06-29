@@ -1,25 +1,10 @@
 import {NgModule} from '@angular/core';
-import {AuthWelcomeComponent} from '../auth/pages/welcome/welcome.component';
 import {UserContainerComponent} from './user-container.component';
 import {CommonModule} from '@angular/common';
-import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {UnauthorizedGuard} from 'core/shared/guards/unauthorized.guard';
 import {SharedModule} from '../../core/shared.module';
+import {UserRoutingModule} from './user-routing.module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: UserContainerComponent,
-    /*children: [
-      /!*{
-        path: 'profile',
-        component: AuthWelcomeComponent,
-        canActivate: [UnauthorizedGuard]
-      },*!/
-    ]*/
-  },
-];
 
 @NgModule({
   declarations: [
@@ -27,7 +12,7 @@ const routes: Routes = [
   ],
   imports: [
     FormsModule,
-    RouterModule.forChild(routes),
+    UserRoutingModule,
     CommonModule,
     SharedModule,
   ],

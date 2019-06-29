@@ -9,7 +9,7 @@ import {EnvironmentToken} from '../../../../core/shared/helpers/environment.help
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {EditorService} from '../../services/editor.service';
 import {mock} from '../../../../../mock';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';

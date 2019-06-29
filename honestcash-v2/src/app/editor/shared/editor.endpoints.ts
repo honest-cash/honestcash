@@ -1,4 +1,4 @@
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 import {STORY_PROPERTIES} from './editor.story-properties';
 
 export const API_ENDPOINTS = {

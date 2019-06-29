@@ -6,7 +6,7 @@ import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
 import {WindowToken} from '../../../../core/shared/helpers/window.helper';
 import {EnvironmentToken} from '../../../../core/shared/helpers/environment.helper';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';

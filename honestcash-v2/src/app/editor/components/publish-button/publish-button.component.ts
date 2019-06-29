@@ -2,7 +2,7 @@ import {Component, HostBinding, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {EditorPublishModalComponent} from '../publish-modal/publish-modal.component';

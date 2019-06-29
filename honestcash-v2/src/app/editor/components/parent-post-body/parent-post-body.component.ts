@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {Observable, Subscription} from 'rxjs';
 import {AppStates, selectEditorState} from '../../../app.states';

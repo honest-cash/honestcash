@@ -12,7 +12,7 @@ import {
   EditorStorySaveSuccess,
   EditorUnload
 } from './editor.actions';
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {ELEMENT_TYPES} from '../shared/json-to-html';
 import {EDITOR_STATUS, EditorState, initialEditorState} from './editor.state';

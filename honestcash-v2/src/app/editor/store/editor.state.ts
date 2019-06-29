@@ -1,4 +1,4 @@
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 
 export enum EDITOR_STATUS {
   NotInitialized = 'NOT_INITIALIZED',

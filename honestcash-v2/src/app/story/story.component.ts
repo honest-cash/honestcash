@@ -1,15 +1,14 @@
-import {Component, ElementRef, HostBinding, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {AppStates, selectUserState} from '../../../app.states';
+import {AppStates, selectUserState} from '../app.states';
 import {Observable, Subscription} from 'rxjs';
-import User from '../../../user/models/user';
-import Story from '../../models/story';
-import {UserState} from '../../../user/store/user.state';
-import {StoryService} from '../../services/story.service';
-import {Upvote} from '../../models/upvote';
-import {Unlock} from '../../models/unlock';
+import User from '../user/models/user';
+import Story from './models/story';
+import {UserState} from '../user/store/user.state';
+import {StoryService} from './services/story.service';
+import {Upvote} from './models/upvote';
+import {Unlock} from './models/unlock';
 import {ActivatedRoute} from '@angular/router';
-import {EditorStoryLoad} from '../../../editor/store/editor.actions';
 
 @Component({
   selector: 'main-page-story',

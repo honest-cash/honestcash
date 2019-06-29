@@ -19,38 +19,7 @@ import {AuthForbiddenUsernameValidatorDirective} from '../auth/shared/directives
 import {AuthResetPasswordVerifyComponent} from '../auth/pages/reset-password-verify/reset-password-verify.component';
 import {AuthHeaderComponent} from './components/header/header.component';
 import {SharedModule} from '../../core/shared.module';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: AuthContainerComponent,
-    children: [
-      {
-        path: 'welcome',
-        component: AuthWelcomeComponent,
-        canActivate: [UnauthorizedGuard]
-      },
-      {
-        path: 'login',
-        component: AuthLoginComponent,
-        canActivate: [UnauthorizedGuard],
-      },
-      {path: 'logout', component: AuthLogoutComponent, canActivate: [AuthorizedGuard]},
-      {
-        path: 'signup',
-        component: AuthSignupComponent,
-        canActivate: [UnauthorizedGuard],
-      },
-      {
-        path: 'reset-password-request/:resetCode',
-        component: AuthResetPasswordVerifyComponent,
-        canActivate: [UnauthorizedGuard]
-      },
-      {path: 'reset-password-request', component: AuthResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
-      {path: 'thank-you', component: AuthThankYouComponent, canActivate: [AuthorizedGuard]},
-    ]
-  },
-];
+import {AuthRoutingModule} from './auth-routing.module';
 
 @NgModule({
   declarations: [
@@ -71,7 +40,7 @@ const routes: Routes = [
   ],
   imports: [
     FormsModule,
-    RouterModule.forChild(routes),
+    AuthRoutingModule,
     CommonModule,
     SharedModule,
   ],

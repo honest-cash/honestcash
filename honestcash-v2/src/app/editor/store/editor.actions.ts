@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 import {FailedResponse} from '../../auth/models/authentication';
 import {STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext} from '../shared/interfaces';

@@ -2,7 +2,7 @@ import {Component, HostBinding, Input, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {interval, Observable, Subscription} from 'rxjs';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {EditorStoryPropertySave} from '../../store/editor.actions';
 import {EDITOR_AUTO_SAVE_INTERVAL} from '../editor/editor.component';
 import {takeWhile} from 'rxjs/operators';

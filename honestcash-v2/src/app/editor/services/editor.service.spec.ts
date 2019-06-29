@@ -7,7 +7,7 @@ import {EditorService} from './editor.service';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from '../../app.states';
 import {HttpService} from '../../../core';
-import Story from '../../main/models/story';
+import Story from '../../story/models/story';
 import {RouterTestingModule} from '@angular/router/testing';
 import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {API_ENDPOINTS} from '../shared/editor.endpoints';

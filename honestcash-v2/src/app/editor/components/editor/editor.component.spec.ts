@@ -10,7 +10,7 @@ import {EditorService} from '../../services/editor.service';
 import {mock} from '../../../../../mock';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {ELEMENT_TYPES} from '../../shared/json-to-html';
 import {EditorLoad, EditorStoryPropertyChange, EditorUnload} from '../../store/editor.actions';

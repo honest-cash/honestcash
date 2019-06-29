@@ -17,6 +17,10 @@ const routes: Routes = [
   },
   {
     path: '',
+    loadChildren: './story/story.module#StoryModule'
+  },
+  {
+    path: '',
     loadChildren: './main/main.module#MainModule'
   },
   {

@@ -5,7 +5,7 @@ import {EditorPublishModalComponent} from './publish-modal.component';
 import {FormsModule} from '@angular/forms';
 import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppStates} from '../../../app.states';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {WindowToken} from '../../../../core/shared/helpers/window.helper';
 import {localStorageProvider, LocalStorageToken} from '../../../../core/shared/helpers/local-storage.helper';
 import {HttpClientTestingModule} from '@angular/common/http/testing';

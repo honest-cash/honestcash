@@ -1,7 +1,7 @@
 import {Component, HostBinding, Inject, OnDestroy, OnInit} from '@angular/core';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {Store} from '@ngrx/store';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {ToastrService} from 'ngx-toastr';
 import {Observable, Subscription} from 'rxjs';
 import {EditorStorySaveAndPublish} from '../../store/editor.actions';

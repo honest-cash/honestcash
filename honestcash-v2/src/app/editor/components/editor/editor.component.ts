@@ -1,5 +1,5 @@
 import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {forkJoin, Observable, Subscription} from 'rxjs';

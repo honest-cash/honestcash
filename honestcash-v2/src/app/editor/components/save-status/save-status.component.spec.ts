@@ -5,7 +5,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import {AppStates} from '../../../app.states';
 import {Store} from '@ngrx/store';
 import {EDITOR_EDITING_MODES} from '../header/header.component';

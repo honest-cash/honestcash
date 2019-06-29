@@ -9,7 +9,7 @@ import {
 } from './paid-section-selection.component';
 import {FormsModule} from '@angular/forms';
 import {EDITOR_STATUS} from '../../store/editor.state';
-import Story from '../../../main/models/story';
+import Story from '../../../story/models/story';
 import * as converter from '../../shared/json-to-html';
 import {convertBlockToHtml, ELEMENT_TYPES} from '../../shared/json-to-html';
 import {Subscription} from 'rxjs';
