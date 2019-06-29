@@ -68,6 +68,18 @@ export class AuthService {
   }
 
   public hasAuthorization(): boolean {
+    // this function is used throughout the app
+    // to determine whether a user is logged in
+    // if the token exists via this instance or via localStorage
+    // the user is considered as authenticated
+
+    // @todo hack -> fix of empty wallets on login -> users will have to log in if they do not have a valid wallet!
+    if (this.isPlatformBrowser) {
+      if (!this.isAuthenticated && this.getToken() && this.localStorage.getItem('HC_BCH_MNEMONIC')) {
+        this.isAuthenticated = true;
+      }
+    }
+
     return this.isAuthenticated;
   }
 
