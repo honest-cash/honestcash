@@ -8,7 +8,7 @@ import Story from '../../models/story';
 })
 export class StoryActionsComponent implements OnInit {
   @Input() public story: Story;
-  @HostBinding('class') public class = 'd-flex w-100';
+  @HostBinding('class') public class = 'row mx-auto mt-5';
   constructor() { }
 
   ngOnInit() {

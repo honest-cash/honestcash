@@ -153,6 +153,12 @@ export class AuthEffects {
   );
 
   @Effect({dispatch: false})
+  public AuthCleanup: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.AUTH_CLEANUP),
+    tap(() => this.authService.unauthenticate()),
+  );
+
+  @Effect({dispatch: false})
   public RootRedirect: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.ROOT_REDIRECT),
     tap(() => {

@@ -4,6 +4,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../core/shared.module';
 import {WalletRoutingModule} from './wallet-routing.module';
+import {WalletSharedModule} from './wallet-shared.module';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import {WalletRoutingModule} from './wallet-routing.module';
   imports: [
     FormsModule,
     WalletRoutingModule,
+    WalletSharedModule,
     CommonModule,
     SharedModule,
   ],

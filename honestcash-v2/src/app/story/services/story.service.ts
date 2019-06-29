@@ -3,10 +3,12 @@ import {forkJoin, Observable} from 'rxjs';
 import {HttpService} from '../../../core';
 
 export const API_ENDPOINTS = {
-  getStory: (id: number) => `/post/${id}`,
+  getStory: (id: number) => `/v2/post/${id}`,
   getStoryUpvotes: (id: number) => `/post/${id}/upvotes`,
   getStoryUnlocks: (id: number) => `/post/${id}/unlocks`,
   getStoryComments: (id: number) => `/v2/post/${id}/responses`,
+  upvoteStory: (id: number) => `/post/${id}/upvote`,
+  unlockStory: (id: number) => `/post/${id}/unlock`,
 };
 
 @Injectable({providedIn: 'root'})
@@ -40,6 +42,20 @@ export class StoryService {
 
   public getStoryUnlocks(id: number): Observable<any> {
     return this.http.get(API_ENDPOINTS.getStoryUnlocks(id));
+  }
+
+  public upvoteStory(id: number, txId: number) {
+    return this.http.post(API_ENDPOINTS.upvoteStory(id), {
+      postId: id,
+      txId,
+    });
+  }
+
+  public unlockStory(id: number, txId: number) {
+    return this.http.post(API_ENDPOINTS.unlockStory(id), {
+      postId: id,
+      txId,
+    });
   }
 
 }

@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-import {API_ENDPOINTS, AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
+import {AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../../../core/http/http.service';
 import {mock} from '../../../../mock';
@@ -19,6 +19,7 @@ import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../app.states.mock';
 import {SimpleWallet} from '../../wallet/models/simple-wallet';
 import {WalletService} from '../../wallet/services/wallet.service';
+import {API_ENDPOINTS} from '../shared/auth.endpoints';
 
 const MockWalletService = {
   createWallet: () => ({mnemonic: 'test1 test2 test3'}),

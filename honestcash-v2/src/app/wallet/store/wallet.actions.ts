@@ -1,12 +1,15 @@
 import {Action} from '@ngrx/store';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
 import {ISimpleWallet} from '../models/simple-wallet';
+import {WALLET_SETUP_STATUS} from '../services/wallet.service';
 
 export enum WalletActionTypes {
-  WALLET_SETUP = '[Wallet] Wallet setup',
-  WALLET_SETUP_FAILED = '[Wallet] Wallet setup failed',
-  WALLET_CLEANUP = '[Wallet] Wallet cleanup',
-  WALLET_GENERATED = '[Wallet] Wallet has been generated'
+  WALLET_SETUP = '[Wallet] Wallet Setup',
+  WALLET_SETUP_FAILED = '[Wallet] Wallet Setup Failed',
+  WALLET_CLEANUP = '[Wallet] Wallet Cleanup',
+  WALLET_GENERATED = '[Wallet] Wallet Generated',
+  WALLET_BALANCE_UPDATED = '[Wallet] Wallet Balance Updated',
+  WALLET_STATUS_UPDATED = '[Wallet] Wallet Status Update',
 }
 
 export class WalletSetup implements Action {
@@ -31,8 +34,25 @@ export class WalletGenerated implements Action {
   }
 }
 
+export class WalletBalanceUpdated implements Action {
+  public readonly type = WalletActionTypes.WALLET_BALANCE_UPDATED;
+
+  constructor(public payload: number) {
+  }
+}
+
+export class WalletStatusUpdated implements Action {
+  public readonly type = WalletActionTypes.WALLET_STATUS_UPDATED;
+
+  constructor(public payload: WALLET_SETUP_STATUS) {
+  }
+
+}
+
 export type All =
   | WalletSetup
   | WalletSetupFailed
   | WalletGenerated
-  | WalletCleanup;
+  | WalletCleanup
+  | WalletBalanceUpdated
+  | WalletStatusUpdated;

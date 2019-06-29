@@ -18,6 +18,7 @@ import {EditorEffects} from './editor/store/editor.effects';
 import {AppSharedModule} from './app.shared.module';
 import {ToastrModule} from 'ngx-toastr';
 import {SharedModule} from '../core/shared.module';
+import {CoreEffects} from '../core/store/core.effects';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import {SharedModule} from '../core/shared.module';
     SharedModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([AuthEffects, UserEffects, EditorEffects, WalletEffects]),
+    EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, EditorEffects, WalletEffects]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
     ToastrModule.forRoot(),
   ],

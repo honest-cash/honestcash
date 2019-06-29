@@ -1,5 +1,7 @@
 export interface ISimpleWallet {
   cashAddress: string;
+  balance: number;
+  unconfirmedBalance: number;
   mnemonic: string;
   address: string;
   HdPath: string;
@@ -7,7 +9,7 @@ export interface ISimpleWallet {
   legacyAddress: string;
   mnemonicEncrypted: string;
   getBalance(): any;
-  send(): any;
+  send(receivers: any[]): any;
   getWalletInfo(): any;
   download(): any;
   upload(): any;
@@ -15,6 +17,8 @@ export interface ISimpleWallet {
 
 export class SimpleWallet implements ISimpleWallet {
   public cashAddress = '';
+  public balance = 0;
+  public unconfirmedBalance = 0;
   public mnemonic = '';
   public address = '';
   public HdPath = '';

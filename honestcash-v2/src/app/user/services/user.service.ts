@@ -6,10 +6,12 @@ import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/aut
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';
 import User from '../models/user';
-import {AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from '../../auth/services/auth.service';
 import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {UserLoaded} from '../store/user.actions';
+
+export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
+export const LOCAL_USER_ID_KEY = 'HC_USER_ID';
 
 export const API_ENDPOINTS = {
   getCurrentUser: `/me`,
@@ -18,7 +20,7 @@ export const API_ENDPOINTS = {
 @Injectable({providedIn: 'root'})
 export class UserService {
 
-  private token = '';
+  private token: string;
   private userId: number;
   private readonly isPlatformBrowser: boolean;
 
@@ -28,24 +30,21 @@ export class UserService {
     private store: Store<AppStates>,
     private router: Router,
     private http: HttpService,
-    private authService: AuthService,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
-  public init(token?: string, _user?: User) {
-    if (token) {
-      this.setToken(token);
-      if (_user) {
-        this.setUserId(_user.id);
-        this.store.dispatch(new UserLoaded({user: _user}));
+  public init(payload?: {token?: string, user?: User}) {
+    if (payload && payload.token) {
+      this.setToken(payload.token);
+      if (payload.user) {
+        this.setUserId(payload.user.id);
+        this.store.dispatch(new UserLoaded({user: payload.user}));
       }
-      this.authService.authenticate();
     } else if (this.getToken()) {
       this.getCurrentUser().subscribe((user: User) => {
         this.store.dispatch(new UserLoaded({user}));
         this.setUserId(user.id);
-        this.authService.authenticate();
       });
     }
   }

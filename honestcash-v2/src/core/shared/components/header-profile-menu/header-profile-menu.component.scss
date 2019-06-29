@@ -9,3 +9,23 @@
 .buttons-wrapper {
   margin-top: 10px;
 }
+
+:host {
+
+  $borderColor: #e7e7e7;
+  $borderRadius: .25rem; // radius of bootstrap to match
+  border: 1px solid $borderColor;
+  padding-right: .6em;
+  padding-left: 0px !important;
+  border-radius: 10rem;
+
+  ::ng-deep {
+    .nav-link {
+      padding: 0px !important;
+    }
+
+    .dropdown-toggle::after {
+      vertical-align: 0.155em;
+    }
+  }
+}

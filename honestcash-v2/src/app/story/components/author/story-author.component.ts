@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostBinding, Input, OnInit} from '@angular/core';
 import Story from '../../models/story';
 
 @Component({
@@ -7,6 +7,7 @@ import Story from '../../models/story';
   styleUrls: ['./story-author.component.scss']
 })
 export class StoryAuthorComponent implements OnInit {
+  @HostBinding('class') public class = 'row mt-5';
   @Input() public story: Story;
   constructor() { }
 

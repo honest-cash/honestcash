@@ -13,17 +13,22 @@ import {StoryDetailsComponent} from './components/details/story-details.componen
 import {StoryCommentCardComponent} from './components/comment-card/story-comment-card.component';
 import {StoryCommentsComponent} from './components/comments/story-comments.component';
 import {SharedModule} from '../../core/shared.module';
-import {StoryContainerComponent} from './story-container.component';
 import {StoryActionsComponent} from './components/actions/story-actions.component';
 import {StoryShareButtonsComponent} from './components/share-buttons/story-share-buttons.component';
 import {StoryPaywallCallToActionComponent} from './components/paywall-call-to-action/paywall-call-to-action.component';
 import {StorySharedModule} from './story-shared.module';
 import {StoryLockedBodyComponent} from './components/locked-body/locked-body.component';
-import {StoryComponent} from './components/story/story.component';
+import {StoryComponent} from './story.component';
+import {StoryActionsTwoComponent} from './components/actions-2/story-actions-two.component';
+import {StoryUnlockButtonComponent} from './components/unlock-button/unlock-button.component';
+import {StoryUpvoteButtonTwoComponent} from './components/upvote-button-2/story-upvote-button-two.component';
+import {StoryShareButtonsTwoComponent} from './components/share-buttons-2/story-share-buttons-two.component';
+import {StoryCommentCardActionsComponent} from './components/comment-card-actions/comment-card-actions.component';
+import {StoryCommentCardBodyComponent} from './components/comment-card-body/story-comment-card-body.component';
+import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
 
 @NgModule({
   declarations: [
-    StoryContainerComponent,
     StoryComponent,
     StoryUpvotesComponent,
     StoryUnlocksComponent,
@@ -39,6 +44,13 @@ import {StoryComponent} from './components/story/story.component';
     StoryPayerBadgeComponent,
     StoryPaywallCallToActionComponent,
     StoryLockedBodyComponent,
+    StoryUnlockButtonComponent,
+    StoryUpvoteButtonTwoComponent,
+    StoryActionsTwoComponent,
+    StoryShareButtonsTwoComponent,
+    StoryCommentCardActionsComponent,
+    StoryCommentCardBodyComponent,
+    StoryCommentCardHeaderComponent,
   ],
   imports: [
     StoryRoutingModule,
@@ -47,7 +59,7 @@ import {StoryComponent} from './components/story/story.component';
     SharedModule,
   ],
   providers: [],
-  bootstrap: [StoryContainerComponent]
+  bootstrap: [StoryComponent]
 })
 export class StoryModule {
 }

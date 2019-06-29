@@ -1,15 +1,13 @@
-<div class="editor-paid-section-unlocker__wrapper">
+<div class="story-paywall-call-to-action__wrapper">
   <div class="fadeout"></div>
-  <div class="editor-paid-section-unlocker p-5 text-center w-100">
+  <div class="story-paywall-call-to-action__body p-5 text-center w-100">
     <h3 class="mb-3">CONTINUE READING & SUPPORT {{story.user.username | uppercase}}</h3>
     <p class="mb-4">Honest gives creators the opportunity to generate income from their work. By clicking on the button
       below, you'll
-      be empowering <b>{{story.user.username}}</b> to create more content and helping HonestCash.</p>
+      be empowering <b>{{story.user.username}}</b> to create more content and also helping HonestCash.</p>
     <div class="row">
       <div class="col-6 mx-auto">
-        <button type="button" class="btn btn-md btn-block badge-pill btn-warning">
-          <b class="text-uppercase text-white">Unlock Now for {{story.paidSectionCost || 0.001}} BCH</b>
-        </button>
+        <story-unlock-button [cost]="story.paidSectionCost"></story-unlock-button>
       </div>
     </div>
   </div>

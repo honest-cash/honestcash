@@ -2,7 +2,14 @@ import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable, of} from 'rxjs';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
-import {WalletActionTypes, WalletCleanup, WalletGenerated, WalletSetup, WalletSetupFailed} from './wallet.actions';
+import {
+  WalletActionTypes,
+  WalletBalanceUpdated,
+  WalletCleanup,
+  WalletGenerated,
+  WalletSetup,
+  WalletSetupFailed
+} from './wallet.actions';
 import {WalletService} from '../services/wallet.service';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';

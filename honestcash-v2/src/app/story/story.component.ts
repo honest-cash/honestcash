@@ -1,14 +1,15 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import Story from '../../models/story';
-import {Upvote} from '../../models/upvote';
-import {Unlock} from '../../models/unlock';
-import User from '../../../user/models/user';
+import {Component, HostBinding, Input, OnDestroy, OnInit} from '@angular/core';
+import Story from './models/story';
+import {Upvote} from './models/upvote';
+import {Unlock} from './models/unlock';
+import User from '../user/models/user';
 import {Observable, Subscription} from 'rxjs';
-import {UserState} from '../../../user/store/user.state';
+import {UserState} from '../user/store/user.state';
 import {Store} from '@ngrx/store';
-import {AppStates, selectUserState} from '../../../app.states';
+import {AppStates, selectUserState} from '../app.states';
 import {ActivatedRoute} from '@angular/router';
-import {StoryService} from '../../services/story.service';
+import {StoryService} from './services/story.service';
+import {WalletService} from '../wallet/services/wallet.service';
 
 @Component({
   selector: 'story',
@@ -16,6 +17,7 @@ import {StoryService} from '../../services/story.service';
   styleUrls: ['./story.component.scss']
 })
 export class StoryComponent implements OnInit, OnDestroy {
+  @HostBinding('class') public class = 'd-flex flex-column justify-content-center';
   public story: Story;
   public comments: Story[];
   public upvotes: Upvote[];
@@ -29,10 +31,12 @@ export class StoryComponent implements OnInit, OnDestroy {
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
     private storyService: StoryService,
+    private walletService: WalletService,
   ) {
+    //this.walletService.updateWalletBalances();
     this.user$ = this.store.select(selectUserState);
     this.activatedRoute.params.subscribe(params => {
-      this.storyService.getStoryWithDetails(params.storyId).subscribe((completeStory: any) => {
+      this.storyService.getStoryWithDetails(params.storyIdOrAlias).subscribe((completeStory: any) => {
         const story = completeStory[0];
         const comments = completeStory[1];
         const upvotes = completeStory[2];

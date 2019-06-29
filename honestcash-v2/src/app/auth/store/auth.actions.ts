@@ -22,9 +22,10 @@ export enum AuthActionTypes {
   RESET_PASSWORD_REQUEST = '[Auth] Reset Password',
   RESET_PASSWORD_REQUEST_SUCCESS = '[Auth] Reset Password Request Success',
   RESET_PASSWORD_REQUEST_FAILURE = '[Auth] Reset Password Request Failure',
+  AUTH_SETUP = '[Auth] Auth Setup',
+  AUTH_CLEANUP = '[Auth] Auth Cleanup',
   LOGOUT = '[Auth] Logout',
   ROOT_REDIRECT = '[Auth] Root Redirect',
-  AUTH_SETUP = '[Auth] Auth setup',
 }
 
 export class LogIn implements Action {
@@ -109,6 +110,10 @@ export class AuthSetup implements Action {
   public readonly type = AuthActionTypes.AUTH_SETUP;
 }
 
+export class AuthCleanup implements Action {
+  public readonly type = AuthActionTypes.AUTH_CLEANUP;
+}
+
 export class LogOut implements Action {
   public readonly type = AuthActionTypes.LOGOUT;
 }
@@ -130,6 +135,7 @@ export type All =
   | ResetPasswordRequest
   | ResetPasswordRequestSuccess
   | AuthSetup
+  | AuthCleanup
   | ResetPasswordRequestFailure
   | LogOut
   | RootRedirect;

@@ -9,8 +9,8 @@ const log = new Logger('AuthorizedGuard');
 
 @Injectable({providedIn: 'root'})
 export class AuthorizedGuard implements CanActivate {
-  readonly isPlatformBrowser: boolean;
-  readonly isPlatformServer: boolean;
+  private readonly isPlatformBrowser: boolean;
+  private readonly isPlatformServer: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -21,7 +21,7 @@ export class AuthorizedGuard implements CanActivate {
     this.isPlatformServer = isPlatformServer(this.platformId);
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.isPlatformBrowser) {
       if (this.authenticationService.hasAuthorization()) {
         return true;

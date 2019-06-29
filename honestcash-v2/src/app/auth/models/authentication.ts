@@ -71,3 +71,7 @@ export interface CheckPasswordContext {
 export interface CheckPasswordSuccessResponse {
   isValid: boolean;
 }
+
+export interface ChangePasswordPayload extends ResetPasswordContext {
+  mnemonicEncrypted: string;
+}

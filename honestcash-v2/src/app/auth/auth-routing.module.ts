@@ -22,26 +22,31 @@ const routes: Routes = [
       {
         path: 'welcome',
         component: AuthWelcomeComponent,
-        canActivate: [UnauthorizedGuard]
       },
       {
         path: 'login',
         component: AuthLoginComponent,
-        canActivate: [UnauthorizedGuard],
       },
-      {path: 'logout', component: AuthLogoutComponent, canActivate: [AuthorizedGuard]},
+      {
+        path: 'logout',
+        component: AuthLogoutComponent
+      },
       {
         path: 'signup',
         component: AuthSignupComponent,
-        canActivate: [UnauthorizedGuard],
       },
       {
         path: 'reset-password-request/:resetCode',
         component: AuthResetPasswordVerifyComponent,
-        canActivate: [UnauthorizedGuard]
       },
-      {path: 'reset-password-request', component: AuthResetPasswordRequestComponent, canActivate: [UnauthorizedGuard]},
-      {path: 'thank-you', component: AuthThankYouComponent, canActivate: [AuthorizedGuard]},
+      {
+        path: 'reset-password-request',
+        component: AuthResetPasswordRequestComponent,
+      },
+      {
+        path: 'thank-you',
+        component: AuthThankYouComponent,
+      },
     ]
   },
 ];

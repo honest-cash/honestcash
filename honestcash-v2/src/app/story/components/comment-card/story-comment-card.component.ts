@@ -8,7 +8,7 @@ import Story from '../../models/story';
 })
 export class StoryCommentCardComponent implements OnInit {
   @Input() public comment: Story;
-  @HostBinding('class') public class = 'col-12 mb-2';
+  @HostBinding('class') public class = 'col-12 p-2';
   constructor() { }
 
   ngOnInit() {

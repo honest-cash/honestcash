@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {StoryContainerComponent} from './story-container.component';
-import {StoryComponent} from './components/story/story.component';
+import {StoryComponent} from './story.component';
 
 /**
  * - More specific routes should come first
@@ -9,22 +8,8 @@ import {StoryComponent} from './components/story/story.component';
 const routes: Routes = [
   {
     path: '',
-    component: StoryContainerComponent,
-    children: [
-      {
-        path: ':username/:storyIdOrAlias',
-        component: StoryComponent,
-      },
-      {
-        path: 'post/:storyIdOrAlias',
-        component: StoryComponent,
-      },
-      {
-        path: 'post/:username/:storyIdOrAlias',
-        component: StoryComponent,
-      },
-    ]
-  }
+    component: StoryComponent,
+  },
 ];
 
 @NgModule({

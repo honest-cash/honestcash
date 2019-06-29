@@ -8,6 +8,9 @@ import {SharedHeaderComponent} from './shared/components/header/header.component
 import {ShardHeaderProfileMenuComponent} from './shared/components/header-profile-menu/header-profile-menu.component';
 import {SharedNotFoundComponent} from './shared/pages/not-found/not-found.component';
 import {SharedLoadingIndicatorComponent} from './shared/components/loading-indicator/loading-indicator.component';
+import {WalletSharedModule} from '../app/wallet/wallet-shared.module';
+import {SharedReceiptComponent} from './shared/components/receipt/receipt.component';
+import {QRCodeModule} from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -17,11 +20,17 @@ import {SharedLoadingIndicatorComponent} from './shared/components/loading-indic
     SharedHonestLogoComponent,
     SharedLoadingIndicatorComponent,
     SharedNotFoundComponent,
+    SharedReceiptComponent,
   ],
   imports: [
     CommonModule,
     FontAwesomeModule,
     NgbModule,
+    WalletSharedModule,
+    QRCodeModule,
+  ],
+  entryComponents: [
+    SharedReceiptComponent,
   ],
   exports: [
     CommonModule,
@@ -32,6 +41,7 @@ import {SharedLoadingIndicatorComponent} from './shared/components/loading-indic
     ShardHeaderProfileMenuComponent,
     SharedHonestLogoComponent,
     SharedLoadingIndicatorComponent,
+    SharedReceiptComponent,
   ]
 })
 export class SharedModule {

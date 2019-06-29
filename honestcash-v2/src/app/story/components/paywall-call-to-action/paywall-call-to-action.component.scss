@@ -1,14 +1,18 @@
 :host {
 
   ::ng-deep {
-    .editor-paid-section-unlocker__wrapper {
-
+    .story-paywall-call-to-action__wrapper {
+      background-image: url("../../../../assets/images/undraw/unlock.svg");
       background-color: #fafafa;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position-x: center;
+      box-shadow: inset 0px 0px 277px 100px #fafafa;
 
-      .editor-paid-section-unlocker {
+      story-paywall-call-to-action__body {
         border: 1px solid transparent;
         border-radius: 4px;
-        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
         font-size: 14px;
       }
 

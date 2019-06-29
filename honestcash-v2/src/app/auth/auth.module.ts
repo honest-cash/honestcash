@@ -15,7 +15,7 @@ import {AuthLoadingSubmitButtonComponent} from '../auth/components/loading-submi
 import {AuthorizedGuard} from 'core/shared/guards/authorized.guard';
 import {UnauthorizedGuard} from 'core/shared/guards/unauthorized.guard';
 import {AuthThankYouComponent} from '../auth/pages/thank-you/thank-you.component';
-import {AuthForbiddenUsernameValidatorDirective} from '../auth/shared/directives/forbidden-username.directive';
+import {AuthForbiddenUsernameValidatorDirective} from './directives/forbidden-username.directive';
 import {AuthResetPasswordVerifyComponent} from '../auth/pages/reset-password-verify/reset-password-verify.component';
 import {AuthHeaderComponent} from './components/header/header.component';
 import {SharedModule} from '../../core/shared.module';

@@ -30,6 +30,7 @@ export class EditorHeaderComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.userSub = this.store.select(selectUserState).subscribe((userState: UserState) => {
+      console.log('user', this.user);
       this.user = userState.user;
     });
   }

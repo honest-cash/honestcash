@@ -20,11 +20,8 @@ export class UserEffects {
   public UserSetup: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.USER_SETUP),
     map((action: UserSetup) => action.payload),
-    tap((payload?: LoginSuccessResponse | SignupSuccessResponse) => {
-      if (payload) {
-        return this.userService.init(payload.token, payload.user);
-      }
-      this.userService.init();
+    tap((payload?: LoginSuccessResponse) => {
+      this.userService.init(payload);
     }),
   );
 

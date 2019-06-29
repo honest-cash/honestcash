@@ -1,0 +1,2 @@
+<span *ngIf="status === WALLET_SETUP_STATUS.Generated">Balance: {{balance}}$</span>
+<span *ngIf="status !== WALLET_SETUP_STATUS.Generated && status !== WALLET_SETUP_STATUS.Errored">Loading Balance...</span>
