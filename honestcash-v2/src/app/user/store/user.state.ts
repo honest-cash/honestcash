@@ -1,7 +1,7 @@
 import User from 'app/user/models/user';
 
 export interface UserState {
-  user: User | null;
+  user: User;
 }
 
 export const initialUserState: UserState = {

@@ -1,6 +1,5 @@
 import Story from '../models/story';
-import {STORY_PROPERTIES} from './story.actions';
-import {ITransaction} from '../../../core/shared/models/transaction';
+import {ITransaction, TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
 
@@ -8,7 +7,7 @@ export interface StoryState {
   isLoading: boolean;
   isPropertySaving: boolean;
   pendingTransaction: {
-    type: STORY_PROPERTIES;
+    type: TRANSACTION_TYPES;
     transaction: ITransaction;
     data: Upvote | Unlock | Story;
     status: 'pending' | 'success' | 'fail'

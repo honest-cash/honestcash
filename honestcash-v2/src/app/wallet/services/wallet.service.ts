@@ -10,8 +10,10 @@ import {ISimpleWallet} from '../models/simple-wallet';
 import {ScriptService} from 'ngx-script-loader';
 import {map} from 'rxjs/operators';
 import {WalletBalanceUpdated, WalletStatusUpdated} from '../store/wallet.actions';
-import {AppStates} from '../../app.states';
+import {AppStates, selectWalletState} from '../../app.states';
 import {Store} from '@ngrx/store';
+import {WalletState} from '../store/wallet.state';
+import {WALLET_STATUS} from '../models/status';
 
 interface CoinbaseExchangeResponse {
   data: {
@@ -35,24 +37,13 @@ export const WALLET_DEFAULT_HD_PATH = `m/44'/0'/0'/0/0`;
 
 const simpleBitcoinWalletAssetPath = 'assets/libs/simple-bitcoin-wallet.min.js';
 
-export enum WALLET_SETUP_STATUS {
-  NotInitialized = 'NOT_INITIALIZED',
-  Loaded = 'LOADED',
-  Errored = 'ERRORED',
-  Started = 'STARTED',
-  Initialized = 'INITIALIZED',
-  Generated = 'GENERATED',
-}
-
 declare var SimpleWallet: any;
 
 @Injectable({providedIn: 'root'})
 export class WalletService {
   public wallet: ISimpleWallet;
-  public isSettingUpWallet: Subject<WALLET_SETUP_STATUS> = new AsyncSubject<WALLET_SETUP_STATUS>();
   private logger: Logger;
   private readonly isPlatformBrowser: boolean;
-  private mnemonicEncrypted: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -63,7 +54,9 @@ export class WalletService {
   ) {
     this.logger = new Logger('WalletService');
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
-    this.isSettingUpWallet.next(WALLET_SETUP_STATUS.NotInitialized);
+    this.store.select(selectWalletState).subscribe((walletState: WalletState) => {
+      this.wallet = walletState.wallet;
+    });
   }
 
   public static calculateSHA3Hash(message: string): string {
@@ -85,18 +78,19 @@ export class WalletService {
       .pipe(
         map((response: CoinbaseExchangeResponse) => {
           const rate = response.data.rates[targetCurrency.toUpperCase()];
-          return Number(((Number(rate) * Number(amount))).toFixed(2));
+          return Number(Number((Number(rate) * Number(amount))));
         })
       );
   }
 
   public updateWalletBalance() {
-    this.wallet.getWalletInfo().then(res => {
-      this.convertCurrency(res.balance, 'bch', 'usd').subscribe((balance: number) => {
-        console.log('balance2', balance);
-        this.store.dispatch(new WalletBalanceUpdated(balance));
+    if (this.wallet) {
+      this.wallet.getWalletInfo().then(res => {
+        this.convertCurrency(res.balance, 'bch', 'usd').subscribe((balance: number) => {
+          this.store.dispatch(new WalletBalanceUpdated(balance));
+        });
       });
-    });
+    }
   }
 
   public createWallet(password: string): ISimpleWallet {
@@ -127,11 +121,11 @@ export class WalletService {
   public loadWallet(payload?: LoginSuccessResponse): Observable<ISimpleWallet> {
     return defer(
       async () => {
-        this.store.dispatch(new WalletStatusUpdated(WALLET_SETUP_STATUS.Started));
+        this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Started));
         await this.scriptService.loadScript(simpleBitcoinWalletAssetPath).toPromise();
-        this.store.dispatch(new WalletStatusUpdated(WALLET_SETUP_STATUS.Initialized));
+        this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Initialized));
         let simpleWallet: ISimpleWallet;
-        let shouldMakeRequest = false;
+
         if (payload) {
           if ((<LoginSuccessResponse>payload).wallet && (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted) {
             // if there is a payload and a wallet attached
@@ -142,7 +136,7 @@ export class WalletService {
               payload.password
             );
             simpleWallet.mnemonicEncrypted = this.encrypt(payload.wallet.mnemonic, payload.password);
-            shouldMakeRequest = true;
+            this.http.post(API_ENDPOINTS.setWallet, {mnemonicEncrypted: simpleWallet.mnemonicEncrypted});
           }
         } else {
           if (this.getWalletMnemonic()) {
@@ -155,19 +149,14 @@ export class WalletService {
         }
 
         if (!simpleWallet) {
-          this.store.dispatch(new WalletStatusUpdated(WALLET_SETUP_STATUS.Errored));
-          throwError(WALLET_SETUP_STATUS.Errored);
+          this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Errored));
+          throwError(WALLET_STATUS.Errored);
         }
 
-        await this.setWallet(simpleWallet, shouldMakeRequest);
-        this.store.dispatch(new WalletStatusUpdated(WALLET_SETUP_STATUS.Loaded));
+        this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Loaded));
         return simpleWallet;
       }
     );
-  }
-
-  public getWalletSetupStatus(): Observable<WALLET_SETUP_STATUS> {
-    return this.isSettingUpWallet.asObservable();
   }
 
   public getWalletMnemonic(): string | void {
@@ -176,24 +165,10 @@ export class WalletService {
     }
   }
 
-  public setWallet(wallet: ISimpleWallet, shouldMakeRequest: boolean) {
-    const requests: any = [
-      of({}) // do not remove for forkJoin to succeed
-    ];
-
-    if (shouldMakeRequest) {
-      requests.push(this.http.post(API_ENDPOINTS.setWallet, {mnemonicEncrypted: wallet.mnemonicEncrypted}));
+  public setWallet(wallet: ISimpleWallet) {
+    if (this.isPlatformBrowser) {
+      this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
     }
-    return forkJoin(
-      ...requests
-    ).subscribe(() => {
-      if (this.isPlatformBrowser) {
-        this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
-      }
-      this.wallet = wallet;
-      this.mnemonicEncrypted = wallet.mnemonicEncrypted;
-      this.updateWalletBalance();
-    });
   }
 
   public unsetWallet(): void {

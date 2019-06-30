@@ -7,7 +7,7 @@ import {
   faChevronDown,
   faChevronLeft,
   faChevronRight,
-  faChevronUp,
+  faChevronUp, faCommentMedical,
   faComments, faCreditCard,
   faExclamationCircle,
   faExclamationTriangle,
@@ -26,6 +26,7 @@ import {
   faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
 import {faBitcoin, faFacebook, faReddit} from '@fortawesome/free-brands-svg-icons';
+import {faCircle} from '@fortawesome/free-solid-svg-icons/faCircle';
 
 @NgModule({
   declarations: [],
@@ -56,6 +57,7 @@ export class FontAwesomeModule {
     library.add(faWindowClose);
     library.add(faChevronLeft);
     library.add(faChevronRight);
+    library.add(faCommentMedical);
     library.add(faHeading);
     library.add(faAlignLeft);
     library.add(faTags);
@@ -71,5 +73,6 @@ export class FontAwesomeModule {
     library.add(faKey);
     library.add(faAt);
     library.add(faRedoAlt);
+    library.add(faCircle);
   }
 }

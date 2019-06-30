@@ -15,6 +15,7 @@ import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/aut
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {UserCleanup} from '../../user/store/user.actions';
 import {ISimpleWallet} from '../models/simple-wallet';
+import {AuthCleanup} from '../../auth/store/auth.actions';
 
 @Injectable()
 export class WalletEffects {
@@ -45,10 +46,20 @@ export class WalletEffects {
     ),
   );
 
+  @Effect({dispatch: false})
+  public WalletGenerated: Observable<any> = this.actions.pipe(
+    ofType(WalletActionTypes.WALLET_GENERATED),
+    map((action: WalletGenerated) => action.payload.wallet),
+    tap((wallet: ISimpleWallet) => {
+      this.walletService.setWallet(wallet);
+      this.walletService.updateWalletBalance();
+    }),
+  );
+
   @Effect()
   public WalletSetupFailed: Observable<any> = this.actions.pipe(
     ofType(WalletActionTypes.WALLET_SETUP_FAILED),
-    switchMap(() => [new UserCleanup(), new WalletCleanup()]),
+    switchMap(() => [new UserCleanup(), new WalletCleanup(), new AuthCleanup()]),
   );
 
   @Effect({dispatch: false})

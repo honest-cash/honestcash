@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
 import {ISimpleWallet} from '../models/simple-wallet';
-import {WALLET_SETUP_STATUS} from '../services/wallet.service';
+import {WALLET_STATUS} from '../models/status';
 
 export enum WalletActionTypes {
   WALLET_SETUP = '[Wallet] Wallet Setup',
@@ -44,7 +44,7 @@ export class WalletBalanceUpdated implements Action {
 export class WalletStatusUpdated implements Action {
   public readonly type = WalletActionTypes.WALLET_STATUS_UPDATED;
 
-  constructor(public payload: WALLET_SETUP_STATUS) {
+  constructor(public payload: WALLET_STATUS) {
   }
 
 }

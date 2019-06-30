@@ -1,4 +1,4 @@
-import {Component, HostBinding, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, HostBinding, Input, OnInit, Output} from '@angular/core';
 import Story from '../../models/story';
 
 @Component({
@@ -9,9 +9,14 @@ import Story from '../../models/story';
 export class StoryCommentCardActionsComponent implements OnInit {
   @Input() public comment: Story;
   @HostBinding('class') public class = 'row p-3';
+  @Output() public hasReplyClicked = new EventEmitter();
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
+  }
+
+  public replyClicked(commentId: number) {
+    this.hasReplyClicked.next(commentId);
   }
 
 }

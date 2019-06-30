@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
 import {isPlatformBrowser} from '@angular/common';
@@ -17,7 +17,7 @@ export interface INgxChipsTag {
   templateUrl: './story-tags-selection.component.html',
   styleUrls: ['./story-tags-selection.component.scss']
 })
-export class EditorStoryTagsSelectionComponent implements OnInit {
+export class EditorStoryTagsSelectionComponent implements OnInit, OnDestroy {
 
   public isPlatformBrowser: boolean;
   public _hashtags: Hashtag[] | INgxChipsTag[] | string;
@@ -44,6 +44,12 @@ export class EditorStoryTagsSelectionComponent implements OnInit {
 
   public onTagChange(tags: INgxChipsTag[]) {
     this.store.dispatch(new EditorStoryPropertyChange({property: EDITOR_STORY_PROPERTIES.Hashtags, value: tags}));
+  }
+
+  public ngOnDestroy() {
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
+    }
   }
 
 }

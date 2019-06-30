@@ -1,2 +1,2 @@
-<span *ngIf="balance">Balance: {{balance}}$</span>
-<span *ngIf="!balance">Loading Balance...</span>
+<span *ngIf="balance !== null">Balance: {{balance}}$</span>
+<span *ngIf="balance === null">Loading Balance...</span>

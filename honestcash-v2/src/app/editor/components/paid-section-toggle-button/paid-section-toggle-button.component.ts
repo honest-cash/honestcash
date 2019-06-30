@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EditorStoryPropertyChange} from '../../store/editor.actions';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
@@ -12,7 +12,7 @@ import {EditorState} from '../../store/editor.state';
   templateUrl: './paid-section-toggle-button.component.html',
   styleUrls: ['./paid-section-toggle-button.component.scss']
 })
-export class EditorPaidSectionToggleButtonComponent implements OnInit {
+export class EditorPaidSectionToggleButtonComponent implements OnInit, OnDestroy {
 
   public story: Story;
   private editor$: Observable<EditorState>;
@@ -33,6 +33,12 @@ export class EditorPaidSectionToggleButtonComponent implements OnInit {
 
   public onChangeHasPaidSection() {
     this.store.dispatch(new EditorStoryPropertyChange({property: EDITOR_STORY_PROPERTIES.HasPaidSection, value: this.story.hasPaidSection}));
+  }
+
+  public ngOnDestroy() {
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
+    }
   }
 
 }

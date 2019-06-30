@@ -1,10 +1,12 @@
-export const UpvoteTransactionStrategy = (tipAmountSat: number, lupvotes, author) => {
+import {ITRansactionResult} from '../models/transaction';
+
+export const UpvoteTransactionStrategy = (tipAmountSat: number, lupvotes, author): ITRansactionResult[] => {
   let receivers = [];
 
   const authorAmountPart = 0.4;
 
   // filter only users with BCH address for receiving tips
-  const upvotes = lupvotes.filter(upvote => upvote.user && upvote.user.addressBCH);
+  const upvotes = lupvotes.filter(_upvote => _upvote.user && _upvote.user.addressBCH);
 
   let authorAmount;
 

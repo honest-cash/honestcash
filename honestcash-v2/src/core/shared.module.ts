@@ -11,7 +11,11 @@ import {SharedLoadingIndicatorComponent} from './shared/components/loading-indic
 import {WalletSharedModule} from '../app/wallet/wallet-shared.module';
 import {SharedReceiptComponent} from './shared/components/receipt/receipt.component';
 import {QRCodeModule} from 'angularx-qrcode';
-import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
+import {SharedTransactionButtonComponent} from './shared/components/transaction-button/transaction-button.component';
+import {TransactionService} from './shared/services/transaction.service';
+import {WalletService} from '../app/wallet/services/wallet.service';
+import {StoryService} from '../app/story/services/story.service';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -22,6 +26,7 @@ import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
     SharedLoadingIndicatorComponent,
     SharedNotFoundComponent,
     SharedReceiptComponent,
+    SharedTransactionButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +34,12 @@ import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
     NgbModule,
     WalletSharedModule,
     QRCodeModule,
+    ToastrModule.forRoot(),
+  ],
+  providers: [
+    TransactionService,
+    WalletService,
+    StoryService,
   ],
   entryComponents: [
     SharedReceiptComponent,
@@ -43,6 +54,7 @@ import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
     SharedHonestLogoComponent,
     SharedLoadingIndicatorComponent,
     SharedReceiptComponent,
+    SharedTransactionButtonComponent,
   ]
 })
 export class SharedModule {

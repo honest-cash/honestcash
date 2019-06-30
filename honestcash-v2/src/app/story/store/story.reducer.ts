@@ -1,7 +1,7 @@
-import {All, STORY_PROPERTIES, StoryActionTypes} from './story.actions';
+import {All, StoryActionTypes} from './story.actions';
 import {Logger} from '../../../core/shared/services/logger.service';
 import {initialStoryState, StoryState} from './story.state';
-import Story from '../models/story';
+import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
 
 const logger = new Logger();
 
@@ -36,30 +36,41 @@ export function reducer(state = initialStoryState, action: All): StoryState {
       const story = state.story;
 
       let property;
-      if (action.payload.property === STORY_PROPERTIES.Unlock) {
+      let propertyData;
+      if (action.payload.property === TRANSACTION_TYPES.Unlock) {
         story.unlockCount += 1;
         story.body = action.payload.story.body;
         property = 'unlocks';
-      } else if (action.payload.property === STORY_PROPERTIES.Upvote) {
+        propertyData = [
+          ...state[property],
+          {user: state.pendingTransaction.transaction.sender},
+        ];
+      } else if (action.payload.property === TRANSACTION_TYPES.Upvote) {
         story.upvoteCount += 1;
         property = 'upvotes';
-      } else if (action.payload.property === STORY_PROPERTIES.Comment) {
+        propertyData = [
+          ...state[property],
+          {user: state.pendingTransaction.transaction.sender},
+        ];
+      } else if (action.payload.property === TRANSACTION_TYPES.Comment) {
         story.responseCount += 1;
         property = 'comments';
+        propertyData = state.pendingTransaction.data;
+        propertyData = [
+          state.pendingTransaction.data, // add comment to top to make it look recent
+          ...state[property],
+        ];
       }
 
-      const propertyData = state.pendingTransaction.data;
-
-      return {
+      const nextState = {
         ...state,
         isPropertySaving: false,
         pendingTransaction: undefined,
         story,
-        [property]: [
-          propertyData,
-          ...state[property],
-        ]
+        [property]: propertyData,
       };
+
+      return nextState;
     }
     default: {
       return state;

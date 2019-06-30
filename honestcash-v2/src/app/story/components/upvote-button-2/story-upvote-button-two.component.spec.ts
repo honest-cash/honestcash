@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainStoryUpvotesComponent } from './story-upvote-button-two.component';
+import { StoryUpvoteButtonTwoComponent } from './story-upvote-button-two.component';
 
-describe('StoryUpvotesComponent', () => {
-  let component: MainStoryUpvotesComponent;
-  let fixture: ComponentFixture<MainStoryUpvotesComponent>;
+describe('StoryUpvoteButtonTwoComponent', () => {
+  let component: StoryUpvoteButtonTwoComponent;
+  let fixture: ComponentFixture<StoryUpvoteButtonTwoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainStoryUpvotesComponent ]
+      declarations: [ StoryUpvoteButtonTwoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainStoryUpvotesComponent);
+    fixture = TestBed.createComponent(StoryUpvoteButtonTwoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

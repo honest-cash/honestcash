@@ -10,5 +10,5 @@ import {Unlock} from '../../models/unlock';
 export class StoryUnlocksComponent{
   @Input() public story: Story;
   @Input() public unlocks: Unlock[];
-  public isCollapsed = true;
+  public isCollapsed = false;
 }

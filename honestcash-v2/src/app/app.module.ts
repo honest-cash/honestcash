@@ -38,7 +38,6 @@ import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
     StoreModule.forRoot(reducers, {metaReducers}),
     EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, EditorEffects, StoryEffects, WalletEffects]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
-    ToastrModule.forRoot(),
   ],
   providers: [
     {

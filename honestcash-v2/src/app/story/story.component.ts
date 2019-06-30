@@ -34,7 +34,6 @@ export class StoryComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
-    private storyService: StoryService,
   ) {
     this.user$ = this.store.select(selectUserState);
     this.story$ = this.store.select(selectStoryState);
@@ -62,6 +61,9 @@ export class StoryComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     if (this.userSub) {
       this.userSub.unsubscribe();
+    }
+    if (this.storySub) {
+      this.storySub.unsubscribe();
     }
   }
 }

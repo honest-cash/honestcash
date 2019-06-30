@@ -1,20 +1,14 @@
 import Story from '../models/story';
 import {FailedResponse} from '../../auth/models/authentication';
 import {Action} from '@ngrx/store';
-import {ITransaction} from '../../../core/shared/models/transaction';
+import {ITransaction, TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
 import {Unlock} from '../models/unlock';
 import {Upvote} from '../models/upvote';
 
 export interface StoryPropertySaveContext {
   data: Upvote | Unlock | Story;
-  property: STORY_PROPERTIES;
+  property: TRANSACTION_TYPES;
   transaction: ITransaction;
-}
-
-export enum STORY_PROPERTIES {
-  Upvote = 'UPVOTE',
-  Unlock = 'UNLOCK',
-  Comment = 'COMMENT',
 }
 
 export enum StoryActionTypes {
@@ -57,7 +51,7 @@ export class StoryPropertySave implements Action {
 export class StoryPropertySaveSuccess implements Action {
   public readonly type = StoryActionTypes.STORY_PROPERTY_SAVE_SUCCESS;
 
-  constructor(public payload: {story: Story, property: STORY_PROPERTIES}) {
+  constructor(public payload: {story: Story, property: TRANSACTION_TYPES}) {
   }
 }
 

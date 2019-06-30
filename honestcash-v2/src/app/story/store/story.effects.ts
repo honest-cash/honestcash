@@ -4,7 +4,6 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable, of} from 'rxjs';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {
-  STORY_PROPERTIES,
   StoryActionTypes,
   StoryLoad,
   StoryLoadFailure,
@@ -20,6 +19,7 @@ import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';
 import {StoryService} from '../services/story.service';
 import Story from '../models/story';
+import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
 
 @Injectable()
 export class StoryEffects {
@@ -65,7 +65,7 @@ export class StoryEffects {
   public StoryPropertySaveSuccess: Observable<any> = this.actions.pipe(
     ofType(StoryActionTypes.STORY_PROPERTY_SAVE_SUCCESS),
     tap((action: StoryPropertySaveSuccess) => {
-      if (action.payload.property !== STORY_PROPERTIES.Comment) {
+      if (action.payload.property !== TRANSACTION_TYPES.Comment) {
         this.walletService.updateWalletBalance();
       }
     })

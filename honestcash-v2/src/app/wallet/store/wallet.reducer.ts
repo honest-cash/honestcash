@@ -1,7 +1,7 @@
 import {All, WalletActionTypes} from './wallet.actions';
 import {initialWalletState, WalletState} from './wallet.state';
 import {Logger} from '../../../core';
-import {WALLET_SETUP_STATUS} from '../services/wallet.service';
+import {WALLET_STATUS} from '../models/status';
 
 const logger = new Logger();
 
@@ -18,7 +18,7 @@ export function reducer(state = initialWalletState, action: All): WalletState {
       return {
         ...state,
         wallet: action.payload.wallet,
-        status: WALLET_SETUP_STATUS.Generated
+        status: WALLET_STATUS.Generated
       };
     }
     case WalletActionTypes.WALLET_BALANCE_UPDATED: {

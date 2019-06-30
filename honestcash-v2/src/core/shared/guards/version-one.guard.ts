@@ -3,13 +3,14 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 
 import {Logger} from '../services/logger.service';
 import {AuthService} from '../../../app/auth/services/auth.service';
-import {WALLET_SETUP_STATUS, WalletService} from '../../../app/wallet/services/wallet.service';
+import {WalletService} from '../../../app/wallet/services/wallet.service';
 import {WindowToken} from '../helpers/window.helper';
 import {EnvironmentToken} from '../helpers/environment.helper';
 import {Environment} from '../../../environments/environment';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {WALLET_STATUS} from '../../../app/wallet/models/status';
 
 const log = new Logger('VersionOneGuard');
 
@@ -52,26 +53,6 @@ export class VersionOneGuard implements CanActivate {
       // by then localStorage is defined and if the user exists, user will see the correct route
       /* istanbul ignore next*/
       return true;
-    }
-  }
-
-  public canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    if (this.isPlatformBrowser) {
-      return this.walletService.getWalletSetupStatus()
-      .pipe(
-        map((status: WALLET_SETUP_STATUS) => {
-          if (status === WALLET_SETUP_STATUS.Initialized) {
-            return true;
-          }
-          return false;
-        }),
-      );
-    }
-
-    if (this.isPlatformServer) {
-      // to cheat SSR until client takes over
-      /* istanbul ignore next*/
-      return of(true);
     }
   }
 

@@ -2,14 +2,14 @@
 <div *ngIf="!isLoading" class="mb-5 story">
   <story-title [story]="story"></story-title>
   <story-details [story]="story"></story-details>
-  <story-body *ngIf="story.paidSectionCost === 0" [story]="story"></story-body>
-  <story-locked-body *ngIf="story.paidSectionCost > 0" [story]="story"></story-locked-body>
+  <story-body *ngIf="!story.hasPaidSection" [story]="story"></story-body>
+  <story-locked-body *ngIf="story.hasPaidSection" [story]="story"></story-locked-body>
   <story-author [story]="story"></story-author>
   <story-actions-two [story]="story"></story-actions-two>
   <hr class="my-5">
   <story-upvotes [upvotes]="upvotes" [story]="story"></story-upvotes>
-  <hr class="my-5" *ngIf="story.paidSectionCost > 0">
-  <story-unlocks *ngIf="story.paidSectionCost > 0" [unlocks]="unlocks" [story]="story"></story-unlocks>
+  <hr class="my-5" *ngIf="story.hasPaidSection">
+  <story-unlocks *ngIf="story.hasPaidSection" [unlocks]="unlocks" [story]="story"></story-unlocks>
   <hr class="my-5">
   <story-comments [comments]="comments" [story]="story"></story-comments>
 </div>

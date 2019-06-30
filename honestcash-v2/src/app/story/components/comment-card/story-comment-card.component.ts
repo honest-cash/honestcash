@@ -9,9 +9,14 @@ import Story from '../../models/story';
 export class StoryCommentCardComponent implements OnInit {
   @Input() public comment: Story;
   @HostBinding('class') public class = 'col-12 p-2';
+  public shouldShowEditor = false;
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
+  }
+
+  public replyClicked() {
+    this.shouldShowEditor = !this.shouldShowEditor;
   }
 
 }

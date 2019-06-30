@@ -25,17 +25,17 @@ export class EditorParentPostBodyComponent implements OnInit, OnDestroy {
     this.editor$ = this.store.select(selectEditorState);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editorSub = this.editor$.subscribe((editorState: EditorState) => {
       this.story = editorState.story;
     });
   }
 
-  toggleBody() {
+  public toggleBody() {
     this.isBodyOpen = !this.isBodyOpen;
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.editorSub) {
       this.editorSub.unsubscribe();
     }

@@ -29,7 +29,6 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
   @ViewChild('paidSectionElementsWrapperElement') public paidSectionElementsWrapperElement: ElementRef;
   public LINEBREAK_ACTION = LINEBREAK_ACTION;
   public shouldHideElements = true;
-  public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public paidSectionLinebreakEnd: number;
   public story: Story;
   public PAID_SECTION_PRICE_SLIDER_SETTINGS = PAID_SECTION_PRICE_SLIDER_SETTINGS;

@@ -1,4 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {ITransaction, TRANSACTION_TYPES} from '../../models/transaction';
 
 @Component({
   selector: 'shared-receipt',
@@ -7,17 +9,16 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class SharedReceiptComponent implements OnInit {
 
-  @Input() public receivers: any[];
-  @Input() public amount: number;
-  @Input() public txid: string;
+  public transactionType: TRANSACTION_TYPES;
+  public TRANSACTION_TYPES = TRANSACTION_TYPES;
+  public transaction: ITransaction;
   constructor(
-
+    public activeModal: NgbActiveModal
   ) {
 
   }
 
   public ngOnInit() {
-
   }
 
 }

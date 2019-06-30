@@ -1,14 +1,11 @@
-<div class="row mb-3">
+<div class="row mb-3" *ngIf="story && story.user">
   <div class="col">
     Upvote <b>{{story.user.username}}</b>'s story now to show your appreciation.
   </div>
 </div>
 <div class="row mb-5">
   <div class="col d-flex justify-content-center">
-    <button type="button" class="upvote-button text-white font-weight-bold btn btn-lg btn-warning text-uppercase">
-      <div class="amount-dollars">Upvote 10¢</div>
-      <div class="amount-bch">For 0.00023BCH</div>
-    </button>
+    <shared-transaction-button [actionText]="'Upvote'" [actionLoadingText]="'Upvoting...'" [onTransactionComplete]="onTransactionComplete" [transactionType]="TRANSACTION_TYPES.Upvote"></shared-transaction-button>
   </div>
 </div>
 <div class="row">

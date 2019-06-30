@@ -20,7 +20,6 @@ import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 export class EditorCommentButtonComponent implements OnInit, OnDestroy {
   @HostBinding('class') public class = 'd-flex align-items-center mr-4';
   public story: Story;
-  public EDITOR_SAVE_STATUS = EDITOR_STATUS;
   public saveStatus: EDITOR_STATUS;
   public isBodyEmpty = true;
   public canPublishComment = false;
@@ -68,12 +67,6 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     }
   }
 
-  public ngOnDestroy() {
-    if (this.editorSub) {
-      this.editorSub.unsubscribe();
-    }
-  }
-
   public setIsBodyEmpty() {
     this.isBodyEmpty = !this.story.bodyJSON ||
       (this.story.bodyJSON && this.story.bodyJSON.length === 0) ||
@@ -92,5 +85,11 @@ export class EditorCommentButtonComponent implements OnInit, OnDestroy {
     this.canPublishComment = this.saveStatus === EDITOR_STATUS.EditorLoaded ||
       this.saveStatus === EDITOR_STATUS.Saved ||
       this.saveStatus === EDITOR_STATUS.NotSaved;
+  }
+
+  public ngOnDestroy() {
+    if (this.editorSub) {
+      this.editorSub.unsubscribe();
+    }
   }
 }

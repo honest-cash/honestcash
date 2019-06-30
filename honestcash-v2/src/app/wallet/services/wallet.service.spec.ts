@@ -3,7 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../../../core';
 import {mock} from '../../../../mock';
-import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WALLET_SETUP_STATUS, WalletService} from './wallet.service';
+import {API_ENDPOINTS, WALLET_LOCALSTORAGE_KEYS, WalletService} from './wallet.service';
 import {of} from 'rxjs';
 import {LoginSuccessResponse, OkResponse} from '../../auth/models/authentication';
 import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
@@ -12,6 +12,7 @@ import {LOCAL_TOKEN_KEY} from '../../auth/services/auth.service';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../app.states.mock';
 import {ISimpleWallet, SimpleWallet} from '../models/simple-wallet';
+import {WALLET_STATUS} from '../models/status';
 
 const SHARED_MOCKS = {
   mnemonic: 'test1 test2 test3 test4 test5 test6 test7 test8',

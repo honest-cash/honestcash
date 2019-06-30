@@ -1,5 +1,13 @@
-<div class="row mb-2">
-  <h5 class="col font-weight-bold text-uppercase cursor-pointer" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseUpvotes"><a (click)="isCollapsed = !isCollapsed">Unlocks</a>({{story.unlockCount}})</h5>
+<div class="row justify-content-between mb-2">
+  <div class="col">
+    <h5 class="font-weight-bold text-uppercase cursor-pointer" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseUpvotes"><a (click)="isCollapsed = !isCollapsed">Unlocks</a>({{story.unlockCount}})</h5>
+  </div>
+  <div class="col text-right">
+    <button class="btn btn-outline-dark btn-sm" (click)="isCollapsed = !isCollapsed" ngbTooltip="Toggle Unlocks">
+      <fa-icon *ngIf="!isCollapsed" [icon]="['fas', 'chevron-up']"></fa-icon>
+      <fa-icon *ngIf="isCollapsed" [icon]="['fas', 'chevron-down']"></fa-icon>
+    </button>
+  </div>
 </div>
 <div class="row" [ngbCollapse]="isCollapsed">
   <story-payer-badge *ngFor="let transaction of unlocks" [transaction]="transaction"></story-payer-badge>
