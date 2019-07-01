@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title text-success">Transaction Success</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p *ngIf="transactionType === TRANSACTION_TYPES.Upvote">Your vote has been distributed to <b>author by 40%</b> and the previous <b>upvoters by 60%.</b></p>
+  <p *ngIf="transactionType === TRANSACTION_TYPES.Unlock">You have successfully unlocked the story.</p>
+  <p *ngFor="let receiver of transaction.receivers"><shared-avatar [src]="receiver.user.imageUrl"></shared-avatar>&nbsp;<u>{{receiver.user.username}}</u> received {{receiver.amountDollars}}$</p>
+  <small>Disclaimer: We are still in beta and many features may not work as intended! We do not assume any risk or give any warranty that you will receive rewards.</small>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

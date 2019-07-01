@@ -1,0 +1,9 @@
+@import '../../../../styles';
+
+:host {
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+  font-weight: bold;
+  font-size: 0.75rem;
+  color: $black;
+}

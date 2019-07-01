@@ -1,0 +1,29 @@
+:host {
+
+  ::ng-deep {
+    .story-paywall-call-to-action__wrapper {
+      background-color: #fafafa;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position-x: center;
+      box-shadow: inset 0px 0px 277px 100px #fafafa;
+
+      story-paywall-call-to-action__body {
+        border: 1px solid transparent;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        font-size: 14px;
+      }
+
+      & > .fadeout {
+        position: relative;
+        height: 2.5em;
+        background: -webkit-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: -moz-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: -o-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+        background-image: -ms-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
+      }
+    }
+  }
+}

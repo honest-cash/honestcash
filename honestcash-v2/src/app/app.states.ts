@@ -1,32 +1,32 @@
 import {ActionReducerMap, createFeatureSelector, MetaReducer} from '@ngrx/store';
 import {environment} from '../environments/environment';
 
-import {State as AppState} from './store/app/app.state';
-import {reducer as AppReducer} from './store/app/app.reducer';
-
-import {State as AuthState} from './store/auth/auth.state';
-import {reducer as AuthReducer} from './store/auth/auth.reducer';
-
-import {State as UserState} from './store/user/user.state';
-import {reducer as UserReducer} from './store/user/user.reducer';
-
-import {State as WalletState} from './store/wallet/wallet.state';
-import {reducer as WalletReducer} from './store/wallet/wallet.reducer';
-
-import {State as EditorState} from './store/editor/editor.state';
-import {reducer as EditorReducer} from './store/editor/editor.reducer';
+import {reducer as CoreReducer} from '../core/store/core.reducer';
+import {reducer as AuthReducer} from './auth/store/auth.reducer';
+import {reducer as StoryReducer} from './story/store/story.reducer';
+import {reducer as UserReducer} from './user/store/user.reducer';
+import {reducer as WalletReducer} from './wallet/store/wallet.reducer';
+import {reducer as EditorReducer} from './editor/store/editor.reducer';
+import {WalletState} from './wallet/store/wallet.state';
+import {UserState} from './user/store/user.state';
+import {AuthState} from './auth/store/auth.state';
+import {EditorState} from './editor/store/editor.state';
+import {CoreState} from '../core/store/core.state';
+import {StoryState} from './story/store/story.state';
 
 export interface AppStates {
-  app: AppState;
+  core: CoreState;
   auth: AuthState;
+  story: StoryState;
   user: UserState;
   wallet: WalletState;
   editor: EditorState;
 }
 
 export const reducers: ActionReducerMap<AppStates> = {
-  app: AppReducer,
+  core: CoreReducer,
   auth: AuthReducer,
+  story: StoryReducer,
   user: UserReducer,
   wallet: WalletReducer,
   editor: EditorReducer,
@@ -34,8 +34,9 @@ export const reducers: ActionReducerMap<AppStates> = {
 
 export const metaReducers: MetaReducer<AppStates>[] = !environment.production ? [] : [];
 
-export const selectAppState = createFeatureSelector<AppState>('app');
+export const selectCoreState = createFeatureSelector<AuthState>('core');
 export const selectAuthState = createFeatureSelector<AuthState>('auth');
 export const selectWalletState = createFeatureSelector<WalletState>('wallet');
+export const selectStoryState = createFeatureSelector<StoryState>('story');
 export const selectUserState = createFeatureSelector<UserState>('user');
 export const selectEditorState = createFeatureSelector<EditorState>('editor');

@@ -1,0 +1,14 @@
+@import '../../../../styles';
+
+:host {
+  ::ng-deep {
+    .card {
+      .card {
+        margin-left: 0.5rem;
+        border: 0px;
+        border-left: 2px solid $border-color;
+        border-radius: 0px;
+      }
+    }
+  }
+}

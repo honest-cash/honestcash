@@ -1,0 +1,27 @@
+<div [hidden]="!hasEditorInitialized" class="h-100 w-100">
+  <!--
+	  The below contenteditable paragraph (tag does not matter) has to work with input and blur, please don't change
+	  https://github.com/angular/angular/issues/9796#issuecomment-332566737
+	  if we directly modify the value of the story title, the cursor jumps to the beginning thus creating bad UX
+	  this is the workaround with a side variable called updatedTitle here
+	  Title is changed when user defocuses (blurs) the input to update the value
+	-->
+  <p
+    #titleElement
+    *ngIf="shouldEditorAllowTitleAndCustomElements"
+    id="editor-title"
+    class="mb-4"
+    contenteditable="true"
+    name="title"
+    (input)="onTitleChange($event)"
+    (blur)="onTitleBlur()"
+    placeholder="Title of your story"
+    ngDefaultControl
+  >
+  </p>
+  <div id="editor" [ngClass]="{'comment-mode': editingMode === EDITOR_EDITING_MODES.Comment}"></div>
+</div>
+
+<div *ngIf="!hasEditorInitialized" class="d-flex justify-content-center align-items-center h-100 w-100">
+  <shared-loading-indicator></shared-loading-indicator>
+</div>

@@ -1,0 +1,29 @@
+.amount-dollars,
+.amount-bch {
+  display: block; /* important */
+  height: 31px;
+}
+.upvote-button,
+.amount-dollars {
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  transition: 0.3s;
+  margin: 0;
+  padding: 0;
+}
+
+.amount-dollars{
+  margin-top: 0em;
+}
+
+.upvote-button {
+  height: 31px;
+  line-height: 31px;
+  overflow: hidden;
+  width: 200px;
+}
+
+.upvote-button:hover .amount-dollars{
+  margin-top: -2em;
+}

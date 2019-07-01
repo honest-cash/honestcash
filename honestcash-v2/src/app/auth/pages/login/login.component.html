@@ -1,0 +1,97 @@
+<auth-heading
+  title="Sign in to Honest."
+  description="Enter your details below"
+></auth-heading>
+<div class="card-body">
+  <form name="form" class="needs-validation" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)" novalidate>
+    <div class="input-group form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['far', 'envelope']"></fa-icon></span>
+      </div>
+      <input
+        required
+        name="email"
+        #email="ngModel"
+        [ngModel]="user.email"
+        [ngClass]="{ 'is-invalid': f.submitted && email.invalid, 'is-valid': f.submitted && email.valid }"
+        class="form-control"
+        type="text"
+        placeholder="E-Mail"
+        email
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && email.invalid"
+      >
+        <span
+          *ngIf="email.errors.required"
+        >
+          E-mail is required.
+        </span>
+        <span
+          *ngIf="email.errors.email"
+        >
+          E-mail must be a valid e-mail address.
+        </span>
+      </div>
+    </div>
+    <div class="input-group form-group mb-0">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><fa-icon [icon]="['fas', 'key']"></fa-icon></span>
+      </div>
+      <input
+        required
+        minlength="8"
+        name="password"
+        #password="ngModel"
+        [ngModel]="user.password"
+        class="form-control"
+        type="password"
+        placeholder="Password"
+        [ngClass]="{ 'is-invalid': f.submitted && password.invalid, 'is-valid': f.submitted && password.valid }"
+      >
+      <div
+        class="invalid-feedback"
+        *ngIf="f.submitted && password.invalid"
+      >
+        <span
+          *ngIf="password.errors.required"
+        >
+          Password is required.
+        </span>
+        <span
+          *ngIf="password.errors.minlength"
+        >
+          Password must be at least 8 characters long.
+        </span>
+      </div>
+    </div>
+    <div class="text-right mb-4">
+      <a
+        class="small"
+        [routerLink]="['/reset-password-request']"
+      >Forgot your password?</a>
+    </div>
+    <div *ngIf="errorMessage" class="card errors mb-2">
+      <div class="card-body text-danger">{{errorMessage}}</div>
+    </div>
+    <p class="small">
+      Ensure that the website is <code class="domain">https://honest.cash</code> with a valid security certificate. Your
+      email and password is used to decrypt your wallet and get access to your bitcoin.
+    </p>
+
+    <div class="form-group">
+      <auth-loading-submit-button
+        text="Sign In"
+        loadingText="Signing In"
+        [isLoading]="isLoading"
+        btnClass="btn-dark"
+      ></auth-loading-submit-button>
+    </div>
+  </form>
+</div>
+<auth-card-footer
+  to="signup"
+  text="Don't have an account?"
+  anchor="Sign Up"
+></auth-card-footer>

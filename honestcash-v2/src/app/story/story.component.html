@@ -1,0 +1,16 @@
+<shared-header></shared-header>
+<div *ngIf="!isLoading" class="mb-5 story">
+  <story-title></story-title>
+  <story-details></story-details>
+  <story-body *ngIf="!story.hasPaidSection"></story-body>
+  <story-locked-body *ngIf="story.hasPaidSection"></story-locked-body>
+  <story-author></story-author>
+  <story-actions></story-actions>
+  <hr class="my-5">
+  <story-upvotes></story-upvotes>
+  <hr class="my-5" *ngIf="story.hasPaidSection">
+  <story-unlocks *ngIf="story.hasPaidSection"></story-unlocks>
+  <hr class="my-5">
+  <story-comments></story-comments>
+</div>
+<shared-loading-indicator *ngIf="isLoading"></shared-loading-indicator>

@@ -1,0 +1,36 @@
+<ng-template #confirmTitle><span class="font-weight-bold">Confirm Transaction</span></ng-template>
+<ng-template #confirmBody let-click="onClick">
+  <div class="row mb-2">
+    <div class="col">
+      <input class="input-checkbox checkbox-success" id="styled-checkbox-1" type="checkbox" value="value1">
+      <label for="styled-checkbox-1">Don't ask me next time</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col d-flex justify-content-between">
+      <button type="button" class="text-uppercase btn btn-danger btn-sm" (click)="closePopover()">
+        Cancel
+      </button>
+      <button type="button" class="text-uppercase btn btn-warning btn-sm text-white font-weight-bold" (click)="onClick()">
+        {{actionText}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<button *ngIf="!isLoading" type="button"
+        class="transaction-button text-white font-weight-bold btn btn-lg btn-warning text-uppercase"
+        [ngbPopover]="confirmBody"
+        [popoverTitle]="confirmTitle"
+        [autoClose]="false"
+        triggers="manual"
+        #popover="ngbPopover"
+        (click)="openPopover()"
+        placement="bottom">
+  <div *ngIf="isProcessing">{{actionLoadingText}}</div>
+  <div *ngIf="!isProcessing" class="amount-dollars">{{actionText}} {{costInDollars}}$</div>
+  <div *ngIf="!isProcessing" class="amount-bch">For {{costInBch}}BCH</div>
+</button>
+<button *ngIf="isLoading" class="btn btn-lg btn-warning text-white">
+  <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+</button>

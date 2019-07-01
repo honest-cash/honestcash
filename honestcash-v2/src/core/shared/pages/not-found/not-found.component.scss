@@ -1,0 +1,22 @@
+:host {
+  padding-top: 70px;
+  display: flex;
+  min-width: 100vw;
+  width: 100%;
+
+  #not-found__image {
+    text-align: center;
+    img {
+      max-width: 50%;
+      width: 50%;
+      margin-bottom: 8rem;
+    }
+  }
+
+  #not-found__text {
+    text-align: center;
+    font-weight: 300;
+    font-size: 3rem;
+    color: #6c63ff;
+  }
+}

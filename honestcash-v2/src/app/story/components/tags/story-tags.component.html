@@ -1,0 +1,6 @@
+<div *ngIf="story.hashtags && story.hashtags.length" class="row">
+  <div class="col">
+    <a *ngFor="let tag of story.hashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
+       class="badge badge-light p-3 font-weight-normal small">{{tag.hashtag}}</a>
+  </div>
+</div>

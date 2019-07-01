@@ -1,0 +1,23 @@
+:host {
+  padding-top: 70px;
+  display: flex;
+  min-width: 100vw;
+  width: 100%;
+
+  ::ng-deep {
+
+    shared-loading-indicator {
+      text-align: center;
+    }
+
+    .story {
+      width: 700px;
+      display: block;
+      margin: 0 auto;
+      word-break: break-word;
+      word-wrap: break-word;
+
+
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<header>
+  <nav class="navbar navbar-light navbar-expand">
+    <a class="navbar-brand" href="/">
+      <shared-honest-logo></shared-honest-logo>
+    </a>
+    <div *ngIf="user" id="navbar-menu" class="collapse navbar-collapse float-xs-none">
+      <div class="navbar-nav ml-auto">
+        <!--
+          Save button is commont for all editing modes
+        -->
+        <editor-save-status [editingMode]="editingMode" [isAutosaveEnabled]="isAutosaveEnabled"></editor-save-status>
+        <!--
+          Publish button is only for write and edit modes
+        -->
+        <editor-publish-button
+          *ngIf="editingMode === EDITOR_EDITING_MODE.Write || editingMode === EDITOR_EDITING_MODE.Edit"></editor-publish-button>
+        <editor-comment-button *ngIf="editingMode === EDITOR_EDITING_MODE.Comment"></editor-comment-button>
+        <shared-header-profile-menu [user]="user"></shared-header-profile-menu>
+      </div>
+    </div>
+  </nav>
+</header>

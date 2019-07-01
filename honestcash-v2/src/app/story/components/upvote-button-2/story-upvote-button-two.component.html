@@ -1,0 +1,16 @@
+<div class="row mb-3" *ngIf="story && story.user">
+  <div class="col">
+    Upvote <b>{{story.user.username}}</b>'s story now to show your appreciation.
+  </div>
+</div>
+<div class="row mb-5">
+  <div class="col d-flex justify-content-center">
+    <shared-transaction-button [actionText]="'Upvote'" [actionLoadingText]="'Upvoting...'" [onTransactionComplete]="onTransactionComplete" [transactionType]="TRANSACTION_TYPES.Upvote"></shared-transaction-button>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <small><i>Did you know that you can earn money<br>
+      by simply just upvoting? <a target="_blank" href="https://honest.cash/honest_cash/earning-money-on-honest-cashupvoting-paywalls-and-benefits-4027">Click to read more.</a></i></small>
+  </div>
+</div>
