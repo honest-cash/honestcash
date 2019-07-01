@@ -72,6 +72,12 @@ export function reducer(state = initialStoryState, action: All): StoryState {
 
       return nextState;
     }
+    case StoryActionTypes.STORY_COMMENT_CLICKED: {
+      return {
+        ...state,
+        commentingOnStoryId: action.payload
+      };
+    }
     default: {
       return state;
     }

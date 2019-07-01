@@ -9,14 +9,9 @@ import Story from '../../models/story';
 export class StoryCommentCardActionsComponent implements OnInit {
   @Input() public comment: Story;
   @HostBinding('class') public class = 'row p-3';
-  @Output() public hasReplyClicked = new EventEmitter();
   constructor() { }
 
   public ngOnInit() {
-  }
-
-  public replyClicked(commentId: number) {
-    this.hasReplyClicked.next(commentId);
   }
 
 }

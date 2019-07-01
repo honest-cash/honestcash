@@ -1,4 +1,4 @@
-import {Component, HostBinding, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
 import Story from './models/story';
 import {Upvote} from './models/upvote';
 import {Unlock} from './models/unlock';
@@ -8,8 +8,6 @@ import {UserState} from '../user/store/user.state';
 import {Store} from '@ngrx/store';
 import {AppStates, selectStoryState, selectUserState} from '../app.states';
 import {ActivatedRoute} from '@angular/router';
-import {StoryService} from './services/story.service';
-import {WalletService} from '../wallet/services/wallet.service';
 import {StoryLoad} from './store/story.actions';
 import {StoryState} from './store/story.state';
 

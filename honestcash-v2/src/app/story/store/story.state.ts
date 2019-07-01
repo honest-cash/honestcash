@@ -16,6 +16,7 @@ export interface StoryState {
   upvotes: Upvote[];
   unlocks: Unlock[];
   comments: Story[];
+  commentingOnStoryId: number;
 }
 
 export const initialStoryState: StoryState = {
@@ -26,4 +27,5 @@ export const initialStoryState: StoryState = {
   upvotes: undefined,
   unlocks: undefined,
   comments: undefined,
+  commentingOnStoryId: undefined,
 };

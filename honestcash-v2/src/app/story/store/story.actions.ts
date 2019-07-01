@@ -18,6 +18,7 @@ export enum StoryActionTypes {
   STORY_PROPERTY_SAVE = '[Story] Property Save',
   STORY_PROPERTY_SAVE_SUCCESS = '[Story] Property Save Success',
   STORY_PROPERTY_SAVE_FAILURE = '[Story] Property Failure',
+  STORY_COMMENT_CLICKED = '[Story] Comment Clicked',
 }
 
 export class StoryLoad implements Action {
@@ -62,10 +63,18 @@ export class StoryPropertySaveFailure implements Action {
   }
 }
 
+export class StoryCommentClicked implements Action {
+  public readonly type = StoryActionTypes.STORY_COMMENT_CLICKED;
+
+  constructor(public payload: number) {
+  }
+}
+
 export type All =
   | StoryLoad
   | StoryLoadSuccess
   | StoryLoadFailure
   | StoryPropertySave
   | StoryPropertySaveSuccess
-  | StoryPropertySaveFailure;
+  | StoryPropertySaveFailure
+  | StoryCommentClicked;

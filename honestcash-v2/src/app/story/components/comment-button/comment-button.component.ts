@@ -1,5 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import Story from '../../models/story';
+import {Store} from '@ngrx/store';
+import {AppStates} from '../../../app.states';
+import {StoryCommentClicked} from '../../store/story.actions';
 
 @Component({
   selector: 'story-comment-button',
@@ -8,14 +11,15 @@ import Story from '../../models/story';
 })
 export class StoryCommentButtonComponent implements OnInit {
   @Input() public comment: Story;
-  @Output() public hasReplyClicked = new EventEmitter();
-  constructor() { }
+  constructor(
+    private store: Store<AppStates>,
+  ) { }
 
   public ngOnInit() {
   }
 
   public onReplyClicked() {
-    this.hasReplyClicked.emit(this.comment.id);
+    this.store.dispatch(new StoryCommentClicked(this.comment.id));
   }
 
 }

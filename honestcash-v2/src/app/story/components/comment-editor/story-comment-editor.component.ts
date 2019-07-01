@@ -25,7 +25,9 @@ import {TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
 })
 export class StoryCommentEditorComponent implements OnInit, OnDestroy {
   @Input() public parentStory: Story;
+  @Input() public shouldScrollToEditor = false;
   @ViewChild('commentElement') public commentElement: ElementRef;
+  @ViewChild('commentWrapperElement') public commentWrapperElement: ElementRef;
   @HostBinding('class') public class = 'col-12 mb-2 px-2';
   public user: User;
   public story: Story;
@@ -43,11 +45,11 @@ export class StoryCommentEditorComponent implements OnInit, OnDestroy {
     this.user$ = this.store.select(selectUserState);
     this.editor$ = this.store.select(selectEditorState);
     this.story$ = this.store.select(selectStoryState);
+
   }
 
   public ngOnInit() {
     this.store.dispatch(new EditorStoryLoad({parentPostId: this.parentStory.id}));
-
     this.userSub = this.user$.subscribe((userState: UserState) => {
       this.user = userState.user;
     });

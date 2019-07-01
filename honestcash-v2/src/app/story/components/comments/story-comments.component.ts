@@ -30,7 +30,7 @@ export class StoryCommentsComponent implements OnInit {
   @Input() public comments: Story[];
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }
