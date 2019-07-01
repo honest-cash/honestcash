@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-import {AuthService, LOCAL_TOKEN_KEY, LOCAL_USER_ID_KEY} from './auth.service';
+import {AuthService} from './auth.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpService} from '../../../core/http/http.service';
 import {mock} from '../../../../mock';
@@ -20,11 +20,12 @@ import {initialAppStates} from '../../app.states.mock';
 import {SimpleWallet} from '../../wallet/models/simple-wallet';
 import {WalletService} from '../../wallet/services/wallet.service';
 import {API_ENDPOINTS} from '../shared/auth.endpoints';
+import {RouterTestingModule} from '@angular/router/testing';
 
 const MockWalletService = {
   createWallet: () => ({mnemonic: 'test1 test2 test3'}),
   encrypt: () => `encrypted test1 test2 test3`
-}
+};
 
 const SHARED_MOCKS = {
   token: '123',
@@ -48,6 +49,7 @@ describe('AuthService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        RouterTestingModule
       ],
       providers: [
         AuthService,

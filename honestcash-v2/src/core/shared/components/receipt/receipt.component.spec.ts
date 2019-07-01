@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainStoryUpvotesComponent } from './receipt.component';
+import { SharedReceiptComponent } from './receipt.component';
 
 describe('StoryUpvotesComponent', () => {
-  let component: MainStoryUpvotesComponent;
-  let fixture: ComponentFixture<MainStoryUpvotesComponent>;
+  let component: SharedReceiptComponent;
+  let fixture: ComponentFixture<SharedReceiptComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainStoryUpvotesComponent ]
+      declarations: [ SharedReceiptComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainStoryUpvotesComponent);
+    fixture = TestBed.createComponent(SharedReceiptComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -19,10 +19,7 @@ import {StoryPaywallCallToActionComponent} from './components/paywall-call-to-ac
 import {StorySharedModule} from './story-shared.module';
 import {StoryLockedBodyComponent} from './components/locked-body/locked-body.component';
 import {StoryComponent} from './story.component';
-import {StoryActionsTwoComponent} from './components/actions-2/story-actions-two.component';
 import {StoryUnlockButtonComponent} from './components/unlock-button/unlock-button.component';
-import {StoryUpvoteButtonTwoComponent} from './components/upvote-button-2/story-upvote-button-two.component';
-import {StoryShareButtonsTwoComponent} from './components/share-buttons-2/story-share-buttons-two.component';
 import {StoryCommentCardActionsComponent} from './components/comment-card-actions/comment-card-actions.component';
 import {StoryCommentCardBodyComponent} from './components/comment-card-body/story-comment-card-body.component';
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
@@ -45,9 +42,6 @@ import {StoryCommentCardHeaderComponent} from './components/comment-card-header/
     StoryPaywallCallToActionComponent,
     StoryLockedBodyComponent,
     StoryUnlockButtonComponent,
-    StoryUpvoteButtonTwoComponent,
-    StoryActionsTwoComponent,
-    StoryShareButtonsTwoComponent,
     StoryCommentCardActionsComponent,
     StoryCommentCardBodyComponent,
     StoryCommentCardHeaderComponent,

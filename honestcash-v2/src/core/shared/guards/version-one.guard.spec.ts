@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {Router, RouterStateSnapshot} from '@angular/router';
 
-import {AuthService, LOCAL_TOKEN_KEY} from '../../../app/auth/services/auth.service';
+import {AuthService} from '../../../app/auth/services/auth.service';
 import {VersionOneGuard} from './version-one.guard';
 import {localStorageProvider, LocalStorageToken} from '../helpers/local-storage.helper';
 import {HttpService} from '../../index';
@@ -14,7 +14,7 @@ import {resetLocalStorage} from '../helpers/tests.helper';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app/app.states.mock';
 import {Environment} from '../../../environments/environment';
-import {WALLET_STATUS} from '../../../app/wallet/models/status';
+import {LOCAL_TOKEN_KEY} from '../../../app/user/services/user.service';
 
 const MockWindow = {
   location: {
@@ -99,32 +99,4 @@ describe('VersionOneGuard', () => {
     });
   });
 
-  describe('canDeactivate', () => {
-
-    it('should have a canDeactivate method', () => {
-      expect(typeof versionOneGuard.canDeactivate).toBe('function');
-    });
-
-    /*it('should let user leave the page if wallet has been initialized', () => {
-      walletService.isSettingUpWallet.next(WALLET_STATUS.NotInitialized);
-      walletService.isSettingUpWallet.complete();
-
-      walletService.isSettingUpWallet.asObservable().subscribe((response) => {
-        versionOneGuard.canDeactivate(null, mockSnapshot).subscribe((result) => {
-          expect(result).toBeFalsy();
-        });
-      });
-    });
-
-    it('should NOT let user leave the page if wallet has NOT yet been initialized (waits for it)', () => {
-      walletService.isSettingUpWallet.next(WALLET_STATUS.Initialized);
-      walletService.isSettingUpWallet.complete();
-
-      walletService.isSettingUpWallet.asObservable().subscribe((response) => {
-        versionOneGuard.canDeactivate(null, mockSnapshot).subscribe((result) => {
-          expect(result).toBeTruthy();
-        });
-      });
-    });*/
-  });
 });

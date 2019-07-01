@@ -15,7 +15,6 @@ import {
   SignupSuccessResponse
 } from '../models/authentication';
 import User from '../../user/models/user';
-import {LOCAL_TOKEN_KEY} from './auth.service';
 import {ISimpleWallet, SimpleWallet} from '../../wallet/models/simple-wallet';
 import {WalletService} from '../../wallet/services/wallet.service';
 
@@ -81,42 +80,6 @@ export class MockAuthenticationService {
   public isAuthenticated = false;
   public token = '';
 
-  public getToken(): string {
-    let token;
-    if (!this.token && (token = localStorage.getItem(LOCAL_TOKEN_KEY))) {
-      this.token = token;
-    }
-    return this.token;
-  }
-
-  public setToken(token: string) {
-    this.token = token;
-    localStorage.setItem(LOCAL_TOKEN_KEY, token);
-  }
-
-  public unsetToken(): void {
-    this.token = '';
-    this.isAuthenticated = false;
-    localStorage.removeItem(LOCAL_TOKEN_KEY);
-  }
-
-  public hasAuthorization(): boolean {
-    if (!this.isAuthenticated && this.getToken()) {
-      this.isAuthenticated = true;
-    }
-    return this.isAuthenticated;
-  }
-
-  public init(token?: string) {
-    if (!token && this.getToken()) {
-      this.isAuthenticated = true;
-    } else if (!token) {
-
-    } else {
-      this.setToken(token);
-      this.isAuthenticated = true;
-    }
-  }
 
   public logIn(payload: LoginContext): Observable<LoginResponse> {
     // check if correct and return success

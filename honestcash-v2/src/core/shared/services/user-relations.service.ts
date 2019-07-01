@@ -1,3 +1,4 @@
+/*
 public followProfile = (profileId) => {
   this.$http.post(`${this.API_URL}/user/${profileId}/follow`, {}).then((response) => {
   });
@@ -37,3 +38,4 @@ public showFollowedHashtags = (profileId, callback) => {
     callback(response.data);
   });
 }
+*/
