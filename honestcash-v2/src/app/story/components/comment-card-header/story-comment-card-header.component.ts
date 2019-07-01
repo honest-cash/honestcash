@@ -11,7 +11,7 @@ export class StoryCommentCardHeaderComponent implements OnInit {
   @HostBinding('class') public class = 'row p-3';
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

@@ -16,6 +16,7 @@ import {LoginSuccessResponse} from '../../auth/models/authentication';
 import User from '../../user/models/user';
 import {UserCleanup} from '../../user/store/user.actions';
 import {SimpleWallet} from '../models/simple-wallet';
+import {AuthCleanup} from '../../auth/store/auth.actions';
 
 describe('wallet.effects', () => {
   let effects: WalletEffects;
@@ -112,8 +113,8 @@ describe('wallet.effects', () => {
 
   describe('WalletSetupFailed', () => {
     it('should correctly dispatch UserCleanup and WalletCleanup actions', () => {
-      actions = hot('a---|', {a: new WalletSetupFailed()});
-      const expected = cold('(bc)|', {b: new UserCleanup(), c: new WalletCleanup()});
+      actions = hot('a----|', {a: new WalletSetupFailed()});
+      const expected = cold('(bcd)|', {b: new UserCleanup(), c: new WalletCleanup(), d: new AuthCleanup()});
       expect(effects.WalletSetupFailed).toBeObservable(expected);
     });
   });

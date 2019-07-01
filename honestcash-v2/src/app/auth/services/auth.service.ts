@@ -57,8 +57,6 @@ export class AuthService {
     // if the token exists via this instance or via localStorage
     // the user is considered as authenticated
     if (this.isPlatformBrowser) {
-      console.log(this.walletService.getWalletMnemonic())
-      console.log(this.userService.getToken())
       if (!this.isAuthenticated && this.walletService.getWalletMnemonic() && this.userService.getToken()) {
         this.isAuthenticated = true;
       }

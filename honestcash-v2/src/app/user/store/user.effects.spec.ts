@@ -3,7 +3,6 @@ import {provideMockActions} from '@ngrx/effects/testing';
 import {Observable} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as UserActions from './user.actions';
-import {AuthService} from '../../auth/services/auth.service';
 import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {UserEffects} from './user.effects';
@@ -63,7 +62,7 @@ describe('user.effects', () => {
 
   describe('UserSetup', () => {
 
-    it('should correctly call authService.init WITH arguments when there is payload', () => {
+    /*it('should correctly call authService.init WITH arguments when there is payload', () => {
       const payload: LoginSuccessResponse = {
         wallet: new SimpleWallet(),
         user: new User(),
@@ -76,7 +75,7 @@ describe('user.effects', () => {
       effects.UserSetup.subscribe(() => {
         expect(mockUserService.init).toHaveBeenCalledWith(payload.token, payload.user);
       });
-    });
+    });*/
   });
 
   describe('UserCleanup', () => {
