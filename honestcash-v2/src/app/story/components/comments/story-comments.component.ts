@@ -1,6 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import Story from '../../models/story';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {Unlock} from '../../models/unlock';
+import {Observable, Subscription} from 'rxjs';
+import {StoryState} from '../../store/story.state';
+import {Store} from '@ngrx/store';
+import {AppStates, selectStoryState} from '../../../app.states';
+import {StoryCommentDraftLoad} from '../../store/story.actions';
 
 @Component({
   selector: 'story-comments',
@@ -25,12 +31,48 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     ])
   ]
 })
-export class StoryCommentsComponent implements OnInit {
-  @Input() public story: Story;
-  @Input() public comments: Story[];
-  constructor() { }
-
-  public ngOnInit() {
+export class StoryCommentsComponent implements OnInit, OnDestroy {
+  @ViewChild('editorContainerElement') public editor: ElementRef;
+  public comments: Story[];
+  public masterStory: Story;
+  public story$: Observable<StoryState>;
+  public storySub: Subscription;
+  public shouldShowCommentEditor = false;
+  public shouldShowCommentEditorPlaceholder = true;
+  public commentParent: Story;
+  public commentDraft: Story;
+  constructor(
+    private store: Store<AppStates>,
+  ) {
+    this.story$ = this.store.select(selectStoryState);
   }
 
+  public ngOnInit() {
+    this.storySub = this.story$.subscribe((storyState: StoryState) => {
+      this.masterStory = storyState.story;
+      this.comments = storyState.comments;
+      this.commentParent = storyState.commentParent;
+      this.commentDraft = storyState.commentDraft;
+
+      if (storyState.hasCommentDraftLoaded) {
+        if (this.commentDraft.parentPostId === this.masterStory.id) {
+          this.shouldShowCommentEditorPlaceholder = false;
+          this.shouldShowCommentEditor = true;
+        } else {
+          this.shouldShowCommentEditorPlaceholder = true;
+          this.shouldShowCommentEditor = false;
+        }
+      }
+    });
+  }
+
+  public onCommentClicked() {
+    this.store.dispatch(new StoryCommentDraftLoad(this.masterStory.id));
+  }
+
+  public ngOnDestroy() {
+    if (this.storySub) {
+      this.storySub.unsubscribe();
+    }
+  }
 }

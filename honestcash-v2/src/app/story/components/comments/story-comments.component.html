@@ -1,9 +1,19 @@
-<div class="row mb-2">
-   <h5 class="col font-weight-bold text-uppercase">Comments ({{story.responseCount}})</h5>
+<div class="row mb-2" *ngIf="comments !== undefined">
+   <h5 class="col font-weight-bold text-uppercase">Comments ({{comments.length}})</h5>
  </div>
-<div class="row mb-3">
-  <story-comment-editor [parentStory]="story"></story-comment-editor>
+<div class="row mb-4" *ngIf="shouldShowCommentEditorPlaceholder">
+  <div class="col" id="comments-placeholder__wrapper">
+    <div id="comments-placeholder" class="bg-light text-center py-3">
+      <button class="btn btn-link btn-sm" (click)="onCommentClicked()">
+        <span *ngIf="!comments || (comments && !comments.length)">No one commented yet. Be the first to comment.</span>
+        <span *ngIf="comments && comments.length">Write a comment.</span>
+      </button>
+    </div>
+  </div>
 </div>
- <div class="row mb-4">
+<div class="row mb-3" #editorContainerElement *ngIf="shouldShowCommentEditor">
+  <story-comment-editor [commentParent]="masterStory"></story-comment-editor>
+</div>
+ <div class="row mb-4" *ngIf="comments && comments.length">
      <story-comment-card [@simpleFadeAnimation]="'in'" *ngFor="let comment of comments" [comment]="comment"></story-comment-card>
  </div>

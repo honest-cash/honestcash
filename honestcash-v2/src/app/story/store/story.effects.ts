@@ -2,24 +2,29 @@ import {Inject, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable, of} from 'rxjs';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {
   StoryActionTypes,
+  StoryCommentDraftLoad, StoryCommentDraftLoadFailure, StoryCommentDraftLoadSuccess,
   StoryLoad,
   StoryLoadFailure,
   StoryLoadSuccess,
+  StoryPropertiesLoadFailure,
+  StoryPropertiesLoadSuccess,
+  StoryPropertyLoad,
   StoryPropertySave,
   StoryPropertySaveContext,
-  StoryPropertySaveFailure,
-  StoryPropertySaveSuccess,
+  StoryPropertyUpdate,
 } from './story.actions';
-import {WalletService} from 'app/wallet/services/wallet.service';
 import {WindowToken} from '../../../core/shared/helpers/window.helper';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';
 import {StoryService} from '../services/story.service';
 import Story from '../models/story';
-import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
+import {Upvote} from '../models/upvote';
+import {Unlock} from '../models/unlock';
+import {EditorStoryLoadFailure, EditorStoryLoadSuccess} from '../../editor/store/editor.actions';
+import {EditorService} from '../../editor/services/editor.service';
 
 @Injectable()
 export class StoryEffects {
@@ -29,7 +34,7 @@ export class StoryEffects {
     private store: Store<AppStates>,
     private actions: Actions,
     private storyService: StoryService,
-    private walletService: WalletService,
+    private editorService: EditorService,
 
     private router: Router,
   ) {
@@ -40,12 +45,37 @@ export class StoryEffects {
     ofType(StoryActionTypes.STORY_LOAD),
     map((action: StoryLoad) => action.payload),
     switchMap((storyId: number) =>
-      this.storyService.getStoryWithDetails(storyId)
+      this.storyService.getStoryWithoutDetails(storyId)
       .pipe(
-        map((storyResponse: any[]) => new StoryLoadSuccess(storyResponse)),
+        map((storyResponse: Story) => new StoryLoadSuccess(storyResponse)),
         catchError((error) => of(new StoryLoadFailure(error))),
       )
     )
+  );
+
+  @Effect()
+  public StoryLoadSuccess: Observable<any> = this.actions.pipe(
+    ofType(StoryActionTypes.STORY_LOAD_SUCCESS),
+    map((action: StoryLoadSuccess) => action.payload),
+    switchMap((story: Story) =>
+      this.storyService.getStoryDetails(story.id)
+        .pipe(
+          map((storyDetailsResponse: [Story[], Upvote[], Unlock[]]) => new StoryPropertiesLoadSuccess(storyDetailsResponse)),
+          catchError((error) => of(new StoryPropertiesLoadFailure(error))),
+        )
+    )
+  );
+
+  @Effect()
+  public StoryCommentDraftLoad: Observable<any> = this.actions.pipe(
+    ofType(StoryActionTypes.STORY_COMMENT_DRAFT_LOAD),
+    map((action: StoryCommentDraftLoad) => action.payload),
+    switchMap((storyId: number) => this.editorService.loadPostDraft({parentPostId: storyId})
+      .pipe(
+        map((story: Story) => new StoryCommentDraftLoadSuccess(story)),
+        catchError(error => of(new StoryCommentDraftLoadFailure(error))),
+      ),
+    ),
   );
 
   @Effect()
@@ -55,19 +85,22 @@ export class StoryEffects {
     switchMap((payload: StoryPropertySaveContext) =>
       this.storyService.saveProperty(payload)
       .pipe(
-        map((savePropertyResponse: Story) => new StoryPropertySaveSuccess({story: savePropertyResponse, property: payload.property})),
-        catchError((error) => of(new StoryPropertySaveFailure(error))),
+        map(() => new StoryPropertyLoad(payload)),
       )
     )
   );
 
-  @Effect({dispatch: false})
-  public StoryPropertySaveSuccess: Observable<any> = this.actions.pipe(
-    ofType(StoryActionTypes.STORY_PROPERTY_SAVE_SUCCESS),
-    tap((action: StoryPropertySaveSuccess) => {
-      if (action.payload.property !== TRANSACTION_TYPES.Comment) {
-        this.walletService.updateWalletBalance();
-      }
-    })
+  @Effect()
+  public StoryPropertyLoad: Observable<any> = this.actions.pipe(
+    ofType(StoryActionTypes.STORY_PROPERTY_LOAD),
+    map((action: StoryPropertyLoad) => action.payload),
+    switchMap((payload: StoryPropertySaveContext) =>
+      this.storyService.loadProperty(payload)
+        .pipe(
+          map((savePropertyResponse: Story[] | Upvote[] | Unlock[]) =>
+            new StoryPropertyUpdate({property: payload.property, value: savePropertyResponse})
+          ),
+        )
+    )
   );
 }

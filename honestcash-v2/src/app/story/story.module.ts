@@ -26,7 +26,6 @@ import {StoryShareButtonsTwoComponent} from './components/share-buttons-2/story-
 import {StoryCommentCardActionsComponent} from './components/comment-card-actions/comment-card-actions.component';
 import {StoryCommentCardBodyComponent} from './components/comment-card-body/story-comment-card-body.component';
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [

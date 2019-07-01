@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import Story from '../../models/story';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../app.states';
-import {StoryCommentClicked} from '../../store/story.actions';
+import {StoryCommentClicked, StoryCommentDraftLoad} from '../../store/story.actions';
 
 @Component({
   selector: 'story-comment-button',
@@ -10,7 +10,7 @@ import {StoryCommentClicked} from '../../store/story.actions';
   styleUrls: ['./comment-button.component.scss']
 })
 export class StoryCommentButtonComponent implements OnInit {
-  @Input() public comment: Story;
+  @Input() public parentStory: Story;
   constructor(
     private store: Store<AppStates>,
   ) { }
@@ -19,7 +19,7 @@ export class StoryCommentButtonComponent implements OnInit {
   }
 
   public onReplyClicked() {
-    this.store.dispatch(new StoryCommentClicked(this.comment.id));
+    this.store.dispatch(new StoryCommentDraftLoad(this.parentStory.id));
   }
 
 }

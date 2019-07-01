@@ -12,10 +12,12 @@ import {StoryState} from '../../store/story.state';
 })
 export class StoryCommentCardComponent implements OnInit, OnDestroy {
   @Input() public comment: Story;
-  @HostBinding('class') public class = 'col-12 p-2';
+  @HostBinding('class') public class = 'col-12 mb-2';
+  public commentParent: Story;
+  public commentDraft: Story;
   public story$: Observable<StoryState>;
   public storySub: Subscription;
-  public commentingOnStoryId: number;
+  public shouldShowEditor = false;
   constructor(
     private store: Store<AppStates>,
   ) {
@@ -24,9 +26,15 @@ export class StoryCommentCardComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.storySub = this.story$.subscribe((storyState: StoryState) => {
-      this.commentingOnStoryId = storyState.commentingOnStoryId;
+      this.commentParent = storyState.commentParent;
+      this.commentDraft = storyState.commentDraft;
+
+      if (this.commentDraft && this.comment && this.commentDraft.parentPostId === this.comment.id) {
+        this.shouldShowEditor = true;
+      }
     });
   }
+
 
   public ngOnDestroy() {
     if (this.storySub) {

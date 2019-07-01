@@ -2,6 +2,6 @@
   <story-comment-card-header [comment]="comment"></story-comment-card-header>
   <story-comment-card-body [comment]="comment"></story-comment-card-body>
   <story-comment-card-actions [comment]="comment"></story-comment-card-actions>
-  <story-comment-editor *ngIf="commentingOnStoryId === comment.id" [shouldScrollToEditor]="commentingOnStoryId === comment.id" [parentStory]="comment"></story-comment-editor>
+  <story-comment-editor *ngIf="shouldShowEditor" [commentParent]="comment"></story-comment-editor>
   <story-comment-card *ngFor="let subComment of comment.userPosts" [comment]="subComment"></story-comment-card>
 </div>

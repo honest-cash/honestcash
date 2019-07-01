@@ -16,6 +16,7 @@ import {TransactionService} from './shared/services/transaction.service';
 import {WalletService} from '../app/wallet/services/wallet.service';
 import {StoryService} from '../app/story/services/story.service';
 import {ToastrModule} from 'ngx-toastr';
+import {SharedFollowButtonComponent} from './shared/components/follow-button/follow-button.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {ToastrModule} from 'ngx-toastr';
     SharedNotFoundComponent,
     SharedReceiptComponent,
     SharedTransactionButtonComponent,
+    // SharedFollowButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +57,7 @@ import {ToastrModule} from 'ngx-toastr';
     SharedLoadingIndicatorComponent,
     SharedReceiptComponent,
     SharedTransactionButtonComponent,
+    // SharedFollowButtonComponent,
   ]
 })
 export class SharedModule {

@@ -1,25 +1,19 @@
 import {All, EditorActionTypes} from './editor.actions';
-import {Logger} from '../../../core/shared/services/logger.service';
 import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {EDITOR_STATUS, EditorState, initialEditorState} from './editor.state';
-
-const logger = new Logger();
 
 export function reducer(state = initialEditorState, action: All): EditorState {
   switch (action.type) {
     case EditorActionTypes.EDITOR_LOAD: {
-      logger.info('Editor Load Success');
       return {
         ...state,
         status: EDITOR_STATUS.EditorLoaded,
       };
     }
     case EditorActionTypes.EDITOR_UNLOAD: {
-      logger.info('Editor Unload Success');
       return initialEditorState;
     }
     case EditorActionTypes.EDITOR_STORY_LOAD_SUCCESS: {
-      logger.info('Editor Story Load Success', action.payload);
       return {
         ...state,
         story: action.payload,
@@ -58,7 +52,6 @@ export function reducer(state = initialEditorState, action: All): EditorState {
           break;
         }
       }
-      logger.info(`Editor Story Property [${property}] Change`, action.payload.value);
       return {
         ...state,
         story: {
@@ -71,21 +64,18 @@ export function reducer(state = initialEditorState, action: All): EditorState {
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE: {
-      logger.info(`Editor Story Property [${action.payload.property}] Save`);
       return {
         ...state,
         status: EDITOR_STATUS.Saving,
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_SUCCESS: {
-      logger.info(`Editor Story Property Save Success`);
       return {
         ...state,
         status: EDITOR_STATUS.Saved
       };
     }
     case EditorActionTypes.EDITOR_STORY_PROPERTY_SAVE_FAILURE: {
-      logger.info(`Editor Story Property Save Success`);
       return {
         ...state,
         status: EDITOR_STATUS.NotSaved
@@ -96,7 +86,6 @@ export function reducer(state = initialEditorState, action: All): EditorState {
         ...state.story,
         updatedAt: new Date().toString(),
       };
-      logger.info('Editor Story Save Success Started', story);
       return {
         ...state,
         story,
@@ -104,21 +93,18 @@ export function reducer(state = initialEditorState, action: All): EditorState {
       };
     }
     case EditorActionTypes.EDITOR_STORY_SAVE_SUCCESS: {
-      logger.info('Editor Story Save Success');
       return {
         ...state,
         status: EDITOR_STATUS.Saved,
       };
     }
     case EditorActionTypes.EDITOR_STORY_SAVE_FAILURE: {
-      logger.info('Editor Story Save Failure');
       return {
         ...state,
         status: EDITOR_STATUS.NotSaved,
       };
     }
     case EditorActionTypes.EDITOR_STORY_SAVE_AND_PUBLISH: {
-      logger.info('Editor Story Publish Started', action.payload);
       return {
         ...state,
         story: action.payload,
@@ -126,7 +112,6 @@ export function reducer(state = initialEditorState, action: All): EditorState {
       };
     }
     case EditorActionTypes.EDITOR_STORY_PUBLISH_SUCCESS: {
-      logger.info('Editor Story Publish Success', action.payload);
       return {
         ...state,
         story: action.payload,
