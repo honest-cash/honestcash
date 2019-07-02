@@ -25,7 +25,7 @@ import {
   faTerminal,
   faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
-import {faBitcoin, faFacebook, faReddit} from '@fortawesome/free-brands-svg-icons';
+import {faBitcoin, faFacebook, faReddit, faTwitter} from '@fortawesome/free-brands-svg-icons';
 import {faCircle} from '@fortawesome/free-solid-svg-icons/faCircle';
 
 @NgModule({
@@ -68,6 +68,7 @@ export class FontAwesomeModule {
     library.add(faExclamationTriangle);
     library.add(faEye);
     library.add(faFacebook);
+    library.add(faTwitter);
     library.add(faReddit);
     library.add(faCreditCard);
     library.add(faLevelUpAlt);
