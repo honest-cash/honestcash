@@ -1,6 +1,6 @@
 import {All, StoryActionTypes} from './story.actions';
 import {initialStoryState, StoryState} from './story.state';
-import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
+import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 import Story from '../models/story';
 import {Unlock} from '../models/unlock';
 import {ENVIRONMENT_DEFAULTS} from '../../../environments/environment';
