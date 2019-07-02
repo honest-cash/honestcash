@@ -12,6 +12,6 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting()
 );
 // Then we find all the tests.
-const context = require.context('./app/', true, /paid-section-selection.component\.spec\.ts$/);
+const context = require.context('./app/', true, /wallet.reducer\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);

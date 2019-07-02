@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {cold, hot} from 'jasmine-marbles';
-import {Observable, of, throwError} from 'rxjs';
+import {forkJoin, Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
 import {AuthSetup, LogInSuccess, RootRedirect} from './auth.actions';
@@ -20,10 +20,13 @@ import {initialAppStates} from '../../app.states.mock';
 import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../models/authentication';
 import {AppStates, metaReducers, reducers} from '../../app.states';
-import {WalletCleanup, WalletSetup} from '../../wallet/store/wallet.actions';
-import {UserCleanup, UserSetup} from '../../user/store/user.actions';
+import {WalletActionTypes, WalletCleanup, WalletSetup, WalletStatusUpdated} from '../../wallet/store/wallet.actions';
+import {UserActionTypes, UserCleanup, UserSetup} from '../../user/store/user.actions';
 import {mock} from '../../../../mock';
 import {SimpleWallet} from '../../wallet/models/simple-wallet';
+import {WALLET_STATUS} from '../../wallet/models/status';
+import {ofType} from '@ngrx/effects';
+import {first} from 'rxjs/operators';
 
 const MockWindow = {
   location: {
@@ -147,8 +150,8 @@ describe('auth.effects', () => {
         expect(effects.LogIn).toBeObservable(expected);
       });
     });
-    describe('LogInSuccess', () => {
-      it('should correctly return UserSetup, WalletSetup and AuthSetup with mnemonicEncrypted and password', () => {
+    describe('LogInSuccess should', () => {
+      it('correctly return UserSetup, WalletSetup and AuthSetup with mnemonicEncrypted and password', () => {
         const action = new AuthActions.LogInSuccess(mocks.logInSuccess);
 
         actions = hot('-a', {a: action});
@@ -159,7 +162,6 @@ describe('auth.effects', () => {
         });
 
         expect(effects.LogInSuccess).toBeObservable(expected);
-
       });
     });
   });

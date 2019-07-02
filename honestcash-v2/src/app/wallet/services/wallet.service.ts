@@ -15,7 +15,7 @@ import {Store} from '@ngrx/store';
 import {WalletState} from '../store/wallet.state';
 import {WALLET_STATUS} from '../models/status';
 
-interface CoinbaseExchangeResponse {
+export interface CoinbaseExchangeResponse {
   data: {
     currency: string;
     rates: any;
@@ -25,6 +25,7 @@ interface CoinbaseExchangeResponse {
 
 export const API_ENDPOINTS = {
   setWallet: `/auth/set-wallet`,
+  convertCurrency: (sourceCurrency: string) => `https://api.coinbase.com/v2/exchange-rates?currency=${sourceCurrency.toUpperCase()}`
 };
 
 export const WALLET_LOCALSTORAGE_KEYS = {
@@ -35,7 +36,7 @@ export const WALLET_LOCALSTORAGE_KEYS = {
 
 export const WALLET_DEFAULT_HD_PATH = `m/44'/0'/0'/0/0`;
 
-const simpleBitcoinWalletAssetPath = 'assets/libs/simple-bitcoin-wallet.min.js';
+export const simpleBitcoinWalletAssetPath = 'assets/libs/simple-bitcoin-wallet.min.js';
 
 declare var SimpleWallet: any;
 
@@ -75,7 +76,7 @@ export class WalletService {
   }
 
   public async cacheExchangeRates() {
-    const response: CoinbaseExchangeResponse = await this.http.get<CoinbaseExchangeResponse>(`https://api.coinbase.com/v2/exchange-rates?currency=USD`)
+    const response: CoinbaseExchangeResponse = await this.http.get<CoinbaseExchangeResponse>(API_ENDPOINTS.convertCurrency('usd'))
       .toPromise();
     this.exchangeRateCache = response;
     console.log('response1');
@@ -101,19 +102,28 @@ export class WalletService {
     }
   }
 
-  public createWallet(password: string): ISimpleWallet {
-    return new SimpleWallet(null, {password});
+  public createWallet(mnemonic?: string, mnemonicEncrypted?: string, password?: string): ISimpleWallet {
+    if (mnemonicEncrypted && password) {
+      return new SimpleWallet(mnemonicEncrypted, {password});
+    }
+    if (mnemonic && !password) {
+      return new SimpleWallet(mnemonic, {password: null});
+    }
+
+    if (!mnemonic && password) {
+      return new SimpleWallet(null, {password});
+    }
   }
 
-  public encrypt(mnemonic: string, password: string): string {
+  public encryptMnemonic(mnemonic: string, password: string): string {
     return SimpleWallet.encrypt(mnemonic, password);
   }
 
-  public decrypt(mnemonicEncrypted: string, password: string): string {
+  public decryptMnemonic(mnemonicEncrypted: string, password: string): string {
     return SimpleWallet.decrypt(mnemonicEncrypted, password);
   }
 
-  public loadWallet(payload?: LoginSuccessResponse): Observable<ISimpleWallet> {
+  public loadWallet(payload?: LoginSuccessResponse): Observable<ISimpleWallet | undefined> {
     return defer(
       async () => {
         await this.cacheExchangeRates();
@@ -128,11 +138,12 @@ export class WalletService {
             // if there is a payload and a wallet attached
             // it means it is a login action
             this.logger.info('Setting up an already existing wallet from payload');
-            simpleWallet = this.loadWalletWithEncryptedRecoveryPhrase(
+            simpleWallet = this.createWallet(
+              undefined,
               (<LoginSuccessResponse>payload).wallet.mnemonicEncrypted,
               payload.password
             );
-            simpleWallet.mnemonicEncrypted = this.encrypt(payload.wallet.mnemonic, payload.password);
+            simpleWallet.mnemonicEncrypted = this.encryptMnemonic(payload.wallet.mnemonic, payload.password);
             this.http.post(API_ENDPOINTS.setWallet, {mnemonicEncrypted: simpleWallet.mnemonicEncrypted});
           }
         } else {
@@ -141,29 +152,29 @@ export class WalletService {
             // but there is a decrypted mnemonic and a token in the localstorage
             // it means the app loads wallet from localStorage
             this.logger.info('Setting up an already existing wallet from local storage');
-            simpleWallet = this.loadWalletWithDecryptedRecoveryPhrase(<string>this.getWalletMnemonic());
+            simpleWallet = this.createWallet(<string>this.getWalletMnemonic());
           }
         }
 
         if (!simpleWallet) {
           this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Errored));
-          throwError(WALLET_STATUS.Errored);
+        } else {
+          this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Loaded));
         }
-
-        this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Loaded));
         return simpleWallet;
       }
     );
   }
 
-  public getWalletMnemonic(): string | void {
+  public getWalletMnemonic(): string | undefined {
     if (this.isPlatformBrowser) {
-      return this.localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+      const mnemonic = this.localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+      return mnemonic ? mnemonic : undefined;
     }
   }
 
   public setWallet(wallet: ISimpleWallet) {
-    if (this.isPlatformBrowser) {
+    if (this.isPlatformBrowser && wallet && wallet.mnemonic) {
       this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
     }
   }
