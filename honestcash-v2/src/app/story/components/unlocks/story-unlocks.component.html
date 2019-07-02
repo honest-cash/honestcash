@@ -14,7 +14,7 @@
     </button>
   </div>
 </div>
-<div class="row" [ngbCollapse]="isCollapsed" *ngIf="!isLoading && unlocks && unlocks.length">
+<div class="row px-sm-2" [ngbCollapse]="isCollapsed" *ngIf="!isLoading && unlocks && unlocks.length">
   <story-payer-badge *ngFor="let transaction of unlocks" [transaction]="transaction"></story-payer-badge>
 </div>
 <div class="row"  *ngIf="!isLoading && (!unlocks || (unlocks && !unlocks.length))">
