@@ -77,10 +77,10 @@ export class WalletService {
   }
 
   public async cacheExchangeRates() {
-    const response: CoinbaseExchangeResponse = await this.http.get<CoinbaseExchangeResponse>(API_ENDPOINTS.convertCurrency('usd'))
-      .toPromise();
     if (this.isPlatformBrowser) {
-     this.localStorage.setItem(EXCHANGE_RATE_CACHE_KEY, JSON.stringify(response));
+      const request = this.http.get<CoinbaseExchangeResponse>(API_ENDPOINTS.convertCurrency('usd'));
+      const response: CoinbaseExchangeResponse = await request.toPromise();
+      this.localStorage.setItem(EXCHANGE_RATE_CACHE_KEY, JSON.stringify(response));
     }
   }
 

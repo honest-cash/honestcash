@@ -5,7 +5,7 @@ import {HttpService} from '../../../core';
 import {mock} from '../../../../mock';
 import {
   API_ENDPOINTS,
-  CoinbaseExchangeResponse,
+  CoinbaseExchangeResponse, EXCHANGE_RATE_CACHE_KEY,
   simpleBitcoinWalletAssetPath,
   WALLET_LOCALSTORAGE_KEYS,
   WalletService
@@ -104,8 +104,28 @@ describe('WalletService', () => {
   });
 
   describe('non-static functions', () => {
+    describe('cacheExchangeRates should', () => {
+      it('call Coinbase API to get the results', async () => {
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': 1.4
+            }
+          }
+        };
+        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
+        localStorage.removeItem(EXCHANGE_RATE_CACHE_KEY);
+        await walletService.cacheExchangeRates();
+        expect(localStorage.getItem(EXCHANGE_RATE_CACHE_KEY)).toBeDefined();
+        expect(mockHttpService.get)
+          .toHaveBeenCalledWith(API_ENDPOINTS.convertCurrency('usd'));
+      });
+    });
+
     describe('convertCurrency should', () => {
-      it('make a request to coinbase to get exchange rates and return a balance: number from response', (done) => {
+      it('get exchangeRates from localStorage and call calculateRate to return the convertedCurrency', (done) => {
+        const calculateRateSpy = spyOn(walletService, 'calculateRate').and.callThrough();
         const usdRate = 1.3;
         const bchBalance = 0.0005;
         const coinbaseResultMock: CoinbaseExchangeResponse = {
@@ -116,13 +136,30 @@ describe('WalletService', () => {
             }
           }
         };
-        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
+        localStorage.setItem(EXCHANGE_RATE_CACHE_KEY, JSON.stringify(coinbaseResultMock));
         walletService.convertCurrency(bchBalance, 'bch', 'usd').subscribe((response: number) => {
-          expect(mockHttpService.get)
-            .toHaveBeenCalledWith(API_ENDPOINTS.convertCurrency('bch'));
+          expect(calculateRateSpy).toHaveBeenCalled();
           expect(response).toEqual(usdRate * bchBalance);
           done();
         });
+      });
+    });
+
+    describe('calculateRate should', () => {
+      it('return the calculated rate correctly', () => {
+        const usdRate = 1.3;
+        const bchBalance = 0.0005;
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': usdRate
+            }
+          }
+        };
+
+        const calculateRateResult = walletService.calculateRate(bchBalance, coinbaseResultMock.data.rates, 'usd');
+        expect(calculateRateResult).toEqual(usdRate * bchBalance);
       });
     });
 
@@ -244,7 +281,35 @@ describe('WalletService', () => {
           ok: true
         },
       };
+
+      it('should call cacheExchangeRates', (done) => {
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': 1.4
+            }
+          }
+        };
+        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
+        const cacheExchangeRatesSpy = spyOn(walletService, 'cacheExchangeRates').and.callThrough();
+        // Act
+        walletService.loadWallet().subscribe((wallet: ISimpleWallet | Observable<any>) => {
+          expect(cacheExchangeRatesSpy).toHaveBeenCalled();
+          done();
+        });
+      });
+
       it('return a SimpleBitcoinWallet if there is a payload and payload is a LoginSuccessResponse', (done) => {
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': 1.4
+            }
+          }
+        };
+        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
         const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
         const loginSuccessResponse: LoginSuccessResponse = {
           user: mocks.setupWalletContext.user,
@@ -254,7 +319,6 @@ describe('WalletService', () => {
         };
         loginSuccessResponse.wallet.mnemonic = SHARED_MOCKS.mnemonic;
         loginSuccessResponse.wallet.mnemonicEncrypted = SHARED_MOCKS.mnemonicEncrypted;
-
 
         // Act
         walletService.loadWallet(loginSuccessResponse).subscribe((wallet: ISimpleWallet) => {
@@ -266,6 +330,15 @@ describe('WalletService', () => {
       });
 
       it('return a SimpleBitcoinWallet if there is NO payload but a token and decrypted mnemonic exists in localStorage', (done) => {
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': 1.4
+            }
+          }
+        };
+        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
         const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
         localStorage.setItem(LOCAL_TOKEN_KEY, mocks.setupWalletContext.token);
         localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, SHARED_MOCKS.mnemonic);
@@ -279,6 +352,15 @@ describe('WalletService', () => {
       });
 
       it('NOT return a SimpleBitcoinWallet if there is NO payload and NO token and NO decrypted mnemonic exists in localStorage', (done) => {
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': 1.4
+            }
+          }
+        };
+        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
         const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
         // Act
         walletService.loadWallet().subscribe((wallet: ISimpleWallet | Observable<any>) => {
