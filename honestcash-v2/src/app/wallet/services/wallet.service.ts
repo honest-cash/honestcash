@@ -159,14 +159,15 @@ export class WalletService {
     );
   }
 
-  public getWalletMnemonic(): string | void {
+  public getWalletMnemonic(): string | undefined {
     if (this.isPlatformBrowser) {
-      return this.localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+      const mnemonic = this.localStorage.getItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+      return mnemonic ? mnemonic : undefined;
     }
   }
 
   public setWallet(wallet: ISimpleWallet) {
-    if (this.isPlatformBrowser) {
+    if (this.isPlatformBrowser && this.wallet && this.wallet.mnemonic) {
       this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
     }
   }

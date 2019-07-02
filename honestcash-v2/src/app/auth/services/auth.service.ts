@@ -48,7 +48,9 @@ export class AuthService {
   }
 
   public authenticate() {
-    this.isAuthenticated = true;
+    if (this.walletService.getWalletMnemonic() && this.userService.getToken()) {
+      this.isAuthenticated = true;
+    }
   }
 
   public hasAuthorization(): boolean {
