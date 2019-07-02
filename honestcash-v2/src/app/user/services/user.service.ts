@@ -20,8 +20,6 @@ export const API_ENDPOINTS = {
 @Injectable({providedIn: 'root'})
 export class UserService {
 
-  private token: string;
-  private userId: number;
   private readonly isPlatformBrowser: boolean;
 
   constructor(
@@ -49,16 +47,14 @@ export class UserService {
     }
   }
 
-  public getToken(): string {
-    let token;
-    if (!this.token && this.isPlatformBrowser && (token = this.localStorage.getItem(LOCAL_TOKEN_KEY))) {
-      this.token = token;
+  public getToken(): string | undefined {
+    if (this.isPlatformBrowser) {
+      const token = this.localStorage.getItem(LOCAL_TOKEN_KEY);
+      return token ? token : undefined;
     }
-    return this.token;
   }
 
   public setToken(token: string) {
-    this.token = token;
     if (this.isPlatformBrowser) {
       this.localStorage.setItem(LOCAL_TOKEN_KEY, token);
     }
@@ -66,8 +62,6 @@ export class UserService {
 
   // needed for the v1 integration, @todo, review its use after.
   public setUserId(userId: number) {
-    this.userId = userId;
-
     if (this.isPlatformBrowser) {
       this.localStorage.setItem(LOCAL_USER_ID_KEY, String(userId));
     }
@@ -82,10 +76,9 @@ export class UserService {
 
 
   public getUserId(): number | undefined {
-    if (this.isPlatformBrowser && !this.userId) {
+    if (this.isPlatformBrowser) {
       return parseInt(this.localStorage.getItem(LOCAL_USER_ID_KEY), 10);
     }
-    return this.userId;
   }
 
   public checkAddressBCH(payload: LoginSuccessResponse | SignupSuccessResponse) {

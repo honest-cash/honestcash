@@ -75,12 +75,12 @@ export class AuthEffects {
         first(),
       );
 
-      const secondActionsSuccess$ = this.actions.pipe(
+      const secondActionSuccess$ = this.actions.pipe(
         ofType(WalletActionTypes.WALLET_GENERATED),
         first(),
       );
 
-      const success$ = forkJoin(firstActionSuccess$, secondActionsSuccess$)
+      forkJoin(firstActionSuccess$, secondActionSuccess$)
       .pipe(first())
       .subscribe(() => {
         this.store.dispatch(new RootRedirect());

@@ -78,6 +78,15 @@ describe('editor.reducer', () => {
         expect(state.status).toBe(EDITOR_STATUS.NotSaved);
         expect(state.story.title).toEqual(payload.value);
       });
+      it('body', () => {
+        const payload = {
+          property: EDITOR_STORY_PROPERTIES.Body,
+          value: 'asdfasdf'
+        };
+        const state: EditorState = reducer(undefined, new EditorStoryPropertyChange(payload));
+
+        expect(state.story.body).toEqual(payload.value);
+      });
       it('bodyJSON and status NotSaved', () => {
         const payload = {
           property: EDITOR_STORY_PROPERTIES.BodyJSON,
