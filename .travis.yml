@@ -1,4 +1,4 @@
-sudo: required
+sudo: true
 
 notifications:
   slack: $SLACK_TOKEN
