@@ -1,8 +1,3 @@
-.amount-dollars,
-.amount-bch {
-  display: block; /* important */
-  height: 48px;
-}
 .transaction-button,
 .amount-dollars {
   -webkit-transition: 0.3s;
@@ -17,13 +12,34 @@
   margin-top: 0em;
 }
 
-.transaction-button {
+.transaction-button.btn-lg {
   height: 48px;
   line-height: 48px;
   overflow: hidden;
   width: 200px;
+  .amount-dollars,
+  .amount-bch {
+    display: block; /* important */
+    height: 48px;
+  }
+
+  &:hover .amount-dollars {
+    margin-top: -2.5em;
+  }
 }
 
-.transaction-button:hover .amount-dollars{
-  margin-top: -2.4em;
+.transaction-button.btn-sm {
+  height: 31px;
+  line-height: 31px;
+  overflow: hidden;
+  width: 200px;
+  .amount-dollars,
+  .amount-bch {
+    display: block; /* important */
+    height: 31px;
+  }
+
+  &:hover .amount-dollars {
+    margin-top: -2.3em;
+  }
 }

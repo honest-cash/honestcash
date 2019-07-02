@@ -1,5 +1,5 @@
 <header>
-  <nav class="navbar fixed-top navbar-light navbar-expand">
+  <nav class="navbar justify-content-between fixed-top navbar-light navbar-expand bg-white">
     <a class="navbar-brand" href="/">
       <shared-honest-logo></shared-honest-logo>
     </a>
@@ -7,6 +7,14 @@
       <div class="navbar-nav ml-auto">
         <shared-header-profile-menu [user]="user"></shared-header-profile-menu>
       </div>
+    </div>
+    <div *ngIf="!user">
+      <a class="btn btn-link btn-sm text-dark" [routerLink]="['/login']">
+        Login
+      </a>
+      <a class="btn btn-link btn-sm text-dark" [routerLink]="['/signup']">
+        Signup
+      </a>
     </div>
   </nav>
 </header>

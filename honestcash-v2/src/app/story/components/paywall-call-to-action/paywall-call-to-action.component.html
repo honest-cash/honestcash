@@ -1,6 +1,6 @@
-<div class="story-paywall-call-to-action__wrapper">
+<div *ngIf="story" class="story-paywall-call-to-action__wrapper w-100">
   <div class="fadeout"></div>
-  <div class="story-paywall-call-to-action__body p-5 text-center w-100">
+  <div *ngIf="!shouldShowUnlockingSpinner" class="story-paywall-call-to-action__body p-5 text-center">
     <h3 class="mb-3">CONTINUE READING & SUPPORT {{story.user.username | uppercase}}</h3>
     <p class="mb-4">Honest gives creators the opportunity to generate income from their work. By clicking on the button
       below, you'll
@@ -10,6 +10,9 @@
         <story-unlock-button></story-unlock-button>
       </div>
     </div>
+  </div>
+  <div *ngIf="shouldShowUnlockingSpinner" class="p-5 text-center">
+    <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
   </div>
 </div>
 

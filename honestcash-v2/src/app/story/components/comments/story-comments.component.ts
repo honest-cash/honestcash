@@ -1,12 +1,14 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import Story from '../../models/story';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Unlock} from '../../models/unlock';
 import {Observable, Subscription} from 'rxjs';
 import {StoryState} from '../../store/story.state';
 import {Store} from '@ngrx/store';
-import {AppStates, selectStoryState} from '../../../app.states';
+import {AppStates, selectStoryState, selectUserState} from '../../../app.states';
 import {StoryCommentDraftLoad} from '../../store/story.actions';
+import User from '../../../user/models/user';
+import {UserState} from '../../../user/store/user.state';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'story-comments',
@@ -41,10 +43,16 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
   public shouldShowCommentEditorPlaceholder = true;
   public commentParent: Story;
   public commentDraft: Story;
+  public isLoading = true;
+  public user: User;
+  public user$: Observable<UserState>;
+  public userSub: Subscription;
   constructor(
     private store: Store<AppStates>,
+    private router: Router,
   ) {
     this.story$ = this.store.select(selectStoryState);
+    this.user$ = this.store.select(selectUserState);
   }
 
   public ngOnInit() {
@@ -53,6 +61,10 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
       this.comments = storyState.comments;
       this.commentParent = storyState.commentParent;
       this.commentDraft = storyState.commentDraft;
+
+      if (this.comments) {
+        this.isLoading = false;
+      }
 
       if (storyState.hasCommentDraftLoaded) {
         if (this.commentDraft.parentPostId === this.masterStory.id) {
@@ -64,15 +76,25 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
         }
       }
     });
+    this.userSub = this.user$.subscribe((userState: UserState) => {
+      this.user = userState.user;
+    });
   }
 
   public onCommentClicked() {
-    this.store.dispatch(new StoryCommentDraftLoad(this.masterStory.id));
+    if (this.user) {
+      this.store.dispatch(new StoryCommentDraftLoad(this.masterStory.id));
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   public ngOnDestroy() {
     if (this.storySub) {
       this.storySub.unsubscribe();
+    }
+    if (this.userSub) {
+      this.userSub.unsubscribe();
     }
   }
 }

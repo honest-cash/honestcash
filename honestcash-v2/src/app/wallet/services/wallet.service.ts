@@ -38,6 +38,8 @@ export const WALLET_DEFAULT_HD_PATH = `m/44'/0'/0'/0/0`;
 
 export const simpleBitcoinWalletAssetPath = 'assets/libs/simple-bitcoin-wallet.min.js';
 
+export const EXCHANGE_RATE_CACHE_KEY = 'EXCHANGE_RATES';
+
 declare var SimpleWallet: any;
 
 @Injectable({providedIn: 'root'})
@@ -74,14 +76,25 @@ export class WalletService {
     );
   }
 
+  public async cacheExchangeRates() {
+    if (this.isPlatformBrowser) {
+      const request = this.http.get<CoinbaseExchangeResponse>(API_ENDPOINTS.convertCurrency('usd'));
+      const response: CoinbaseExchangeResponse = await request.toPromise();
+      this.localStorage.setItem(EXCHANGE_RATE_CACHE_KEY, JSON.stringify(response));
+    }
+  }
+
   public convertCurrency(amount: number, sourceCurrency: string, targetCurrency: string): Observable<number> {
-    return this.http.get(API_ENDPOINTS.convertCurrency(sourceCurrency))
-      .pipe(
-        map((response: CoinbaseExchangeResponse) => {
-          const rate = response.data.rates[targetCurrency.toUpperCase()];
-          return Number(Number((Number(rate) * Number(amount))));
-        })
-      );
+    if (this.isPlatformBrowser) {
+      const exchangeRateCache = JSON.parse(this.localStorage.getItem(EXCHANGE_RATE_CACHE_KEY));
+      const convertedCurrency = this.calculateRate(amount, exchangeRateCache.data.rates, targetCurrency);
+      return of(convertedCurrency);
+    }
+  }
+
+  public calculateRate(amount: number, rates: number[], targetCurrency: string): number {
+    const rate = rates[targetCurrency.toUpperCase()];
+    return Number(Number((Number(rate) * Number(amount))));
   }
 
   public updateWalletBalance() {
@@ -118,6 +131,7 @@ export class WalletService {
   public loadWallet(payload?: LoginSuccessResponse): Observable<ISimpleWallet | undefined> {
     return defer(
       async () => {
+        await this.cacheExchangeRates();
         this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Started));
         await this.scriptService.loadScript(simpleBitcoinWalletAssetPath).toPromise();
         this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Initialized));

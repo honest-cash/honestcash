@@ -1,4 +1,7 @@
-<button type="button" class="upvote-button text-white font-weight-bold btn btn-warning text-uppercase">
-  <div class="amount-dollars">Upvote 10¢</div>
-  <div class="amount-bch">For 0.00023BCH</div>
-</button>
+<shared-transaction-button
+  [story]="story"
+  [actionText]="'Upvote'"
+  [actionLoadingText]="'Upvoting...'"
+  [onTransactionComplete]="onTransactionComplete"
+  [transactionType]="TRANSACTION_TYPES.Upvote"
+  [isSmallButton]="isSmallButton"></shared-transaction-button>

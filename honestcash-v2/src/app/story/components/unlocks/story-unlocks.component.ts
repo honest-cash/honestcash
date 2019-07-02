@@ -5,6 +5,7 @@ import {Observable, Subscription} from 'rxjs';
 import {StoryState} from '../../store/story.state';
 import {Store} from '@ngrx/store';
 import {AppStates, selectStoryState} from '../../../app.states';
+import {TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
 
 @Component({
   selector: 'story-unlocks',
@@ -15,6 +16,7 @@ export class StoryUnlocksComponent implements OnInit, OnDestroy {
   public unlocks: Unlock[];
 
   public isCollapsed = false;
+  public isLoading = true;
   public story: Story;
   public story$: Observable<StoryState>;
   public storySub: Subscription;
@@ -29,6 +31,7 @@ export class StoryUnlocksComponent implements OnInit, OnDestroy {
       this.isCollapsed = storyState.unlocks && storyState.unlocks.length > 20 ? true : false;
       this.story = storyState.story;
       this.unlocks = storyState.unlocks;
+      this.isLoading = storyState.isLoadingProperties[TRANSACTION_TYPES.Unlock];
     });
   }
 

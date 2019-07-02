@@ -61,11 +61,14 @@ export class StoryService {
     return this.http.get<Unlock[]>(API_ENDPOINTS.getStoryUnlocks(id));
   }
 
-  public loadProperty(payload: StoryPropertySaveContext): Observable<Story[] | Upvote[] | Unlock[]> {
+  public loadProperty(payload: StoryPropertySaveContext): Observable<Story[] | Upvote[] | [Unlock[], Story]> {
     if (payload.property === TRANSACTION_TYPES.Upvote) {
       return this.getStoryUpvotes(payload.transaction.postId);
     } else if (payload.property === TRANSACTION_TYPES.Unlock) {
-      return this.getStoryUnlocks(payload.transaction.postId);
+      return forkJoin(
+        this.getStoryUnlocks(payload.transaction.postId),
+        this.getStoryWithoutDetails(payload.transaction.postId)
+      );
     } else if (payload.property === TRANSACTION_TYPES.Comment) {
       return this.getStoryComments(payload.transaction.postId);
     }

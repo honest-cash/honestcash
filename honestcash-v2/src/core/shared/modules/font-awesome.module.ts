@@ -18,7 +18,7 @@ import {
   faImage,
   faKey, faLevelUpAlt,
   faPenAlt, faRedoAlt,
-  faRetweet,
+  faRetweet, faShare,
   faShareAlt,
   faSpinner,
   faTags,
@@ -58,6 +58,7 @@ export class FontAwesomeModule {
     library.add(faChevronLeft);
     library.add(faChevronRight);
     library.add(faCommentMedical);
+    library.add(faComments);
     library.add(faHeading);
     library.add(faAlignLeft);
     library.add(faTags);

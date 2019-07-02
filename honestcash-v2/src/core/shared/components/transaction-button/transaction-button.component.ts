@@ -14,7 +14,6 @@ import Story from '../../../../app/story/models/story';
 import {StoryState} from '../../../../app/story/store/story.state';
 import {TransactionService} from '../../services/transaction.service';
 import {SharedReceiptComponent} from '../receipt/receipt.component';
-import {WalletBalanceUpdated} from '../../../../app/wallet/store/wallet.actions';
 import {WALLET_STATUS} from '../../../../app/wallet/models/status';
 
 @Component({
@@ -23,17 +22,17 @@ import {WALLET_STATUS} from '../../../../app/wallet/models/status';
   styleUrls: ['./transaction-button.component.scss'],
 })
 export class SharedTransactionButtonComponent implements OnInit {
-  @ViewChild('popover') public popover: NgbPopover;
   @Input() public onTransactionComplete: Function;
   @Input() public transactionType: TRANSACTION_TYPES;
   @Input() public actionText: string;
   @Input() public actionLoadingText: string;
   @Input() public costInDollars: number;
+  @Input() public isSmallButton: boolean;
+  @Input() public story: Story;
   public costInBch: number;
   public isLoading = true;
   public wallet: ISimpleWallet;
   public user: User;
-  public story: Story;
   public isProcessing = false;
 
   constructor(
@@ -47,16 +46,14 @@ export class SharedTransactionButtonComponent implements OnInit {
 
   public ngOnInit() {
     combineLatest(
-      this.store.select(selectStoryState),
       this.store.select(selectUserState),
       this.store.select(selectWalletState),
-    ).subscribe((state: [StoryState, UserState, WalletState]) => {
-      this.story = state[0].story;
-      this.user = state[1].user;
+    ).subscribe((state: [UserState, WalletState]) => {
+      this.user = state[0].user;
 
 
-      if (state[2].status === WALLET_STATUS.Generated) {
-        this.wallet = state[2].wallet;
+      if (state[1].status === WALLET_STATUS.Generated) {
+        this.wallet = state[1].wallet;
       }
     });
     if (this.transactionType === TRANSACTION_TYPES.Upvote) {
@@ -75,9 +72,8 @@ export class SharedTransactionButtonComponent implements OnInit {
   }
 
   public onClick() {
-    this.popover.close();
-    this.isProcessing = true;
     if (this.user) {
+      this.isProcessing = true;
       let transactionPromise: Promise<ITransaction>;
       if (this.transactionType === TRANSACTION_TYPES.Upvote) {
         transactionPromise = this.transactionService.upvote(this.wallet, this.story, this.user, this.costInBch);
@@ -90,19 +86,12 @@ export class SharedTransactionButtonComponent implements OnInit {
           const modalRef = this.modalService.open(SharedReceiptComponent);
           modalRef.componentInstance.transaction = transaction;
           modalRef.componentInstance.transactionType = this.transactionType;
+          modalRef.componentInstance.story = this.story;
           this.onTransactionComplete(transaction);
         });
       }
     } else {
       this.router.navigate(['/login']);
     }
-  }
-
-  public openPopover() {
-    this.popover.open();
-  }
-
-  public closePopover() {
-    this.popover.close();
   }
 }

@@ -1,5 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import Story from '../../models/story';
+import {ITransaction, TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
+import {Store} from '@ngrx/store';
+import {AppStates, selectStoryState} from '../../../app.states';
+import {Observable, Subscription} from 'rxjs';
+import {StoryState} from '../../store/story.state';
+import {StoryPropertySave} from '../../store/story.actions';
 
 @Component({
   selector: 'story-upvote-button',
@@ -7,10 +13,21 @@ import Story from '../../models/story';
   styleUrls: ['./story-upvote-button.component.scss']
 })
 export class StoryUpvoteButtonComponent implements OnInit {
+  @Input() public isSmallButton: boolean;
   @Input() public story: Story;
-  constructor() { }
+  public TRANSACTION_TYPES = TRANSACTION_TYPES;
+  constructor(
+    private store: Store<AppStates>,
+  ) {
+  }
 
-  ngOnInit() {
+  public ngOnInit() {
+  }
+
+  public onTransactionComplete(transaction: ITransaction) {
+    this.store.dispatch(
+      new StoryPropertySave({property: TRANSACTION_TYPES.Upvote, transaction, data: this.story})
+    );
   }
 
 }
