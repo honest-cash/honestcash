@@ -14,7 +14,11 @@ export default class Story {
   public plain: string;
   public user: User;
   public userId: number;
-  public shareURLs: any;
+  public shareURLs: {
+    reddit: string;
+    twitter: string;
+    facebook?: string;
+  };
   public status: 'draft' | 'published' | 'archived';
   public postTypeId: TPostTypeId;
   public parentPostId: number;

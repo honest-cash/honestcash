@@ -1,4 +1,4 @@
-<div class="btn-group" [ngClass]="{'btn-group-sm': isSmallButton, 'btn-group-lg': !isSmallButton}">
-  <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'facebook']"></fa-icon></button>
-  <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></button>
+<div *ngIf="story && story.shareURLs" class="btn-group" [ngClass]="{'btn-group-sm': isSmallButton, 'btn-group-lg': !isSmallButton}">
+   <a class="btn btn-light" target="_blank" [href]="story.shareURLs.twitter"><fa-icon [icon]="['fab', 'twitter']"></fa-icon></a>
+  <a class="btn btn-light" target="_blank" [href]="story.shareURLs.reddit"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></a>
 </div>

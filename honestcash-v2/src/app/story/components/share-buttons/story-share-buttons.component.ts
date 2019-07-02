@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AppStates, selectStoryState} from '../../../app.states';
-import {Store} from '@ngrx/store';
 import Story from '../../models/story';
+import {Store} from '@ngrx/store';
+import {AppStates, selectStoryState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {StoryState} from '../../store/story.state';
 
@@ -16,7 +16,7 @@ export class StoryShareButtonsComponent implements OnInit, OnDestroy {
   public story$: Observable<StoryState>;
   public storySub: Subscription;
   constructor(
-    private store: Store<AppStates>
+    private store: Store<AppStates>,
   ) {
     this.story$ = this.store.select(selectStoryState);
   }
