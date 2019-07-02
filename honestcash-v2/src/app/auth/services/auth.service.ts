@@ -99,8 +99,8 @@ export class AuthService {
 
   public changePassword(context: ResetPasswordContext): Observable<OkResponse> {
     return defer(async () => {
-      const mnemonic = (await this.walletService.createWallet(context.newPassword)).mnemonic;
-      const mnemonicEncrypted = await this.walletService.encrypt(mnemonic, context.newPassword);
+      const mnemonic = (this.walletService.createWallet(context.newPassword)).mnemonic;
+      const mnemonicEncrypted = this.walletService.encryptMnemonic(mnemonic, context.newPassword);
       const payload: ChangePasswordPayload = {
         email: context.email,
         code: context.code,

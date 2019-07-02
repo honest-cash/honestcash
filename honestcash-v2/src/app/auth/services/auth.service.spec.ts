@@ -18,14 +18,11 @@ import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../app.states.mock';
 import {SimpleWallet} from '../../wallet/models/simple-wallet';
-import {WalletService} from '../../wallet/services/wallet.service';
+import {WALLET_LOCALSTORAGE_KEYS, WalletService} from '../../wallet/services/wallet.service';
 import {API_ENDPOINTS} from '../shared/auth.endpoints';
 import {RouterTestingModule} from '@angular/router/testing';
+import {LOCAL_TOKEN_KEY, UserService} from '../../user/services/user.service';
 
-const MockWalletService = {
-  createWallet: () => ({mnemonic: 'test1 test2 test3'}),
-  encrypt: () => `encrypted test1 test2 test3`
-};
 
 const SHARED_MOCKS = {
   token: '123',
@@ -43,9 +40,12 @@ describe('AuthService', () => {
   let authService: AuthService;
   let mockWalletService: WalletService;
   let mockHttpService: HttpService;
+  let mockUserService: UserService;
 
   beforeEach(() => {
     mockHttpService = mock(HttpService);
+    mockWalletService = mock(WalletService);
+    mockUserService = mock(UserService);
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -53,7 +53,8 @@ describe('AuthService', () => {
       ],
       providers: [
         AuthService,
-        {provide: WalletService, useValue: MockWalletService},
+        {provide: UserService, useValue: mockUserService},
+        {provide: WalletService, useValue: mockWalletService},
         {provide: HttpService, useValue: mockHttpService},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
@@ -62,6 +63,7 @@ describe('AuthService', () => {
     });
     authService = TestBed.get(AuthService);
     mockWalletService = TestBed.get(WalletService);
+    mockUserService = TestBed.get(UserService);
   });
 
   afterEach(() => {
@@ -72,6 +74,47 @@ describe('AuthService', () => {
   describe('instance', () => {
     it('should have been initialized', () => {
       expect(authService).toBeDefined();
+    });
+  });
+
+  describe('unauthenticate should', () => {
+    it('set isAuthenticated to false', () => {
+      localStorage.setItem(LOCAL_TOKEN_KEY, 'asdf');
+      localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, 'asdfasdf');
+      authService.authenticate();
+      localStorage.removeItem(LOCAL_TOKEN_KEY);
+      localStorage.removeItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC);
+      authService.unauthenticate();
+      expect(authService.hasAuthorization()).toBeFalsy();
+    });
+  });
+
+  describe('authenticate should', () => {
+    it('set isAuthenticated to true when mnemonic and token exists in localStorage', () => {
+      (<jasmine.Spy>mockWalletService.getWalletMnemonic).and.returnValue('asdf');
+      (<jasmine.Spy>mockUserService.getToken).and.returnValue('asdf');
+
+      authService.authenticate();
+      expect(authService.hasAuthorization()).toBeTruthy();
+    });
+    it('NOT set isAuthorization to true if mnemonic and token does not exist in localStorage', () => {
+      (<jasmine.Spy>mockWalletService.getWalletMnemonic).and.callThrough();
+      (<jasmine.Spy>mockUserService.getToken).and.callThrough();
+      authService.authenticate();
+      expect(authService.hasAuthorization()).toBeFalsy();
+    });
+  });
+
+  describe('hasAuthorization should', () => {
+    it('return isAuthenticated as false if token and mnemonic does not exist in localStorage', () => {
+      (<jasmine.Spy>mockWalletService.getWalletMnemonic).and.callThrough();
+      (<jasmine.Spy>mockUserService.getToken).and.callThrough();
+      expect(authService.hasAuthorization()).toBeFalsy();
+    });
+    it('return isAuthenticated as true if token and mnemonic exist in localStorage', () => {
+      (<jasmine.Spy>mockWalletService.getWalletMnemonic).and.returnValue('asdf');
+      (<jasmine.Spy>mockUserService.getToken).and.returnValue('token');
+      expect(authService.hasAuthorization()).toBeTruthy();
     });
   });
 
@@ -305,6 +348,8 @@ describe('AuthService', () => {
     it('should make API request to the correct API endpoint and'
       + ' have the correct body on request with hashed passwords and newly generated mnemonicEncrypted', (done) => {
       (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
+      (<jasmine.Spy>mockWalletService.createWallet).and.returnValue({mnemonic: 'test1 test2 test3'});
+      (<jasmine.Spy>mockWalletService.encryptMnemonic).and.returnValue('test1 test2 test3');
       // Act
       authService.changePassword(mocks.changePasswordContext).subscribe((response: OkResponse) => {
         // Assert
@@ -321,6 +366,8 @@ describe('AuthService', () => {
 
     it('should return nothing as a response', (done) => {
       (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
+      (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.changePasswordSuccess));
+      (<jasmine.Spy>mockWalletService.createWallet).and.returnValue({mnemonic: 'test1 test2 test3'});
       // Act
       authService.resetPassword(mocks.changePasswordContext).subscribe((response: EmptyResponse) => {
         // Assert
@@ -347,6 +394,7 @@ describe('AuthService', () => {
 
     it('should make API request to the correct API endpoint with the correct body', (done) => {
       (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.checkPasswordSuccess));
+      (<jasmine.Spy>mockWalletService.createWallet).and.returnValue({mnemonic: 'test1 test2 test3'});
       // Act
       authService.checkPassword(mocks.checkPasswordContext).subscribe((response: CheckPasswordResponse) => {
         // Assert
@@ -357,6 +405,7 @@ describe('AuthService', () => {
 
     it('should have no body on response', (done) => {
       (<jasmine.Spy>mockHttpService.post).and.returnValue(of(mocks.checkPasswordSuccess));
+      (<jasmine.Spy>mockWalletService.createWallet).and.returnValue({mnemonic: 'test1 test2 test3'});
       // Act
       authService.checkPassword(mocks.checkPasswordContext).subscribe((response: CheckPasswordResponse) => {
         // Assert

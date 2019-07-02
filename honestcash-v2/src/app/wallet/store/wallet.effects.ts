@@ -40,8 +40,12 @@ export class WalletEffects {
     map((action: WalletSetup) => action.payload),
     switchMap((payload?: LoginSuccessResponse) => this.walletService.loadWallet(payload)
       .pipe(
-        map((wallet: ISimpleWallet) => new WalletGenerated({wallet})),
-        catchError(() => of(new WalletSetupFailed()))
+        map((wallet: ISimpleWallet) => {
+          if (wallet) {
+            return new WalletGenerated({wallet});
+          }
+          return new WalletSetupFailed();
+        }),
       )
     ),
   );
