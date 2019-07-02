@@ -30,8 +30,8 @@ matrix:
     # enable it once all the linting errors are fixed:
     # - npm run lint
     - npm run transfer-libs
-    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run test --prod -C ./honestcash-v2; fi
-    - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run test --configuration=development -C ./honestcash-v2; fi
+    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run test --prod; fi
+    - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run test --configuration=development; fi
     # build V2 depending on the branch
     - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run build --prod -C ./honestcash-v2; fi
     - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build --configuration=development -C ./honestcash-v2; fi
