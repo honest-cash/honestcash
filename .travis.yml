@@ -7,6 +7,7 @@ cache:
 
 addons:
   sauce_connect: true
+  chrome: stable
 
 dist: trusty
 
@@ -30,15 +31,13 @@ matrix:
     # enable it once all the linting errors are fixed:
     # - npm run lint
     - npm run transfer-libs
-    - - cd ./honestcash-v2
-    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run test --prod; fi
-    - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run test --configuration=development; fi
-    - cd ..
+    - npm run test
     # build V2 depending on the branch
     - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run build --prod -C ./honestcash-v2; fi
     - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build --configuration=development -C ./honestcash-v2; fi
     - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run build:ssr:prod -C ./honestcash-v2; fi
     - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build:ssr:dev -C ./honestcash-v2; fi
+    - npm run test -C ./honestcash-v2
 
 
     before_deploy:
