@@ -37,7 +37,7 @@ matrix:
     - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build --configuration=development -C ./honestcash-v2; fi
     - if [[ "$TRAVIS_BRANCH" == "master" ]]; then npm run build:ssr:prod -C ./honestcash-v2; fi
     - if [[ "$TRAVIS_BRANCH" != "master" ]]; then npm run build:ssr:dev -C ./honestcash-v2; fi
-    - npm run test --watch=false --browsers ChromeHeadless -C ./honestcash-v2
+    - npm run test -C ./honestcash-v2
 
 
     before_deploy:
