@@ -6,7 +6,7 @@
     <div id="comments-placeholder" class="bg-light text-center py-3">
       <button class="btn btn-link btn-sm" (click)="onCommentClicked()">
         <span *ngIf="!comments || (comments && !comments.length)">No one commented yet. Be the first to comment.</span>
-        <span *ngIf="comments && comments.length">Write a comment.</span>
+        <span *ngIf="comments && comments.length">Write a comment and join the conversation.</span>
       </button>
     </div>
   </div>

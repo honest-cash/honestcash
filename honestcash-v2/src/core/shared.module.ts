@@ -16,6 +16,7 @@ import {TransactionService} from './shared/services/transaction.service';
 import {WalletService} from '../app/wallet/services/wallet.service';
 import {StoryService} from '../app/story/services/story.service';
 import {ToastrModule} from 'ngx-toastr';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {ToastrModule} from 'ngx-toastr';
     WalletSharedModule,
     QRCodeModule,
     ToastrModule.forRoot(),
+    RouterModule,
   ],
   providers: [
     TransactionService,
