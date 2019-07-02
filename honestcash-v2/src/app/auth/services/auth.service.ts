@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   public authenticate() {
-    if (this.walletService.getWalletMnemonic() && this.userService.getToken()) {
+    if (this.isPlatformBrowser && this.walletService.getWalletMnemonic() && this.userService.getToken()) {
       this.isAuthenticated = true;
     }
   }
