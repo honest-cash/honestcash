@@ -1,4 +1,4 @@
-<div class="btn-group btn-group-sm">
-  <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'facebook']"></fa-icon></button>
-  <button type="button" class="btn btn-light"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></button>
+<div class="btn-group btn-group-sm" *ngIf="story && story.shareURLs">
+  <a class="btn btn-light" target="_blank" [href]="story.shareURLs.twitter"><fa-icon [icon]="['fab', 'twitter']"></fa-icon></a>
+  <a class="btn btn-light" target="_blank" [href]="story.shareURLs.reddit"><fa-icon [icon]="['fab', 'reddit']"></fa-icon></a>
 </div>
