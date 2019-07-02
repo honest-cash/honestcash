@@ -18,7 +18,7 @@ export class TransactionService {
 
   private readonly satoshiFactor = 100000000;
 
-  private logger = new Logger();
+  private logger = new Logger('TransactionService');
 
   constructor(
     private http: HttpService,
@@ -263,7 +263,7 @@ export class TransactionService {
 
     const url = `https://explorer.bitcoin.com/bch/tx/${tx.txid}`;
 
-    console.log(`Unlock transaction: ${url}`);
+    this.logger.info(`Unlock transaction: ${url}`);
 
     this.walletService.updateWalletBalance();
 
