@@ -7,6 +7,7 @@ import {WalletRoutingModule} from './wallet-routing.module';
 import {WalletSharedModule} from './wallet-shared.module';
 import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
 import {QRCodeModule} from 'angularx-qrcode';
+import {LayoutModule} from '../../core/layout.module';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import {QRCodeModule} from 'angularx-qrcode';
     WalletSharedModule,
     CommonModule,
     SharedModule,
+    LayoutModule,
     ScrollToModule.forRoot(),
     QRCodeModule,
   ],

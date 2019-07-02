@@ -23,6 +23,8 @@ import {StoryUnlockButtonComponent} from './components/unlock-button/unlock-butt
 import {StoryCommentCardActionsComponent} from './components/comment-card-actions/comment-card-actions.component';
 import {StoryCommentCardBodyComponent} from './components/comment-card-body/story-comment-card-body.component';
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
+import {WalletSharedModule} from '../wallet/wallet-shared.module';
+import {LayoutModule} from '../../core/layout.module';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import {StoryCommentCardHeaderComponent} from './components/comment-card-header/
   imports: [
     StoryRoutingModule,
     StorySharedModule,
+    WalletSharedModule,
+    LayoutModule,
     CommonModule,
     SharedModule,
   ],

@@ -1,7 +1,7 @@
 import Story from '../models/story';
 import {FailedResponse} from '../../auth/models/authentication';
 import {Action} from '@ngrx/store';
-import {ITransaction, TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
+import {ITransaction, TRANSACTION_TYPES} from '../../wallet/models/transaction';
 import {Unlock} from '../models/unlock';
 import {Upvote} from '../models/upvote';
 

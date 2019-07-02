@@ -26,7 +26,7 @@ import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
 import {EditorService} from '../../editor/services/editor.service';
-import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
+import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 
 @Injectable()
 export class StoryEffects {

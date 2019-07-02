@@ -15,7 +15,7 @@
         <editor-publish-button
           *ngIf="editingMode === EDITOR_EDITING_MODE.Write || editingMode === EDITOR_EDITING_MODE.Edit"></editor-publish-button>
         <editor-comment-button *ngIf="editingMode === EDITOR_EDITING_MODE.Comment"></editor-comment-button>
-        <shared-header-profile-menu [user]="user"></shared-header-profile-menu>
+        <user-profile-menu></user-profile-menu>
       </div>
     </div>
   </nav>

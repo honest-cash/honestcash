@@ -16,15 +16,17 @@ import {HeaderInterceptor} from '../core/http/header.interceptor';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {EditorEffects} from './editor/store/editor.effects';
 import {AppSharedModule} from './app.shared.module';
-import {ToastrModule} from 'ngx-toastr';
 import {SharedModule} from '../core/shared.module';
 import {CoreEffects} from '../core/store/core.effects';
 import {StoryEffects} from './story/store/story.effects';
-import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
+import {CoreModule} from '../core';
+import {LayoutModule} from '../core/layout.module';
+import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AppNotFoundComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({
@@ -33,6 +35,8 @@ import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
+    CoreModule,
+    LayoutModule,
     SharedModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),

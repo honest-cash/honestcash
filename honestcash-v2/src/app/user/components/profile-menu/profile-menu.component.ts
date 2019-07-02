@@ -1,9 +1,11 @@
-import {Component, Inject, Input} from '@angular/core';
-import User from '../../../../app/user/models/user';
+import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import User from '../../models/user';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../../app/app.states';
-import {LogOut} from '../../../../app/auth/store/auth.actions';
-import {WindowToken} from '../../helpers/window.helper';
+import {AppStates, selectUserState} from '../../../app.states';
+import {LogOut} from '../../../auth/store/auth.actions';
+import {WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {Observable, Subscription} from 'rxjs';
+import {UserState} from '../../store/user.state';
 
 export const GOTO_PATHS = {
   profile: (username) => `/profile/${username}`,
@@ -15,29 +17,38 @@ export const GOTO_PATHS = {
 };
 
 @Component({
-  selector: 'shared-header-profile-menu',
-  templateUrl: './header-profile-menu.component.html',
-  styleUrls: ['./header-profile-menu.component.scss']
+  selector: 'user-profile-menu',
+  templateUrl: './profile-menu.component.html',
+  styleUrls: ['./profile-menu.component.scss']
 })
-export class ShardHeaderProfileMenuComponent {
+export class UserProfileMenuComponent implements OnInit, OnDestroy {
   public menuHidden = true;
-  @Input() public user: User;
+  public user: User;
+  public user$: Observable<UserState>;
+  public userSub: Subscription;
 
   constructor(
     @Inject(WindowToken) private window,
     private store: Store<AppStates>,
   ) {
+    this.user$ = this.store.select(selectUserState);
   }
 
-  toggleMenu() {
+  public ngOnInit() {
+    this.userSub = this.user$.subscribe((userState: UserState) => {
+      this.user = userState.user;
+    });
+  }
+
+  public toggleMenu() {
     this.menuHidden = !this.menuHidden;
   }
 
-  logout() {
+  public logout() {
     this.store.dispatch(new LogOut());
   }
 
-  goTo(path: string) {
+  public goTo(path: string) {
     switch (path) {
       case 'profile':
         this.window.location.href = GOTO_PATHS.profile(this.user.username);
@@ -60,6 +71,12 @@ export class ShardHeaderProfileMenuComponent {
       /* istanbul ignore next: testing is not needed */
       default:
         break;
+    }
+  }
+
+  public ngOnDestroy(){
+    if (this.userSub) {
+      this.userSub.unsubscribe();
     }
   }
 }
