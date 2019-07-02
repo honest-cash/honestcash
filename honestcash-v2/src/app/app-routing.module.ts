@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {SharedNotFoundComponent} from '../core/shared/pages/not-found/not-found.component';
-import {AppComponent} from './app.component';
+import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
 
 /**
  * - More specific routes should come first
@@ -30,7 +29,7 @@ const routes: Routes = [
     path: '',
     loadChildren: './auth/auth.module#AuthModule'
   },
-  {path: 'not-found', component: SharedNotFoundComponent},
+  {path: 'not-found', component: AppNotFoundComponent},
   {path: '**', redirectTo: '/not-found'}
 ];
 

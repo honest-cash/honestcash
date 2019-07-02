@@ -3,6 +3,8 @@ import {WalletBalanceComponent} from './components/balance/balance.component';
 import {WalletReceiptComponent} from './components/receipt/receipt.component';
 import {WalletTransactionButtonComponent} from './components/transaction-button/transaction-button.component';
 import {SharedModule} from '../../core/shared.module';
+import {WalletService} from './services/wallet.service';
+import {TransactionService} from './services/transaction.service';
 
 @NgModule({
   declarations: [
@@ -12,6 +14,10 @@ import {SharedModule} from '../../core/shared.module';
   ],
   imports: [
     SharedModule,
+  ],
+  providers: [
+    WalletService,
+    TransactionService,
   ],
   entryComponents: [
     WalletReceiptComponent,

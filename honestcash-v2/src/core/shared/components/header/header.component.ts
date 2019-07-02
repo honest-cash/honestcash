@@ -6,11 +6,11 @@ import {UserState} from '../../../../app/user/store/user.state';
 import User from '../../../../app/user/models/user';
 
 @Component({
-  selector: 'shared-header',
+  selector: 'layout-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class SharedHeaderComponent implements OnInit, OnDestroy {
+export class LayoutHeaderComponent implements OnInit, OnDestroy {
   public menuHidden = true;
   public user$: Observable<UserState>;
   public user: User;

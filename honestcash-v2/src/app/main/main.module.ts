@@ -6,6 +6,7 @@ import {MainAboutComponent} from './pages/about/about.component';
 import {MainRoutingModule} from './main-routing.module';
 import {MainTermsOfServiceComponent} from './pages/terms-of-service/terms-of-service.component';
 import {StorySharedModule} from '../story/story-shared.module';
+import {LayoutModule} from '../../core/layout.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import {StorySharedModule} from '../story/story-shared.module';
     MainRoutingModule,
     CommonModule,
     SharedModule,
+    LayoutModule,
     StorySharedModule,
   ],
   providers: [],
