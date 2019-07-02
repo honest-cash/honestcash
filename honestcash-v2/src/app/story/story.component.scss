@@ -1,3 +1,5 @@
+@import '../../styles';
+
 :host {
   padding-top: 90px;
   display: flex;
@@ -11,13 +13,24 @@
     }
 
     .story {
-      width: 700px;
       display: block;
       margin: 0 auto;
       word-break: break-word;
       word-wrap: break-word;
+    }
+
+    @include media-breakpoint-down(xl) {
+      .story {
+        width: 700px;
+      }
+    }
 
 
+    @include media-breakpoint-down(md) {
+      .story {
+        width: 100%;
+        padding: 0px 1rem 0px 1rem;
+      }
     }
   }
 }
