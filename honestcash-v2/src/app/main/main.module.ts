@@ -7,6 +7,7 @@ import {MainRoutingModule} from './main-routing.module';
 import {MainTermsOfServiceComponent} from './pages/terms-of-service/terms-of-service.component';
 import {StorySharedModule} from '../story/story-shared.module';
 import {MainPrivacyPolicyComponent} from './pages/privacy-policy/privacy-policy.component';
+import {MainFaqComponent} from './pages/faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import {MainPrivacyPolicyComponent} from './pages/privacy-policy/privacy-policy.
     MainAboutComponent,
     MainTermsOfServiceComponent,
     MainPrivacyPolicyComponent,
+    MainFaqComponent,
   ],
   imports: [
     MainRoutingModule,
