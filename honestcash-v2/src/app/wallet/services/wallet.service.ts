@@ -42,6 +42,7 @@ declare var SimpleWallet: any;
 @Injectable({providedIn: 'root'})
 export class WalletService {
   public wallet: ISimpleWallet;
+  private exchangeRateCache: CoinbaseExchangeResponse;
   private logger: Logger;
   private readonly isPlatformBrowser: boolean;
 
@@ -73,14 +74,21 @@ export class WalletService {
     );
   }
 
+  public async cacheExchangeRates() {
+    const response: CoinbaseExchangeResponse = await this.http.get<CoinbaseExchangeResponse>(`https://api.coinbase.com/v2/exchange-rates?currency=USD`)
+      .toPromise();
+    this.exchangeRateCache = response;
+    console.log('response1');
+  }
+
   public convertCurrency(amount: number, sourceCurrency: string, targetCurrency: string): Observable<number> {
-    return this.http.get(`https://api.coinbase.com/v2/exchange-rates?currency=${sourceCurrency.toUpperCase()}`)
-      .pipe(
-        map((response: CoinbaseExchangeResponse) => {
-          const rate = response.data.rates[targetCurrency.toUpperCase()];
-          return Number(Number((Number(rate) * Number(amount))));
-        })
-      );
+    console.log('response2');
+    return of(this.calculateRate(amount, this.exchangeRateCache.data.rates, targetCurrency));
+  }
+
+  public calculateRate(amount: number, rates: number[], targetCurrency: string): number {
+    const rate = rates[targetCurrency.toUpperCase()];
+    return Number(Number((Number(rate) * Number(amount))));
   }
 
   public updateWalletBalance() {
@@ -105,22 +113,11 @@ export class WalletService {
     return SimpleWallet.decrypt(mnemonicEncrypted, password);
   }
 
-  public loadWalletWithEncryptedRecoveryPhrase(
-    encryptedRecoveryPhrase: string,
-    password: string
-  ): ISimpleWallet {
-    return new SimpleWallet(encryptedRecoveryPhrase, {password});
-  }
-
-  public loadWalletWithDecryptedRecoveryPhrase(
-    recoveryPhrase: string,
-  ): ISimpleWallet {
-    return new SimpleWallet(recoveryPhrase, {password: null});
-  }
-
   public loadWallet(payload?: LoginSuccessResponse): Observable<ISimpleWallet> {
     return defer(
       async () => {
+        await this.cacheExchangeRates();
+        console.log('response3');
         this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Started));
         await this.scriptService.loadScript(simpleBitcoinWalletAssetPath).toPromise();
         this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Initialized));

@@ -1,12 +1,12 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import Story from '../../models/story';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Unlock} from '../../models/unlock';
 import {Observable, Subscription} from 'rxjs';
 import {StoryState} from '../../store/story.state';
 import {Store} from '@ngrx/store';
 import {AppStates, selectStoryState} from '../../../app.states';
 import {StoryCommentDraftLoad} from '../../store/story.actions';
+import {TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
 
 @Component({
   selector: 'story-comments',
@@ -41,6 +41,7 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
   public shouldShowCommentEditorPlaceholder = true;
   public commentParent: Story;
   public commentDraft: Story;
+  public isLoading = true;
   constructor(
     private store: Store<AppStates>,
   ) {
@@ -53,6 +54,10 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
       this.comments = storyState.comments;
       this.commentParent = storyState.commentParent;
       this.commentDraft = storyState.commentDraft;
+
+      if (this.comments) {
+        this.isLoading = false;
+      }
 
       if (storyState.hasCommentDraftLoaded) {
         if (this.commentDraft.parentPostId === this.masterStory.id) {

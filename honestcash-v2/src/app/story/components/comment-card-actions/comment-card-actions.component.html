@@ -1,4 +1,12 @@
 <div class="col">
-  <story-upvote-button></story-upvote-button>
+  <story-upvote-button [isSmallButton]="true" [story]="comment"></story-upvote-button>
   <story-comment-button [parentStory]="comment" style="margin-left: 20px;"></story-comment-button>
+  <span class="comment-counts">
+    <span class="ml-4">
+      {{comment.upvoteCount}}&nbsp;<fa-icon [icon]="['fab', 'bitcoin']"></fa-icon>
+    </span>
+    <span class="ml-2">
+      {{comment.responseCount}}&nbsp;<fa-icon [icon]="['fas', 'comments']"></fa-icon>
+    </span>
+  </span>
 </div>

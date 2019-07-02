@@ -1,13 +1,26 @@
 <div class="row mb-2" *ngIf="upvotes !== undefined">
-  <h5 class="col font-weight-bold text-uppercase cursor-pointer"
-      [attr.aria-expanded]="!isCollapsed"
-      aria-controls="collapseUpvotes">
-    <a (click)="isCollapsed = !isCollapsed">Upvotes</a>({{upvotes.length}})
-  </h5>
+  <div class="col">
+    <h5 class="font-weight-bold text-uppercase cursor-pointer"
+        [attr.aria-expanded]="!isCollapsed"
+        aria-controls="collapseUpvotes">
+      <a (click)="isCollapsed = !isCollapsed">Upvotes</a> ({{upvotes.length}})
+    </h5>
+  </div>
+  <div class="col text-right">
+    <button class="btn btn-outline-dark btn-sm" (click)="isCollapsed = !isCollapsed" ngbTooltip="Toggle Unlocks">
+      <fa-icon *ngIf="!isCollapsed" [icon]="['fas', 'chevron-up']"></fa-icon>
+      <fa-icon *ngIf="isCollapsed" [icon]="['fas', 'chevron-down']"></fa-icon>
+    </button>
+  </div>
 </div>
-<div class="row" [ngbCollapse]="isCollapsed" *ngIf="upvotes && upvotes.length">
+<div class="row" [ngbCollapse]="isCollapsed" *ngIf="!isLoading && upvotes && upvotes.length">
   <story-payer-badge *ngFor="let transaction of upvotes" [transaction]="transaction"></story-payer-badge>
 </div>
-<div class="row" *ngIf="!upvotes || (upvotes && !upvotes.length) ">
+<div class="row" *ngIf="!isLoading && (!upvotes || (upvotes && !upvotes.length))">
   <div class="col"><small>No one upvoted yet. You can be the first one!</small></div>
+</div>
+<div *ngIf="isLoading" class="row">
+  <div class="col text-center">
+    <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon> Loading upvotes...
+  </div>
 </div>

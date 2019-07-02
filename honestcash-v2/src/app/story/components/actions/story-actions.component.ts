@@ -11,7 +11,7 @@ export class StoryActionsComponent implements OnInit {
   @HostBinding('class') public class = 'row mx-auto mt-5';
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

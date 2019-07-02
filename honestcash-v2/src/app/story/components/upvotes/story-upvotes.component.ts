@@ -1,10 +1,11 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Upvote} from '../../models/upvote';
 import Story from '../../models/story';
 import {Observable, Subscription} from 'rxjs';
 import {StoryState} from '../../store/story.state';
 import {Store} from '@ngrx/store';
 import {AppStates, selectStoryState} from '../../../app.states';
+import {TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
 
 @Component({
   selector: 'story-upvotes',
@@ -18,6 +19,7 @@ export class StoryUpvotesComponent implements OnInit, OnDestroy {
   public story: Story;
   public story$: Observable<StoryState>;
   public storySub: Subscription;
+  public isLoading = true;
   constructor(
     private store: Store<AppStates>,
   ) {
@@ -29,6 +31,7 @@ export class StoryUpvotesComponent implements OnInit, OnDestroy {
       this.isCollapsed = storyState.upvotes && storyState.upvotes.length > 20 ? true : false;
       this.story = storyState.story;
       this.upvotes = storyState.upvotes;
+      this.isLoading = storyState.isLoadingProperties[TRANSACTION_TYPES.Upvote];
     });
   }
 

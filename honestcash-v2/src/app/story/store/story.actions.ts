@@ -86,7 +86,7 @@ export class StoryPropertyLoad implements Action {
 export class StoryPropertyUpdate implements Action {
   public readonly type = StoryActionTypes.STORY_PROPERTY_UPDATE;
 
-  constructor(public payload: {property: string, value: Story[] | Upvote[] | Unlock[]}) {
+  constructor(public payload: {property: string, value: Story[] | Upvote[] | [Unlock[], Story]}) {
   }
 }
 

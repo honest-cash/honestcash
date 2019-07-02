@@ -5,7 +5,9 @@ import {Observable, of} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {
   StoryActionTypes,
-  StoryCommentDraftLoad, StoryCommentDraftLoadFailure, StoryCommentDraftLoadSuccess,
+  StoryCommentDraftLoad,
+  StoryCommentDraftLoadFailure,
+  StoryCommentDraftLoadSuccess,
   StoryLoad,
   StoryLoadFailure,
   StoryLoadSuccess,
@@ -23,8 +25,8 @@ import {StoryService} from '../services/story.service';
 import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
-import {EditorStoryLoadFailure, EditorStoryLoadSuccess} from '../../editor/store/editor.actions';
 import {EditorService} from '../../editor/services/editor.service';
+import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
 
 @Injectable()
 export class StoryEffects {
@@ -97,9 +99,17 @@ export class StoryEffects {
     switchMap((payload: StoryPropertySaveContext) =>
       this.storyService.loadProperty(payload)
         .pipe(
-          map((savePropertyResponse: Story[] | Upvote[] | Unlock[]) =>
-            new StoryPropertyUpdate({property: payload.property, value: savePropertyResponse})
-          ),
+          map((savePropertyResponse: Story[] | Upvote[] | [Unlock[], Story]) => {
+            if (payload.property === TRANSACTION_TYPES.Unlock) {
+              return new StoryPropertyUpdate({property: TRANSACTION_TYPES.Unlock, value: savePropertyResponse as [Unlock[], Story]});
+            }
+            if (payload.property === TRANSACTION_TYPES.Upvote) {
+              return new StoryPropertyUpdate({property: TRANSACTION_TYPES.Upvote, value: savePropertyResponse as Upvote[]});
+            }
+            if (payload.property === TRANSACTION_TYPES.Comment) {
+              return new StoryPropertyUpdate({property: TRANSACTION_TYPES.Comment, value: savePropertyResponse as Story[]});
+            }
+          }),
         )
     )
   );

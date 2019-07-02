@@ -5,7 +5,7 @@
   <story-body *ngIf="!story.hasPaidSection"></story-body>
   <story-locked-body *ngIf="story.hasPaidSection"></story-locked-body>
   <story-author></story-author>
-  <story-actions></story-actions>
+  <story-actions [story]="story"></story-actions>
   <hr class="my-5">
   <story-upvotes></story-upvotes>
   <hr class="my-5" *ngIf="story.hasPaidSection">

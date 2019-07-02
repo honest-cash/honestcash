@@ -4,7 +4,7 @@
       class="font-weight-bold text-uppercase cursor-pointer"
       [attr.aria-expanded]="!isCollapsed"
       aria-controls="collapseUpvotes">
-      <a (click)="isCollapsed = !isCollapsed">Unlocks</a>({{unlocks.length}})
+      <a (click)="isCollapsed = !isCollapsed">Unlocks</a> ({{unlocks.length}})
     </h5>
   </div>
   <div class="col text-right">
@@ -14,9 +14,14 @@
     </button>
   </div>
 </div>
-<div class="row" [ngbCollapse]="isCollapsed" *ngIf="unlocks && unlocks.length">
+<div class="row" [ngbCollapse]="isCollapsed" *ngIf="!isLoading && unlocks && unlocks.length">
   <story-payer-badge *ngFor="let transaction of unlocks" [transaction]="transaction"></story-payer-badge>
 </div>
-<div class="row"  *ngIf="!unlocks || (unlocks && !unlocks.length)">
+<div class="row"  *ngIf="!isLoading && (!unlocks || (unlocks && !unlocks.length))">
   <div class="col"><small>No unlocks yet</small></div>
+</div>
+<div *ngIf="isLoading" class="row">
+  <div class="col text-center">
+    <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon> Loading unlocks...
+  </div>
 </div>
