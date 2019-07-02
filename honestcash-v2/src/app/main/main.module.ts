@@ -15,7 +15,6 @@ import {StorySharedModule} from '../story/story-shared.module';
   ],
   imports: [
     MainRoutingModule,
-    CommonModule,
     SharedModule,
     StorySharedModule,
   ],

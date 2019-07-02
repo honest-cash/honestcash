@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col">
       <a class="font-weight-bold">{{story.user.username}}</a>
-      Follow <!--<shared-follow-button></shared-follow-button>-->
+      <user-follow-button [author]="story.user"></user-follow-button>
     </div>
   </div>
 </div>

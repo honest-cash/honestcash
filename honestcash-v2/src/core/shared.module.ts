@@ -17,6 +17,7 @@ import {WalletService} from '../app/wallet/services/wallet.service';
 import {StoryService} from '../app/story/services/story.service';
 import {ToastrModule} from 'ngx-toastr';
 import {RouterModule} from '@angular/router';
+import {WalletBalanceComponent} from '../app/wallet/components/balance/balance.component';
 
 @NgModule({
   declarations: [
@@ -28,12 +29,12 @@ import {RouterModule} from '@angular/router';
     SharedNotFoundComponent,
     SharedReceiptComponent,
     SharedTransactionButtonComponent,
+    WalletBalanceComponent,
   ],
   imports: [
     CommonModule,
     FontAwesomeModule,
     NgbModule,
-    WalletSharedModule,
     QRCodeModule,
     ToastrModule.forRoot(),
     RouterModule,

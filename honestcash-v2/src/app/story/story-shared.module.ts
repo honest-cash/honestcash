@@ -13,7 +13,6 @@ import {StoryCommentButtonComponent} from './components/comment-button/comment-b
     StoryCommentButtonComponent,
   ],
   imports: [
-    CommonModule,
     SharedModule,
   ],
   providers: [

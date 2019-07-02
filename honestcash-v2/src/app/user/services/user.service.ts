@@ -15,6 +15,10 @@ export const LOCAL_USER_ID_KEY = 'HC_USER_ID';
 
 export const API_ENDPOINTS = {
   getCurrentUser: `/me`,
+  followUser: (id: number) => `/user/${id}/follow`,
+  unfollowUser: (id: number) => `/user/${id}/unfollow`,
+  getFollowerUsersOfUser: (id: number) => `/user/${id}/followers`,
+  getFollowingUsersOfUser: (id: number) => `/user/${id}/following`,
 };
 
 @Injectable({providedIn: 'root'})
@@ -120,5 +124,20 @@ export class UserService {
 
   public getCurrentUser(): Observable<User> {
     return this.http.get<User>(API_ENDPOINTS.getCurrentUser);
+  }
+
+  public followUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.followUser(userId), {});
+  }
+  public unfollowUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.unfollowUser(userId), {});
+  }
+
+  public getFollowerUsersOfUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.getFollowerUsersOfUser(userId), {});
+  }
+
+  public getFollowingUsersOfUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.getFollowingUsersOfUser(userId), {});
   }
 }

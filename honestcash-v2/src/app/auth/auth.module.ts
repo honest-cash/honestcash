@@ -41,7 +41,6 @@ import {AuthRoutingModule} from './auth-routing.module';
   imports: [
     FormsModule,
     AuthRoutingModule,
-    CommonModule,
     SharedModule,
   ],
   providers: [],

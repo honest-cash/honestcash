@@ -17,7 +17,6 @@ import {QRCodeModule} from 'angularx-qrcode';
     FormsModule,
     WalletRoutingModule,
     WalletSharedModule,
-    CommonModule,
     SharedModule,
     ScrollToModule.forRoot(),
     QRCodeModule,

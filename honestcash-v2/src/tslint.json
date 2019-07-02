@@ -5,6 +5,13 @@
             true,
             "attribute",
             "app",
+            "editor",
+            "main",
+            "wallet",
+            "user",
+            "auth",
+            "story",
+            "shared",
             "camelCase"
         ],
         "component-selector": [
@@ -14,7 +21,10 @@
             "editor",
             "main",
             "wallet",
-            "welcome",
+            "user",
+            "auth",
+            "story",
+            "shared",
             "kebab-case"
         ]
     }
