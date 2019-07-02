@@ -38,12 +38,13 @@ export const WALLET_DEFAULT_HD_PATH = `m/44'/0'/0'/0/0`;
 
 export const simpleBitcoinWalletAssetPath = 'assets/libs/simple-bitcoin-wallet.min.js';
 
+export const EXCHANGE_RATE_CACHE_KEY = 'EXCHANGE_RATES';
+
 declare var SimpleWallet: any;
 
 @Injectable({providedIn: 'root'})
 export class WalletService {
   public wallet: ISimpleWallet;
-  private exchangeRateCache: CoinbaseExchangeResponse;
   private logger: Logger;
   private readonly isPlatformBrowser: boolean;
 
@@ -78,13 +79,17 @@ export class WalletService {
   public async cacheExchangeRates() {
     const response: CoinbaseExchangeResponse = await this.http.get<CoinbaseExchangeResponse>(API_ENDPOINTS.convertCurrency('usd'))
       .toPromise();
-    this.exchangeRateCache = response;
-    console.log('response1');
+    if (this.isPlatformBrowser) {
+     this.localStorage.setItem(EXCHANGE_RATE_CACHE_KEY, JSON.stringify(response));
+    }
   }
 
   public convertCurrency(amount: number, sourceCurrency: string, targetCurrency: string): Observable<number> {
-    console.log('response2');
-    return of(this.calculateRate(amount, this.exchangeRateCache.data.rates, targetCurrency));
+    if (this.isPlatformBrowser) {
+      const exchangeRateCache = JSON.parse(this.localStorage.getItem(EXCHANGE_RATE_CACHE_KEY));
+      const convertedCurrency = this.calculateRate(amount, exchangeRateCache.data.rates, targetCurrency);
+      return of(convertedCurrency);
+    }
   }
 
   public calculateRate(amount: number, rates: number[], targetCurrency: string): number {
@@ -127,7 +132,6 @@ export class WalletService {
     return defer(
       async () => {
         await this.cacheExchangeRates();
-        console.log('response3');
         this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Started));
         await this.scriptService.loadScript(simpleBitcoinWalletAssetPath).toPromise();
         this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Initialized));

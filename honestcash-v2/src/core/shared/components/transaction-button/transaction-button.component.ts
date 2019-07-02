@@ -72,8 +72,9 @@ export class SharedTransactionButtonComponent implements OnInit {
   }
 
   public onClick() {
-    this.isProcessing = true;
     if (this.user) {
+      console.log('user');
+      this.isProcessing = true;
       let transactionPromise: Promise<ITransaction>;
       if (this.transactionType === TRANSACTION_TYPES.Upvote) {
         transactionPromise = this.transactionService.upvote(this.wallet, this.story, this.user, this.costInBch);
