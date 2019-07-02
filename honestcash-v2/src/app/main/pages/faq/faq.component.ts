@@ -9,10 +9,10 @@ import {StoryLoad} from '../../../story/store/story.actions';
 
 @Component({
   selector: 'main-page-terms-of-service',
-  templateUrl: './terms-of-service.component.html',
-  styleUrls: ['./terms-of-service.component.scss']
+  templateUrl: './faq.component.html',
+  styleUrls: ['./faq.component.scss']
 })
-export class MainTermsOfServiceComponent implements OnInit, OnDestroy {
+export class MainFaqComponent implements OnInit, OnDestroy {
   @HostBinding('class') public class = 'card m-auto';
   public story: Story;
   public story$: Observable<StoryState>;
@@ -25,7 +25,7 @@ export class MainTermsOfServiceComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(new StoryLoad(124));
+    this.store.dispatch(new StoryLoad(57));
     this.storySub = this.story$.subscribe((storyState: StoryState) => {
       this.story = storyState.story;
 
