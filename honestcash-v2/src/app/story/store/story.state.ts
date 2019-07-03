@@ -1,7 +1,7 @@
 import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
-import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
+import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 
 export interface StoryState {
   isLoading: boolean;

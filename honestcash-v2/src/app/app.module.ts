@@ -19,10 +19,14 @@ import {AppSharedModule} from './app.shared.module';
 import {SharedModule} from '../core/shared.module';
 import {CoreEffects} from '../core/store/core.effects';
 import {StoryEffects} from './story/store/story.effects';
+import {CoreModule} from '../core';
+import {LayoutModule} from '../core/layout.module';
+import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AppNotFoundComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({
@@ -31,6 +35,8 @@ import {StoryEffects} from './story/store/story.effects';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
+    CoreModule,
+    LayoutModule,
     SharedModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),

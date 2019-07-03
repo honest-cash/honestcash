@@ -1,27 +1,26 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ITransaction, TRANSACTION_TYPES} from '../../models/transaction';
-import {WalletService} from '../../../../app/wallet/services/wallet.service';
-import {NgbModal, NgbPopover} from '@ng-bootstrap/ng-bootstrap';
-import {ISimpleWallet} from '../../../../app/wallet/models/simple-wallet';
+import {WalletService} from '../../services/wallet.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ISimpleWallet} from '../../models/simple-wallet';
 import {combineLatest} from 'rxjs';
-import {WalletState} from '../../../../app/wallet/store/wallet.state';
+import {WalletState} from '../../store/wallet.state';
 import {Store} from '@ngrx/store';
-import {AppStates, selectStoryState, selectUserState, selectWalletState} from '../../../../app/app.states';
-import {UserState} from '../../../../app/user/store/user.state';
-import User from '../../../../app/user/models/user';
+import {AppStates, selectUserState, selectWalletState} from '../../../app.states';
+import {UserState} from '../../../user/store/user.state';
+import User from '../../../user/models/user';
 import {Router} from '@angular/router';
-import Story from '../../../../app/story/models/story';
-import {StoryState} from '../../../../app/story/store/story.state';
+import Story from '../../../story/models/story';
 import {TransactionService} from '../../services/transaction.service';
-import {SharedReceiptComponent} from '../receipt/receipt.component';
-import {WALLET_STATUS} from '../../../../app/wallet/models/status';
+import {WalletReceiptComponent} from '../receipt/receipt.component';
+import {WALLET_STATUS} from '../../models/status';
 
 @Component({
-  selector: 'shared-transaction-button',
+  selector: 'wallet-transaction-button',
   templateUrl: `./transaction-button.component.html`,
   styleUrls: ['./transaction-button.component.scss'],
 })
-export class SharedTransactionButtonComponent implements OnInit {
+export class WalletTransactionButtonComponent implements OnInit {
   @Input() public onTransactionComplete: Function;
   @Input() public transactionType: TRANSACTION_TYPES;
   @Input() public actionText: string;
@@ -83,7 +82,7 @@ export class SharedTransactionButtonComponent implements OnInit {
       if (transactionPromise) {
         transactionPromise.then((transaction: ITransaction) => {
           this.isProcessing = false;
-          const modalRef = this.modalService.open(SharedReceiptComponent);
+          const modalRef = this.modalService.open(WalletReceiptComponent);
           modalRef.componentInstance.transaction = transaction;
           modalRef.componentInstance.transactionType = this.transactionType;
           modalRef.componentInstance.story = this.story;

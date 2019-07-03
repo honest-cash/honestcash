@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../core/shared.module';
 import {UserRoutingModule} from './user-routing.module';
-import {UserSharedModule} from './user-shared.module';
+import {LayoutModule} from '../../core/layout.module';
 
 
 @NgModule({
@@ -14,7 +14,8 @@ import {UserSharedModule} from './user-shared.module';
   imports: [
     FormsModule,
     UserRoutingModule,
-    UserSharedModule,
+    LayoutModule,
+    CommonModule,
     SharedModule,
   ],
   providers: [],

@@ -4,7 +4,7 @@ import {AppStates, selectStoryState} from '../../../app.states';
 import Story from '../../models/story';
 import {Observable, Subscription} from 'rxjs';
 import {StoryState} from '../../store/story.state';
-import {TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
+import {TRANSACTION_TYPES} from '../../../wallet/models/transaction';
 
 @Component({
   selector: 'story-paywall-call-to-action',

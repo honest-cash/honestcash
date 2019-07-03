@@ -1,20 +1,21 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {UserFollowButtonComponent} from './components/follow-button/follow-button.component';
 import {SharedModule} from '../../core/shared.module';
-import {UserService} from './services/user.service';
+import {UserProfileMenuComponent} from './components/profile-menu/profile-menu.component';
+import {UserFollowButtonComponent} from './components/follow-button/follow-button.component';
+import {WalletSharedModule} from '../wallet/wallet-shared.module';
 
 @NgModule({
   declarations: [
+    UserProfileMenuComponent,
     UserFollowButtonComponent,
   ],
   imports: [
     SharedModule,
-  ],
-  providers: [
+    WalletSharedModule,
     UserService,
   ],
   exports: [
+    UserProfileMenuComponent,
     UserFollowButtonComponent,
   ],
 })

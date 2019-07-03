@@ -4,7 +4,6 @@ import {AppStates, selectWalletState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {WalletState} from '../../store/wallet.state';
 import {WALLET_STATUS} from '../../models/status';
-import {WalletService} from '../../services/wallet.service';
 
 @Component({
   selector: 'wallet-balance',

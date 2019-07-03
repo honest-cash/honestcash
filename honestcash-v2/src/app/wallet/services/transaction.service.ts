@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../app/app.states';
-import {HttpService, Logger} from '../..';
-import Story from '../../../app/story/models/story';
-import User from '../../../app/user/models/user';
-import {StoryService} from '../../../app/story/services/story.service';
-import {WalletService} from '../../../app/wallet/services/wallet.service';
-import {ISimpleWallet} from '../../../app/wallet/models/simple-wallet';
+import {AppStates} from '../../app.states';
+import {HttpService, Logger} from '../../../core';
+import Story from '../../story/models/story';
+import User from '../../user/models/user';
+import {StoryService} from '../../story/services/story.service';
+import {WalletService} from './wallet.service';
+import {ISimpleWallet} from '../models/simple-wallet';
 import {UpvoteTransactionStrategy} from './upvote.transaction.strategy';
 import {ITransaction, ITRansactionResult} from '../models/transaction';
 
