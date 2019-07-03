@@ -316,7 +316,7 @@ describe('auth.effects', () => {
 
   describe('LogOut Effects', () => {
     describe('LogOut', () => {
-      it('should correctly return return UserCleanup, WalletCleanup and RootRedirect', () => {
+      it('should correctly return return UserCleanup, WalletCleanup', () => {
         (<jasmine.Spy>mockAuthenticationService.logOut).and.returnValue(of({}));
         const action = new AuthActions.LogOut();
         actions = hot('-a', {a: action});

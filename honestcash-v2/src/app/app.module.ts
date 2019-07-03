@@ -12,19 +12,11 @@ import {environment} from '../environments/environment';
 import {HeaderInterceptor} from '../core/http/header.interceptor';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppSharedModule} from './app.shared.module';
-import {SharedModule} from '../core/shared.module';
 import {CoreEffects} from '../core/store/core.effects';
 import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
 import {CoreModule} from '../core/core.module';
-import {UserSharedModule} from './user/user-shared.module';
-import {WalletSharedModule} from './wallet/wallet-shared.module';
-import {AuthSharedModule} from './auth/auth-shared.module';
-import {EditorSharedModule} from './editor/editor-shared.module';
-import {StorySharedModule} from './story/story-shared.module';
-import {SharedComponentsModule} from '../core/shared-components.module';
 import {LayoutModule} from '../core/layout.module';
 import {AuthEffects} from './auth/store/auth.effects';
-import {AuthModule} from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +30,6 @@ import {AuthModule} from './auth/auth.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
-    AuthModule,
     CoreModule,
     LayoutModule,
     HttpClientModule,

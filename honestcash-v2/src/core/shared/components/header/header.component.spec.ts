@@ -1,13 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {SharedHeaderComponent} from './header.component';
+import {LayoutHeaderComponent} from './header.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../../app/app.states.mock';
-import {cold} from 'jasmine-marbles';
-import {LogOut} from '../../../../app/auth/store/auth.actions';
-import User from '../../../../app/user/models/user';
-import {GOTO_PATHS} from '../../../../app/user/components/profile-menu/profile-menu.component';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../../../app/app.states';
 import {WindowToken} from '../../helpers/window.helper';
@@ -19,16 +15,16 @@ const MockWindow = {
   }
 };
 
-describe('SharedHeaderComponent', () => {
-  let component: SharedHeaderComponent;
-  let fixture: ComponentFixture<SharedHeaderComponent>;
+describe('LayoutHeaderComponent', () => {
+  let component: LayoutHeaderComponent;
+  let fixture: ComponentFixture<LayoutHeaderComponent>;
   let store: Store<AppStates>;
   let componentWindow: Window;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [SharedHeaderComponent],
+      declarations: [LayoutHeaderComponent],
       providers: [
         {provide: WindowToken, useValue: MockWindow},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
@@ -40,7 +36,7 @@ describe('SharedHeaderComponent', () => {
       ]
     });
     store = TestBed.get(Store);
-    fixture = TestBed.createComponent(SharedHeaderComponent);
+    fixture = TestBed.createComponent(LayoutHeaderComponent);
     component = fixture.componentInstance;
     componentWindow = TestBed.get(WindowToken);
 

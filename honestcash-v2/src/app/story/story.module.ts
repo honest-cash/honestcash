@@ -27,6 +27,8 @@ import {StoryEffects} from './store/story.effects';
 import {SharedComponentsModule} from '../../core/shared-components.module';
 import {StorySharedModule} from './story-shared.module';
 import {LayoutModule} from '../../core/layout.module';
+import {UserSharedModule} from '../user/user-shared.module';
+import {WalletSharedModule} from '../wallet/wallet-shared.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import {LayoutModule} from '../../core/layout.module';
     StorySharedModule,
     CommonModule,
     LayoutModule,
+    UserSharedModule,
+    WalletSharedModule,
   ],
   bootstrap: [StoryComponent]
 })

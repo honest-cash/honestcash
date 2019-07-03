@@ -7,8 +7,6 @@ import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
 import {mergeMap} from 'rxjs/operators';
 import {HttpService} from '../../../core/http/http.service';
-import {StoryModule} from '../story.module';
-import {StorySharedModule} from '../story-shared.module';
 
 export const API_ENDPOINTS = {
   getStory: (id: number) => `/v2/post/${id}`,
@@ -16,8 +14,8 @@ export const API_ENDPOINTS = {
   getStoryUnlocks: (id: number) => `/post/${id}/unlocks`,
   getStoryComments: (id: number) => `/v2/post/${id}/responses`,
   loadCommentDraft: (id: number) => `/v2/draft?parentPostId=${id}`,
-  saveComment: (id: number) =>  `/v2/draft/${id}/BodyAndTitle`,
-  publishComment: (id: number) =>   `/v2/draft/${id}/publish`,
+  saveComment: (id: number) => `/v2/draft/${id}/bodyAndTitle`,
+  publishComment: (id: number) => `/v2/draft/${id}/publish`,
   upvoteStory: (id: number) => `/post/${id}/upvote`,
   unlockStory: (id: number) => `/post/${id}/unlock`,
 };
@@ -86,13 +84,12 @@ export class StoryService {
     } else if (payload.property === TRANSACTION_TYPES.Unlock) {
       return this.http.post(API_ENDPOINTS.unlockStory(payload.transaction.postId), payload.transaction);
     } else if (payload.property === TRANSACTION_TYPES.Comment) {
-      const requestBody = {
-        title: (payload.data as Story).title,
-        bodyJSON: (payload.data as Story).bodyJSON
+      const story = {
+        ...payload.data as Story,
       };
-      return this.http.post(API_ENDPOINTS.saveComment(payload.transaction.postId), requestBody)
+      return this.http.put(API_ENDPOINTS.saveComment(story.id), {title: story.title, bodyJSON: story.bodyJSON})
         .pipe(
-          mergeMap(() => this.http.post(API_ENDPOINTS.publishComment(payload.transaction.postId), payload.data as Story))
+          mergeMap(() => this.http.put(API_ENDPOINTS.publishComment(story.id), story))
         );
     }
   }

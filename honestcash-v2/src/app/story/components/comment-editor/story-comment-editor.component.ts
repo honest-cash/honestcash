@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 import {AppStates, selectStoryState, selectUserState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
 import {UserState} from '../../../user/store/user.state';
-import {ELEMENT_TYPES} from '../../../editor/shared/json-to-html';
+import {Block, ELEMENT_TYPES, ParagraphElement} from '../../../editor/shared/json-to-html';
 import {StoryCommentDraftBodyChange, StoryCommentDraftLoad, StoryPropertySave} from '../../store/story.actions';
 import {StoryState} from '../../store/story.state';
 import {TRANSACTION_TYPES} from '../../../wallet/models/transaction';
@@ -49,6 +49,9 @@ export class StoryCommentEditorComponent implements OnInit, OnDestroy {
 
       if (storyState.hasCommentDraftLoaded) {
         this.commentDraft.title = `RE: ${this.commentDraft.parentPost.title}`;
+        if (this.commentDraft.bodyJSON) {
+          this.commentDraft.body = this.convertStoryBodyJSONtoText();
+        }
       }
 
         if (this.isSaving && !storyState.isPropertySaving) {
@@ -105,6 +108,15 @@ export class StoryCommentEditorComponent implements OnInit, OnDestroy {
         };
       }
     );
+  }
+
+  public convertStoryBodyJSONtoText() {
+    return (this.commentDraft.bodyJSON as Block[])
+      .filter((block: ParagraphElement) => block.data.text !== '&nbsp;')
+      .map((block: ParagraphElement) => {
+          return block.data.text;
+        }
+      );
   }
 
   public ngOnDestroy() {

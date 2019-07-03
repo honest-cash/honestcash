@@ -21,6 +21,7 @@ import {EffectsModule} from '@ngrx/effects';
 import {EditorEffects} from './store/editor.effects';
 import {EditorSharedModule} from './editor-shared.module';
 import {LayoutModule} from '../../core/layout.module';
+import {UserSharedModule} from '../user/user-shared.module';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import {LayoutModule} from '../../core/layout.module';
     FormsModule,
     EditorRoutingModule,
     EditorSharedModule,
+    UserSharedModule,
     LayoutModule,
     TagInputModule,
     ScriptLoaderModule,
