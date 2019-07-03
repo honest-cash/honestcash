@@ -8,9 +8,9 @@ import Hashtag from '../../editor/models/hashtag';
 
 const appendShareUrls = (story: Story) => {
   story.shareURLs = {
-    reddit: `https://reddit.com/submit?url=${ENVIRONMENT_DEFAULTS.clientUrl}/${story.user.username}/` +
+    reddit: `https://reddit.com/submit?url=${ENVIRONMENT_DEFAULTS.clientUrl}${story.user.username}/` +
       `${story.alias}&title=${story.title}`,
-    twitter: `https://twitter.com/intent/tweet?url=${ENVIRONMENT_DEFAULTS.clientUrl}/${story.user.username}/${story.alias}` +
+    twitter: `https://twitter.com/intent/tweet?url=${ENVIRONMENT_DEFAULTS.clientUrl}${story.user.username}/${story.alias}` +
       `&text=${story.title}&via=honest_cash&hashtags=${(story.userPostHashtags as Hashtag[]).map((hashtag: Hashtag) => hashtag.hashtag).join(',')}`,
   };
   return story;

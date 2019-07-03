@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {ITransaction, TRANSACTION_TYPES} from '../../models/transaction';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ISimpleWallet} from '../../models/simple-wallet';
@@ -14,6 +14,7 @@ import {ExchangeService} from '../../services/exchange.service';
 import {WalletReceiptComponent} from '../receipt/receipt.component';
 import {WALLET_STATUS} from '../../models/status';
 import {CurrencyService} from '../../services/currency.service';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'wallet-transaction-button',
@@ -37,14 +38,17 @@ export class WalletTransactionButtonComponent implements OnInit {
   public wallet: ISimpleWallet;
   public user: User;
   public isProcessing = false;
+  private readonly isPlatformBrowser: boolean;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private router: Router,
     private store: Store<AppStates>,
     private exchangeService: ExchangeService,
     private currencyService: CurrencyService,
     private modalService: NgbModal,
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
   public ngOnInit() {
@@ -67,11 +71,13 @@ export class WalletTransactionButtonComponent implements OnInit {
       this.costInDollars = this.story.paidSectionCost;
     }
 
-    this.currencyService.convertCurrency(this.costInDollars, 'usd', 'bch')
-      .subscribe((costInBch: number) => {
-        this.costInBch = Number(costInBch.toFixed(5));
-        this.isLoading = false;
-      });
+    if (this.isPlatformBrowser) {
+      this.currencyService.convertCurrency(this.costInDollars, 'usd', 'bch')
+        .subscribe((costInBch: number) => {
+          this.costInBch = Number(costInBch.toFixed(5));
+          this.isLoading = false;
+        });
+    }
   }
 
   public onClick() {
