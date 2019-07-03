@@ -17,6 +17,12 @@ import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component
 import {CoreModule} from '../core/core.module';
 import {LayoutModule} from '../core/layout.module';
 import {AuthEffects} from './auth/store/auth.effects';
+import {UserEffects} from './user/store/user.effects';
+import {WalletEffects} from './wallet/store/wallet.effects';
+import {StoryEffects} from './story/store/story.effects';
+import {UserSharedModule} from './user/user-shared.module';
+import {WalletSharedModule} from './wallet/wallet-shared.module';
+import {StorySharedModule} from './story/story-shared.module';
 
 @NgModule({
   declarations: [
@@ -32,9 +38,12 @@ import {AuthEffects} from './auth/store/auth.effects';
     AppSharedModule,
     CoreModule,
     LayoutModule,
+    UserSharedModule,
+    WalletSharedModule,
+    StorySharedModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([CoreEffects, AuthEffects]),
+    EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, WalletEffects, StoryEffects]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
   ],
   providers: [

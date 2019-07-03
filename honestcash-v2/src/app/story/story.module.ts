@@ -53,7 +53,7 @@ import {WalletSharedModule} from '../wallet/wallet-shared.module';
     StoryCommentCardHeaderComponent,
   ],
   imports: [
-    EffectsModule.forFeature([StoryEffects]),
+    EffectsModule.forRoot([StoryEffects]),
     StoryRoutingModule,
     StorySharedModule,
     CommonModule,

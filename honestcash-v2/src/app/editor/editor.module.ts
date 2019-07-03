@@ -48,7 +48,7 @@ import {UserSharedModule} from '../user/user-shared.module';
     EditorSaveStatusComponent,
   ],
   imports: [
-    EffectsModule.forFeature([EditorEffects]),
+    EffectsModule.forRoot([EditorEffects]),
     FormsModule,
     EditorRoutingModule,
     EditorSharedModule,

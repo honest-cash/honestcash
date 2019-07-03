@@ -6,9 +6,8 @@ import {map, switchMap, tap} from 'rxjs/operators';
 import {UserActionTypes, UserSetup} from './user.actions';
 import {LoginSuccessResponse} from '../../auth/models/authentication';
 import {UserService} from '../services/user.service';
-import {UserSharedModule} from '../user-shared.module';
 
-@Injectable({providedIn: UserSharedModule})
+@Injectable()
 export class UserEffects {
 
   constructor(
