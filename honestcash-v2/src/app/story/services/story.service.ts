@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   getStoryUpvotes: (id: number) => `/post/${id}/upvotes`,
   getStoryUnlocks: (id: number) => `/post/${id}/unlocks`,
   getStoryComments: (id: number) => `/v2/post/${id}/responses`,
+  loadCommentDraft: (id: number) => `/v2/draft?parentPostId=${id}`,
   saveComment: (id: number) =>  `/v2/draft/${id}/BodyAndTitle`,
   publishComment: (id: number) =>   `/v2/draft/${id}/publish`,
   upvoteStory: (id: number) => `/post/${id}/upvote`,
@@ -59,6 +60,10 @@ export class StoryService {
 
   public getStoryUnlocks(id: number): Observable<Unlock[]> {
     return this.http.get<Unlock[]>(API_ENDPOINTS.getStoryUnlocks(id));
+  }
+
+  public loadCommentDraft(id: number): Observable<Story> {
+    return this.http.get<Story>(API_ENDPOINTS.loadCommentDraft(id));
   }
 
   public loadProperty(payload: StoryPropertySaveContext): Observable<Story[] | Upvote[] | [Unlock[], Story]> {

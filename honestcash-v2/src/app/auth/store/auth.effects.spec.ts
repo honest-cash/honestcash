@@ -25,6 +25,7 @@ import {UserCleanup, UserSetup} from '../../user/store/user.actions';
 import {mock} from '../../../../mock';
 import {SimpleWallet} from '../../wallet/models/simple-wallet';
 import {WalletService} from '../../wallet/services/wallet.service';
+import {CurrencyService} from '../../wallet/services/currency.service';
 
 const MockWindow = {
   location: {
@@ -82,6 +83,7 @@ describe('auth.effects', () => {
         {provide: AuthService, useValue: mockAuthenticationService},
         UserService,
         WalletService,
+        CurrencyService,
         provideMockActions(() => actions),
         provideMockStore({initialState: initialAppStates})
       ],

@@ -17,7 +17,7 @@ import {CurrencyService} from './currency.service';
 
 declare var bitbox: any;
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ExchangeService {
 
   private readonly satoshiFactor = 100000000;

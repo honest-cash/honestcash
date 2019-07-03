@@ -4,10 +4,11 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {Logger} from '../../../core/shared/services/logger.service';
 import {AuthService} from '../services/auth.service';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {AuthSharedModule} from '../auth-shared.module';
 
 const log = new Logger('AuthorizedGuard');
 
-@Injectable({providedIn: 'root'})
+@Injectable({providedIn: AuthSharedModule})
 export class AuthorizedGuard implements CanActivate {
   private readonly isPlatformBrowser: boolean;
   private readonly isPlatformServer: boolean;
@@ -15,7 +16,7 @@ export class AuthorizedGuard implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     private router: Router,
-    private authenticationService: AuthService
+    private authService: AuthService
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.isPlatformServer = isPlatformServer(this.platformId);
@@ -23,7 +24,7 @@ export class AuthorizedGuard implements CanActivate {
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.isPlatformBrowser) {
-      if (this.authenticationService.hasAuthorization()) {
+      if (this.authService.hasAuthorization()) {
         return true;
       }
 

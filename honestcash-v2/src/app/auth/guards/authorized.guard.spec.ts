@@ -7,8 +7,8 @@ import {AuthorizedGuard} from './authorized.guard';
 import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 
 describe('AuthorizedGuard', () => {
-  let authenticationGuard: AuthorizedGuard;
-  let authenticationService: MockAuthenticationService;
+  let authorizedGuard: AuthorizedGuard;
+  let mockAuthService: MockAuthenticationService;
   let mockRouter: any;
   let mockSnapshot: RouterStateSnapshot;
 
@@ -25,37 +25,32 @@ describe('AuthorizedGuard', () => {
         {provide: Router, useValue: mockRouter}
       ]
     });
-  });
 
-  beforeEach(inject(
-    [AuthorizedGuard, AuthService],
-    (_authenticationGuard: AuthorizedGuard, _authenticationService: MockAuthenticationService) => {
-      authenticationGuard = _authenticationGuard;
-      authenticationService = _authenticationService;
-    }
-  ));
+    authorizedGuard = TestBed.get(AuthorizedGuard);
+    mockAuthService = TestBed.get(AuthService);
+  });
 
   afterEach(() => {
     resetLocalStorage();
-    authenticationService.isAuthenticated = false;
+    mockAuthService.isAuthenticated = false;
   });
 
   it('should have a canActivate method', () => {
-    expect(typeof authenticationGuard.canActivate).toBe('function');
+    expect(typeof authorizedGuard.canActivate).toBe('function');
   });
 
   describe('canActivate', () => {
     it('should return true if user is authenticated', () => {
-      authenticationService.isAuthenticated = true;
-      expect(authenticationGuard.canActivate(null, mockSnapshot)).toBe(true);
+      mockAuthService.isAuthenticated = true;
+      expect(authorizedGuard.canActivate(null, mockSnapshot)).toBe(true);
     });
 
     it('should return false and redirect to login page if user is not authenticated', () => {
       // Arrange
-      authenticationService.isAuthenticated = false;
+      mockAuthService.isAuthenticated = false;
 
       // Act
-      const result = authenticationGuard.canActivate(null, mockSnapshot);
+      const result = authorizedGuard.canActivate(null, mockSnapshot);
 
       // Assert
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
@@ -66,11 +61,11 @@ describe('AuthorizedGuard', () => {
     });
 
     it('should save url as queryParam if user is not authenticated', () => {
-      authenticationService.isAuthenticated = false;
+      mockAuthService.isAuthenticated = false;
       mockRouter.url = '/about';
       mockSnapshot.url = '/about';
 
-      authenticationGuard.canActivate(null, mockSnapshot);
+      authorizedGuard.canActivate(null, mockSnapshot);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login'], {
         queryParams: {redirect: mockRouter.url},
         replaceUrl: true

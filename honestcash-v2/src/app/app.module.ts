@@ -22,6 +22,7 @@ import {StoryEffects} from './story/store/story.effects';
 import {LayoutModule} from '../core/layout.module';
 import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
 import {CoreModule} from '../core/core.module';
+import {AuthSharedModule} from './auth/auth-shared.module';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {CoreModule} from '../core/core.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
+    AuthSharedModule,
     CoreModule,
     LayoutModule,
     SharedModule,

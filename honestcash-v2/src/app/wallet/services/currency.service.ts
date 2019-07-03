@@ -18,7 +18,7 @@ export const API_ENDPOINTS = {
   convertCurrency: (sourceCurrency: string) => `https://api.coinbase.com/v2/exchange-rates?currency=${sourceCurrency.toUpperCase()}`
 };
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class CurrencyService {
 
   private readonly isPlatformBrowser: boolean;

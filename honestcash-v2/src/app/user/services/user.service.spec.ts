@@ -1,7 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {HttpService} from '../../../core';
 import {mock} from '../../../../mock';
 import {API_ENDPOINTS, UserService} from './user.service';
 import {of} from 'rxjs';
@@ -11,6 +10,7 @@ import {metaReducers, reducers} from '../../app.states';
 import {RouterTestingModule} from '@angular/router/testing';
 import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {AuthService} from '../../auth/services/auth.service';
+import {HttpService} from '../../../core/http/http.service';
 
 const SHARED_MOCKS = {
   mnemonic: 'test test2 test3 test4',

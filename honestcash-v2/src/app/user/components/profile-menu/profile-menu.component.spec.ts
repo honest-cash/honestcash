@@ -17,6 +17,8 @@ import {provideMockActions} from '@ngrx/effects/testing';
 import {Observable} from 'rxjs';
 import {WalletService} from '../../../wallet/services/wallet.service';
 import {UserService} from '../../services/user.service';
+import {CurrencyService} from '../../../wallet/services/currency.service';
+import {AuthService} from '../../../auth/services/auth.service';
 
 const MockWindow = {
   location: {
@@ -56,6 +58,8 @@ describe('HeaderProfileMenu', () => {
         WalletService,
         UserService,
         AuthEffects,
+        AuthService,
+        CurrencyService,
         {provide: WindowToken, useValue: MockWindow},
         {provide: 'PLATFORM_ID', useValue: 'browser'},
         {provide: LocalStorageToken, useFactory: localStorageProvider},
