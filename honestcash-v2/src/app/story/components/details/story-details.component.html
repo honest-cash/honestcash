@@ -5,7 +5,7 @@
   <div class="col-xxs-10 col-xs-10 col-sm-11 col-md-11 col-lg-11 col-xl-11">
     <div class="row justify-content-between h-100 align-middle align-items-center">
       <div class="col">
-        <a class="font-weight-bold">{{story.user.username}}</a>
+        <button (click)="goToUserProfile()" class="btn btn-link p-0 text-dark font-weight-bold">{{story.user.username}}</button>
         <user-follow-button [author]="story.user"></user-follow-button>
       </div>
       <div class="col-xxs-4 col-xs-4 col-sm-4 col-md-3 col-lg-3 col-xl-2 text-right">

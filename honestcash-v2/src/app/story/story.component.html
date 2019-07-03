@@ -1,5 +1,6 @@
 <layout-header></layout-header>
 <div *ngIf="!isLoading" class="mb-5 story">
+  <story-response-details *ngIf="story.parentPost"></story-response-details>
   <story-title></story-title>
   <story-details></story-details>
   <story-body *ngIf="!story.hasPaidSection"></story-body>

@@ -22,6 +22,7 @@ import {StoryUnlockButtonComponent} from './components/unlock-button/unlock-butt
 import {StoryCommentCardActionsComponent} from './components/comment-card-actions/comment-card-actions.component';
 import {StoryCommentCardBodyComponent} from './components/comment-card-body/story-comment-card-body.component';
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
+import {StoryResponseDetailsComponent} from './components/response-details/response-details.component';
 import {EffectsModule} from '@ngrx/effects';
 import {StoryEffects} from './store/story.effects';
 import {SharedComponentsModule} from '../../core/shared-components.module';
@@ -52,6 +53,7 @@ import {OrderModule} from 'ngx-order-pipe';
     StoryCommentCardActionsComponent,
     StoryCommentCardBodyComponent,
     StoryCommentCardHeaderComponent,
+    StoryResponseDetailsComponent,
   ],
   imports: [
     EffectsModule.forRoot([StoryEffects]),
