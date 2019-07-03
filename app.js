@@ -245,7 +245,9 @@ for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown
 */
 
 // PATHS MIGRATED TO V2
-
+app.get("/:username/:postId", (req, res) => res.redirect(`/v2/${req.params.username}/${req.params.postId}`));
+app.get("/post/:postId", (req, res) => res.redirect(`/v2/post/${req.params.postId}`));
+app.get("/story/:postId", (req, res) => res.redirect(`/v2/story/${req.params.postId}`));
 app.get("/write", (_, res) => res.redirect(`/v2/editor/write`));
 app.get("/edit/:postId", (req, res) => res.redirect(`/v2/editor/edit/${req.params.postId}`));
 app.get("/write/response/:parentPostId", (req, res) => res.redirect(`/v2/editor/comment/${req.params.parentPostId}`));
