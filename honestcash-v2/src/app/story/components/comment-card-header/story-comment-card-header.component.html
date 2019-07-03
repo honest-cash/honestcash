@@ -1,13 +1,9 @@
-<div class="col-1 pr-0">
+<div class="col-auto pr-0">
   <shared-avatar [src]="comment.user && comment.user.imageUrl" large="true"></shared-avatar>
 </div>
 <div class="col">
-  <div class="row">
-    <div class="col">
-      <a class="font-weight-bold">{{comment.user.username}}</a><br>
-      <span class="text-muted">
-                   {{comment.updatedAt | date:'MMM d, yy'}}
-                 </span>
-    </div>
-  </div>
+  <a class="font-weight-bold">{{comment.user.username}}</a><br>
+  <span class="text-muted">
+     {{comment.createdAt | date:'d MMM yy hh:mm'}}
+   </span>
 </div>
