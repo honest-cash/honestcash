@@ -5,7 +5,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppStates} from '../../../app.states.mock';
 
-describe('LayoutHeaderComponent', () => {
+describe('EditorHeaderComponent', () => {
   let component: EditorHeaderComponent;
   let fixture: ComponentFixture<EditorHeaderComponent>;
 

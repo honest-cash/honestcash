@@ -1,10 +1,10 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 
-import {Logger} from '../services/logger.service';
-import {AuthService} from '../../../app/auth/services/auth.service';
-import {WindowToken} from '../helpers/window.helper';
-import {EnvironmentToken} from '../helpers/environment.helper';
+import {Logger} from '../../../core/shared/services/logger.service';
+import {AuthService} from '../services/auth.service';
+import {WindowToken} from '../../../core/shared/helpers/window.helper';
+import {EnvironmentToken} from '../../../core/shared/helpers/environment.helper';
 import {Environment} from '../../../environments/environment';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
@@ -20,7 +20,7 @@ export class UnauthorizedGuard implements CanActivate {
     @Inject(WindowToken) private window: Window,
     @Inject(EnvironmentToken) private environment: Environment,
     private router: Router,
-    private authenticationService: AuthService
+    private authService: AuthService
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.isPlatformServer = isPlatformServer(this.platformId);
@@ -28,7 +28,7 @@ export class UnauthorizedGuard implements CanActivate {
 
   public canActivate(): boolean {
     if (this.isPlatformBrowser) {
-      if (!this.authenticationService.hasAuthorization()) {
+      if (!this.authService.hasAuthorization()) {
         return true;
       }
 

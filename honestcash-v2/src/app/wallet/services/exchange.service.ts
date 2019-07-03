@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {Store} from '@ngrx/store';
 import {AppStates} from '../../app.states';
-import {HttpService, Logger} from '../../../core';
 import Story from '../../story/models/story';
 import User from '../../user/models/user';
 import {StoryService} from '../../story/services/story.service';
@@ -10,23 +9,32 @@ import {WalletService} from './wallet.service';
 import {ISimpleWallet} from '../models/simple-wallet';
 import {UpvoteTransactionStrategy} from './upvote.transaction.strategy';
 import {ITransaction, ITRansactionResult} from '../models/transaction';
+import {Logger} from '../../../core/shared/services/logger.service';
+import {HttpService} from '../../../core/http/http.service';
+import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
+import {isPlatformBrowser} from '@angular/common';
+import {CurrencyService} from './currency.service';
 
 declare var bitbox: any;
 
-@Injectable()
-export class TransactionService {
+@Injectable({providedIn: 'root'})
+export class ExchangeService {
 
   private readonly satoshiFactor = 100000000;
 
   private logger = new Logger('TransactionService');
-
+  private readonly isPlatformBrowser: boolean;
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(LocalStorageToken) private localStorage: Storage,
     private http: HttpService,
     private store: Store<AppStates>,
     private toastr: ToastrService,
     private storyService: StoryService,
     private walletService: WalletService,
+    private currencyService: CurrencyService,
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
   }
 
   /**
@@ -98,7 +106,7 @@ export class TransactionService {
       story.user,
     );
 
-    const bchToUsdRate = await this.walletService.convertCurrency(1, 'bch', 'usd').toPromise();
+    const bchToUsdRate = await this.currencyService.convertCurrency(1, 'bch', 'usd').toPromise();
     receivers = receivers.map(receiver => {
       return {
         ...receiver,
@@ -273,5 +281,4 @@ export class TransactionService {
       sender: user,
     };
   }
-
 }

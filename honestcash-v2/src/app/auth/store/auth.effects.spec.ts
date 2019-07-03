@@ -1,10 +1,10 @@
 import {TestBed} from '@angular/core/testing';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {cold, hot} from 'jasmine-marbles';
-import {forkJoin, Observable, of, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import * as AuthActions from './auth.actions';
-import {AuthSetup, LogInSuccess, RootRedirect} from './auth.actions';
+import {AuthSetup, RootRedirect} from './auth.actions';
 import {AuthEffects} from './auth.effects';
 import {Store, StoreModule} from '@ngrx/store';
 import {Router} from '@angular/router';
@@ -20,13 +20,12 @@ import {initialAppStates} from '../../app.states.mock';
 import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 import {ResetPasswordContext, ResetPasswordRequestContext, SignupContext} from '../models/authentication';
 import {AppStates, metaReducers, reducers} from '../../app.states';
-import {WalletActionTypes, WalletCleanup, WalletSetup, WalletStatusUpdated} from '../../wallet/store/wallet.actions';
-import {UserActionTypes, UserCleanup, UserSetup} from '../../user/store/user.actions';
+import {WalletCleanup, WalletSetup} from '../../wallet/store/wallet.actions';
+import {UserCleanup, UserSetup} from '../../user/store/user.actions';
 import {mock} from '../../../../mock';
 import {SimpleWallet} from '../../wallet/models/simple-wallet';
-import {WALLET_STATUS} from '../../wallet/models/status';
-import {ofType} from '@ngrx/effects';
-import {first} from 'rxjs/operators';
+import {WalletService} from '../../wallet/services/wallet.service';
+import {CurrencyService} from '../../wallet/services/currency.service';
 
 const MockWindow = {
   location: {
@@ -83,6 +82,8 @@ describe('auth.effects', () => {
         AuthEffects,
         {provide: AuthService, useValue: mockAuthenticationService},
         UserService,
+        WalletService,
+        CurrencyService,
         provideMockActions(() => actions),
         provideMockStore({initialState: initialAppStates})
       ],
@@ -315,7 +316,7 @@ describe('auth.effects', () => {
 
   describe('LogOut Effects', () => {
     describe('LogOut', () => {
-      it('should correctly return return UserCleanup, WalletCleanup and RootRedirect', () => {
+      it('should correctly return return UserCleanup, WalletCleanup', () => {
         (<jasmine.Spy>mockAuthenticationService.logOut).and.returnValue(of({}));
         const action = new AuthActions.LogOut();
         actions = hot('-a', {a: action});

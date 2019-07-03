@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {EditorContainerComponent} from './editor-container.component';
 import {EditorWriteComponent} from './pages/write/write.component';
-import {AuthorizedGuard} from '../../core/shared/guards/authorized.guard';
+import {AuthorizedGuard} from '../auth/guards/authorized.guard';
 import {EditorEditComponent} from './pages/edit/edit.component';
 import {EditorCommentComponent} from './pages/comment/comment.component';
 

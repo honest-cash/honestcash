@@ -1,6 +1,5 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpService} from '../../../core';
 import {Router} from '@angular/router';
 import {LoginSuccessResponse, SignupSuccessResponse} from '../../auth/models/authentication';
 import {Store} from '@ngrx/store';
@@ -9,15 +8,22 @@ import User from '../models/user';
 import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {UserLoaded} from '../store/user.actions';
+import {HttpService} from '../../../core/http/http.service';
+import {UserModule} from '../user.module';
+import {UserSharedModule} from '../user-shared.module';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 export const LOCAL_USER_ID_KEY = 'HC_USER_ID';
 
 export const API_ENDPOINTS = {
   getCurrentUser: `/me`,
+  followUser: (id: number) => `/user/${id}/follow`,
+  unfollowUser: (id: number) => `/user/${id}/unfollow`,
+  getFollowerUsersOfUser: (id: number) => `/user/${id}/followers`,
+  getFollowingUsersOfUser: (id: number) => `/user/${id}/following`,
 };
 
-@Injectable({providedIn: 'root'})
+@Injectable({providedIn: UserSharedModule})
 export class UserService {
 
   private readonly isPlatformBrowser: boolean;
@@ -120,5 +126,20 @@ export class UserService {
 
   public getCurrentUser(): Observable<User> {
     return this.http.get<User>(API_ENDPOINTS.getCurrentUser);
+  }
+
+  public followUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.followUser(userId), {});
+  }
+  public unfollowUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.unfollowUser(userId), {});
+  }
+
+  public getFollowerUsersOfUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.getFollowerUsersOfUser(userId), {});
+  }
+
+  public getFollowingUsersOfUser(userId: number) {
+    return this.http.post(API_ENDPOINTS.getFollowingUsersOfUser(userId), {});
   }
 }

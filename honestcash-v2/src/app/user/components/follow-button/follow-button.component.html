@@ -1,0 +1,4 @@
+<button type="button" class="btn btn-light btn-sm ml-2" (click)="onButtonClicked()">
+  <span *ngIf="author.alreadyFollowing">Following</span>
+  <span *ngIf="!author.alreadyFollowing">Follow</span>
+</button>

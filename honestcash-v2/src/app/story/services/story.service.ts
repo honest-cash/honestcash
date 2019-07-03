@@ -1,30 +1,30 @@
 import {Injectable} from '@angular/core';
-import {concat, forkJoin, merge, Observable} from 'rxjs';
-import {HttpService} from '../../../core';
+import {forkJoin, Observable} from 'rxjs';
 import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 import {StoryPropertySaveContext} from '../store/story.actions';
 import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
-import {EditorService} from '../../editor/services/editor.service';
-import {EDITOR_STORY_PROPERTIES} from '../../editor/shared/editor.story-properties';
 import {mergeMap} from 'rxjs/operators';
+import {HttpService} from '../../../core/http/http.service';
 
 export const API_ENDPOINTS = {
   getStory: (id: number) => `/v2/post/${id}`,
   getStoryUpvotes: (id: number) => `/post/${id}/upvotes`,
   getStoryUnlocks: (id: number) => `/post/${id}/unlocks`,
   getStoryComments: (id: number) => `/v2/post/${id}/responses`,
+  loadCommentDraft: (id: number) => `/v2/draft?parentPostId=${id}`,
+  saveComment: (id: number) => `/v2/draft/${id}/bodyAndTitle`,
+  publishComment: (id: number) => `/v2/draft/${id}/publish`,
   upvoteStory: (id: number) => `/post/${id}/upvote`,
   unlockStory: (id: number) => `/post/${id}/unlock`,
 };
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class StoryService {
 
   constructor(
     private http: HttpService,
-    private editorSerice: EditorService,
   ) {
   }
 
@@ -61,6 +61,10 @@ export class StoryService {
     return this.http.get<Unlock[]>(API_ENDPOINTS.getStoryUnlocks(id));
   }
 
+  public loadCommentDraft(id: number): Observable<Story> {
+    return this.http.get<Story>(API_ENDPOINTS.loadCommentDraft(id));
+  }
+
   public loadProperty(payload: StoryPropertySaveContext): Observable<Story[] | Upvote[] | [Unlock[], Story]> {
     if (payload.property === TRANSACTION_TYPES.Upvote) {
       return this.getStoryUpvotes(payload.transaction.postId);
@@ -80,9 +84,12 @@ export class StoryService {
     } else if (payload.property === TRANSACTION_TYPES.Unlock) {
       return this.http.post(API_ENDPOINTS.unlockStory(payload.transaction.postId), payload.transaction);
     } else if (payload.property === TRANSACTION_TYPES.Comment) {
-      return this.editorSerice.savePostProperty(payload.data as Story, EDITOR_STORY_PROPERTIES.BodyAndTitle)
+      const story = {
+        ...payload.data as Story,
+      };
+      return this.http.put(API_ENDPOINTS.saveComment(story.id), {title: story.title, bodyJSON: story.bodyJSON})
         .pipe(
-          mergeMap(() => this.editorSerice.publishPost(payload.data as Story))
+          mergeMap(() => this.http.put(API_ENDPOINTS.publishComment(story.id), story))
         );
     }
   }

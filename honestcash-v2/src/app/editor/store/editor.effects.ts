@@ -10,7 +10,8 @@ import {
   EditorStoryPropertySaveFailure,
   EditorStoryPropertySaveSuccess,
   EditorStoryPublishFailure,
-  EditorStoryPublishSuccess, EditorStorySaveAndPublish,
+  EditorStoryPublishSuccess,
+  EditorStorySaveAndPublish,
   EditorStorySaveFailure,
   EditorStorySaveSuccess,
 } from './editor.actions';

@@ -1,0 +1,8 @@
+<div class="row mb-2">
+  <div class="col">
+    <div id="story-response-details" class="bg-light p-3">
+      <p>Response to: <b><a class="text-dark" [routerLink]="['/', story.parentPost.user.username, story.parentPost.alias]">{{story.parentPost.title || "No title"}}</a></b></p>
+      <p>by <button (click)="goToUserProfile()" class="btn btn-link p-0 text-dark font-weight-bold">{{story.user.username}}</button>
+    </div>
+  </div>
+</div>

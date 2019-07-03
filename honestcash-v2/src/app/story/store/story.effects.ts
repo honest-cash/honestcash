@@ -1,5 +1,4 @@
 import {Inject, Injectable} from '@angular/core';
-import {Router} from '@angular/router';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Observable, of} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
@@ -25,7 +24,6 @@ import {StoryService} from '../services/story.service';
 import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
-import {EditorService} from '../../editor/services/editor.service';
 import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 
 @Injectable()
@@ -36,9 +34,6 @@ export class StoryEffects {
     private store: Store<AppStates>,
     private actions: Actions,
     private storyService: StoryService,
-    private editorService: EditorService,
-
-    private router: Router,
   ) {
   }
 
@@ -72,7 +67,7 @@ export class StoryEffects {
   public StoryCommentDraftLoad: Observable<any> = this.actions.pipe(
     ofType(StoryActionTypes.STORY_COMMENT_DRAFT_LOAD),
     map((action: StoryCommentDraftLoad) => action.payload),
-    switchMap((storyId: number) => this.editorService.loadPostDraft({parentPostId: storyId})
+    switchMap((storyId: number) => this.storyService.loadCommentDraft(storyId)
       .pipe(
         map((story: Story) => new StoryCommentDraftLoadSuccess(story)),
         catchError(error => of(new StoryCommentDraftLoadFailure(error))),

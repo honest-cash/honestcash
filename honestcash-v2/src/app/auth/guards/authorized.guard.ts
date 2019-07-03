@@ -1,9 +1,10 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 
-import {Logger} from '../services/logger.service';
-import {AuthService} from '../../../app/auth/services/auth.service';
+import {Logger} from '../../../core/shared/services/logger.service';
+import {AuthService} from '../services/auth.service';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {AuthSharedModule} from '../auth-shared.module';
 
 const log = new Logger('AuthorizedGuard');
 
@@ -15,7 +16,7 @@ export class AuthorizedGuard implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     private router: Router,
-    private authenticationService: AuthService
+    private authService: AuthService
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.isPlatformServer = isPlatformServer(this.platformId);
@@ -23,7 +24,7 @@ export class AuthorizedGuard implements CanActivate {
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.isPlatformBrowser) {
-      if (this.authenticationService.hasAuthorization()) {
+      if (this.authService.hasAuthorization()) {
         return true;
       }
 

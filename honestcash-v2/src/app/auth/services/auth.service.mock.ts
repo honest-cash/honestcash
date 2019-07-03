@@ -80,6 +80,9 @@ export class MockAuthenticationService {
   public isAuthenticated = false;
   public token = '';
 
+  public hasAuthorization() {
+    return this.isAuthenticated;
+  }
 
   public logIn(payload: LoginContext): Observable<LoginResponse> {
     // check if correct and return success

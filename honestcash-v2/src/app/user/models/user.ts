@@ -11,6 +11,7 @@ export default class User {
   public postCount?: number;
   public status?: string;
   public website?: string;
+  public alreadyFollowing?: boolean;
   public username?: string;
   public imageUrl?: string;
   public token?: string;
@@ -22,4 +23,5 @@ export default class User {
   public wallet?: {
     mnemonicEncrypted: string;
   };
+
 }

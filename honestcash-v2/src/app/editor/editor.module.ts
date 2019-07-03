@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {EditorContainerComponent} from './editor-container.component';
 import {FormsModule} from '@angular/forms';
-import {SharedModule} from '../../core/shared.module';
 import {TagInputModule} from 'ngx-chips';
 import {EditorWriteComponent} from './pages/write/write.component';
 import {EditorEditComponent} from './pages/edit/edit.component';
@@ -18,8 +17,11 @@ import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-
 import {EditorCommentComponent} from './pages/comment/comment.component';
 import {EditorParentPostBodyComponent} from './components/parent-post-body/parent-post-body.component';
 import {EditorRoutingModule} from './editor-routing.module';
+import {EffectsModule} from '@ngrx/effects';
+import {EditorEffects} from './store/editor.effects';
+import {EditorSharedModule} from './editor-shared.module';
+import {LayoutModule} from '../../core/layout.module';
 import {UserSharedModule} from '../user/user-shared.module';
-import {WalletSharedModule} from '../wallet/wallet-shared.module';
 
 @NgModule({
   declarations: [
@@ -46,15 +48,15 @@ import {WalletSharedModule} from '../wallet/wallet-shared.module';
     EditorSaveStatusComponent,
   ],
   imports: [
+    EffectsModule.forRoot([EditorEffects]),
     FormsModule,
     EditorRoutingModule,
-    SharedModule,
+    EditorSharedModule,
+    UserSharedModule,
+    LayoutModule,
     TagInputModule,
     ScriptLoaderModule,
-    UserSharedModule,
-    WalletSharedModule,
   ],
-  providers: [],
   bootstrap: [EditorContainerComponent]
 })
 export class EditorModule {

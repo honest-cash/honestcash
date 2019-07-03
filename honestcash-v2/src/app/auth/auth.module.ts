@@ -5,7 +5,6 @@ import {AuthSignupComponent} from '../auth/pages/signup/signup.component';
 import {AuthResetPasswordRequestComponent} from '../auth/pages/reset-password-request/reset-password-request.component';
 import {AuthWelcomeComponent} from '../auth/pages/welcome/welcome.component';
 import {AuthContainerComponent} from './auth-container.component';
-import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AuthFooterComponent} from '../auth/components/footer/footer.component';
 import {AuthHeadingComponent} from '../auth/components/heading/heading.component';
@@ -17,7 +16,9 @@ import {AuthResetPasswordVerifyComponent} from '../auth/pages/reset-password-ver
 import {AuthHeaderComponent} from './components/header/header.component';
 import {SharedModule} from '../../core/shared.module';
 import {AuthRoutingModule} from './auth-routing.module';
-import {LayoutModule} from '../../core/layout.module';
+import {UserSharedModule} from '../user/user-shared.module';
+import {WalletSharedModule} from '../wallet/wallet-shared.module';
+import {AuthSharedModule} from './auth-shared.module';
 
 @NgModule({
   declarations: [
@@ -39,11 +40,11 @@ import {LayoutModule} from '../../core/layout.module';
   imports: [
     FormsModule,
     AuthRoutingModule,
-    CommonModule,
+    AuthSharedModule,
     SharedModule,
-    LayoutModule,
+    UserSharedModule,
+    WalletSharedModule,
   ],
-  providers: [],
   bootstrap: [AuthContainerComponent]
 })
 export class AuthModule {

@@ -11,6 +11,7 @@ import {StoryState} from '../../store/story.state';
   styleUrls: ['./story-share-buttons.component.scss']
 })
 export class StoryShareButtonsComponent implements OnInit, OnDestroy {
+  @Input() public isSmallButton: boolean;
   public story: Story;
   public story$: Observable<StoryState>;
   public storySub: Subscription;
@@ -25,10 +26,10 @@ export class StoryShareButtonsComponent implements OnInit, OnDestroy {
       this.story = storyState.story;
     });
   }
+
   public ngOnDestroy() {
     if (this.storySub) {
       this.storySub.unsubscribe();
     }
   }
-
 }

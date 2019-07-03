@@ -6,6 +6,10 @@ export type LoginResponse = LoginSuccessResponse | FailedResponse;
 export type SignupResponse = SignupSuccessResponse | FailedResponse;
 export type CheckPasswordResponse = CheckPasswordSuccessResponse | FailedResponse;
 
+export abstract class CodedResponse {
+  public code: string;
+}
+
 export abstract class CodedErrorResponse {
   public code: string | number;
   public desc: string;
