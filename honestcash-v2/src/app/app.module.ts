@@ -23,6 +23,8 @@ import {StoryEffects} from './story/store/story.effects';
 import {UserSharedModule} from './user/user-shared.module';
 import {WalletSharedModule} from './wallet/wallet-shared.module';
 import {StorySharedModule} from './story/story-shared.module';
+import {EditorEffects} from './editor/store/editor.effects';
+import {EditorSharedModule} from './editor/editor-shared.module';
 
 @NgModule({
   declarations: [
@@ -41,9 +43,10 @@ import {StorySharedModule} from './story/story-shared.module';
     UserSharedModule,
     WalletSharedModule,
     StorySharedModule,
+    EditorSharedModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, WalletEffects, StoryEffects]),
+    EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, WalletEffects, EditorEffects, StoryEffects]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
   ],
   providers: [
