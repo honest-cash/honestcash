@@ -6,8 +6,9 @@ import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
 import {mergeMap} from 'rxjs/operators';
-import {StorySharedModule} from '../story-shared.module';
 import {HttpService} from '../../../core/http/http.service';
+import {StoryModule} from '../story.module';
+import {StorySharedModule} from '../story-shared.module';
 
 export const API_ENDPOINTS = {
   getStory: (id: number) => `/v2/post/${id}`,
@@ -21,7 +22,7 @@ export const API_ENDPOINTS = {
   unlockStory: (id: number) => `/post/${id}/unlock`,
 };
 
-@Injectable({providedIn: StorySharedModule})
+@Injectable()
 export class StoryService {
 
   constructor(

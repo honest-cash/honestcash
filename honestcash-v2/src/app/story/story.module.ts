@@ -16,14 +16,16 @@ import {SharedModule} from '../../core/shared.module';
 import {StoryActionsComponent} from './components/actions/story-actions.component';
 import {StoryShareButtonsComponent} from './components/share-buttons/story-share-buttons.component';
 import {StoryPaywallCallToActionComponent} from './components/paywall-call-to-action/paywall-call-to-action.component';
-import {StorySharedModule} from './story-shared.module';
 import {StoryLockedBodyComponent} from './components/locked-body/locked-body.component';
 import {StoryComponent} from './story.component';
 import {StoryUnlockButtonComponent} from './components/unlock-button/unlock-button.component';
 import {StoryCommentCardActionsComponent} from './components/comment-card-actions/comment-card-actions.component';
 import {StoryCommentCardBodyComponent} from './components/comment-card-body/story-comment-card-body.component';
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
-import {WalletSharedModule} from '../wallet/wallet-shared.module';
+import {EffectsModule} from '@ngrx/effects';
+import {StoryEffects} from './store/story.effects';
+import {SharedComponentsModule} from '../../core/shared-components.module';
+import {StorySharedModule} from './story-shared.module';
 import {LayoutModule} from '../../core/layout.module';
 
 @NgModule({
@@ -49,12 +51,11 @@ import {LayoutModule} from '../../core/layout.module';
     StoryCommentCardHeaderComponent,
   ],
   imports: [
+    EffectsModule.forFeature([StoryEffects]),
     StoryRoutingModule,
     StorySharedModule,
-    WalletSharedModule,
-    LayoutModule,
     CommonModule,
-    SharedModule,
+    LayoutModule,
   ],
   bootstrap: [StoryComponent]
 })

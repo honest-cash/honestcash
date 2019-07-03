@@ -14,6 +14,7 @@ import {WalletState} from '../store/wallet.state';
 import {WALLET_STATUS} from '../models/status';
 import {HttpService} from '../../../core/http/http.service';
 import {CurrencyService} from './currency.service';
+import {WalletModule} from '../wallet.module';
 
 export const API_ENDPOINTS = {
   setWallet: `/auth/set-wallet`,

@@ -36,8 +36,9 @@ import {Store} from '@ngrx/store';
 import {WalletActionTypes, WalletCleanup, WalletSetup} from '../../wallet/store/wallet.actions';
 import {AppStates} from '../../app.states';
 import {UserActionTypes, UserCleanup, UserSetup} from '../../user/store/user.actions';
+import {AuthSharedModule} from '../auth-shared.module';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthEffects {
 
   constructor(

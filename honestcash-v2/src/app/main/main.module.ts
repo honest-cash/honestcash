@@ -16,8 +16,8 @@ import {LayoutModule} from '../../core/layout.module';
   imports: [
     MainRoutingModule,
     SharedModule,
-    LayoutModule,
     StorySharedModule,
+    LayoutModule,
   ],
   providers: [],
   bootstrap: [MainContainerComponent]

@@ -8,7 +8,7 @@ import {AuthSharedModule} from '../auth-shared.module';
 
 const log = new Logger('AuthorizedGuard');
 
-@Injectable({providedIn: AuthSharedModule})
+@Injectable({providedIn: 'root'})
 export class AuthorizedGuard implements CanActivate {
   private readonly isPlatformBrowser: boolean;
   private readonly isPlatformServer: boolean;

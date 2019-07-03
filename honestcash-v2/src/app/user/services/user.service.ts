@@ -8,8 +8,9 @@ import User from '../models/user';
 import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
 import {UserLoaded} from '../store/user.actions';
-import {UserSharedModule} from '../user-shared.module';
 import {HttpService} from '../../../core/http/http.service';
+import {UserModule} from '../user.module';
+import {UserSharedModule} from '../user-shared.module';
 
 export const LOCAL_TOKEN_KEY = 'HC_USER_TOKEN';
 export const LOCAL_USER_ID_KEY = 'HC_USER_ID';

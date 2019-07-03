@@ -21,11 +21,11 @@ import {AppStates} from '../../app.states';
 import {WalletService} from '../../wallet/services/wallet.service';
 import {UserService} from '../../user/services/user.service';
 import {API_ENDPOINTS} from '../shared/auth.endpoints';
-import {AuthSharedModule} from '../auth-shared.module';
 import {HttpService} from '../../../core/http/http.service';
+import {AuthSharedModule} from '../auth-shared.module';
 
 @Injectable({
-  providedIn: AuthSharedModule
+  providedIn: 'root'
 })
 export class AuthService {
 

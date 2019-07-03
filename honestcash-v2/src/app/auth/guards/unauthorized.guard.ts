@@ -7,11 +7,10 @@ import {WindowToken} from '../../../core/shared/helpers/window.helper';
 import {EnvironmentToken} from '../../../core/shared/helpers/environment.helper';
 import {Environment} from '../../../environments/environment';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
-import {AuthSharedModule} from '../auth-shared.module';
 
 const log = new Logger('UnauthorizedGuard');
 
-@Injectable({providedIn: AuthSharedModule})
+@Injectable({providedIn: 'root'})
 export class UnauthorizedGuard implements CanActivate {
   private readonly isPlatformBrowser: boolean;
   private readonly isPlatformServer: boolean;

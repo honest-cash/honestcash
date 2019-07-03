@@ -1,30 +1,25 @@
 import {NgModule} from '@angular/core';
 import {WalletContainerComponent} from './wallet-container.component';
 import {FormsModule} from '@angular/forms';
-import {SharedModule} from '../../core/shared.module';
 import {WalletRoutingModule} from './wallet-routing.module';
-import {WalletSharedModule} from './wallet-shared.module';
 import {ScrollToModule} from '@nicky-lenaers/ngx-scroll-to';
-import {QRCodeModule} from 'angularx-qrcode';
+import {EffectsModule} from '@ngrx/effects';
+import {WalletEffects} from './store/wallet.effects';
+import {WalletSharedModule} from './wallet-shared.module';
 import {LayoutModule} from '../../core/layout.module';
-import {WalletService} from './services/wallet.service';
 
 
 @NgModule({
   declarations: [
     WalletContainerComponent,
   ],
-  providers: [
-    WalletService,
-  ],
   imports: [
+    EffectsModule.forFeature([WalletEffects]),
     FormsModule,
     WalletRoutingModule,
     WalletSharedModule,
-    SharedModule,
-    LayoutModule,
     ScrollToModule.forRoot(),
-    QRCodeModule,
+    LayoutModule,
   ],
   bootstrap: [WalletContainerComponent]
 })

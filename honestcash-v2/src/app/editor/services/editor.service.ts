@@ -11,12 +11,9 @@ import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext, UploadImageResponse} from '../shared/interfaces';
 import {isPlatformBrowser} from '@angular/common';
 import {Block} from '../shared/json-to-html';
-import {EditorSharedModule} from '../editor-shared.module';
 import {HttpService} from '../../../core/http/http.service';
 
-@Injectable({
-  providedIn: EditorSharedModule,
-})
+@Injectable()
 export class EditorService {
   private readonly isPlatformBrowser: boolean;
   constructor(

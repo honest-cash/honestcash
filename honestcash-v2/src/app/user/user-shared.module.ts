@@ -4,6 +4,10 @@ import {UserProfileMenuComponent} from './components/profile-menu/profile-menu.c
 import {UserFollowButtonComponent} from './components/follow-button/follow-button.component';
 import {WalletSharedModule} from '../wallet/wallet-shared.module';
 import {UserBalanceComponent} from './components/balance/balance.component';
+import {EffectsModule} from '@ngrx/effects';
+import {UserEffects} from './store/user.effects';
+import {SharedComponentsModule} from '../../core/shared-components.module';
+import {LayoutModule} from '../../core/layout.module';
 
 @NgModule({
   declarations: [
@@ -13,9 +17,11 @@ import {UserBalanceComponent} from './components/balance/balance.component';
   ],
   imports: [
     SharedModule,
-    WalletSharedModule,
+    SharedComponentsModule,
   ],
   exports: [
+    SharedModule,
+    SharedComponentsModule,
     UserProfileMenuComponent,
     UserFollowButtonComponent,
     UserBalanceComponent,

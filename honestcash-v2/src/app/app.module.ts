@@ -6,23 +6,25 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {StoreModule} from '@ngrx/store';
-import {AuthEffects} from './auth/store/auth.effects';
-import {WalletEffects} from './wallet/store/wallet.effects';
-import {UserEffects} from './user/store/user.effects';
 import {metaReducers, reducers} from './app.states';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
 import {HeaderInterceptor} from '../core/http/header.interceptor';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {EditorEffects} from './editor/store/editor.effects';
 import {AppSharedModule} from './app.shared.module';
 import {SharedModule} from '../core/shared.module';
 import {CoreEffects} from '../core/store/core.effects';
-import {StoryEffects} from './story/store/story.effects';
-import {LayoutModule} from '../core/layout.module';
 import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
 import {CoreModule} from '../core/core.module';
+import {UserSharedModule} from './user/user-shared.module';
+import {WalletSharedModule} from './wallet/wallet-shared.module';
 import {AuthSharedModule} from './auth/auth-shared.module';
+import {EditorSharedModule} from './editor/editor-shared.module';
+import {StorySharedModule} from './story/story-shared.module';
+import {SharedComponentsModule} from '../core/shared-components.module';
+import {LayoutModule} from '../core/layout.module';
+import {AuthEffects} from './auth/store/auth.effects';
+import {AuthModule} from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -36,13 +38,12 @@ import {AuthSharedModule} from './auth/auth-shared.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
-    AuthSharedModule,
+    AuthModule,
     CoreModule,
     LayoutModule,
-    SharedModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([CoreEffects, AuthEffects, UserEffects, EditorEffects, StoryEffects, WalletEffects]),
+    EffectsModule.forRoot([CoreEffects, AuthEffects]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !environment.production}),
   ],
   providers: [
