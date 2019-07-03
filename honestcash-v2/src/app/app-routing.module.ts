@@ -16,9 +16,15 @@ const routes: Routes = [
     loadChildren: './wallet/wallet.module#WalletModule'
   },
   {
-    // :username also counts for /anyRoute/:id meaning /story/id is possible and /post/id is possible
-    // @todo write UrlMatcher to only include story and post prefixes
     path: ':username/:storyIdOrAlias',
+    loadChildren: './story/story.module#StoryModule'
+  },
+  {
+    path: 'story/:username/:storyIdOrAlias',
+    loadChildren: './story/story.module#StoryModule'
+  },
+  {
+    path: 'post/:username/:storyIdOrAlias',
     loadChildren: './story/story.module#StoryModule'
   },
   {

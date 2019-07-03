@@ -47,6 +47,7 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
   public user: User;
   public user$: Observable<UserState>;
   public userSub: Subscription;
+  public commentSortOrder = 'createdAt';
   constructor(
     private store: Store<AppStates>,
     private router: Router,
@@ -87,6 +88,10 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/login']);
     }
+  }
+
+  public onCommentSortClicked(commentSortOrder: 'createdAt' | 'upvoteCount') {
+    this.commentSortOrder = commentSortOrder;
   }
 
   public ngOnDestroy() {
