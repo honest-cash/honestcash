@@ -4,7 +4,7 @@
 <div class="col-xxs-10 col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xl-11">
   <div class="row">
     <div class="col">
-      <a class="font-weight-bold">{{story.user.username}}</a>
+      <button (click)="goToUserProfile()" class="btn btn-link p-0 text-dark font-weight-bold">{{story.user.username}}</button>
       Follow <!--<shared-follow-button></shared-follow-button>-->
     </div>
   </div>

@@ -1,22 +1,20 @@
-import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import Story from '../../models/story';
-import {Observable, Subscription} from 'rxjs';
-import {StoryState} from '../../store/story.state';
 import {Store} from '@ngrx/store';
 import {AppStates, selectStoryState} from '../../../app.states';
-import {WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {Observable, Subscription} from 'rxjs';
+import {StoryState} from '../../store/story.state';
 
 @Component({
-  selector: 'story-details',
-  templateUrl: './story-details.component.html',
-  styleUrls: ['./story-details.component.scss']
+  selector: 'story-response-details',
+  templateUrl: './response-details.component.html',
+  styleUrls: ['./response-details.component.scss']
 })
-export class StoryDetailsComponent implements OnInit, OnDestroy {
+export class StoryResponseDetailsComponent implements OnInit, OnDestroy {
   public story: Story;
   public story$: Observable<StoryState>;
   public storySub: Subscription;
   constructor(
-    @Inject(WindowToken) private window,
     private store: Store<AppStates>,
   ) {
     this.story$ = this.store.select(selectStoryState);
@@ -28,14 +26,9 @@ export class StoryDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public goToUserProfile() {
-      this.window.location.href = `/profile/${this.story.parentPost.user.username}`;
-  }
-
   public ngOnDestroy() {
     if (this.storySub) {
       this.storySub.unsubscribe();
     }
   }
-
 }

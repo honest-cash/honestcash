@@ -25,6 +25,7 @@ import {StoryCommentCardBodyComponent} from './components/comment-card-body/stor
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
 import {WalletSharedModule} from '../wallet/wallet-shared.module';
 import {LayoutModule} from '../../core/layout.module';
+import {StoryResponseDetailsComponent} from './components/response-details/response-details.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import {LayoutModule} from '../../core/layout.module';
     StoryCommentCardActionsComponent,
     StoryCommentCardBodyComponent,
     StoryCommentCardHeaderComponent,
+    StoryResponseDetailsComponent,
   ],
   imports: [
     StoryRoutingModule,
