@@ -1,14 +1,14 @@
 <div class="row mb-2">
-  <div class="col-1 pr-0">
+  <div class="col-xxs-2 col-xs-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 pr-md-0 pr-lg-0 pr-xl-0">
     <shared-avatar [src]="story.user.imageUrl" large="true"></shared-avatar>
   </div>
-  <div class="col">
-    <div class="row justify-content-between">
+  <div class="col-xxs-10 col-xs-10 col-sm-11 col-md-11 col-lg-11 col-xl-11">
+    <div class="row justify-content-between h-100 align-middle align-items-center">
       <div class="col">
         <a class="font-weight-bold">{{story.user.username}}</a>
         Follow <!--<shared-follow-button></shared-follow-button>-->
       </div>
-      <div class="col-2 text-right">
+      <div class="col-xxs-4 col-xs-4 col-sm-4 col-md-3 col-lg-3 col-xl-2 text-right">
         {{story.updatedAt | date:'MMM d, yy'}}
       </div>
     </div>

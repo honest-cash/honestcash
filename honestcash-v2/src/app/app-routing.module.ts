@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {SharedNotFoundComponent} from '../core/shared/pages/not-found/not-found.component';
-import {AppComponent} from './app.component';
+import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
 
 /**
  * - More specific routes should come first
@@ -17,9 +16,15 @@ const routes: Routes = [
     loadChildren: './wallet/wallet.module#WalletModule'
   },
   {
-    // :username also counts for /anyRoute/:id meaning /story/id is possible and /post/id is possible
-    // @todo write UrlMatcher to only include story and post prefixes
     path: ':username/:storyIdOrAlias',
+    loadChildren: './story/story.module#StoryModule'
+  },
+  {
+    path: 'story/:username/:storyIdOrAlias',
+    loadChildren: './story/story.module#StoryModule'
+  },
+  {
+    path: 'post/:username/:storyIdOrAlias',
     loadChildren: './story/story.module#StoryModule'
   },
   {
@@ -30,7 +35,7 @@ const routes: Routes = [
     path: '',
     loadChildren: './auth/auth.module#AuthModule'
   },
-  {path: 'not-found', component: SharedNotFoundComponent},
+  {path: 'not-found', component: AppNotFoundComponent},
   {path: '**', redirectTo: '/not-found'}
 ];
 

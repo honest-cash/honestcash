@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {concat, forkJoin, merge, Observable} from 'rxjs';
 import {HttpService} from '../../../core';
-import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
+import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 import {StoryPropertySaveContext} from '../store/story.actions';
 import Story from '../models/story';
 import {Upvote} from '../models/upvote';

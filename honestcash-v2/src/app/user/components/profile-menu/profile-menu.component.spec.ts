@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {GOTO_PATHS, ShardHeaderProfileMenuComponent} from './header-profile-menu.component';
+import {GOTO_PATHS, UserProfileMenuComponent} from './profile-menu.component';
 import {Router} from '@angular/router';
-import {WindowToken} from '../../helpers/window.helper';
-import {localStorageProvider, LocalStorageToken} from '../../helpers/local-storage.helper';
-import {provideMockActions} from '@ngrx/effects/testing';
-import {provideMockStore} from '@ngrx/store/testing';
-import {initialAppStates} from '../../../../app/app.states.mock';
-import {AuthEffects} from '../../../../app/auth/store/auth.effects';
-import {Observable} from 'rxjs';
+import {WindowToken} from '../../../../core/shared/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../../core/shared/helpers/local-storage.helper';
+import {MockStore, provideMockStore} from '@ngrx/store/testing';
+import {initialAppStates} from '../../../app.states.mock';
+import {AuthEffects} from '../../../auth/store/auth.effects';
 import {Store} from '@ngrx/store';
-import {AppStates} from '../../../../app/app.states';
+import {AppStates} from '../../../app.states';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {cold} from 'jasmine-marbles';
-import {LogOut} from '../../../../app/auth/store/auth.actions';
-import User from '../../../../app/user/models/user';
+import {LogOut} from '../../../auth/store/auth.actions';
+import User from '../../models/user';
+import {provideMockActions} from '@ngrx/effects/testing';
+import {Observable} from 'rxjs';
 
 const MockWindow = {
   location: {
@@ -24,17 +24,17 @@ const MockWindow = {
 
 describe('HeaderProfileMenu', () => {
   let effects: AuthEffects;
-  let actions: Observable<any>;
-  let component: ShardHeaderProfileMenuComponent;
-  let fixture: ComponentFixture<ShardHeaderProfileMenuComponent>;
+  let component: UserProfileMenuComponent;
+  let fixture: ComponentFixture<UserProfileMenuComponent>;
   let router: Router;
-  let store: Store<AppStates>;
+  let store: MockStore<AppStates>;
   let componentWindow: Window;
+  let actions: Observable<any>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ShardHeaderProfileMenuComponent
+        UserProfileMenuComponent
       ],
       imports: [
         HttpClientTestingModule,
@@ -59,7 +59,7 @@ describe('HeaderProfileMenu', () => {
         provideMockStore({initialState: initialAppStates})
       ]
     });
-    fixture = TestBed.createComponent(ShardHeaderProfileMenuComponent);
+    fixture = TestBed.createComponent(UserProfileMenuComponent);
     component = fixture.componentInstance;
 
     router = TestBed.get(Router);
@@ -102,13 +102,19 @@ describe('HeaderProfileMenu', () => {
     });
     describe('goTo', () => {
       it('should go change location.href to correct URL when provided with a profile path with the userId', () => {
-        const username = 'toto';
-        component.user = new User();
-        component.user.username = username;
+        const user = new User();
+        user.username = 'asdf';
+        user.imageUrl = 'asdfasdf';
+        store.setState({
+          ...initialAppStates,
+          user: {
+            user
+          }
+        });
         fixture.detectChanges();
 
         component.goTo('profile');
-        expect(componentWindow.location.href).toEqual(GOTO_PATHS.profile(username));
+        expect(componentWindow.location.href).toEqual(GOTO_PATHS.profile(user.username));
       });
       it('should go change location.href to correct URL when provided with a posts path', () => {
         component.goTo('posts');

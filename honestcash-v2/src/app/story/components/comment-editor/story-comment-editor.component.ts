@@ -8,7 +8,7 @@ import {UserState} from '../../../user/store/user.state';
 import {ELEMENT_TYPES} from '../../../editor/shared/json-to-html';
 import {StoryCommentDraftBodyChange, StoryCommentDraftLoad, StoryPropertySave} from '../../store/story.actions';
 import {StoryState} from '../../store/story.state';
-import {TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
+import {TRANSACTION_TYPES} from '../../../wallet/models/transaction';
 
 @Component({
   selector: 'story-comment-editor',

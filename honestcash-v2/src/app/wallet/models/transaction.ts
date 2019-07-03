@@ -1,4 +1,4 @@
-import User from '../../../app/user/models/user';
+import User from '../../user/models/user';
 
 export interface ITransaction {
   postId: number;

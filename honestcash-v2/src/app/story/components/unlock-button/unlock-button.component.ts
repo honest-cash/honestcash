@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import Story from '../../models/story';
-import {ITransaction, TRANSACTION_TYPES} from '../../../../core/shared/models/transaction';
+import {ITransaction, TRANSACTION_TYPES} from '../../../wallet/models/transaction';
 import User from '../../../user/models/user';
 import {Observable, Subscription} from 'rxjs';
 import {StoryState} from '../../store/story.state';

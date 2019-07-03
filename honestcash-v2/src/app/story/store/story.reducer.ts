@@ -1,15 +1,28 @@
 import {All, StoryActionTypes} from './story.actions';
 import {initialStoryState, StoryState} from './story.state';
-import {TRANSACTION_TYPES} from '../../../core/shared/models/transaction';
+import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 import Story from '../models/story';
 import {Unlock} from '../models/unlock';
+import {ENVIRONMENT_DEFAULTS} from '../../../environments/environment';
+import Hashtag from '../../editor/models/hashtag';
+
+const appendShareUrls = (story: Story) => {
+  story.shareURLs = {
+    reddit: `https://reddit.com/submit?url=${ENVIRONMENT_DEFAULTS.clientUrl}/${story.user.username}/` +
+      `${story.alias}&title=${story.title}`,
+    twitter: `https://twitter.com/intent/tweet?url=${ENVIRONMENT_DEFAULTS.clientUrl}/${story.user.username}/${story.alias}` +
+      `&text=${story.title}&via=honest_cash&hashtags=${(story.userPostHashtags as Hashtag[]).map((hashtag: Hashtag) => hashtag.hashtag).join(',')}`,
+  };
+  return story;
+};
 
 export function reducer(state = initialStoryState, action: All): StoryState {
   switch (action.type) {
     case StoryActionTypes.STORY_LOAD_SUCCESS: {
+      const story = appendShareUrls(action.payload);
       return {
         ...initialStoryState,
-        story: action.payload,
+        story,
         isLoading: false,
       };
     }

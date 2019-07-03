@@ -1,4 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Overwrites to bootstrap should come on top before imports */
+$grid-breakpoints: (
+  xxxs: 0,
+  xxs: 320px,
+  xs: 568px, /* this does not exist in bootstrap */
+  sm: 667px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+$container-max-widths: (
+  xxxs: 0,
+  xxs: 320px,
+  xs: 568px, /* this does not exist in bootstrap */
+  sm: 667px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
 @import "~bootstrap/scss/bootstrap";
 @import 'core/shared/styles/_background-opacity';
 @import 'core/shared/styles/_opacity';
