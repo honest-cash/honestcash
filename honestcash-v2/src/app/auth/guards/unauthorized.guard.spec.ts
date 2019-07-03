@@ -1,13 +1,13 @@
 import {TestBed} from '@angular/core/testing';
 import {Router, RouterStateSnapshot} from '@angular/router';
 
-import {AuthService} from '../../../app/auth/services/auth.service';
-import {MockAuthenticationService} from '../../../app/auth/services/auth.service.mock';
+import {AuthService} from '../services/auth.service';
+import {MockAuthenticationService} from '../services/auth.service.mock';
 import {UnauthorizedGuard} from './unauthorized.guard';
-import {resetLocalStorage} from '../helpers/tests.helper';
-import {WindowToken} from '../helpers/window.helper';
-import {localStorageProvider, LocalStorageToken} from '../helpers/local-storage.helper';
-import {environmentProvider, EnvironmentToken} from '../helpers/environment.helper';
+import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
+import {WindowToken} from '../../../core/shared/helpers/window.helper';
+import {localStorageProvider, LocalStorageToken} from '../../../core/shared/helpers/local-storage.helper';
+import {environmentProvider, EnvironmentToken} from '../../../core/shared/helpers/environment.helper';
 import {Environment} from '../../../environments/environment';
 
 const MockWindow = {

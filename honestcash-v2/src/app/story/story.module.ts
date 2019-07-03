@@ -56,7 +56,6 @@ import {LayoutModule} from '../../core/layout.module';
     CommonModule,
     SharedModule,
   ],
-  providers: [],
   bootstrap: [StoryComponent]
 })
 export class StoryModule {

@@ -15,6 +15,8 @@ import {LogOut} from '../../../auth/store/auth.actions';
 import User from '../../models/user';
 import {provideMockActions} from '@ngrx/effects/testing';
 import {Observable} from 'rxjs';
+import {WalletService} from '../../../wallet/services/wallet.service';
+import {UserService} from '../../services/user.service';
 
 const MockWindow = {
   location: {
@@ -51,6 +53,8 @@ describe('HeaderProfileMenu', () => {
             }
           }
         },
+        WalletService,
+        UserService,
         AuthEffects,
         {provide: WindowToken, useValue: MockWindow},
         {provide: 'PLATFORM_ID', useValue: 'browser'},

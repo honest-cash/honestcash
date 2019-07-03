@@ -1,10 +1,10 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {Router, RouterStateSnapshot} from '@angular/router';
 
-import {AuthService} from '../../../app/auth/services/auth.service';
-import {MockAuthenticationService} from '../../../app/auth/services/auth.service.mock';
+import {AuthService} from '../services/auth.service';
+import {MockAuthenticationService} from '../services/auth.service.mock';
 import {AuthorizedGuard} from './authorized.guard';
-import {resetLocalStorage} from '../helpers/tests.helper';
+import {resetLocalStorage} from '../../../core/shared/helpers/tests.helper';
 
 describe('AuthorizedGuard', () => {
   let authenticationGuard: AuthorizedGuard;

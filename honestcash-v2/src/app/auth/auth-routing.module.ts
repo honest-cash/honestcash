@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthorizedGuard} from '../../core/shared/guards/authorized.guard';
+import {AuthorizedGuard} from './guards/authorized.guard';
 import {AuthContainerComponent} from './auth-container.component';
 import {AuthWelcomeComponent} from './pages/welcome/welcome.component';
-import {UnauthorizedGuard} from '../../core/shared/guards/unauthorized.guard';
+import {UnauthorizedGuard} from './guards/unauthorized.guard';
 import {AuthLoginComponent} from './pages/login/login.component';
 import {AuthLogoutComponent} from './pages/logout/logout.component';
 import {AuthSignupComponent} from './pages/signup/signup.component';

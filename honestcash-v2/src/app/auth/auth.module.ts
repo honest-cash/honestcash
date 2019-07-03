@@ -18,6 +18,9 @@ import {AuthHeaderComponent} from './components/header/header.component';
 import {SharedModule} from '../../core/shared.module';
 import {AuthRoutingModule} from './auth-routing.module';
 import {LayoutModule} from '../../core/layout.module';
+import {UserSharedModule} from '../user/user-shared.module';
+import {WalletSharedModule} from '../wallet/wallet-shared.module';
+import {AuthSharedModule} from './auth-shared.module';
 
 @NgModule({
   declarations: [
@@ -39,10 +42,12 @@ import {LayoutModule} from '../../core/layout.module';
   imports: [
     FormsModule,
     AuthRoutingModule,
+    AuthSharedModule,
     SharedModule,
     LayoutModule,
+    UserSharedModule,
+    WalletSharedModule,
   ],
-  providers: [],
   bootstrap: [AuthContainerComponent]
 })
 export class AuthModule {

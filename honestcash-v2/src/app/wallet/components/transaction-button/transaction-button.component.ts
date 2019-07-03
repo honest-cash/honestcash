@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ITransaction, TRANSACTION_TYPES} from '../../models/transaction';
-import {WalletService} from '../../services/wallet.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ISimpleWallet} from '../../models/simple-wallet';
 import {combineLatest} from 'rxjs';
@@ -11,14 +10,19 @@ import {UserState} from '../../../user/store/user.state';
 import User from '../../../user/models/user';
 import {Router} from '@angular/router';
 import Story from '../../../story/models/story';
-import {TransactionService} from '../../services/transaction.service';
+import {ExchangeService} from '../../services/exchange.service';
 import {WalletReceiptComponent} from '../receipt/receipt.component';
 import {WALLET_STATUS} from '../../models/status';
+import {CurrencyService} from '../../services/currency.service';
 
 @Component({
   selector: 'wallet-transaction-button',
   templateUrl: `./transaction-button.component.html`,
   styleUrls: ['./transaction-button.component.scss'],
+  providers: [
+    ExchangeService,
+    CurrencyService,
+  ]
 })
 export class WalletTransactionButtonComponent implements OnInit {
   @Input() public onTransactionComplete: Function;
@@ -37,8 +41,8 @@ export class WalletTransactionButtonComponent implements OnInit {
   constructor(
     private router: Router,
     private store: Store<AppStates>,
-    private walletService: WalletService,
-    private transactionService: TransactionService,
+    private exchangeService: ExchangeService,
+    private currencyService: CurrencyService,
     private modalService: NgbModal,
   ) {
   }
@@ -63,7 +67,7 @@ export class WalletTransactionButtonComponent implements OnInit {
       this.costInDollars = this.story.paidSectionCost;
     }
 
-    this.walletService.convertCurrency(this.costInDollars, 'usd', 'bch')
+    this.currencyService.convertCurrency(this.costInDollars, 'usd', 'bch')
       .subscribe((costInBch: number) => {
         this.costInBch = Number(costInBch.toFixed(5));
         this.isLoading = false;
@@ -75,9 +79,9 @@ export class WalletTransactionButtonComponent implements OnInit {
       this.isProcessing = true;
       let transactionPromise: Promise<ITransaction>;
       if (this.transactionType === TRANSACTION_TYPES.Upvote) {
-        transactionPromise = this.transactionService.upvote(this.wallet, this.story, this.user, this.costInBch);
+        transactionPromise = this.exchangeService.upvote(this.wallet, this.story, this.user, this.costInBch);
       } else if (this.transactionType === TRANSACTION_TYPES.Unlock) {
-        transactionPromise = this.transactionService.unlock(this.wallet, this.story, this.user, this.costInBch);
+        transactionPromise = this.exchangeService.unlock(this.wallet, this.story, this.user, this.costInBch);
       }
       if (transactionPromise) {
         transactionPromise.then((transaction: ITransaction) => {

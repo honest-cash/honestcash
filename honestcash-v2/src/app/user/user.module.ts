@@ -18,7 +18,6 @@ import {LayoutModule} from '../../core/layout.module';
     CommonModule,
     SharedModule,
   ],
-  providers: [],
   bootstrap: [UserContainerComponent]
 })
 export class UserModule {

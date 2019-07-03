@@ -1,7 +1,6 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable} from 'rxjs';
 import Story from '../../story/models/story';
-import {HttpService} from '../../../core';
 import {EmptyResponse, FailedResponse} from '../../auth/models/authentication';
 import Hashtag from '../models/hashtag';
 import {HttpHeaders} from '@angular/common/http';
@@ -12,9 +11,11 @@ import {EDITOR_STORY_PROPERTIES} from '../shared/editor.story-properties';
 import {StoryLoadContext, UploadImageResponse} from '../shared/interfaces';
 import {isPlatformBrowser} from '@angular/common';
 import {Block} from '../shared/json-to-html';
+import {EditorSharedModule} from '../editor-shared.module';
+import {HttpService} from '../../../core/http/http.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: EditorSharedModule,
 })
 export class EditorService {
   private readonly isPlatformBrowser: boolean;

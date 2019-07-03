@@ -3,11 +3,14 @@ import {LayoutHeaderComponent} from './shared/components/header/header.component
 import {UserSharedModule} from '../app/user/user-shared.module';
 import {WalletSharedModule} from '../app/wallet/wallet-shared.module';
 import {SharedModule} from './shared.module';
-import {RouterModule} from '@angular/router';
+import {WalletService} from '../app/wallet/services/wallet.service';
 
 @NgModule({
   declarations: [
     LayoutHeaderComponent,
+  ],
+  providers: [
+    WalletService,
   ],
   imports: [
     UserSharedModule,

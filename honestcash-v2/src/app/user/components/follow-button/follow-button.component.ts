@@ -4,13 +4,16 @@ import {AppStates, selectUserState} from '../../../app.states';
 import User from '../../models/user';
 import {Observable, Subscription} from 'rxjs';
 import {UserState} from '../../store/user.state';
-import {UserService} from '../../services/user.service';
-import {CodedErrorResponse, CodedResponse} from '../../../auth/models/authentication';
+import {CodedResponse} from '../../../auth/models/authentication';
+import {UserRelationsService} from '../../services/user.relations.service';
 
 @Component({
   selector: 'user-follow-button',
   templateUrl: './follow-button.component.html',
-  styleUrls: ['./follow-button.component.scss']
+  styleUrls: ['./follow-button.component.scss'],
+  providers: [
+    UserRelationsService,
+  ]
 })
 export class UserFollowButtonComponent implements OnInit, OnDestroy {
   @Input() public author: User;
@@ -19,7 +22,7 @@ export class UserFollowButtonComponent implements OnInit, OnDestroy {
   public userSub: Subscription;
   constructor(
     private store: Store<AppStates>,
-    private userService: UserService,
+    private userRelationsService: UserRelationsService,
   ) {
     this.user$ = this.store.select(selectUserState);
   }
@@ -32,13 +35,13 @@ export class UserFollowButtonComponent implements OnInit, OnDestroy {
 
   public onButtonClicked() {
     if (this.author.alreadyFollowing) {
-      this.userService.unfollowUser(this.author.id).subscribe((result: CodedResponse) => {
+      this.userRelationsService.unfollowUser(this.author.id).subscribe((result: CodedResponse) => {
         if (result.code === 'UNFOLLOWED') {
           this.author.alreadyFollowing = false;
         }
       });
     } else {
-      this.userService.followUser(this.author.id).subscribe((result: CodedResponse) => {
+      this.userRelationsService.followUser(this.author.id).subscribe((result: CodedResponse) => {
         if (result.code === 'FOLLOWED') {
           this.author.alreadyFollowing = true;
         }

@@ -19,9 +19,9 @@ import {AppSharedModule} from './app.shared.module';
 import {SharedModule} from '../core/shared.module';
 import {CoreEffects} from '../core/store/core.effects';
 import {StoryEffects} from './story/store/story.effects';
-import {CoreModule} from '../core';
 import {LayoutModule} from '../core/layout.module';
 import {AppNotFoundComponent} from './shared/pages/not-found/not-found.component';
+import {CoreModule} from '../core/core.module';
 
 @NgModule({
   declarations: [

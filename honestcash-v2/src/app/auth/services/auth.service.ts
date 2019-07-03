@@ -1,6 +1,5 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {defer, Observable} from 'rxjs';
-import {HttpService} from '../../../core';
 import {
   ChangePasswordPayload,
   CheckPasswordContext,
@@ -22,9 +21,11 @@ import {AppStates} from '../../app.states';
 import {WalletService} from '../../wallet/services/wallet.service';
 import {UserService} from '../../user/services/user.service';
 import {API_ENDPOINTS} from '../shared/auth.endpoints';
+import {AuthSharedModule} from '../auth-shared.module';
+import {HttpService} from '../../../core/http/http.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: AuthSharedModule
 })
 export class AuthService {
 

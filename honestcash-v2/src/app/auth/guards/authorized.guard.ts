@@ -1,8 +1,8 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 
-import {Logger} from '../services/logger.service';
-import {AuthService} from '../../../app/auth/services/auth.service';
+import {Logger} from '../../../core/shared/services/logger.service';
+import {AuthService} from '../services/auth.service';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
 const log = new Logger('AuthorizedGuard');

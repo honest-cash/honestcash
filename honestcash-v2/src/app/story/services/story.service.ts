@@ -1,30 +1,30 @@
 import {Injectable} from '@angular/core';
-import {concat, forkJoin, merge, Observable} from 'rxjs';
-import {HttpService} from '../../../core';
+import {forkJoin, Observable} from 'rxjs';
 import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
 import {StoryPropertySaveContext} from '../store/story.actions';
 import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
-import {EditorService} from '../../editor/services/editor.service';
-import {EDITOR_STORY_PROPERTIES} from '../../editor/shared/editor.story-properties';
 import {mergeMap} from 'rxjs/operators';
+import {StorySharedModule} from '../story-shared.module';
+import {HttpService} from '../../../core/http/http.service';
 
 export const API_ENDPOINTS = {
   getStory: (id: number) => `/v2/post/${id}`,
   getStoryUpvotes: (id: number) => `/post/${id}/upvotes`,
   getStoryUnlocks: (id: number) => `/post/${id}/unlocks`,
   getStoryComments: (id: number) => `/v2/post/${id}/responses`,
+  saveComment: (id: number) =>  `/v2/draft/${id}/BodyAndTitle`,
+  publishComment: (id: number) =>   `/v2/draft/${id}/publish`,
   upvoteStory: (id: number) => `/post/${id}/upvote`,
   unlockStory: (id: number) => `/post/${id}/unlock`,
 };
 
-@Injectable({providedIn: 'root'})
+@Injectable({providedIn: StorySharedModule})
 export class StoryService {
 
   constructor(
     private http: HttpService,
-    private editorSerice: EditorService,
   ) {
   }
 
@@ -80,9 +80,13 @@ export class StoryService {
     } else if (payload.property === TRANSACTION_TYPES.Unlock) {
       return this.http.post(API_ENDPOINTS.unlockStory(payload.transaction.postId), payload.transaction);
     } else if (payload.property === TRANSACTION_TYPES.Comment) {
-      return this.editorSerice.savePostProperty(payload.data as Story, EDITOR_STORY_PROPERTIES.BodyAndTitle)
+      const requestBody = {
+        title: (payload.data as Story).title,
+        bodyJSON: (payload.data as Story).bodyJSON
+      };
+      return this.http.post(API_ENDPOINTS.saveComment(payload.transaction.postId), requestBody)
         .pipe(
-          mergeMap(() => this.editorSerice.publishPost(payload.data as Story))
+          mergeMap(() => this.http.post(API_ENDPOINTS.publishComment(payload.transaction.postId), payload.data as Story))
         );
     }
   }

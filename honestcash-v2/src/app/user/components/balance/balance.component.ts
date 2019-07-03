@@ -2,15 +2,15 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppStates, selectWalletState} from '../../../app.states';
 import {Observable, Subscription} from 'rxjs';
-import {WalletState} from '../../store/wallet.state';
-import {WALLET_STATUS} from '../../models/status';
+import {WalletState} from '../../../wallet/store/wallet.state';
+import {WALLET_STATUS} from '../../../wallet/models/status';
 
 @Component({
-  selector: 'wallet-balance',
+  selector: 'user-balance',
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.scss']
 })
-export class WalletBalanceComponent implements OnInit, OnDestroy {
+export class UserBalanceComponent implements OnInit, OnDestroy {
   public balance: number;
   public status: WALLET_STATUS;
   private wallet$: Observable<WalletState>;

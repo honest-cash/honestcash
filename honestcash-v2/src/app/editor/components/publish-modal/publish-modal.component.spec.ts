@@ -69,8 +69,8 @@ describe('EditorPublishModalComponent', () => {
       ],
       declarations: [EditorPublishModalComponent],
       providers: [
-        EditorService,
         provideMockStore({initialState}),
+        EditorService,
         {provide: ToastrService, useValue: MockToastr},
         {provide: NgbActiveModal, useValue: MockActiveModal},
         {provide: WindowToken, useValue: MockWindow},
