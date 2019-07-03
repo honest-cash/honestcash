@@ -25,6 +25,7 @@ import {StoryCommentCardBodyComponent} from './components/comment-card-body/stor
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
 import {WalletSharedModule} from '../wallet/wallet-shared.module';
 import {LayoutModule} from '../../core/layout.module';
+import {OrderModule} from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import {LayoutModule} from '../../core/layout.module';
     LayoutModule,
     CommonModule,
     SharedModule,
+    OrderModule,
   ],
   providers: [],
   bootstrap: [StoryComponent]

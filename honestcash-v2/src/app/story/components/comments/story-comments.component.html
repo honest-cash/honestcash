@@ -1,5 +1,13 @@
-<div class="row mb-2" *ngIf="comments !== undefined">
-   <h5 class="col font-weight-bold text-uppercase">Comments ({{comments.length}})</h5>
+<div class="row justify-content-between mb-2" *ngIf="comments !== undefined">
+   <div class="col">
+     <h5 class="font-weight-bold text-uppercase">Comments ({{comments.length}})</h5>
+   </div>
+  <div class="col text-right">
+    <small>sort by&nbsp;</small>
+    <button class="btn btn-sm p-0 btn-link text-dark" [ngClass]="{'font-weight-bold': commentSortOrder === 'upvoteCount'}" (click)="onCommentSortClicked('upvoteCount')"># of upvotes</button>
+    /
+    <button class="btn btn-sm p-0 btn-link text-dark" [ngClass]="{'font-weight-bold': commentSortOrder === 'createdAt'}" (click)="onCommentSortClicked('createdAt')">chronologically</button>
+  </div>
  </div>
 <div class="row mb-4" *ngIf="!isLoading && shouldShowCommentEditorPlaceholder">
   <div class="col" id="comments-placeholder__wrapper">
@@ -15,7 +23,7 @@
   <story-comment-editor [commentParent]="masterStory"></story-comment-editor>
 </div>
  <div class="row mb-4" *ngIf="!isLoading && comments && comments.length">
-     <story-comment-card [@simpleFadeAnimation]="'in'" *ngFor="let comment of comments" [comment]="comment"></story-comment-card>
+     <story-comment-card [@simpleFadeAnimation]="'in'" *ngFor="let comment of comments | orderBy: commentSortOrder: true" [comment]="comment"></story-comment-card>
  </div>
 <div *ngIf="isLoading" class="row">
   <div class="col text-center">
