@@ -240,7 +240,7 @@ describe('WalletService', () => {
         });
       });
 
-      it('return a SimpleBitcoinWallet if there is a payload and payload is a LoginSuccessResponse', (done) => {
+      it('return a SimpleBitcoinWallet if there is a payload and payload is a LoginSuccessResponse WITH wallet', (done) => {
         const coinbaseResultMock: CoinbaseExchangeResponse = {
           data: {
             currency: 'BCH',
@@ -250,6 +250,7 @@ describe('WalletService', () => {
           }
         };
         (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
+        (<jasmine.Spy>mockHttpService.post).and.returnValue(of());
         const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
         const loginSuccessResponse: LoginSuccessResponse = {
           user: mocks.setupWalletContext.user,
@@ -259,6 +260,65 @@ describe('WalletService', () => {
         };
         loginSuccessResponse.wallet.mnemonic = SHARED_MOCKS.mnemonic;
         loginSuccessResponse.wallet.mnemonicEncrypted = SHARED_MOCKS.mnemonicEncrypted;
+
+        // Act
+        walletService.loadWallet(loginSuccessResponse).subscribe((wallet: ISimpleWallet) => {
+          // Assert
+          expect(wallet).toBeDefined();
+          expect(dispatchSpy).toHaveBeenCalledWith(new WalletStatusUpdated(WALLET_STATUS.Loaded));
+          done();
+        });
+      });
+
+      it('return a SimpleBitcoinWallet if there is a payload and payload is a LoginSuccessResponse WITHOUT wallet but mnemonic exists in localStorage', (done) => {
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': 1.4
+            }
+          }
+        };
+        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
+        (<jasmine.Spy>mockHttpService.post).and.returnValue(of());
+        const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
+        const loginSuccessResponse: LoginSuccessResponse = {
+          user: mocks.setupWalletContext.user,
+          token: mocks.setupWalletContext.token,
+          password: mocks.setupWalletContext.password,
+          wallet: undefined
+        };
+
+        localStorage.setItem(LOCAL_TOKEN_KEY, mocks.setupWalletContext.token);
+        localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, SHARED_MOCKS.mnemonic);
+
+        // Act
+        walletService.loadWallet(loginSuccessResponse).subscribe((wallet: ISimpleWallet) => {
+          // Assert
+          expect(wallet).toBeDefined();
+          expect(dispatchSpy).toHaveBeenCalledWith(new WalletStatusUpdated(WALLET_STATUS.Loaded));
+          done();
+        });
+      });
+
+      it('return a SimpleBitcoinWallet if there is a payload and payload is a LoginSuccessResponse WITHOUT wallet and mnemonic DOES NOT in localStorage', (done) => {
+        const coinbaseResultMock: CoinbaseExchangeResponse = {
+          data: {
+            currency: 'BCH',
+            rates: {
+              'USD': 1.4
+            }
+          }
+        };
+        (<jasmine.Spy>mockHttpService.get).and.returnValue(of(coinbaseResultMock));
+        (<jasmine.Spy>mockHttpService.post).and.returnValue(of());
+        const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
+        const loginSuccessResponse: LoginSuccessResponse = {
+          user: mocks.setupWalletContext.user,
+          token: mocks.setupWalletContext.token,
+          password: mocks.setupWalletContext.password,
+          wallet: undefined
+        };
 
         // Act
         walletService.loadWallet(loginSuccessResponse).subscribe((wallet: ISimpleWallet) => {
