@@ -13,7 +13,7 @@ import {StoryLoad} from '../../../story/store/story.actions';
   styleUrls: ['./faq.component.scss']
 })
 export class MainFaqComponent implements OnInit, OnDestroy {
-  @HostBinding('class') public class = 'card m-auto';
+  @HostBinding('class') public class = 'm-auto';
   public story: Story;
   public story$: Observable<StoryState>;
   public storySub: Subscription;
@@ -28,10 +28,7 @@ export class MainFaqComponent implements OnInit, OnDestroy {
     this.store.dispatch(new StoryLoad(57));
     this.storySub = this.story$.subscribe((storyState: StoryState) => {
       this.story = storyState.story;
-
-      if (this.story && this.story.title) {
-        this.isLoading = false;
-      }
+      this.isLoading = storyState.isLoading;
     });
   }
 

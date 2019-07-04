@@ -13,7 +13,7 @@ import {StoryLoad} from '../../../story/store/story.actions';
   styleUrls: ['./terms-of-service.component.scss']
 })
 export class MainTermsOfServiceComponent implements OnInit, OnDestroy {
-  @HostBinding('class') public class = 'card m-auto';
+  @HostBinding('class') public class = 'm-auto';
   public story: Story;
   public story$: Observable<StoryState>;
   public storySub: Subscription;
@@ -28,10 +28,7 @@ export class MainTermsOfServiceComponent implements OnInit, OnDestroy {
     this.store.dispatch(new StoryLoad(124));
     this.storySub = this.story$.subscribe((storyState: StoryState) => {
       this.story = storyState.story;
-
-      if (this.story && this.story.title) {
-        this.isLoading = false;
-      }
+      this.isLoading = storyState.isLoading;
     });
   }
 

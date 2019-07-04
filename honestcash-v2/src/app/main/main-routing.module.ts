@@ -5,6 +5,7 @@ import {MainAboutComponent} from './pages/about/about.component';
 import {MainTermsOfServiceComponent} from './pages/terms-of-service/terms-of-service.component';
 import {MainPrivacyPolicyComponent} from './pages/privacy-policy/privacy-policy.component';
 import {MainFaqComponent} from './pages/faq/faq.component';
+import {MainTransparencyComponent} from './pages/transparency/transparency.component';
 
 /**
  * - More specific routes should come first
@@ -15,8 +16,10 @@ const routes: Routes = [
     component: MainContainerComponent,
     children: [
       {path: 'about', component: MainAboutComponent},
+      {path: 'about-honest-cash', component: MainAboutComponent},
       {path: 'terms-of-service', component: MainTermsOfServiceComponent},
       {path: 'privacy-policy', component: MainPrivacyPolicyComponent},
+      {path: 'transparency', component: MainTransparencyComponent},
       {path: 'help', component: MainFaqComponent},
       {path: 'faq', component: MainFaqComponent},
       {path: 'frequently-asked-questions', component: MainFaqComponent},

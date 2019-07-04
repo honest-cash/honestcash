@@ -8,11 +8,11 @@ import {StoryLoad} from '../../../story/store/story.actions';
 
 
 @Component({
-  selector: 'main-page-terms-of-service',
-  templateUrl: './privacy-policy.component.html',
-  styleUrls: ['./privacy-policy.component.scss']
+  selector: 'main-page-transparency',
+  templateUrl: './transparency.component.html',
+  styleUrls: ['./transparency.component.scss']
 })
-export class MainPrivacyPolicyComponent implements OnInit, OnDestroy {
+export class MainTransparencyComponent implements OnInit, OnDestroy {
   @HostBinding('class') public class = 'm-auto';
   public story: Story;
   public story$: Observable<StoryState>;
@@ -25,7 +25,7 @@ export class MainPrivacyPolicyComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(new StoryLoad(133));
+    this.store.dispatch(new StoryLoad(129));
     this.storySub = this.story$.subscribe((storyState: StoryState) => {
       this.story = storyState.story;
       this.isLoading = storyState.isLoading;

@@ -245,16 +245,28 @@ for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown
 */
 
 // PATHS MIGRATED TO V2
+
+// Story
 app.get("/:username/:postId", (req, res) => res.redirect(`/v2/${req.params.username}/${req.params.postId}`));
 app.get("/post/:username/:postId", (req, res) => res.redirect(`/v2/post/${req.params.username}/${req.params.postId}`));
 app.get("/post/:postId", (req, res) => res.redirect(`/v2/post/${req.params.postId}`));
 app.get("/story/:username/:postId", (req, res) => res.redirect(`/v2/story/${req.params.username}/${req.params.postId}`));
 app.get("/story/:postId", (req, res) => res.redirect(`/v2/story/${req.params.postId}`));
+
+// Editor
 app.get("/write", (_, res) => res.redirect(`/v2/editor/write`));
 app.get("/edit/:postId", (req, res) => res.redirect(`/v2/editor/edit/${req.params.postId}`));
 app.get("/write/response/:parentPostId", (req, res) => res.redirect(`/v2/editor/comment/${req.params.parentPostId}`));
 
-for (let v2Path of [ "/login", "/signup", "/thank-you", "/about" ]) {
+// Main
+for (let v2Path of [ "/terms-of-service", "/about-honest-cash", "/privacy-policy", "transparency" ]) {
+	app.get(v2Path, (_, res) =>
+		res.redirect(`/v2${v2Path}`)
+	);
+}
+
+// Auth
+for (let v2Path of [ "/login", "/signup", "/thank-you" ]) {
   app.get(v2Path, (_, res) =>
     res.redirect(`/v2${v2Path}`)
   );

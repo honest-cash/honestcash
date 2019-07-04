@@ -8,6 +8,7 @@ import {StorySharedModule} from '../story/story-shared.module';
 import {MainPrivacyPolicyComponent} from './pages/privacy-policy/privacy-policy.component';
 import {MainFaqComponent} from './pages/faq/faq.component';
 import {LayoutModule} from '../../core/layout.module';
+import {MainTransparencyComponent} from './pages/transparency/transparency.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import {LayoutModule} from '../../core/layout.module';
     MainTermsOfServiceComponent,
     MainPrivacyPolicyComponent,
     MainFaqComponent,
+    MainTransparencyComponent,
   ],
   imports: [
     MainRoutingModule,

@@ -3,15 +3,15 @@
     <shared-avatar [src]="user.imageUrl"></shared-avatar>
     <user-balance></user-balance>
   </a>
-  <div ngbDropdownMenu aria-labelledby="user-dropdown">
-    <button class="dropdown-item" (click)="goTo('profile')" translate>my profile</button>
-    <button class="dropdown-item" (click)="goTo('posts')" translate>my posts</button>
-    <button class="dropdown-item" (click)="goTo('wallet')" translate>my wallet</button>
+  <div id="user-dropdown-list" ngbDropdownMenu aria-labelledby="user-dropdown">
+    <a class="dropdown-item" (click)="goTo('profile')">my profile</a>
+    <a class="dropdown-item" (click)="goTo('posts')">my posts</a>
+    <a class="dropdown-item" (click)="goTo('wallet')">my wallet</a>
     <div class="dropdown-divider"></div>
-    <button class="dropdown-item" (click)="goTo('help')" translate>help</button>
-    <button class="dropdown-item" (click)="goTo('terms-of-service')" translate>terms of service</button>
-    <button class="dropdown-item" (click)="goTo('privacy-policy')" translate>privacy policy</button>
+    <a class="dropdown-item" [routerLink]="['/frequently-asked-questions']">help</a>
+    <a class="dropdown-item"  [routerLink]="['/terms-of-service']">terms of service</a>
+    <a class="dropdown-item"  [routerLink]="['/privacy-policy']">privacy policy</a>
     <div class="dropdown-divider"></div>
-    <button class="dropdown-item" (click)="logout()" translate>Logout</button>
+    <a class="dropdown-item" (click)="logout()">Logout</a>
   </div>
 </div>

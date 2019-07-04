@@ -10,11 +10,8 @@
   @include background-opacity($white, 5);
 
   ::ng-deep {
-    figure {
-      text-align: center;
-    }
     img {
-      max-width: 50% !important;
+      max-width: 100%;
     }
   }
 }
