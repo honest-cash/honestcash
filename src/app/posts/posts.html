@@ -63,15 +63,15 @@
             <div class="col-xs-12 col-sm-4 pull-right text-right">
                 <a
                         class="btn btn-default btn-xs"
-                        ui-sref="vicigo.post({ alias: post.alias, username: post.user.username })"
-                        target="_blank"
+                        ng-href="/{{post.user.username}}/{{ post.alias}}"
+                        target="_self"
                 >
                     <i class="fa fa-eye"></i>&nbsp;View
                 </a>
                 <a
                         class="btn btn-default btn-xs"
                         ng-href="/edit/{{ post.id }}"
-                        target="_blank"
+                        target="_self"
                 >
                     <i class="fa fa-eraser"></i>&nbsp;Edit
                 </a>

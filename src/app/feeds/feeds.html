@@ -35,7 +35,7 @@
           ng-class="{ 'bold': feedScope === 'last-month' }"
         >
           last month
-        </a> · 
+        </a> ·
         <a
         ng-href="/{{feedType}}?feedScope=all-time"
           ng-class="{ 'bold': feedScope === 'all-time' }"
@@ -96,19 +96,26 @@
         </li>
       </ul>
       <div style="margin-top:50px;">
-        <a href="https://honest.cash/honest_cash/frequently-asked-questions"
+        <a href="/honest_cash/frequently-asked-questions"
+           target="_self"
         >FAQ</a
       >
-      <a href="https://honest.cash/honest_cash/about-honest-cash">About</a>
       <a
-        href="https://honest.cash/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
+              href="/honest_cash/about-honest-cash"
+              target="_self">About</a>
+      <a
+        href="/honest_cash/honest-cash-transparency-report-and-warrant-canary-129"
+        target="_self"
         >Transparency</a
       >
       <a
-        href="https://honest.cash/honest_cash/honest-cash-terms-of-service-124/"
+        target="_self"
+        href="/honest_cash/honest-cash-terms-of-service-124/"
         >Terms</a
       >
-      <a href="https://honest.cash/honest_cash/honestcash-privacy-policy"
+      <a
+        target="_self"
+        href="/honest_cash/honestcash-privacy-policy"
         >Privacy</a
       >
       <br />
