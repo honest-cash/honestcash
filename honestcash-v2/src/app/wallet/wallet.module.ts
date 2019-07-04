@@ -14,7 +14,6 @@ import {LayoutModule} from '../../core/layout.module';
     WalletContainerComponent,
   ],
   imports: [
-    EffectsModule.forRoot([WalletEffects]),
     FormsModule,
     WalletRoutingModule,
     WalletSharedModule,

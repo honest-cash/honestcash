@@ -56,7 +56,6 @@ import {OrderModule} from 'ngx-order-pipe';
     StoryResponseDetailsComponent,
   ],
   imports: [
-    EffectsModule.forRoot([StoryEffects]),
     StoryRoutingModule,
     StorySharedModule,
     CommonModule,

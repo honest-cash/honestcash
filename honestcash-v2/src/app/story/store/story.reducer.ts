@@ -72,6 +72,7 @@ export function reducer(state = initialStoryState, action: All): StoryState {
         hasCommentDraftLoaded: false,
         commentDraft: undefined,
         commentParent: undefined,
+        scrollTo: state.commentDraft.id
       };
     }
     case StoryActionTypes.STORY_PROPERTY_SAVE: {
@@ -82,7 +83,8 @@ export function reducer(state = initialStoryState, action: All): StoryState {
           [action.payload.property]: true,
         },
         isPropertySaving: true,
-        savingProperty: action.payload.property
+        savingProperty: action.payload.property,
+        scrollTo: undefined,
       };
     }
     case StoryActionTypes.STORY_COMMENT_DRAFT_BODY_CHANGE: {
@@ -104,7 +106,8 @@ export function reducer(state = initialStoryState, action: All): StoryState {
     case StoryActionTypes.STORY_COMMENT_CLICKED: {
       return {
         ...state,
-        commentParent: action.payload
+        commentParent: action.payload,
+        scrollTo: undefined,
       };
     }
     default: {
