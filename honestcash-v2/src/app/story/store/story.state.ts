@@ -17,8 +17,9 @@ export interface StoryState {
   unlocks: Unlock[];
   comments: Story[];
   commentParent: Story;
-  hasCommentDraftLoaded: boolean,
+  hasCommentDraftLoaded: boolean;
   commentDraft: Story;
+  scrollTo: number;
 }
 
 export const initialStoryState: StoryState = {
@@ -37,4 +38,5 @@ export const initialStoryState: StoryState = {
   commentParent: undefined,
   hasCommentDraftLoaded: false,
   commentDraft: undefined,
+  scrollTo: undefined,
 };

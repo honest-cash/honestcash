@@ -14,7 +14,6 @@ import {LayoutModule} from '../../core/layout.module';
     UserContainerComponent,
   ],
   imports: [
-    EffectsModule.forRoot([UserEffects]),
     FormsModule,
     UserRoutingModule,
     UserSharedModule,
