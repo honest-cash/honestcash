@@ -22,7 +22,6 @@ import {WalletService} from '../../wallet/services/wallet.service';
 import {UserService} from '../../user/services/user.service';
 import {API_ENDPOINTS} from '../shared/auth.endpoints';
 import {HttpService} from '../../../core/http/http.service';
-import {AuthSharedModule} from '../auth-shared.module';
 
 @Injectable({
   providedIn: 'root'
