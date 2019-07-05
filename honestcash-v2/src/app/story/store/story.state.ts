@@ -19,6 +19,7 @@ export interface StoryState {
   commentParent: Story;
   hasCommentDraftLoaded: boolean;
   commentDraft: Story;
+  isCommentEditingSelf: boolean;
   scrollTo: number;
 }
 
@@ -38,5 +39,6 @@ export const initialStoryState: StoryState = {
   commentParent: undefined,
   hasCommentDraftLoaded: false,
   commentDraft: undefined,
+  isCommentEditingSelf: undefined,
   scrollTo: undefined,
 };

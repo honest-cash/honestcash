@@ -1,0 +1,8 @@
+<span *ngIf="story" class="comment-counts">
+    <span class="ml-2">
+      {{story.upvoteCount}}&nbsp;&nbsp;<fa-icon [icon]="['fab', 'bitcoin']"></fa-icon>
+    </span>
+    <span class="ml-2">
+      {{story.responseCount}}&nbsp;&nbsp;<fa-icon [icon]="['fas', 'comments']"></fa-icon>
+    </span>
+  </span>

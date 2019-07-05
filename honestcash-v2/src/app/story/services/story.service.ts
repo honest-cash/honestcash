@@ -1,24 +1,13 @@
 import {Injectable} from '@angular/core';
 import {forkJoin, Observable} from 'rxjs';
 import {TRANSACTION_TYPES} from '../../wallet/models/transaction';
-import {StoryPropertySaveContext} from '../store/story.actions';
+import {StoryCommentDraftLoadContext, StoryPropertySaveContext} from '../store/story.actions';
 import Story from '../models/story';
 import {Upvote} from '../models/upvote';
 import {Unlock} from '../models/unlock';
 import {mergeMap} from 'rxjs/operators';
 import {HttpService} from '../../../core/http/http.service';
-
-export const API_ENDPOINTS = {
-  getStory: (id: number) => `/v2/post/${id}`,
-  getStoryUpvotes: (id: number) => `/post/${id}/upvotes`,
-  getStoryUnlocks: (id: number) => `/post/${id}/unlocks`,
-  getStoryComments: (id: number) => `/v2/post/${id}/responses`,
-  loadCommentDraft: (id: number) => `/v2/draft?parentPostId=${id}`,
-  saveComment: (id: number) => `/v2/draft/${id}/bodyAndTitle`,
-  publishComment: (id: number) => `/v2/draft/${id}/publish`,
-  upvoteStory: (id: number) => `/post/${id}/upvote`,
-  unlockStory: (id: number) => `/post/${id}/unlock`,
-};
+import {API_ENDPOINTS} from '../shared/story.endpoints';
 
 @Injectable()
 export class StoryService {
@@ -61,8 +50,8 @@ export class StoryService {
     return this.http.get<Unlock[]>(API_ENDPOINTS.getStoryUnlocks(id));
   }
 
-  public loadCommentDraft(id: number): Observable<Story> {
-    return this.http.get<Story>(API_ENDPOINTS.loadCommentDraft(id));
+  public loadCommentDraft(payload: StoryCommentDraftLoadContext): Observable<Story> {
+    return this.http.get<Story>(API_ENDPOINTS.loadCommentDraft(payload));
   }
 
   public loadProperty(payload: StoryPropertySaveContext): Observable<Story[] | Upvote[] | [Unlock[], Story]> {

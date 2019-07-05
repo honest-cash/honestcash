@@ -23,14 +23,14 @@ import {StoryCommentCardActionsComponent} from './components/comment-card-action
 import {StoryCommentCardBodyComponent} from './components/comment-card-body/story-comment-card-body.component';
 import {StoryCommentCardHeaderComponent} from './components/comment-card-header/story-comment-card-header.component';
 import {StoryResponseDetailsComponent} from './components/response-details/response-details.component';
-import {EffectsModule} from '@ngrx/effects';
-import {StoryEffects} from './store/story.effects';
-import {SharedComponentsModule} from '../../core/shared-components.module';
 import {StorySharedModule} from './story-shared.module';
 import {LayoutModule} from '../../core/layout.module';
 import {UserSharedModule} from '../user/user-shared.module';
 import {WalletSharedModule} from '../wallet/wallet-shared.module';
 import {OrderModule} from 'ngx-order-pipe';
+import {StoryCommentEditButtonComponent} from './components/comment-edit-button/comment-edit-button.component';
+import {StoryCountsComponent} from './components/comment-counts/story-counts.component';
+import {StoryCommentInlineEditorComponent} from './components/comment-inline-editor/story-comment-inline-editor.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +40,7 @@ import {OrderModule} from 'ngx-order-pipe';
     StoryCommentsComponent,
     StoryCommentCardComponent,
     StoryCommentEditorComponent,
+    StoryCommentInlineEditorComponent,
     StoryDetailsComponent,
     StoryTagsComponent,
     StoryUpvoteButtonComponent,
@@ -54,6 +55,8 @@ import {OrderModule} from 'ngx-order-pipe';
     StoryCommentCardBodyComponent,
     StoryCommentCardHeaderComponent,
     StoryResponseDetailsComponent,
+    StoryCommentEditButtonComponent,
+    StoryCountsComponent,
   ],
   imports: [
     StoryRoutingModule,

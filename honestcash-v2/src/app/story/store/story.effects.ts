@@ -4,7 +4,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {
   StoryActionTypes,
-  StoryCommentDraftLoad,
+  StoryCommentDraftLoad, StoryCommentDraftLoadContext,
   StoryCommentDraftLoadFailure,
   StoryCommentDraftLoadSuccess,
   StoryLoad,
@@ -67,9 +67,9 @@ export class StoryEffects {
   public StoryCommentDraftLoad: Observable<any> = this.actions.pipe(
     ofType(StoryActionTypes.STORY_COMMENT_DRAFT_LOAD),
     map((action: StoryCommentDraftLoad) => action.payload),
-    switchMap((storyId: number) => this.storyService.loadCommentDraft(storyId)
+    switchMap((payload: StoryCommentDraftLoadContext) => this.storyService.loadCommentDraft(payload)
       .pipe(
-        map((story: Story) => new StoryCommentDraftLoadSuccess(story)),
+        map((comment: Story) => new StoryCommentDraftLoadSuccess({comment, isCommentEditingSelfSelf: payload.isLoadingSelf})),
         catchError(error => of(new StoryCommentDraftLoadFailure(error))),
       ),
     ),
