@@ -114,7 +114,7 @@ export class EditorPaidSectionSelectionComponent implements OnInit, OnDestroy {
 
   public scrollLinebreakIntoView(element: ElementRef) {
     element.nativeElement.scrollIntoView();
-    if (this.story.paidSectionLinebreak !== this.paidSectionLinebreakEnd) {
+    if (this.paidSectionElementsWrapperElement && this.story.paidSectionLinebreak !== this.paidSectionLinebreakEnd) {
       this.paidSectionElementsWrapperElement.nativeElement.scrollTop -= 20;
     }
   }
