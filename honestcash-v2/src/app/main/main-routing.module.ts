@@ -6,6 +6,7 @@ import {MainTermsOfServiceComponent} from './pages/terms-of-service/terms-of-ser
 import {MainPrivacyPolicyComponent} from './pages/privacy-policy/privacy-policy.component';
 import {MainFaqComponent} from './pages/faq/faq.component';
 import {MainTransparencyComponent} from './pages/transparency/transparency.component';
+import {MainAboutHonestCashComponent} from './pages/about-honest-cash/about-honest-cash.component';
 
 /**
  * - More specific routes should come first
@@ -16,7 +17,7 @@ const routes: Routes = [
     component: MainContainerComponent,
     children: [
       {path: 'about', component: MainAboutComponent},
-      {path: 'about-honest-cash', component: MainAboutComponent},
+      {path: 'about-honest-cash', component: MainAboutHonestCashComponent},
       {path: 'terms-of-service', component: MainTermsOfServiceComponent},
       {path: 'privacy-policy', component: MainPrivacyPolicyComponent},
       {path: 'transparency', component: MainTransparencyComponent},

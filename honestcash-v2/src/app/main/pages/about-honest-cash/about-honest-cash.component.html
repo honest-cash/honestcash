@@ -1,0 +1,13 @@
+<div class="card-body">
+  <div *ngIf="isLoading" class="row">
+    <div class="col text-center">
+      <shared-loading-indicator></shared-loading-indicator>
+    </div>
+  </div>
+  <div *ngIf="!isLoading" class="row">
+    <div class="col">
+      <story-title *ngIf="story.title"></story-title>
+      <story-body *ngIf="story.body"></story-body>
+    </div>
+  </div>
+</div>
