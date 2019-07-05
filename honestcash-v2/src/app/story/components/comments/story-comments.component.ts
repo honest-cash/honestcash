@@ -52,13 +52,20 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
       }
 
       if (storyState.hasCommentDraftLoaded) {
-        if (this.commentDraft.parentPostId === this.masterStory.id) {
+        if (
+          this.commentDraft.parentPostId === this.commentParent.id &&
+          this.commentDraft.parentPostId === this.masterStory.id &&
+          !storyState.isCommentEditingSelf
+        ) {
           this.shouldShowCommentEditorPlaceholder = false;
           this.shouldShowCommentEditor = true;
-        } else {
+        } else if (this.commentDraft.parentPost.id === this.commentParent.id) {
           this.shouldShowCommentEditorPlaceholder = true;
           this.shouldShowCommentEditor = false;
         }
+      } else {
+        this.shouldShowCommentEditor = false;
+        this.shouldShowCommentEditorPlaceholder = true;
       }
     });
     this.userSub = this.user$.subscribe((userState: UserState) => {
@@ -68,7 +75,7 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
 
   public onCommentClicked() {
     if (this.user) {
-      this.store.dispatch(new StoryCommentDraftLoad(this.masterStory.id));
+      this.store.dispatch(new StoryCommentDraftLoad({storyId: this.masterStory.id}));
     } else {
       this.router.navigate(['/login']);
     }

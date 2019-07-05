@@ -28,6 +28,9 @@ import {LayoutModule} from '../../core/layout.module';
 import {UserSharedModule} from '../user/user-shared.module';
 import {WalletSharedModule} from '../wallet/wallet-shared.module';
 import {OrderModule} from 'ngx-order-pipe';
+import {StoryCommentEditButtonComponent} from './components/comment-edit-button/comment-edit-button.component';
+import {StoryCountsComponent} from './components/comment-counts/story-counts.component';
+import {StoryCommentInlineEditorComponent} from './components/comment-inline-editor/story-comment-inline-editor.component';
 import {StoryEditButtonComponent} from './components/edit-button/edit-button.component';
 
 @NgModule({
@@ -38,6 +41,7 @@ import {StoryEditButtonComponent} from './components/edit-button/edit-button.com
     StoryCommentsComponent,
     StoryCommentCardComponent,
     StoryCommentEditorComponent,
+    StoryCommentInlineEditorComponent,
     StoryDetailsComponent,
     StoryTagsComponent,
     StoryUpvoteButtonComponent,
@@ -52,7 +56,9 @@ import {StoryEditButtonComponent} from './components/edit-button/edit-button.com
     StoryCommentCardBodyComponent,
     StoryCommentCardHeaderComponent,
     StoryResponseDetailsComponent,
+    StoryCommentEditButtonComponent,
     StoryEditButtonComponent,
+    StoryCountsComponent,
   ],
   imports: [
     StoryRoutingModule,

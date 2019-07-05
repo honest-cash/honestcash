@@ -1,4 +1,14 @@
-import {AfterViewChecked, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterContentChecked, AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import Story from '../../models/story';
 import User from '../../../user/models/user';
 import {Store} from '@ngrx/store';
@@ -11,14 +21,13 @@ import {StoryState} from '../../store/story.state';
 import {TRANSACTION_TYPES} from '../../../wallet/models/transaction';
 
 @Component({
-  selector: 'story-comment-editor',
-  templateUrl: './story-comment-editor.component.html',
-  styleUrls: ['./story-comment-editor.component.scss']
+  selector: 'story-comment-inline-editor',
+  templateUrl: './story-comment-inline-editor.component.html',
+  styleUrls: ['./story-comment-inline-editor.component.scss']
 })
-export class StoryCommentEditorComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class StoryCommentInlineEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public shouldScrollToEditor = false;
   @Input() public commentParent: Story;
-  @Input() public isSubComment: boolean;
   @ViewChild('commentElement') public commentElement: ElementRef;
   @ViewChild('commentWrapperElement') public commentWrapperElement: ElementRef;
   @HostBinding('class') public class = 'col-12 mb-2';
@@ -48,6 +57,7 @@ export class StoryCommentEditorComponent implements OnInit, OnDestroy, AfterView
     this.storySub = this.story$.subscribe((storyState: StoryState) => {
       this.masterStory = storyState.story;
       this.commentDraft = storyState.commentDraft;
+      this.commentParent = storyState.commentParent;
       this.isCommentEditingSelf = storyState.isCommentEditingSelf;
 
       if (storyState.hasCommentDraftLoaded) {
@@ -63,10 +73,14 @@ export class StoryCommentEditorComponent implements OnInit, OnDestroy, AfterView
         }
 
     });
+
+    if (this.commentParent) {
+      // this.store.dispatch(new StoryCommentDraftLoad({storyId: this.commentParent.id}));
+    }
   }
 
-  public ngAfterViewChecked() {
-    if (this.commentElement && this.commentDraft && this.commentDraft.bodyJSON && this.commentDraft.bodyJSON.length > 0) {
+  public ngAfterViewInit() {
+    if (this.commentElement && this.commentDraft.bodyJSON && this.commentDraft.bodyJSON.length > 0) {
       this.commentDraft.body = this.convertStoryBodyJSONtoText();
       this.commentElement.nativeElement.innerHTML = this.commentDraft.body;
     }
@@ -89,6 +103,7 @@ export class StoryCommentEditorComponent implements OnInit, OnDestroy, AfterView
   }
 
   public onCommentClicked() {
+    this.commentDraft.body = this.commentElement.nativeElement.innerHTML;
     this.commentDraft.bodyJSON = this.converStoryBodyToJson();
     this.isSaving = true;
     this.store.dispatch(new StoryPropertySave(

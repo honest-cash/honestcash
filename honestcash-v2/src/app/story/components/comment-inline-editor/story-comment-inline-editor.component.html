@@ -1,9 +1,6 @@
-<div *ngIf="user" class="card">
-  <div id="story-comment-wrapper" #commentWrapperElement class="pb-5 p-3">
+<div *ngIf="user">
+  <div id="story-comment-wrapper" #commentWrapperElement class="pb-5">
     <div class="row">
-      <div class="col-auto pr-0">
-        <shared-avatar [src]="user && user.imageUrl" large="true"></shared-avatar>
-      </div>
       <div class="col">
         <p
           #commentElement
@@ -19,8 +16,8 @@
       </div>
     </div>
     <button [id]="commentButtonId" type="button" (click)="onCommentClicked()" class="font-weight-bold btn btn-sm btn-success text-uppercase" [disabled]="isSaving">
-      <span *ngIf="!isSaving">Comment</span>
-      <span *ngIf="isSaving">Commenting...</span>
+      <span *ngIf="!isSaving">Publish</span>
+      <span *ngIf="isSaving">Publishing...</span>
     </button>
   </div>
 </div>

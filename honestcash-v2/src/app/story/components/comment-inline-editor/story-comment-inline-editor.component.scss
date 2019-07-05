@@ -1,0 +1,31 @@
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  color: grey;
+  display: block; /* For Firefox */
+  height: 100%;
+}
+
+#story-comment-wrapper {
+  position: relative;
+  #story-comment {
+    border: none;
+    color: black;
+    width: 100%;
+    margin: 0px;
+    padding: 0;
+    outline: none !important;
+    word-break: break-word;
+    word-wrap: break-word;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    white-space: pre-line;
+    height: 100%;
+    cursor: text;
+  }
+
+  #story-comment-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+}
