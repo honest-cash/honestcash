@@ -1,7 +1,7 @@
-<div class="card">
+<div class="card" [id]="'comment-'+comment.id">
   <story-comment-card-header [comment]="comment"></story-comment-card-header>
   <story-comment-card-body [comment]="comment"></story-comment-card-body>
   <story-comment-card-actions [comment]="comment"></story-comment-card-actions>
   <story-comment-editor *ngIf="shouldShowEditor" [commentParent]="comment"></story-comment-editor>
-  <story-comment-card *ngFor="let subComment of comment.userPosts" [comment]="subComment"></story-comment-card>
+  <story-comment-card *ngFor="let subComment of comment.userPosts" [isSubComment]="true" [comment]="subComment"></story-comment-card>
 </div>

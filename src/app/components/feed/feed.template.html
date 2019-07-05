@@ -60,7 +60,8 @@
       </div>
     </div>
     <a
-      ui-sref="vicigo.post({ postId: feed.id, alias: feed.alias || feed.id, username: feed.user.username })"
+      ng-href="/{{feed.user.username}}/{{feed.alias}}"
+      target="_self"
     >
       <div class="post-feed-body">
         <div class="feed-title">

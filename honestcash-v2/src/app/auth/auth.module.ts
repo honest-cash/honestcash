@@ -19,6 +19,8 @@ import {AuthRoutingModule} from './auth-routing.module';
 import {UserSharedModule} from '../user/user-shared.module';
 import {WalletSharedModule} from '../wallet/wallet-shared.module';
 import {AuthSharedModule} from './auth-shared.module';
+import {EffectsModule} from '@ngrx/effects';
+import {AuthEffects} from './store/auth.effects';
 
 @NgModule({
   declarations: [

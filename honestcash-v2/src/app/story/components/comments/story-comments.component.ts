@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import Story from '../../models/story';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Observable, Subscription} from 'rxjs';
@@ -14,24 +14,6 @@ import {Router} from '@angular/router';
   selector: 'story-comments',
   templateUrl: './story-comments.component.html',
   styleUrls: ['./story-comments.component.scss'],
-  animations: [
-    // the fade-in/fade-out animation.
-    trigger('simpleFadeAnimation', [
-
-      // the "in" style determines the "resting" state of the element when it is visible.
-      state('in', style({opacity: 1})),
-
-      // fade in when created. this could also be written as transition('void => *')
-      transition(':enter', [
-        style({opacity: 0}),
-        animate(600 )
-      ]),
-
-      // fade out when destroyed. this could also be written as transition('void => *')
-      transition(':leave',
-        animate(600, style({opacity: 0})))
-    ])
-  ]
 })
 export class StoryCommentsComponent implements OnInit, OnDestroy {
   @ViewChild('editorContainerElement') public editor: ElementRef;
@@ -48,6 +30,7 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
   public user$: Observable<UserState>;
   public userSub: Subscription;
   public commentSortOrder = 'createdAt';
+  public scrollTo: number;
   constructor(
     private store: Store<AppStates>,
     private router: Router,
@@ -62,6 +45,7 @@ export class StoryCommentsComponent implements OnInit, OnDestroy {
       this.comments = storyState.comments;
       this.commentParent = storyState.commentParent;
       this.commentDraft = storyState.commentDraft;
+      this.scrollTo = storyState.scrollTo;
 
       if (this.comments) {
         this.isLoading = false;

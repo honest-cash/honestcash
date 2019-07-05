@@ -14,7 +14,6 @@ import {WalletState} from '../store/wallet.state';
 import {WALLET_STATUS} from '../models/status';
 import {HttpService} from '../../../core/http/http.service';
 import {CurrencyService} from './currency.service';
-import {WalletModule} from '../wallet.module';
 
 export const API_ENDPOINTS = {
   setWallet: `/auth/set-wallet`,
@@ -118,8 +117,21 @@ export class WalletService {
               payload.password
             );
             simpleWallet.mnemonicEncrypted = this.encryptMnemonic(payload.wallet.mnemonic, payload.password);
-            this.http.post(API_ENDPOINTS.setWallet, {mnemonicEncrypted: simpleWallet.mnemonicEncrypted});
+          } else if (this.getWalletMnemonic()) {
+            // if there is payload
+            // but there is a decrypted mnemonic in the localstorage
+            // it means the app loads wallet from localStorage
+            this.logger.info('Setting up an already existing wallet from local storage');
+            simpleWallet = this.createWallet(<string>this.getWalletMnemonic());
+            simpleWallet.mnemonicEncrypted = this.encryptMnemonic(simpleWallet.mnemonic, payload.password);
+          } else {
+            // if there is a payload but NO wallet attached and NO localstorage wallet
+            // it means it is a login action but a wallet has not yet saved to the database
+            this.logger.info('Creating new wallet.');
+            simpleWallet = this.createWallet(undefined, undefined, payload.password);
           }
+
+          await this.http.post(API_ENDPOINTS.setWallet, {mnemonicEncrypted: simpleWallet.mnemonicEncrypted, address: simpleWallet.address}).toPromise();
         } else {
           if (this.getWalletMnemonic()) {
             // if there is no payload
@@ -135,6 +147,7 @@ export class WalletService {
         } else {
           this.store.dispatch(new WalletStatusUpdated(WALLET_STATUS.Loaded));
         }
+
         return simpleWallet;
       }
     );
@@ -148,8 +161,10 @@ export class WalletService {
   }
 
   public setWallet(wallet: ISimpleWallet) {
-    if (this.isPlatformBrowser && wallet && wallet.mnemonic) {
-      this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
+    if (wallet && wallet.mnemonic) {
+      if (this.isPlatformBrowser) {
+        this.localStorage.setItem(WALLET_LOCALSTORAGE_KEYS.MNEMONIC, wallet.mnemonic);
+      }
     }
   }
 
