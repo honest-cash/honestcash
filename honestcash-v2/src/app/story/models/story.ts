@@ -43,4 +43,5 @@ export default class Story {
   public upvoteCount: number;
   public unlockCount: number;
   public responseCount: number;
+  public imageUrl?: string;
 }

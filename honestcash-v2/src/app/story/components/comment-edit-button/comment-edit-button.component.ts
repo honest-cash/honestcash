@@ -1,21 +1,21 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import Story from '../../models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectUserState} from '../../../app.states';
-import {StoryCommentDraftLoad} from '../../store/story.actions';
+import {StoryCommentClicked, StoryCommentDraftLoad} from '../../store/story.actions';
 import User from '../../../user/models/user';
 import {Observable, Subscription} from 'rxjs';
 import {UserState} from '../../../user/store/user.state';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'story-comment-button',
-  templateUrl: './comment-button.component.html',
-  styleUrls: ['./comment-button.component.scss']
+  selector: 'story-comment-edit-button',
+  templateUrl: './comment-edit-button.component.html',
+  styleUrls: ['./comment-edit-button.component.scss']
 })
-export class StoryCommentButtonComponent implements OnInit, OnDestroy {
+export class StoryCommentEditButtonComponent implements OnInit, OnDestroy {
   @Input() public parentStory: Story;
-  @Input() public nestingLevel: number;
+  @HostBinding('class') public class = 'ml-2'
   public user: User;
   public user$: Observable<UserState>;
   public userSub: Subscription;
@@ -32,9 +32,9 @@ export class StoryCommentButtonComponent implements OnInit, OnDestroy {
   public ngOnInit() {
   }
 
-  public onReplyClicked() {
+  public onEditClicked() {
     if (this.user) {
-      this.store.dispatch(new StoryCommentDraftLoad({storyId: this.parentStory.id}));
+      this.store.dispatch(new StoryCommentDraftLoad({storyId: this.parentStory.id, isLoadingSelf: true}));
     } else {
       this.router.navigate(['/login']);
     }

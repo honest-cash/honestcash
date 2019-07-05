@@ -1,7 +1,12 @@
 <div class="card" [id]="'comment-'+comment.id">
   <story-comment-card-header [comment]="comment"></story-comment-card-header>
-  <story-comment-card-body [comment]="comment"></story-comment-card-body>
-  <story-comment-card-actions [comment]="comment" [nestingLevel]="nestingLevel"></story-comment-card-actions>
-  <story-comment-editor *ngIf="shouldShowEditor" [commentParent]="comment"></story-comment-editor>
-  <story-comment-card [nestingLevel]="nestingLevel" *ngFor="let subComment of comment.userPosts" [isSubComment]="true" [comment]="subComment"></story-comment-card>
+  <ng-container *ngIf="!shouldShowInlineEditor">
+    <story-comment-card-body [comment]="comment"></story-comment-card-body>
+    <story-comment-card-actions [nestingLevel]="nestingLevel"  [comment]="comment"></story-comment-card-actions>
+  </ng-container>
+  <ng-container *ngIf="shouldShowInlineEditor">
+    <story-comment-inline-editor [commentParent]="comment"></story-comment-inline-editor>
+  </ng-container>
+  <story-comment-editor [isSubComment]="isSubComment" *ngIf="shouldShowEditor" [commentParent]="comment"></story-comment-editor>
+  <story-comment-card [nestingLevel]="nestingLevel"  *ngFor="let subComment of comment.userPosts" [isSubComment]="true" [comment]="subComment"></story-comment-card>
 </div>
