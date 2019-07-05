@@ -15,6 +15,7 @@ export class StoryCommentCardComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() public comment: Story;
   @Input() public isSubComment: boolean;
   @HostBinding('class') public class = 'col-12 mb-2';
+  @Input() public nestingLevel: number;
   public commentParent: Story;
   public commentDraft: Story;
   public story$: Observable<StoryState>;
@@ -28,6 +29,7 @@ export class StoryCommentCardComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public ngOnInit() {
+    this.nestingLevel += 1;
     this.storySub = this.story$.subscribe((storyState: StoryState) => {
       this.commentParent = storyState.commentParent;
       this.commentDraft = storyState.commentDraft;
