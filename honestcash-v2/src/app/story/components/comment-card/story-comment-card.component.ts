@@ -61,7 +61,6 @@ export class StoryCommentCardComponent implements OnInit, OnDestroy, AfterViewIn
   public ngAfterViewInit() {
     if (this.scrollTo && this.scrollTo === this.comment.id) {
       const element: HTMLElement = document.getElementById(`comment-${this.scrollTo}`);
-      const body = document.body;
       if (element) {
         element.classList.add('highlight');
         // element.scrollIntoView({behavior: 'instant'});
@@ -69,7 +68,7 @@ export class StoryCommentCardComponent implements OnInit, OnDestroy, AfterViewIn
         this.window.scroll({
           top: top - (top / 8),
           behavior: 'smooth'
-        })
+        });
         this.scrollTo = undefined;
         element.classList.remove('highlight');
       }
