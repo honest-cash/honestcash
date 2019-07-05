@@ -1,4 +1,10 @@
 #!/bin/bash
+echo "Copying robots.txt from v1"
+cp ../public/robots.txt ./src/robots.txt
+echo "Copying sitemap.xml from v1"
+cp ../public/sitemap.xml ./src/sitemap.xml
+echo "Copying Google verification file from v1"
+cp ../public/google88a6c30000120fdc.html ./src/google88a6c30000120fdc.html
 echo "Copying Simple Bitcoin Wallet"
 cp ./node_modules/simple-bitcoin-wallet/dist/simplewallet.min.js ./src/assets/libs/simple-bitcoin-wallet.min.js
 echo "Removing 'editorjs' folder from assets/lib"

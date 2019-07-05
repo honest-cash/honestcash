@@ -3,12 +3,17 @@
 :host {
   ::ng-deep {
     .card {
+      transition: background-color 2s linear;
       .card {
         margin-left: 0.5rem;
         border: 0px;
         border-left: 2px solid $border-color;
         border-radius: 0px;
       }
+    }
+
+    .highlight{
+      background: #fffec8;
     }
   }
 }

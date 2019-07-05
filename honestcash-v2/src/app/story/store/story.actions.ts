@@ -11,6 +11,16 @@ export interface StoryPropertySaveContext {
   transaction?: ITransaction;
 }
 
+export interface StoryCommentDraftLoadContext {
+  storyId: number;
+  isLoadingSelf?: boolean;
+}
+
+export interface StoryCommentDraftLoadSuccessContext {
+  comment: Story;
+  isCommentEditingSelfSelf?: boolean;
+}
+
 export enum StoryActionTypes {
   STORY_LOAD = '[Story] Load',
   STORY_LOAD_SUCCESS = '[Story] Load Success',
@@ -51,7 +61,7 @@ export class StoryLoadFailure implements Action {
 export class StoryCommentDraftLoad implements Action {
   public readonly type = StoryActionTypes.STORY_COMMENT_DRAFT_LOAD;
 
-  constructor(public payload: number) {
+  constructor(public payload: StoryCommentDraftLoadContext) {
   }
 }
 
@@ -65,7 +75,7 @@ export class StoryCommentDraftBodyChange implements Action {
 export class StoryCommentDraftLoadSuccess implements Action {
   public readonly type = StoryActionTypes.STORY_COMMENT_DRAFT_LOAD_SUCCESS;
 
-  constructor(public payload: Story) {
+  constructor(public payload: StoryCommentDraftLoadSuccessContext) {
   }
 }
 
@@ -79,7 +89,7 @@ export class StoryCommentDraftLoadFailure implements Action {
 export class StoryPropertyLoad implements Action {
   public readonly type = StoryActionTypes.STORY_PROPERTY_LOAD;
 
-  constructor(public payload: StoryPropertySaveContext) {
+  constructor(public payload: StoryPropertySaveContext, public scrollTo?: number) {
   }
 }
 
