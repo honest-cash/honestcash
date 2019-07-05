@@ -10,6 +10,7 @@ import {AppStates, selectStoryState, selectUserState} from '../app.states';
 import {ActivatedRoute} from '@angular/router';
 import {StoryLoad} from './store/story.actions';
 import {StoryState} from './store/story.state';
+import {Meta, Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'story',
@@ -30,6 +31,8 @@ export class StoryComponent implements OnInit, OnDestroy {
   private storySub: Subscription;
 
   constructor(
+    private meta: Meta,
+    private title: Title,
     private store: Store<AppStates>,
     private activatedRoute: ActivatedRoute,
   ) {
@@ -52,6 +55,14 @@ export class StoryComponent implements OnInit, OnDestroy {
         this.upvotes = storyState.upvotes;
         this.unlocks = storyState.unlocks;
         this.isLoading = storyState.isLoading;
+
+        if (!this.isLoading) {
+          this.title.setTitle(`${this.story.title} | Honest Cash`);
+          if (this.story.imageUrl) {
+            this.meta.updateTag({name: 'og:image', content: this.story.imageUrl});
+            this.meta.updateTag({name: 'twitter:image', content: this.story.imageUrl});
+          }
+        }
       }
     });
   }
