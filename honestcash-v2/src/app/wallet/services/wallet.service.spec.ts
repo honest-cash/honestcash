@@ -159,23 +159,30 @@ describe('WalletService', () => {
     });
 
     describe('createWallet should', () => {
+
+      const realWalletMocks = {
+        mnemonic: 'runway bleak method trim length fame gun coral scrap pizza frog place',
+        mnemonicEncrypted: 'U2FsdGVkX18wTELTnxkgeZypULgSB+cPakb91vE89RNqdTjuRO+C5gIwFF4Pdefl40h8ZlbEhX9NqZheiP1knx9qj6u1Eh31MENN/WJTYI4nSRw3l+4t+p9p0BbGxWXs',
+        password: '12345678'
+      };
       it('return a wallet when mnemonicEncrypted and password is provided', (done) => {
+
         scriptService.loadScript(simpleBitcoinWalletAssetPath).subscribe(() => {
-          const wallet = walletService.createWallet(undefined, 'asdfasdf', 'asdfasdf');
+          const wallet = walletService.createWallet(undefined, realWalletMocks.mnemonicEncrypted, realWalletMocks.password);
           expect(wallet).toBeDefined();
           done();
         });
       });
       it('return a wallet when mnemonic is provided', (done) => {
         scriptService.loadScript(simpleBitcoinWalletAssetPath).subscribe(() => {
-          const wallet = walletService.createWallet('asdfasdf');
+          const wallet = walletService.createWallet(realWalletMocks.mnemonic);
           expect(wallet).toBeDefined();
           done();
         });
       });
       it('return a wallet when password', (done) => {
         scriptService.loadScript(simpleBitcoinWalletAssetPath).subscribe(() => {
-          const wallet = walletService.createWallet(undefined, undefined, 'asdfasdf');
+          const wallet = walletService.createWallet(undefined, undefined, realWalletMocks.password);
           expect(wallet).toBeDefined();
           done();
         });
