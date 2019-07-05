@@ -4,6 +4,7 @@ import {SharedModule} from './shared.module';
 import {SharedComponentsModule} from './shared-components.module';
 import {UserSharedModule} from '../app/user/user-shared.module';
 import {WalletSharedModule} from '../app/wallet/wallet-shared.module';
+import {StorySharedModule} from '../app/story/story-shared.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import {WalletSharedModule} from '../app/wallet/wallet-shared.module';
     SharedComponentsModule,
     UserSharedModule,
     WalletSharedModule,
+    StorySharedModule,
   ],
   exports: [
     LayoutHeaderComponent,

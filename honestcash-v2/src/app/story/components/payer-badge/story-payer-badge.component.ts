@@ -8,6 +8,6 @@ import {Unlock} from '../../models/unlock';
   styleUrls: ['./story-payer-badge.component.scss']
 })
 export class StoryPayerBadgeComponent {
-  @HostBinding('class') public class = 'col-1 mb-2 p-2';
+  @HostBinding('class') public class = 'w-auto d-inline-block mb-2 mr-2';
   @Input() public transaction: Upvote | Unlock;
 }

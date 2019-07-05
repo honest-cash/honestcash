@@ -1,6 +1,5 @@
-<div *ngIf="story.hashtags && story.hashtags.length" class="row">
-  <div class="col">
-    <a *ngFor="let tag of story.hashtags; let i = index;" [ngClass]="{'ml-2': i > 0}"
-       class="badge badge-light p-3 font-weight-normal small">{{tag.hashtag}}</a>
+<div *ngIf="story.userPostHashtags && story.userPostHashtags.length" class="row">
+  <div class="col-auto px-0 ml-3 mt-2" *ngFor="let tag of story.userPostHashtags">
+    <a class="badge badge-light p-3 font-weight-normal small" [href]="'/hashtag/' + tag.hashtag" target="_self">{{tag.hashtag}}</a>
   </div>
 </div>

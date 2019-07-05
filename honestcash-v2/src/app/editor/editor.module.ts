@@ -17,19 +17,15 @@ import {EditorPaidSectionToggleButtonComponent} from './components/paid-section-
 import {EditorCommentComponent} from './pages/comment/comment.component';
 import {EditorParentPostBodyComponent} from './components/parent-post-body/parent-post-body.component';
 import {EditorRoutingModule} from './editor-routing.module';
-import {EffectsModule} from '@ngrx/effects';
-import {EditorEffects} from './store/editor.effects';
 import {EditorSharedModule} from './editor-shared.module';
 import {LayoutModule} from '../../core/layout.module';
 import {UserSharedModule} from '../user/user-shared.module';
 
 @NgModule({
   declarations: [
-    EditorComponent,
     EditorHeaderComponent,
     EditorPublishModalComponent,
     EditorPublishButtonComponent,
-    EditorStoryTagsSelectionComponent,
     EditorCommentButtonComponent,
     EditorSaveStatusComponent,
     EditorContainerComponent,
@@ -37,15 +33,7 @@ import {UserSharedModule} from '../user/user-shared.module';
     EditorEditComponent,
     EditorCommentComponent,
     EditorHeaderComponent,
-    EditorPaidSectionSelectionComponent,
-    EditorPaidSectionToggleButtonComponent,
     EditorParentPostBodyComponent,
-  ],
-  entryComponents: [
-    EditorComponent,
-    EditorPublishModalComponent,
-    EditorPublishButtonComponent,
-    EditorSaveStatusComponent,
   ],
   imports: [
     FormsModule,

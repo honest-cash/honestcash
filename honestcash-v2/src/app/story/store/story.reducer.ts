@@ -18,6 +18,12 @@ const appendShareUrls = (story: Story) => {
 
 export function reducer(state = initialStoryState, action: All): StoryState {
   switch (action.type) {
+    case StoryActionTypes.STORY_LOAD: {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
     case StoryActionTypes.STORY_LOAD_SUCCESS: {
       const story = appendShareUrls(action.payload);
       return {

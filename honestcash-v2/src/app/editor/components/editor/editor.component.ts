@@ -1,4 +1,14 @@
-import {Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild
+} from '@angular/core';
 import Story from '../../../story/models/story';
 import {Store} from '@ngrx/store';
 import {AppStates, selectEditorState} from '../../../app.states';
@@ -12,7 +22,7 @@ import {concatMap} from 'rxjs/operators';
 import {EDITOR_EDITING_MODES} from '../header/header.component';
 import {EDITOR_STORY_PROPERTIES} from '../../shared/editor.story-properties';
 import {editorScriptPaths} from '../../shared/editor.scripts-path';
-import {EditorState} from '../../store/editor.state';
+import {EDITOR_STATUS, EditorState} from '../../store/editor.state';
 
 export const EDITOR_AUTO_SAVE_INTERVAL = 10 * 1000; // 10 mins
 
@@ -48,7 +58,7 @@ declare var CodeTool: any;
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit, OnDestroy {
+export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public editingMode: EDITOR_EDITING_MODES;
   @ViewChild('titleElement') public titleElement: ElementRef;
   public EDITOR_EDITING_MODES = EDITOR_EDITING_MODES;
@@ -85,7 +95,17 @@ export class EditorComponent implements OnInit, OnDestroy {
           });
         }
       }
+
+      if (editorState.status === EDITOR_STATUS.StoryLoaded) {
+        this.setShouldEditorAllowTitleAndCustomElements();
+        this.setupEditorTitle();
+      }
     });
+  }
+
+  public ngAfterViewInit() {
+    this.setShouldEditorAllowTitleAndCustomElements();
+    this.setupEditorTitle();
   }
 
   public onBodyChange() {
@@ -234,11 +254,12 @@ export class EditorComponent implements OnInit, OnDestroy {
   public setupEditorTitle() {
     if (this.story.title && this.story.title !== '') {
       this.updatedTitle = this.story.title;
-      if (this.titleElement && this.titleElement.nativeElement) {
-        this.titleElement.nativeElement.innerHTML = this.updatedTitle;
-      }
     } else if (!this.story.title && this.story.parentPost && this.story.parentPost.title) {
       this.story.title = `RE: ${this.story.parentPost.title}`;
+    }
+
+    if (this.titleElement && this.titleElement.nativeElement) {
+      this.titleElement.nativeElement.innerHTML = this.updatedTitle;
     }
   }
 

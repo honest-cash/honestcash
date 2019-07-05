@@ -1,4 +1,4 @@
-<div [hidden]="shouldHideElements" class="form-row mt-3">
+<div *ngIf="story && story.paidSectionCost" [hidden]="shouldHideElements" class="form-row mt-3">
   <div class="col">
     <div class="text-uppercase"><b>Pay-to-read Section Cost</b></div>
     <div>
@@ -28,7 +28,7 @@
     <span class="text-success">{{story.paidSectionCost}}$</span>
   </div>
 </div>
-<div [hidden]="shouldHideElements" class="form-row mt-3">
+<div *ngIf="story && story.bodyJSON" [hidden]="shouldHideElements" class="form-row mt-3">
   <div class="col">
     <div class="text-uppercase"><b>Pay-to-read Section</b></div>
     <div>

@@ -6,6 +6,7 @@ import {StoryCommentButtonComponent} from './components/comment-button/comment-b
 import {StoryService} from './services/story.service';
 import {StoryEffects} from './store/story.effects';
 import {SharedComponentsModule} from '../../core/shared-components.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import {SharedComponentsModule} from '../../core/shared-components.module';
     StoryEffects,
   ],
   imports: [
+    FormsModule,
     SharedModule,
     SharedComponentsModule,
   ],

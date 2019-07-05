@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h4 class="modal-title col text-uppercase text-center">{{editingMode}} Story</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div #modalBody class="modal-body">
+  <div class="panes" [@slide]="activePane">
+    <div class="pane">
+      <editor class="p-4" [editingMode]="EDITOR_EDITING_MODES.Write"></editor>
+    </div>
+    <div class="pane">
+      <form *ngIf="hasLoaded" name="form" class="p-4 needs-validation" #f="ngForm"
+            (ngSubmit)="(f.form.valid && ((story.hasPaidSection && story.paidSectionCost > 0 && story.paidSectionLinebreak <= story.bodyJSON.length - 1) || !story.hasPaidSection)) && onSubmit()"
+            novalidate>
+        <editor-story-tags-selection></editor-story-tags-selection>
+        <editor-paid-section-toggle-button></editor-paid-section-toggle-button>
+        <editor-paid-section-selection [hidden]="!story.hasPaidSection"></editor-paid-section-selection>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="col text-left">
+    <button *ngIf="activePane === 'first'" type="button" class="btn btn-outline-dark" (click)="onDismiss()">Close
+    </button>
+    <button *ngIf="activePane === 'second'" type="button" class="btn btn-outline-dark" (click)="onBack()">Back
+    </button>
+  </div>
+  <div class="col text-right">
+    <button *ngIf="activePane === 'first'" type="button" class="btn btn-success" (click)="onNext()">Publish
+    </button>
+    <button *ngIf="activePane === 'second'" type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="saveStatus === EDITOR_STATUS.Publishing">Publish
+    </button>
+  </div>
+</div>

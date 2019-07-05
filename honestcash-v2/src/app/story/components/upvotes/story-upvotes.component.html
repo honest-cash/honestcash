@@ -14,7 +14,9 @@
   </div>
 </div>
 <div class="row px-sm-2" [ngbCollapse]="isCollapsed" *ngIf="!isLoading && upvotes && upvotes.length">
-  <story-payer-badge *ngFor="let transaction of upvotes" [transaction]="transaction"></story-payer-badge>
+  <div class="col">
+    <story-payer-badge *ngFor="let transaction of upvotes" [transaction]="transaction"></story-payer-badge>
+  </div>
 </div>
 <div class="row" *ngIf="!isLoading && (!upvotes || (upvotes && !upvotes.length))">
   <div class="col"><small>No one upvoted yet. You can be the first one!</small></div>
