@@ -9,11 +9,13 @@ import {MainPrivacyPolicyComponent} from './pages/privacy-policy/privacy-policy.
 import {MainFaqComponent} from './pages/faq/faq.component';
 import {LayoutModule} from '../../core/layout.module';
 import {MainTransparencyComponent} from './pages/transparency/transparency.component';
+import {MainAboutHonestCashComponent} from './pages/about-honest-cash/about-honest-cash.component';
 
 @NgModule({
   declarations: [
     MainContainerComponent,
     MainAboutComponent,
+    MainAboutHonestCashComponent,
     MainTermsOfServiceComponent,
     MainPrivacyPolicyComponent,
     MainFaqComponent,

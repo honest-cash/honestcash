@@ -6,8 +6,19 @@
   </div>
   <div *ngIf="!isLoading" class="row">
     <div class="col">
-      <story-title *ngIf="story.title"></story-title>
-      <story-body *ngIf="story.body"></story-body>
+      <story-response-details *ngIf="story.parentPost"></story-response-details>
+      <story-title></story-title>
+      <story-details></story-details>
+      <story-body *ngIf="!story.hasPaidSection"></story-body>
+      <story-locked-body *ngIf="story.hasPaidSection"></story-locked-body>
+      <story-author></story-author>
+      <story-actions [story]="story"></story-actions>
+      <hr class="my-5">
+      <story-upvotes></story-upvotes>
+      <hr class="my-5" *ngIf="story.hasPaidSection">
+      <story-unlocks *ngIf="story.hasPaidSection"></story-unlocks>
+      <hr class="my-5">
+      <story-comments></story-comments>
     </div>
   </div>
 </div>
