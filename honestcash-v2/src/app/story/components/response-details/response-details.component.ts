@@ -29,7 +29,7 @@ export class StoryResponseDetailsComponent implements OnInit, OnDestroy {
   }
 
   public goToUserProfile() {
-    this.window.location.href = `/profile/${this.story.parentPost.user.username}`;
+    this.window.location.href = `/profile/${this.story.user.username}`;
   }
 
   public goToParentStory() {
