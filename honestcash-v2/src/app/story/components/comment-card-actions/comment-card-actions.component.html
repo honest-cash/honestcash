@@ -1,6 +1,6 @@
 <div class="col">
   <story-upvote-button [isSmallButton]="true" [story]="comment"></story-upvote-button>
   <story-comment-edit-button [parentStory]="comment"></story-comment-edit-button>
-  <story-comment-button [parentStory]="comment" style="margin-left: 20px;"></story-comment-button>
+  <story-comment-button *ngIf="nestingLevel <= 4" [nestingLevel]="nestingLevel" [parentStory]="comment" style="margin-left: 20px;"></story-comment-button>
   <story-counts [story]="comment"></story-counts>
 </div>

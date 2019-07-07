@@ -23,7 +23,7 @@
   <story-comment-editor [commentParent]="masterStory"></story-comment-editor>
 </div>
  <div class="row mb-4" *ngIf="!isLoading && comments && comments.length">
-     <story-comment-card [isSubComment]="false" *ngFor="let comment of comments | orderBy: commentSortOrder: true" [comment]="comment"></story-comment-card>
+     <story-comment-card [nestingLevel]="0" [isSubComment]="false" *ngFor="let comment of comments | orderBy: commentSortOrder: true" [comment]="comment"></story-comment-card>
  </div>
 <div *ngIf="isLoading" class="row">
   <div class="col text-center">

@@ -8,6 +8,7 @@ import Story from '../../models/story';
 })
 export class StoryCommentCardActionsComponent implements OnInit {
   @Input() public comment: Story;
+  @Input() public nestingLevel: number;
   @HostBinding('class') public class = 'row p-3';
   constructor() { }
 
