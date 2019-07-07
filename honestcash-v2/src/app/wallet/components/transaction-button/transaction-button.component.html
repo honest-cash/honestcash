@@ -1,12 +1,14 @@
 <button *ngIf="!isLoading"
         (click)="onClick()"
         type="button"
+        [disabled]="isProcessing"
         [ngClass]="{'btn-sm': isSmallButton, 'btn-lg': !isSmallButton}"
         class="transaction-button text-white font-weight-bold btn btn-warning text-uppercase">
   <div *ngIf="isProcessing">{{actionLoadingText}}</div>
   <div *ngIf="!isProcessing" class="amount-dollars">{{actionText}} {{costInDollars}}$</div>
   <div *ngIf="!isProcessing" class="amount-bch">For {{costInBch}}BCH</div>
 </button>
-<button *ngIf="isLoading" class="btn btn-lg btn-warning text-white">
+
+<button disabled *ngIf="isLoading" class="btn btn-lg btn-warning text-white">
   <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
 </button>

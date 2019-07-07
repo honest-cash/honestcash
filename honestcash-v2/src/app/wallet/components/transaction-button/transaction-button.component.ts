@@ -15,6 +15,8 @@ import {WalletReceiptComponent} from '../receipt/receipt.component';
 import {WALLET_STATUS} from '../../models/status';
 import {CurrencyService} from '../../services/currency.service';
 import {isPlatformBrowser} from '@angular/common';
+import {ToastrService} from 'ngx-toastr';
+import {Logger} from 'core/shared/services/logger.service';
 
 @Component({
   selector: 'wallet-transaction-button',
@@ -37,6 +39,7 @@ export class WalletTransactionButtonComponent implements OnInit {
   public isLoading = true;
   public wallet: ISimpleWallet;
   public user: User;
+  private logger = new Logger('WalletTransactionButtonComponent');
   public isProcessing = false;
   private readonly isPlatformBrowser: boolean;
 
@@ -44,6 +47,7 @@ export class WalletTransactionButtonComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: any,
     private router: Router,
     private store: Store<AppStates>,
+    private toastr: ToastrService,
     private exchangeService: ExchangeService,
     private currencyService: CurrencyService,
     private modalService: NgbModal,
@@ -80,27 +84,102 @@ export class WalletTransactionButtonComponent implements OnInit {
     }
   }
 
-  public onClick() {
-    if (this.user) {
-      this.isProcessing = true;
-      let transactionPromise: Promise<ITransaction>;
-      if (this.transactionType === TRANSACTION_TYPES.Upvote) {
-        transactionPromise = this.exchangeService.upvote(this.wallet, this.story, this.user, this.costInBch);
-      } else if (this.transactionType === TRANSACTION_TYPES.Unlock) {
-        transactionPromise = this.exchangeService.unlock(this.wallet, this.story, this.user, this.costInBch);
-      }
-      if (transactionPromise) {
-        transactionPromise.then((transaction: ITransaction) => {
-          this.isProcessing = false;
-          const modalRef = this.modalService.open(WalletReceiptComponent);
-          modalRef.componentInstance.transaction = transaction;
-          modalRef.componentInstance.transactionType = this.transactionType;
-          modalRef.componentInstance.story = this.story;
-          this.onTransactionComplete(transaction);
-        });
-      }
-    } else {
+  public async onClick() {
+    if (!this.user) {
       this.router.navigate(['/login']);
+
+      return;
     }
+
+    if (!this.wallet) {
+      this.toastr.error(
+        'Not possible',
+        undefined,
+        {positionClass: 'toast-bottom-right'}
+      );
+
+      return;
+    }
+
+    if (!this.story) {
+      this.toastr.error(
+        'You can only upvote stories',
+        undefined,
+        {positionClass: 'toast-bottom-right'}
+      );
+    }
+
+    if (!this.story.user.addressBCH) {
+      this.toastr.error(
+        'Author does not receive tips.',
+        undefined,
+        {positionClass: 'toast-bottom-right'}
+      );
+
+      return;
+    }
+
+    if (this.story.userId === this.user.id) {
+      this.toastr.error(
+        'You cannot tip yourself.',
+        undefined,
+        {positionClass: 'toast-bottom-right'}
+      );
+
+      return;
+    }
+
+    this.isProcessing = true;
+    let transaction: ITransaction;
+
+    const fnName = this.transactionType === TRANSACTION_TYPES.Upvote ? 'upvote' : 'unlock';
+
+    try {
+      transaction = await this.exchangeService[fnName](this.wallet, this.story, this.user, this.costInBch);
+    } catch (err) {
+      this.isProcessing = false;
+
+      if (err.message && err.message.indexOf('Insufficient') > -1) {
+        this.toastr.warning(
+          'Insufficient balance on your BCH account.',
+          undefined,
+          {positionClass: 'toast-bottom-right'}
+        );
+
+        // new qrcode(qrContainer, this.wallet.cashAddress);
+
+        return;
+      }
+
+      if (err.message && err.message.indexOf('has no matching Script') > -1) {
+        this.toastr.warning(
+          'Problems with broadcasting transaction (no matching script found)',
+          undefined,
+          {positionClass: 'toast-bottom-right'}
+        );
+
+        return;
+      }
+
+      this.logger.error(err);
+
+      this.toastr.warning(
+        'Error. Try again later.',
+        undefined,
+        {positionClass: 'toast-bottom-right'}
+      );
+
+      return;
+    }
+
+    this.isProcessing = false;
+
+    const modalRef = this.modalService.open(WalletReceiptComponent);
+
+    modalRef.componentInstance.transaction = transaction;
+    modalRef.componentInstance.transactionType = this.transactionType;
+    modalRef.componentInstance.story = this.story;
+
+    this.onTransactionComplete(transaction);
   }
 }
