@@ -196,65 +196,20 @@ app.get("/profile/:username", async (req, res, next) => {
 	});
 });
 
-/**
- * Server rendering for posts
- */
-app.get("/:username/:alias", async (req, res, next) => {
-	const userAgent = req.headers['user-agent'];
-	const crawlerView = req.query.crawlerView;
-
-	if (!isBot(userAgent, crawlerView)) {
-		return next();
-  }
-
-  const postBaseUrl = "https://honest.cash/api/post";
-  const url = `${postBaseUrl}/${req.params.alias}`;
-
-	const post = preparePost((await axios.get(url)).data);
-  const responses = (await axios.get(`${postBaseUrl}/${post.id}/responses`)).data
-    .map(preparePost);
-
-  const upvotes = (await axios.get(`${postBaseUrl}/${post.id}/upvotes`)).data;
-
-	const seoData = seo.getForPost(post);
-
-	if (!post) {
-		res.status(404).render("Not found");
-
-		return;
-	}
-
-	res.render('postBody.ejs', {
-		layout: 'crawlerPostLayout',
-		SEO: seoData,
-    post,
-    responses,
-    upvotes
-	});
-});
-
-/**
-for (let editorPath of [ "/write", "/edit/:postId", "/write/response/:parentPostId" ]) {
-	app.get(editorPath, (_, res) => res.sendfile("editor.html", { root: __dirname + "/public" }));
-}
-
-// Markdown Editor paths
-for (let editorPath of [ "/markdown/write", "/markdown/edit/:postId", "/markdown/write/response/:parentPostId" ]) {
-	app.get(editorPath, (_, res) => res.sendfile("index.html", { root: __dirname + "/public/honestcash-editor" }));
-}
-*/
+// V1
+app.get("/profile/:username", (_, res) => res.sendfile("app.html", { root: __dirname + "/public" }));
 
 // PATHS MIGRATED TO V2
 app.get("/:username/:postId", (req, res) => res.redirect(`/v2/${req.params.username}/${req.params.postId}`));
 app.get("/post/:username/:postId", (req, res) => res.redirect(`/v2/post/${req.params.username}/${req.params.postId}`));
 app.get("/post/:postId", (req, res) => res.redirect(`/v2/post/${req.params.postId}`));
-app.get("/story/:username/:postId", (req, res) => res.redirect(`/v2/story/${req.params.username}/${req.params.postId}`));
-app.get("/story/:postId", (req, res) => res.redirect(`/v2/story/${req.params.postId}`));
 app.get("/write", (_, res) => res.redirect(`/v2/editor/write`));
 app.get("/edit/:postId", (req, res) => res.redirect(`/v2/editor/edit/${req.params.postId}`));
 app.get("/write/response/:parentPostId", (req, res) => res.redirect(`/v2/editor/comment/${req.params.parentPostId}`));
 
-for (let v2Path of [ "/login", "/signup", "/thank-you", "/about" ]) {
+for (let v2Path of [
+  "/login", "/signup", "/thank-you", "/about"
+]) {
   app.get(v2Path, (_, res) =>
     res.redirect(`/v2${v2Path}`)
   );
