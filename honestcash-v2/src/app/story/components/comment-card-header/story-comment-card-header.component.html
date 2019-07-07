@@ -2,7 +2,7 @@
   <shared-avatar [src]="comment.user && comment.user.imageUrl" large="true"></shared-avatar>
 </div>
 <div class="col">
-  <a class="font-weight-bold">{{comment.user.username}}</a><br>
+  <button class="btn btn-link p-0 font-weight-bold text-dark" (click)="goToUserProfile()">{{comment.user.username}}</button><br>
   <span class="text-muted">
      {{comment.createdAt | date:'d MMM yy hh:mm'}}
    </span>
